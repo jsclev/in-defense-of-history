@@ -1,0 +1,111 @@
+import Foundation
+
+public struct SimulationResult: Sendable, Codable {
+    public struct TypeFates: Sendable, Codable {
+        public var killed: Int
+        public var routed: Int
+        public var captured: Int
+        public var leaked: Int
+    }
+
+    public var outcome: Outcome
+    public var seconds: Double
+    public var livesRemaining: Int
+    public var goldRemaining: Int
+    public var goldEarned: Int
+    public var killed: Int
+    public var routed: Int
+    public var captured: Int
+    public var leaked: Int
+    public var fatesByTypeID: [UUID: TypeFates]
+    public var waveMaxProgress: [Double]
+    public var leaksByWave: [Int]
+}
+
+public enum Percentile {
+    /// Linear-interpolated percentile. `p` in 0...100.
+    public static func of(_ values: [Double], _ p: Double) -> Double {
+        guard !values.isEmpty else { return 0 }
+        let sorted = values.sorted()
+        if sorted.count == 1 { return sorted[0] }
+        let rank = (p / 100.0) * Double(sorted.count - 1)
+        let lo = Int(rank.rounded(.down))
+        let hi = Int(rank.rounded(.up))
+        if lo == hi { return sorted[lo] }
+        let t = rank - Double(lo)
+        return sorted[lo] + (sorted[hi] - sorted[lo]) * t
+    }
+}
+
+public struct BatchReport: Sendable {
+    public var results: [SimulationResult]
+
+    public var runs: Int { results.count }
+    public var victories: Int { countOutcome(.victory) }
+    public var defeats: Int { countOutcome(.defeat) }
+    public var timeouts: Int { countOutcome(.timeout) }
+
+    private func countOutcome(_ o: Outcome) -> Int {
+        results.reduce(0) { $0 + ($1.outcome == o ? 1 : 0) }
+    }
+    public var winRate: Double {
+        runs == 0 ? 0 : Double(victories) / Double(runs)
+    }
+
+    public func livesPercentile(_ p: Double) -> Double {
+        Percentile.of(results.map { Double($0.livesRemaining) }, p)
+    }
+
+    public var totalKilled: Int { results.reduce(0) { $0 + $1.killed } }
+    public var totalRouted: Int { results.reduce(0) { $0 + $1.routed } }
+    public var totalCaptured: Int { results.reduce(0) { $0 + $1.captured } }
+    public var totalLeaked: Int { results.reduce(0) { $0 + $1.leaked } }
+
+    /// Share of removals that came from morale rather than the musket —
+    /// the "is terror strictly better than shooting?" dial.
+    public var routShare: Double {
+        let removed = totalKilled + totalRouted + totalCaptured
+        return removed == 0 ? 0 : Double(totalRouted + totalCaptured) / Double(removed)
+    }
+
+    /// Mean of per-run max progress for each wave: the tension curve.
+    public var meanWaveMaxProgress: [Double] {
+        guard let first = results.first else { return [] }
+        var sums = Array(repeating: 0.0, count: first.waveMaxProgress.count)
+        for r in results {
+            for (i, v) in r.waveMaxProgress.enumerated() where i < sums.count {
+                sums[i] += v
+            }
+        }
+        return sums.map { $0 / Double(results.count) }
+    }
+}
+
+public enum Batch {
+    /// Runs `count` simulations at seeds base, base+1, ... sequentially.
+    /// Sequential keeps determinism trivially auditable; a TaskGroup fan-out
+    /// (one task per seed, each sim single-threaded) is the drop-in next step
+    /// once throughput matters.
+    public static func run(
+        level: LevelInfo,
+        catalog: ContentCatalog,
+        baseSeed: UInt64,
+        count: Int,
+        maxSeconds: Double = 900,
+        makePolicy: (UInt64) -> any CommanderPolicy
+    ) throws -> BatchReport {
+        var results: [SimulationResult] = []
+        results.reserveCapacity(count)
+        for k in 0..<count {
+            let seed = baseSeed &+ UInt64(k)
+            let sim = try Simulation(
+                level: level,
+                catalog: catalog,
+                policy: makePolicy(seed),
+                seed: seed
+            )
+            results.append(sim.run(maxSeconds: maxSeconds))
+        }
+        return BatchReport(results: results)
+    }
+}

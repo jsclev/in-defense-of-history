@@ -1,0 +1,599 @@
+import SwiftUI
+
+struct LevelMapProjection {
+    let imageSize: CGSize
+    /// The region of the level art that must be fully visible, in the art's
+    /// own pixels.
+    let playableRect: CGRect
+    /// What the playable rect is fitted into: the safe area, in physical
+    /// screen coordinates. The rect is centred here and scaled — aspect
+    /// intact — until two of its sides meet the safe edges. Everything
+    /// outside it is bleed, and the art still covers the whole screen.
+    let fitRect: CGRect
+
+    var scale: CGFloat {
+        min(fitRect.width / playableRect.width, fitRect.height / playableRect.height)
+    }
+
+    private var origin: CGPoint {
+        CGPoint(
+            x: fitRect.midX - playableRect.midX * scale,
+            y: fitRect.midY - playableRect.midY * scale
+        )
+    }
+
+    func viewPoint(_ p: CGPoint) -> CGPoint {
+        CGPoint(x: origin.x + p.x * scale, y: origin.y + p.y * scale)
+    }
+
+    func viewLength(_ l: CGFloat) -> CGFloat { l * scale }
+
+    var imageFrameSize: CGSize {
+        CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+    }
+
+    var imageCenter: CGPoint {
+        viewPoint(CGPoint(x: imageSize.width / 2, y: imageSize.height / 2))
+    }
+}
+
+// Menus never adapt per slot or level. Pixel numbers below are measured
+// from the ring art so items land exactly on the painted bubbles.
+enum RadialMenu {
+    /// 91.0 is the original 114.48 tuning taken down 10%, 8%, then 4% —
+    /// 20.5% smaller in all. Every background and bubble offset derives from
+    /// it or from fourChoiceArtScale, so the whole menu shrinks together.
+    static let radius: CGFloat = 91.0
+
+    /// One button is three things drawn as a unit: the shared square material
+    /// frame, a transparent tower-category glyph, and the tap area. All three derive from
+    /// buttonSide so they can never drift apart again.
+    ///
+    /// The circles painted into the background art remain underneath at their
+    /// original size; the opaque square frame covers them concentrically.
+    /// 79.8 is 114 taken down 30%.
+    // 108.38 is 79.8 up 10%, 12%, 6%, then 4% more.
+    static let buttonSide: CGFloat = 108.38
+
+    /// Each tightly cropped glyph fits the frame's inset while leaving the
+    /// shared ashwood field and clipped iron corners visible.
+    // 0.5321 keeps the glyph at the same absolute size (57.7pt reference)
+    // while the frame grew 12%, 6%, then 4% around it.
+    static let iconFraction: CGFloat = 0.5321
+
+    static var iconSide: CGFloat { buttonSide * iconFraction }
+
+    private static let fourChoiceArtScale: CGFloat = (90.5 / 409.5) * 0.9 * 0.92 * 0.96
+
+    private static let variantArtScale: CGFloat = radius / 541
+
+    static let iconDropFraction: CGFloat = 0
+
+    static func iconDropFraction(for _: TowerKind) -> CGFloat {
+        iconDropFraction
+    }
+
+    private struct Art {
+        let assetName: String
+        let canvasPx: CGFloat
+        let parchmentPx: CGFloat
+        let pointsPerPx: CGFloat
+        let bubbleOffsetsPx: [CGSize]
+    }
+
+    private static let arts: [Int: Art] = [
+        1: Art(assetName: "radial_menu_1_choice", canvasPx: 1536,
+               parchmentPx: 192, pointsPerPx: variantArtScale,
+               bubbleOffsetsPx: [CGSize(width: 0, height: -540)]),
+        2: Art(assetName: "radial_menu_2_choices", canvasPx: 1536,
+               parchmentPx: 192, pointsPerPx: variantArtScale,
+               bubbleOffsetsPx: [CGSize(width: 0, height: -540),
+                                 CGSize(width: 0, height: 543)]),
+        3: Art(assetName: "radial_menu_3_choices", canvasPx: 1536,
+               parchmentPx: 192, pointsPerPx: variantArtScale,
+               bubbleOffsetsPx: [CGSize(width: 0, height: -540),
+                                 CGSize(width: 469, height: 270),
+                                 CGSize(width: -469, height: 271)]),
+        4: Art(assetName: "tower_menu_v02", canvasPx: 1536,
+               parchmentPx: 251, pointsPerPx: fourChoiceArtScale,
+               bubbleOffsetsPx: [CGSize(width: -366, height: -366),
+                                 CGSize(width: 366, height: -366),
+                                 CGSize(width: 366, height: 366),
+                                 CGSize(width: -366, height: 366)]),
+    ]
+
+    private static func art(count: Int) -> Art {
+        arts[min(max(count, 1), 4)]!
+    }
+
+    static func backgroundAssetName(count: Int) -> String {
+        art(count: count).assetName
+    }
+
+    static func backgroundDiameter(count: Int) -> CGFloat {
+        let art = art(count: count)
+        return art.canvasPx * art.pointsPerPx
+    }
+
+    static func iconWellDiameter(count: Int) -> CGFloat {
+        let art = art(count: count)
+        return art.parchmentPx * art.pointsPerPx
+    }
+
+    /// Buttons sit further from the menu centre than the art's painted
+    /// bubbles, giving the larger frames room without scaling the ring.
+    /// 1.134 is the 8% spread taken out another 5%; frames and their glyphs
+    /// move together since they share the item's offset.
+    static let itemSpread: CGFloat = 1.134
+
+    static func itemOffset(index: Int, count: Int) -> CGSize {
+        let art = art(count: count)
+        guard art.bubbleOffsetsPx.indices.contains(index) else {
+            let angle = Angle.degrees(-90 + Double(index) * 360 / Double(count))
+            return CGSize(width: radius * itemSpread * cos(angle.radians),
+                          height: radius * itemSpread * sin(angle.radians))
+        }
+        return CGSize(width: art.bubbleOffsetsPx[index].width * art.pointsPerPx * itemSpread,
+                      height: art.bubbleOffsetsPx[index].height * art.pointsPerPx * itemSpread)
+    }
+}
+
+struct LevelMapView: View {
+    var node: CampaignNode
+    var onExit: () -> Void
+
+    @StateObject private var runner: LevelRunner
+    @AppStorage("showDebugInfo") private var showDebugInfo = false
+    @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
+
+    init(node: CampaignNode, onExit: @escaping () -> Void) {
+        self.node = node
+        self.onExit = onExit
+        _runner = StateObject(wrappedValue: LevelRunner(
+            levelInfoID: node.levelInfoID,
+            mapImageName: node.mapImageName,
+            mapImageSize: node.mapImageSize
+        ))
+    }
+
+    var body: some View {
+        GeometryReader { geometry in
+            let screen = ScreenGeometry(proxy: geometry)
+            let fullSize = screen.physical.size
+            let metrics = HudMetrics(viewSize: fullSize)
+            ZStack(alignment: .topLeading) {
+                GeometryReader { gameGeometry in
+                    content(in: gameGeometry.size, safe: screen.safe)
+                }
+                .ignoresSafeArea()
+
+                // Under the HUD, so a guide never hides the chrome it measures.
+                if showSafeAreaOverlay {
+                    SafeAreaOverlayView(screen: screen)
+                        .ignoresSafeArea()
+                }
+
+                if runner.isDefeated {
+                    failBanner(metrics: metrics)
+                        .ignoresSafeArea()
+                }
+
+                hud(metrics: metrics,
+                    isPortrait: geometry.size.height > geometry.size.width,
+                    screen: screen)
+                    .ignoresSafeArea()
+
+                cornerButtons(screen: screen)
+                    .ignoresSafeArea()
+            }
+        }
+        .persistentSystemOverlays(.hidden)
+        .onAppear { runner.start() }
+        .onDisappear { runner.stop() }
+    }
+
+    /// Glyph share of the control button, measured from the artist's own
+    /// 260px compositions (speed 0.677, pause 0.654).
+    private static let controlGlyphFraction: CGFloat = 0.66
+
+    private func cornerButtons(screen: ScreenGeometry) -> some View {
+        let layout = CornerButtonsLayout(screen: screen)
+        return ZStack(alignment: .topLeading) {
+            cornerButton(glyph: "speed_up_icon_glyph", frame: layout.speed,
+                         in: screen) { runner.speedUp() }
+            cornerButton(glyph: "pause_icon_glyph", frame: layout.pause,
+                         in: screen, action: onExit)
+        }
+    }
+
+    /// Same composition as the tower buttons: the shared square frame with a
+    /// transparent pictogram in its inset; the whole frame is the tap area.
+    private func cornerButton(glyph: String, frame: CGRect,
+                              in screen: ScreenGeometry,
+                              action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            ZStack {
+                Image("tower_menu_square_frame")
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                Image(glyph)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: frame.width * Self.controlGlyphFraction,
+                           height: frame.height * Self.controlGlyphFraction)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .hudFrame(frame, in: screen)
+    }
+
+    private func content(in viewSize: CGSize, safe: CGRect) -> some View {
+        let projection = LevelMapProjection(
+            imageSize: runner.mapImageSize,
+            playableRect: runner.playableRect,
+            fitRect: safe
+        )
+        let metrics = HudMetrics(viewSize: viewSize)
+        // Sprite sizes come from the playable rect, not the level's pixel
+        // scale, so a tower is the same size on every level.
+        let sprites = MapSpriteScale(playableRect: runner.playableRect,
+                                     viewSize: viewSize)
+
+        return ZStack(alignment: .topLeading) {
+            Color.black
+
+            // invisible pre-render: pays the image-decode cost at load, not first tap
+            Group {
+                Image(RadialMenu.backgroundAssetName(count: TowerKind.allCases.count))
+                Image(RadialMenu.backgroundAssetName(count: 1))
+                Image("tower_menu_square_frame")
+                ForEach(TowerKind.allCases) { kind in
+                    Image(kind.menuIconName)
+                }
+                Image("tower_locked_icon")
+            }
+            .frame(width: 1, height: 1)
+            .opacity(0.001)
+            .allowsHitTesting(false)
+
+            Image(runner.mapImageName)
+                .resizable()
+                .frame(width: projection.imageFrameSize.width,
+                       height: projection.imageFrameSize.height)
+                .position(projection.imageCenter)
+
+            ForEach(runner.placedTowers) { tower in
+                if let assetName = tower.kind.assetName(atLevel: tower.level,
+                                                        branch: tower.branch) {
+                    let towerHeight = sprites.points(tower.kind.spriteHeight)
+                    let basePoint = projection.viewPoint(tower.position)
+                    ZStack(alignment: .bottom) {
+                        Image(assetName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: towerHeight)
+                    }
+                    .position(
+                        x: basePoint.x,
+                        y: basePoint.y - towerHeight / 2 + sprites.points(MapSpriteSizing.towerBaseLift)
+                            + towerHeight * 0.20
+                    )
+                }
+            }
+
+            ForEach(runner.walkers) { walker in
+                let spriteHeight = sprites.points(MapSpriteSizing.walker)
+                let footPoint = projection.viewPoint(walker.position)
+                Image(walker.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: spriteHeight)
+                    .position(x: footPoint.x, y: footPoint.y - spriteHeight / 2)
+
+                if walker.hp < walker.maxHP {
+                    let fraction = CGFloat(max(0, walker.hp / walker.maxHP))
+                    let barWidth = sprites.points(MapSpriteSizing.healthBarWidth)
+                    let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(.black.opacity(0.7))
+                        Capsule()
+                            .fill(fraction > 0.5 ? Color.green
+                                  : fraction > 0.25 ? Color.yellow : Color.red)
+                            .frame(width: (barWidth - 2) * fraction,
+                                   height: barHeight - 2)
+                            .offset(x: 1)
+                    }
+                    .frame(width: barWidth, height: barHeight)
+                    .position(x: footPoint.x,
+                              y: footPoint.y - spriteHeight - sprites.points(MapSpriteSizing.walkerLabelLift))
+                }
+            }
+
+            // Shots in flight are frozen the instant the level is lost, so
+            // they fade rather than hanging in the air.
+            Group {
+                ForEach(runner.projectiles) { projectile in
+                    if let assetName = projectile.kind.projectileAssetName {
+                        Image(assetName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: sprites.points(projectile.kind.projectileHeight))
+                            .rotationEffect(.radians(projectile.heading))
+                            .position(projection.viewPoint(projectile.position))
+                    }
+                }
+            }
+            .opacity(runner.isDefeated ? 0 : 1)
+            .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
+
+            ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
+                Button {
+                    if runner.isSlotOccupied(index) {
+                        runner.selectPlacedTower(atSlot: index)
+                    } else {
+                        runner.selectSlot(index)
+                    }
+                } label: {
+                    Circle()
+                        .fill(Color.white.opacity(0.001))
+                        .frame(width: 64, height: 64)
+                }
+                .position(projection.viewPoint(slotPosition))
+            }
+
+            if let buildSlot = runner.selectedSlotIndex,
+               runner.slotPositions.indices.contains(buildSlot) {
+                dismissCatcher(viewSize: viewSize)
+                radialBuildMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
+                                scale: metrics.scale)
+            }
+            if let upgradeSlot = runner.selectedTowerSlotIndex,
+               runner.slotPositions.indices.contains(upgradeSlot),
+               let tower = runner.placedTower(atSlot: upgradeSlot) {
+                dismissCatcher(viewSize: viewSize)
+                upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
+                            scale: metrics.scale)
+            }
+
+        }
+    }
+
+    private func dismissCatcher(viewSize: CGSize) -> some View {
+        Color.black.opacity(0.001)
+            .frame(width: viewSize.width, height: viewSize.height)
+            .onTapGesture { runner.dismissMenu() }
+    }
+
+    private func radialBuildMenu(around center: CGPoint, scale: CGFloat) -> some View {
+        let kinds = TowerKind.allCases
+        return Group {
+            radialMenuBackground(count: kinds.count, center: center, scale: scale)
+            ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
+                let offset = RadialMenu.itemOffset(index: index, count: kinds.count)
+                BuildMenuItem(kind: kind, isAvailable: runner.maxLevel(for: kind) >= 1,
+                              scale: scale) {
+                    runner.buildTower(kind)
+                }
+                .position(x: center.x + offset.width * scale,
+                          y: center.y + offset.height * scale)
+            }
+        }
+    }
+
+    private func upgradeMenu(for tower: PlacedTower, around center: CGPoint,
+                             scale: CGFloat) -> some View {
+        let offers = runner.upgradeOffers
+        let count = max(offers.count, 1)
+        return Group {
+            radialMenuBackground(count: count, center: center, scale: scale)
+            if offers.isEmpty {
+                let offset = RadialMenu.itemOffset(index: 0, count: 1)
+                UpgradeMenuItem(iconName: tower.kind.menuIconName,
+                                dropKind: tower.kind, cost: nil, scale: scale) {}
+                    .position(x: center.x + offset.width * scale,
+                              y: center.y + offset.height * scale)
+            } else {
+                ForEach(Array(offers.enumerated()), id: \.offset) { index, offer in
+                    let offset = RadialMenu.itemOffset(index: index, count: count)
+                    let iconName = offers.count > 1
+                        ? (tower.kind.assetName(atLevel: offer.nextLevel,
+                                                branch: offer.branch) ?? tower.kind.menuIconName)
+                        : tower.kind.menuIconName
+                    UpgradeMenuItem(iconName: iconName, dropKind: tower.kind,
+                                    cost: offer.cost, scale: scale) {
+                        runner.upgradeSelectedTower(branch: offer.branch)
+                    }
+                    .position(x: center.x + offset.width * scale,
+                              y: center.y + offset.height * scale)
+                }
+            }
+        }
+    }
+
+    private func radialMenuBackground(count: Int, center: CGPoint,
+                                      scale: CGFloat) -> some View {
+        Image(RadialMenu.backgroundAssetName(count: count))
+            .resizable()
+            .frame(width: RadialMenu.backgroundDiameter(count: count) * scale,
+                   height: RadialMenu.backgroundDiameter(count: count) * scale)
+            .position(center)
+            .allowsHitTesting(false)
+    }
+
+    private func hud(metrics: HudMetrics, isPortrait: Bool,
+                     screen: ScreenGeometry) -> some View {
+        let panel = StatsPanelLayout(
+            screen: screen, isPortrait: isPortrait,
+            livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
+            moneyIconAspect: HudIcon.aspect(of: "money_icon_12"))
+        return ZStack(alignment: .topLeading) {
+            // Plates first, so every counter draws over its own box.
+            RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
+                .fill(.black.opacity(HudSizing.statPlateOpacity))
+                .hudFrame(panel.livesPlate, in: screen)
+            RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
+                .fill(.black.opacity(HudSizing.statPlateOpacity))
+                .hudFrame(panel.moneyPlate, in: screen)
+
+            Image("lives_icon_05").resizable().scaledToFit()
+                .hudFrame(panel.lives.icon, in: screen)
+            counterText("\(runner.lives)", fontSize: panel.lives.fontSize)
+                .hudFrame(panel.lives.valueBox, in: screen, alignment: .topLeading)
+
+            Image("money_icon_12").resizable().scaledToFit()
+                .hudFrame(panel.money.icon, in: screen)
+            counterText(goldText, fontSize: panel.money.fontSize)
+                .hudFrame(panel.money.valueBox, in: screen, alignment: .topLeading)
+
+            counterText("Wave \(runner.currentWaveNumber) of \(runner.waveCount)",
+                        fontSize: panel.waveFontSize)
+                .padding(.horizontal, metrics.statPlatePadding * 1.4)
+                .padding(.vertical, metrics.statPlatePadding * 0.6)
+                .background(.black.opacity(HudSizing.statPlateOpacity),
+                            in: RoundedRectangle(cornerRadius: metrics.statPlateCorner,
+                                                 style: .continuous))
+                .hudFrame(panel.waveBox.insetBy(dx: 0, dy: -metrics.statPlatePadding),
+                          in: screen, alignment: .top)
+
+            if showDebugInfo {
+                Text(runner.status)
+                    .font(.footnote.monospaced())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 8))
+                    .hudFrame(CGRect(x: panel.bounds.minX,
+                                     y: panel.bounds.maxY + 12 * metrics.scale,
+                                     width: 600, height: 60),
+                              in: screen, alignment: .topLeading)
+            }
+        }
+    }
+
+    private func counterText(_ value: String, fontSize: CGFloat) -> some View {
+        Text(value)
+            .font(.system(size: fontSize, weight: .black, design: .rounded)
+                .monospacedDigit())
+            .lineLimit(1)
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.85), radius: 2, x: 0, y: 1)
+    }
+
+    /// Shown once the last life is lost. Purely informational — it never
+    /// takes hits, so the back button underneath stays tappable, which is the
+    /// only way out of a lost level.
+    private func failBanner(metrics: HudMetrics) -> some View {
+        ZStack {
+            Color.black.opacity(0.45)
+            Text("Done")
+                .font(.system(size: 104 * metrics.scale, weight: .black, design: .rounded))
+                .foregroundStyle(Color(red: 0.87, green: 0.09, blue: 0.09))
+                .shadow(color: .black.opacity(0.85), radius: 7 * metrics.scale,
+                        y: 3 * metrics.scale)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .allowsHitTesting(false)
+    }
+
+    private var goldText: String {
+        let money = runner.money
+        return money >= 1000
+            ? "\(money / 1000),\(String(format: "%03d", money % 1000))"
+            : "\(money)"
+    }
+
+}
+
+private struct BuildMenuItem: View {
+    let kind: TowerKind
+    let isAvailable: Bool
+    let scale: CGFloat
+    let action: () -> Void
+
+    var body: some View {
+        // never .disabled — SwiftUI dims a disabled button's image, shifting the art's colors
+        Button(action: action) { icon }
+            .buttonStyle(.plain)
+    }
+
+    private var icon: some View {
+        let buttonSide = RadialMenu.buttonSide * scale
+        let iconSize = RadialMenu.iconSide * scale
+        return ZStack {
+            Image("tower_menu_square_frame")
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: buttonSide, height: buttonSide)
+            Image(isAvailable ? kind.menuIconName : "tower_locked_icon")
+                .resizable()
+                .scaledToFit()
+                .frame(width: isAvailable ? iconSize : iconSize * 0.81,
+                       height: isAvailable ? iconSize : iconSize * 0.81)
+                .offset(y: iconSize * (isAvailable
+                    ? RadialMenu.iconDropFraction(for: kind)
+                    : RadialMenu.iconDropFraction))
+        }
+        .frame(width: buttonSide, height: buttonSide)
+        .contentShape(RoundedRectangle(cornerRadius: buttonSide * 0.10))
+    }
+}
+
+private struct UpgradeMenuItem: View {
+    let iconName: String
+    let dropKind: TowerKind
+    let cost: Int?
+    let scale: CGFloat
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            VStack(spacing: 3 * scale) {
+                ZStack {
+                    let iconSize = RadialMenu.iconSide * scale
+                    Image("tower_menu_square_frame")
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: RadialMenu.buttonSide * scale,
+                               height: RadialMenu.buttonSide * scale)
+                    Image(iconName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: iconSize, height: iconSize)
+                        .offset(y: iconSize * RadialMenu.iconDropFraction(for: dropKind))
+                        .opacity(cost != nil ? 1 : 0.5)
+                }
+                .frame(width: RadialMenu.buttonSide * scale,
+                       height: RadialMenu.buttonSide * scale)
+
+                if let cost {
+                    Label("\(cost)", systemImage: "circle.fill")
+                        .font(.system(size: 12 * scale, weight: .bold))
+                        .labelStyle(.titleOnly)
+                        .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
+                        .padding(.horizontal, 8 * scale)
+                        .padding(.vertical, 2 * scale)
+                        .background(.black.opacity(0.7), in: Capsule())
+                } else {
+                    Text("MAX")
+                        .font(.system(size: 11 * scale, weight: .bold))
+                        .foregroundStyle(.white.opacity(0.8))
+                        .padding(.horizontal, 8 * scale)
+                        .padding(.vertical, 2 * scale)
+                        .background(.black.opacity(0.55), in: Capsule())
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .disabled(cost == nil)
+    }
+}
+
+#Preview {
+    LevelMapView(node: CampaignNode.all[0], onExit: {})
+}
