@@ -1,8 +1,9 @@
 -- Main campaign
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -13,12 +14,15 @@ INSERT INTO level_info (
     julianday('1775-04-19T14:00:00-05:00'),
     270,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    6,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_001_lexington_and_concord', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '9d692af7-345d-419a-bc04-16112c3f0b74',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -29,12 +33,15 @@ INSERT INTO level_info (
     julianday('1775-06-17T17:00:00-05:00'),
     320,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    8,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_002_bunker_hill', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '55a5d12d-3cea-475f-aa8d-125271a8a0c2',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -45,12 +52,15 @@ INSERT INTO level_info (
     julianday('1775-12-09T07:30:00-05:00'),
     300,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    10,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_003_great_bridge', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '96170d0e-6983-47e0-bf80-93cd4c91ad3a',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -61,12 +71,15 @@ INSERT INTO level_info (
     julianday('1779-07-05T14:00:00-05:00'),
     450,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_013_new_haven', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -77,7 +90,9 @@ INSERT INTO level_info (
     julianday('1776-02-27T06:30:00-05:00'),
     330,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    14,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_004_moores_creek_bridge', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -97,8 +112,9 @@ INSERT INTO level_info (
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '17914ebc-7052-490d-b606-afc1746da512',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -109,12 +125,15 @@ INSERT INTO level_info (
     julianday('1776-03-05T07:00:00-05:00'),
     350,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_005_dorchester_heights', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '35916460-914a-457b-beb9-1c5bfe95e61a',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -125,12 +144,15 @@ INSERT INTO level_info (
     julianday('1776-06-28T21:30:00-05:00'),
     360,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    14,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_006_sullivans_island', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '99633efd-f135-44fc-8248-b8635a6db957',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -141,12 +163,15 @@ INSERT INTO level_info (
     julianday('1776-08-27T16:00:00-05:00'),
     420,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_007_long_island', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '537aba11-6201-4fe9-b789-36607de98e41',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -157,12 +182,15 @@ INSERT INTO level_info (
     julianday('1776-12-26T09:30:00-05:00'),
     380,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_008_trenton', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '9c6679ab-c028-48ab-95b7-93318f37c1a9',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -173,12 +201,15 @@ INSERT INTO level_info (
     julianday('1777-01-03T11:00:00-05:00'),
     400,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_009_princeton', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '42e95fce-6da1-416d-bf69-24f70bb4dc52',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -189,12 +220,15 @@ INSERT INTO level_info (
     julianday('1777-07-08T12:30:00-05:00'),
     400,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_010_fort_ann', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '549a67d9-f721-4cdf-8ba7-8916ba71b040',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -205,12 +239,15 @@ INSERT INTO level_info (
     julianday('1777-09-19T18:30:00-05:00'),
     450,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_011_saratoga', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '46157f59-b21b-4b03-9151-d404c6cd6d0b',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -221,12 +258,15 @@ INSERT INTO level_info (
     julianday('1779-10-18T12:00:00-05:00'),
     480,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_014_savannah_kr_complexity', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '4ca73a47-98f6-41b6-815d-c2c797aa746e',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -237,12 +277,15 @@ INSERT INTO level_info (
     julianday('1780-05-12T14:00:00-05:00'),
     500,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_014_siege_of_charleston', 6240.0, 4320.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
 ) VALUES (
     '33d900c6-c6ff-409a-973b-f09ddc8a6f6a',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -253,7 +296,9 @@ INSERT INTO level_info (
     julianday('1779-02-14T13:00:00-05:00'),
     430,
     20,
-    960.0, 540.0, 3840.0, 2160.0
+    15,
+    960.0, 540.0, 3840.0, 2160.0,
+    'level_012_kettle_creek', 5760.0, 3240.0
 );
 
 -- The Fall of New York
@@ -553,7 +598,7 @@ INSERT INTO level_info (
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives,
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
     playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
 ) VALUES (
     'b01bfd74-6f62-4f66-ba84-1af4d08112c0',
@@ -565,6 +610,7 @@ INSERT INTO level_info (
     julianday('1779-10-18T12:00:00-05:00'),
     300,
     20,
+    15,
     190.0, 226.125, 1164.0, 654.75
 );
 INSERT INTO level_info (

@@ -19,9 +19,7 @@ sqlite3 redcoat_raid.sqlite < DML/fort_ann_level.sql
 sqlite3 redcoat_raid.sqlite < DML/kettle_creek_level.sql
 sqlite3 redcoat_raid.sqlite < DML/level_01_path_points.sql
 sqlite3 redcoat_raid.sqlite < DML/level_tower_slots.sql
-sqlite3 redcoat_raid.sqlite < DML/level_map_images.sql
 sqlite3 redcoat_raid.sqlite < DML/savannah_bastion_v7.sql
-sqlite3 redcoat_raid.sqlite < DML/level_wave_counts.sql
 
 # Add the simulator data
 sqlite3 redcoat_raid.sqlite < DML/Simulator/sim_stat_bounds.sql
