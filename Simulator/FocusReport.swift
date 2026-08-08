@@ -180,6 +180,20 @@ enum FocusReport {
         """)
     }
 
+    static func faviconTag() -> String {
+        let candidates = [
+            "Simulator/Images/favicon.ico",
+            "Images/favicon.ico",
+            ("~/projects/in-defense-of-history/Simulator/Images/favicon.ico" as NSString).expandingTildeInPath,
+        ]
+        for path in candidates {
+            guard let data = FileManager.default.contents(atPath: path) else { continue }
+            return "<link rel=\"icon\" type=\"image/x-icon\" href=\"data:image/x-icon;base64,\(data.base64EncodedString())\">"
+        }
+        FileHandle.standardError.write(Data("  note: Simulator/Images/favicon.ico not found — report has no favicon\n".utf8))
+        return ""
+    }
+
     static func renderHTML(buckets: [FocusBucket], focus: SweepFocus, space: SweepSpace,
                            best: FocusBucket, rows: [SweepRow], csvPath: String) throws -> String {
         func r4(_ v: Double) -> Double { (v * 10000).rounded() / 10000 }
@@ -227,6 +241,7 @@ enum FocusReport {
         let sub = "\(buckets.count) focus values × \(buckets.map(\.n).min() ?? 0) paired permutation samples "
             + "of every other variable · \(rows.count) sweep rows · ≤\(space.grids.seedsPerPermutation) seeds each"
         return htmlTemplate
+            .replacingOccurrences(of: "__FAVICON__", with: faviconTag())
             .replacingOccurrences(of: "__TITLE__", with: "\(pretty)\(kindNote) — \(space.fixedInputs.levelName)")
             .replacingOccurrences(of: "__SUB__", with: sub)
             .replacingOccurrences(of: "__FOOT__", with: "Generated \(df.string(from: Date())) · aggregates: \(csvPath)")
@@ -240,6 +255,7 @@ enum FocusReport {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TITLE__</title>
+__FAVICON__
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root { color-scheme: light dark; }
