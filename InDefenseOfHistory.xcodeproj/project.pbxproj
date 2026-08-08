@@ -24,9 +24,9 @@
 
 /* Begin PBXFileReference section */
 		520082B7300C245B00DF4F64 /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
+		520082C1300C300000DF4F64 /* RedcoatRaidAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = RedcoatRaidAssets.xcassets; path = "../in-defense-of-history-data/RedcoatRaidAssets.xcassets"; sourceTree = SOURCE_ROOT; };
 		5263FCBD3002C99600C1546D /* Redcoat Raid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Redcoat Raid.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52AB1A00000000000000BA01 /* LevelEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		520082C1300C300000DF4F64 /* RedcoatRaidAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = RedcoatRaidAssets.xcassets; path = "../in-defense-of-history-data/RedcoatRaidAssets.xcassets"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */

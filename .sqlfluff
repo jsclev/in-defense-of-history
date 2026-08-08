@@ -1,5 +1,5 @@
 [sqlfluff]
 dialect = sqlite
-large_file_skip_byte_limit = 100000
+large_file_skip_byte_limit = 1000000
 max_line_length = 180
 

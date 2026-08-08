@@ -23,7 +23,7 @@ struct Options {
     var dimPins: [(dim: String, value: String)] = []
     var focus: (stat: String, kind: String)?
     var focusGrid: [Double]?
-    var reportDir = ("~/projects/in-defense-of-history-data/Simulator" as NSString).expandingTildeInPath
+    var reportDir = ("~/projects/in-defense-of-history-data/SimulatorRuns" as NSString).expandingTildeInPath
     var budgetHours = 8.0
     var gpu = false
     var fineGrids = false
@@ -83,7 +83,7 @@ func printUsage() {
                        (numeric stats only), e.g. --focus-grid 120:300:10.
       --report-dir <path>  Where focus reports land, named
                        focus_<variable>_<yyyy-MM-dd_HH.mm.ss>.{html,csv}
-                       (default: ~/projects/in-defense-of-history-data/Simulator)
+                       (default: ~/projects/in-defense-of-history-data/SimulatorRuns)
       --budget-hours <h>  Nightly budget; the run projects its length after a
                        calibration batch and warns if it will blow this (default 8)
       --melee          Field the melee line in sweep catalogs and enable the

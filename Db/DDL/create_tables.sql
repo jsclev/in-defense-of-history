@@ -1,3 +1,9 @@
+CREATE TABLE campaign (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    campaign_name TEXT NOT NULL,
+    parent_campaign_id TEXT REFERENCES campaign (id)
+);
+
 CREATE TABLE enemy_type (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     enemy_type_name TEXT NOT NULL,
@@ -60,12 +66,6 @@ CREATE TABLE player_unlocked_hero (
     hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id)
 );
 
-CREATE TABLE campaign (
-    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    campaign_name TEXT NOT NULL,
-    parent_campaign_id TEXT REFERENCES campaign (id)
-);
-
 CREATE TABLE level_info (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     campaign_id TEXT NOT NULL REFERENCES campaign (id),
@@ -86,42 +86,6 @@ CREATE TABLE level_info (
     map_image_height REAL NOT NULL DEFAULT 0.0 CHECK (map_image_height >= 0.0),
     CHECK (map_image_width = 0.0 OR playable_rect_x + playable_rect_width <= map_image_width),
     CHECK (map_image_height = 0.0 OR playable_rect_y + playable_rect_height <= map_image_height)
-);
-
-CREATE TABLE sim_enemy_type (
-    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    enemy_type_id TEXT NOT NULL UNIQUE REFERENCES enemy_type (id),
-    min_speed REAL NOT NULL CHECK (min_speed > 0),
-    max_speed REAL NOT NULL CHECK (max_speed >= min_speed),
-    min_hp REAL NOT NULL CHECK (min_hp > 0),
-    max_hp REAL NOT NULL CHECK (max_hp >= min_hp)
-);
-
-CREATE TABLE sim_enemy_type_bounty (
-    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    enemy_type_id TEXT NOT NULL UNIQUE REFERENCES enemy_type (id),
-    min_bounty REAL NOT NULL CHECK (min_bounty >= 0),
-    max_bounty REAL NOT NULL CHECK (max_bounty >= min_bounty)
-);
-
-CREATE TABLE sim_melee_unit (
-    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    tower_id TEXT NOT NULL UNIQUE REFERENCES tower (id),
-    min_hp REAL NOT NULL CHECK (min_hp > 0),
-    max_hp REAL NOT NULL CHECK (max_hp >= min_hp),
-    min_damage REAL NOT NULL CHECK (min_damage > 0),
-    max_damage REAL NOT NULL CHECK (max_damage >= min_damage)
-);
-
-CREATE TABLE sim_stat_bounds (
-    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    level_info_id TEXT REFERENCES level_info (id),
-    tower_kind TEXT NOT NULL,
-    stat TEXT NOT NULL,
-    min_value REAL NOT NULL,
-    max_value REAL NOT NULL CHECK (max_value >= min_value),
-    derived_from TEXT NOT NULL DEFAULT '',
-    UNIQUE (level_info_id, tower_kind, stat)
 );
 
 CREATE TABLE level_tower_unlock (
@@ -180,4 +144,40 @@ CREATE TABLE hero (
     historical_text TEXT NOT NULL,
     primary_image_name TEXT NOT NULL,
     details_image_name TEXT NOT NULL
+);
+
+CREATE TABLE sim_enemy_type (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    enemy_type_id TEXT NOT NULL UNIQUE REFERENCES enemy_type (id),
+    min_speed REAL NOT NULL CHECK (min_speed > 0),
+    max_speed REAL NOT NULL CHECK (max_speed >= min_speed),
+    min_hp REAL NOT NULL CHECK (min_hp > 0),
+    max_hp REAL NOT NULL CHECK (max_hp >= min_hp)
+);
+
+CREATE TABLE sim_enemy_type_bounty (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    enemy_type_id TEXT NOT NULL UNIQUE REFERENCES enemy_type (id),
+    min_bounty REAL NOT NULL CHECK (min_bounty >= 0),
+    max_bounty REAL NOT NULL CHECK (max_bounty >= min_bounty)
+);
+
+CREATE TABLE sim_melee_unit (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    tower_id TEXT NOT NULL UNIQUE REFERENCES tower (id),
+    min_hp REAL NOT NULL CHECK (min_hp > 0),
+    max_hp REAL NOT NULL CHECK (max_hp >= min_hp),
+    min_damage REAL NOT NULL CHECK (min_damage > 0),
+    max_damage REAL NOT NULL CHECK (max_damage >= min_damage)
+);
+
+CREATE TABLE sim_stat_bounds (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    level_info_id TEXT REFERENCES level_info (id),
+    tower_kind TEXT NOT NULL,
+    stat TEXT NOT NULL,
+    min_value REAL NOT NULL,
+    max_value REAL NOT NULL CHECK (max_value >= min_value),
+    derived_from TEXT NOT NULL DEFAULT '',
+    UNIQUE (level_info_id, tower_kind, stat)
 );
