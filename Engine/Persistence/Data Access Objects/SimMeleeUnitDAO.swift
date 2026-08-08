@@ -1,8 +1,6 @@
 import Foundation
 import SQLite3
 
-/// Simulator-only melee unit brackets: designer-provided HP and average-swing
-/// damage ranges per tower level. The game never reads this table.
 public struct SimMeleeBrackets {
     public var hp: ClosedRange<Double>
     public var averageDamage: ClosedRange<Double>
@@ -13,7 +11,6 @@ public class SimMeleeUnitDAO: BaseDAO {
         super.init(conn: conn, table: "sim_melee_unit", loggerName: SimMeleeUnitDAO.self)
     }
 
-    /// Brackets keyed by tower category then tower level (1-based).
     public func getBrackets() throws -> [String: [Int: SimMeleeBrackets]] {
         var out: [String: [Int: SimMeleeBrackets]] = [:]
 

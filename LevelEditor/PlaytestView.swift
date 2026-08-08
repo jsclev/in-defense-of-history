@@ -1,7 +1,3 @@
-// PlaytestView.swift
-// Playtest mode: run the current draft in the design-lab simulation — hand
-// play or autopilot, seeds, speed, quick batches, report card — and adopt a
-// recorded hand-played run as the blueprint's intended solution.
 import SwiftUI
 
 @MainActor
@@ -44,8 +40,6 @@ struct PlaytestView: View {
         .preferredColorScheme(.dark)
     }
 
-    // MARK: - Top bar
-
     private var topBar: some View {
         HStack(spacing: 16) {
             Label(session.blueprint.name, systemImage: "map")
@@ -73,8 +67,6 @@ struct PlaytestView: View {
         .padding(.vertical, 5)
         .background(.white.opacity(0.06), in: Capsule())
     }
-
-    // MARK: - Bottom bar
 
     private var bottomBar: some View {
         HStack(spacing: 14) {
@@ -199,8 +191,6 @@ struct PlaytestView: View {
         case .libertyPole: return "Liberty"
         }
     }
-
-    // MARK: - Report
 
     private var reportCard: some View {
         let sim = session.sim

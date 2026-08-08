@@ -76,8 +76,6 @@ struct MenuButton: View {
 struct DoneButton: View {
     static let assetName = "done_button_20"
 
-    /// The artwork's width/height ratio, which DoneButtonLayout needs to turn
-    /// its height into a frame.
     static var aspect: CGFloat { HudIcon.aspect(of: assetName) }
 
     let action: () -> Void

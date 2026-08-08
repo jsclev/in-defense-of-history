@@ -1,7 +1,3 @@
-// PlaytestCanvas.swift
-// The live simulation renderer: roads are ribbons, slots are sockets,
-// enemies are dots whose color is type, whose ring is morale state, and
-// whose bar is HP.
 import SwiftUI
 
 @MainActor
@@ -58,7 +54,6 @@ struct PlaytestCanvas: View {
             ctx.stroke(p, with: .color(Palette.roadFill),
                        style: StrokeStyle(lineWidth: 24 * s, lineCap: .round, lineJoin: .round))
 
-            // Direction chevrons every 140 design units.
             var d = 70.0
             while d < road.totalLength {
                 let a = road.point(atDistance: d - 8)
@@ -77,7 +72,6 @@ struct PlaytestCanvas: View {
                 d += 140
             }
 
-            // Spawn and exit markers.
             let spawn = t.view(road.points[0])
             let exitP = t.view(road.points[road.points.count - 1])
             ctx.fill(
@@ -190,7 +184,6 @@ struct PlaytestCanvas: View {
                 )
             }
 
-            // HP bar.
             let frac = max(0, min(1, e.hp / type.stats.maxHP))
             if frac < 1 {
                 let w = 2.4 * baseR

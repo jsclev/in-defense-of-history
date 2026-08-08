@@ -1,12 +1,5 @@
 import CoreGraphics
 
-/// Pure row/column composition: item sizes in, item frames and an overall
-/// size out. This is the only place HUD code computes "things next to each
-/// other", so a spacing or alignment fix lands everywhere at once.
-///
-/// Frames are in the stack's own space, origin at the top-leading corner.
-/// Rows align tops, columns align leading edges — HUD elements share edges,
-/// they don't centre on each other.
 public struct StackLayout: Equatable {
     public let frames: [CGRect]
     public let size: CGSize
@@ -39,7 +32,6 @@ public struct StackLayout: Equatable {
                                         height: itemSizes.isEmpty ? 0 : y - spacing))
     }
 
-    /// The same stack translated into a parent's coordinate space.
     public func placed(at origin: CGPoint) -> [CGRect] {
         frames.map { $0.offsetBy(dx: origin.x, dy: origin.y) }
     }

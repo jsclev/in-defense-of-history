@@ -1,28 +1,27 @@
--- Lexington and Concord: 6 waves
-INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES
-('58a4045d-cf16-428c-9f46-11d4e29e3305',
- (SELECT li.id FROM level_info li JOIN campaign c ON c.id = li.campaign_id
-   WHERE li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'),
+INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES (
+    '58a4045d-cf16-428c-9f46-11d4e29e3305',
+    (SELECT li.id FROM level_info AS li INNER JOIN campaign AS c ON c.id = li.campaign_id
+     WHERE li.level_name = 'Battle Road' AND c.campaign_name = 'Main'),
  1, 5.0),
 ('43e72179-bae1-462d-a08c-01f7b7454b3d',
  (SELECT li.id FROM level_info li JOIN campaign c ON c.id = li.campaign_id
-   WHERE li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'),
+   WHERE li.level_name = 'Battle Road' AND c.campaign_name = 'Main'),
  2, 30.0),
 ('48543733-3925-440d-b783-0f4f2b92a8bd',
  (SELECT li.id FROM level_info li JOIN campaign c ON c.id = li.campaign_id
-   WHERE li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'),
+   WHERE li.level_name = 'Battle Road' AND c.campaign_name = 'Main'),
  3, 55.0),
 ('5696e7f8-adae-4976-9da4-826644b94460',
  (SELECT li.id FROM level_info li JOIN campaign c ON c.id = li.campaign_id
-   WHERE li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'),
+   WHERE li.level_name = 'Battle Road' AND c.campaign_name = 'Main'),
  4, 80.0),
 ('7d24d7eb-0815-45b6-a516-461d610d6583',
  (SELECT li.id FROM level_info li JOIN campaign c ON c.id = li.campaign_id
-   WHERE li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'),
+   WHERE li.level_name = 'Battle Road' AND c.campaign_name = 'Main'),
  5, 105.0),
 ('77f4a7f9-c6e4-4afe-b786-43b66a23ac9d',
  (SELECT li.id FROM level_info li JOIN campaign c ON c.id = li.campaign_id
-   WHERE li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'),
+   WHERE li.level_name = 'Battle Road' AND c.campaign_name = 'Main'),
  6, 130.0);
 
 -- Bunker Hill: 7 waves

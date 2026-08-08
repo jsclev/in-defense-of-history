@@ -1,7 +1,3 @@
-// MapDocument.swift
-// The .tdmap document: a JSON MapDraft plus undo plumbing. A draft mirrors
-// LevelBlueprint field-for-field so the editor can round-trip design-lab
-// levels and compile them for playtesting without touching art or the DB.
 import SwiftUI
 import Combine
 import UniformTypeIdentifiers
@@ -10,9 +6,6 @@ extension UTType {
     static let tdmap = UTType(exportedAs: "com.zippyzen.td.map")
 }
 
-// nonisolated everywhere: the document system encodes, decodes, and compares
-// drafts on background threads, so none of these conformances may be bound
-// to the main actor.
 nonisolated struct MapDraft: Codable, Equatable, Sendable {
     nonisolated struct Road: Codable, Equatable, Sendable {
         var name: String
@@ -72,7 +65,6 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
 }
 
 extension MapDraft {
-    // Tolerant decoding so hand-edited or older .tdmap files still open.
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         name = try c.decodeIfPresent(String.self, forKey: .name) ?? "Untitled Map"
@@ -85,8 +77,6 @@ extension MapDraft {
         backgroundImagePath = try c.decodeIfPresent(String.self, forKey: .backgroundImagePath)
         backgroundOpacity = try c.decodeIfPresent(Double.self, forKey: .backgroundOpacity) ?? 0.35
         coordinateSpace = try c.decodeIfPresent(String.self, forKey: .coordinateSpace) ?? "design1600x900"
-        // Files saved before the retina canvas existed are in engine design
-        // space; lift them into canvas pixels.
         if coordinateSpace != Self.canvasSpace {
             for r in roads.indices {
                 roads[r].points = roads[r].points.map(CanvasSpec.fromDesign)
@@ -178,8 +168,6 @@ final class MapDocument: ReferenceFileDocument {
         return FileWrapper(regularFileWithContents: try encoder.encode(snapshot))
     }
 
-    // MARK: - Undoable editing
-
     @MainActor
     func edit(_ undoManager: UndoManager?, _ apply: (inout MapDraft) -> Void) {
         let before = draft
@@ -209,10 +197,6 @@ final class MapDocument: ReferenceFileDocument {
         )
     }
 
-    // MARK: - Structural edits shared by canvas and inspector
-
-    // Removing a slot renumbers everything after it, so intended-solution
-    // steps must be dropped or shifted to keep referring to the same towers.
     @MainActor
     func deleteSlot(_ i: Int, _ undoManager: UndoManager?) {
         edit(undoManager) { d in
@@ -248,9 +232,6 @@ final class MapDocument: ReferenceFileDocument {
     }
 }
 
-// MARK: - Geometry checks
-
-// All distances in canvas pixels: engine design units x CanvasSpec.designScale.
 enum MapGeometry {
     static let roadHalfWidth = 15.0 * CanvasSpec.designScale
     static let slotRadius = 16.0 * CanvasSpec.designScale

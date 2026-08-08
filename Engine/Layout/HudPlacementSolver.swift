@@ -1,6 +1,5 @@
 import CoreGraphics
 
-/// The corner a piece of chrome is anchored to.
 public enum HudCorner {
     case topLeading, topTrailing, bottomLeading, bottomTrailing
 
@@ -19,28 +18,8 @@ public enum HudCorner {
     }
 }
 
-/// Decides where anchored chrome — counters, corner buttons, the title, the
-/// menu bar — sits on a given screen.
-///
-/// Two rules, in priority order:
-///
-/// 1. Chrome is always entirely inside the safe area. This is absolute.
-/// 2. Chrome always keeps at least `margin` from the physical screen edge.
-///
-/// The element starts at the corner it would occupy inside the playable
-/// rect, then shifts outward into any spare room the safe area offers, then
-/// is clamped back inside the safe area. Because the outward shift stops at
-/// `chromeInset` — which is `max(safeAreaInset, margin)` — the second rule
-/// holds by construction: where the safe inset is deep it supplies the
-/// clearance, and where it is shallow the margin does.
-///
-/// Deliberately free of SwiftUI so the rules can be exercised directly.
 public enum HudPlacementSolver {
 
-    /// The frame for chrome of `size` anchored to `corner`.
-    ///
-    /// Pass `.zero` for `size` when the element sizes itself and is anchored
-    /// to a leading/top corner — only the origin is meaningful there.
     public static func frame(size: CGSize,
                              corner: HudCorner,
                              margin: CGFloat,
@@ -50,7 +29,6 @@ public enum HudPlacementSolver {
         return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
 
-    /// Just the origin, for elements whose size SwiftUI works out itself.
     public static func origin(size: CGSize = .zero,
                               corner: HudCorner,
                               margin: CGFloat,
@@ -63,7 +41,6 @@ public enum HudPlacementSolver {
         let inset = g.chromeInset(corner.horizontal, margin: margin)
         switch corner.horizontal {
         case .leading:
-            // start inside the playable rect, shift out to the limit, clamp
             let limit = g.physical.minX + inset
             return max(min(g.playable.minX + margin, limit), g.safe.minX)
         case .trailing:

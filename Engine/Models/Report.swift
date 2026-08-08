@@ -23,7 +23,6 @@ public struct SimulationResult: Sendable, Codable {
 }
 
 public enum Percentile {
-    /// Linear-interpolated percentile. `p` in 0...100.
     public static func of(_ values: [Double], _ p: Double) -> Double {
         guard !values.isEmpty else { return 0 }
         let sorted = values.sorted()
@@ -61,14 +60,11 @@ public struct BatchReport: Sendable {
     public var totalCaptured: Int { results.reduce(0) { $0 + $1.captured } }
     public var totalLeaked: Int { results.reduce(0) { $0 + $1.leaked } }
 
-    /// Share of removals that came from morale rather than the musket —
-    /// the "is terror strictly better than shooting?" dial.
     public var routShare: Double {
         let removed = totalKilled + totalRouted + totalCaptured
         return removed == 0 ? 0 : Double(totalRouted + totalCaptured) / Double(removed)
     }
 
-    /// Mean of per-run max progress for each wave: the tension curve.
     public var meanWaveMaxProgress: [Double] {
         guard let first = results.first else { return [] }
         var sums = Array(repeating: 0.0, count: first.waveMaxProgress.count)
@@ -82,10 +78,6 @@ public struct BatchReport: Sendable {
 }
 
 public enum Batch {
-    /// Runs `count` simulations at seeds base, base+1, ... sequentially.
-    /// Sequential keeps determinism trivially auditable; a TaskGroup fan-out
-    /// (one task per seed, each sim single-threaded) is the drop-in next step
-    /// once throughput matters.
     public static func run(
         level: LevelInfo,
         catalog: ContentCatalog,

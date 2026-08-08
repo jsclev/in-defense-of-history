@@ -1,8 +1,6 @@
 import SwiftUI
 
 extension ScreenGeometry {
-    /// Built from a GeometryProxy that sits in a safe-area-respecting layer:
-    /// its `size` excludes the insets, so the physical bounds are the two added back.
     init(proxy: GeometryProxy) {
         let insets = proxy.safeAreaInsets
         self.init(
@@ -14,8 +12,6 @@ extension ScreenGeometry {
 }
 
 extension View {
-    /// Anchors this view to a corner of the screen using the placement rules,
-    /// in physical-screen coordinates. Apply inside a layer that ignores the safe area.
     func hudAnchored(_ corner: HudCorner,
                      margin: CGFloat,
                      size: CGSize = .zero,
@@ -30,9 +26,6 @@ extension View {
 }
 
 extension View {
-    /// Renders this view exactly in a frame a layout type computed, in
-    /// physical-screen coordinates. Pair with `.ignoresSafeArea()` on the
-    /// wrapping layer so physical coordinates mean what they say.
     func hudFrame(_ rect: CGRect, in geometry: ScreenGeometry,
                   alignment: Alignment = .center) -> some View {
         self.frame(width: rect.width, height: rect.height, alignment: alignment)

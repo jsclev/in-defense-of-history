@@ -10,8 +10,6 @@ struct EncyclopediaView: View {
 
     @State private var selectedCategory: Category?
 
-    // Element frames from encyclopedia_screen_layout.json, in the 3840x2160
-    // playable-screen pixel space.
     private static let layoutSize = CGSize(width: 3840, height: 2160)
     private static let titleFrame = CGRect(x: 1220, y: 8, width: 1400, height: 622)
     private static let towersFrame = CGRect(x: 675, y: 620, width: 1138, height: 1420)
@@ -49,8 +47,6 @@ struct EncyclopediaView: View {
                                    frame: Self.enemiesFrame,
                                    scale: scale, origin: origin)
 
-                    // Sized by the screen's own internal scale, placed by the
-                    // shared solver like every other done button.
                     let encScale = rectHeight / 680.625
                     let doneFrame = DoneButtonLayout(
                         screen: ScreenGeometry(proxy: geometry),

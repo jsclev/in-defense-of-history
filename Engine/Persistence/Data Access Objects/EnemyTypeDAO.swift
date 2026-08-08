@@ -6,8 +6,6 @@ public class EnemyTypeDAO: BaseDAO {
         super.init(conn: conn, table: "enemy_type", loggerName: EnemyTypeDAO.self)
     }
 
-    /// Loads the full enemy roster — the source of the encyclopedia, the
-    /// simulation catalog, and wave authoring. Ordered by name for stable output.
     public func getAll() throws -> [EnemyType] {
         var enemyTypes: [EnemyType] = []
 
@@ -73,8 +71,6 @@ public class EnemyTypeDAO: BaseDAO {
         return enemyTypes
     }
 
-    /// The `traits` column stores the same human-readable JSON the `Trait`
-    /// Codable produces, so decoding round-trips through JSONDecoder.
     private func decodeTraits(stmt: OpaquePointer?, colIndex: Int, name: String) throws -> [Trait] {
         guard let json = try getString(stmt: stmt, colIndex: colIndex), !json.isEmpty else {
             return []

@@ -22,12 +22,7 @@ struct HeroesView: View {
 
     private var heroGrid: some View {
         ZStack(alignment: .topLeading) {
-            // The board ignores safe areas so the grid can truly reach the
-            // screen bottom; only the back button honors them.
             GeometryReader { geometry in
-                // 5x3 grid of individually framed cards inside the centered
-                // 16:9 playable rect: a wood margin around the outside and
-                // small gaps between the cards.
                 let rectHeight = ScreenGeometry(
                     fullSize: geometry.size, leading: 0, top: 0, trailing: 0, bottom: 0
                 ).playable.height
@@ -39,9 +34,6 @@ struct HeroesView: View {
                 let cellHeight = (rectHeight - 2 * margin - CGFloat(Self.rows - 1) * gap)
                     / CGFloat(Self.rows)
                 ZStack {
-                    // Aspect-fill: the smallest zoom that still covers the
-                    // whole screen, so no empty bar can ever show. Whichever
-                    // axis overflows is cropped evenly about the centre.
                     Image("hero_screen_background")
                         .resizable()
                         .scaledToFill()
@@ -88,8 +80,6 @@ struct HeroesView: View {
         .onAppear(perform: loadHeroes)
     }
 
-    // Shared size: the largest at which every card's unlock message wraps
-    // to at most two lines at the ribbon's wrap width.
     static func unlockFontSize(heroes: [Hero], cellWidth: CGFloat,
                                cellHeight: CGFloat) -> CGFloat {
         let wrapWidth = cellWidth * (1 - 2 * 0.04) - 1
@@ -124,9 +114,6 @@ struct HeroesView: View {
         )
         heroes = (try? db.heroDao.getAll()) ?? []
 
-        // A stored selection can go stale — a hero that was picked before can
-        // since have been locked. Drop anything not currently unlocked, and
-        // fall back to whatever the database seeds.
         let unlocked = Set(heroes.filter(\.unlocked).map(\.id.uuidString))
         var selection = (UserDefaults.standard.string(forKey: "selectedHeroIDs") ?? "")
             .split(separator: ",").map(String.init)
@@ -207,8 +194,6 @@ private struct HeroSlot: View {
     }
 
     var body: some View {
-        // Unlocked slots navigate; locked and empty slots are inert
-        // (not a disabled Button — SwiftUI would dim the art).
         Group {
             if let hero {
                 Button(action: { onSelect(hero) }) { slotContent }
@@ -224,18 +209,11 @@ private struct HeroSlot: View {
     private var slotContent: some View {
         ZStack {
             if let hero {
-                // Fill (not fit) so the art, name bar, and frame share the
-                // exact cell bounds — no intermittent hairline seams.
-                // Explicit width-driven art frame pinned to the cell top:
-                // scaledToFill paints overflow centered no matter the
-                // alignment, so the oversize frame is set by hand and any
-                // crop comes off the bottom, keeping heads and headroom.
                 Group {
                     if hasArt {
                         Image(hero.primaryImageName)
                             .resizable()
                             .frame(width: width, height: width * 15 / 16)
-                            // Down-shift stays under the frame's top bar.
                             .offset(y: height * 0.045)
                     } else {
                         lockedPanel
@@ -317,7 +295,6 @@ private struct HeroSlot: View {
         startPoint: .top, endPoint: .bottom
     )
 
-    // Plate navy sampled from the card art's baked name plates.
     private static let plateColor = Color(red: 8 / 255, green: 30 / 255, blue: 58 / 255)
 
     private func unlockRibbon(_ hero: Hero) -> some View {
@@ -328,12 +305,9 @@ private struct HeroSlot: View {
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)
-                    // Tight same-color glow visually thickens the light
-                    // Cochin bold face.
                     .shadow(color: .white.opacity(0.65), radius: 0.4)
                     .shadow(color: .black.opacity(0.8), radius: 1.5, y: 1)
                     .padding(.horizontal, width * 0.04)
-                    // Clears the frame's top bar.
                     .padding(.top, height * 0.075)
             }
         }
@@ -347,8 +321,6 @@ private struct HeroSlot: View {
             .minimumScaleFactor(0.55)
             .padding(.horizontal, width * 0.04)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            // Bottom padding tuned so the text keeps the same absolute
-            // height while the plate grew upward around it.
             .padding(.bottom, height * 0.038)
             .frame(height: height * 0.196)
             .background(Self.plateColor)
@@ -371,9 +343,6 @@ private struct HeroSlot: View {
 
 }
 
-// Musket-furniture steel frame around one card: four polished bars,
-// verticals butting against the horizontals. Bars are generated long
-// (2048px) so on-screen use always downscales and stays crisp.
 @available(iOS 26.0, *)
 private struct MusketSteelFrame: View {
     let width: CGFloat
@@ -396,7 +365,6 @@ private struct MusketSteelFrame: View {
                 .frame(width: thickness, height: height - 2 * thickness)
                 .position(x: width - thickness / 2, y: height / 2)
 
-            // Mitered corners (asset is the top-left; rotate for the rest).
             corner(rotation: 0, x: thickness / 2, y: thickness / 2)
             corner(rotation: 90, x: width - thickness / 2, y: thickness / 2)
             corner(rotation: 180, x: width - thickness / 2, y: height - thickness / 2)
@@ -416,9 +384,6 @@ private struct MusketSteelFrame: View {
     }
 }
 
-// Touch feedback per mobile-UX practice: instant compress + darken on
-// touch-down with a light haptic fired at the same moment, then a springy
-// pop back on release. Visual is the primary channel; the haptic accents it.
 @available(iOS 26.0, *)
 private struct HeroCardButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
@@ -470,7 +435,6 @@ struct HeroDetailsView: View {
                 )
                 .ignoresSafeArea()
 
-                // Placeholder layout until the details screen art exists.
                 HStack(spacing: 36 * metrics.scale) {
                     Image(UIImage(named: hero.detailsImageName) != nil
                           ? hero.detailsImageName : hero.primaryImageName)

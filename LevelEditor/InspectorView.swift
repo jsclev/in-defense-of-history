@@ -1,7 +1,3 @@
-// InspectorView.swift
-// Right-hand panel: level metadata, background reference image, road/slot
-// lists, numeric editing of the selection, the wave table, and the
-// intended-solution build order.
 import SwiftUI
 
 @MainActor
@@ -26,8 +22,6 @@ struct InspectorView: View {
         }
     }
 
-    // MARK: - Level
-
     private var levelBox: some View {
         GroupBox("Level") {
             VStack(alignment: .leading, spacing: 8) {
@@ -47,8 +41,6 @@ struct InspectorView: View {
             .padding(4)
         }
     }
-
-    // MARK: - Background
 
     private var backgroundBox: some View {
         GroupBox("Reference Image") {
@@ -100,8 +92,6 @@ struct InspectorView: View {
         }
     }
 
-    // MARK: - Roads
-
     private var roadsBox: some View {
         GroupBox("Roads") {
             VStack(alignment: .leading, spacing: 6) {
@@ -110,7 +100,6 @@ struct InspectorView: View {
                 }
                 Button {
                     document.edit(undoManager) { d in
-                        // Spawn starts in the bleed just past the playable edge.
                         d.roads.append(.init(
                             name: "Road \(d.roads.count + 1)",
                             points: [Point(2520, 1032), Point(2130, 1032)]
@@ -171,8 +160,6 @@ struct InspectorView: View {
         .onTapGesture { state.selection = .road(ri) }
     }
 
-    // MARK: - Slots
-
     private var slotsBox: some View {
         let warnings = MapGeometry.warnings(for: document.draft)
         return GroupBox("Tower Slots") {
@@ -220,8 +207,6 @@ struct InspectorView: View {
             .padding(4)
         }
     }
-
-    // MARK: - Selection coordinates
 
     @ViewBuilder
     private var selectionBox: some View {
@@ -271,8 +256,6 @@ struct InspectorView: View {
             return nil
         }
     }
-
-    // MARK: - Waves
 
     private var wavesBox: some View {
         GroupBox("Waves") {
@@ -417,8 +400,6 @@ struct InspectorView: View {
         .background(.white.opacity(0.04), in: RoundedRectangle(cornerRadius: 6))
     }
 
-    // MARK: - Intended solution
-
     private var solutionBox: some View {
         GroupBox("Intended Solution") {
             VStack(alignment: .leading, spacing: 4) {
@@ -534,8 +515,6 @@ struct InspectorView: View {
         }
         .font(.caption)
     }
-
-    // MARK: - Small fields
 
     private func intField(_ label: String, _ binding: Binding<Int>) -> some View {
         HStack(spacing: 2) {

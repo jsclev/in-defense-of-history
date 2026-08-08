@@ -2,13 +2,6 @@
 -- Two routes converge along Wood Creek before the Fort Anne gate.
 BEGIN TRANSACTION;
 
-DELETE FROM level_path_point
-WHERE level_info_id = '42e95fce-6da1-416d-bf69-24f70bb4dc52';
-DELETE FROM tower_slot
-WHERE level_info_id = '42e95fce-6da1-416d-bf69-24f70bb4dc52';
-DELETE FROM level_tower_unlock
-WHERE level_info_id = '42e95fce-6da1-416d-bf69-24f70bb4dc52';
-
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,
     map_position_x, map_position_y

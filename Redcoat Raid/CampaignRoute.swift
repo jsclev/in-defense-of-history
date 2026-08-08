@@ -1,17 +1,7 @@
 import CoreGraphics
 import Foundation
 
-/// Shared machinery for the map's wandering animals and ships.
-///
-/// A route is a closed Catmull-Rom loop through random waypoints, so a
-/// traveller curves rather than turning on a sixpence and the circuit
-/// repeats seamlessly. Candidate loops are rejected unless the *whole
-/// sampled curve* lies in allowed terrain — a spline bulges outside its
-/// control points, so checking only the waypoints lets a traveller cut a
-/// corner across a coastline. Courses are seeded deterministically, so a
-/// given seed always yields the same route.
 enum CampaignRoute {
-    /// SplitMix64 — deterministic and independent of the platform RNG.
     struct Seeded {
         var state: UInt64
 
@@ -34,14 +24,9 @@ enum CampaignRoute {
     struct Course {
         var points: [CGPoint]
         var lengths: [CGFloat]
-        /// Cumulative *travel time* rather than distance. A traveller eases
-        /// off through a bend and picks up again on the straights, which is
-        /// what stops a constant-speed loop looking mechanical.
         var times: [CGFloat]
     }
 
-    /// A coarse terrain mask over the map image: rows of "#" (allowed) and
-    /// "." (not), sampled at the cell containing a point.
     struct Mask {
         var rows: [String]
         var width: Int
@@ -78,9 +63,6 @@ enum CampaignRoute {
         return out
     }
 
-    /// Builds a closed course whose every sampled point satisfies `allows`.
-    /// `centreX`/`centreY` bound where the loop may be centred; `radius`
-    /// bounds its size, shrinking on each retry.
     static func closedCourse(
         seed: Int,
         centreX: ClosedRange<CGFloat>,
@@ -93,8 +75,6 @@ enum CampaignRoute {
     ) -> Course {
         var rng = Seeded(seed: seed)
         var points: [CGPoint] = []
-        // Best valid loop seen so far, in case none reaches minimumLength —
-        // a short legal course still beats an unvalidated fallback.
         var bestValid: [CGPoint] = []
         var bestValidLength: CGFloat = 0
 
@@ -106,7 +86,7 @@ enum CampaignRoute {
         }
 
         for attempt in 0..<attempts {
-            let count = 5 + Int(rng.next() % 3)                    // 5...7 waypoints
+            let count = 5 + Int(rng.next() % 3)
             let cx = rng.range(centreX.lowerBound, centreX.upperBound)
             let cy = rng.range(centreY.lowerBound, centreY.upperBound)
             let shrink = 1 - CGFloat(attempt) / CGFloat(attempts + 20)
@@ -115,14 +95,11 @@ enum CampaignRoute {
             var candidate: [CGPoint] = []
             for i in 0..<count {
                 let a = spin + CGFloat(i) / CGFloat(count) * .pi * 2
-                let r = baseR * rng.range(0.7, 1.3)                // irregular, not a circle
+                let r = baseR * rng.range(0.7, 1.3)
                 candidate.append(CGPoint(x: cx + cos(a) * r * aspect, y: cy + sin(a) * r))
             }
             let sampled = spline(candidate)
             guard sampled.allSatisfy(allows) else { continue }
-            // A valid but tiny loop reads as spinning on the spot, so hold
-            // out for a circuit worth travelling — but remember the best
-            // legal one in case nothing longer turns up.
             let length = perimeter(sampled)
             if length > bestValidLength { bestValidLength = length; bestValid = sampled }
             if length >= minimumLength { points = sampled; break }
@@ -145,7 +122,6 @@ enum CampaignRoute {
             lengths.append(lengths[i - 1] + hypot(b.x - a.x, b.y - a.y))
         }
 
-        // Travel time per segment: the sharper the turn, the slower the leg.
         func heading(_ i: Int) -> CGFloat {
             let a = points[i % points.count], b = points[(i + 1) % points.count]
             return atan2(b.y - a.y, b.x - a.x)
@@ -155,16 +131,12 @@ enum CampaignRoute {
             let step = lengths[i] - lengths[i - 1]
             var turn = abs(heading(i % points.count) - heading(i - 1))
             if turn > .pi { turn = 2 * .pi - turn }
-            // 0 rad -> full speed, ~0.25 rad of turn per sample -> about half
             let speed = max(0.45, 1 - turn * 2.2)
             times.append(times[i - 1] + step / speed)
         }
         return Course(points: points, lengths: lengths, times: times)
     }
 
-    /// Position and direction of travel at a fraction around the course.
-    /// The heading is returned as a unit vector; callers convert it to their
-    /// own sheet's angle convention.
     static func sample(_ progress: Double, on course: Course)
         -> (point: CGPoint, dx: CGFloat, dy: CGFloat) {
         let points = course.points, times = course.times
@@ -182,7 +154,6 @@ enum CampaignRoute {
         let a = points[lo % points.count], b = points[(lo + 1) % points.count]
         let here = CGPoint(x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t)
 
-        // Look a little further along so the heading reads the curve, not one segment.
         let ahead = points[(lo + 6) % points.count]
         let dx = ahead.x - here.x, dy = ahead.y - here.y
         let d = max(hypot(dx, dy), 0.0001)

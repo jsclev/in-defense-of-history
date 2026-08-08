@@ -1,12 +1,3 @@
-// SQLite.swift
-// A deliberately thin, fast wrapper over the SQLite C API. No ORM, no codegen:
-// prepared-statement caching + explicit transactions is where the performance
-// lives, and repositories stay readable on top of it.
-//
-// Threading: one connection, one owner. Create it, use it from a single task,
-// let it die. The sim's hot loop never touches the database — content loads
-// once up front — so there is nothing to synchronize.
-
 import Foundation
 
 #if canImport(SQLite3)
@@ -15,21 +6,8 @@ import SQLite3
 import CSQLite
 #endif
 
-/// SQLITE_TRANSIENT tells SQLite to copy bound buffers immediately, which is
-/// what we want when binding Swift-managed strings and data.
 private let SQLITE_TRANSIENT = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
-//public struct SQLiteError: Error, CustomStringConvertible {
-//    public let code: Int32
-//    public let message: String
-//    public let context: String
-//
-//    public var description: String {
-//        "SQLite error \(code) (\(context)): \(message)"
-//    }
-//}
-
-/// A value crossing into or out of the database.
 public enum SQLiteValue: Sendable {
     case int(Int64)
     case real(Double)
@@ -40,8 +18,6 @@ public enum SQLiteValue: Sendable {
     public static func integer(_ v: Int) -> SQLiteValue { .int(Int64(v)) }
 }
 
-/// Read access to the current row inside a `query` callback. Column indices
-/// are zero-based and follow the SELECT list.
 public struct SQLiteRow {
     let stmt: OpaquePointer
 
@@ -70,7 +46,6 @@ public final class SQLiteDatabase {
 
     public let path: String
 
-    /// Opens (creating if needed) a database. Use ":memory:" for throwaway runs.
     public init(path: String) throws {
         self.path = path
         var h: OpaquePointer?
@@ -80,7 +55,6 @@ public final class SQLiteDatabase {
             let msg = h.map { String(cString: sqlite3_errmsg($0)) } ?? "unknown"
             if let h { sqlite3_close_v2(h) }
             throw SQLiteError.OpenDatabase(message: "Unable to open db")
-//            throw SQLiteError(code: rc, message: msg, context: "open \(path)")
         }
         handle = opened
         try tunePragmas()
@@ -96,8 +70,6 @@ public final class SQLiteDatabase {
     }
 
     private func tunePragmas() throws {
-        // WAL + NORMAL is the standard high-throughput durable-enough profile.
-        // (:memory: ignores journal_mode; harmless to ask.)
         try query("PRAGMA journal_mode=WAL;") { _ in }
         try exec("PRAGMA synchronous=NORMAL;")
         try exec("PRAGMA foreign_keys=ON;")
@@ -107,7 +79,6 @@ public final class SQLiteDatabase {
     private func requireHandle() throws -> OpaquePointer {
         guard let handle else {
             throw SQLiteError.OpenDatabase(message: "database closed")
-//            throw SQLiteError(code: SQLITE_MISUSE, message: "database closed", context: "handle")
         }
         return handle
     }
@@ -117,13 +88,8 @@ public final class SQLiteDatabase {
         let code = handle.map { sqlite3_errcode($0) } ?? SQLITE_ERROR
         
         return SQLiteError.Bind(message: msg)
-//        return SQLiteError(code: code, message: msg, context: context)
     }
 
-    // MARK: - Execution
-
-    /// Executes one or more semicolon-separated statements (DDL, pragmas).
-    /// Not for hot paths — no binds, no cache.
     public func exec(_ sql: String) throws {
         let h = try requireHandle()
         var errMsg: UnsafeMutablePointer<CChar>?
@@ -132,11 +98,9 @@ public final class SQLiteDatabase {
             let msg = errMsg.map { String(cString: $0) } ?? "unknown"
             sqlite3_free(errMsg)
             throw SQLiteError.Prepare(message: msg)
-//            throw SQLiteError(code: rc, message: msg, context: "exec")
         }
     }
 
-    /// Returns a cached prepared statement, reset and cleared for reuse.
     private func prepared(_ sql: String) throws -> OpaquePointer {
         if let cached = statementCache[sql] {
             sqlite3_reset(cached)
@@ -181,7 +145,6 @@ public final class SQLiteDatabase {
         }
     }
 
-    /// Runs a statement that returns no rows (INSERT/UPDATE/DELETE).
     public func run(_ sql: String, _ binds: [SQLiteValue] = []) throws {
         let stmt = try prepared(sql)
         try bind(binds, to: stmt)
@@ -191,7 +154,6 @@ public final class SQLiteDatabase {
         }
     }
 
-    /// Runs a SELECT, invoking `row` once per result row.
     public func query(
         _ sql: String,
         _ binds: [SQLiteValue] = [],
@@ -211,7 +173,6 @@ public final class SQLiteDatabase {
         }
     }
 
-    /// Convenience: first column of the first row as Int64, else nil.
     public func scalarInt(_ sql: String, _ binds: [SQLiteValue] = []) throws -> Int64? {
         var result: Int64? = nil
         try query(sql, binds) { r in
@@ -228,11 +189,6 @@ public final class SQLiteDatabase {
         handle.map { Int(sqlite3_changes($0)) } ?? 0
     }
 
-    // MARK: - Transactions
-
-    /// Wraps `body` in BEGIN IMMEDIATE / COMMIT with rollback on throw.
-    /// Bulk inserts belong inside one of these: it is the difference between
-    /// thousands of fsyncs and one.
     public func transaction<T>(_ body: () throws -> T) throws -> T {
         try exec("BEGIN IMMEDIATE;")
         do {

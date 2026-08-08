@@ -4,8 +4,6 @@ import Combine
 import QuartzCore
 
 enum TowerKind: String, CaseIterable, Identifiable {
-    // Case order is the build menu's bubble order: upper-left, upper-right,
-    // lower-right, lower-left.
     case ranged
     case melee
     case areaOfEffect
@@ -56,9 +54,6 @@ enum TowerKind: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Sizes below are the pixel heights the art was tuned at on a 1164x655
-    /// level; MapSpriteSizing turns them into a fraction of the playable rect
-    /// so they render the same on levels authored at other pixel scales.
     var spriteHeight: SpriteHeight {
         switch self {
         case .ranged: return MapSpriteSizing.tower(mapPixels: 80)
@@ -107,9 +102,6 @@ struct PlacedTower: Identifiable {
 @MainActor
 final class LevelRunner: NSObject, ObservableObject {
     private static let normalTickDuration: Duration = .seconds(1) / SimClock.ticksPerSecond
-    /// Seeded from CampaignNode, then replaced by the database once the level
-    /// loads — the DB is the source of truth for which art a level draws and
-    /// how big it is, since the playable rect is expressed in those pixels.
     private(set) var mapImageSize: CGSize
     private(set) var mapImageName: String
     private(set) var playableRect: CGRect
@@ -121,13 +113,8 @@ final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var lives = 0
 
-    /// Set the moment the last life is lost. The display link is torn down
-    /// with it, so walkers, projectiles and towers freeze exactly where they
-    /// were. There is no retry from here: the player leaves via the back
-    /// button and re-enters, which builds a fresh runner.
     @Published private(set) var isDefeated = false
 
-    /// Every wave in the level has been sent and destroyed.
     @Published private(set) var isCleared = false
 
     private(set) var towerCosts: [TowerKind: [Int: [Int: Int]]] = [:]
@@ -150,9 +137,7 @@ final class LevelRunner: NSObject, ObservableObject {
 
     var availableTowerKinds: Set<TowerKind> { Set(towerUnlocks.keys) }
 
-
     private(set) var slotPositions: [CGPoint] = []
-
 
     private static let attackRangeInImagePixels: CGFloat = 260
     private static let projectileSpeedPerSecond: CGFloat = 520
@@ -195,7 +180,6 @@ final class LevelRunner: NSObject, ObservableObject {
     @Published private(set) var walkers: [Walker] = []
     private var nextWalkerID = 0
 
-    /// One enemy queued to enter, resolved from a wave's spawn lines.
     private struct ScheduledSpawn {
         let tick: Int64
         let enemyTypeID: UUID
@@ -210,8 +194,6 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private(set) var isReady = false
 
-    /// Every route the level offers. A wave's spawn lines each name the
-    /// path their enemies enter on, so one wave can use several entrances.
     private var paths: [Path] = []
     private var levelName = ""
     private var enemyTypesByID: [UUID: EnemyType] = [:]
@@ -219,10 +201,8 @@ final class LevelRunner: NSObject, ObservableObject {
     private var waveIndex = 0
 
     var waveCount: Int { waves.count }
-    /// 1-based, for display.
     var currentWaveNumber: Int { min(waveIndex + 1, max(waves.count, 1)) }
 
-    /// Enemy art is named after the enemy: "Hessian Jäger" -> hessian_jager.
     private static func assetName(for enemyName: String) -> String {
         enemyName.folding(options: .diacriticInsensitive, locale: .init(identifier: "en_US"))
             .lowercased()
@@ -245,7 +225,6 @@ final class LevelRunner: NSObject, ObservableObject {
             status = "This campaign node has no level_info id."
             return
         }
-        // Fail soft instead of letting Db.init fatalError on a missing file.
         guard Bundle.main.url(forResource: "redcoat_raid", withExtension: "sqlite") != nil else {
             status = "redcoat_raid.sqlite is not in the app bundle."
             return
@@ -310,8 +289,6 @@ final class LevelRunner: NSObject, ObservableObject {
             status = "Database load failed: \(error)"
         }
     }
-
-    // MARK: - Build & upgrade menus
 
     func isSlotOccupied(_ index: Int) -> Bool {
         placedTowers.contains { $0.slotIndex == index }
@@ -381,12 +358,6 @@ final class LevelRunner: NSObject, ObservableObject {
         selectedTowerSlotIndex = nil
     }
 
-    // MARK: - Waves
-
-    /// Flattens a wave's spawn lines into one time-ordered queue of enemies.
-    /// Each line contributes `count` enemies `interval` apart, starting
-    /// `delay` seconds after the wave begins — `delay` already carries the
-    /// mini-wave's offset, accumulated by WaveDAO.
     private func enterWave(_ index: Int) {
         guard waves.indices.contains(index) else { return }
         waveIndex = index
@@ -413,7 +384,6 @@ final class LevelRunner: NSObject, ObservableObject {
 
     func start() {
         guard isReady, !isDefeated, displayLink == nil else { return }
-        // resync so stopped time doesn't replay as a catch-up sprint
         timer.resync()
         lastStepGameTicks = Double(timer.tick) + timer.interpolationAlpha
         enterWave(waveIndex)
@@ -427,8 +397,6 @@ final class LevelRunner: NSObject, ObservableObject {
         displayLink = nil
     }
 
-    /// One walker reached the exit. At zero the level is lost and everything
-    /// on screen stops where it stands.
     private func loseLife() {
         guard !isDefeated else { return }
         lives = max(0, lives - 1)
@@ -476,11 +444,8 @@ final class LevelRunner: NSObject, ObservableObject {
         for var walker in walkers {
             let ticksWalking = Double(timer.tick - walker.spawnTick) + alpha
             let distance = walker.speed * ticksWalking * SimClock.dt
-            // Out-of-range indices fall back to the first route rather than
-            // dropping the walker, so bad data can't silently delete enemies.
             let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
             if path.totalLength > 0, distance >= path.totalLength {
-                // Crossed the exit: it costs a life and the walker is gone.
                 loseLife()
                 continue
             }
@@ -490,12 +455,8 @@ final class LevelRunner: NSObject, ObservableObject {
         }
         walkers = marching
 
-        // The last life can go to the last walker on screen, which would leave
-        // the wave looking finished and start the next one on a lost level.
         guard !isDefeated else { return }
 
-        // The wave is over once it has sent everything and nothing is left on
-        // the field. The last level wave just holds; there is no win state yet.
         if pendingSpawns.isEmpty && walkers.isEmpty {
             if waveIndex + 1 < waves.count {
                 enterWave(waveIndex + 1)

@@ -1,8 +1,3 @@
-// DesignArsenal.swift
-// The Patriot tower archetypes for design-time simulation, one per damage
-// role: cheap shot DPS, sniper alpha, area denial, and the terror/rout
-// economy. Stats live here in code while tuning; the DB gets them when they
-// stabilize.
 import Foundation
 
 public enum Emplacement: String, CaseIterable, Sendable {

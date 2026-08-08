@@ -8,7 +8,6 @@ public struct ContentCatalog: Sendable {
     private let towerIndexByID: [UUID: Int]
 
     public init(enemyTypes: [EnemyType], towerTypes: [TowerType]) {
-        // Sort for deterministic index assignment regardless of source order.
         let enemies = enemyTypes.sorted { $0.id < $1.id }
         let towers = towerTypes.sorted { $0.id < $1.id }
         self.enemyTypes = enemies

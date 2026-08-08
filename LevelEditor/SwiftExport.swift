@@ -1,11 +1,6 @@
-// SwiftExport.swift
-// Generates a Blueprints.swift-ready `static let` for the current draft, in
-// the exact style of the hand-written blueprints.
 import Foundation
 
 enum SwiftExport {
-    // Draft geometry lives in canvas pixels; blueprints are written in the
-    // engine's 1600x900 design space, so every point converts on the way out.
     static func code(for d: MapDraft) -> String {
         var out = "    public static let \(identifier(from: d.name)) = LevelBlueprint(\n"
         out += "        name: \"\(d.name)\",\n"

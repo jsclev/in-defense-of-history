@@ -1,9 +1,6 @@
-// LevelEditorApp.swift
 import SwiftUI
 import AppKit
 
-// DocumentGroup's macOS default is an Open panel at launch; we suppress that
-// scene and open an untitled map ourselves so the editor GUI just appears.
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private func openUntitledIfNoWindows() {
@@ -14,8 +11,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Give window restoration a beat; only create a fresh map if it
-        // brought nothing back.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.openUntitledIfNoWindows()
         }
@@ -55,8 +50,6 @@ extension FocusedValues {
     }
 }
 
-// Photoshop's View-menu zoom set: ⌘+ / ⌘- step the preset ladder,
-// ⌘0 fits on screen, ⌘1 shows actual pixels.
 struct ZoomCommands: Commands {
     @FocusedValue(\.editorState) private var state
 

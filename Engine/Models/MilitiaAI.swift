@@ -1,27 +1,17 @@
-// MilitiaAI.swift
-// The behavior of melee garrison units, kept separate from the simulation's
-// bookkeeping: this file decides what a soldier WANTS to do each tick; the
-// engine executes those decisions (movement, damage, pairing) so combat
-// resolution stays in one place.
-//
-// The unit lifecycle: dead -> (respawn at tower) -> returning to rally ->
-// holding (heal, watch for enemies) -> engaging (advance on a free enemy) ->
-// fighting (blocked enemy, trade blows) -> holding or dead.
 import Foundation
 
 public struct MilitiaUnit: Sendable {
     public enum State: Sendable, Equatable {
         case dead
-        case returning     // walking to the rally point
-        case holding       // at the rally point: heal, scan
-        case engaging      // advancing on a chosen enemy
-        case fighting      // in reach, enemy blocked
+        case returning
+        case holding
+        case engaging
+        case fighting
     }
 
     public var position: Point
     public var hp: Double
     public var state: State = .returning
-    /// spawnID of the enemy this unit is engaging/fighting; -1 == none.
     public var targetSpawnID: Int = -1
     public var respawnTicksLeft: Int = 0
     public var swingTicksLeft: Int = 0
@@ -33,38 +23,27 @@ public struct MilitiaUnit: Sendable {
 }
 
 public enum MilitiaTunables {
-    /// Soldier walk speed, design units/sec.
     public static let moveSpeed: Double = 70
-    /// How far from the rally point a soldier will pick a fight.
     public static let engageScanRadius: Double = 80
-    /// Melee reach: closer than this and the fight is on.
     public static let meleeReach: Double = 26
-    /// A fighting soldier lets go if the fight drifts this far from rally.
     public static let leashRadius: Double = 130
-    /// Blocked enemies swing back this often (seconds).
     public static let enemySwingInterval: Double = 1.2
-    /// Rally formation ring radius (units stand apart, not stacked).
     public static let rallySpread: Double = 16
 }
 
-/// What a unit wants done this tick. The engine applies these.
 public enum MilitiaDecision: Sendable, Equatable {
     case idle
     case countdownRespawn
-    case respawn                       // timer expired: spawn at tower
+    case respawn
     case move(toward: Point)
     case heal
-    case engage(targetSpawnID: Int)    // claim this enemy and advance
-    case strike(targetSpawnID: Int)    // swing: engine rolls damage
-    case disengage                     // target gone/leashed: return to rally
+    case engage(targetSpawnID: Int)
+    case strike(targetSpawnID: Int)
+    case disengage
 }
 
-/// The engine's view of the battlefield, as the AI needs it.
 public struct MilitiaContext {
-    /// Free enemies: not blocked by any unit, not broken, not block-immune
-    /// (rideDown riders shove past infantry). (spawnID, position).
     public var freeEnemies: [(spawnID: Int, position: Point)]
-    /// Position of this unit's current target, nil if gone/removed.
     public var targetPosition: Point?
     public var rallyPoint: Point
     public var towerPosition: Point
@@ -79,7 +58,6 @@ public struct MilitiaContext {
 }
 
 public enum MilitiaAI {
-    /// One decision per unit per tick. Pure: no engine state is touched here.
     public static func decide(_ unit: MilitiaUnit, context: MilitiaContext) -> MilitiaDecision {
         switch unit.state {
         case .dead:
@@ -87,13 +65,11 @@ public enum MilitiaAI {
 
         case .returning:
             if unit.position.distance(to: context.rallyPoint) <= 2 {
-                return .idle   // arrival; engine flips state to holding
+                return .idle
             }
             return .move(toward: context.rallyPoint)
 
         case .holding:
-            // Pick the nearest free enemy inside the scan radius of the POST
-            // (soldiers defend their ground; they don't chase across the map).
             if let target = nearestFreeEnemy(in: context) {
                 return .engage(targetSpawnID: target)
             }
@@ -105,7 +81,7 @@ public enum MilitiaAI {
                 return .disengage
             }
             if unit.position.distance(to: targetPos) <= MilitiaTunables.meleeReach {
-                return .strike(targetSpawnID: unit.targetSpawnID)  // first blow starts the fight
+                return .strike(targetSpawnID: unit.targetSpawnID)
             }
             return .move(toward: targetPos)
 
@@ -119,7 +95,6 @@ public enum MilitiaAI {
         }
     }
 
-    /// Rally formation slot for the k-th of n units around the flag.
     public static func formationOffset(index: Int, of count: Int) -> Point {
         guard count > 1 else { return .zero }
         let angle = 2.0 * Double.pi * Double(index) / Double(count)

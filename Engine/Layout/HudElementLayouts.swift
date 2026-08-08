@@ -1,25 +1,8 @@
 import CoreGraphics
 
-/// Resolved frames for every HUD element, in physical-screen coordinates.
-///
-/// Each element type here is the complete sizing-and-placement answer for one
-/// piece of HUD: construct it from a `ScreenGeometry` (plus whatever facts the
-/// logic genuinely needs, like an image's aspect ratio) and read frames off
-/// it. Nothing in this file may import SwiftUI or UIKit — image aspects and
-/// text strings are inputs, never lookups — so every element is testable by
-/// constructing geometry by hand.
-///
-/// The shared rules all elements inherit:
-///   * one scale per screen (`HudScale`), one margin (`HudSizing.hudMargin`)
-///   * anchoring via `HudPlacementSolver`: inside the safe area, at least the
-///     margin from the physical edge, inset and margin never added
-///   * composition via `StackLayout`, so siblings share top/leading edges
-
-/// The speed-up and back-to-campaign buttons in the top-trailing corner.
 public struct CornerButtonsLayout: Equatable {
     public let speed: CGRect
     public let pause: CGRect
-    /// The two buttons and their gap, as one block.
     public let block: CGRect
 
     public init(screen: ScreenGeometry) {
@@ -38,28 +21,21 @@ public struct CornerButtonsLayout: Equatable {
     }
 }
 
-/// The lives counter, money counter and wave line in the top-leading corner.
 public struct StatsPanelLayout: Equatable {
     public struct CounterRow: Equatable {
         public let icon: CGRect
-        /// Box the value text draws in, top-leading aligned.
         public let valueBox: CGRect
         public let fontSize: CGFloat
     }
 
     public let lives: CounterRow
     public let money: CounterRow
-    /// Backing plates, one per counter group, padded a little beyond the
-    /// icon and value they hold.
     public let livesPlate: CGRect
     public let moneyPlate: CGRect
-    /// Box the wave line draws in, centred under the counters.
     public let waveBox: CGRect
     public let waveFontSize: CGFloat
     public let bounds: CGRect
 
-    /// Rough line-box height for a font size; exact glyph metrics are the
-    /// renderer's business, this only reserves vertical room.
     static let lineHeightFactor: CGFloat = 1.25
 
     public init(screen: ScreenGeometry, isPortrait: Bool,
@@ -121,7 +97,6 @@ public struct StatsPanelLayout: Equatable {
     }
 }
 
-/// The campaign map's menu bar in the bottom-trailing corner.
 public struct MenuBarLayout: Equatable {
     public let itemFrames: [CGRect]
     public let bar: CGRect
@@ -140,12 +115,9 @@ public struct MenuBarLayout: Equatable {
     }
 }
 
-/// The done button in the bottom-trailing corner of menu screens.
 public struct DoneButtonLayout: Equatable {
     public let frame: CGRect
 
-    /// `scaleOverride` lets a screen with its own internal scale (the
-    /// encyclopedia) keep the button proportionate to itself.
     public init(screen: ScreenGeometry, aspect: CGFloat, scaleOverride: CGFloat? = nil) {
         let scale = scaleOverride ?? HudScale(viewSize: screen.physical.size).value
         let height = HudSizing.doneButton.resolved(at: scale)
@@ -156,7 +128,6 @@ public struct DoneButtonLayout: Equatable {
     }
 }
 
-/// The title graphic in the campaign map's top-leading corner.
 public struct TitleLayout: Equatable {
     public let frame: CGRect
 

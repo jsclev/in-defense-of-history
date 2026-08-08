@@ -3,8 +3,6 @@
 
 BEGIN TRANSACTION;
 
-DELETE FROM level_wave_enemy_spawn;
-
 INSERT INTO level_wave_enemy_spawn (
     id, level_wave_id, enemy_type_id, spawn_index,
     num_enemies, spawn_time_since_previous_spawn, spawn_interval, path_index

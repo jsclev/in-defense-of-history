@@ -1,12 +1,5 @@
-// Level.swift
-// A level is pure data: polyline paths in virtual art coordinates, tower
-// slots at fixed points in the same space, and a wave timeline. Enemies track
-// a single scalar (distance along path); Path converts that to a Point when
-// something spatial needs to happen (range checks, splash, rendering later).
-
 public struct Path: Sendable, Equatable {
     public let points: [Point]
-    /// cumulative[i] == polyline length from points[0] to points[i].
     public let cumulative: [Double]
     public let totalLength: Double
 
@@ -24,11 +17,9 @@ public struct Path: Sendable, Equatable {
         self.totalLength = total
     }
 
-    /// Position at a given travelled distance, clamped to the endpoints.
     public func point(atDistance d: Double) -> Point {
         if d <= 0 { return points[0] }
         if d >= totalLength { return points[points.count - 1] }
-        // Binary search for the segment containing d.
         var lo = 0
         var hi = cumulative.count - 1
         while lo + 1 < hi {

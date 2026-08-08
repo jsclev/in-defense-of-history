@@ -1,7 +1,3 @@
-// GPUSweep.swift
-// Metal dispatch layer for the batch simulation kernel. The CPU engine stays
-// the reference implementation; this path exists for scale. Layouts are shared
-// via SimGPUTypes.h (bridging header), so Swift writes the same bytes MSL reads.
 import Foundation
 import Metal
 
@@ -9,14 +5,7 @@ final class GPUEngine {
     let device: MTLDevice
     let queue: MTLCommandQueue
     let pipeline: MTLComputePipelineState
-    /// Thread-ticks allowed per command buffer. The display watchdog kills
-    /// buffers that hog the GPU; ~90ms buffers stay safely under it while
-    /// keeping dispatch overhead negligible (48M drew occasional kills on a
-    /// display-attached M2 Max). On a kill we halve this and cleanly rerun.
     var threadTickBudget = 16_000_000
-    /// Grow-only device buffer pool. Reusing allocations across batches keeps
-    /// long sweeps from outrunning Metal's deferred reclamation (the old
-    /// per-batch allocations eventually failed on multi-hour runs).
     private var pool: [String: MTLBuffer] = [:]
 
     private func pooledBuffer(_ name: String, minLength: Int) throws -> MTLBuffer {
@@ -46,7 +35,6 @@ final class GPUEngine {
     }
 
     private static func loadLibrary(device: MTLDevice) throws -> MTLLibrary {
-        // Tool targets place default.metallib beside the executable.
         if let execURL = Bundle.main.executableURL {
             let lib = execURL.deletingLastPathComponent().appendingPathComponent("default.metallib")
             if FileManager.default.fileExists(atPath: lib.path),
@@ -54,7 +42,6 @@ final class GPUEngine {
                 return library
             }
         }
-        // Fallback: compile from source relative to the repo root.
         let fm = FileManager.default
         let kernelPath = "Simulator/SimKernel.metal"
         let headerPath = "Simulator/SimGPUTypes.h"
@@ -67,8 +54,6 @@ final class GPUEngine {
         throw DbError.Db(message: "No default.metallib beside executable and no Simulator/SimKernel.metal in cwd")
     }
 }
-
-// MARK: - Buffer builders
 
 enum GPUBuild {
     static func levelGPU(level: LevelInfo, catalog: ContentCatalog) throws -> LevelGPU {
@@ -180,7 +165,6 @@ enum GPUBuild {
                   $0.meleeUnitCount <= Int(SIM_MAX_MELEE_UNITS_PER) } })
         else { throw DbError.Db(message: "Catalog exceeds GPU tower caps") }
 
-        // Flattened, stably sorted spawn schedule — same as Simulation.init.
         var sched: [(time: Double, type: Int, path: Int, wave: Int)] = []
         for (wi, wave) in level.waves.enumerated() {
             for entry in wave.spawns {
@@ -199,7 +183,6 @@ enum GPUBuild {
         }
         perm.spawnCount = UInt32(sorted.count)
 
-        // Policy tables from the reference commander.
         let proto = GreedyCommander(level: level, catalog: catalog)
         perm.planLen = UInt32(min(proto.plan.count, Int(SIM_PLAN_LEN)))
         perm.w1CutoffSeconds = Float(level.waves.count > 1 ? level.waves[1].startTime + 25 : 600)
@@ -267,9 +250,6 @@ enum GPUBuild {
                 raw.storeBytes(of: Float(type.stats.maxHP), toByteOffset: hpOff + i * 4, as: Float.self)
                 raw.storeBytes(of: Int32(type.stats.gold), toByteOffset: goldOff + i * 4, as: Int32.self)
             }
-            // Default rally per slot for the melee kind (a catalog fields at
-            // most one), from the same nearest-road algorithm the CPU engine
-            // runs at build time, in the same Double precision.
             if let melee = catalog.towerTypes.first(where: {
                 ($0.levels.first?.meleeUnitCount ?? 0) > 0
             }), let flagRange = melee.levels.first?.range {
@@ -288,17 +268,12 @@ enum GPUBuild {
     }
 }
 
-// MARK: - Dispatch
-
 struct GPUBatchResult {
     var results: [SimResultGPU]
     var seedsPerPerm: Int
 }
 
 extension GPUEngine {
-    /// Runs `perms.count × seedsPerPerm` simulations, sliced into bounded-tick
-    /// dispatches so the GPU watchdog never fires. Per-sim state persists in a
-    /// device buffer between slices.
     func run(
         level: LevelGPU,
         perms: [PermGPU],
@@ -308,9 +283,6 @@ extension GPUEngine {
         maxSeconds: Float = 600,
         sliceTicks: Int = 960
     ) throws -> GPUBatchResult {
-        // A watchdog kill can leave in-flight sims mid-tick, so recovery is
-        // never "resume": each attempt reruns this whole batch on fresh
-        // zeroed buffers with a halved per-buffer budget.
         var lastError: Error?
         for attempt in 0..<4 {
             do {
@@ -324,8 +296,6 @@ extension GPUEngine {
                 let allocation = msg.contains("buffer allocation")
                 guard watchdog || allocation else { throw error }
                 if watchdog { threadTickBudget = max(250_000, threadTickBudget / 2) }
-                // Allocation failures usually mean deferred reclamation hasn't
-                // caught up; give it a beat and rerun the batch.
                 usleep(allocation ? 500_000 : 100_000)
                 FileHandle.standardError.write(Data(
                     "  gpu: \(watchdog ? "watchdog kill" : "allocation failure") (attempt \(attempt + 1)); rerunning batch\n".utf8))
@@ -373,15 +343,9 @@ extension GPUEngine {
         let maxSlices = maxTicks / sliceTicks + 2
         let resultPtr = resultBuf.contents().bindMemory(to: SimResultGPU.self, capacity: threads)
 
-        // Watchdog budget: bound thread-ticks per command buffer, chunking the
-        // grid when a slice alone would exceed it.
         let threadsPerCmd = max(1024, threadTickBudget / sliceTicks)
 
         for _ in 0..<maxSlices {
-            // All of a slice's chunks are committed back to back and waited on
-            // once — buffers on one queue execute in commit order, so the last
-            // one completing means they all did. The autorelease drain keeps
-            // long CLI runs from accumulating thousands of dead Metal objects.
             try autoreleasepool {
                 var cmds: [MTLCommandBuffer] = []
                 var base = 0
@@ -426,8 +390,6 @@ extension GPUEngine {
     }
 }
 
-// MARK: - Bench & validation
-
 enum GPUHarness {
     static func makeInputs(
         db: Db, levelName: String, fieldMelee: Bool = false
@@ -461,7 +423,6 @@ enum GPUHarness {
         let permGPU = try GPUBuild.permGPU(level: level, catalog: catalog, money: perm.money)
 
         let engine = try GPUEngine()
-        // Warm-up dispatch compiles/pages everything.
         _ = try engine.run(level: lvlGPU, perms: [permGPU], seedsPerPerm: 256,
                            baseSeed: 1776, mode: UInt32(SIM_MODE_GREEDY))
         let t0 = Date()
@@ -486,8 +447,6 @@ enum GPUHarness {
         let engine = try GPUEngine()
         var failures = try probeSuite(db: db, engine: engine, levelName: levelName,
                                       seeds: seeds, fieldMelee: false)
-        // Rerun the suite with the melee line fielded whenever the DB defines
-        // one for this level — that is the configuration --gpu --melee sweeps.
         let inputs = try SweepFixedInputs.load(db: db, levelName: levelName)
         let hasMelee = inputs.unlocks.keys.contains {
             (inputs.towerLevels[$0]?.first?.meleeUnitCount ?? 0) > 0
@@ -514,8 +473,6 @@ enum GPUHarness {
                                                   fieldMelee: fieldMelee)
         let count = space.permutationCount
 
-        // Probe selection: scan for configs that actually exercise the
-        // dynamics — contested win rates and defeats, not just perfect wins.
         var contested: [Int] = []
         var hopeless: [Int] = []
         var easy: [Int] = []
@@ -545,7 +502,6 @@ enum GPUHarness {
             let perm = space.permutation(at: pi)
             let (level, catalog) = levelFor(perm: perm, fixed: fixed, base: base)
 
-            // CPU reference.
             let proto = GreedyCommander(level: level, catalog: catalog)
             var cpuWins = 0
             var cpuLives = 0.0
@@ -569,7 +525,6 @@ enum GPUHarness {
                 cpuMilitia.respawns += Double(sim.militiaRespawns)
             }
 
-            // CPU naive wave-1 reference.
             let w1Cutoff = level.waves.count > 1 ? level.waves[1].startTime + 25 : 600
             var cpuW1Clear = 0
             for s in 0..<seeds {
@@ -581,7 +536,6 @@ enum GPUHarness {
                 if sim.run(maxSeconds: w1Cutoff).leaksByWave.first == 0 { cpuW1Clear += 1 }
             }
 
-            // GPU, both modes.
             let lvlGPU = try GPUBuild.levelGPU(level: level, catalog: catalog)
             let permGPU = try GPUBuild.permGPU(level: level, catalog: catalog, money: perm.money)
             let batch = try engine.run(level: lvlGPU, perms: [permGPU], seedsPerPerm: seeds,
@@ -607,8 +561,6 @@ enum GPUHarness {
             let w1Pool = (w1C + w1G) / 2
             let w1SE = (2 * w1Pool * (1 - w1Pool) / n).squareRoot()
             let w1Sigma = w1SE > 0 ? abs(w1C - w1G) / w1SE : 0
-            // Militia counters (melee suites): loose gate — fp32 boundary
-            // flips shift individual fights, but the means must agree.
             var militiaOK = true
             var militiaNote = ""
             if fieldMelee {
@@ -641,21 +593,6 @@ enum GPUHarness {
                 .max() ?? 0
             let projOverflow = batch.results.reduce(0) { $0 + Int($1.projOverflow) }
 
-            // Lives tolerance is one enemy: fp32-vs-Double can flip a single
-            // kill-at-the-exit boundary deterministically (verified 2026-08-05:
-            // wave-4 leak 5.00 CPU / 4.00 GPU across every seed, all other
-            // metrics identical). Larger deltas mean real logic divergence.
-            //
-            // The win-σ gate gets a one-enemy override for the same class:
-            // at leak-cliff configs (total leaks ≈ lives) a deterministic
-            // one-tick projectile-impact skew at fixed geometry — amplified by
-            // militia last-hit races — can move win rate many σ while every
-            // design metric stays within one enemy (verified 2026-08-07:
-            // seed-0 trace showed impact counters diverging by exactly one at
-            // t=35.0s then re-syncing; hitscan variant of the same config
-            // agreed 0.557/0.542). When per-wave leaks, lives, tension,
-            // militia counters, and naive-W1 all agree within that class, the
-            // engines share the same dynamics and the probe passes.
             let oneEnemyClass = livesDelta < 1.0 && perWaveLeakDeltaMax < 1.0
                 && tensionDelta < 0.05 && w1Sigma < 4 && militiaOK
             let pass = (winSigma < 4 || oneEnemyClass) && livesDelta < 2.0
@@ -668,7 +605,6 @@ enum GPUHarness {
                          pi, pC, pG, winSigma, livesDelta, tensionDelta, w1C, w1G, w1Sigma,
                          militiaNote, verdict))
             if w1Sigma >= 4 {
-                // Localize: per-seed naive wave-1 leaks, CPU vs GPU.
                 var pairs: [String] = []
                 for s2 in 0..<min(24, seeds) {
                     guard let sim = try? Simulation(
@@ -681,21 +617,16 @@ enum GPUHarness {
                     pairs.append("s\(s2):\(cpuLeak)/\(gpuLeak)")
                 }
                 print("    per-seed naive w1 leaks cpu/gpu: \(pairs.joined(separator: " "))")
-                // And the naive commanders' slot orders for seed 0, both sides.
                 let nc = NaiveCommander(level: level, catalog: catalog, seed: 1776)
                 print("    cpu naive slotOrder seed0: \(nc.slotOrder)")
             }
             if livesDelta >= 0.5 || winSigma >= 4 {
-                // Localize: which waves leak differently?
                 let diffs = (0..<fixed.numWaves).map { w in
                     String(format: "w%d %.2f/%.2f", w + 1, cpuLeaksByWave[w] / n, gpuLeaksByWave[w] / n)
                 }.joined(separator: "  ")
                 print("    per-wave mean leaks cpu/gpu: \(diffs)")
             }
             if fieldMelee && !pass {
-                // Localize: per-seed outcome + militia counters, CPU vs GPU.
-                // Uniform early divergence = logic bug; scattered flips = fp
-                // boundary noise amplified by a cliff config.
                 var lines: [String] = []
                 for s in 0..<min(12, seeds) {
                     guard let sim = try? Simulation(
@@ -729,11 +660,6 @@ enum GPUHarness {
         return failures
     }
 
-    /// Militia structural regression ladder: controlled scenarios from a
-    /// single duel up to ranged+melee with projectiles, compared per-seed at
-    /// full strictness. These configs never sit on outcome cliffs, so the
-    /// engines must agree essentially exactly — any rung below 99% exact-match
-    /// is a logic divergence in the garrison port, not fp32 noise.
     static func meleeDuelProbe(db: Db, engine: GPUEngine, levelName: String,
                                seeds: Int) throws -> Int {
         let (fixed, space, base) = try makeInputs(db: db, levelName: levelName, fieldMelee: true)
@@ -774,8 +700,6 @@ enum GPUHarness {
             ("4g + upgrades", 4 * c1 + c2 + 40, [Wave(startTime: 5, spawns: [
                 SpawnEntry(enemyTypeID: walker.id, count: 8, interval: 1.4)])]),
         ]
-        // Ranged + melee rungs: the sweep's real configuration — shared
-        // rngCombat between tower volleys, projectile impacts, and militia.
         let rangedBase = Array((fixed.towerLevels["ranged"] ?? []).prefix(2))
         var rangedMeleeScenarios: [(name: String, money: Int, waves: [Wave],
                                     catalog: ContentCatalog)] = []
@@ -855,10 +779,6 @@ enum GPUHarness {
         return failures
     }
 
-    /// Synthetic artillery probe: the level's unlocks may not include the
-    /// areaOfEffect kind, but the blast path (falloff + cover pierce) must
-    /// be validated whenever the DB defines it. Field a catalog of the DB
-    /// artillery line plus ranged and compare engines directly.
     private static func artilleryProbe(
         db: Db, engine: GPUEngine, levelName: String, seeds: Int
     ) throws -> Int {
@@ -901,8 +821,6 @@ enum GPUHarness {
             let se = (2 * pPool * (1 - pPool) / n).squareRoot()
             let sigma = se > 0 ? abs(pC - pG) / se : 0
             let livesDelta = abs(cpuLives - gpuLives) / n
-            // Same one-enemy tolerance as the main probes: deterministic
-            // kill-at-the-exit boundary flips are documented fp32 behavior.
             let pass = sigma < 4 && livesDelta < 2.0
             if !pass { failures += 1 }
             print(String(format: "  artillery blast probe: win %.3f/%.3f (%.1fσ)  lives Δ%.2f  %@",
@@ -911,11 +829,6 @@ enum GPUHarness {
         return failures
     }
 
-    // MARK: - Sweep integration
-
-    /// GPU version of the sweep's per-permutation work: adaptive probe/full
-    /// rounds for both commanders, aggregated into the same SweepRows the CPU
-    /// path produces.
     static func sweepRows(
         db: Db, fixed: SweepFixedInputs, base: LevelInfo, space: SweepSpace,
         indices: [Int], grids: SweepGrids, checkpointPath: String? = nil
@@ -928,7 +841,6 @@ enum GPUHarness {
         let extra = grids.seedsPerPermutation - probe
         let t0 = Date()
 
-        // Crash insurance: every finished batch is appended to a .partial CSV.
         var checkpoint: FileHandle?
         if let path = checkpointPath {
             let url = URL(fileURLWithPath: path + ".partial")
@@ -949,10 +861,6 @@ enum GPUHarness {
             guard let firstPerm = perms.first else {
                 throw DbError.Db(message: "Empty permutation batch")
             }
-            // Geometry and enemy trait tables are batch-constant (per-perm
-            // enemy brackets ride in PermGPU); build LevelGPU once, then the
-            // per-perm tables on all cores — GreedyCommander's slot scoring is
-            // the expensive part and is embarrassingly parallel.
             let (level0, catalog0) = levelFor(perm: firstPerm, fixed: fixed, base: base)
             let lvl = try GPUBuild.levelGPU(level: level0, catalog: catalog0)
             var permsGPU = [PermGPU](repeating: PermGPU(), count: perms.count)
@@ -971,10 +879,8 @@ enum GPUHarness {
             }
             if let buildError { throw buildError }
 
-            // Round 1: greedy probe.
             let probeBatch = try engine.run(level: lvl, perms: permsGPU, seedsPerPerm: probe,
                                             baseSeed: grids.baseSeed, mode: UInt32(SIM_MODE_GREEDY))
-            // Triage.
             var contested: [Int] = []
             for (pi, _) in perms.enumerated() {
                 let rs = probeBatch.results[(pi * probe)..<((pi + 1) * probe)]
@@ -985,8 +891,6 @@ enum GPUHarness {
                 let allLost = rs.allSatisfy { $0.outcome == SIM_OUTCOME_DEFEAT }
                 if !(allPerfect || allLost) { contested.append(pi) }
             }
-            // Rounds 2+: full seeds for contested perms, chunked so no single
-            // dispatch round exceeds ~250k threads (memory + watchdog headroom).
             func extraRound(_ mode: UInt32) throws -> [Int: [SimResultGPU]] {
                 var byPerm: [Int: [SimResultGPU]] = [:]
                 guard extra > 0, !contested.isEmpty else { return byPerm }
@@ -1006,7 +910,6 @@ enum GPUHarness {
                 return byPerm
             }
             let extraByPerm = try extraRound(UInt32(SIM_MODE_GREEDY))
-            // Naive rounds mirror the seed counts.
             let naiveProbe = try engine.run(level: lvl, perms: permsGPU, seedsPerPerm: probe,
                                             baseSeed: grids.baseSeed, mode: UInt32(SIM_MODE_NAIVE_W1))
             let naiveExtraByPerm = try extraRound(UInt32(SIM_MODE_NAIVE_W1))

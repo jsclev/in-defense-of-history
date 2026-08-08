@@ -6,10 +6,6 @@ public class PathDAO: BaseDAO {
         super.init(conn: conn, table: "level_path_point", loggerName: PathDAO.self)
     }
 
-    /// Loads a level's enemy path(s). Points are grouped by path_index and
-    /// ordered by point_index, then handed to `Path` (which precomputes segment
-    /// lengths for distance-along-path lookups). Returned array is indexed by
-    /// path_index, so `paths[enemy.pathIndex]` lines up with the engine.
     public func getPathsFor(levelInfoId: UUID) throws -> [Path] {
         var pointsByPath: [Int: [Point]] = [:]
 
@@ -47,7 +43,6 @@ public class PathDAO: BaseDAO {
 
         guard !pointsByPath.isEmpty else { return [] }
 
-        // Build a contiguous, 0-based array so indexing by enemy.pathIndex is valid.
         let maxIndex = pointsByPath.keys.max() ?? -1
         var paths: [Path] = []
         for index in 0...maxIndex {

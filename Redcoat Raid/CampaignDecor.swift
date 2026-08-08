@@ -1,24 +1,10 @@
 import SwiftUI
 
-/// Scenery scattered across the campaign map: a compass rose and sail
-/// traffic out at sea, historic landmarks inland.
-///
-/// Every piece has a fixed berth in the artwork's pixel space — chosen from
-/// a distance transform of the painted terrain, so ships sit in genuinely
-/// open water and landmarks on genuinely open ground — but whether a piece
-/// is actually drawn is decided at runtime. A berth is skipped if the
-/// current screen puts it under a callout plate, a leader line, a node
-/// marker, the corner menu, or a piece already placed. Pieces are tried in
-/// list order. The compass is not in this list — it is placed from screen
-/// geometry instead, in CampaignCompass.
 enum CampaignDecor {
     struct Piece {
         var assetName: String
-        /// Centre in campaign-map image pixels.
         var imagePosition: CGPoint
-        /// Width as a fraction of the view's width.
         var widthFraction: CGFloat
-        /// Mirrored, so a ship sails away from the coast it sits off.
         var flipped: Bool = false
     }
 
@@ -35,19 +21,14 @@ enum CampaignDecor {
     }
 
     static let pieces: [Piece] = [
-        // Atlantic sail traffic, fanned out around the compass. The
-        // British warship is animated and lives in CampaignWildlife.
         Piece(assetName: "main_campaign_map_ship_american",
               imagePosition: CGPoint(x: 2690, y: 1040), widthFraction: 0.075,
               flipped: true),
 
-        // Gulf of Mexico, west of Florida — Spanish waters.
         Piece(assetName: "main_campaign_map_ship_spanish",
               imagePosition: CGPoint(x: 1085, y: 1600), widthFraction: 0.065,
               flipped: true),
 
-        // The western backcountry. Boonesborough is anchored to its real
-        // location; the others give it room and stay off the rivers.
         Piece(assetName: "main_campaign_map_land_voyageur",
               imagePosition: CGPoint(x: 1039, y: 730), widthFraction: 0.078),
         Piece(assetName: "main_campaign_map_land_conestoga",
@@ -55,10 +36,6 @@ enum CampaignDecor {
         Piece(assetName: "main_campaign_map_land_cumberland",
               imagePosition: CGPoint(x: 1350, y: 1220), widthFraction: 0.070),
 
-        // New France, along the St. Lawrence and north of the lakes. The
-        // map's upper-left is deliberately left bare for the title graphic.
-        // Fort Boonesborough, on the Kentucky river frontier — projected from
-        // its real latitude/longitude, so it sits where it actually belongs.
         Piece(assetName: "main_campaign_map_land_boonestation",
               imagePosition: CGPoint(x: 1324, y: 998), widthFraction: 0.075),
 
@@ -111,7 +88,6 @@ enum CampaignDecor {
         return result
     }
 
-    /// Liang–Barsky: does the leader line clip the piece's box at all?
     private static func segment(_ a: CGPoint, _ b: CGPoint,
                                 intersects rect: CGRect) -> Bool {
         var t0: CGFloat = 0, t1: CGFloat = 1

@@ -19,9 +19,6 @@ SET playable_rect_x = 960.0,
     playable_rect_height = 2160.0
 WHERE id = '4ca73a47-98f6-41b6-815d-c2c797aa746e';
 
-DELETE FROM tower_slot
-WHERE level_info_id = '4ca73a47-98f6-41b6-815d-c2c797aa746e';
-
 INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUES
 ('c3000001-7a11-4c4a-8e10-000000000001', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2880.0, 1790.0),
 ('c3000002-7a11-4c4a-8e10-000000000002', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 3471.0, 1785.0),
@@ -38,9 +35,6 @@ INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUE
 ('c3000013-7a11-4c4a-8e10-000000000013', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 3361.0, 2870.0),
 ('c3000014-7a11-4c4a-8e10-000000000014', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 4100.0, 3000.0),
 ('c3000015-7a11-4c4a-8e10-000000000015', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 4580.0, 2550.0);
-
-DELETE FROM level_path_point
-WHERE level_info_id = '4ca73a47-98f6-41b6-815d-c2c797aa746e';
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index, map_position_x, map_position_y

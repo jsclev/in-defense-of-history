@@ -1,7 +1,5 @@
 import SwiftUI
 
-// One scale for all HUD and menu sizes, taken from the playable rect and then
-// clamped; HudSizing owns the reference sizes and the per-element ranges.
 struct HudMetrics {
     let scale: CGFloat
 
@@ -36,12 +34,6 @@ struct HudMetrics {
     var menuButtonSpacing: CGFloat { HudSizing.menuButtonSpacing.resolved(at: scale) }
 }
 
-/// A HUD icon drawn at an exact height, framed to the artwork's own aspect.
-///
-/// Framing every icon square made a wide image fit by width and fall short of
-/// its frame's height, so each new piece of art needed a hand-tuned multiplier
-/// to look the same size as its neighbour. Sizing by height instead means the
-/// number in HudSizing is what actually appears on screen.
 struct HudIcon: View {
     let name: String
     let height: CGFloat

@@ -1,8 +1,6 @@
 import Foundation
 import SQLite3
 
-/// Simulator-only enemy overrides: designer-provided speed brackets the
-/// simulator may permute inside. The game never reads this table.
 public class SimEnemyTypeDAO: BaseDAO {
     init(conn: OpaquePointer?) {
         super.init(conn: conn, table: "sim_enemy_type", loggerName: SimEnemyTypeDAO.self)

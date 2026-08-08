@@ -1,7 +1,5 @@
 import SwiftUI
 
-/// Stand-in for the campaign save, which does not exist yet: levels up to
-/// `completedThrough` are won and the next one is the current objective.
 enum CampaignProgress {
     static let completedThrough = 6
 
@@ -11,17 +9,6 @@ enum CampaignProgress {
     }
 }
 
-/// Placement of the campaign map's level markers.
-///
-/// Every level is a numbered disc. Colour carries progress — won, current, or
-/// still ahead — but the label is always just the number. No names appear on
-/// the map; how the map is labelled properly is still open.
-///
-/// Several battles sit almost on top of each other. Bunker Hill and Dorchester
-/// Heights are about 1pt apart on a phone, against a disc that has to be 44pt
-/// across to stay tappable, so discs are relaxed apart from their true spots.
-/// Where one ends up noticeably off its place, a hairline ties it back to a
-/// dot at the real position.
 enum CampaignMarkers {
     enum State { case completed, current, upcoming }
 
@@ -29,9 +16,7 @@ enum CampaignMarkers {
         var id: Int
         var node: CampaignNode
         var state: State
-        /// The battle's true spot, in view coordinates.
         var anchor: CGPoint
-        /// Where the disc is actually drawn.
         var center: CGPoint
         var diameter: CGFloat
         var showsTether: Bool
@@ -48,15 +33,12 @@ enum CampaignMarkers {
         min(max(viewSize.height / referenceHeight, 0.75), 1.35)
     }
 
-    /// Floored at the HIG hit region so every level stays tappable on the
-    /// smallest phone; the current objective reads larger than the rest.
     static func diameter(scale: CGFloat, state: State) -> CGFloat {
         let base = max(TouchTarget.minimum, 46 * scale)
         return state == .current ? base * 1.3 : base
     }
 
     static func numberFont(scale: CGFloat, state: State) -> UIFont {
-        // Grown twice from the 21/17 launch sizes: +20%, then +17%.
         let size = (state == .current ? 29.5 : 23.9) * scale
         return UIFont(name: "Baskerville-Bold", size: size)
             ?? .systemFont(ofSize: size, weight: .bold)
@@ -91,7 +73,6 @@ enum CampaignMarkers {
                     var dist = hypot(dx, dy)
                     guard dist < need else { continue }
                     if dist < 0.0001 {
-                        // Anchors identical: split along a per-pair direction.
                         let angle = CGFloat(i * n + j)
                         dx = cos(angle); dy = sin(angle); dist = 1
                     }
@@ -111,8 +92,6 @@ enum CampaignMarkers {
             }
         }
 
-        // Ease each disc toward its true spot, then push overlapping pairs
-        // apart. Fixed iteration counts keep the layout deterministic.
         for _ in 0..<240 {
             for i in 0..<n {
                 centers[i].x += (anchors[i].x - centers[i].x) * pull
@@ -121,7 +100,6 @@ enum CampaignMarkers {
             separate()
             clampToView()
         }
-        // Settle with no spring, so the pull can't leave a pair overlapping.
         for _ in 0..<80 {
             separate()
             clampToView()
@@ -129,8 +107,6 @@ enum CampaignMarkers {
 
         return (0..<n).map { i in
             let drift = hypot(centers[i].x - anchors[i].x, centers[i].y - anchors[i].y)
-            // Only the markedly displaced discs earn a hairline; below this a
-            // tether on every crowded marker just reads as clutter.
             return Placement(id: nodes[i].id, node: nodes[i], state: states[i],
                              anchor: anchors[i], center: centers[i],
                              diameter: diameters[i],
@@ -198,7 +174,6 @@ struct CampaignLevelMarker: View {
     }
 }
 
-/// Hairlines from a displaced disc back to the battle's true position.
 struct CampaignMarkerTethers: Shape {
     var placements: [CampaignMarkers.Placement]
 

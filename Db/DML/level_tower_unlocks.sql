@@ -1,6 +1,6 @@
 INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level) VALUES
-('ec49efb7-3ead-4880-ab05-3a93c4271ca4', (SELECT id FROM level_info WHERE level_name = 'Lexington and Concord'), 'ranged', 2),
-('5f7a784f-dae1-4660-8da7-31ac09d18429', (SELECT id FROM level_info WHERE level_name = 'Lexington and Concord'), 'melee', 2),
+('ec49efb7-3ead-4880-ab05-3a93c4271ca4', (SELECT id FROM level_info WHERE level_name = 'Battle Road'), 'ranged', 2),
+('5f7a784f-dae1-4660-8da7-31ac09d18429', (SELECT id FROM level_info WHERE level_name = 'Battle Road'), 'melee', 2),
 ('935b8ec2-7b93-493c-8138-9c1a3d7a966a', (SELECT id FROM level_info WHERE level_name = 'Bunker Hill'), 'ranged', 2),
 ('e823e982-0a16-44c2-889c-8c791a5a57e9', (SELECT id FROM level_info WHERE level_name = 'Bunker Hill'), 'melee', 2),
 ('f56615bd-bcff-4643-9e2d-31998f419319', (SELECT id FROM level_info WHERE level_name = 'Great Bridge'), 'ranged', 3),

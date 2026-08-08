@@ -1,29 +1,16 @@
 import SwiftUI
 
-/// Animals crossing the western backcountry.
-///
-/// Each one enters at a fixed point in the artwork's pixel space, so it
-/// tracks the map, then travels due west until it is clear off the side of
-/// the screen and rests out of sight before crossing again. Distance and
-/// speed are measured in view points, so a critter walks right off whatever
-/// screen it is on. They are drawn beneath the callouts, so they pass behind
-/// the name plates rather than fighting them.
 struct CampaignCritter: View {
     struct Species {
         var framePrefix: String
         var frameCount: Int
         var framesPerSecond: Double
-        /// Where it enters, in campaign-map image pixels.
         var startImagePoint: CGPoint
-        /// Displayed width as a fraction of the view's width.
         var widthFraction: CGFloat
-        /// Travel speed as a fraction of the view's width per second.
         var speedFraction: CGFloat
         var restSeconds: Double
-        /// Staggers the species so they never set off together.
         var phaseOffset: Double
 
-        /// Ambles west along the Virginia frontier, clear of the landmarks.
         static let grizzly = Species(
             framePrefix: "grizzly_bear_walk_",
             frameCount: 8,
@@ -35,8 +22,6 @@ struct CampaignCritter: View {
             phaseOffset: 0
         )
 
-        /// Bolts across the open ground north of the Cumberland Gap — smaller
-        /// and far quicker than the bear, on its own lane.
         static let jackrabbit = Species(
             framePrefix: "jackrabbit_run_",
             frameCount: 32,
@@ -65,7 +50,6 @@ struct CampaignCritter: View {
         let sprite = UIImage(named: species.framePrefix + "0")
         let height = width * (sprite?.size.height ?? 1) / (sprite?.size.width ?? 1)
 
-        // Far enough west to clear the screen edge completely.
         let travel = start.x + width / 2 + 4
         let speed = viewSize.width * species.speedFraction
         let runSeconds = Double(travel / max(speed, 1))
@@ -73,8 +57,6 @@ struct CampaignCritter: View {
 
         return Group {
             if sprite != nil, travel > 0, start.y > height, start.y < viewSize.height {
-                // 30Hz keeps the redraws well below what a display-linked
-                // timeline would cost; the rabbit's own cycle is 30fps too.
                 TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
                     let elapsed = timeline.date.timeIntervalSinceReferenceDate
                         + species.phaseOffset
@@ -83,7 +65,6 @@ struct CampaignCritter: View {
                     let progress = running ? phase / runSeconds : 1
                     let frame = Int(elapsed * species.framesPerSecond) % species.frameCount
 
-                    // Both sheets face right, so a westward run is mirrored.
                     Image(species.framePrefix + "\(frame)")
                         .resizable()
                         .interpolation(.high)
@@ -101,12 +82,6 @@ struct CampaignCritter: View {
     }
 }
 
-
-/// A sprite that animates in place rather than travelling — the British
-/// warship riding at anchor, hull bobbing while the water laps around it.
-/// It is allowed to sit under the compass, so unlike the static scenery it
-/// runs no collision checks at all — which means its berth has to be chosen
-/// to clear the corner menu on every device by hand.
 struct CampaignAnchoredSprite: View {
     struct Kind {
         var framePrefix: String
@@ -118,7 +93,7 @@ struct CampaignAnchoredSprite: View {
         static let britishWarship = Kind(
             framePrefix: "british_warship_",
             frameCount: 64,
-            framesPerSecond: 30,        // per the sheet manifest
+            framesPerSecond: 30,
             imagePosition: CGPoint(x: 1980, y: 1420),
             widthFraction: 0.098
         )
@@ -126,8 +101,6 @@ struct CampaignAnchoredSprite: View {
 
     var kind: Kind
     var viewSize: CGSize
-    /// Overrides the kind's fixed anchorage when a berth was solved at layout
-    /// time; nil keeps the authored position.
     var center: CGPoint? = nil
 
     var body: some View {
@@ -159,14 +132,6 @@ struct CampaignAnchoredSprite: View {
     }
 }
 
-/// Finds open water for the British warship at layout time.
-///
-/// The authored anchorage can end up under the menu bar or another dynamic
-/// element, so the berth is solved per screen: every open-Atlantic cell of the
-/// pirate's water mask is a candidate, tried nearest-first from the authored
-/// spot. A berth is taken only if the hull stays in open water and its
-/// on-screen rect clears every obstacle. With no valid berth the ship simply
-/// stays in port — nil means don't draw it.
 enum CampaignWarshipBerth {
     static func center(viewSize: CGSize, avoiding obstacles: [CGRect]) -> CGPoint? {
         let kind = CampaignAnchoredSprite.Kind.britishWarship
@@ -205,7 +170,6 @@ enum CampaignWarshipBerth {
                               width: width, height: height)
             guard bounds.insetBy(dx: 4, dy: 4).contains(rect) else { continue }
             guard !obstacles.contains(where: { $0.intersects(rect) }) else { continue }
-            // The hull footprint has to stay in open water, not just the centre.
             let corners = [
                 CGPoint(x: rect.minX, y: rect.midY), CGPoint(x: rect.maxX, y: rect.midY),
                 CGPoint(x: rect.midX, y: rect.minY), CGPoint(x: rect.midX, y: rect.maxY),

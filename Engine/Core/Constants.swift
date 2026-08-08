@@ -10,7 +10,6 @@ public struct Constants {
     public static let headless = true
     public static let runMode = RunMode.Debug
     public static let uiRunMode = RunMode.Replay
-//    public static let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "game", fullRefresh: false), fullRefresh: false)
     public static let heightInTiles = 61
     public static let widthInTiles = 80
     public static let skin = "Upgraded"
@@ -30,9 +29,6 @@ public struct Constants {
     public static let maxUtility = 100.0
     public static let numAITurns = 441
     
-    // Scale and zoom are different
-    // Zoom grows logarithmically to scale
-    // Having zoom level is necessary in animations because animations need to have linear control over the map
     public static let minScale = 0.4
     public static let maxScale = CGSize(width: 512, height: 286).width / 20.0
     public static let minZoom = log2(Constants.minScale)
@@ -63,7 +59,6 @@ public struct Constants {
     public static let mapMomentumScaleDecelerationConstant: CGFloat = 0.985
     public static let mapMomentumScaleSpringMass: CGFloat = 25
     
-    // Max time allowed between both fingers leaving screen for it to still be considered part of the scale gesture
     public static let mapMomentumScaleGestureMaxTimeDifference = 0.15
 
     public static let terrainTypes: [String: TerrainType] = [

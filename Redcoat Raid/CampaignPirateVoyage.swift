@@ -1,18 +1,6 @@
 import SwiftUI
 
-/// A pirate brig cruising the Atlantic on a course regenerated each calendar
-/// day, painted from 32 static isometric yaw views so it turns smoothly without
-/// running a separate hull or water animation.
-///
-/// The course is a closed loop that must clear three things at every sampled
-/// point: the navigable-water mask baked from the map art, the safe rect (so
-/// the brig never sails off screen), and every other piece of scenery — the
-/// compass, the moored ships and the coastal landmarks — so it cannot
-/// collide with anything already on the map.
 enum CampaignPirateVoyage {
-    // Cells that are entirely open Atlantic, with an all-water neighbourhood,
-    // sampled from the full-resolution art so rivers and inlets are excluded.
-    // Shared with the warship berth solver, which needs the same water test.
     static let mask = CampaignRoute.Mask(rows: [
         "................................................................................................................................",
         "...................................................................................................############################.",
@@ -124,12 +112,8 @@ enum CampaignPirateVoyage {
         "pirate_ship_direction_31_n_by_w",
     ]
     static let widthFraction: CGFloat = 0.078
-    /// Cruising pace as a fraction of the view's width per second, so the
-    /// brig sails at the same speed however long that day's circuit is.
     static let speedFraction: CGFloat = 0.0035
 
-    /// Anything already on the map that the brig must stay clear of, as
-    /// image-space centres with a clearance radius in image pixels.
     private static var obstacles: [(CGPoint, CGFloat)] {
         let halfSelf = widthFraction * CampaignMapAsset.safeRect.width / 2
         return CampaignDecor.pieces.map { piece in
@@ -150,9 +134,6 @@ enum CampaignPirateVoyage {
 
     private static var cache: (day: Int, extra: CGRect, course: CampaignRoute.Course)?
 
-    /// `compassBox` is the compass's footprint in image space. It is placed
-    /// from screen geometry, so it moves with the device and has to be fed
-    /// in rather than read from the static berth list.
     static func course(forDay day: Int, compassBox: CGRect = .zero) -> CampaignRoute.Course {
         if let c = cache, c.day == day, c.extra == compassBox { return c.course }
         var blocked = obstacles
@@ -177,8 +158,6 @@ enum CampaignPirateVoyage {
         return course
     }
 
-    /// Orientations measure degrees clockwise from screen north, with screen y
-    /// increasing downward. Each 11.25-degree sector selects one static sprite.
     static func orientationIndex(dx: CGFloat, dy: CGFloat) -> Int {
         var deg = atan2(dx, -dy) * 180 / .pi
         if deg < 0 { deg += 360 }
@@ -192,7 +171,6 @@ enum CampaignPirateVoyage {
 
 struct CampaignPirateShip: View {
     var viewSize: CGSize
-    /// The compass's footprint in image space, so the brig sails around it.
     var compassBox: CGRect = .zero
 
     var body: some View {
@@ -201,7 +179,6 @@ struct CampaignPirateShip: View {
         let width = viewSize.width * CampaignPirateVoyage.widthFraction
         let sprite = UIImage(named: CampaignPirateVoyage.orientationAssetNames[0])
         let height = width * (sprite?.size.height ?? 1) / (sprite?.size.width ?? 1)
-        // Constant speed: a longer circuit simply takes longer to sail.
         let lengthPoints = (course.lengths.last ?? 1)
             * viewSize.width / CampaignMapAsset.safeRect.width
         let seconds = Double(lengthPoints / max(viewSize.width * CampaignPirateVoyage.speedFraction, 0.01))
@@ -223,9 +200,6 @@ struct CampaignPirateShip: View {
                         .interpolation(.high)
                         .scaledToFit()
                         .frame(width: width, height: height)
-                        // The sheet's anchor is the waterline at bottom
-                        // centre, so the hull rides the course line instead
-                        // of the sprite's bounding box hovering over it.
                         .position(x: centre.x, y: centre.y - height / 2)
                 }
                 .allowsHitTesting(false)

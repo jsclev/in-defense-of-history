@@ -1,12 +1,6 @@
 import SwiftUI
 
-/// A beaver waddling around the western backcountry on a course that changes
-/// each calendar day. The sheet carries 16 headings, so it genuinely turns
-/// as the path curves rather than being mirrored.
 enum CampaignBeaverRoute {
-    // Walkable ground baked from main_campaign_map_03: land with an all-land
-    // neighbourhood, west of the colonies and inside the safe rect, so the
-    // beaver never waddles into the Mississippi or off the screen.
     private static let mask = CampaignRoute.Mask(rows: [
         "................................................................................................................................",
         "................................................................................................................................",
@@ -84,10 +78,8 @@ enum CampaignBeaverRoute {
 
     static let directionCount = 16
     static let phaseCount = 8
-    static let framesPerSecond: Double = 12    // per the sheet manifest
+    static let framesPerSecond: Double = 12
     static let widthFraction: CGFloat = 0.034
-    /// Waddling pace as a fraction of the view's width per second, so it
-    /// moves at the same speed however long that day's circuit is.
     static let speedFraction: CGFloat = 0.0026
 
     private static var cache: (day: Int, course: CampaignRoute.Course)?
@@ -95,7 +87,7 @@ enum CampaignBeaverRoute {
     static func course(forDay day: Int) -> CampaignRoute.Course {
         if let c = cache, c.day == day { return c.course }
         let course = CampaignRoute.closedCourse(
-            seed: day &* 7919 &+ 101,        // its own stream, not the pirate's
+            seed: day &* 7919 &+ 101,
             centreX: 1100...1400,
             centreY: 1200...1400,
             radius: 60...150,
@@ -107,7 +99,6 @@ enum CampaignBeaverRoute {
         return course
     }
 
-    /// The sheet measures clockwise screen degrees with east at 0.
     static func frameIndex(dx: CGFloat, dy: CGFloat, elapsed: Double) -> Int {
         var deg = atan2(dy, dx) * 180 / .pi
         if deg < 0 { deg += 360 }

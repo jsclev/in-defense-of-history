@@ -4,7 +4,6 @@ public final class Simulation {
     public let catalog: ContentCatalog
     public let level: LevelInfo
 
-    // Mutable run state.
     public private(set) var time: Double = 0
     public private(set) var tick: Int = 0
     public private(set) var gold: Int
@@ -13,28 +12,22 @@ public final class Simulation {
     public private(set) var towers: [Tower?]
     public private(set) var outcome: Outcome?
 
-    // Counters.
     public private(set) var killed = 0
     public private(set) var routed = 0
     public private(set) var captured = 0
     public private(set) var leaked = 0
-    public private(set) var fatesByType: [[Int]]   // [enemyTypeIndex][EnemyFate]
+    public private(set) var fatesByType: [[Int]]
     public private(set) var goldEarned = 0
-    /// Per-wave max progress fraction any enemy reached (the tension trace /
-    /// flatness detector: a wave that never crosses ~0.6 will bore humans too).
     public private(set) var waveMaxProgress: [Double]
-    /// Per-wave leak counts (which wave the leaked enemy belonged to).
     public private(set) var leaksByWave: [Int]
 
     private var policy: any CommanderPolicy
     private var observers: [SimulationObserver] = []
 
-    // RNG streams (see SeededRNG.fork for why they're separate).
     private var rngCombat: SeededRNG
     private var rngMorale: SeededRNG
     private var rngContagion: SeededRNG
 
-    // Precomputed spawn timeline.
     private struct ScheduledSpawn {
         var time: Double
         var enemyTypeIndex: Int
@@ -46,33 +39,25 @@ public final class Simulation {
     private var lastWaveAnnounced = -1
     private var nextSpawnID = 0
 
-    // Scratch buffers, rebuilt each tick (kept as stored properties so their
-    // capacity is reused instead of reallocated).
     private var positions: [Point] = []
     private var moraleRegen: [Double] = []
     private var disciplineBonus: [Double] = []
     private var contagionAccumulator: Double = 0
 
-    /// In-flight projectiles. Homing rounds chase a spawnID and fizzle if the
-    /// target dies first; ballistic shells fly to a fixed point and detonate
-    /// there regardless. Order-preserving removal keeps the impact-time RNG
-    /// draws identical between the CPU and GPU engines.
     private struct Projectile {
         var position: Point
-        var aim: Point            // ballistic detonation point
-        var targetSpawnID: Int    // -1 == ballistic
+        var aim: Point
+        var targetSpawnID: Int
         var towerTypeIndex: Int
         var towerLevel: Int
         var removed: Bool = false
     }
     private var projectiles: [Projectile] = []
 
-    /// Melee garrisons by tower slot. Units live here; their behavior comes
-    /// from MilitiaAI — the engine only executes decisions and owns combat.
     public struct Garrison: Sendable {
         public var rallyPoint: Point
         public var units: [MilitiaUnit]
-        var enemySwingTicks: [Int: Int] = [:]   // blocked enemy spawnID -> ticks to next swing
+        var enemySwingTicks: [Int: Int] = [:]
     }
     public private(set) var garrisons: [Int: Garrison] = [:]
     public private(set) var militiaKills = 0
@@ -80,12 +65,8 @@ public final class Simulation {
     public private(set) var militiaRespawns = 0
     public private(set) var projImpacts = 0
     public private(set) var projFizzles = 0
-    /// Enemy type indices that cannot be blocked (rideDown shoves infantry).
     private var blockImmune: [Bool] = []
-    /// Rebuilt each militia tick: spawnIDs currently held in a fight.
     private var blockedSpawnIDs: Set<Int> = []
-
-    // MARK: - Init
 
     public init(
         level: LevelInfo,
@@ -112,7 +93,6 @@ public final class Simulation {
         self.rngMorale = root.fork(stream: 2)
         self.rngContagion = root.fork(stream: 3)
 
-        // Flatten the wave timeline once, up front.
         var sched: [ScheduledSpawn] = []
         for (wi, wave) in level.waves.enumerated() {
             for entry in wave.spawns {
@@ -130,8 +110,6 @@ public final class Simulation {
                 }
             }
         }
-        // Stable sort: ties resolve by insertion order, keeping runs identical
-        // across content edits that don't change timings.
         self.schedule = sched.enumerated()
             .sorted { ($0.element.time, $0.offset) < ($1.element.time, $1.offset) }
             .map { $0.element }
@@ -157,8 +135,6 @@ public final class Simulation {
         for o in observers { o.handle(e, atTime: time) }
     }
 
-    // MARK: - Build API (called by policies)
-
     @discardableResult
     public func build(slot: Int, towerID: UUID) -> BuildResult {
         guard slot >= 0, slot < towers.count, towers[slot] == nil,
@@ -182,7 +158,6 @@ public final class Simulation {
         return .ok
     }
 
-    /// Rally the garrison at a new flag position, clamped to the flag range.
     public func setRallyPoint(slot: Int, to point: Point) {
         guard var g = garrisons[slot], let tower = towers[slot] else { return }
         let towerPos = level.towerSlots[slot].position
@@ -193,14 +168,11 @@ public final class Simulation {
         garrisons[slot] = g
     }
 
-    /// Default flag: as close to the nearest road as the flag range allows.
     private func defaultRallyPoint(towerPosition: Point, flagRange: Double) -> Point {
         Simulation.defaultRallyPoint(towerPosition: towerPosition, flagRange: flagRange,
                                      paths: level.paths)
     }
 
-    /// Shared with the GPU buffer builder so both engines place the flag at
-    /// exactly the same point.
     public static func defaultRallyPoint(
         towerPosition: Point, flagRange: Double, paths: [Path]
     ) -> Point {
@@ -237,9 +209,6 @@ public final class Simulation {
         return .ok
     }
 
-    // MARK: - Run
-
-    /// Runs to completion (or the safety cap) and reports.
     public func run(maxSeconds: Double = 900) -> SimulationResult {
         while outcome == nil, time < maxSeconds {
             step()
@@ -248,16 +217,12 @@ public final class Simulation {
         return makeResult()
     }
 
-    // MARK: - Tick
-
     public func step() {
         guard outcome == nil else { return }
         let dt = SimClock.dt
 
-        // 1. Policy.
         policy.tick(time: time, sim: self)
 
-        // 2. Spawns.
         while scheduleCursor < schedule.count, schedule[scheduleCursor].time <= time {
             let s = schedule[scheduleCursor]
             scheduleCursor += 1
@@ -283,7 +248,6 @@ public final class Simulation {
 
         let n = enemies.count
         if n > 0 {
-            // 3. Position cache.
             positions.removeAll(keepingCapacity: true)
             positions.reserveCapacity(n)
             for i in 0..<n {
@@ -291,7 +255,6 @@ public final class Simulation {
                 positions.append(path.point(atDistance: enemies[i].distance))
             }
 
-            // 4. Auras.
             moraleRegen.removeAll(keepingCapacity: true)
             disciplineBonus.removeAll(keepingCapacity: true)
             for _ in 0..<n {
@@ -321,12 +284,11 @@ public final class Simulation {
                 }
             }
 
-            // 5. Towers fire.
             for slot in 0..<towers.count {
                 guard var tower = towers[slot] else { continue }
                 let ranged = catalog.towerTypes[tower.typeIndex].levels[tower.level]
                 guard ranged.shotMax > 0 || ranged.terrorMax > 0 || ranged.contagionChance > 0 else {
-                    continue   // melee garrisons fight in their own step
+                    continue
                 }
                 tower.cooldown -= 1
                 if tower.cooldown <= 0 {
@@ -351,30 +313,25 @@ public final class Simulation {
                 towers[slot] = tower
             }
 
-            // 5b. Projectiles fly; collision applies damage at impact.
             stepProjectiles(dt: dt)
 
-            // 5c. Militia garrisons: AI decides, engine executes.
             stepMilitia(dt: dt)
 
-            // 6. Contagion.
             contagionAccumulator += dt
             if contagionAccumulator >= Tunables.contagionTickInterval {
                 contagionAccumulator -= Tunables.contagionTickInterval
                 contagionTick(interval: Tunables.contagionTickInterval)
             }
 
-            // 7. Morale resolution (with break cascades).
             resolveMorale(dt: dt)
 
-            // 8. Movement & exits.
             for i in 0..<enemies.count where !enemies[i].removed {
                 var e = enemies[i]
                 let stats = catalog.enemyTypes[e.typeIndex].stats
                 let path = level.paths[e.pathIndex]
                 if blockedSpawnIDs.contains(e.spawnID), e.state != .broken {
                     enemies[i] = e
-                    continue   // held in melee: stands and fights
+                    continue
                 }
                 switch e.state {
                 case .broken:
@@ -398,7 +355,6 @@ public final class Simulation {
             }
         }
 
-        // 9. Compaction (order-preserving, in place — no per-tick allocation).
         var w = 0
         for i in 0..<enemies.count where !enemies[i].removed {
             if w != i { enemies[w] = enemies[i] }
@@ -406,7 +362,6 @@ public final class Simulation {
         }
         if w < enemies.count { enemies.removeLast(enemies.count - w) }
 
-        // 10. End conditions.
         if lives <= 0 {
             outcome = .defeat
         } else if scheduleCursor == schedule.count && enemies.isEmpty {
@@ -417,12 +372,9 @@ public final class Simulation {
         tick += 1
     }
 
-    // MARK: - Militia
-
     private func stepMilitia(dt: Double) {
         guard !garrisons.isEmpty else { return }
 
-        // Who is claimed (engaged or fought) by any unit right now?
         var claimed: Set<Int> = []
         for (_, g) in garrisons.sorted(by: { $0.key < $1.key }) {
             for u in g.units where u.targetSpawnID >= 0 {
@@ -430,7 +382,6 @@ public final class Simulation {
             }
         }
 
-        // Index enemies by spawnID once.
         var bySpawnID: [Int: Int] = [:]
         for i in 0..<enemies.count where !enemies[i].removed {
             bySpawnID[enemies[i].spawnID] = i
@@ -443,7 +394,6 @@ public final class Simulation {
             let stats = catalog.towerTypes[tower.typeIndex].levels[tower.level]
             let towerPos = level.towerSlots[slot].position
 
-            // Free enemies near this post: alive, steady/shaken, blockable, unclaimed.
             var free: [(spawnID: Int, position: Point)] = []
             for i in 0..<enemies.count where !enemies[i].removed {
                 let e = enemies[i]
@@ -516,7 +466,6 @@ public final class Simulation {
                     unit.targetSpawnID = -1
                 }
 
-                // Fights hold the enemy in place and draw return blows.
                 if unit.state == .fighting, unit.targetSpawnID >= 0,
                    let ei = bySpawnID[unit.targetSpawnID], !enemies[ei].removed {
                     blockedSpawnIDs.insert(unit.targetSpawnID)
@@ -569,7 +518,6 @@ public final class Simulation {
             var destination = p.aim
             var targetIndex = -1
             if p.targetSpawnID >= 0 {
-                // Homing: chase the target's current position; fizzle if gone.
                 for i in 0..<enemies.count where !enemies[i].removed
                     && enemies[i].spawnID == p.targetSpawnID {
                     targetIndex = i
@@ -603,8 +551,6 @@ public final class Simulation {
         }
     }
 
-    /// Ballistic detonation: the blast happens where the shell lands, against
-    /// enemies there NOW — no primary target, so no contagion application.
     private func detonate(_ lvl: TowerLevel, at center: Point) {
         let r2 = lvl.aoeRadius * lvl.aoeRadius
         for i in 0..<enemies.count where !enemies[i].removed {
@@ -616,13 +562,9 @@ public final class Simulation {
         }
     }
 
-    /// Fire cadence in whole engine ticks, computed in Double once so both
-    /// engines agree exactly (0.8s at 30tps == 24 ticks, never 25).
     public static func fireTicks(_ fireInterval: Double) -> Int {
         max(1, Int((fireInterval * Double(SimClock.ticksPerSecond)).rounded()))
     }
-
-    // MARK: - Targeting & damage
 
     private func selectTarget(from origin: Point, range: Double, targeting: Targeting) -> Int? {
         let r2 = range * range
@@ -637,8 +579,6 @@ public final class Simulation {
             case .last: key = -e.distance
             case .strongest: key = e.hp
             case .shakiest:
-                // Prefer units that can still be broken; already-Broken units
-                // rank behind everything else.
                 key = e.state == .broken ? -1_000_000 : -e.morale
             }
             if key > bestKey {
@@ -656,8 +596,6 @@ public final class Simulation {
             for i in 0..<enemies.count where !enemies[i].removed {
                 let d2 = positions[i].squaredDistance(to: center)
                 if d2 <= r2 {
-                    // KR blast model: max damage at the impact center falling
-                    // to min at the edge; no roll — distance is the roll.
                     let t = pow(min(1.0, d2.squareRoot() / lvl.aoeRadius), lvl.aoeFalloffExponent)
                     applyVolley(lvl, to: i, isPrimary: i == primary, blastFraction: t)
                 }
@@ -674,7 +612,6 @@ public final class Simulation {
         guard !e.removed else { return }
         let stats = catalog.enemyTypes[e.typeIndex].stats
 
-        // Shot vs cover. Splash pierces part of the cover (KR: half).
         if lvl.shotMax > 0 {
             let damage: Double
             let effCover: Double
@@ -688,7 +625,6 @@ public final class Simulation {
             e.hp -= damage * (1.0 - effCover)
         }
 
-        // Terror vs discipline (aura bonus caps at full immunity).
         if lvl.terrorMax > 0 {
             let effDiscipline = min(1.0, stats.discipline + disciplineBonus[index])
             if effDiscipline < 1.0 {
@@ -702,7 +638,6 @@ public final class Simulation {
             }
         }
 
-        // Contagion application (primary target only) vs hardiness.
         if isPrimary, lvl.contagionChance > 0, !e.infected {
             if rngCombat.chance(lvl.contagionChance * (1.0 - stats.hardiness)) {
                 e.infected = true
@@ -715,11 +650,8 @@ public final class Simulation {
         enemies[index] = e
     }
 
-    // MARK: - Contagion
-
     private func contagionTick(interval: Double) {
         let n = enemies.count
-        // Drain phase: HP down to the floor, then morale pressure instead.
         for i in 0..<n where !enemies[i].removed && enemies[i].infected {
             var e = enemies[i]
             let stats = catalog.enemyTypes[e.typeIndex].stats
@@ -734,8 +666,6 @@ public final class Simulation {
             }
             enemies[i] = e
         }
-        // Spread phase: proximity transmission. Slows clump enemies; clumped
-        // enemies infect each other faster — the epidemic-amplifier interaction.
         let r2 = Tunables.contagionSpreadRadius * Tunables.contagionSpreadRadius
         for i in 0..<n where !enemies[i].removed && enemies[i].infected {
             for j in 0..<n where j != i && !enemies[j].removed && !enemies[j].infected {
@@ -748,12 +678,9 @@ public final class Simulation {
         }
     }
 
-    // MARK: - Morale
-
     private func resolveMorale(dt: Double) {
         let n = enemies.count
 
-        // Regen and Shaken transitions.
         for i in 0..<n where !enemies[i].removed {
             var e = enemies[i]
             if e.state != .broken {
@@ -764,14 +691,12 @@ public final class Simulation {
                 if e.state == .steady, e.morale <= e.shakenThreshold, !steadyGate {
                     e.state = .shaken
                 } else if e.state == .shaken, e.morale > e.shakenThreshold {
-                    e.state = .steady   // rallied back above threshold
+                    e.state = .steady
                 }
             }
             enemies[i] = e
         }
 
-        // Break cascade: breaking units splash morale damage, which can break
-        // neighbours in the same tick — iterate until quiescent. Bounded by n.
         var anyBroke = true
         while anyBroke {
             anyBroke = false
@@ -781,7 +706,6 @@ public final class Simulation {
                 anyBroke = true
                 e.state = .broken
 
-                // Splash to neighbours.
                 let mult = e.isWavering ? Tunables.waveringSplashMultiplier : 1.0
                 let splash = Tunables.breakMoraleSplash * mult
                 let r2 = Tunables.breakSplashRadius * Tunables.breakSplashRadius
@@ -792,7 +716,6 @@ public final class Simulation {
                     enemies[j].morale -= splash * (1.0 - effDiscipline)
                 }
 
-                // Mercenaries surrender on the spot rather than routing.
                 if e.isMercenary {
                     remove(&e, fate: .captured)
                 }
@@ -801,11 +724,7 @@ public final class Simulation {
         }
     }
 
-    // MARK: - Removal & economy
-
     private func kill(_ e: inout Enemy) {
-        // Killing a routing unit still pays full — finishing routers is the
-        // sharpshooter's payoff.
         remove(&e, fate: .killed)
     }
 
@@ -836,7 +755,6 @@ public final class Simulation {
         goldEarned += earned
         fatesByType[e.typeIndex][fateIndex(fate)] += 1
 
-        // Command aura holders shock their own side when they fall.
         for trait in type.traits {
             if case let .commandAura(radius, _, deathShock) = trait, fate == .killed {
                 deathShockSplash(around: e, radius: radius, amount: deathShock)
@@ -870,8 +788,6 @@ public final class Simulation {
         case .leaked: return 3
         }
     }
-
-    // MARK: - Result
 
     private func makeResult() -> SimulationResult {
         var perType: [UUID: SimulationResult.TypeFates] = [:]

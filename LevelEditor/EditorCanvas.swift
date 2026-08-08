@@ -1,7 +1,3 @@
-// EditorCanvas.swift
-// The interactive map surface for edit mode. Renders the 1600x900 design
-// space in the same schematic language as playtest, plus editing handles,
-// and turns clicks/drags into undoable draft mutations.
 import SwiftUI
 
 @MainActor
@@ -72,8 +68,6 @@ struct EditorCanvas: View {
         .onExitCommand { state.selection = .none }
         .onMoveCommand { nudge($0) }
     }
-
-    // MARK: - Input
 
     private func dragGesture(_ t: DesignTransform) -> some Gesture {
         DragGesture(minimumDistance: 0)
@@ -204,7 +198,6 @@ struct EditorCanvas: View {
         }
     }
 
-    // Snap step is 12 canvas px = 10 engine design units, so exports stay round.
     private func snap(_ p: Point) -> Point {
         var out = p
         if state.snapToGrid {
@@ -214,8 +207,6 @@ struct EditorCanvas: View {
         out.y = min(max(out.y, 0), CanvasSpec.height)
         return out
     }
-
-    // MARK: - Hit testing (view space for handles, design space for roads)
 
     private func hitHandle(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
         var best: (DragTarget, CGFloat)?
@@ -265,8 +256,6 @@ struct EditorCanvas: View {
         return best?.0
     }
 
-    // MARK: - Drawing
-
     private func draw(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let draft = document.draft
         let frame = t.frame
@@ -284,9 +273,6 @@ struct EditorCanvas: View {
         ctx.stroke(SwiftUI.Path(frame), with: .color(.white.opacity(0.2)), lineWidth: 1)
     }
 
-    // The reference image is never scaled or stretched: native pixels,
-    // centered on the canvas. Art that doesn't match the canvas is the
-    // artist's problem — the editor dictates the dimensions.
     private func backgroundCanvasRect(_ d: MapDraft) -> CGRect {
         let px = state.backgroundPixelSize ?? CanvasSpec.size
         return CGRect(
@@ -297,8 +283,6 @@ struct EditorCanvas: View {
         )
     }
 
-    // Dim everything outside the playable rect and outline the rect itself,
-    // so imported full-bleed art can be lined up against what ships on screen.
     private func drawPlayableOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let playable = t.view(CanvasSpec.playable)
         var dim = SwiftUI.Path(t.frame)
@@ -315,7 +299,6 @@ struct EditorCanvas: View {
         )
     }
 
-    // Grid steps: 15 canvas px minor / 120 major (8 minors per major).
     private func drawGrid(_ ctx: inout GraphicsContext, _ t: DesignTransform, _ frame: CGRect) {
         var minor = SwiftUI.Path()
         var major = SwiftUI.Path()
@@ -435,7 +418,6 @@ struct EditorCanvas: View {
         let s = t.scale
         let draft = document.draft
         let warnings = MapGeometry.warnings(for: draft)
-        // First tower the intended solution places on each slot, for a hint dot.
         var planned: [Int: Emplacement] = [:]
         for step in draft.intendedSolution where step.kind == "place" {
             if planned[step.slot] == nil, let e = step.emplacement.flatMap(Emplacement.init(rawValue:)) {

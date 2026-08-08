@@ -1,13 +1,3 @@
-// Sweep.swift
-// The design-space search. Fixed inputs are the designer's and come from the
-// database via DAOs: which tower kinds/levels a level allows, tower costs,
-// starting lives, wave count, and the enemy roster. Everything else is
-// permuted — starting money, ranged range/damage/rate-of-fire, special-tower
-// terror strength, and wave composition — and every permutation is run across
-// many seeds by a fixed greedy commander. One CSV row per permutation.
-//
-// Map geometry (roads/slots) comes from the level's design blueprint when one
-// exists; otherwise the DB's own geometry, normalized into design space.
 import Foundation
 import CoreGraphics
 
@@ -16,20 +6,14 @@ struct SweepFixedInputs {
     var levelName: String
     var lives: Int
     var numWaves: Int
-    var unlocks: [String: Int]            // kind -> max tower level
-    var towerLevels: [String: [TowerLevel]]  // kind -> branch-1 stats per level
+    var unlocks: [String: Int]
+    var towerLevels: [String: [TowerLevel]]
     var roster: [EnemyType]
-    /// Simulator-discovered choice-irrelevance bounds, kind -> stat -> bounds.
     var bounds: [String: [String: SimStatBounds]]
-    /// Designer-provided simulator-only speed brackets per enemy type.
     var speedBounds: [UUID: ClosedRange<Double>]
-    /// Designer-provided simulator-only max-HP brackets per enemy type.
     var hpBounds: [UUID: ClosedRange<Double>]
-    /// Designer-provided simulator-only bounty brackets per enemy type.
     var bountyBounds: [UUID: ClosedRange<Double>]
-    /// Designer-provided melee unit brackets, kind -> tower level -> brackets.
     var meleeBrackets: [String: [Int: SimMeleeBrackets]]
-    /// Field the melee line in catalogs (both engines simulate it).
     var fieldMelee: Bool = false
 
     static func load(db: Db, levelName: String) throws -> SweepFixedInputs {
@@ -64,17 +48,11 @@ struct SweepFixedInputs {
         )
     }
 
-    /// Map geometry for a sweep: a design blueprint when one exists, else the
-    /// DB's own paths/slots normalized into the 1600×900 design space (so
-    /// range/splash units mean the same thing on every map) and simplified to
-    /// the GPU's per-path point cap.
     static func designLevel(db: Db, levelName: String, fixed: SweepFixedInputs) throws -> LevelInfo {
         let level = try db.levelInfoDao.getBy(id: fixed.levelID)
         let rect = level.playableRect
         guard rect.width > 0, rect.height > 0, !level.paths.isEmpty, !level.towerSlots.isEmpty else {
-            // No designer geometry in the DB yet: fall back to a blueprint.
-            if let bp = Blueprints.named(levelName) { return bp.makeLevel() }
-            throw DbError.Db(message: "Level '\(levelName)' has no DB geometry and no blueprint")
+            throw DbError.Db(message: "Level '\(levelName)' has no paths or tower slots in the database")
         }
         let s = LevelBlueprint.designWidth / Double(rect.width)
         func norm(_ p: Point) -> Point {
@@ -94,7 +72,6 @@ struct SweepFixedInputs {
         )
     }
 
-    /// Ramer-Douglas-Peucker with rising tolerance until the polyline fits.
     static func simplify(_ points: [Point], maxPoints: Int) -> [Point] {
         guard points.count > maxPoints else { return points }
         var epsilon = 2.0
@@ -103,7 +80,6 @@ struct SweepFixedInputs {
             result = rdp(points, epsilon: epsilon)
             epsilon *= 1.5
         }
-        // Tolerance blew up before fitting: decimate as a last resort.
         if result.count > maxPoints {
             let step = Double(points.count - 1) / Double(maxPoints - 1)
             result = (0..<maxPoints).map { points[Int((Double($0) * step).rounded())] }
@@ -138,7 +114,6 @@ struct SweepFixedInputs {
         return p.distance(to: Point(a.x + t * dx, a.y + t * dy))
     }
 
-    // tower_type.tower_type_category ("Ranged") vs level_tower_unlock.tower_kind ("ranged").
     static func normalizeKind(_ s: String) -> String {
         switch s.lowercased() {
         case "ranged": return "ranged"
@@ -150,8 +125,6 @@ struct SweepFixedInputs {
     }
 }
 
-// MARK: - Permutation space
-
 struct SweepFocus {
     var stat: String
     var kind: String
@@ -159,53 +132,29 @@ struct SweepFocus {
 }
 
 struct SweepGrids {
-    /// Upgrade-cost exploration: cost(Ln) = round5(L1 cost × growth^(n-1)),
-    /// per combat kind independently. Finding these numbers is the sweep's job;
-    /// the designer owns only the level-1 costs.
     var upgradeGrowth: [Double] = [1.3, 1.5, 1.7, 1.9, 2.1]
-    /// L1 range exploration per kind, in design units (1600×900 space). The
-    /// grids bracket the Kingdom Rush 1 proportions (archer/mage radius 140,
-    /// bombard 160, on a ~1080-wide stage ≈ 13%/15% of screen width → ~210/240
-    /// here) widely enough to find both the useless floor and the OP ceiling.
-    /// Upper tower levels scale by the DB's per-level range ratios.
     var rangeGrids: [String: [Double]] = [
         "ranged": [140, 175, 210, 245, 280],
         "special": [140, 175, 210, 245, 280],
         "areaOfEffect": [160, 200, 240, 280, 320],
     ]
     var defaultRangeGrid: [Double] = [140, 175, 210, 245, 280]
-    /// L1 fire-interval exploration per kind, in seconds, bracketing the DB
-    /// baselines (ranged 0.8, special 1.2, areaOfEffect 2.4). Upper tower
-    /// levels scale by the DB's per-level rate ratios.
     var rofGrids: [String: [Double]] = [
         "ranged": [0.5, 0.65, 0.8, 1.0, 1.2],
         "special": [0.8, 1.0, 1.2, 1.5, 1.8],
         "areaOfEffect": [1.6, 2.0, 2.4, 2.8, 3.2],
     ]
     var defaultRofGrid: [Double] = [0.5, 0.65, 0.8, 1.0, 1.2]
-    /// L1 blast-radius exploration for kinds with area damage, in design
-    /// units. KR ladder is ~95/95/99/99 here (Bertha's radius 67 in KR px,
-    /// blast ≈ 46% of the archer range radius); upper levels keep the DB ratio.
     var splashGrids: [String: [Double]] = [
         "areaOfEffect": [70, 85, 100, 115, 130],
     ]
     var defaultSplashGrid: [Double] = [70, 85, 100, 115, 130]
-    /// Blast falloff exponents: damage(d) = max - band·(d/R)^k.
-    /// 0.5 = harsh (drops fast), 1.0 = KR linear, 3.0 = gentle (near-flat max).
     var falloffGrid: [Double] = [0.5, 1.0, 3.0]
-    /// Projectile flight-speed exploration per kind (design units/sec).
-    /// Experiments (2026-08-07) showed this flips outcomes at cliff configs:
-    /// homing rounds waste fire on already-doomed targets when slow; ballistic
-    /// shells trade blast lead/lag against marching columns. Kinds whose DB
-    /// speed is 0 stay hitscan and are never swept.
     var projSpeedGrids: [String: [Double]] = [
         "ranged": [300, 425, 550, 800, 1100],
         "areaOfEffect": [80, 160, 320, 640, 1280],
     ]
     var defaultProjSpeedGrid: [Double] = [275, 550, 1100]
-    /// Designer pins: a stat listed here is a fixed input this run, not a
-    /// dimension — e.g. fixedRof["ranged"] = 0.8 sweeps everything else while
-    /// ranged fires at exactly the designed rate.
     var fixedRange: [String: Double] = [:]
     var fixedRof: [String: Double] = [:]
     var fixedGrowth: [String: Double] = [:]
@@ -216,23 +165,12 @@ struct SweepGrids {
     var fixedCurve: String?
     var fixedMix: String?
     var fixedSpacing: String?
-    /// Enemy speed exploration: a single bracket position in [0,1]; every
-    /// enemy sits at that position inside its own designer-provided min-max
-    /// speed bracket (sim_enemy_type). With symmetric brackets, bracket
-    /// position 0.5 is the shipped speed.
     var enemySpeedGrid: [Double] = [0, 0.25, 0.5, 0.75, 1.0]
     var fixedEnemySpeed: Double?
-    /// Enemy max-HP exploration: same bracket-position model as speed;
-    /// position 0.5 is the shipped HP with symmetric brackets.
     var enemyHpGrid: [Double] = [0, 0.25, 0.5, 0.75, 1.0]
     var fixedEnemyHp: Double?
-    /// Enemy bounty exploration: same bracket-position model; position 0.5 is
-    /// the shipped bounty with symmetric brackets. KR keeps bounty constant
-    /// per enemy — this dimension finds the band that constant must live in.
     var enemyBountyGrid: [Double] = [0, 0.25, 0.5, 0.75, 1.0]
     var fixedEnemyBounty: Double?
-    /// Melee unit brackets (sim_melee_unit): HP and average swing damage,
-    /// same bracket-position model. Only in play when melee is fielded.
     var meleeHpGrid: [Double] = [0, 0.25, 0.5, 0.75, 1.0]
     var fixedMeleeHp: Double?
     var meleeDamageGrid: [Double] = [0, 0.25, 0.5, 0.75, 1.0]
@@ -242,19 +180,10 @@ struct SweepGrids {
     var moneyGridOverride: [Int]?
     var reportDir = ""
     var limit: Int?
-    /// Step for grids derived from stored bounds; 0 = five evenly spaced
-    /// values (fine mode sets 10 for cliff-mapping resolution).
     var boundsStep: Double = 0
     var startingMoneyStep = 5
-    /// Starting-lives exploration. Genre landscape: 20 is the Desktop-TD-era
-    /// convention KR inherited; challenge modes across the genre use 1; BTD
-    /// scales 100-200 with far costlier leaks. 1 is the perfect-play floor,
-    /// 50 is near "lives don't matter" at early-level enemy counts.
     var livesGrid: [Int] = [1, 10, 20, 35, 50]
     var fixedLives: Int?
-    /// Adaptive seeds: run this many first; only permutations that show any
-    /// variance get the full seed count. Outlier-hunting spends effort where
-    /// the outcome is in doubt.
     var probeSeeds = 8
     var budgetHours = 8.0
     var compCurves = ["gentle", "standard", "steep"]
@@ -264,13 +193,10 @@ struct SweepGrids {
     var baseSeed: UInt64 = 1776
 }
 
-/// The concrete permutation space for one level: money range derived from the
-/// level's slots and cheapest tower, one upgrade-growth dimension per combat
-/// kind, and the composition dimensions.
 struct SweepSpace {
     var moneyValues: [Int]
-    var combatKinds: [String]            // kinds that field a simulated tower
-    var aoeKinds: [String]               // combat kinds with a blast radius
+    var combatKinds: [String]
+    var aoeKinds: [String]
     var meleeFielded: Bool = false
     var fixedInputs: SweepFixedInputs
     var grids: SweepGrids
@@ -302,10 +228,7 @@ struct SweepSpace {
         let cheapest = combatKinds
             .compactMap { fixed.towerLevels[$0]?.first?.cost }
             .min() ?? 70
-        // Floor: three of the cheapest tower buildable on the opening beat.
         let minMoney = 3 * cheapest
-        // Ceiling: an opening force on half the board plus one — more starting
-        // gold than that and the opening build stops being a decision.
         let maxMoney = cheapest * (slotCount / 2 + 1)
         if let pinned = grids.fixedMoney {
             self.moneyValues = [pinned]
@@ -353,21 +276,14 @@ struct SweepSpace {
     var mixes: [String] { grids.fixedMix.map { [$0] } ?? grids.compMixes }
     var spacings: [String] { grids.fixedSpacing.map { [$0] } ?? grids.compSpacings }
 
-    /// A pinned stat collapses to a single-value grid (a fixed input).
     func growthGrid(for kind: String) -> [Double] {
         grids.fixedGrowth[kind].map { [$0] } ?? grids.upgradeGrowth
     }
 
-    /// Melee towers take range (the flag range) and cadence straight from the
-    /// DB rows — the catalog ignores those permutation dimensions for them, so
-    /// they collapse to a single grid point instead of multiplying the space.
     private func isMeleeKind(_ kind: String) -> Bool {
         (fixedInputs.towerLevels[kind]?.first?.meleeUnitCount ?? 0) > 0
     }
 
-    /// Priority: designer pin > stored choice-irrelevance bounds > static grid.
-    /// Stored bounds are the interesting window a previous sweep discovered;
-    /// permutation effort concentrates inside them.
     func rangeGrid(for kind: String) -> [Double] {
         if isMeleeKind(kind) {
             return [fixedInputs.towerLevels[kind]?.first?.range ?? 0]
@@ -400,7 +316,6 @@ struct SweepSpace {
         grids.fixedSplash[kind].map { [$0] } ?? grids.splashGrids[kind] ?? grids.defaultSplashGrid
     }
 
-    /// Kinds designed as hitscan (DB speed 0) are never swept.
     func projSpeedGrid(for kind: String, fixed: SweepFixedInputs) -> [Double] {
         guard let base = fixed.towerLevels[kind]?.first, base.projectileSpeed > 0 else { return [0] }
         return grids.fixedProjSpeed[kind].map { [$0] }
@@ -502,29 +417,16 @@ struct SweepSpace {
 struct SweepPermutation {
     var index: Int
     var money: Int
-    /// Starting lives for this permutation (DB num_starting_lives is the
-    /// designer's shipped value; the sweep explores around it).
     var lives: Int
-    /// Combat kind -> per-step upgrade cost growth factor.
     var upgradeGrowth: [String: Double]
-    /// Combat kind -> L1 range in design units.
     var rangeByKind: [String: Double]
-    /// Combat kind -> L1 fire interval in seconds.
     var rofByKind: [String: Double]
-    /// Combat kind -> projectile flight speed (0 = hitscan, per DB design).
     var projSpeedByKind: [String: Double]
-    /// AoE kind -> L1 blast radius in design units.
     var splashByKind: [String: Double]
-    /// AoE kind -> blast falloff exponent.
     var falloffByKind: [String: Double]
-    /// Bracket position for enemy speed: every enemy's speed sits at
-    /// min + position * (max - min) of its own bracket.
     var enemySpeedBracketPosition: Double
-    /// Bracket position for enemy max HP.
     var enemyHpBracketPosition: Double
-    /// Bracket position for enemy bounty (rounded to whole gold).
     var enemyBountyBracketPosition: Double
-    /// Bracket positions for melee unit HP and average swing damage.
     var meleeHpBracketPosition: Double
     var meleeDamageBracketPosition: Double
     var curve: String
@@ -568,8 +470,6 @@ struct SweepPermutation {
     }
 }
 
-// MARK: - Catalog per permutation
-
 enum SweepCatalog {
     static let kindIDs: [String: UUID] = [
         "ranged": UUID(uuidString: "5e0e91a1-0001-4000-8000-000000000001")!,
@@ -578,14 +478,7 @@ enum SweepCatalog {
         "melee": UUID(uuidString: "5e0e91a1-0004-4000-8000-000000000004")!,
     ]
 
-    /// Every unlocked kind at DB base stats, capped at the unlocked level.
-    /// The designer's level-1 cost stands; upgrade costs are the permutation's:
-    /// cost(Ln) = round5(L1 cost × growth^(n-1)). Kinds whose DB rows have no
-    /// offensive output (melee until a blocker system exists, special until it
-    /// has stats) field no simulated tower.
     static func make(perm: SweepPermutation, fixed: SweepFixedInputs) -> ContentCatalog {
-        // Enemy speed and max HP at the permutation's position inside each
-        // designer bracket (sim_enemy_type).
         let roster = fixed.roster.map { type -> EnemyType in
             var t = type
             if let b = fixed.speedBounds[type.id] {
@@ -644,7 +537,6 @@ enum SweepCatalog {
                     let raw = Double(baseCost) * pow(growth, Double(n))
                     l.cost = Int((raw / 5).rounded()) * 5
                 }
-                // Swept L1 range/rate/blast; upper levels keep the DB's relative ladders.
                 l.range = dbL1Range > 0 ? l1Range * (base.range / dbL1Range) : l1Range
                 if let l1Rof = perm.rofByKind[kind], dbL1Rof > 0 {
                     l.fireInterval = l1Rof * (base.fireInterval / dbL1Rof)
@@ -666,8 +558,6 @@ enum SweepCatalog {
     }
 }
 
-// MARK: - Wave composition generator
-
 enum SweepWaves {
     static let curveWeights: [String: [Double]] = [
         "gentle": [1.0, 1.15, 1.3, 1.45, 1.6, 1.75],
@@ -681,8 +571,6 @@ enum SweepWaves {
         "combined": [("Loyalist Militia", 0.3), ("Redcoat Regular", 0.4),
                      ("Light Infantry", 0.2), ("Regimental Drummer", 0.1)],
     ]
-    /// Bounty budget per wave; total scales with the level's wave count
-    /// (Lexington's 6 waves keep their original 660 total).
     static let budgetPerWave = 110.0
 
     static func make(perm: SweepPermutation, fixed: SweepFixedInputs, pathCount: Int = 1) -> [Wave] {
@@ -709,14 +597,11 @@ enum SweepWaves {
             for (li, entry) in mix.enumerated() {
                 let (name, frac) = entry
                 guard let type = byName[name] else { continue }
-                // Drummers are support: never before wave 3, never more than 1.
                 let isDrummer = name == "Regimental Drummer"
                 if isDrummer && w < 2 { continue }
                 var count = Int((budget * frac / Double(type.stats.gold)).rounded())
                 if isDrummer { count = min(count, 1) }
                 guard count >= 1 else { continue }
-                // Multi-entrance maps: waves rotate entrances, and mixed waves
-                // spread their lines across them KR-style.
                 let path = pathCount > 1 ? (w + li) % pathCount : 0
                 lines.append(SpawnEntry(
                     enemyTypeID: type.id, count: count, interval: interval,
@@ -735,8 +620,6 @@ enum SweepWaves {
     }
 }
 
-// MARK: - Greedy commander (the fixed reference player for all permutations)
-
 struct GreedyCommander: CommanderPolicy {
     let slotOrder: [Int]
     let plan: [UUID]
@@ -744,8 +627,6 @@ struct GreedyCommander: CommanderPolicy {
     private var buildsDone = 0
 
     init(level: LevelInfo, catalog: ContentCatalog) {
-        // Primary tower: best sustained single-target damage. Secondary (one
-        // emplacement, if a second kind has output): variety slot.
         func dps(_ t: TowerType) -> Double {
             guard let l = t.levels.first, l.fireInterval > 0 else { return 0 }
             return (l.shotMin + l.shotMax + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
@@ -761,7 +642,6 @@ struct GreedyCommander: CommanderPolicy {
         }
         plan = order
 
-        // Slot quality: how much road sits inside the primary tower's circle.
         let range = ranked.first?.levels.first?.range ?? 150
         var scores: [(Int, Double)] = []
         for (i, slot) in level.towerSlots.enumerated() {
@@ -794,7 +674,6 @@ struct GreedyCommander: CommanderPolicy {
             return
         }
 
-        // Upgrades, best slots first, keeping a small reserve.
         for slot in slotOrder {
             guard let tower = sim.towers[slot] else { continue }
             let type = sim.catalog.towerTypes[tower.typeIndex]
@@ -803,10 +682,9 @@ struct GreedyCommander: CommanderPolicy {
             if sim.gold >= cost + 40 {
                 if sim.upgrade(slot: slot) == .ok { return }
             }
-            return  // save for this upgrade rather than skipping ahead
+            return
         }
 
-        // Everything maxed: add primary towers up to six.
         let built = sim.towers.compactMap { $0 }.count
         if built < min(6, slotOrder.count), sim.gold >= 150, let primary = plan.first {
             sim.build(slot: slotOrder[built], towerID: primary)
@@ -814,10 +692,6 @@ struct GreedyCommander: CommanderPolicy {
     }
 }
 
-/// The sloppy-but-reasonable opening: same tower choices as the greedy
-/// commander, but slots picked in a seeded-random order instead of by road
-/// coverage. Starting money is right when this player still survives wave 1 —
-/// surviving must not require perfect placement, only placement.
 struct NaiveCommander: CommanderPolicy {
     let slotOrder: [Int]
     let plan: [UUID]
@@ -842,7 +716,6 @@ struct NaiveCommander: CommanderPolicy {
 
         var rng = SeededRNG(seed: seed ^ 0xA1F0_5107)
         var slots = Array(level.towerSlots.indices)
-        // Fisher-Yates with the deterministic engine RNG.
         for i in stride(from: slots.count - 1, to: 0, by: -1) {
             let j = Int(rng.double(in: 0...Double(i)))
             slots.swapAt(i, min(j, i))
@@ -863,8 +736,6 @@ struct NaiveCommander: CommanderPolicy {
     }
 }
 
-// MARK: - Runner
-
 struct SweepRow {
     var perm: SweepPermutation
     var seedsUsed: Int
@@ -878,7 +749,6 @@ struct SweepRow {
     var tensionPeak: Double
     var tensionFinal: Double
     var meanSeconds: Double
-    /// Wave-1 economics: clear = share of seeds with zero wave-1 leaks.
     var w1GreedyClear: Double
     var w1GreedyLeaks: Double
     var w1NaiveClear: Double
@@ -904,10 +774,6 @@ struct SweepRow {
 }
 
 enum Sweep {
-    /// Throughput benchmark: run one representative permutation's config
-    /// across many seeds on all cores and report sims/s and ticks/s. The
-    /// engine clock is unbounded here — no pacing, ticks run as fast as the
-    /// CPU executes them; this measures that ceiling.
     static func bench(db: Db, levelName: String, sims: Int) throws {
         let fixed = try SweepFixedInputs.load(db: db, levelName: levelName)
         let base = try SweepFixedInputs.designLevel(db: db, levelName: levelName, fixed: fixed)
@@ -1087,11 +953,8 @@ enum Sweep {
                 playableRect: base.playableRect,
                 paths: base.paths, towerSlots: base.towerSlots, waves: waves
             )
-            // Slot scoring is identical for every seed of the permutation.
             let proto = GreedyCommander(level: level, catalog: catalog)
 
-            // Adaptive seeds: probe first; only contested permutations get the
-            // full count. All-perfect or all-lost after the probe is settled.
             var results: [SimulationResult] = []
             results.reserveCapacity(grids.seedsPerPermutation)
             let probe = min(grids.probeSeeds, grids.seedsPerPermutation)
@@ -1113,8 +976,6 @@ enum Sweep {
             let seedsUsed = results.count
             let report = BatchReport(results: results)
 
-            // Wave-1 economics: does a sloppy (random-slot) opening survive
-            // wave 1 on this starting money? Truncated runs — wave 1 only.
             let w1Cutoff = waves.count > 1 ? waves[1].startTime + 25 : 600
             var naiveW1: [Int] = []
             naiveW1.reserveCapacity(seedsUsed)
@@ -1167,8 +1028,6 @@ enum Sweep {
             lock.unlock()
         }
 
-        // Calibration batch: measure real throughput, project the whole run
-        // against the nightly budget before committing to it.
         let calibrationCount = min(32, indices.count)
         DispatchQueue.concurrentPerform(iterations: calibrationCount) { k in
             record(processPerm(indices[k]))
@@ -1207,19 +1066,13 @@ enum Sweep {
         }
     }
 
-    /// Derive choice-irrelevance bounds from this run and store them for the
-    /// next one. Criteria, on the designed-stats slice (other swept stats at
-    /// their DB / middle-grid values):
-    ///   min = smallest value with win rate >= 10%   (below: always lose)
-    ///   max = smallest value with win >= 99% AND naive W1 clear >= 85%
-    ///         (above: even sloppy play always wins); grid max if not reached.
     static func deriveAndStoreBounds(
         db: Db, fixed: SweepFixedInputs, space: SweepSpace,
         rows: [SweepRow], outPath: String
     ) throws {
         for kind in space.combatKinds {
             let grid = space.rangeGrid(for: kind)
-            guard grid.count >= 3 else { continue }   // pinned: nothing to derive
+            guard grid.count >= 3 else { continue }
             let dbRof = fixed.towerLevels[kind]?.first?.fireInterval ?? 0
             let gGrid = space.growthGrid(for: kind)
             let midGrowth = gGrid[gGrid.count / 2]
@@ -1259,7 +1112,7 @@ enum Sweep {
             )
             print("""
               bounds[\(kind).range] stored: \(Int(minV))–\(Int(maxV)) (\(derivedFrom))
-              to make it permanent, mirror into Db/DML/sim_stat_bounds.sql — DB rebuilds reset live rows
+              live database only — create_db.sh seeds no run data, so re-run --store-bounds after a rebuild
             """)
         }
     }
@@ -1278,14 +1131,11 @@ enum Sweep {
         try out.write(to: outURL, atomically: true, encoding: .utf8)
 
         let elapsed = Date().timeIntervalSince(t0)
-        // Actual simulations executed (greedy + naive), after adaptive stops.
         let actualSims = rows.reduce(0) { $0 + $1.seedsUsed * 2 }
         let inBand = rows.filter { $0.winRate >= inBandLow && $0.winRate <= inBandHigh }.count
         let hopeless = rows.filter { $0.winRate == 0 }.count
         let trivial = rows.filter { $0.winRate == 1 && $0.livesP10 >= Double($0.perm.lives) }.count
 
-        // Starting-money read: naive wave-1 clear rate by money, averaged over
-        // every other dimension, and the knee where sloppy play becomes safe.
         var byMoney: [Int: (clear: Double, n: Int)] = [:]
         for row in rows {
             let e = byMoney[row.perm.money] ?? (0, 0)

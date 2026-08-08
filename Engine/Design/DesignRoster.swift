@@ -1,7 +1,3 @@
-// DesignRoster.swift
-// The Crown Forces roster as code, for art-free level design. IDs and stats
-// mirror Db/DML/enemy_types.sql exactly so a blueprint sim and a production
-// sim disagree about nothing but the map.
 import Foundation
 
 public enum Foe: String, CaseIterable, Sendable {

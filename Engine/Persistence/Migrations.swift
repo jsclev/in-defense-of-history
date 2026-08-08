@@ -1,8 +1,3 @@
-// Schema.swift
-// Versioned, forward-only migrations. Each entry in `all` is one version;
-// migrate() applies whatever the database hasn't seen yet, atomically.
-// Telemetry tables will arrive as v2+ without touching v1.
-
 public enum Migrations {
     static let v1 = """
     CREATE TABLE enemy_types (
@@ -90,7 +85,6 @@ public enum Migrations {
     CREATE INDEX idx_waves_level ON waves(level_id);
     """
 
-    /// All migrations in order. Version N is all[N-1].
     public static let all: [String] = [v1]
 
     public static func migrate(_ db: SQLiteDatabase) throws {

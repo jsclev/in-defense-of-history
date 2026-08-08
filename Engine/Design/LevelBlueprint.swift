@@ -1,8 +1,3 @@
-// LevelBlueprint.swift
-// Art-free level authoring. A blueprint is the whole level-design surface —
-// paths, slots, waves, pacing, and the intended-solution build order — in a
-// 1600x900 virtual space. makeLevel() compiles it to the engine's LevelInfo;
-// no artwork, database, or renderer involved.
 import Foundation
 import CoreGraphics
 
@@ -39,7 +34,6 @@ public struct LevelBlueprint: Sendable {
     }
 
     public struct WaveSketch: Sendable {
-        /// Seconds between the previous wave's final spawn and this wave's first.
         public var breather: Double
         public var lines: [SpawnLine]
 
@@ -69,7 +63,6 @@ public struct LevelBlueprint: Sendable {
     public var roads: [Road]
     public var slots: [Point]
     public var waves: [WaveSketch]
-    /// The designer's intended solution; the balance harness plays this.
     public var intendedSolution: [BuildStep]
 
     public init(
@@ -90,8 +83,6 @@ public struct LevelBlueprint: Sendable {
         self.intendedSolution = intendedSolution
     }
 
-    /// Stable per-blueprint id derived from the name, so runs and reports
-    /// reference the same level across processes.
     public var id: UUID {
         var hash: UInt64 = 0xcbf2_9ce4_8422_2325
         for byte in name.utf8 {
@@ -135,7 +126,6 @@ public struct LevelBlueprint: Sendable {
             playableRect: CGRect(x: 0, y: 0, width: Self.designWidth, height: Self.designHeight),
             paths: roads.map { Path(points: $0.waypoints) },
             towerSlots: slots.enumerated().map { i, p in
-                // Slot ids only need to be stable within the blueprint.
                 TowerSlot(id: UUID(uuidString: String(format: "b0000000-0000-4000-8000-%012d", i))!, position: p)
             },
             waves: compiled

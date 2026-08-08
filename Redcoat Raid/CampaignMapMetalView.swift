@@ -1,11 +1,6 @@
 import SwiftUI
 import MetalKit
 
-/// Hosts the Metal-rendered campaign map inside SwiftUI.
-///
-/// This is deliberately a thin adapter: all the actual Metal setup and
-/// drawing lives in `Renderer`. SwiftUI owns layout, and this just keeps
-/// the `Renderer` alive for as long as the view is on screen.
 @available(iOS 26.0, *)
 struct CampaignMapMetalView: UIViewRepresentable {
     final class Coordinator {
@@ -36,7 +31,6 @@ struct CampaignMapMetalView: UIViewRepresentable {
             alpha: 1.0
         )
 
-        // The campaign map is static, so render only when requested.
         metalView.isPaused = true
         metalView.enableSetNeedsDisplay = true
 
@@ -61,8 +55,5 @@ struct CampaignMapMetalView: UIViewRepresentable {
     }
 
     func updateUIView(_ metalView: MTKView, context: Context) {
-        // SwiftUI resizing the view already triggers
-        // mtkView(_:drawableSizeWillChange:), which redraws on-demand
-        // views itself — nothing to do here.
     }
 }

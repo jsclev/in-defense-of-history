@@ -21,16 +21,10 @@ public class BaseDAO {
         if (rc != SQLITE_OK) {
             let sqliteMsg = String(cString: sqlite3_errmsg(conn))
             logger.error("\(sqliteMsg)")
-//            throw DbError.Db(message: "\(sqliteMsg)")
         }
     }
     
     func logInsertAttempt(table: String, numRows: Int) {
-        //        if numRows == 1 {
-        //            logger.debug("Trying to insert \(numRows) row into the \(table, privacy: .public) table.")
-        //        } else {
-        //            logger.debug("Trying to insert \(numRows) rows into the \(table, privacy: .public) table.")
-        //        }
     }
     
     func logInsertSuccess(table: String, numRows: Int) {
@@ -113,7 +107,6 @@ public class BaseDAO {
     func attempt(conn: OpaquePointer?, stmt: inout OpaquePointer?, table: String, column: String, id: Int) throws {
         let sql = "SELECT * FROM \(table) where \(column) = ?"
         if sqlite3_prepare_v2(conn, sql, -1, &stmt, nil) == SQLITE_OK {
-            // TODO Need to fix the truncation of the Int id
             guard sqlite3_bind_int(stmt, 1, Int32(id)) == SQLITE_OK else {
                 throw DbError.Db(message: "Unable to get rows")
             }
@@ -154,7 +147,6 @@ public class BaseDAO {
         
         var stmt: OpaquePointer?
         if sqlite3_prepare_v2(conn, sql, -1, &stmt, nil) == SQLITE_OK {
-            // TODO Need to fix the truncation of the Int id
             guard sqlite3_bind_int(stmt, 1, Int32(id)) == SQLITE_OK else {
                 throw DbError.Db(message: String(cString: sqlite3_errmsg(conn)!))
             }
@@ -177,11 +169,8 @@ public class BaseDAO {
     
     func getRowById(conn: OpaquePointer?, stmt: inout OpaquePointer?, table: String, idName: String, id: Int) throws {
         let sql = "SELECT * FROM \(table) where \(idName) = ?"
-        
-        // logger.debug("Executing query 'SELECT * FROM \(table) where \(idName) = \(id)'")
-        
+
         if sqlite3_prepare_v2(conn, sql, -1, &stmt, nil) == SQLITE_OK {
-            // TODO Need to fix the truncation of the Int id
             guard sqlite3_bind_int(stmt, 1, Int32(id)) == SQLITE_OK else {
                 throw DbError.Db(message: "Unable to bind")
             }
@@ -202,9 +191,7 @@ public class BaseDAO {
     
     func getRowById(conn: OpaquePointer?, stmt: inout OpaquePointer?, table: String, idName: String, id: String) throws {
         let sql = "SELECT * FROM \(table) where \(idName) = ?"
-        
-        // logger.debug("Executing query 'SELECT * FROM \(table) where \(idName) = \(id)'")
-        
+
         if sqlite3_prepare_v2(conn, sql, -1, &stmt, nil) == SQLITE_OK {
             try bindParam(stmt, index: 1, value: id)
         }
@@ -229,9 +216,7 @@ public class BaseDAO {
             return
         }
         
-        // logInsertAttempt(table: table, numRows: numRows)
         try executeNonQuery(conn: conn, sql: sql)
-        // logInsertSuccess(table: table, numRows: numRows)
     }
     
     func executeNonQuery(conn: OpaquePointer?, sql: String) throws {
@@ -485,7 +470,6 @@ public class BaseDAO {
     
     func getSql(val: String?, postfix: String) -> String {
         if let stringVal = val {
-            //TODO Fix replacement of double quotes in string value
             let newVal = stringVal.replacingOccurrences(
                 of: "\"",
                 with: "",
@@ -536,7 +520,6 @@ public class BaseDAO {
     
     func getUpdateSql(column: String, val: String?, postfix: String) -> String {
         if let stringVal = val {
-            // TODO Fix replacement of double quotes in string value
             let newVal = stringVal.replacingOccurrences(
                 of: "\"",
                 with: "",

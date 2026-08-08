@@ -2,9 +2,6 @@ import SwiftUI
 import Metal
 import MetalKit
 
-// Fills its drawable by repeating a seamless texture at native pixel
-// density. The texture loads once; rotation only changes a uvScale uniform,
-// so orientation flips redraw instantly.
 @available(iOS 26.0, *)
 final class TiledBackgroundRenderer: NSObject, MTKViewDelegate {
     private static let maximumFramesInFlight = 3

@@ -1,6 +1,3 @@
-// Palette.swift
-// Shared design-space transform and the schematic color language used by
-// both the editor canvas and the playtest canvas.
 import SwiftUI
 
 struct DesignTransform {

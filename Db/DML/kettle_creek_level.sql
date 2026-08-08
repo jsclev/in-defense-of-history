@@ -2,13 +2,6 @@
 -- Two routes converge at the Kettle Creek ford and share one exit.
 BEGIN TRANSACTION;
 
-DELETE FROM level_path_point
-WHERE level_info_id = (SELECT id FROM level_info WHERE level_name = 'Kettle Creek');
-DELETE FROM tower_slot
-WHERE level_info_id = (SELECT id FROM level_info WHERE level_name = 'Kettle Creek');
-DELETE FROM level_tower_unlock
-WHERE level_info_id = (SELECT id FROM level_info WHERE level_name = 'Kettle Creek');
-
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,
     map_position_x, map_position_y

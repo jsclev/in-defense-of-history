@@ -7,16 +7,16 @@ INSERT INTO level_info (
 ) VALUES (
     'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0',
     'f589a28f-54d8-4791-851c-a307f252151a',
-    'Lexington and Concord',
-    2228.0,
-    495.0,
+    'Battle Road',
+    2189.0,
+    865.0,
     julianday('1775-04-19T00:00:00-05:00'),
     julianday('1775-04-19T14:00:00-05:00'),
     270,
     20,
     6,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_001_lexington_and_concord', 5760.0, 3240.0
+    'level_01_battle_road', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -27,15 +27,15 @@ INSERT INTO level_info (
     '9d692af7-345d-419a-bc04-16112c3f0b74',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Bunker Hill',
-    2342.0,
-    631.0,
+    2203.0,
+    873.0,
     julianday('1775-06-17T15:00:00-05:00'),
     julianday('1775-06-17T17:00:00-05:00'),
     320,
     20,
     8,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_002_bunker_hill', 5760.0, 3240.0
+    'level_02_bunker_hill', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -46,15 +46,15 @@ INSERT INTO level_info (
     '55a5d12d-3cea-475f-aa8d-125271a8a0c2',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Great Bridge',
-    1567.0,
-    1231.0,
+    1822.0,
+    1192.0,
     julianday('1775-12-09T07:00:00-05:00'),
     julianday('1775-12-09T07:30:00-05:00'),
     300,
     20,
     10,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_003_great_bridge', 5760.0, 3240.0
+    'level_03_great_bridge', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -65,8 +65,8 @@ INSERT INTO level_info (
     '96170d0e-6983-47e0-bf80-93cd4c91ad3a',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'New Haven',
-    2083.0,
-    659.0,
+    2074.0,
+    921.0,
     julianday('1779-07-05T05:00:00-05:00'),
     julianday('1779-07-05T14:00:00-05:00'),
     450,
@@ -84,15 +84,15 @@ INSERT INTO level_info (
     '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Moore''s Creek Bridge',
-    1371.0,
-    1466.0,
+    1682.0,
+    1322.0,
     julianday('1776-02-27T06:00:00-05:00'),
     julianday('1776-02-27T06:30:00-05:00'),
     330,
     20,
     14,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_004_moores_creek_bridge', 5760.0, 3240.0
+    'level_04_moores_creek_bridge', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -119,15 +119,15 @@ INSERT INTO level_info (
     '17914ebc-7052-490d-b606-afc1746da512',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Dorchester Heights',
-    2353.0,
-    788.0,
+    2203.0,
+    877.0,
     julianday('1776-03-04T18:00:00-05:00'),
     julianday('1776-03-05T07:00:00-05:00'),
     350,
     20,
     15,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_005_dorchester_heights', 5760.0, 3240.0
+    'level_05_dorchester_heights', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -138,15 +138,15 @@ INSERT INTO level_info (
     '35916460-914a-457b-beb9-1c5bfe95e61a',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Sullivan''s Island',
-    1318.0,
-    1567.0,
+    1557.0,
+    1416.0,
     julianday('1776-06-28T11:00:00-05:00'),
     julianday('1776-06-28T21:30:00-05:00'),
     360,
     20,
     14,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_006_sullivans_island', 5760.0, 3240.0
+    'level_06_sullivans_island', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -157,15 +157,15 @@ INSERT INTO level_info (
     '99633efd-f135-44fc-8248-b8635a6db957',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Long Island',
-    1957.0,
-    776.0,
+    2001.0,
+    951.0,
     julianday('1776-08-27T03:00:00-05:00'),
     julianday('1776-08-27T16:00:00-05:00'),
     420,
     20,
     15,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_007_long_island', 5760.0, 3240.0
+    'level_07_long_island', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -176,15 +176,15 @@ INSERT INTO level_info (
     '537aba11-6201-4fe9-b789-36607de98e41',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Trenton',
-    1832.0,
-    943.0,
+    1948.0,
+    971.0,
     julianday('1776-12-26T08:00:00-05:00'),
     julianday('1776-12-26T09:30:00-05:00'),
     380,
     20,
     15,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_008_trenton', 5760.0, 3240.0
+    'level_08_trenton', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -195,15 +195,15 @@ INSERT INTO level_info (
     '9c6679ab-c028-48ab-95b7-93318f37c1a9',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Princeton',
-    1599.0,
-    983.0,
+    1956.0,
+    963.0,
     julianday('1777-01-03T08:00:00-05:00'),
     julianday('1777-01-03T11:00:00-05:00'),
     400,
     20,
     15,
     960.0, 540.0, 3840.0, 2160.0,
-    'level_009_princeton', 5760.0, 3240.0
+    'level_09_princeton', 5760.0, 3240.0
 );
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
@@ -214,8 +214,8 @@ INSERT INTO level_info (
     '42e95fce-6da1-416d-bf69-24f70bb4dc52',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Fort Ann',
-    1748.0,
-    444.0,
+    2058.0,
+    767.0,
     julianday('1777-07-08T10:30:00-05:00'),
     julianday('1777-07-08T12:30:00-05:00'),
     400,
@@ -233,8 +233,8 @@ INSERT INTO level_info (
     '549a67d9-f721-4cdf-8ba7-8916ba71b040',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Saratoga',
-    1852.0,
-    623.0,
+    2049.0,
+    788.0,
     julianday('1777-09-19T13:00:00-05:00'),
     julianday('1777-09-19T18:30:00-05:00'),
     450,
@@ -252,8 +252,8 @@ INSERT INTO level_info (
     '46157f59-b21b-4b03-9151-d404c6cd6d0b',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Savannah',
-    977.0,
-    1675.0,
+    1471.0,
+    1445.0,
     julianday('1779-09-16T12:00:00-05:00'),
     julianday('1779-10-18T12:00:00-05:00'),
     480,
@@ -271,8 +271,8 @@ INSERT INTO level_info (
     '4ca73a47-98f6-41b6-815d-c2c797aa746e',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Charleston',
-    1329.0,
-    1748.0,
+    1551.0,
+    1413.0,
     julianday('1780-03-29T08:00:00-05:00'),
     julianday('1780-05-12T14:00:00-05:00'),
     500,
@@ -290,8 +290,8 @@ INSERT INTO level_info (
     '33d900c6-c6ff-409a-973b-f09ddc8a6f6a',
     'f589a28f-54d8-4791-851c-a307f252151a',
     'Kettle Creek',
-    753.0,
-    1553.0,
+    1400.0,
+    1330.0,
     julianday('1779-02-14T10:00:00-05:00'),
     julianday('1779-02-14T13:00:00-05:00'),
     430,

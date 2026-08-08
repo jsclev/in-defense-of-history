@@ -2,13 +2,7 @@ import SwiftUI
 
 struct LevelMapProjection {
     let imageSize: CGSize
-    /// The region of the level art that must be fully visible, in the art's
-    /// own pixels.
     let playableRect: CGRect
-    /// What the playable rect is fitted into: the safe area, in physical
-    /// screen coordinates. The rect is centred here and scaled — aspect
-    /// intact — until two of its sides meet the safe edges. Everything
-    /// outside it is bleed, and the art still covers the whole screen.
     let fitRect: CGRect
 
     var scale: CGFloat {
@@ -37,28 +31,11 @@ struct LevelMapProjection {
     }
 }
 
-// Menus never adapt per slot or level. Pixel numbers below are measured
-// from the ring art so items land exactly on the painted bubbles.
 enum RadialMenu {
-    /// 91.0 is the original 114.48 tuning taken down 10%, 8%, then 4% —
-    /// 20.5% smaller in all. Every background and bubble offset derives from
-    /// it or from fourChoiceArtScale, so the whole menu shrinks together.
     static let radius: CGFloat = 91.0
 
-    /// One button is three things drawn as a unit: the shared square material
-    /// frame, a transparent tower-category glyph, and the tap area. All three derive from
-    /// buttonSide so they can never drift apart again.
-    ///
-    /// The circles painted into the background art remain underneath at their
-    /// original size; the opaque square frame covers them concentrically.
-    /// 79.8 is 114 taken down 30%.
-    // 108.38 is 79.8 up 10%, 12%, 6%, then 4% more.
     static let buttonSide: CGFloat = 108.38
 
-    /// Each tightly cropped glyph fits the frame's inset while leaving the
-    /// shared ashwood field and clipped iron corners visible.
-    // 0.5321 keeps the glyph at the same absolute size (57.7pt reference)
-    // while the frame grew 12%, 6%, then 4% around it.
     static let iconFraction: CGFloat = 0.5321
 
     static var iconSide: CGFloat { buttonSide * iconFraction }
@@ -120,10 +97,6 @@ enum RadialMenu {
         return art.parchmentPx * art.pointsPerPx
     }
 
-    /// Buttons sit further from the menu centre than the art's painted
-    /// bubbles, giving the larger frames room without scaling the ring.
-    /// 1.134 is the 8% spread taken out another 5%; frames and their glyphs
-    /// move together since they share the item's offset.
     static let itemSpread: CGFloat = 1.134
 
     static func itemOffset(index: Int, count: Int) -> CGSize {
@@ -167,7 +140,6 @@ struct LevelMapView: View {
                 }
                 .ignoresSafeArea()
 
-                // Under the HUD, so a guide never hides the chrome it measures.
                 if showSafeAreaOverlay {
                     SafeAreaOverlayView(screen: screen)
                         .ignoresSafeArea()
@@ -192,8 +164,6 @@ struct LevelMapView: View {
         .onDisappear { runner.stop() }
     }
 
-    /// Glyph share of the control button, measured from the artist's own
-    /// 260px compositions (speed 0.677, pause 0.654).
     private static let controlGlyphFraction: CGFloat = 0.66
 
     private func cornerButtons(screen: ScreenGeometry) -> some View {
@@ -206,8 +176,6 @@ struct LevelMapView: View {
         }
     }
 
-    /// Same composition as the tower buttons: the shared square frame with a
-    /// transparent pictogram in its inset; the whole frame is the tap area.
     private func cornerButton(glyph: String, frame: CGRect,
                               in screen: ScreenGeometry,
                               action: @escaping () -> Void) -> some View {
@@ -236,15 +204,12 @@ struct LevelMapView: View {
             fitRect: safe
         )
         let metrics = HudMetrics(viewSize: viewSize)
-        // Sprite sizes come from the playable rect, not the level's pixel
-        // scale, so a tower is the same size on every level.
         let sprites = MapSpriteScale(playableRect: runner.playableRect,
                                      viewSize: viewSize)
 
         return ZStack(alignment: .topLeading) {
             Color.black
 
-            // invisible pre-render: pays the image-decode cost at load, not first tap
             Group {
                 Image(RadialMenu.backgroundAssetName(count: TowerKind.allCases.count))
                 Image(RadialMenu.backgroundAssetName(count: 1))
@@ -312,8 +277,6 @@ struct LevelMapView: View {
                 }
             }
 
-            // Shots in flight are frozen the instant the level is lost, so
-            // they fade rather than hanging in the air.
             Group {
                 ForEach(runner.projectiles) { projectile in
                     if let assetName = projectile.kind.projectileAssetName {
@@ -430,7 +393,6 @@ struct LevelMapView: View {
             livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
             moneyIconAspect: HudIcon.aspect(of: "money_icon_12"))
         return ZStack(alignment: .topLeading) {
-            // Plates first, so every counter draws over its own box.
             RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
                 .fill(.black.opacity(HudSizing.statPlateOpacity))
                 .hudFrame(panel.livesPlate, in: screen)
@@ -482,9 +444,6 @@ struct LevelMapView: View {
             .shadow(color: .black.opacity(0.85), radius: 2, x: 0, y: 1)
     }
 
-    /// Shown once the last life is lost. Purely informational — it never
-    /// takes hits, so the back button underneath stays tappable, which is the
-    /// only way out of a lost level.
     private func failBanner(metrics: HudMetrics) -> some View {
         ZStack {
             Color.black.opacity(0.45)
@@ -514,7 +473,6 @@ private struct BuildMenuItem: View {
     let action: () -> Void
 
     var body: some View {
-        // never .disabled — SwiftUI dims a disabled button's image, shifting the art's colors
         Button(action: action) { icon }
             .buttonStyle(.plain)
     }
@@ -595,5 +553,5 @@ private struct UpgradeMenuItem: View {
 }
 
 #Preview {
-    LevelMapView(node: CampaignNode.all[0], onExit: {})
+    LevelMapView(node: CampaignNode.load()[0], onExit: {})
 }

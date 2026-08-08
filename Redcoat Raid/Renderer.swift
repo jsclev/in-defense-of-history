@@ -7,8 +7,6 @@ import CoreGraphics
 @available(iOS 26.0, *)
 final class Renderer: NSObject, MTKViewDelegate {
 
-    // MARK: - Metal objects
-
     private let device: any MTLDevice
     private let commandQueue: any MTL4CommandQueue
     private let commandBuffer: any MTL4CommandBuffer
@@ -21,14 +19,11 @@ final class Renderer: NSObject, MTKViewDelegate {
     private let cropUniformBuffers: [any MTLBuffer]
     private let resourceResidencySet: any MTLResidencySet
 
-    // MARK: - Frame synchronization
-
     private static let maximumFramesInFlight = 3
 
     private let commandAllocators: [any MTL4CommandAllocator]
     private let completionEvent: any MTLSharedEvent
 
-    /// For each allocator, the event value that must complete before reuse.
     private var allocatorCompletionValues = Array(
         repeating: UInt64(0),
         count: maximumFramesInFlight
@@ -36,8 +31,6 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     private var currentFrameSlot = 0
     private var nextCompletionValue: UInt64 = 0
-
-    // MARK: - Initialization
 
     init(
         view: MTKView,
@@ -63,8 +56,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             throw RendererError.sharedEventCreationFailed
         }
 
-        // Create multiple allocators so the CPU can encode another frame
-        // while a previous allocator is still being used by the GPU.
         var allocators: [any MTL4CommandAllocator] = []
         allocators.reserveCapacity(Self.maximumFramesInFlight)
 
@@ -76,8 +67,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             allocators.append(allocator)
         }
 
-        // Load the image directly from an entry in Assets.xcassets (an
-        // image set or texture set) rather than a loose bundle file.
         let textureLoader = MTKTextureLoader(device: device)
 
         let imageTexture: any MTLTexture
@@ -101,7 +90,6 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         imageTexture.label = "Campaign map texture"
 
-        // Create the render pipeline.
         guard let library = device.makeDefaultLibrary() else {
             throw RendererError.defaultLibraryCreationFailed
         }
@@ -123,7 +111,6 @@ final class Renderer: NSObject, MTKViewDelegate {
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
 
-        // This must match the MTKView's pixel format.
         pipelineDescriptor.colorAttachments[0].pixelFormat =
             view.colorPixelFormat
 
@@ -131,7 +118,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             descriptor: pipelineDescriptor
         )
 
-        // Metal 4 uses explicit argument tables for resource binding.
         let argumentDescriptor = MTL4ArgumentTableDescriptor()
         argumentDescriptor.label = "Image fragment arguments"
         argumentDescriptor.maxTextureBindCount = 1
@@ -145,9 +131,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             index: Int(TextureIndex.color.rawValue)
         )
 
-        // One small uniform buffer per frame slot, so the CPU can write
-        // next frame's crop rect while the GPU may still be reading a
-        // previous frame's buffer.
         var cropBuffers: [any MTLBuffer] = []
         cropBuffers.reserveCapacity(Self.maximumFramesInFlight)
 
@@ -163,9 +146,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             cropBuffers.append(buffer)
         }
 
-        // Argument tables allocate binding slots 0..<maxBufferBindCount,
-        // so this must cover BufferIndexImageCrop's slot even though it's
-        // the table's only binding.
         let vertexArgumentDescriptor = MTL4ArgumentTableDescriptor()
         vertexArgumentDescriptor.label = "Image vertex arguments"
         vertexArgumentDescriptor.maxBufferBindCount =
@@ -175,7 +155,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             descriptor: vertexArgumentDescriptor
         )
 
-        // Create a residency set for the static resources used by rendering.
         let residencyDescriptor = MTLResidencySetDescriptor()
         residencyDescriptor.label = "Image renderer resources"
         residencyDescriptor.initialCapacity = 2 + Self.maximumFramesInFlight
@@ -208,11 +187,8 @@ final class Renderer: NSObject, MTKViewDelegate {
 
         super.init()
 
-        // Make static resources visible to work submitted to this queue.
         commandQueue.addResidencySet(resourceResidencySet)
 
-        // CAMetalLayer maintains a dynamic residency set containing its
-        // drawable textures. Metal 4 requires that set on the queue.
         guard let metalLayer = view.layer as? CAMetalLayer else {
             throw RendererError.invalidMetalLayer
         }
@@ -220,13 +196,10 @@ final class Renderer: NSObject, MTKViewDelegate {
         commandQueue.addResidencySet(metalLayer.residencySet)
     }
 
-    // MARK: - MTKViewDelegate
-
     func mtkView(
         _ view: MTKView,
         drawableSizeWillChange size: CGSize
     ) {
-        // Important when the view is configured for on-demand drawing.
         if view.isPaused {
             view.setNeedsDisplay()
         }
@@ -246,8 +219,6 @@ final class Renderer: NSObject, MTKViewDelegate {
         let requiredCompletionValue =
             allocatorCompletionValues[frameSlot]
 
-        // An allocator can't be reset until the GPU has finished executing
-        // all commands previously encoded with it.
         if requiredCompletionValue != 0 {
             let completed = completionEvent.wait(
                 untilSignaledValue: requiredCompletionValue,
@@ -277,10 +248,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             return
         }
 
-        // Recompute which sub-rect of the source image to sample, in case
-        // the drawable size changed (rotation, Split View / Stage Manager
-        // resize, external display, ...), then upload it to this frame
-        // slot's uniform buffer.
         let cropResult = makeCropUVRect(drawableSize: view.drawableSize)
 
         var cropUniforms = ImageCropUniforms(
@@ -312,9 +279,6 @@ final class Renderer: NSObject, MTKViewDelegate {
             stages: .fragment
         )
 
-        // The image always fills the entire drawable; the crop rect
-        // uploaded above controls which part of the source image is
-        // visible, not the viewport.
         encoder.setViewport(
             MTLViewport(
                 originX: 0,
@@ -335,7 +299,6 @@ final class Renderer: NSObject, MTKViewDelegate {
         encoder.endEncoding()
         commandBuffer.endCommandBuffer()
 
-        // Metal 4 requires explicit synchronization with the drawable.
         commandQueue.waitForDrawable(drawable)
         commandQueue.commit([commandBuffer])
 
@@ -357,19 +320,11 @@ final class Renderer: NSObject, MTKViewDelegate {
             % Self.maximumFramesInFlight
     }
 
-    // MARK: - Crop calculation
-
-    /// The sub-rect of the source image to sample (in normalized 0...1
-    /// texture coordinates), plus whether the vertex shader needs to
-    /// rotate it 90° to keep that content in a landscape orientation.
     private struct CropResult {
         var uvRect: SIMD4<Float>
         var rotateToLandscape: Bool
     }
 
-    /// Computes the sub-rect of the source image, and rotation, that
-    /// should fill the given drawable size. See `CampaignMapLayout` for
-    /// the shared math (also used by the SwiftUI HUD to position nodes).
     private func makeCropUVRect(drawableSize: CGSize) -> CropResult {
         let imageSize = CGSize(
             width: imageTexture.width,
@@ -395,8 +350,6 @@ final class Renderer: NSObject, MTKViewDelegate {
         )
     }
 }
-
-// MARK: - Errors
 
 @available(iOS 26.0, *)
 private enum RendererError: LocalizedError {

@@ -1,23 +1,10 @@
-// Blueprints.swift
-// Design-lab levels. Brandywine Ford is the mid-campaign reference map:
-// two roads converge at a ford, so junction slots are efficient but leave
-// the approaches bare — the core KR tension between coverage and economy.
-//
-// Wave arc: militia warmup -> split pressure -> capture economy (Hessians) ->
-// dragoon speed check -> grenadier grind -> officer aura column (terror
-// counter) -> artillery crawl with a cavalry sting -> highlander morale
-// fight -> Foot Guards finale.
 import Foundation
 
 public enum Blueprints {
-    public static let all: [LevelBlueprint] = [lexingtonAndConcord, brandywineFord]
+    public static let all: [LevelBlueprint] = [singleRoad, convergingRoads]
 
-    // Level 1. One road, right to left — the British march out of Boston.
-    // The single sharp bend is the chokepoint lesson: slot 3 sits inside the
-    // elbow and covers the approach, the curve, and the exit leg, so the
-    // player who notices it holds with half the towers.
-    public static let lexingtonAndConcord = LevelBlueprint(
-        name: "Lexington and Concord",
+    public static let singleRoad = LevelBlueprint(
+        name: "Single Road",
         startingGold: 220,
         lives: 20,
         roads: [
@@ -28,14 +15,14 @@ public enum Blueprints {
             ]),
         ],
         slots: [
-            Point(1250, 350),   // 0  early, below the road
-            Point(980, 180),    // 1  early, above the road
-            Point(760, 420),    // 2  approach to the bend
-            Point(620, 470),    // 3  inside the elbow — the chokepoint
-            Point(430, 560),    // 4  outside the bend
-            Point(230, 590),    // 5  west road, north side
-            Point(450, 780),    // 6  west road, south side
-            Point(120, 780),    // 7  last stand before Concord
+            Point(1250, 350),
+            Point(980, 180),
+            Point(760, 420),
+            Point(620, 470),
+            Point(430, 560),
+            Point(230, 590),
+            Point(450, 780),
+            Point(120, 780),
         ],
         waves: [
             .init(breather: 10, lines: [
@@ -76,8 +63,8 @@ public enum Blueprints {
         all.first { $0.name.lowercased() == name.lowercased() }
     }
 
-    public static let brandywineFord = LevelBlueprint(
-        name: "Brandywine Ford",
+    public static let convergingRoads = LevelBlueprint(
+        name: "Converging Roads",
         startingGold: 500,
         lives: 20,
         roads: [
@@ -93,18 +80,18 @@ public enum Blueprints {
             ]),
         ],
         slots: [
-            Point(250, 210),    // 0  north early
-            Point(600, 270),    // 1  north mid
-            Point(830, 250),    // 2  north descent overlook
-            Point(320, 690),    // 3  south early
-            Point(590, 610),    // 4  south mid
-            Point(790, 610),    // 5  south approach
-            Point(890, 560),    // 6  ford, south shoulder
-            Point(985, 425),    // 7  ford road, prime
-            Point(1130, 400),   // 8  shared wiggle
-            Point(1330, 540),   // 9  shared late
-            Point(1480, 340),   // 10 last stand
-            Point(740, 455),    // 11 ford overlook (reaches both approaches)
+            Point(250, 210),
+            Point(600, 270),
+            Point(830, 250),
+            Point(320, 690),
+            Point(590, 610),
+            Point(790, 610),
+            Point(890, 560),
+            Point(985, 425),
+            Point(1130, 400),
+            Point(1330, 540),
+            Point(1480, 340),
+            Point(740, 455),
         ],
         waves: [
             .init(breather: 8, lines: [

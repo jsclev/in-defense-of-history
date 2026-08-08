@@ -271,14 +271,6 @@ public enum GameAIAutoplayState {
     case IsDone
     case None
     
-//    public var description: String {
-//        switch self {
-//        case .IsCreated: return "Is Created"
-//        case .IsLoaded: return "Is Loaded"
-//        case .IsInMatch: return "Is In Match"
-//        case .IsReadyToPlay: return "Is Ready to Play"
-//        }
-//    }
 }
 
 public enum GameMode: CustomStringConvertible {
@@ -686,42 +678,10 @@ public enum StrategicGoalType: CustomStringConvertible {
     case Monarchy
     case Republic
     case ConquerPlayer
-//    case ThreatenPlayer
     case Wide
     case Defensive
-//    case IncreaseScience
-//    case IncreaseEconomy
     case Explore
     case Tall
-//    case ExploreWater
-//    case BuildAdamSmithsTradingCo
-//    case BuildApolloProgram
-//    case BuildColossus
-//    case BuildCopernicusObservatory
-//    case BuildCureForCancer
-//    case BuildDarwinsVoyage
-//    case BuildEiffelTower
-//    case BuildGreatLibrary
-//    case BuildGreatWall
-//    case BuildHangingGardens
-//    case BuildHooverDam
-//    case BuildIsaacNewtonsCollege
-//    case BuildJSBachsCathedral
-//    case BuildKingRichardsCrusade
-//    case BuildLeonardosWorkshop
-//    case BuildLighthouse
-//    case BuildMagellansExpedition
-//    case BuildManhattenProject
-//    case BuildMarcoPolosEmbassy
-//    case BuildMichelangelosChapel
-//    case BuildOracle
-//    case BuildPyramids
-//    case BuildSETIProgram
-//    case BuildShakespearesTheatre
-//    case BuildStatueOfLiberty
-//    case BuildSunTzusWarAcademy
-//    case BuildUnitedNations
-//    case BuildWomensSuffrage
     
     public var description: String {
         switch self {
@@ -1044,107 +1004,56 @@ public enum UnitOrderType {
 }
 
 public enum UnitType: CustomStringConvertible {
-    /// Equivalent to the Carrier unit in Civilization II
     case AircraftCarrier
-    /// Equivalent to the Fighter unit in Civilization II
     case Air1
-    /// Equivalent to the Bomber unit in Civilization II
     case Air2
-    /// Equivalent to the Stealth Fighter unit in Civilization II
     case Air3
-    /// Equivalent to the Stealth Bomber unit in Civilization II
     case Air4
-    /// Equivalent to the Helicopter unit in Civilization II
     case Helicopter
-    /// Equivalent to the Horsemen unit in Civilization II
     case Cavalry1
-    /// Equivalent to the Chariot unit in Civilization II
     case Cavalry2
-    /// Equivalent to the Elephant unit in Civilization II
     case Cavalry3
-    /// Equivalent to the Knights unit in Civilization II
     case Cavalry4
-    /// Equivalent to the Dragoons unit in Civilization II
     case Cavalry5
-    /// Equivalent to the Crusaders unit in Civilization II
     case Cavalry6
-    /// Equivalent to the Cavalry unit in Civilization II
     case Cavalry7
-    /// Equivalent to the Armor unit in Civilization II
     case Cavalry8
-    /// Equivalent to the Cruise Missile unit in Civilization II
     case CruiseMissile
-    /// Equivalent to the Diplomat unit in Civilization II
     case Diplomat
-    /// Equivalent to the Explorer unit in Civilization II
     case Explorer
-    /// Equivalent to the Warrior unit in Civilization II
     case Infantry1
-    /// Equivalent to the Phalanx unit in Civilization II
     case Infantry2
-    /// Equivalent to the Archers unit in Civilization II
     case Infantry3
-    /// Equivalent to the Pikemen unit in Civilization II
     case Infantry4
-    /// Equivalent to the Legion unit in Civilization II
     case Infantry5
-    /// Equivalent to the Musketeers unit in Civilization II
     case Infantry6
-    /// Equivalent to the Alpine Troops unit in Civilization II
     case Infantry7
-    /// Equivalent to the Fanatics unit in Civilization II
-    case Infantry8  // FIXME: Should we make Fanatics its own unit type?
-    /// Equivalent to the Riflemen unit in Civilization II
+    case Infantry8
     case Infantry9
-    /// Equivalent to the Partisans unit in Civilization II
     case Infantry10
-    /// Equivalent to the Mechanized Infantry unit in Civilization II
     case Infantry11
-    /// Equivalent to the Marines unit in Civilization II
     case Marines
-    /// Equivalent to the Trireme unit in Civilization II
     case Naval1
-    /// Equivalent to the Caravel unit in Civilization II
     case Naval2
-    /// Equivalent to the Galleon unit in Civilization II
     case Naval3
-    /// Equivalent to the Frigate unit in Civilization II
     case Naval4
-    /// Equivalent to the Ironclad unit in Civilization II
     case Naval5
-    /// Equivalent to the Destroyer unit in Civilization II
     case Naval6
-    /// Equivalent to the Cruiser unit in Civilization II
     case Naval7
-    /// Equivalent to the Battleship unit in Civilization II
     case Naval8
-    /// Equivalent to the AEGIS Cruiser unit in Civilization II
     case Naval9
-    /// Equivalent to the Transport unit in Civilization II
     case NavalTransport
-    /// Equivalent to the Nuclear Missile unit in Civilization II
     case NuclearMissile
-    /// Equivalent to the Paratroopers unit in Civilization II
     case Paratroopers
-    /// Equivalent to the Catapult unit in Civilization II
     case Siege1
-    /// Equivalent to the Cannon unit in Civilization II
     case Siege2
-    /// Equivalent to the Artillery unit in Civilization II
     case Siege3
-    /// Equivalent to the Howitzer unit in Civilization II
     case Siege4
-    /// Equivalent to the Spy unit in Civilization II
     case Spy
-    /// Equivalent to the Submarine unit in Civilization II
     case Submarine
-    /// Equivalent to the Trade unit in Civilization II
     case Trade1
-    /// Equivalent to the Freight unit in Civilization II
     case Trade2
-    /// Equivalent to the Settlers unit in Civilization II
     case Worker1
-    /// Equivalent to the Engineers unit in Civilization II
     case Worker2
     
     public func assetName(skinName: String) -> String {

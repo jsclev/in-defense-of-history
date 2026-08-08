@@ -1,7 +1,5 @@
 import SwiftUI
 
-/// Developer settings. Plain and unstyled on purpose — this is a tools
-/// screen, not part of the game's presentation.
 @available(iOS 26.0, *)
 struct SettingsView: View {
     let onExit: () -> Void

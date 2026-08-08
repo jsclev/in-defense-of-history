@@ -9,7 +9,7 @@ INSERT INTO hero (
         INNER JOIN level_info AS li ON lw.level_info_id = li.id
         INNER JOIN campaign AS c ON li.campaign_id = c.id
         WHERE
-            li.level_name = 'Lexington and Concord' AND c.campaign_name = 'Main'
+            li.level_name = 'Battle Road' AND c.campaign_name = 'Main'
             AND lw.wave_index = 4
     ),
     'A stubborn veteran who holds the line and rallies shaken militia.',

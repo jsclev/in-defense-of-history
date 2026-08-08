@@ -1,7 +1,3 @@
-// EditorView.swift
-// Window shell: mode switch (Edit / Playtest), toolbar, canvas + status bar,
-// inspector. Editor-only state lives here; the map lives in MapDocument.
-// Playtest compiles the draft to a LevelBlueprint and runs the real engine.
 import SwiftUI
 import AppKit
 import UniformTypeIdentifiers
@@ -35,8 +31,6 @@ final class EditorState {
     var toast: String?
     var background: NSImage?
     var backgroundPixelSize: CGSize?
-
-    // MARK: Zoom (Photoshop conventions; 1.0 = 100%, nil = Fit on Screen)
 
     var zoom: Double?
     var fitScale: Double = 0.4
@@ -128,8 +122,6 @@ struct EditorView: View {
         }
         .focusedSceneValue(\.editorState, state)
         .background(
-            // ⌘= alias: Photoshop's Zoom In answers to both ⌘+ and ⌘=,
-            // since + needs shift on most layouts.
             Button("") { state.zoomIn() }
                 .keyboardShortcut("=", modifiers: .command)
                 .opacity(0)
@@ -150,8 +142,6 @@ struct EditorView: View {
             .frame(minWidth: 680, maxWidth: .infinity, maxHeight: .infinity)
         }
     }
-
-    // MARK: - Toolbar
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
@@ -253,8 +243,6 @@ struct EditorView: View {
         }
         state.selection = .none
     }
-
-    // MARK: - Status bar
 
     private var statusBar: some View {
         let warnings = MapGeometry.warnings(for: document.draft)

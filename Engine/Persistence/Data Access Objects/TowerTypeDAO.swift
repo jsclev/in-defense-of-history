@@ -72,9 +72,6 @@ public class TowerTypeDAO: BaseDAO {
         return names
     }
 
-    /// Branch-1 combat stats per category and tower level, in tower_level
-    /// order — the designer's fixed baseline the simulator reads and may only
-    /// nudge with small per-level modifiers.
     public func getTowerLevels() throws -> [String: [TowerLevel]] {
         var levels: [String: [(Int, TowerLevel)]] = [:]
 

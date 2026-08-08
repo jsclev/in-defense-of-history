@@ -24,8 +24,6 @@ SET map_image_name = 'level_014_savannah_bastion_v7',
     playable_rect_height = 645.1875
 WHERE id = '46157f59-b21b-4b03-9151-d404c6cd6d0b';
 
-DELETE FROM tower_slot WHERE level_info_id = '46157f59-b21b-4b03-9151-d404c6cd6d0b';
-
 INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUES
 ('e9000001-5a11-4c4a-8e10-000000000001', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 643.0, 258.0),
 ('e9000002-5a11-4c4a-8e10-000000000002', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 870.0, 232.0),
@@ -40,8 +38,6 @@ INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUE
 ('e9000011-5a11-4c4a-8e10-000000000011', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 870.0, 522.0),
 ('e9000012-5a11-4c4a-8e10-000000000012', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 812.0, 673.0),
 ('e9000013-5a11-4c4a-8e10-000000000013', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 996.0, 643.0);
-
-DELETE FROM level_path_point WHERE level_info_id = '46157f59-b21b-4b03-9151-d404c6cd6d0b';
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index, map_position_x, map_position_y

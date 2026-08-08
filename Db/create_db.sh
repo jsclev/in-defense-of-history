@@ -43,12 +43,11 @@ sqlite3 redcoat_raid.sqlite < DML/selected_heroes.sql
 sqlite3 redcoat_raid.sqlite < DML/unlocked_heroes.sql
 sqlite3 redcoat_raid.sqlite < DML/fort_ann_level.sql
 sqlite3 redcoat_raid.sqlite < DML/kettle_creek_level.sql
-sqlite3 redcoat_raid.sqlite < DML/level_01_path_points.sql
+sqlite3 redcoat_raid.sqlite < DML/level_path_points.sql
 sqlite3 redcoat_raid.sqlite < DML/level_tower_slots.sql
 sqlite3 redcoat_raid.sqlite < DML/savannah_bastion_v7.sql
 
 # Add the simulator data
-sqlite3 redcoat_raid.sqlite < DML/Simulator/sim_stat_bounds.sql
 sqlite3 redcoat_raid.sqlite < DML/Simulator/sim_enemy_types.sql
 sqlite3 redcoat_raid.sqlite < DML/Simulator/sim_enemy_type_bounty.sql
 sqlite3 redcoat_raid.sqlite < DML/Simulator/sim_melee_units.sql

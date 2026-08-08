@@ -1,6 +1,5 @@
 import SwiftUI
 
-// Not a NavigationStack — fixed, chrome-free game screens.
 @available(iOS 26.0, *)
 struct RootView: View {
     @State private var selectedNode: CampaignNode?

@@ -1,8 +1,6 @@
 import Foundation
 import SQLite3
 
-/// Simulator-derived choice-irrelevance bounds: below min the player always
-/// loses, above max even sloppy play always wins. Sweeps permute between them.
 public struct SimStatBounds {
     public var towerKind: String
     public var stat: String
@@ -16,8 +14,6 @@ public class SimBoundsDAO: BaseDAO {
         super.init(conn: conn, table: "sim_stat_bounds", loggerName: SimBoundsDAO.self)
     }
 
-    /// Bounds for a level (falling back to global NULL-scope rows), keyed by
-    /// tower kind then stat. Level rows shadow global rows.
     public func getBoundsFor(levelInfoId: UUID) throws -> [String: [String: SimStatBounds]] {
         var out: [String: [String: SimStatBounds]] = [:]
 
@@ -44,7 +40,6 @@ public class SimBoundsDAO: BaseDAO {
             throw DbError.Db(message: "Unable to bind level info id")
         }
 
-        // Global rows come first; level rows overwrite them.
         while sqlite3_step(stmt) == SQLITE_ROW {
             guard let kind = try getString(stmt: stmt, colIndex: 0),
                   let stat = try getString(stmt: stmt, colIndex: 1) else { continue }
@@ -64,7 +59,6 @@ public class SimBoundsDAO: BaseDAO {
         return out
     }
 
-    /// Insert-or-replace a bounds row for a level (nil = global).
     public func upsert(
         levelInfoId: UUID?, towerKind: String, stat: String,
         minValue: Double, maxValue: Double, derivedFrom: String

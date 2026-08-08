@@ -8,7 +8,6 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
     public let unlockedAtLevelId: UUID?
     public let unlockedAtLevelName: String?
     public let unlockedAtCampaignName: String?
-    /// Which wave of `unlockedAtLevelId` this hero joins on.
     public let unlockedAtWave: Int
     public let unlocked: Bool
     public let fromMiniCampaign: Bool

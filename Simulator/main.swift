@@ -1,8 +1,3 @@
-// main.swift — revsim
-// Headless batch runner. Opens (or creates) the content database, seeds it on
-// first run, replays one level across N seeds with a scripted build order, and
-// prints the balance report: win rate, lives percentiles, fate breakdown,
-// rout share, and the per-wave tension trace.
 import Foundation
 
 struct Options {
@@ -255,7 +250,6 @@ if let levelName = opts.meleeDemo {
         let perm = space.permutation(at: space.permutationCount / 2)
         base.waves = SweepWaves.make(perm: perm, fixed: fixed, pathCount: base.paths.count)
 
-        // Catalog with the melee line fielded alongside ranged.
         let rangedID = UUID(uuidString: "5e0e91a1-0001-4000-8000-000000000001")!
         let meleeID = UUID(uuidString: "5e0e91a1-0004-4000-8000-000000000004")!
         var towers: [TowerType] = []
@@ -302,7 +296,6 @@ if let levelName = opts.meleeDemo {
         militia over 20 runs: \(kills) kills, \(deaths) deaths, \(respawns) respawns
         """)
 
-        // One traced seed: watch a garrison work.
         let (_, sim) = run(withMelee: true, seed: 1776)
         for (slot, g) in sim.garrisons.sorted(by: { $0.key < $1.key }) {
             let states = g.units.map { "\($0.state)" }.joined(separator: ", ")
@@ -351,7 +344,6 @@ if let benchLevel = opts.bench {
     }
 }
 
-// Sweep mode: designer-fixed inputs from the DB via DAOs, everything else permuted.
 if let sweepLevel = opts.sweep {
     do {
         let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "redcoat_raid", fullRefresh: false),
@@ -360,7 +352,6 @@ if let sweepLevel = opts.sweep {
         grids.seedsPerPermutation = opts.sweepSeeds
         grids.baseSeed = opts.baseSeed
         if opts.fineGrids {
-            // Cliff-mapping resolution: ~3× denser tower-stat grids.
             grids.upgradeGrowth = Array(stride(from: 1.2, through: 2.2, by: 0.1)).map { ($0 * 10).rounded() / 10 }
             grids.rangeGrids = [
                 "ranged": Array(stride(from: 130.0, through: 290, by: 10)),
@@ -452,7 +443,6 @@ if let sweepLevel = opts.sweep {
     }
 }
 
-// Blueprint mode: pure design-lab batch, no database and no artwork.
 if let bpName = opts.blueprint {
     guard let bp = Blueprints.named(bpName) else {
         FileHandle.standardError.write(Data("Unknown blueprint '\(bpName)'. Known: \(Blueprints.all.map { $0.name }.joined(separator: ", "))\n".utf8))
@@ -544,9 +534,6 @@ do {
     
     let levelInfo = try db.levelInfoDao.getBy(id: levelInfoId)
 
-    // The tower_type / enemy_type tables exist but are not yet populated with
-    // level/cost/range data, so the content catalog is assembled here for now.
-    // Replace with a TowerTypeDAO once those tables carry the stat columns.
     let minutemanPost = TowerType(
         id: UUID(),
         name: "Minuteman Post",
@@ -558,11 +545,6 @@ do {
     let enemyTypes = try db.enemyTypeDao.getAll()
     let catalog = ContentCatalog(enemyTypes: enemyTypes, towerTypes: [minutemanPost])
 
-    // Build the simulation for the loaded level. No waves or paths are in the
-    // database yet, so the spawn schedule is empty and the run sits at the start
-    // of wave 1 (wave index 0). We deliberately do not step() the simulation:
-    // with an empty schedule the very first tick would satisfy the victory
-    // condition. Waves become runnable once paths and wave data are seeded.
     let sim = try Simulation(
         level: levelInfo,
         catalog: catalog,
@@ -570,7 +552,6 @@ do {
         seed: opts.baseSeed
     )
 
-    // Create a tower and assign it to the first slot.
     guard !levelInfo.towerSlots.isEmpty else {
         throw DbError.Db(message: "Level '\(levelInfo.name)' has no tower slots to place a tower in.")
     }
@@ -596,20 +577,11 @@ do {
 
     """)
 
-    // Walk one enemy along the level's path, driven by the game clock. Movement
-    // is the engine's own model — distance += speed * dt each tick — with the
-    // clock supplying the fixed dt independent of wall-clock time, so this is
-    // deterministic and runs as fast as the CPU allows. This mirrors what
-    // Simulation.step() does per enemy; here it is isolated to demonstrate the
-    // timer moving a unit along the real path at its type's speed.
     guard let path = levelInfo.paths.first else {
         throw DbError.Db(message: "Level '\(levelInfo.name)' has no path to walk. Seed level_path_point first.")
     }
     let walker = enemyTypes.first(where: { $0.name == "Redcoat Regular" }) ?? enemyTypes[0]
     let speed = walker.stats.speed
-    // The engine Timer in unbounded mode (tickDuration .zero): no pacing, ticks
-    // run as fast as the CPU allows — batch simulation. Game time is
-    // tick * SimClock.dt; on-screen play paces the very same ticks in real time.
     let timer = Timer(tickDuration: .zero)
     let ticksPerSecond = Int64(SimClock.ticksPerSecond)
 
@@ -632,17 +604,17 @@ do {
     """)
 
     var distance = 0.0
-    sample(distance: distance)                      // t = 0, at the spawn
-    var nextSampleTick = ticksPerSecond             // then once per game-second
+    sample(distance: distance)
+    var nextSampleTick = ticksPerSecond
     while distance < path.totalLength {
-        let tick = timer.waitForNextTick()          // returns immediately when unbounded
+        let tick = timer.waitForNextTick()
         distance = min(path.totalLength, Double(tick) * SimClock.dt * speed)
         if tick >= nextSampleTick {
             sample(distance: distance)
             nextSampleTick += ticksPerSecond
         }
     }
-    if timer.tick % ticksPerSecond != 0 { sample(distance: distance) }  // final position
+    if timer.tick % ticksPerSecond != 0 { sample(distance: distance) }
 
     print("""
 

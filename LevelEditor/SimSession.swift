@@ -1,8 +1,3 @@
-// SimSession.swift
-// Drives one Simulation in real time for playtesting: fixed engine ticks
-// paced by the display clock, a manual build API for hand-play, an autopilot
-// running the intended solution, and an in-process quick batch. Hand-played
-// builds are recorded so a good run can be adopted as the intended solution.
 import Foundation
 import Observation
 
@@ -78,8 +73,6 @@ final class SimSession {
         restart()
     }
 
-    // MARK: - Clock
-
     func advance(to date: Date) {
         guard !paused, sim.outcome == nil else { lastDate = date; return }
         defer { frame += 1 }
@@ -89,7 +82,6 @@ final class SimSession {
         accumulator += dt * Double(SimClock.ticksPerSecond * speed)
         var steps = Int(accumulator)
         accumulator -= Double(steps)
-        // Cap per-frame work so a hitch can't spiral.
         steps = min(steps, SimClock.ticksPerSecond * 8)
         for _ in 0..<steps where sim.outcome == nil {
             sim.step()
@@ -99,8 +91,6 @@ final class SimSession {
             banner = nil
         }
     }
-
-    // MARK: - Player actions
 
     func build(_ e: Emplacement, at slot: Int) {
         let result = sim.build(slot: slot, towerID: e.id)
@@ -126,8 +116,6 @@ final class SimSession {
         max(1, (sim.time * 2).rounded() / 2)
     }
 
-    // MARK: - Derived
-
     var currentWave: Int {
         level.waves.filter { $0.startTime <= sim.time }.count
     }
@@ -138,8 +126,6 @@ final class SimSession {
         guard let t = sim.towers[slot] else { return nil }
         return (catalog.towerTypes[t.typeIndex], t.level)
     }
-
-    // MARK: - Quick batch (synchronous; ~a second for 100 seeds)
 
     func runQuickBatch() {
         let report = try? Batch.run(
@@ -154,8 +140,6 @@ final class SimSession {
         )
     }
 
-    // MARK: - Events
-
     private func attachObserver() {
         let collector = Collector(session: self)
         sim.addObserver(collector)
@@ -168,8 +152,6 @@ final class SimSession {
             self.session = session
         }
 
-        // Observers fire synchronously from sim.step(), which only runs on
-        // the main actor (advance/build/upgrade are all MainActor).
         func handle(_ event: SimEvent, atTime time: Double) {
             MainActor.assumeIsolated {
                 guard let s = session else { return }

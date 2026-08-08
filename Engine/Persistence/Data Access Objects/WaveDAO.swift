@@ -6,12 +6,6 @@ public class WaveDAO: BaseDAO {
         super.init(conn: conn, table: "level_wave", loggerName: WaveDAO.self)
     }
 
-    /// Waves for a level, in order, each with its spawn lines.
-    ///
-    /// Rows sharing a `spawn_index` are one mini-wave: they start together and
-    /// may mix enemy types. `spawn_time_since_previous_spawn` is the gap from
-    /// the previous mini-wave, so it is accumulated here into the absolute
-    /// `delay` from the wave's start that `SpawnEntry` expects.
     public func getWavesFor(levelInfoId: UUID) throws -> [Wave] {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""
@@ -43,8 +37,6 @@ public class WaveDAO: BaseDAO {
 
         var startTimes: [Int: Double] = [:]
         var spawnsByWave: [Int: [SpawnEntry]] = [:]
-        // Running delay per wave, plus the mini-wave it was last advanced for,
-        // so several rows in one group all take the same start.
         var cumulativeDelay: [Int: Double] = [:]
         var lastSpawnIndex: [Int: Int] = [:]
 
@@ -52,7 +44,6 @@ public class WaveDAO: BaseDAO {
             let waveIndex = getInt(stmt: stmt, colIndex: 0)
             startTimes[waveIndex] = getDouble(stmt: stmt, colIndex: 1)
 
-            // LEFT JOIN: a wave with no spawn rows yet still yields a row.
             guard sqlite3_column_type(stmt, 3) != SQLITE_NULL else {
                 spawnsByWave[waveIndex] = spawnsByWave[waveIndex] ?? []
                 continue

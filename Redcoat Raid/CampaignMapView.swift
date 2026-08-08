@@ -7,6 +7,8 @@ struct CampaignMapView: View {
 
     @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
 
+    @State private var nodes: [CampaignNode] = []
+
     var body: some View {
         GeometryReader { geometry in
             let screen = ScreenGeometry(proxy: geometry)
@@ -20,11 +22,9 @@ struct CampaignMapView: View {
                 GeometryReader { mapGeometry in
                     let scale = CampaignMarkers.scale(for: mapGeometry.size)
                     let placements = CampaignMarkers.placements(
-                        for: CampaignNode.all,
+                        for: nodes,
                         viewSize: mapGeometry.size
                     )
-                    // Solved once, in physical-screen coordinates, then extended to the
-                    // corner so scenery steers clear of the whole region.
                     let menuBox = CGRect(
                         x: menu.bar.minX, y: menu.bar.minY,
                         width: screen.physical.maxX - menu.bar.minX,
@@ -34,14 +34,11 @@ struct CampaignMapView: View {
                         callouts: placements,
                         menuExclusion: menuBox
                     )
-                    // Placed from screen geometry: centred in the sea between
-                    // the New Haven plate, the right edge and the menu.
                     let compass = CampaignCompass.placement(
                         viewSize: mapGeometry.size,
                         callouts: placements,
                         menuBox: menuBox
                     )
-                    // Its footprint in map coordinates, so the brig avoids it.
                     let compassBox: CGRect = compass.map { c in
                         let a = CampaignMapLayout.imagePoint(
                             forViewPoint: CGPoint(x: c.center.x - c.size.width / 2,
@@ -58,9 +55,6 @@ struct CampaignMapView: View {
                         return CGRect(x: min(a.x, b.x), y: min(a.y, b.y),
                                       width: abs(b.x - a.x), height: abs(b.y - a.y))
                     } ?? .zero
-                    // Everything already placed is an obstacle for the
-                    // warship berth; the title box is approximated from the
-                    // same numbers the Image below uses.
                     let titleBox = title.frame.insetBy(dx: -title.frame.width * 0.075,
                                                        dy: -title.frame.height * 0.15)
                     let warshipObstacles = [menuBox, titleBox]
@@ -126,7 +120,6 @@ struct CampaignMapView: View {
                 }
                 .ignoresSafeArea()
 
-                // Under the HUD, so a guide never hides the chrome it measures.
                 if showSafeAreaOverlay {
                     SafeAreaOverlayView(screen: screen)
                         .ignoresSafeArea()
@@ -154,6 +147,9 @@ struct CampaignMapView: View {
             }
         }
         .persistentSystemOverlays(.hidden)
+        .task {
+            if nodes.isEmpty { nodes = CampaignNode.load() }
+        }
     }
 }
 
