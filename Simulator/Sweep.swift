@@ -241,6 +241,7 @@ struct SweepGrids {
     var rangeGridOverride: [String: [Double]] = [:]
     var moneyGridOverride: [Int]?
     var reportDir = ""
+    var limit: Int?
     /// Step for grids derived from stored bounds; 0 = five evenly spaced
     /// values (fine mode sets 10 for cliff-mapping resolution).
     var boundsStep: Double = 0
@@ -974,7 +975,7 @@ enum Sweep {
         let space = SweepSpace(grids: grids, fixed: fixed, slotCount: base.towerSlots.count)
 
         let allPerms = space.permutationCount
-        let indices: [Int]
+        var indices: [Int]
         if let focus = grids.focus {
             guard let (place, count) = space.focusPlacement(stat: focus.stat, kind: focus.kind) else {
                 throw DbError.Db(message: "focus \(focus.label) is not a permutation dimension of this level")
@@ -997,6 +998,15 @@ enum Sweep {
             indices = paired
         } else {
             indices = Array(Swift.stride(from: 0, to: allPerms, by: sampleStride))
+        }
+        let unlimited = indices.count
+        if let limit = grids.limit, limit < indices.count {
+            if let focus = grids.focus,
+               let (_, count) = space.focusPlacement(stat: focus.stat, kind: focus.kind) {
+                indices = Array(indices.prefix(max(1, limit / count) * count))
+            } else {
+                indices = Array(indices.prefix(limit))
+            }
         }
         let sims = indices.count * grids.seedsPerPermutation
         let moneyLo = space.moneyValues.first ?? 0
@@ -1029,6 +1039,12 @@ enum Sweep {
             return pins.isEmpty ? "" : "\n  designer pins: " + pins.sorted().joined(separator: " ")
         }())
           permutations: \(indices.count) of \(allPerms) grid points × \(grids.seedsPerPermutation) seeds = \(sims) simulations
+        \({ () -> String in
+            guard let limit = grids.limit, indices.count < unlimited else { return "" }
+            let rounded = indices.count > limit
+                ? " (raised from \(limit) to keep whole focus groups)" : ""
+            return "  ⚠ --limit: running \(indices.count)\(rounded) of \(unlimited) sampled permutations — partial run, not a balance result\n"
+        }())\
           cores: \(ProcessInfo.processInfo.activeProcessorCount)
         \(grids.focus.map { f -> String in
             let count = space.focusPlacement(stat: f.stat, kind: f.kind)?.count ?? 0

@@ -19,6 +19,7 @@ struct Options {
     var sweepOut = "sweeps/sweep.csv"
     var sweepStride = 1
     var sweepSeeds = 40
+    var limit: Int?
     var fixes: [(stat: String, kind: String, value: Double)] = []
     var dimPins: [(dim: String, value: String)] = []
     var focus: (stat: String, kind: String)?
@@ -57,6 +58,14 @@ func printUsage() {
       --sweep-out <p>  CSV output path (default: sweeps/sweep.csv)
       --sweep-stride <n>  Sample every nth permutation (default 1 = all)
       --sweep-seeds <n>   Seeds per permutation (default 40)
+      --limit <n>      Run at most n permutations, then stop and write the
+                       output as usual — the SQL LIMIT of sweeps. Applied
+                       after --sweep-stride. Use it to smoke-test a command
+                       before committing to the full run:
+                         --limit 8 --sweep-seeds 4
+                       Under --focus, n rounds down to whole focus-value
+                       groups so every focus value keeps the same paired
+                       sample (a partial group would skew the curves).
       --fix <stat>:<kind>=<v>  Pin a swept tower stat as a designer-fixed input
                        for this run; repeatable. Stats: range, rof, growth,
                        splash (blast radius), falloff (blast falloff exponent),
@@ -145,6 +154,9 @@ func parseOptions() throws -> Options? {
         case "--sweep-seeds":
             guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
             opts.sweepSeeds = n
+        case "--limit":
+            guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
+            opts.limit = n
         case "--melee-demo":
             guard let v = args.popFirst() else { return nil }
             opts.meleeDemo = v
@@ -427,6 +439,7 @@ if let sweepLevel = opts.sweep {
             exit(2)
         }
         grids.reportDir = opts.reportDir
+        grids.limit = opts.limit
         grids.budgetHours = opts.budgetHours
         try Sweep.run(db: db, levelName: sweepLevel, grids: grids,
                       stride: opts.sweepStride, outPath: opts.sweepOut,
