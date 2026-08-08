@@ -152,6 +152,12 @@ struct SweepFixedInputs {
 
 // MARK: - Permutation space
 
+struct SweepFocus {
+    var stat: String
+    var kind: String
+    var label: String { kind.isEmpty ? stat : "\(stat):\(kind)" }
+}
+
 struct SweepGrids {
     /// Upgrade-cost exploration: cost(Ln) = round5(L1 cost × growth^(n-1)),
     /// per combat kind independently. Finding these numbers is the sweep's job;
@@ -231,6 +237,10 @@ struct SweepGrids {
     var fixedMeleeHp: Double?
     var meleeDamageGrid: [Double] = [0, 0.25, 0.5, 0.75, 1.0]
     var fixedMeleeDamage: Double?
+    var focus: SweepFocus?
+    var rangeGridOverride: [String: [Double]] = [:]
+    var moneyGridOverride: [Int]?
+    var reportDir = ""
     /// Step for grids derived from stored bounds; 0 = five evenly spaced
     /// values (fine mode sets 10 for cliff-mapping resolution).
     var boundsStep: Double = 0
@@ -298,6 +308,8 @@ struct SweepSpace {
         let maxMoney = cheapest * (slotCount / 2 + 1)
         if let pinned = grids.fixedMoney {
             self.moneyValues = [pinned]
+        } else if let override = grids.moneyGridOverride {
+            self.moneyValues = override
         } else {
             self.moneyValues = Array(Swift.stride(
                 from: minMoney,
@@ -359,6 +371,7 @@ struct SweepSpace {
         if isMeleeKind(kind) {
             return [fixedInputs.towerLevels[kind]?.first?.range ?? 0]
         }
+        if let override = grids.rangeGridOverride[kind] { return override }
         if let pinned = grids.fixedRange[kind] { return [pinned] }
         if let b = bounds[kind]?["range"] {
             return Self.gridFromBounds(b.minValue, b.maxValue, step: grids.boundsStep)
@@ -397,25 +410,43 @@ struct SweepSpace {
         grids.fixedFalloff[kind].map { [$0] } ?? grids.falloffGrid
     }
 
-    var permutationCount: Int {
-        var n = moneyValues.count
-        n *= livesValues.count
+    func dimensionLayout() -> [(stat: String, kind: String, count: Int)] {
+        var dims: [(stat: String, kind: String, count: Int)] = [
+            ("money", "", moneyValues.count),
+            ("lives", "", livesValues.count),
+        ]
         for kind in combatKinds {
-            n *= growthGrid(for: kind).count
-            n *= rangeGrid(for: kind).count
-            n *= rofGrid(for: kind).count
-            n *= projSpeedGrid(for: kind, fixed: fixedInputs).count
+            dims.append(("growth", kind, growthGrid(for: kind).count))
+            dims.append(("range", kind, rangeGrid(for: kind).count))
+            dims.append(("rof", kind, rofGrid(for: kind).count))
+            dims.append(("projspeed", kind, projSpeedGrid(for: kind, fixed: fixedInputs).count))
         }
         for kind in aoeKinds {
-            n *= splashGrid(for: kind).count
-            n *= falloffGrid(for: kind).count
+            dims.append(("splash", kind, splashGrid(for: kind).count))
+            dims.append(("falloff", kind, falloffGrid(for: kind).count))
         }
-        n *= enemySpeeds.count
-        n *= enemyHps.count
-        n *= enemyBounties.count
-        n *= meleeHps.count
-        n *= meleeDamages.count
-        return n * curves.count * mixes.count * spacings.count
+        dims.append(("enemyspeed", "", enemySpeeds.count))
+        dims.append(("enemyhp", "", enemyHps.count))
+        dims.append(("enemybounty", "", enemyBounties.count))
+        dims.append(("meleehp", "", meleeHps.count))
+        dims.append(("meleedamage", "", meleeDamages.count))
+        dims.append(("curve", "", curves.count))
+        dims.append(("mix", "", mixes.count))
+        dims.append(("spacing", "", spacings.count))
+        return dims
+    }
+
+    func focusPlacement(stat: String, kind: String) -> (place: Int, count: Int)? {
+        var place = 1
+        for dim in dimensionLayout() {
+            if dim.stat == stat && dim.kind == kind { return (place, dim.count) }
+            place *= dim.count
+        }
+        return nil
+    }
+
+    var permutationCount: Int {
+        dimensionLayout().reduce(1) { $0 * $1.count }
     }
 
     func permutation(at index: Int) -> SweepPermutation {
@@ -943,7 +974,30 @@ enum Sweep {
         let space = SweepSpace(grids: grids, fixed: fixed, slotCount: base.towerSlots.count)
 
         let allPerms = space.permutationCount
-        let indices = Array(Swift.stride(from: 0, to: allPerms, by: sampleStride))
+        let indices: [Int]
+        if let focus = grids.focus {
+            guard let (place, count) = space.focusPlacement(stat: focus.stat, kind: focus.kind) else {
+                throw DbError.Db(message: "focus \(focus.label) is not a permutation dimension of this level")
+            }
+            guard count > 1 else {
+                throw DbError.Db(message: "focus \(focus.label) has a single-value grid — nothing to compare (pinned by --fix, collapsed for this kind, or missing sim brackets)")
+            }
+            let otherCount = allPerms / count
+            var paired: [Int] = []
+            paired.reserveCapacity((otherCount / sampleStride + 1) * count)
+            var other = 0
+            while other < otherCount {
+                let lo = other % place
+                let hi = other / place
+                for f in 0..<count {
+                    paired.append(lo + (f + hi * count) * place)
+                }
+                other += sampleStride
+            }
+            indices = paired
+        } else {
+            indices = Array(Swift.stride(from: 0, to: allPerms, by: sampleStride))
+        }
         let sims = indices.count * grids.seedsPerPermutation
         let moneyLo = space.moneyValues.first ?? 0
         let moneyHi = space.moneyValues.last ?? 0
@@ -976,7 +1030,10 @@ enum Sweep {
         }())
           permutations: \(indices.count) of \(allPerms) grid points × \(grids.seedsPerPermutation) seeds = \(sims) simulations
           cores: \(ProcessInfo.processInfo.activeProcessorCount)
-
+        \(grids.focus.map { f -> String in
+            let count = space.focusPlacement(stat: f.stat, kind: f.kind)?.count ?? 0
+            return "  focus: \(f.label) — \(count) values × \(indices.count / max(1, count)) paired samples of the other variables\n"
+        } ?? "")
         """.utf8))
 
         let lock = NSLock()
@@ -996,6 +1053,9 @@ enum Sweep {
             if storeBounds {
                 try deriveAndStoreBounds(db: db, fixed: fixed, space: space,
                                          rows: rows, outPath: outPath)
+            }
+            if let focus = grids.focus {
+                try FocusReport.emit(rows: rows, focus: focus, space: space, sweepOut: outPath)
             }
             return
         }
@@ -1125,6 +1185,9 @@ enum Sweep {
         if storeBounds {
             try deriveAndStoreBounds(db: db, fixed: fixed, space: space,
                                      rows: rows, outPath: outPath)
+        }
+        if let focus = grids.focus {
+            try FocusReport.emit(rows: rows, focus: focus, space: space, sweepOut: outPath)
         }
     }
 

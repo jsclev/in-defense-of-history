@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		520082C0300C300000DF4F64 /* RedcoatRaidAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520082C1300C300000DF4F64 /* RedcoatRaidAssets.xcassets */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		520082B5300C245B00DF4F64 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -22,6 +26,7 @@
 		520082B7300C245B00DF4F64 /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		5263FCBD3002C99600C1546D /* Redcoat Raid.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Redcoat Raid.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52AB1A00000000000000BA01 /* LevelEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		520082C1300C300000DF4F64 /* RedcoatRaidAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = RedcoatRaidAssets.xcassets; path = "../in-defense-of-history-data/RedcoatRaidAssets.xcassets"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -118,6 +123,7 @@
 				5200827F300C09D400DF4F64 /* Engine */,
 				52AB1A00000000000000BB01 /* LevelEditor */,
 				5263FCBF3002C99600C1546D /* Redcoat Raid */,
+				520082C1300C300000DF4F64 /* RedcoatRaidAssets.xcassets */,
 				520082B8300C245B00DF4F64 /* Simulator */,
 				5263FCBE3002C99600C1546D /* Products */,
 			);
@@ -225,7 +231,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 5263FCB83002C99600C1546D /* Build configuration list for PBXProject "td" */;
+			buildConfigurationList = 5263FCB83002C99600C1546D /* Build configuration list for PBXProject "InDefenseOfHistory" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -251,6 +257,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				520082C0300C300000DF4F64 /* RedcoatRaidAssets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -576,7 +583,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5263FCB83002C99600C1546D /* Build configuration list for PBXProject "td" */ = {
+		5263FCB83002C99600C1546D /* Build configuration list for PBXProject "InDefenseOfHistory" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5263FCD53002C99800C1546D /* Debug */,

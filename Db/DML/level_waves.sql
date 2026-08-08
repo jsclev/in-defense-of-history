@@ -1,10 +1,3 @@
--- Wave table for every level.
--- Main campaign wave counts follow Kingdom Rush Frontiers stages 1-15:
--- stage 1 has 6 waves and stage 15 has 15, ramping monotonically between.
--- Mini-campaign levels ramp 8-12 across each campaign.
--- spawn_time is seconds from level start: first wave at 5s, then every 25s.
-
--- Main
 -- Lexington and Concord: 6 waves
 INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES
 ('58a4045d-cf16-428c-9f46-11d4e29e3305',

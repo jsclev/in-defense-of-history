@@ -1,6 +1,13 @@
 .DS_Store
 .claude/
 
+## Local media working folders — binary game assets live in
+## ../in-defense-of-history-data, never in this repo
+Images/
+images/
+Sounds/
+sounds/
+
 ## User settings
 xcuserdata/
 
@@ -33,6 +40,7 @@ playground.xcworkspace
 # .swiftpm
 
 .build/
+build/
 
 # CocoaPods
 #

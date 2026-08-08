@@ -21,6 +21,9 @@ struct Options {
     var sweepSeeds = 40
     var fixes: [(stat: String, kind: String, value: Double)] = []
     var dimPins: [(dim: String, value: String)] = []
+    var focus: (stat: String, kind: String)?
+    var focusGrid: [Double]?
+    var reportDir = ("~/projects/in-defense-of-history-data/Simulator" as NSString).expandingTildeInPath
     var budgetHours = 8.0
     var gpu = false
     var fineGrids = false
@@ -64,6 +67,23 @@ func printUsage() {
                        position 0..1 across the sim bracket tables:
                        0 = bracket min, 0.5 = designed value, 1 = max).
                        e.g. --fix money=250 --fix mix=balanced
+      --focus <stat>:<kind>  Single-variable focus study. The sweep becomes a
+                       paired design: every value of the focus variable runs
+                       against the identical sample of permutations of every
+                       other variable, then the run emits <sweep-out>.focus.csv
+                       (per-value aggregates) and <sweep-out>.focus.html
+                       (charts: win-rate curve with spread bands, difficulty
+                       composition, wave-1 economics, win distribution).
+                       Tower stats take stat:kind (e.g. --focus range:ranged);
+                       scalar dimensions stand alone: --focus money, lives,
+                       curve, mix, spacing, enemyspeed, enemyhp, enemybounty,
+                       meleehp, meleedamage. --sweep-stride samples the
+                       other-variable space; the focus grid is never strided.
+      --focus-grid <lo:hi:step>  Dense grid for the focus variable this run
+                       (numeric stats only), e.g. --focus-grid 120:300:10.
+      --report-dir <path>  Where focus reports land, named
+                       focus_<variable>_<yyyy-MM-dd_HH.mm.ss>.{html,csv}
+                       (default: ~/projects/in-defense-of-history-data/Simulator)
       --budget-hours <h>  Nightly budget; the run projects its length after a
                        calibration batch and warns if it will blow this (default 8)
       --melee          Field the melee line in sweep catalogs and enable the
@@ -159,6 +179,33 @@ func parseOptions() throws -> Options? {
                 else { return nil }
                 opts.dimPins.append((String(dimAndValue[0]), String(dimAndValue[1])))
             }
+        case "--focus":
+            guard let v = args.popFirst() else { return nil }
+            if v.contains(":") {
+                let parts = v.split(separator: ":", maxSplits: 1)
+                guard parts.count == 2,
+                      ["range", "rof", "growth", "splash", "falloff", "projspeed"].contains(String(parts[0]))
+                else { return nil }
+                opts.focus = (String(parts[0]), String(parts[1]))
+            } else {
+                guard ["money", "lives", "curve", "mix", "spacing", "enemyspeed", "enemyhp", "enemybounty", "meleehp", "meleedamage"].contains(v)
+                else { return nil }
+                opts.focus = (v, "")
+            }
+        case "--focus-grid":
+            guard let v = args.popFirst() else { return nil }
+            let parts = v.split(separator: ":").compactMap { Double($0) }
+            guard parts.count == 3, parts[2] > 0, parts[1] >= parts[0] else { return nil }
+            var values: [Double] = []
+            var x = parts[0]
+            while x <= parts[1] + parts[2] * 0.001 {
+                values.append((x * 1000).rounded() / 1000)
+                x += parts[2]
+            }
+            opts.focusGrid = values
+        case "--report-dir":
+            guard let v = args.popFirst() else { return nil }
+            opts.reportDir = (v as NSString).expandingTildeInPath
         case "--budget-hours":
             guard let v = args.popFirst(), let h = Double(v), h > 0 else { return nil }
             opts.budgetHours = h
@@ -347,6 +394,39 @@ if let sweepLevel = opts.sweep {
             default: break
             }
         }
+        if let focus = opts.focus {
+            let pinnedStat = opts.fixes.contains { $0.stat == focus.stat && $0.kind == focus.kind }
+            let pinnedDim = opts.dimPins.contains { $0.dim == focus.stat }
+            if pinnedStat || pinnedDim {
+                FileHandle.standardError.write(Data("cannot --focus and --fix the same variable\n".utf8))
+                exit(2)
+            }
+            grids.focus = SweepFocus(stat: focus.stat, kind: focus.kind)
+            if let values = opts.focusGrid {
+                switch focus.stat {
+                case "range": grids.rangeGridOverride[focus.kind] = values
+                case "rof": grids.rofGrids[focus.kind] = values
+                case "growth": grids.upgradeGrowth = values
+                case "splash": grids.splashGrids[focus.kind] = values
+                case "falloff": grids.falloffGrid = values
+                case "projspeed": grids.projSpeedGrids[focus.kind] = values
+                case "money": grids.moneyGridOverride = values.map { Int($0) }
+                case "lives": grids.livesGrid = values.map { Int($0) }
+                case "enemyspeed": grids.enemySpeedGrid = values
+                case "enemyhp": grids.enemyHpGrid = values
+                case "enemybounty": grids.enemyBountyGrid = values
+                case "meleehp": grids.meleeHpGrid = values
+                case "meleedamage": grids.meleeDamageGrid = values
+                default:
+                    FileHandle.standardError.write(Data("--focus-grid does not apply to \(focus.stat)\n".utf8))
+                    exit(2)
+                }
+            }
+        } else if opts.focusGrid != nil {
+            FileHandle.standardError.write(Data("--focus-grid requires --focus\n".utf8))
+            exit(2)
+        }
+        grids.reportDir = opts.reportDir
         grids.budgetHours = opts.budgetHours
         try Sweep.run(db: db, levelName: sweepLevel, grids: grids,
                       stride: opts.sweepStride, outPath: opts.sweepOut,
