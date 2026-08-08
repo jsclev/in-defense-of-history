@@ -29,5 +29,3 @@ INSERT INTO campaign VALUES (
     'The Southern Campaign',
     'f589a28f-54d8-4791-851c-a307f252151a'
 );
-
-

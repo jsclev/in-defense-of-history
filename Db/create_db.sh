@@ -17,7 +17,47 @@ sqlite3 redcoat_raid.sqlite < DDL/create_tables.sql
 
 # Add all the data
 sqlite3 redcoat_raid.sqlite < DML/campaigns.sql
-sqlite3 redcoat_raid.sqlite < DML/levels.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_01_battle_road.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_02_bunker_hill.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_03_great_bridge.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_04_moores_creek_bridge.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_05_dorchester_heights.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_06_sullivans_island.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_07_long_island.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_08_trenton.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_09_princeton.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_10_fort_ann.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_11_saratoga.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_12_kettle_creek.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_13_new_haven.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_14_savannah.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_15_charleston.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_16_kips_bay.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_17_harlem_heights.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_18_pells_point.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_19_white_plains.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_20_fort_washington.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_21_monmouth.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_22_rhode_island.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_23_stony_point.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_24_savannah.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_25_flamborough_head.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_26_quebec.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_27_valcour_island.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_28_hubbardton.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_29_fort_stanwix.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_30_oriskany.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_31_bennington.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_32_coochs_bridge.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_33_brandywine.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_34_paoli.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_35_germantown.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_36_white_marsh.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_37_camden.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_38_kings_mountain.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_39_cowpens.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_40_guilford_courthouse.sql
+sqlite3 redcoat_raid.sqlite < DML/Levels/level_41_eutaw_springs.sql
 sqlite3 redcoat_raid.sqlite < DML/level_tower_unlocks.sql
 sqlite3 redcoat_raid.sqlite < DML/enemy_types.sql
 sqlite3 redcoat_raid.sqlite < DML/tower_types.sql
@@ -41,11 +81,6 @@ sqlite3 redcoat_raid.sqlite < DML/Heroes/14_John_Glover.sql
 sqlite3 redcoat_raid.sqlite < DML/Heroes/15_Horatio_Gates.sql
 sqlite3 redcoat_raid.sqlite < DML/selected_heroes.sql
 sqlite3 redcoat_raid.sqlite < DML/unlocked_heroes.sql
-sqlite3 redcoat_raid.sqlite < DML/fort_ann_level.sql
-sqlite3 redcoat_raid.sqlite < DML/kettle_creek_level.sql
-sqlite3 redcoat_raid.sqlite < DML/level_path_points.sql
-sqlite3 redcoat_raid.sqlite < DML/level_tower_slots.sql
-sqlite3 redcoat_raid.sqlite < DML/savannah_bastion_v7.sql
 
 # Add the simulator data
 sqlite3 redcoat_raid.sqlite < DML/Simulator/sim_enemy_types.sql

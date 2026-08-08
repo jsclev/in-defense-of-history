@@ -1,5 +1,3 @@
--- (no semicolons in comments -- the block splitter cuts on them)
-
 -- Ranged Level 1 (Musketmen)
 INSERT INTO tower (
     id, tower_type_id, tower_name,

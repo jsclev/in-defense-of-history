@@ -1,28 +1,22 @@
--- Savannah on the a_07 artwork.
---
--- Playable rect measured from Images/a_07-playable-rect.png: white
--- stroke centres 1147.0 x 645.0 at (280.5, 139.5), height normalised
--- about the centre to exact 16:9.
---
--- 13 pads: rings scoring >0.85 on the ring match, each verified against
--- the art; weaker hits are road bulges and fort clutter, rejected.
---
--- Waypoints carry the direction-aware vertical nudge (8px base, up to
--- 6px more where travel is horizontal); door-mouth spawns a further 7px.
--- Spawns: ship deck by the gangplank, both gatehouse door mouths, the
--- boat's bow. Exits: upper (350,339), middle (310,502), lower (330,627).
-
-BEGIN TRANSACTION;
-
-UPDATE level_info
-SET map_image_name = 'level_014_savannah_bastion_v7',
-    map_image_width = 1672.0,
-    map_image_height = 940.0,
-    playable_rect_x = 280.5000,
-    playable_rect_y = 139.4062,
-    playable_rect_width = 1147.0000,
-    playable_rect_height = 645.1875
-WHERE id = '46157f59-b21b-4b03-9151-d404c6cd6d0b';
+INSERT INTO level_info (
+    id, campaign_id, level_name, world_map_x, world_map_y,
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
+) VALUES (
+    '46157f59-b21b-4b03-9151-d404c6cd6d0b',
+    'f589a28f-54d8-4791-851c-a307f252151a',
+    'Savannah',
+    1471.0,
+    1445.0,
+    julianday('1779-09-16T12:00:00-05:00'),
+    julianday('1779-10-18T12:00:00-05:00'),
+    480,
+    20,
+    15,
+    280.5000, 139.4062, 1147.0000, 645.1875,
+    'level_014_savannah_bastion_v7', 1672.0, 940.0
+);
 
 INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUES
 ('e9000001-5a11-4c4a-8e10-000000000001', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 643.0, 258.0),
@@ -168,18 +162,3 @@ INSERT INTO level_path_point (
 ('e9130000-0000-4000-8000-000000000011', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 3, 17, 402.0, 643.4),
 ('e9130000-0000-4000-8000-000000000012', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 3, 18, 398.0, 639.7),
 ('e9130000-0000-4000-8000-000000000013', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 3, 19, 330.0, 640.0);
-
--- Entrances rotate every two waves; late waves split across entrances.
-UPDATE level_wave_enemy_spawn
-SET path_index = (
-    SELECT CASE WHEN lw.wave_index <= 8
-                THEN ((lw.wave_index - 1) / 2) % 4
-                ELSE ((lw.wave_index - 1) / 2 + level_wave_enemy_spawn.spawn_index) % 4
-           END
-    FROM level_wave lw WHERE lw.id = level_wave_enemy_spawn.level_wave_id
-)
-WHERE level_wave_id IN (
-    SELECT id FROM level_wave WHERE level_info_id = '46157f59-b21b-4b03-9151-d404c6cd6d0b'
-);
-
-COMMIT;

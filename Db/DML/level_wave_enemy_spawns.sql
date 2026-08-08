@@ -7,1680 +7,6722 @@ INSERT INTO level_wave_enemy_spawn (
     id, level_wave_id, enemy_type_id, spawn_index,
     num_enemies, spawn_time_since_previous_spawn, spawn_interval, path_index
 ) VALUES
-('b6138818-31e2-4760-b0fb-bff3b6c02cef', '79583241-f14e-4609-9459-e75da74a112b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('9ec2136a-e624-4db0-9421-daf22a00e6ad', 'df3dee10-d2fe-4ac6-9832-a4e9f1f84c4e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('977813c7-2bbd-41a9-84b1-98f4d0485264', 'f743d7b8-5632-4b1e-9460-c1ad99fa0d9a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('0f38b179-3125-410f-aaa7-7f2907a70b21', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('245afc61-0d73-48fa-892e-f517ca5e779d', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('6d8412ac-fae8-44f6-86ef-c70c2ba1b012', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('0bab854b-57a9-4f6d-b3ac-0947611a33a6', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('76078c2b-6d25-4f7a-8803-b1d1fce9c8da', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('eeb1662b-546d-4126-9a23-6ef84d71ac76', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('7bd14f21-94de-4925-89ea-7805c7723e71', 'effa0c5f-2ae5-4089-896e-23777602eedd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('2f478b75-db42-4a63-92ce-05e0b3b9397a', 'effa0c5f-2ae5-4089-896e-23777602eedd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('ece8d306-8967-4eab-afdc-4b096ac0786f', 'effa0c5f-2ae5-4089-896e-23777602eedd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('c2e7d08f-63f8-41cc-af8b-190170e9552d', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('3de53f89-9fad-4561-b416-be1b49634316', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('818fd805-c942-4c04-a5ea-d152071f766b', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('4bad238a-618d-4482-8cdb-7041686d6cf7', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('79357476-2485-4bd2-8e4c-dad3870a0c1b', '145ff2ef-a595-43ee-acd2-bbafb3065733', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('b0fb0c90-2cb6-46f7-91b0-140c0686f59b', '145ff2ef-a595-43ee-acd2-bbafb3065733', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('ef59d30d-2819-416e-899f-8701bc491c72', '145ff2ef-a595-43ee-acd2-bbafb3065733', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('9451efe1-163a-46b3-8e21-c7e7318404f5', '145ff2ef-a595-43ee-acd2-bbafb3065733', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('bade5271-a6ac-4c01-9bce-8055f589e3aa', '145ff2ef-a595-43ee-acd2-bbafb3065733', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('c494d8d0-a2b9-43f8-8e50-0a1b6f0d74a0', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('1ccb92d1-0327-449d-9a92-12e8ceb2e77c', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('7f2a07f4-3f49-4b77-9b8f-3769f65e2707', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('3dbd9e1e-b2f2-47e5-a3df-188dba993f99', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('b3920341-4d86-4d0f-9285-988185f33222', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('7b08c352-d9a9-40e0-8a29-edd7fb741f46', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('d08d0ecc-95d9-4549-baba-9b3009e37aa2', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('05fe08fc-1881-4b2c-8c2d-bb26dcf40033', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('66f4a78b-0029-4d66-85ba-9852b768bdf8', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('781821e8-097d-4b83-aa30-49311a211fd9', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('52f49f1d-c074-497a-81c3-c4d55f5da0b8', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('6939034e-27c3-44cb-ab84-8f9475a20d97', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('a5263c0c-2bcd-418b-9e93-32115e0044a2', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('04161128-1186-4ac5-8bb0-ccdae1f4b9ce', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('5e4fa13c-100a-4b58-ba3e-7513efae4d25', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('a041ceb0-ecd7-4dfc-8521-909365e4b1a9', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('b9826f15-07f2-4764-ae5e-168df06eb1f3', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('ec206307-459e-49ef-ae79-39d3037b1e12', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('456a5bd4-1aac-4812-be0e-d1a6bdacda7b', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('79c43061-5beb-4bcf-945c-e6ff026da7a3', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('2bdfcaa9-dbd6-45b1-ba38-438f92c658d0', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('73d305e8-fbc8-4410-acb2-65bbe07b917a', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('13befbf5-6c15-4535-95c4-2d556df3a44e', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('141b8a90-5971-4c88-b361-6815c8ff18e4', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('36fdc387-e95a-486e-a7fe-feff6604e1b5', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('839c5a11-91be-4943-bce5-37fe09eee9c3', 'ae8d4268-ae43-4f65-932c-cb40bbde3871', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('31c7ac82-185b-45ea-a100-34a7de50e712', 'ffd894b3-d287-4767-8e1c-4e020c1c66c0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('8007c4c4-a542-417b-8ca3-8ffe75721fff', '828304fc-9c2a-4b28-9a41-f6ada73df381', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('73e5f427-5570-4ef1-9798-6e9ab97fd55a', '828304fc-9c2a-4b28-9a41-f6ada73df381', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('41196332-2d88-4867-949d-a0359221fe31', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('1bf80908-6213-4f8a-968a-29b9414fb41f', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('13b86fb8-b040-4f60-9089-ab9449e3d52a', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('8b77d995-51c1-44f5-bf45-e15fb08f574f', 'a23434f1-32ab-4698-9c0c-57932f611081', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('7be8a940-1057-4992-905c-45c4f54956d9', 'a23434f1-32ab-4698-9c0c-57932f611081', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('a2d878c2-c242-4f89-814b-afdd4e01c34f', 'a23434f1-32ab-4698-9c0c-57932f611081', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('66968866-f342-4546-948f-45848c9130d3', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('b83309b3-0bb0-4aa8-a04f-ec95a5090e3a', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('8030e01c-819c-4e5c-a443-30938a715b4e', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('a7120b3d-fdf0-49e0-8231-adb17bc4c5ec', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('f5812606-4fdf-4123-bc86-dd6a2b35f787', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('519f4e3e-0cdd-4cab-8ce3-4b5ed05b60c8', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('f0411fdc-6113-46e7-a6f1-4900a53a2725', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('f4131adb-15e9-4f04-b3f3-d373bd866d48', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('01440cfe-8aae-47ff-a335-6840c4167b01', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('b67d78f1-a977-4f85-b5ae-13f924e17b65', '559051a0-b358-409e-89c6-310b7870063f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('5cddbf6b-52cb-4b7f-935c-c6e2db1223e3', '559051a0-b358-409e-89c6-310b7870063f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('139276a8-e53f-45f3-86e1-7ee917cca699', '559051a0-b358-409e-89c6-310b7870063f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('2ea938f4-54d4-49c6-bc1b-ee83f4e67f21', '559051a0-b358-409e-89c6-310b7870063f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('2701ed5e-2245-4dfa-b649-17e3618d4830', '559051a0-b358-409e-89c6-310b7870063f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('d409a918-3cf5-4441-97fd-3ef853e02555', '9c4755fd-8ce6-431c-9c04-446d78c86639', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('2ad8f4e5-dac0-44de-b5b6-a25923bf4099', '9c4755fd-8ce6-431c-9c04-446d78c86639', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('fc9afb97-fb08-479c-87a9-a8abf328cf9a', '9c4755fd-8ce6-431c-9c04-446d78c86639', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('a501b698-f850-4281-8612-5fa237df54cb', '9c4755fd-8ce6-431c-9c04-446d78c86639', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('e179d64f-2806-4237-a217-eb0dc8555f78', '9c4755fd-8ce6-431c-9c04-446d78c86639', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('23c7212f-95cc-4a76-887d-69e091cdd2d3', '9c4755fd-8ce6-431c-9c04-446d78c86639', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('4fec3871-3611-4505-bb19-18c300dca86f', '6bb86e4a-c935-463b-88b0-115c37523796', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('c1c9563a-d0e8-4a68-b4d6-1c6dd2935843', '6bb86e4a-c935-463b-88b0-115c37523796', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('75a0a167-74fa-4e2d-ac7e-0c6079e4c6fa', '6bb86e4a-c935-463b-88b0-115c37523796', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('3901b534-22a5-43e4-88cf-aa3d7b472b90', '6bb86e4a-c935-463b-88b0-115c37523796', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('2f0b9e62-f827-4b91-87b3-3a0b5331e82a', '6bb86e4a-c935-463b-88b0-115c37523796', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('cffbaa63-0e3f-4f9b-a218-4e58245b9cc6', '6bb86e4a-c935-463b-88b0-115c37523796', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('4ff61845-f150-4726-a39e-7974300e5f50', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('79d64705-57ec-4352-a7f8-2df0d6905536', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('e03da77d-2164-4389-9246-b770d6cf119f', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('ed0d40c8-54a4-49c4-b09f-3c3230be0383', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('e9b23eac-2372-4da9-b4ba-48a7cd25fb2c', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('1bdabb10-e8e3-4ffd-9161-282219d360c5', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('8d416a6f-02f0-42e3-8b7c-f0c44baa68a6', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('8ccd73fe-2020-4391-940d-be9b7ec46d6b', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('dbf799aa-060a-4516-a538-76f4698a0457', '991f12b3-80a6-44a7-9b16-df7890a43c88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('826b95db-dd1a-4e31-b695-befbbec6d8c6', '7d36e60b-0a9c-4640-ab97-d45d1652593c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('b82aef69-8eb3-4f9d-8122-ec0019a2fd9b', '523c7569-c05c-4b44-b247-50134c90a57f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('e36ab2e3-d3a1-446f-9cd0-f3becf42807a', '92743788-e0b2-49b8-94ad-5ab1b0c2297d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('2150c4bb-9e55-4ae8-9836-6c8f5c48bd8d', '92743788-e0b2-49b8-94ad-5ab1b0c2297d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('17c451c1-6da8-4b4b-be0f-44d5ad88e3f3', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('95f43afd-b7e6-436d-9c72-f546aa91555d', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('f1e2f876-a425-47a7-ba74-519616f98e3e', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('a8c35094-64e1-4574-91a0-5784dd761ea1', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('87be80a1-e5f7-4490-a44d-1b228f62d08a', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('aab565a2-433c-417e-9f8a-fd18772b6c94', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('81b2338a-f2cb-4fa9-a4f0-f671cdd80fee', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('bdcf07c8-584e-420e-bd4b-ac262429e44e', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('6b4038e8-7333-4666-867e-1b47cb951e76', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('7b905e2a-67e9-465f-870c-1d3fde65a785', '7d483edb-09d1-48dd-a574-ff189f606cdf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 4, 0.0, 0.90, 0),
-('bebc8e33-8191-4dd3-b090-84a8a23d3431', '7d483edb-09d1-48dd-a574-ff189f606cdf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('43667185-ae2f-441e-8370-9758102a7b18', '7d483edb-09d1-48dd-a574-ff189f606cdf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('c575e33d-2215-4a2e-b940-8793af2cb730', '7d483edb-09d1-48dd-a574-ff189f606cdf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('6d9d3d7a-ac24-46bb-a42e-47512649ded6', '7d483edb-09d1-48dd-a574-ff189f606cdf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('17c839e8-6f8e-42c8-8b87-4673627e00b5', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('c129a6b0-dd53-4523-a7fa-80670a12dfeb', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('057c6e3d-f2fd-48f6-ab98-ca3dcaee7f64', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('e7d6c3df-9b18-460a-b2bd-bd80fe3dc80e', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('fcdbff84-adf8-49c6-bb28-c89bf52c5eb8', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('409d3673-aaff-4b85-8321-8d377937b7ab', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('e88856c3-4651-4857-9e27-b6239029a4c6', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('3ea4d1a3-f3df-45b3-9b02-72dee0330289', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('33cfac65-d718-4c1a-a2c0-034c7f398ef0', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('7fd96b41-62e6-4c84-b2e1-8c41db9b8e04', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('86873cab-f764-4191-8b4f-012b91a13b07', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('b9326582-cccb-4ea0-b055-0a48f1bec099', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('a3e6a659-d981-4819-a289-be5e43e6b465', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('6043a101-c2da-48ab-b243-6a545f3b9752', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('6b4f50a9-a4cd-4905-adc4-32b5c8eee386', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('5923209a-6757-4c97-b632-1d319b8c8625', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('bc31b91a-ada0-4a90-805e-91980e7ba49c', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('95cc1ec1-bae3-4fec-94cd-f6490751aa62', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('4743525e-26d6-46ca-b203-6123af9828a9', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('e504fc45-34ee-4a9a-8e5a-3ee3f4deb06c', '0a5e5836-0375-4012-b563-b9b6c504a105', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('4ac798ee-f1c1-4321-a707-8b332ad95e09', 'faef4c6e-ba43-44b2-aee5-7018b19026af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('f4ecfacd-1356-4efb-b4d4-b516dbd0cba2', 'b8aa7571-f953-4774-9e40-b0322658c8a4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('ba5d43e9-b328-4501-aca1-9c860ed88fa2', 'b8aa7571-f953-4774-9e40-b0322658c8a4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('52abad56-c0c1-4768-b4c4-af2fac1fbe62', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('3ab9e7e2-387f-451e-86e8-b47a0e16048b', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('f91de297-5252-428a-9fe3-91acfc143b01', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('d89d853f-d726-4af1-bdd6-aef8ab68de69', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('75fbebfa-ef6c-4809-bcd1-2f681dfaf187', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('061f7b4f-c30c-480b-8522-655579973049', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('5136fe3a-e4dd-47e7-b553-91907caa8f59', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('4cd2d094-07fd-4de2-8061-c1f926783467', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('5cfc6411-915f-4d57-8152-7fd53042af0d', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('86314ee3-92f5-4ac0-96c9-3af4c26a1197', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 4, 0.0, 0.90, 0),
-('58687ce9-ce15-4b61-a426-8bce2ee3b8c9', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('56451af3-88c8-4849-b586-645546e77293', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('ced07c1b-b762-455d-8d19-93f96a9bde8d', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('36dd6faa-44c6-4c14-8207-813bb1a412eb', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('005b1b6c-2b75-4524-bd19-320a2c58c7b1', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('2df3e7e7-9fe2-47e8-8939-a5e9e0dadd3e', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('d1ee7928-a508-4ed0-9454-f06992d5bf39', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('338a5db9-9c65-45af-88bb-14bb4c361111', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('d13507bc-0e2d-4202-bc8a-4fb580741c3e', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('347b2578-e3e1-4a87-b4cf-ab021ba73e95', '3c6b891a-1966-470d-b462-90508b93572b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('2be078d3-8cab-4461-b977-cc6c03d96367', '3c6b891a-1966-470d-b462-90508b93572b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('7e69c8c9-278a-431a-952d-fad926b487d6', '3c6b891a-1966-470d-b462-90508b93572b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('acc2aa88-6c64-4ca8-9db0-5efcae22b77d', '3c6b891a-1966-470d-b462-90508b93572b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('f6ceb898-3cf3-4c48-b242-7c32d7d71b46', '3c6b891a-1966-470d-b462-90508b93572b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('146bc0c4-14fa-4551-a290-bde9f95c12c3', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('9e435982-1064-43b0-aea9-6cf57a3ac25b', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('959067c9-4d98-49a9-9394-5bccade74c44', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('520b426d-898d-413c-b2ae-59cf84a2dd3b', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('a07e6107-cf03-48da-bedc-e92593a6d730', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('57a1d07e-9ef5-47d2-a46e-cfdef5628bb6', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('830f33f3-3828-4f2f-bf9a-0163cee2ee13', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('6283169d-0769-4d9e-8ba0-48479464dbf3', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('f05e7694-4a49-43a9-ba45-d4e3cb8776d5', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('ea978f10-e398-4161-adca-8de124bd03ce', 'b7c9e1a9-fb10-4d10-8bbd-cc1e3f489159', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('e851f766-61dd-4f10-8565-a77f39ff19fa', '0979286a-f089-4b5c-b824-30a50050b9ff', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('da63977e-795e-446a-958b-358bb20cb428', '12290a33-60d5-4316-8893-eb1c3c6b1840', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('3feb3711-98f7-40a4-babf-2025869d9208', '12290a33-60d5-4316-8893-eb1c3c6b1840', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('ef9b80a6-7772-4a15-b0df-fe7a319605c6', '53fd2b34-890c-434f-8215-0559448ed8d6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('5fe8d527-1d23-49f7-b043-8fe958a2290e', '53fd2b34-890c-434f-8215-0559448ed8d6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('d894c865-6702-4f55-8f84-1ba420f0889e', '53fd2b34-890c-434f-8215-0559448ed8d6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('969560a1-5700-4c34-bfbd-b065ea7795f1', '53fd2b34-890c-434f-8215-0559448ed8d6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('a85f89ac-7f41-4372-b983-a49dfd6b4153', '9d0e2176-f203-4728-b834-ef343fd93372', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('0fc6361f-7241-450a-9b49-5f58a8e9317e', '9d0e2176-f203-4728-b834-ef343fd93372', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('963b3e27-7741-423d-a128-626cd8aaf240', '9d0e2176-f203-4728-b834-ef343fd93372', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('ad1539e3-12a6-4a74-9220-3d316ae429f8', '9d0e2176-f203-4728-b834-ef343fd93372', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('a6258eb7-fa6e-45f5-9a3e-4ea401869e39', '9d0e2176-f203-4728-b834-ef343fd93372', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('2ceffa21-eb19-45bf-9c08-c949ef4acc20', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('fb1c309d-cee3-4407-87dc-8a97270d471d', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('8cf9a4f5-3963-49ab-982a-afaa8346b9c4', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('28b89142-8392-48b2-85ae-883373491fe4', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('fb99087e-912d-43db-a3a7-03a361ecf446', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('bf7f62a2-4356-4eec-b177-205cb57ed7b4', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('173a8745-a141-4f44-bb8b-81a3ab7f3fd3', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('06e86bb4-c37c-44e3-a432-726e5c34ae5f', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('75bfb1b1-c74f-4ee5-af68-b6c3a67735c0', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('24abfa20-dbc5-402e-88e1-815db0bdd6e4', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('577ec06a-c782-4ba2-893b-cfdd7f7115b5', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('7efacace-84ee-4d29-835d-4adad826b8c6', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('efa24e80-be1b-4f1d-b3be-1319f2132cb2', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('a9bca9cb-cefd-4c43-904e-501b5e632b09', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('aeaa2cb9-aab9-447b-9971-6da2dc9d837e', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('45fc88e1-b983-4ec5-aac8-640b416e428a', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('2c661a40-74be-4bd3-9c4e-a906ab379877', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('5c7ae9b9-ec28-479c-a3f5-4cf50183919a', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('12462ae5-5d94-4f06-b45b-d7c8674822f0', '22f02dbe-bea8-4a08-8fcc-a4136c9b8b8c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('bf3db868-c201-4910-a086-70f185dd953e', 'be7b4449-345c-435d-b8ad-4f247c5b5f75', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('9cde269f-aea8-4136-81ab-0fa1627f42a6', '89799d48-e60a-4383-90cf-628fd50d539f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('2fb34761-4282-4090-b2ff-913f4d023060', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('91a60ed5-9a57-414d-b773-b6d2cacace3d', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('db31a391-352b-4406-8116-3fe8fe235238', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('88c4f65d-f43b-45af-91a7-6f0b32957330', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('07816ce9-6df2-41d0-bc21-79789b298155', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('c28cd616-6ff4-4b76-82d2-ac20306c9522', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('519e8e1e-6739-420d-8b23-a999122cf561', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('6670898e-967d-442b-b666-3af1b1e54447', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('bb4d3cd5-48b1-4d9c-a56f-9175153ea2d4', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('822cfa6e-a672-4e5b-b1cb-109d915debbc', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('2c17d506-624f-4108-b5d6-fad1a7d59a5f', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('8b61ff02-91a3-43a7-a246-ca5348600058', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('0bd4944a-1175-416c-a029-597eb8f0e963', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('96b250b4-6fbe-4140-af52-1226137df824', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('4abab3e7-bc65-4d6b-80f9-7f4841eb6a9c', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('177810fb-ceb8-4676-b531-206479164baa', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('5b0f0e59-5bd8-4577-83fa-49df27cf9863', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('27437f61-04c7-4561-b155-982d7351f98b', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('fb83eab7-9479-4403-8da0-ed5fbbd3f70c', 'fd0955be-0ac7-49ac-9f84-20894446516d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('a6f21a25-cab2-4603-83c4-a0a23e7cbd2a', 'fd0955be-0ac7-49ac-9f84-20894446516d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('1e392df0-333b-43ef-9bc9-b503984cf118', 'fd0955be-0ac7-49ac-9f84-20894446516d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('1e380d20-7fd4-4a4c-83ba-9f1c0e0af166', 'fd0955be-0ac7-49ac-9f84-20894446516d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('ac785fac-312d-4076-baf9-a26c476b1b72', 'fd0955be-0ac7-49ac-9f84-20894446516d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('faa5301b-6782-4d2e-a3ab-618a67f210ad', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('895abb54-4e04-43fc-91d0-6ca57d9a14f8', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('0786aee8-1241-4bf9-ab1d-945659f0abe9', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('32cf4cde-d0df-48f5-a32b-6b94666e2c8c', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('b3a7c72e-df01-41e5-923f-f415863e3d0a', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('574b3aef-784d-470c-9d70-72470096ca29', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('2b74c91d-a561-4861-85b6-57c1bfbb5431', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('e2f8d9e5-b316-410e-a1fa-311cbb94472a', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('88cb40a6-4175-4e5c-96be-711f8a72e149', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('36b24a29-404c-4e7d-aab8-b8ad1b287dce', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('6bc83ff7-c351-48c4-a4ab-6cfa77186dd0', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('b65739b0-17db-44b8-9231-c56208af086f', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('aa5ff5c8-27c7-4e65-b2c3-5409493290e9', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('ec69696d-a0df-4ba3-b523-b58331904b35', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('0d6fcc2c-5c79-4f42-9be0-f86e1b51e912', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('12864398-11f6-43dd-ab06-b0920ee11b77', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('eec6e6bf-93a8-43e2-8e31-87eae9120174', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('7459d9d7-0981-446d-b217-79c7f2c4209e', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('8481b4cc-0789-4142-ac71-0bbe8c505788', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('ee703293-1735-4d9e-80e6-a3d893dbf390', '682789e5-979d-4981-bf35-e028303ba620', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('2c827378-0a35-4428-a02f-7f9905142704', 'eb24961a-483f-4d80-ae9f-672d84806693', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('f6ad837c-7de9-4f45-880e-4b67711069d6', 'b00233b9-745a-46a8-84a6-2897d39572d6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('2f20cb1a-c96b-4137-a471-4af418f8a6d7', '83e96119-1ef4-4d52-b269-1f91f9b947fb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('3e71de42-c6c4-4a25-b219-310037422de5', '2c277555-6082-4401-8e8a-c3cb55d6c802', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('f8623f21-44be-4e11-b8f9-49da7ecc3ff2', '2c277555-6082-4401-8e8a-c3cb55d6c802', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('2fc84d3d-fef6-4d0f-9fc4-9bd6f44e5376', '2c277555-6082-4401-8e8a-c3cb55d6c802', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('1f5f9d47-aed4-476a-a754-f4d40f40d1b8', '885838f2-364e-44bf-be0f-4dfc0361a12b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('4e418092-f95d-4477-8c32-8966ea05b4d7', '885838f2-364e-44bf-be0f-4dfc0361a12b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('cb4929af-749f-44b7-8e54-ebe00baa7270', '885838f2-364e-44bf-be0f-4dfc0361a12b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('b46a9bca-744f-4d7d-a825-3337eda42f9f', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('63cac5c6-8f5a-41b1-8de0-c73440778d8d', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('2c4df84c-b90b-4a0f-8263-d8c392c2a308', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('04f0efb6-bc49-4c16-a0cd-6bfd8a1e0a43', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('a7bdd771-1543-451b-b858-ddc90d1195c5', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('402027be-f71a-4d38-8a1f-e4b4f23062a6', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('62111673-4064-477c-af5a-e6afc9afa120', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('e1e5d013-89e4-4edd-98d3-480b5e07a166', '4382628a-38fb-4acc-833c-8528bea5bea3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('ece9c691-f6bb-41d7-a0f5-78574bb3a713', '4382628a-38fb-4acc-833c-8528bea5bea3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('426ac4ca-f294-4ec7-bad2-14322cb29023', '4382628a-38fb-4acc-833c-8528bea5bea3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('ca371413-ccc5-4826-806a-9afbfa63ebdb', '4382628a-38fb-4acc-833c-8528bea5bea3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('cf5c4cad-e29e-499d-bef4-b26267c21201', '4382628a-38fb-4acc-833c-8528bea5bea3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('4617b94d-937b-4ea9-93ad-ed7348069e9b', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('8864132e-675c-4c98-97f6-7501b3929127', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('b78ee95a-dabe-4e50-9324-6ecac2836b66', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('4e63f4c4-c3c8-4e94-88c0-7870ae189945', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('1dfbe414-0c2b-4e72-9e91-9299131fea7a', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('85dde5eb-7d71-4525-a40a-6c34f46c3915', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('a892c117-4c92-454f-a0af-e64f2d81ef71', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('8164e264-9cda-41ed-8643-ceebc91df108', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('9f29361b-57e0-4fd0-b595-28fcaf1e0427', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('2a9368fa-73c4-40ec-8965-f39cd76653dc', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('e91ab1ba-0dee-4cd0-8b52-1b21354e028d', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('4392ef8b-76a9-4979-85d4-d3fbb640af16', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('d1932349-5322-48c7-af04-a765f965a279', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('52e32451-200b-4a94-a742-f27cbc59db2f', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('30d160c2-9b85-467e-aaa6-d6a1e738f289', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('79985af1-81bc-4451-bfb7-8723d6198cc1', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('0f5db6db-b127-41bd-a1bf-87eb2033b26a', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('a0015b00-4edf-41ba-8828-feab6eae49ae', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('41536bca-8c08-43d2-b003-1ac6a8d8ad01', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('1f72331c-8b71-41f0-b0d5-d1bee7bd4302', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('ecbf61b6-72b0-4d5b-8f2e-c6e0ae4c061b', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('88c33b7d-0cc3-42d9-8d3e-92e52255c03f', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('36f1e824-2e5f-4539-a9f1-365c33058d47', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('bdb13345-0625-4354-913b-284773c31406', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('8f61d16e-3e18-4cdb-8ae0-a1e99a7e611a', 'e1cc6456-109e-4935-acbb-7004c25aa746', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('548d91cd-4b8f-4ac9-baca-4988dcbbfaeb', '0b913a6f-197d-47cd-8fa5-2b956e39e8d6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('b2bbce51-0c60-4394-9248-d6d011aa5148', 'd85836ef-eb51-4f27-ac13-ab59e2b7d881', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('21ba9588-deeb-47a0-9e17-1546adee4b34', '0812523b-dc73-467c-b864-58797c3dca46', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('ac60382a-ae9a-40f0-bf26-1bd71f83d5e7', '0812523b-dc73-467c-b864-58797c3dca46', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('464ee33f-1ad9-4b1f-98e4-93f6c6b44a5c', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('037bbf83-e1d9-4458-8e37-03a4a58b670d', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('6d344ed0-b627-4be9-a7da-6156dd7a7263', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('db34436d-235a-470c-995d-768dfe9fc1d3', '026c399e-554c-44a8-b78c-a76999e8f781', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('482e8b3a-3c81-4afd-b790-e902d57ebaca', '026c399e-554c-44a8-b78c-a76999e8f781', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('06bcdada-0e3b-4c5f-bd68-af50b1bb5cef', '026c399e-554c-44a8-b78c-a76999e8f781', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('205a07e1-91da-4cb5-a0cb-b87219b04897', '996b03fa-0f5f-488b-87ab-e7497edb5490', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('5ddd5f9d-0151-47a8-a014-ef68b0df6ced', '996b03fa-0f5f-488b-87ab-e7497edb5490', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('bb6606fa-987c-4da2-92ad-05280fcb7f44', '996b03fa-0f5f-488b-87ab-e7497edb5490', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('e5540be9-7615-4c6e-ae93-c76ca7f3a5d7', '996b03fa-0f5f-488b-87ab-e7497edb5490', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('bd4346f5-4fa1-4973-9ec6-88f34900c19a', '996b03fa-0f5f-488b-87ab-e7497edb5490', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('9eedba85-5420-4318-8c3a-724c15c1f239', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('ea35a3a6-70f1-40f8-a615-710048e6b127', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('a43e26fc-8f34-4d50-8f79-728076a4547e', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('8f324bb8-9de4-4dbc-9c00-ba717006c558', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('97eb30c4-22ab-4091-bb2c-5fd5b3dce395', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('f34eaf64-c4c8-4a5d-80f6-628106646428', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('0fd5a048-0a01-435f-8635-f6676a448f09', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('752c0db0-df17-439c-a7d6-1d8c186339a8', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('6a7b60b2-ae22-47f6-8f8a-5fbaecd77adf', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('40aa626b-9d7d-4d1d-bff6-32e95350a4f2', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('6698e0a4-99be-448e-b292-fa62b0257744', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('8678971a-a6ff-4838-b0d7-a32ed1c1136e', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('ebaf9a32-09db-43dc-9ca6-054e7e50c8a3', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('fc31bfc9-0403-4061-8c06-4d91915b4fdb', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('9e0dca15-ace8-43f2-bb98-f0dc1f91dadd', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('83bf0c00-fb9d-49d7-a7a9-313ea38ab017', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('959a84ec-a87d-4478-b17a-efd421025daf', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('a9dd0215-3ad2-44c1-932d-c3d0d66995e8', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('6c7b840b-0273-446d-bc2e-534e3e102af0', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('e074a808-36d5-40dd-b05b-ca475a0de29d', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('b1dcb343-78d2-47fc-a97b-ed057c1870d9', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('3c0a3c16-75df-447b-b52d-508aa6f1e1d5', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('f5e0166c-d82a-4832-8b94-0088b7487b48', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('b7b8448b-63e1-4e9f-b6cb-5bd969b5135e', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('2107ed9d-f31e-465f-9d59-79071296fbc0', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('d948d643-c0b7-43c8-a898-365390db01d7', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('1dda21ec-3ac8-47c1-a62c-a746280c751f', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('5edc9afc-3623-4823-bb9e-0e68a4ec52d6', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('422ffe51-ea64-4f34-b40d-e77c52cf4539', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('633d321f-bd8c-44f7-bac5-25a0d497c65c', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('8d1f4052-224b-4a17-9356-0c8d0bc9d97e', '442fce88-33a0-4995-8617-bea9d6ef1df6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('08d683ed-787d-43a5-aa87-1a4305e6a311', '324123fc-4f61-4b8a-b4e7-a04079c4d5dd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('c67178d9-0db0-45bb-b96e-10edfe0f4c15', '1955bbf1-97fc-43e9-8e81-8cbe1c4707c0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('c4c0bce9-e537-4301-878e-dd00bcd7dfc7', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('3fc9c2d2-6201-4ba0-b1c7-e04a374a5481', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('603e5038-8362-40c5-9e9e-86c8c1647845', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('87b9d96d-dd91-4719-bfd7-65b2466d45e7', '31e83569-cc40-4f1b-9428-aeb5c64790af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('24a222dc-5faf-45c7-8fb5-3728d77794d0', '31e83569-cc40-4f1b-9428-aeb5c64790af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('b60a44d8-81e0-471b-939f-3ea3cc544cc5', '31e83569-cc40-4f1b-9428-aeb5c64790af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 1, 6, 5.5, 0.70, 0),
-('34fd2304-739b-4b68-9f0d-d122728e1346', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('776f2bc2-7304-479e-b771-50455ae28710', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('57c2d7e6-79e6-44c1-abc0-cb9f24046f2e', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('b15470fd-2e10-498c-a145-f7e8262148a8', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('a8c22a16-92a1-450f-a63f-174a7e2128d2', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('01445458-0e5d-43c8-84df-7a2c22ba2dbe', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('181eaceb-a4e3-4240-baa8-9e92ab87551c', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('206e09bd-ddc6-4566-860c-b550ec56f68b', 'f6c93b58-8df8-41be-bc72-61aa66060737', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('6116487e-1b49-415d-b6bf-2c412652a84f', 'f6c93b58-8df8-41be-bc72-61aa66060737', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('94233832-9878-4ea4-85c4-0e158c7e0709', 'f6c93b58-8df8-41be-bc72-61aa66060737', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 4, 6.5, 0.90, 0),
-('41000f14-3deb-468d-9d8d-0660d0fefce0', 'f6c93b58-8df8-41be-bc72-61aa66060737', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('87e125f9-7d65-49fd-bcc4-604d89e8abeb', 'f6c93b58-8df8-41be-bc72-61aa66060737', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('c15af154-26fe-4287-ab7d-cefacc633d02', '2832b647-32e5-40c3-84d9-18715d6c555a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('6fd9cd2c-ba2d-470c-9a46-a8cd20e1ebfa', '2832b647-32e5-40c3-84d9-18715d6c555a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('fc2e8fa2-1f2b-41c0-aad7-00f113c9387b', '2832b647-32e5-40c3-84d9-18715d6c555a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('b8c92dd7-9325-4126-9f2e-41f1f39d285b', '2832b647-32e5-40c3-84d9-18715d6c555a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('fc991805-ec01-4274-accb-09a6cf698e98', '2832b647-32e5-40c3-84d9-18715d6c555a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('2a89af9d-65a1-4c28-bba3-88b516c05f0a', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('b4f07dd4-5180-4cc4-8ef8-e507c1225da9', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('5105df7d-5103-44f6-aa16-14d676d8a473', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('d9a4d482-6651-462a-86bc-05e62fe98070', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('c8dfa828-e71a-4456-b215-2a39bae2dba0', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('4472107e-8f9f-4211-bb45-b2f04d01cce3', '8493fd0e-3b99-422a-977f-42f854346a34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('29eb11c7-ee3f-4d40-af1f-0dda960c4472', '8493fd0e-3b99-422a-977f-42f854346a34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('68b417fc-3914-446b-a0d7-7e85d212f6bf', '8493fd0e-3b99-422a-977f-42f854346a34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('8e09931e-d7cb-474e-82fc-00d73bdcafb1', '8493fd0e-3b99-422a-977f-42f854346a34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('6e2e4d3a-a1e2-4fc5-bc25-36f1928e6552', '8493fd0e-3b99-422a-977f-42f854346a34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('d57249f9-dda9-4c93-ae45-deef34653bce', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('d168ef54-7071-415f-8366-ac00ca268f1c', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('da0d1bc6-9af6-4b51-8507-995b97f64199', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('85c0fdcd-107c-40c5-a5f7-81211eacbe8d', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('bc5586c9-9cb1-45bc-b831-2f0b8f6af926', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('bb6a76d9-caec-4103-ab4f-c4d8d4c8e411', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('e2f16e3e-1c88-45c6-8cde-47ea6e76a081', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('f493975a-11a1-47df-a56c-ee5e43b9e826', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('98ca55f3-d47a-4483-a840-47fb2472cd56', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('c4b30b18-a23f-4eeb-8724-423c2c465e7c', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('1ae6e0c1-b910-434a-9add-c576492db5fb', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('30b3e8dc-5f94-423c-82a6-59adbe015c3e', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('7cb2cc35-f295-46f3-8c0b-5ae06e8c26fd', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('977b6b80-e812-41ff-9330-114040adbb80', '667b2c48-28d0-4b39-810e-b8c20f61603c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('2afc2e9c-0ded-4a85-8b65-427cc6e62b6b', 'd3979ea5-a0e8-4a7a-988d-184d4bdc9a88', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('8bbc3f5a-aca8-4bdb-a418-ba2215aad3e2', '889f28f2-0dfb-48d0-b248-f8f6de5e4e32', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('52ebbf0c-e7aa-4127-a397-c60820598667', '618d50e7-e978-4d79-9d27-a4415c0ae8d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('4f6fe217-435d-48bf-a896-9c333e89c31c', '618d50e7-e978-4d79-9d27-a4415c0ae8d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('1c56b4f8-4832-434f-9eff-e90e5286abd1', '8fc03a8f-d6df-404c-a713-53629e264cfe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('58fb1125-3dbb-4120-b073-b9579a1cf70b', '8fc03a8f-d6df-404c-a713-53629e264cfe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('4ba5b39c-9d12-4e14-aa60-27fecd7d860f', '8fc03a8f-d6df-404c-a713-53629e264cfe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('5f460ba5-b792-4020-89a2-5a90b49fdf00', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('d8628028-94cf-4427-98fd-4181b62497e3', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('63aed009-9e9c-4608-8195-fc49f71c3ec1', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('d23708dd-0426-40fa-b296-5903643227d4', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('a07b2a49-db18-4a5f-8ff3-288ab5f7ee46', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('bda67449-c1bb-402f-bcf3-e164fdf771e5', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('7c76db71-e75d-4da8-a8d0-1ab705df619e', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('5dbabc42-3cc5-44e8-80e9-1f2dd2fefea0', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('9f18304d-9eba-4bbf-8858-b9188e810dc6', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('ab29c0a1-a0cf-4511-8700-8591bb0d18c4', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('c233f434-c8cb-43f6-b84f-547efb8e4a93', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('aab4c23e-1be1-4527-aee7-1a01ba253791', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('8d7fb283-df79-4f57-b10e-a2cf554215d3', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('d53a3b38-8279-4bb6-8d91-1d483f1d5689', 'c1d6f185-545e-47b1-be98-8da0a2310744', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('dd457ca2-6bc3-44a5-8a6b-41ca3c7581d9', 'c1d6f185-545e-47b1-be98-8da0a2310744', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('1cc2b6c1-b2f2-412b-ab69-e9637dadb855', 'c1d6f185-545e-47b1-be98-8da0a2310744', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('ac42a656-d17b-4f22-9606-79088425d4fb', 'c1d6f185-545e-47b1-be98-8da0a2310744', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('ff35c39e-5661-49b1-8e5b-806fac37dec1', 'c1d6f185-545e-47b1-be98-8da0a2310744', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('12175370-902e-41ee-bb1b-bcbc07aacbe8', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('eeb5075d-7f05-4ec6-9eba-49b77aa0208e', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('1bc11513-bd55-4c69-8a50-084ea3b80088', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('90e7824f-b23c-492c-a33c-9916bf8ad45e', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('438ae114-fdab-4c95-b17e-ff6a6c8259fb', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('1a89affa-6ff0-439e-ac50-5283464ea750', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('5ccc61fa-9d2f-4f18-bd1b-4a9fea1864a7', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('328c546e-52be-4a04-82d2-a5ba0cb729e9', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('1fddb8be-38fa-42e9-8705-cfe319594825', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('95155211-6abf-416c-a457-edf5827d2594', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('39e9d7a0-f097-4a92-b5e3-0a38b33c5cb0', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('bcb5a683-0fa5-466f-9104-4f420a8f6d36', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('94d87d39-804c-4311-a9ac-1a2272248613', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('742bc965-d019-49d0-8cb5-df7c2275b999', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('7b99a660-7c18-4916-807c-8c5183a70692', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('6af63040-8b72-427f-9492-4f2571ef8def', 'c17b6c02-83c6-4987-8571-13cad7200389', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('c8e667b2-df8c-45de-b11e-23a5757c5a05', '2dbec270-69e5-4bd6-b6fe-881a02d43728', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('d2ffcaef-2244-43d9-81bc-db3219c8ae4d', '1368e9ff-ccba-418e-b8a6-783cd256cf4e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('9e1f8d1d-20af-4a8d-a235-7e4d5ac2a981', '35078aca-309d-4407-a41b-7a63b1f8cd20', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('86fbbf00-3066-4f3e-b6cf-d8bd3c0c267c', '35078aca-309d-4407-a41b-7a63b1f8cd20', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('303728b6-bb0c-4edd-a272-a8ac89ce04b4', '35078aca-309d-4407-a41b-7a63b1f8cd20', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('26d1c418-e83d-4833-8a6f-039111e2478f', '06f52b41-cf3e-4c76-96a1-b659ede40584', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('5848914e-113d-4c1b-b916-cb10ceab59cd', '06f52b41-cf3e-4c76-96a1-b659ede40584', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('49737cec-5704-4b6b-8d9b-e46c98d877b1', '06f52b41-cf3e-4c76-96a1-b659ede40584', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('e2f47c09-3340-4b0f-a0b0-011039b807e4', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('31bd66c3-3d9b-4f88-b1ff-cea3fdec7a96', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('c1596324-a3db-4329-84bf-802afb0b85c8', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('bd6e599b-2a89-479a-b53d-72cb33acae83', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('1a4b193a-2f5c-434d-a1f0-c2b413fbe5e1', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('6a3f865b-7506-463f-8cd4-8a16fbbb4ca8', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('e2d9ec12-58a1-4396-a289-ade4ef5aeb31', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('a032f215-ec9d-437a-a037-4436072b3114', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('0c27a893-3301-41e2-81aa-1e1bffdc21a0', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('bb64089a-750b-49c7-927b-d2d271f00a8c', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('1e2514fd-86ff-470e-8a03-2a16e1fad86c', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('2e3b1931-b2ef-461f-9bd1-c29be225669c', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('c866f1cc-56ef-458d-a05a-06502acf443f', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('80e05f8b-219a-4fe5-ad86-ebc5232c50db', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('1c20cef1-0801-4db1-a622-765c16fd82d9', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('e40b14e0-4479-4902-b85b-4b8970af6745', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('1fc654d7-d14f-438e-b3c1-b8c81b18c16c', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('774e6ab1-e37d-4366-8fc8-d565971afcfc', 'bd7df686-174a-4414-9054-b8329d458553', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('16e4c887-1cd2-4bb8-b1e9-73df8f4a9a31', 'bd7df686-174a-4414-9054-b8329d458553', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('a92cccc4-6267-44cc-89ad-998f02d7fce6', 'bd7df686-174a-4414-9054-b8329d458553', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('81f422ec-5f5d-43d0-88ec-998d94422cc1', 'bd7df686-174a-4414-9054-b8329d458553', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('2c34013c-84ec-4186-a02d-8198a59c9bac', 'bd7df686-174a-4414-9054-b8329d458553', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('e22afa4b-7846-4189-8a15-e2712921c7e9', 'bd7df686-174a-4414-9054-b8329d458553', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('1128698f-1e16-4701-a532-cffc9bd07190', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('f7c3de6c-8db7-4ba8-a8b6-cd67a53ac0d2', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('ebdfce0f-d2e8-42d3-91f8-83c6a7cb8efd', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('c701a417-fd67-4457-8369-ac02071f0a36', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('c4abce41-94be-49c2-80f9-818aa8f6d1d4', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('341e2506-a540-4b98-836f-04f84ad8179b', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('95a5a3dd-8129-488d-bed9-53bd4d37acf5', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('a3a5a0b3-d451-490a-93d0-d0e0a3597888', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('f8a361f5-2ddf-4892-9f41-a133102cb075', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('23feda21-77fe-4abb-b971-0792921f86a7', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('38294d8e-d932-4b59-a932-72f0e15ca634', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('1c74acea-db03-4860-b847-6c9e2a3e6ad2', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('341d82f4-38be-4aaf-a24b-7c133bbc9646', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('6b7013d6-c141-4db0-8048-3f7af9721a66', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('73dc0522-71ee-446b-bbfe-1e88752951d2', '2c669a19-a98f-4707-b697-11b6bffe4399', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('5f936546-d2f8-4741-b290-7fc93baec086', '88328d88-6f83-4a96-92ea-52351e672680', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('6c914ef8-332d-48a7-9733-7b6c3d8ad671', '85d8279c-d1eb-4836-b1b0-b5b130b2055c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('aad7d989-bd3d-4433-89f1-e5bfcbd558f9', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('b859cf3a-006d-4acd-a32d-f15f0206cc31', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('3b2571c6-b8fd-4112-9c50-d6ed9af17272', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('7cf2dbcc-d172-424b-a3ac-6c4324829b59', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('c7d43494-2d23-40d7-b8c6-e1f2d0c4c876', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('ae82b04c-3104-4a27-9023-d858227cf644', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 1, 6, 5.5, 0.70, 0),
-('3b8e4d8c-8a2c-4a34-9136-5b26b2dc0e9f', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('db263c0f-5617-4e9b-8b33-afea2d516f73', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('931a0476-5df5-4675-bece-693af843e1e6', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('3a9c8352-f3f4-46c7-a8df-8f1e38d21b67', '670fdcf2-f082-40a0-b502-ed7a548d6555', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('82d1be96-70e9-495f-b73a-510d7f0610b7', '670fdcf2-f082-40a0-b502-ed7a548d6555', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('15c6f713-9bfd-4966-b18a-59a09af1d101', '670fdcf2-f082-40a0-b502-ed7a548d6555', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('f506f3f6-74a1-4b49-bb0e-2dc0d4a1f7a9', '670fdcf2-f082-40a0-b502-ed7a548d6555', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('64dfde37-3344-4608-9ce8-e375456d1d33', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('bcdbd2f3-2d92-4b15-9f9b-a4f28d40044f', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('5692b4ee-7446-40fd-b315-09aab00ca5e6', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 4, 6.5, 0.90, 0),
-('d3076776-5e36-4879-ad8e-58b215e8fada', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('c7bf1eb5-48c9-4ceb-b3f3-424763a42d8d', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('232bf2ec-41c2-4f63-8e3c-85f7ca9c73c4', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('8515b9a5-c6d4-4f78-8860-65dad284bda0', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('12017442-6b55-4fe3-89aa-ec5cf91c7c51', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('78d54018-b254-4d76-b63a-cd6b746ab149', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 2, 4, 6.5, 0.90, 0),
-('3419f721-07bc-4256-bcef-d82a5aa33af4', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 2, 4, 6.5, 0.70, 0),
-('a1ce265e-c890-41cf-bb97-67efdc40c159', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('b9caaece-a737-4591-a4b8-0102b6b9fd72', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('b2425065-d389-42c9-b2f7-6336c023840d', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('adec190d-f251-44a5-a566-88a5d05a45ba', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('f6f88f2b-d875-4c44-9c05-e885cdae894a', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('0ea0b5dd-3018-4402-99db-40219fb72eba', '127a0865-7817-430f-9551-bc73c81ba903', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('7db6a8ca-6d47-4088-9864-fa83eec0bc04', '127a0865-7817-430f-9551-bc73c81ba903', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('2cee5edb-50f1-4928-9d60-3ca207eb509c', '127a0865-7817-430f-9551-bc73c81ba903', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('43b6f178-9441-42e6-b188-944407b94f8a', '127a0865-7817-430f-9551-bc73c81ba903', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('98178d70-f497-4f25-bcad-64e793b921e2', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('457f7d08-33a9-4b90-a28a-3280db295871', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('1d6fb156-beda-4e42-b732-f24e862350db', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('d53ec495-150e-4e2b-9ccf-6eab27d471c8', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('d8c49701-e8ba-46a7-a268-a4d15754eb72', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('631eb1fc-c8f2-4c1c-9bfa-2ebd45ece16e', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('c390e3f8-c3d2-45d5-b270-9e836d73da1b', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('9c9f9770-35ff-4ea1-98ec-e0b3958db61a', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('712011d8-a1d7-496e-a71c-f1c6c49d5a62', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('022b32a8-5806-45f6-9cf6-e312fe42bdad', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('9af27975-6a73-4e9e-992f-2407969da767', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('415d632d-ab81-403a-932f-5c48bccdbd4c', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('386746ef-fcbc-4b0d-a649-892bb357501f', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('89508b76-0f49-4bc1-9a82-f004690e84ce', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('48540b98-42c2-4b89-a4c7-6bc995f7547f', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('b26d2d3c-18dd-4305-b340-3dfae96ac079', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('a54b2806-cf3a-4543-8690-502f3fadc3f5', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('5ebad54f-46e8-4185-9764-d175555ea1b0', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('3f69e142-4603-4048-b841-14565c40a294', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('08e4caf0-065c-4af5-9650-925da60ca8ca', '44f52463-32ed-41ce-947d-19018be1fd04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('b2186821-f32c-4d94-8b9f-3df839bbf8b0', '506830a2-1519-4db5-a771-1cd3e17d5fb0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('d17e9557-1734-4998-adbe-6991e3020909', '412027b5-63de-4f73-af49-3a220fa5cda8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('98c47098-3df1-4102-890e-43bb25aedd25', '412027b5-63de-4f73-af49-3a220fa5cda8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('2572f910-be29-4136-b209-d6003830a550', 'e929f52a-3a36-4b23-b732-154226bd5790', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('41854435-451d-4e12-916d-871867e898db', 'e929f52a-3a36-4b23-b732-154226bd5790', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('07389d89-d15c-4613-addb-5eedbc7a85e7', 'e929f52a-3a36-4b23-b732-154226bd5790', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('a45aece9-0b7d-469d-aecb-6b4326cc6e55', 'e929f52a-3a36-4b23-b732-154226bd5790', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('7151b420-248f-49a4-bc69-2e1636fd0255', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('70aa2b03-22c0-41ff-b0bb-170916df2248', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('8c455fbe-a131-4d67-9605-c30d28b5a3b6', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('f5b3334a-5227-4770-9727-2a1f173d9023', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('3d48e731-eb8b-4c8d-b4c6-73bdf0ea8697', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('65d8d7cc-e6de-4db1-9bfe-db7e20e78da2', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('e6b87479-0e9e-4460-87f8-4547b1667067', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('cf5bfcb1-34bd-4189-88e0-77cc38849631', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('3c6203a6-dc2c-4a44-91ea-9eba52f49bf4', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('b186c43a-64df-4c76-93aa-5a195925a5fe', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('c3dd56f6-dfb7-4989-883c-72c9d27a4387', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('2c0c4b9c-cae6-4c80-a936-a6ec872408c4', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('1cbdc837-02fd-4741-ab35-0e4e800bd1d0', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('6245655e-1884-462b-87eb-6da6c703a537', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('28afd92e-7e7a-4e22-9d52-b941283ca7d7', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('5a5a054a-3c80-49cd-bfff-07d8cb585364', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('17fb3e95-36a2-4571-9824-7c444111d128', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('068921b9-d4c3-47aa-a896-db7079578cdf', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('2ca4bc85-23a1-4f85-9fd4-266232f08055', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('1d4a547e-c18b-4a0a-8b56-3d5d70e8910c', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('42378fa9-1df6-453b-bc4d-4a7eaad7b18e', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('c69a8466-bea3-40a2-b544-3fb1ea0c761c', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('87f7ef10-dfac-4c15-ba43-a0ad81b419cf', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('3e46a179-a32f-45cd-8287-309045be8b50', '38761627-d196-4f59-99a3-ba04053cbf53', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('ded2f349-4147-4c47-89f9-4be159060113', 'd4ebfc94-f22b-47de-9cbd-017298f0052b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('4b562bd5-5d62-4ad0-8142-09ab0e90caec', 'fc75741d-549e-4a5d-ac9e-f15925c39fe9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('1fcb165d-9a00-4d61-91e8-7f7d2b049658', '2387b68c-e9a6-43e3-8906-298d9609d5bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('cadeb7cd-a582-4e91-9aa1-022da2402a36', '2387b68c-e9a6-43e3-8906-298d9609d5bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('c83740d1-54aa-4f42-9a93-1d151c565ebb', '2387b68c-e9a6-43e3-8906-298d9609d5bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('e6944ea9-e5e5-4239-82f1-0fd5184c594d', '72166c85-9712-4ca4-a5c9-bd37ca825bff', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('905a31b6-2aa6-4b7f-9239-183c050b25e8', '72166c85-9712-4ca4-a5c9-bd37ca825bff', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('81a8d835-efc6-4bf1-bba7-94293db36145', '72166c85-9712-4ca4-a5c9-bd37ca825bff', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 1, 6, 5.5, 0.70, 0),
-('dae63fb3-1495-4114-9336-89bda1c5f92c', '735152a8-1510-4d92-ab83-6bcc2995b935', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('03d26349-56c8-4340-af1b-b230b652834b', '735152a8-1510-4d92-ab83-6bcc2995b935', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('3661bfd6-416e-4120-a496-7f370f5b8c28', '735152a8-1510-4d92-ab83-6bcc2995b935', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('cb313910-d2ae-4ceb-9257-7febf152ef74', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('6591d92d-1fba-45a3-9c43-4164740e6b3e', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('1d4b315d-9d87-448a-8286-5e712b719a5f', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('87aa96ed-1252-4c9f-b015-6a36d822ed5e', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('176d3578-c9e6-426a-ba2b-7f1e0e1da490', '55e72cfe-6459-4958-ac58-00305dceea1a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('aae33de3-f433-482e-8fe9-0b6bc3a81727', '55e72cfe-6459-4958-ac58-00305dceea1a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('12246ab0-0d98-4285-a740-69155afd977b', '55e72cfe-6459-4958-ac58-00305dceea1a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 4, 6.5, 0.90, 0),
-('c026490a-f5de-48a9-9297-064e37f72354', '55e72cfe-6459-4958-ac58-00305dceea1a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('94f04cad-f1bd-491b-aa02-dc4dc516246a', '55e72cfe-6459-4958-ac58-00305dceea1a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('6acd5e31-66d2-4550-957c-bcbc287972b7', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 4, 0.0, 0.90, 0),
-('a2dd8149-d59d-4c31-82df-3c482dd18a40', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('2fee6a51-e921-49eb-9921-921f6fea6567', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('cf1db476-7907-4d2a-ac57-03d2578d8465', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 2, 3, 6.5, 0.90, 0),
-('bfc817c5-baf0-4adf-8805-18404ac00d91', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 2, 3, 6.5, 0.70, 0),
-('1e5f01e0-8d19-4fa8-a0e2-6f705abaac27', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('af663035-f595-4883-94c5-800b7cd1639a', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('47ec814a-8dbf-41dc-b38a-6eea3cab3dee', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 4, 6.5, 0.90, 0),
-('6d7f4f8e-e6d8-4e33-81b7-21d7dbf00c2d', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.5, 0.70, 0),
-('f72b2695-3308-471e-9918-f4b3559ef8ac', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('bbc33adf-ab38-4b73-aea6-9149cd67cc64', '08774df9-658e-4fc4-8db3-8fba95ecd250', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('fccd5ae4-0334-406c-bca5-0f7d6b5b64a6', '08774df9-658e-4fc4-8db3-8fba95ecd250', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('0a4b3cef-1a26-42c9-a218-e0ce39fced1e', '08774df9-658e-4fc4-8db3-8fba95ecd250', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('fac65eea-d930-4dd0-afb1-27cfb30455c0', '08774df9-658e-4fc4-8db3-8fba95ecd250', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('ff549eda-dd1c-45fd-9202-4d7f0cda30d6', 'dcd4486a-a166-47ab-b83f-574daf7db436', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('e3da1021-4a2a-4fa1-b3e3-53b0817178db', 'dcd4486a-a166-47ab-b83f-574daf7db436', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('efc9ebbd-9915-446b-9dc0-448c97525f66', 'dcd4486a-a166-47ab-b83f-574daf7db436', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('f3690864-8dbe-4e6f-99a6-ca565d612bb3', 'dcd4486a-a166-47ab-b83f-574daf7db436', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('b4f83d45-8b2a-4745-ba15-bc700033b6a8', 'dcd4486a-a166-47ab-b83f-574daf7db436', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('1e7a12a8-de34-4372-9b75-8f8fe40df53a', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('ca3208c4-c3ae-493e-9ce5-b7a95cc33d5d', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('ca4da8a3-5569-44b2-a7c8-50d00f1f0bca', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('9094619f-e6ad-4d36-8034-15601c56ab69', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('2940e1cc-6fd1-45fc-947a-53d7bc9e2b88', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('f6475309-9838-410d-8338-dcb4aa9e0b02', 'a90083fe-1297-4ff3-9204-18807ea580ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('75120a4e-f15d-4fc4-a1cf-4477919a1979', 'a90083fe-1297-4ff3-9204-18807ea580ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('37f09aa6-3f08-416b-b216-9d53aa44ea58', 'a90083fe-1297-4ff3-9204-18807ea580ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('c28188fc-895a-4171-8d27-4ff36f13368a', 'a90083fe-1297-4ff3-9204-18807ea580ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('8ea03fed-d0a7-409c-a4c7-b6cbe48f7681', 'a90083fe-1297-4ff3-9204-18807ea580ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('5ed16418-3d54-473b-b724-3387919794c9', 'a90083fe-1297-4ff3-9204-18807ea580ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('be609fa7-43bc-4bf4-9ee0-c3d399088ac7', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('4e07c29c-4cb7-4ecf-91b2-0845c45df478', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('aa2aeeb5-ccee-424d-88b8-aeed0c48951a', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('966ce481-7423-4cc4-8bad-ed372439a879', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('4cd5b6a8-b544-448a-89f8-8f3498695b96', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('86f96725-5f53-433e-8d98-c461e0258b6c', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('de3b4bb7-eeb8-4ccd-9990-49d2d2023186', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('cfb9da26-384c-46ce-9e9a-cc97f7bf187d', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('0a0ebf7b-d452-43c4-84b0-49279b568489', '48a44e78-6156-459b-83f7-d4ab52abe807', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('3c2daff5-fa75-4b2a-a452-1655e7ba6a06', '0641f3b1-18d0-43aa-968d-bf0a594c39c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('ed8ad486-5a72-4067-802b-2cfe2c1f3857', '95f59d89-8566-446e-ba68-a09c74b12f9a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('de157c50-fb92-4573-b091-bc1767e2abc8', 'bb2ef025-88d8-43bb-9412-7b0cb7dc9e13', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('2b91687f-02f0-468a-9179-0b2bc4ef0197', 'bb2ef025-88d8-43bb-9412-7b0cb7dc9e13', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('9aa479fd-64cf-48ee-b57a-163d30ddcdbd', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('1d994c8c-3d15-4824-9561-65cb878bbc3e', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('f141a9ff-fd03-4bbc-9cbf-1ad92631c6c0', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('33330a96-17de-40c2-bb8d-0ce6a3aaa00d', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('ae0dafb3-1d30-4d1c-a4f7-bba4ca44eb99', '1914b37d-748c-44df-8991-e008f0134224', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('8f2cb8c1-1145-49d5-861c-75da4d99b94f', '1914b37d-748c-44df-8991-e008f0134224', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('0e52b120-dd4e-4b76-908e-fdd81347cd68', '1914b37d-748c-44df-8991-e008f0134224', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('63eb7d29-ef6e-4faf-b90b-8531951afe84', '1914b37d-748c-44df-8991-e008f0134224', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('d50af67c-b404-4a93-b6eb-aab7772dc0d5', '1914b37d-748c-44df-8991-e008f0134224', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('f2500dd1-5803-43c6-9783-be6f95eb682a', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('7826d75b-df33-4fee-8177-42957aa5c7ea', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('a90ccd85-3328-462a-b08f-f58bfbd9eedd', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('8a8ca38b-48d7-4b04-8422-2feda623d8fa', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('587f0fe8-c94c-4b9c-9783-53c4a436c0d5', 'e53f71f3-412e-46e1-a85d-511568c850a6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('bd0eaa4d-ebb4-4d81-a1dc-9f15ade503d5', 'e53f71f3-412e-46e1-a85d-511568c850a6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('427eb2cd-0bf4-481d-91ae-96b48afd2287', 'e53f71f3-412e-46e1-a85d-511568c850a6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('b4d052d4-afb3-4e90-99a1-bae18fda9b48', 'e53f71f3-412e-46e1-a85d-511568c850a6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('5f8a1c64-b085-4889-96fe-e752fbe83dcc', 'e53f71f3-412e-46e1-a85d-511568c850a6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('cf56f20f-9212-4d12-b1c4-8b4630e3050c', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('ea8a4908-a7ff-41a5-90ac-026141484beb', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('2b3f6829-fb54-48fa-90b1-624bef3eb852', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('7935e89b-1c42-40d9-8b5c-72ec34722dd7', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('8efb867b-5829-437f-94a5-7d007e778d8b', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('0f8cfbb6-0f65-4f8e-8791-7acb1a258086', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('d1475201-04b0-4e9b-bacf-7aa68b458daf', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('573054a0-fa65-469e-a630-a937eae56e9a', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('0b421c97-9b65-4237-b71f-bceb07ee7627', '28857f77-6769-40b2-a4df-577329ee11a0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('c7718ab1-ca8d-48d7-8eec-364d64caba43', '770b4b45-f8cf-4c7e-bdda-03b57cb35d54', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('01d89d35-e327-4b21-b4c3-c7d45fc0c8c6', '9cb5d36a-1dbc-4391-97b0-54e5f5e96380', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('bd81b5a4-18f1-48a5-8578-407d8537c474', '751b9624-dc4e-40fd-8577-6598164c7e07', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('94c01456-b294-4592-bbb9-a4494d78a5fa', '54473831-c73f-4e86-a096-18787e0934f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('1014c337-15de-4808-96a7-22862e49c4e0', '54473831-c73f-4e86-a096-18787e0934f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('5e6f77df-704c-4c91-8c93-8b281b892284', '54473831-c73f-4e86-a096-18787e0934f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('b056256d-3ee6-4029-852f-053a9ee2af9b', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('bd0e4817-3a31-490c-9e73-a6d6dc3e1987', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('ea76ae37-3f90-42a9-b2bc-0fe2c474f204', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('fc372844-7867-4238-b4fb-101d86933568', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('6a67b9da-1201-4f48-a7a1-d5883f03d31c', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('edc07835-1e48-4911-a567-52a5ba6df0d2', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('f1c627b2-115c-436a-9148-09397e2ff380', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('89cbbbd1-40fa-431e-b7ca-fe0e52478254', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('4affb357-26ac-4fb3-80ae-2f72d1950701', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('26f5ad92-315e-46a9-b672-66e878cb5e4a', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('a4a05d90-49c0-4f08-95c9-53b215f4ad4d', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('57bd40bc-16d1-4207-9388-387bd535a460', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('e5945ae3-97bb-470a-b188-913953af1c60', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('c0d66665-fa44-4cb8-816d-65ef150539ad', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('5e65b5b4-037f-43a1-bbb5-8b7a86f57c5c', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('ad2cb2be-2567-4ea1-82f2-9a555afa1d0d', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('0d08a4a7-d49c-46a5-9b68-370a90b88454', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('1a896900-c91b-465b-a072-a2a5f0c5e47a', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('cab9a394-ccfe-4dc2-91f5-6233d1b06e3b', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('6f00f1f5-bc47-47d9-bfae-3aa5645d9046', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('b2c5aff4-4006-4bed-9351-46a080ac2a42', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('159764f1-dbc2-4041-bb26-a6724bd1422e', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('b714b230-1cff-477a-bcf5-5e681be0a39d', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('d26c7a8c-37db-4a25-8fa9-52d7d893b91b', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('380baa5c-6ede-41a2-87f3-615ea946d5c6', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('a4ae5b31-745e-40ae-9039-3d79cf276380', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('4d7563c4-2436-4c3d-b0b9-d33f5f53fd61', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('c95b57ce-d65c-40bc-8eab-c6a6e68ae254', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('a97a555f-9add-4dfe-b37e-6d6f7dd3a938', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('1538ddb2-5bff-4507-a225-7589a0550865', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('b40a9aa7-0ecd-4f4d-ba81-15214b000016', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('3f20853d-ab02-4137-b020-e40770690258', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('0bbe977d-83b4-49ac-a0eb-08d349ad26ff', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('7ba72c25-0e27-41ca-b227-f6c1d8a70521', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('b154a743-8b10-4537-ae54-abf32106d86e', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('608e9728-ad29-4720-ba9c-cbfd9e015973', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('b9de0b60-230a-4e1a-879c-dd23ebd175f2', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('9ce0f2bb-aa00-4ac1-a909-cc11d6c2b36e', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('6704a6a1-4d56-4eae-a59f-ab3afdbf3de0', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('61b09cfd-b57f-4809-b427-8e2a9b7c5848', '2ef21d07-33d1-4233-8efb-a8f77d690013', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('4e27be0c-de82-44af-8106-fe93a0f7a981', '2c3de8d8-5d9b-4ebc-ab6f-709b19543881', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('275ed0c6-9223-4f84-bcc9-7ea5705ad573', '091bab78-c994-4f20-9e51-9abc3b9be607', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('c323fc94-93e6-4a17-8fd1-8db2c91df50c', '8a31e2a0-7ad1-4154-9ae8-02137d83ffbe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('b4e4a683-77ee-4212-92cd-70441e200fd3', '8a31e2a0-7ad1-4154-9ae8-02137d83ffbe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('142578c5-6e8c-49e4-ab16-6f4415e532f9', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('cfec2639-d4e8-4b7f-9f94-6aeff2bb3e89', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('5d185448-be37-4877-8f35-98176c5d14ef', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('a65aafad-69d5-48d6-a871-e5b22e50fd8f', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('2f526cc7-4765-42c9-9174-2775ae8f74ad', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('eec3fd59-a35a-4885-8613-b0e130cc4204', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('998d4e23-461d-4e31-a9f9-37859e2a6c59', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('793a393f-67af-4b01-a3c7-d76d67033d76', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('fb0245ef-086f-4107-b4b5-e1f4ec17b447', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('b50f2a2d-6b55-4e24-9713-a2050afa7579', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('25637e22-d289-4d13-8468-0adaff94eaed', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('732ac4d7-d5d2-446f-a3e1-6ac80306bfc9', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('1df130f1-b554-4a7c-a88f-0000542e79f5', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('c81d8520-4ba3-4c91-b121-dce9355cf5c5', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('0519e4e0-0194-4844-9568-468582187410', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('0e5e132a-1adf-4c97-9e9c-e8cd3a3a5b80', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('3ecc8b4b-0bc9-4aa4-8dc6-d012b55cb348', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('d6d28975-dfaf-423f-b2c2-da7d31562db7', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('7f75e834-77cd-496d-af87-0c8b3f106539', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('51cad1dd-411e-4594-8384-ea99e0de47c3', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('ab9ab460-218a-4335-b35e-4a44a45e232a', '6aaa8559-9c12-429a-a478-b76f223697f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('b58b4df3-0243-4263-b8c4-1d2928762713', '6aaa8559-9c12-429a-a478-b76f223697f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('8e0591ce-f02e-43da-8e7b-25f38bf6a9b7', '6aaa8559-9c12-429a-a478-b76f223697f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('b7eaddd7-b6da-45c0-a9a1-f0f7e2072a89', '6aaa8559-9c12-429a-a478-b76f223697f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('74c5e6b4-010f-4ca6-a7d9-077b2e57fc08', '6aaa8559-9c12-429a-a478-b76f223697f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('6097aa04-1759-4534-9090-62807c114a51', '6aaa8559-9c12-429a-a478-b76f223697f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('17786713-928f-461f-a329-e2e398071343', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('4c0f9012-54b1-4759-a91c-1c51f33095f2', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('6e807cde-5456-41c1-98a0-08dec89c840b', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('66a4d421-15ae-40b0-a11c-d9b1ecb917d4', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('d9e03d97-ca4f-44d4-bfe9-12a6df0a0809', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('ac4e6c28-96e6-4d8d-9d03-de761b1d24b1', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('40e96d9e-12e9-4181-8a11-2172f12b853f', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('08ecb8bb-8273-4eb5-97e7-87ddc1c06108', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('3483e6f1-fcb1-4011-b2d5-46414d8a744e', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('4f5aad04-093c-4f14-a9aa-bd18140010bc', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('2420bccd-b609-4a43-85e7-5e85ee0b8d00', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('97fcfb63-b41c-46e4-90a7-57fb64778361', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('d92cf84d-f7b3-4986-8780-e6360f22e721', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('90fd622a-471e-4966-81b9-b0c41d19276b', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('cf97f523-61d1-435e-a60e-5caff0ab1511', '7c052c06-118c-4908-9283-eccead8975af', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('5a937b39-6128-4a92-a78e-0e507d9358de', '620793df-d348-463a-bdb2-e167dabc8c3a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('be713833-8716-4cbf-ae88-ec88ef249d59', 'b4f999f4-7af8-478a-a4e9-0d67ac6c73e9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('b8a17740-893c-4efb-9a0f-e2ca366c20c5', 'd7a8d5b3-2507-496b-832c-ae9ba39565d0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('44d13293-5cd0-46d7-9639-81623dd45c05', '44560c8e-4db0-43b4-a895-10760275a09e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('e494dc7e-bc7f-4a79-9735-5157fdc924c1', '44560c8e-4db0-43b4-a895-10760275a09e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('8715f26e-429e-4b1a-a1ba-79b6c92c84d6', '44560c8e-4db0-43b4-a895-10760275a09e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('8b6e5453-7902-4e07-9dca-a8306bea797d', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('9b94861d-871b-4350-afe7-75708ab4e34f', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('af3ebcd1-0812-4bd1-8ca0-b69490c971e3', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 1, 6, 5.5, 0.70, 0),
-('ad791b78-5f50-40f8-aa8e-87a0fc39ea8a', 'be95356a-f320-41e9-b5b0-447621dec054', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('2a57a52d-e1e3-4610-9175-4d5a9f798dce', 'be95356a-f320-41e9-b5b0-447621dec054', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('838d1e85-ec7c-43c6-8093-0c331c7bc443', 'be95356a-f320-41e9-b5b0-447621dec054', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('2e59ea15-2ab7-4569-b4ed-a2238619cd1b', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('2bbbdd0c-340f-4c88-aeb9-fbb4201edab6', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('ed182fa3-397a-4626-a2f7-6e2218bc168e', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('533dec0f-38a7-4f84-99aa-9098a050dd6c', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('fd605f9e-1274-4d07-8a11-7760b208ce9e', '709f802c-65c5-4a45-b9b7-da208ab85221', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('69b9fb0c-2c28-4c56-ba13-606089b16db0', '709f802c-65c5-4a45-b9b7-da208ab85221', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('c9866548-855c-4c76-826d-210d059f3b20', '709f802c-65c5-4a45-b9b7-da208ab85221', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 4, 6.5, 0.90, 0),
-('23ad1197-1f19-4358-aac9-6b6d8349a73c', '709f802c-65c5-4a45-b9b7-da208ab85221', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('3464fd73-1405-427c-b254-5b3a7a452ba6', '709f802c-65c5-4a45-b9b7-da208ab85221', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('05ebcc4d-a266-4ad5-8b26-65abc3f21293', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('4a1e09dc-dbaf-4595-afa9-7906ac26f5b2', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('e9c18116-6597-454a-afa5-cf8988370ce8', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('41daa49c-689f-4fa8-84f4-0c105ae5bd38', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('e7545ec1-c68a-4167-a328-4d212f7ad73e', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('110e9e81-26f6-4369-b96b-63720621be54', 'e455500f-f903-4ce0-894a-96d106300007', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('a5059ee8-88c5-45bc-b57e-359487a872e1', 'e455500f-f903-4ce0-894a-96d106300007', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('9a615f84-92ee-4230-8fa0-a4e235d4d546', 'e455500f-f903-4ce0-894a-96d106300007', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('906b2160-5c64-4db3-9b1e-7ea66f7b3983', 'e455500f-f903-4ce0-894a-96d106300007', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('de5fc2f1-609d-41de-b0f6-e88310d8c399', 'e455500f-f903-4ce0-894a-96d106300007', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('2b1fa664-8644-4813-908f-87755f25562a', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('4e2f7974-4f3f-4fc5-a68a-5620cf10db52', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('c4238ff0-5556-4489-98ca-9720a20fcbfa', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('17196572-42f6-469e-b8dd-a569beed92d3', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('a72f8c1a-0a18-4f3f-8ade-898e13ded3a2', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('70cbd264-c3f9-4191-9113-672735f6b965', '22899a54-e635-4e59-910d-8b029c51cbba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('cab831d1-96e2-4aea-9d4f-fe6818a4dc97', '22899a54-e635-4e59-910d-8b029c51cbba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('2ef62cef-7782-4489-8040-fc35761955ed', '22899a54-e635-4e59-910d-8b029c51cbba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('8804acf9-57ca-4b47-ad5f-bb96adccce13', '22899a54-e635-4e59-910d-8b029c51cbba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('e95b7492-1067-46b2-a2d6-3553147c8c09', '22899a54-e635-4e59-910d-8b029c51cbba', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('58ef6f46-b3ed-4fa2-aad6-a7753a15cbaa', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('abd1de67-ec28-4f06-a596-2f5d786bb215', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('bd912449-4f3d-48e7-87bd-df8515a68a14', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('3422ba41-1fc8-4bfe-a845-f7a143938f5c', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('62b054dc-9d7c-45e6-ae62-6f847638b8e3', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('5b901582-a4fa-4e63-bcb7-c92d89c44d38', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('82bb4d0a-7bd1-4757-9fbe-e5df2b609778', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('d9c7e4ba-6244-4cf4-bf86-7625c7dd215c', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('23a3a786-c7d2-421a-9da8-ecd89d7a91a8', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('3cde9b07-fbc4-4abb-9039-4c91b86bbe91', '32ade549-0ac9-4275-ad35-526bbb1ea6d5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('b7314256-077e-4453-9be5-99a628e8b561', '62aad92f-98ee-49b5-a09a-088fa96c2181', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('dd7ea546-5912-4ede-9a64-d8e138b78fcd', '55632ab6-9e1f-4591-a1e3-23456113e393', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('199d0926-d5d0-44c9-b9c4-ec3d246fb215', '55632ab6-9e1f-4591-a1e3-23456113e393', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('51fb4aa0-13fc-4aa3-a730-465d040b340c', '1faa5e36-4589-47fc-a04a-06388a24af0c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('b5f0f4ec-f8be-4fe4-9a23-7373bd785e3c', '1faa5e36-4589-47fc-a04a-06388a24af0c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('8cc82716-f8a9-4df0-a651-0e1296f5f72c', '1faa5e36-4589-47fc-a04a-06388a24af0c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('2ddb1c23-59dd-4025-824c-5152fc96adea', '1faa5e36-4589-47fc-a04a-06388a24af0c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('9db6007c-70df-4a15-b2dd-a8bfe916e700', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('348b91ef-011c-4825-bbc9-bb30c1c9e9f7', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('d78b51ca-1642-4872-88cb-725162b40d87', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('3e2d8f9b-66cd-48d4-8090-170e30b1b6b4', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('b233d3ec-c89d-4b27-a351-c533601ac7dc', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('f9fdaabb-c770-46fa-8bb9-30808ae8dbfe', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 4, 0.0, 0.90, 0),
-('e99ff35f-f093-4a12-9882-ffd2ba61e15a', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('a09135fc-6ba4-4a94-8b9d-fc1a7c79eafb', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('613d3dba-b5af-4a7a-b26c-2b687a75ca27', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('e0fd9494-5cc0-4337-9d8a-9dafbfffea97', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('f314dc7f-deea-43e3-9e99-425f1c767a03', '49debdf1-af45-454b-901d-e455d0133b40', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('2b3bacf6-ae5a-4462-be65-eb44c0aeca45', '49debdf1-af45-454b-901d-e455d0133b40', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('d9b3fdcc-d2c5-4bc5-8f57-fb13a6eacb9d', '49debdf1-af45-454b-901d-e455d0133b40', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('f2d11519-74c9-4fa3-abf6-89c1ee3dbc04', '49debdf1-af45-454b-901d-e455d0133b40', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('5489291d-31c8-43d6-b759-c4e70ac043be', '49debdf1-af45-454b-901d-e455d0133b40', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('c2fc6fc7-b5bc-4285-b2ec-3ea6dcf28226', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('1b411cfe-ce1b-4a6f-9862-5b3ee8c2762e', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('fd947e6d-7b54-4892-89be-ac0687cd3098', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('bd0cf48b-a00f-40a1-9141-6ee3f1f77ea0', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('832224c1-63a7-42d8-9d5f-c6e0e9ee5157', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('3e020b05-1d67-43a1-b521-2830c106bd4b', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('c5e5f38d-3814-4670-bd75-22dec80a5af2', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('8caa5841-8046-4753-8f1a-d36dc4b6d6b1', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('11631641-27f9-4dd2-967d-df6cae78b117', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('91f3f89a-e7e1-49a9-a546-562f62adf625', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('f07762fb-dd88-4515-b26e-2d4db9311764', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('7e5e92df-c955-4694-8600-fcbd82de5d02', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('4514a0de-44c5-41fe-9fc0-8578902543b8', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('a1457037-f97e-43b5-949d-7b48f243f764', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('d4dbbf23-e2c8-414c-8a3c-d106b8176263', '09389ed8-5411-4695-9e6c-8aa7f7d05fd0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('f135f51c-1701-480a-8669-49cfbc945d7e', '490eab73-3fe3-424d-82a4-05e8f26b5a99', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('a82cc4f8-554b-4f42-bcdc-b76693ea2629', 'fb80cdea-6540-415d-9d3f-b1e360e61ab5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('77cb8ebe-00f2-47d7-b169-6eb1f50ab431', 'fb80cdea-6540-415d-9d3f-b1e360e61ab5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('90e814d8-b295-4227-b19b-ccee250a8543', '1a504f45-448a-440e-9b89-a22ae914d368', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('56f7ca96-ef25-4663-ab35-1aef27939101', '1a504f45-448a-440e-9b89-a22ae914d368', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('476aef32-549a-4d59-bdbd-9a05decbfdf3', '1a504f45-448a-440e-9b89-a22ae914d368', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('38609b87-d7bb-43d5-8b27-d05405c54aea', '1a504f45-448a-440e-9b89-a22ae914d368', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('156960b4-1d33-455b-97c5-a9177c175978', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('0ac2866c-caba-4639-b4d1-0065867183f3', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('e8f5b049-e04e-4d26-8293-4983cd73d62f', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('67e3ba6c-e505-416e-89e6-6846fd67b3ac', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('56ed19ed-5462-4579-84c2-fbd9a57a4b52', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('995f14de-e1a7-43c5-a6ca-bbf44c8445aa', 'f1d4997f-2803-4306-91ee-f0d08082057f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('1493a06a-1bd3-4653-88ee-44ddfd2cfd35', 'f1d4997f-2803-4306-91ee-f0d08082057f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('7a9f2cf9-e5bc-48e7-b513-d25afd871220', 'f1d4997f-2803-4306-91ee-f0d08082057f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('729f77c9-40c3-40af-89b6-eb580c53a6b5', 'f1d4997f-2803-4306-91ee-f0d08082057f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('e76cbe7e-57c5-4373-9ca2-5595d1cc015e', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('3d935f28-7f85-4879-916d-47f12c4f9057', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('07a7765f-b472-4075-9207-0374c3b40edc', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('fa3bb48d-3f83-40ed-9fcd-c846268f9163', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('cb43d780-63e2-4eba-868f-caf61a5c8e4e', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('9d7de43f-8af8-44f2-a78f-5ecaabb3b4f1', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('7c4faa9d-7cdb-4b51-a23d-6cd0cc489215', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('db1cd76c-dd60-4588-a6e6-90a374552c25', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('0d37f300-41bd-4cb5-b554-a4372f802441', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('c0740d75-cfa8-4720-86c9-d3c555bf68fb', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('28cda8ac-58d5-4281-be16-2e7e02bebfb3', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('611ca478-8331-42d1-ab3d-ed4121720501', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('c0cde6b0-2929-42e8-9a12-53d313f3bc99', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('4f07b1af-16f5-452b-81b2-5338efbd2f75', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('30d078ea-f38d-4d64-be13-32cda7b3c145', 'fb789c91-6319-44e1-8f10-40c25ced2e36', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('5b161b00-ba8c-461e-b674-f9af61368270', '597f4c9e-755c-4d1e-89a5-b97d9904548d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('d0ff810c-bb3e-40c8-93d0-5874688d3c61', 'ef4f9711-c593-4006-a337-0e40af760ce1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('777ab6e4-ec3d-4091-a401-f56706ed3772', 'ef4f9711-c593-4006-a337-0e40af760ce1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('c84539e2-3721-4ee4-b0dc-5c476a7e0eb0', 'd2978720-ca52-472b-9300-68c0f8360e6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('19d3b498-8bcd-4d56-99c5-27824a9c7c44', 'd2978720-ca52-472b-9300-68c0f8360e6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('5844ded9-d83b-420a-a5af-d8a7c7d81668', 'd2978720-ca52-472b-9300-68c0f8360e6a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('21c8b748-e7bc-40c8-922c-3e1b6be20eee', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('2671689d-add8-4170-ad92-9c63959c7bf9', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('70eaea52-b6d8-49f0-bf67-fd8cc5a03506', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('e031d0a4-7edc-4ceb-a683-122050869a58', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('15af9a8b-f5bb-46f5-bb71-127023563f17', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('1c9ba88c-020d-4cff-adab-97c59d9913c0', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('1ec635e0-80ba-4c51-9847-cb0e941b734c', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('f99ef312-92f9-4ec6-8dbd-8f9a60fae3ac', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('4e553863-8671-4722-a2cd-44f72e203d56', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('6e3beac9-c7f9-4863-912e-0476c25d5465', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('75c0cde6-8e52-4206-9270-24b09ce64893', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('392d3a78-8526-4332-92e3-d20f4e3e966b', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('047a5fac-a56f-413a-aee9-4073ff32ffd7', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('50aadc9b-c210-4c73-8050-f31514c78c66', '0218aeda-1725-4a6d-91a9-03532e51280c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('ef2598b1-f165-4d55-a90e-1765973d1765', '0218aeda-1725-4a6d-91a9-03532e51280c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('a13a8722-6a70-4f8c-b799-01a2b1768977', '0218aeda-1725-4a6d-91a9-03532e51280c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('205219cd-9a80-49bc-a4b5-3a60dfa0b3fe', '0218aeda-1725-4a6d-91a9-03532e51280c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('4ecc240c-8dd7-4669-9bab-941f637a4b90', '0218aeda-1725-4a6d-91a9-03532e51280c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('c6a16125-9af6-4015-b1cf-fc4573e901ff', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('2482d4f5-b06b-4afd-a6df-43c58149b6ce', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('c8c5c9b3-b1a5-45f4-8030-e8ab0426183b', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('cc4930ec-48d5-4799-b061-bb1459cb508e', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('75a7339a-3b02-4b8a-be0a-f3b33c736632', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('bbbb0484-406e-4857-bc90-5dfa406e305b', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('debe28e2-0d17-4de5-a50d-623d28386792', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('2c831eb4-0186-4913-9b0f-ad90ac2cad47', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('1c96b923-515d-4c67-ab74-382468a29e14', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('e353b4e7-84c7-469b-a23d-7ed4eee5d0a8', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('8ae5b906-7ea2-44fb-a8a1-37f29a48cddb', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('69f727ea-1f05-429b-9076-c23a9b0f0bbb', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('f6be638c-d4a8-41e1-9fda-35e653211208', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('c19612ed-78e5-484e-abea-e0103d331c55', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('f9e0eb63-d1c6-4c95-b008-60e5501218a6', 'ef07ea16-dfd8-4432-a90c-363de872b011', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('aa43835e-9096-4a1b-8186-f89c89bd375c', '285f8a39-3f19-48bb-a9b5-18c49af74b29', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('d0aabe97-197a-4672-9967-4c54c7293c72', '10b54b0d-e9dc-4e45-ba3a-931a1ec9ad1e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('f4c631fc-7c41-49e9-b52a-028cd5333855', 'fefb9975-e2da-48fc-b0e0-d8a33c8b6cb1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('26588c1a-78a8-4d94-b5ce-06365c6f4253', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('98370bef-c904-4def-abf4-2ee6e6b0739b', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('f6fc46be-628c-4124-b326-36486cb08372', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('5c8b94df-0292-4f8f-b695-5ef4ffd87086', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('80bd3b5f-baba-4bcc-afbc-a18fbe10e61e', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('427b0b07-80bb-44d0-ba80-6ec13c597a5a', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('c033a03c-e08b-4e3f-a1be-024a06d542fe', '31c64363-1703-481a-a4af-20fa5d65016d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('0a316b82-b56a-45ab-8ebe-e8c900402a86', '31c64363-1703-481a-a4af-20fa5d65016d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('781ab1b9-d323-447e-888e-100e0c304d43', '31c64363-1703-481a-a4af-20fa5d65016d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('ddfb90dc-fe71-4e20-a6b3-46f6cabb0079', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('498109db-00ea-4c4e-b53a-96bf82957ae8', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('f54cb433-945c-4b1d-b8af-7e34d25f2cf7', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('96367629-4a2f-4267-9a55-435ca82b5298', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('bdd8ac50-1a56-43e1-8ee2-870760a9eebf', '0f16ec5f-028c-4bdb-9449-4373c4668774', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('6eed3a2f-64a4-4c08-a16f-7fc05b2443c6', '0f16ec5f-028c-4bdb-9449-4373c4668774', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('669c7e03-c525-4a4c-9f8d-8a29fb4a0623', '0f16ec5f-028c-4bdb-9449-4373c4668774', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('fe3b9536-4957-4b7c-872d-bf30e5560759', '0f16ec5f-028c-4bdb-9449-4373c4668774', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('b508e836-55d0-4c13-90ea-56e4d6c9c651', '0f16ec5f-028c-4bdb-9449-4373c4668774', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('43fec6cf-6a36-4ce0-8190-bbdb1d4e44f8', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('c7f7cb80-463a-4f0a-a868-bc00b6d80c00', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('25c73b95-efbe-4ef0-a24a-04266a7b1017', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('b56321e9-060d-41b1-9c78-80a6b0b00083', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('e0be795a-5c8b-42f4-a9b6-ae32eb8430da', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('26daf934-19c3-4a55-ba57-b8ce43b02e8e', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('a4c48a93-e7f0-4b25-a956-9fc5c41fc39c', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('04baa1d1-bf63-40b1-9572-a32e8d5ce770', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('61ce8280-9422-4091-b838-dc462f47e66b', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('5b715097-d989-428a-88ad-cec59dbd4663', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('a2e19097-dcbb-4dab-ae84-5376b1015eeb', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('e6ab4073-9f7c-435e-af70-a8f6a7aa9963', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('dad5c334-3946-4a5d-8066-b2163c07ac12', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('cd6570e2-1649-4d8e-b300-e821d1de2874', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('b604e8de-2ba9-482a-87a4-ddf00db3f212', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('aa5825c8-31b7-4557-b39e-5ddf4dc3b4c6', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('59e82ec3-a41a-49e9-8003-0972a275edda', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('696d6eac-c5e0-4978-9b69-9bc422a9f46d', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('e3305516-0abd-428e-baae-e54d3b652fba', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('c1cb030b-1ed9-49b5-84da-65d6a42b569b', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('b11b6fad-a6e0-473d-a5e1-f62149d2b52c', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('708f6a86-80b6-46f2-90bb-a5f0af67a906', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('5cc1dfc3-c005-4884-b1e5-8fb9d2205048', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('1854a0bf-4854-4189-a12b-f50b18c472a1', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('adf9b0a9-d24e-4368-9652-72f2b280f2b9', '06ef2280-d079-4f13-9061-156da0e48191', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('762238a5-a168-4440-8f4a-ba4fbb253ad8', 'ce1bbae5-8f0d-436f-97d0-672434bb80d2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('5516e07c-b342-4fef-9634-6c8989341af6', '7a9cabe5-fe77-4a92-be0c-e17e0b8ad967', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('1a2c0c2f-6fb0-4f89-aee6-b194b958cbb1', '81eead00-4d00-4948-aaef-cc3ba519fb7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('c5199c9f-5e06-415e-a1d2-96fa2a663acd', '81eead00-4d00-4948-aaef-cc3ba519fb7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('c2f01b7e-868a-4e40-86eb-c07a05c98a19', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('bee156de-0c05-4dfa-9469-57269728046c', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('462224c3-3be6-46a1-ab0a-c592700eb054', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('8014e9f2-0061-4d22-aab7-cb398b329c27', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('7110fffb-0ffb-4649-a093-8efb79293007', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('01899fb8-0842-4645-addd-45343bfd180b', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('51a38030-e28d-4610-9b91-6579a8c09ff1', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('a69e1e83-ce84-443a-bf4f-9b95ef2bbd68', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('fb95053a-2f1a-4bba-a310-6724aac9c813', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('e74b3a0a-9a0b-4c9f-8e89-f3878771779f', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 4, 0.0, 0.90, 0),
-('12df1e87-3b99-47b7-9f7d-7571aaedf908', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('dc6f09a2-6134-4ade-a9ba-ee81b6a571f3', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('ffb28ad7-3506-4b82-b781-197ba13bf3ac', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('476984c4-6cbd-48c8-b5cc-3862bd622538', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('c2cebaa5-4774-4698-9d5d-b5b85b51b4c6', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('f5dd625b-99c5-4b3d-90cc-6ce248d223b0', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('707bb188-4f8e-4c9b-8ac9-aa712b1490b7', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('3fbf3d10-f7ba-4e32-9739-dbd3ffaf18b1', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('02dd64d6-ed50-4719-9610-622b1df8ae04', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('d1b1cc23-df09-48c2-9276-c9c65a6e3642', 'e784ce78-343f-41f8-9320-62892464faee', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('1fa2396e-934e-43aa-b06c-1323007529ed', 'e784ce78-343f-41f8-9320-62892464faee', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('f2bf440d-0c59-4011-aba0-d9b2583e198d', 'e784ce78-343f-41f8-9320-62892464faee', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('3588bf59-0f56-48e0-995c-bc01b059e8d1', 'e784ce78-343f-41f8-9320-62892464faee', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('22e5bca0-0dd1-43d5-adc2-7c038997cd69', 'e784ce78-343f-41f8-9320-62892464faee', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('d688de57-a1a6-480d-8a91-ca652d77a2d0', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('33547886-4e45-4d1c-b142-c1840fff5977', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('a35db266-8e25-4de1-a667-7564a81dc370', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('078c856c-819d-4e0d-bd42-d9769bab5c70', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('6111219c-a029-44c2-90c3-7ec6fe715bd6', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('d6ee786a-e8d9-481c-a2f4-08a33e5d31eb', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('bc77c56b-cee0-4593-a3e3-eb5b92a55082', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('c9d49608-32b5-4eab-a8d3-212c644f0be6', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('3558c8fc-bfd9-4df4-9e43-2b2edec2ea0f', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('1eca4978-25b6-4ca0-8e66-ad7e1edf9f56', 'ece9cd36-93d2-48c1-9dc3-fe0db7acdc8d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('9baf9a7f-fbe6-4f28-85db-005dd554817f', 'e48d6889-dd2d-41c6-8f6b-1dfea3fec7c4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('75db51f6-b19c-48dc-a7a1-0f591a72bf72', '7b450e13-422b-489e-a113-d83e3334f673', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('564b6828-3718-4436-8052-e94c3eb6ce0a', '7b450e13-422b-489e-a113-d83e3334f673', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('fde3069c-6b9d-4c2f-afac-10730d9cf5e1', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('7c0604be-eff8-4eea-816f-766dc6b4b200', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('c0c195af-219a-4161-81e6-f0e39be4019e', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('60fde7f0-2e8c-4c11-86e3-0cee7053ec49', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('d7c78208-07fc-4d15-b240-6d5c351be422', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('beb2ac94-128b-44c3-8dc7-4b3db07a0375', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('dd367893-dcad-4d23-958d-e6023654c0d6', '6c53f019-02d1-4082-b919-8629c45da8f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('95e58d50-8893-4a9e-be28-f4c1a307578a', '6c53f019-02d1-4082-b919-8629c45da8f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('845247f8-0144-4657-be93-67a14b139cf8', '6c53f019-02d1-4082-b919-8629c45da8f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('26e0fd79-abbf-45a9-b89a-58696862295c', '6c53f019-02d1-4082-b919-8629c45da8f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('46f506f2-9db7-4d97-a229-e0fd4540cd58', '6c53f019-02d1-4082-b919-8629c45da8f2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('1758b920-34e8-4b71-8c3c-f765e757289b', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('279e6f3b-ccc9-4ca1-8e84-77704b36425c', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('877965bc-8af2-4231-8857-bdfee2086745', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('5641291a-5fe4-4c52-a9f6-66369c728d9a', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('f6a5327b-7778-453c-a8d2-27092c0d1c03', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('70f9f892-b7b8-4498-bf6f-3af7bd29eb29', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('622c5ed8-20ed-4399-b2d0-09dbd09a0fb6', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('5997305a-d8d2-4278-a253-f083ec72e52e', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('55759ea7-5da1-4dfc-95fe-b2f60d24cf8a', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('7a4b352b-cf5f-41ab-a392-7b6b624e449f', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('2a8706d9-b374-43fc-ae5e-20c209ba21ef', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('97106732-da59-4aac-94a7-21b2b7df837d', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('208dcdbd-9065-4cd8-b77e-961908425df0', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('e5863d57-5eb9-4aee-90c3-fba2ffef3f72', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('b2d03463-5108-4ced-bf25-dfac5028e2fc', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('5ba6b149-6354-4cb3-a9d5-c53200a87bcc', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('d5b86e92-369f-4fba-baaf-09c12ddbc46d', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('0d0c0bba-534a-4c19-a4f8-53fef9bbf0aa', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('7b8bcfcd-4b6b-4e97-8ff4-84833da41e07', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('af3a1497-ad47-4a2a-8bc4-fabaec44157c', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('06e28794-6e37-4c37-834b-123d5c9de4dc', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('7c194ddd-17c4-41ab-b084-2da42d3313c9', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('2ba560cf-e89a-49c3-9976-13cf5dbf59b4', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('36c65830-bf28-4cca-932f-cd5355dca5c7', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('85bac4d6-dd87-4406-81dc-9d5f0b89b799', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('cd67282a-7960-4da8-8af7-c14e7367251e', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('1b010ed2-280d-4480-a4dc-a3ae225f8179', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('31782ef1-7380-4e64-b5cf-b33c3eb2a7b9', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('148146da-8c0e-402f-ad58-3119fa1e41cb', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('dd05d695-088f-449a-b772-256f5d66d040', '2e09e869-5d53-450a-bca8-f1f95604506f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('62ea1aa0-aeb4-4841-adf7-d705aca34731', '81d56ddd-3169-48fc-b100-4ea71383e2ce', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('bfb7da86-f182-4552-b9ac-d274f2e2bd19', 'b6b8090b-84a4-4488-88d8-98a3b2f6ac11', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('2e7468aa-160c-42f2-9129-68f45ed74b7f', '1b15df92-c8e5-4d9a-9adb-51077cd200e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('2a3a68a5-5a44-4620-9554-a456f1c7133b', '1b15df92-c8e5-4d9a-9adb-51077cd200e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('865ca6ba-541d-4fb0-a79e-bd7d7fe4296f', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('fcf8fc1e-e1ba-4a74-b8a0-b09472a95cc3', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('89b75c43-1c46-47a8-a4b3-8c11f4b2dcef', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('33212fce-1ac7-4516-9119-7b9a5924cd47', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('8bfd15cb-dad7-4818-945f-944e60903b39', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('b08164bc-3093-4b45-b67a-d10f72faec69', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('60d57fc7-8afd-461a-a2d7-d28e4aeb9de9', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('4341707a-9ff9-4363-8986-a2ab31ff2681', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('e82b5af7-a369-44ce-8846-bad5dfa12fdf', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('cd618ba2-7018-43fc-af9c-e52d6d96dd4d', '9f407c19-d79d-49ad-ba31-812dc255f657', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('64d0acd7-55f6-4d41-9fa6-c8b4544e4fa9', '9f407c19-d79d-49ad-ba31-812dc255f657', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('5c714216-816f-4c45-b44a-d9c258d45247', '9f407c19-d79d-49ad-ba31-812dc255f657', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('960d680f-c44f-4660-8a92-9275862d0849', '9f407c19-d79d-49ad-ba31-812dc255f657', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('e88e8efd-3bcc-4a44-950a-0a2e4f0d4416', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('032564c9-d796-4627-8b14-4d9562b02e6b', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('152c9427-bb05-4bb6-a2f3-5aefc9c92e5b', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('55644032-cc09-4646-b7fb-f57a33caaf5b', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('9b5834dc-cc80-41b5-959d-b432d82590dd', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('9b88b5cb-e493-4520-895a-64940258921f', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('44667fa9-1ccc-4220-8c3c-cd0fc795c6ac', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('157c2270-81d6-4fff-861b-021031933866', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('2ab5441d-1bbd-4863-a0cd-f4de3c8404f0', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('10df6deb-6fa2-4a12-8a8f-84dc116440bc', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('758aa7a1-48be-4c52-88d0-d6a14cf07c15', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('64f66b45-d172-4697-a5a8-12a170be58b9', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('eef2c576-cc55-4579-8da3-068803d2dbf3', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('e23b96e1-fead-4d3d-b1b9-645a5a27eb49', '35e08da8-2565-44ec-a43d-09a963054876', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('c18c3521-e4ea-486a-9409-01479d74d5f0', 'cd1e620f-6577-4c8e-a4e2-cfc0a69cc83d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('d6dd3657-6eff-4d3d-9cf6-b68fa5b938a3', '5c59bf3f-3699-4eaf-9976-d40c6685a27b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('5b3292c1-27a4-4b64-a0bb-49d0d513cc99', '2be0b47b-9a5a-415c-a530-50021adf8378', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('af15faac-d789-41ca-9a62-5e937b3f9b4c', '699e5dd9-7299-4951-bff2-2e309a0c7724', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('a38d3c56-8cf2-42ec-b010-86ecfbe18735', '699e5dd9-7299-4951-bff2-2e309a0c7724', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('f5baad4b-8b8d-49db-949d-945886b206ed', '699e5dd9-7299-4951-bff2-2e309a0c7724', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('f77f3eb9-803a-4b94-9e4f-83c067be20b6', '6586567f-b575-4e69-afc9-979c9af8b646', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('28217671-6728-467f-a8d9-df26ed49de20', '6586567f-b575-4e69-afc9-979c9af8b646', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('14c337d7-1514-4ad9-8f4b-fa0a8ee5df27', '6586567f-b575-4e69-afc9-979c9af8b646', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 1, 6, 5.5, 0.70, 0),
-('6e5f6b8b-8dd4-4dfb-8e12-f3a5fbc7e836', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('06b04e47-7b8b-45cc-ab5b-c3529a367362', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('de42a793-2b6e-4950-8f71-0baebddf185f', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('13a056ee-4c9a-421b-b88c-fe52b8698d72', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('5748405a-ee22-4d5e-ba77-85fa1bb76560', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('73cb929a-1fcd-4a1c-91b4-58055fc53193', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('8d5258f8-58cc-4bfd-89d2-cbf687844577', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('c56ad592-f9cf-4b6a-a4da-9daf15805d1f', '20564472-0a47-4953-9328-bb52fe477fdc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('06d4ce4d-e349-4e4d-96ce-a89d06c0d7d9', '20564472-0a47-4953-9328-bb52fe477fdc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('f4e70a14-e3ad-4a80-b094-9e419ecb3ccf', '20564472-0a47-4953-9328-bb52fe477fdc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 4, 6.5, 0.90, 0),
-('4f97b5ce-5fb9-4df8-bcb2-4fc3994fbcd2', '20564472-0a47-4953-9328-bb52fe477fdc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('f5c94235-0aba-4466-b242-a0ad83a6e0d8', '20564472-0a47-4953-9328-bb52fe477fdc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('aa546275-2fa8-4109-8483-39e550a41ee0', '08606007-a519-4c8b-a454-1dacfb77c296', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('67b0bb9d-2bf2-4fee-ab98-0388716fefb8', '08606007-a519-4c8b-a454-1dacfb77c296', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('16312a6c-a23c-49b4-8191-43f322719d8c', '08606007-a519-4c8b-a454-1dacfb77c296', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('22c20728-86d6-4d14-be93-d3f6d7df6850', '08606007-a519-4c8b-a454-1dacfb77c296', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 2, 4, 6.5, 0.90, 0),
-('58c6c782-f525-4333-afec-c57fde85decc', '08606007-a519-4c8b-a454-1dacfb77c296', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 2, 4, 6.5, 0.70, 0),
-('e8fcbb53-9bed-4ac0-92da-639c5ac6b589', '85da6d64-5218-436b-aa1b-3c1496d43593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('64a72542-3949-42d7-81c8-984319dfad85', '85da6d64-5218-436b-aa1b-3c1496d43593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('edd1f9b9-b0d4-4db5-bca4-5ba80f7edb08', '85da6d64-5218-436b-aa1b-3c1496d43593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('db468038-0b39-4baf-8fb3-c5a23bf27be2', '85da6d64-5218-436b-aa1b-3c1496d43593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('6a04cd4e-de6b-415d-820f-b66d3b566f0a', '85da6d64-5218-436b-aa1b-3c1496d43593', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('fe8a044b-2d36-4da8-a84c-fefefc7ccc49', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('dade4580-4194-4463-838a-2ee31afc5581', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('1e1c438c-4537-49be-979d-ec7dac6a6532', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('13451bfe-6784-4a0c-bde7-9c45d7bf6a7f', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('f9ceeaf0-93c9-4b1d-a8e6-573dac937972', '93a0ad66-da98-4a9a-8edf-791297c000ac', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('ef04eded-5e60-49ab-a3a3-1d7dbb2167b3', '93a0ad66-da98-4a9a-8edf-791297c000ac', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('79e7704f-d324-4ddb-85c9-aa6d6bba5626', '93a0ad66-da98-4a9a-8edf-791297c000ac', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('1e505b24-6783-41be-be13-b4caa93b76fe', '93a0ad66-da98-4a9a-8edf-791297c000ac', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('4f2e308b-f7de-4829-8b4d-aab21e43c0fb', '93a0ad66-da98-4a9a-8edf-791297c000ac', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('91d156e6-09ab-4cc4-a0d9-f93f72515dbf', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('bb42d364-9f41-4ee6-8d52-b55c94d4e9ca', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('29eb8b1f-6c28-4b9f-9683-999b5919d1e6', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('6eb3e632-e8fb-4d17-abd6-ec8d8ec2bea7', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('2c6734e6-ccc6-4306-860c-a4f58dd2cf5e', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('7fb04cdc-7a65-4492-b594-e17ef04c5c20', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('f8a7e47c-0fcb-4399-8430-a87b8371736a', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('66364365-9114-4862-a55e-120a8be094d3', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('28e5280d-fa5f-48bf-9c6b-9fe9cf555b91', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('eda54f82-b1e1-4cda-b4ea-fb0cf8cfe05f', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('21fd1480-e8bd-49d6-ae50-16c23fa37551', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('2717d748-b17a-4cb3-a3ba-5da05e9723b9', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('4287bd14-4178-4c78-9653-418820ee2aee', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('e16c38dc-c8d7-482d-b88b-50358e0d4f74', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('171306e8-9680-4dbf-91fe-27df7057422c', '126dd11f-7d9e-40df-90bb-586612a4f79d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('5de82339-13fb-477b-99ea-abe660bb47ae', '3ae9263a-76d8-4000-9054-7b54a5ebe319', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('6fa219b8-7d6f-44ac-822f-b58e31f98054', '05dc6112-9170-4b9a-b603-eec4807348c6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('9ee06478-5b10-4f8c-a313-c6104ef4cae4', '05dc6112-9170-4b9a-b603-eec4807348c6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('711d1a7f-e082-4b7d-8eeb-865db43a3a90', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('14aa6950-feb7-4292-b542-8e9ec5dc1f89', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('2dc449d5-a203-47bd-ac81-b4081567345b', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('d82c0f48-0048-4bc3-b01b-1b1efd3b6b95', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('81140697-d900-4fda-b0b5-6159c0465496', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('ef99c068-7d82-4646-a69e-383bf38785de', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('f2019484-2705-4286-b6da-0fb91593cc61', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('a3db261d-ff21-412a-9256-e019c53bd48e', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('6bcf3a52-213a-49c0-8431-fd03ec2b5dc8', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('815febdf-2af9-492c-a464-e5210cde2f8f', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('cd6766f7-c431-4a9e-a344-28b4a21ebbb6', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('4940839c-382b-4aff-9b54-4522dafa598c', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('4925e209-f5f2-4b83-9922-e1409b815eff', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('697b3de0-ff91-4d2f-86ec-503432ac7e07', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('02bc4e60-20ef-4821-8c40-a2574b61a020', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('4ce69834-d089-4936-bb3d-1f7645e24ae0', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('62cedd9c-1177-4f89-873d-f69736157124', '9febc13b-740c-4c85-bf96-9a7699904582', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('6786fb1b-1f2d-4ce9-bf03-e2a4c300f614', '9febc13b-740c-4c85-bf96-9a7699904582', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('fe801849-1cd2-4281-ad10-859d1d1b153d', '9febc13b-740c-4c85-bf96-9a7699904582', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('ea0bb5d3-e963-460d-8605-f1d5ca3a9501', '9febc13b-740c-4c85-bf96-9a7699904582', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('b530ef68-c411-4c14-8011-d445c73b67a4', '9febc13b-740c-4c85-bf96-9a7699904582', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('66074d1d-a8e4-45f2-9167-bf35ce39e3a6', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('34a30687-45a1-4f52-a952-3eba5898971a', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('143121b8-dc48-40a1-8e85-e3896cb230e6', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('d42c8597-f8df-4058-98cc-b9a7a143dd4a', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('16e07beb-0fa1-4fec-a17f-e450d6f8448c', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('71b33df5-7531-443b-8cee-07fdaf0020ad', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('6180d69e-22ef-428d-a281-741779d268b7', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('e948f2a0-d677-4ecc-b072-0a4cdf2a98be', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('e40d86f6-1349-4e29-9198-46959267eb34', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('47de9c5d-93f7-4dca-a683-a63845304ef6', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('a412e906-ae84-4f26-a735-d613b475120f', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('7823398a-b444-4a42-b09d-2418d7e795b5', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('e266a422-02a7-4e06-a4f1-4e9fe744f11a', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('cd5d49ed-621b-47ff-9b46-8c3a319d28b3', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('a6deba96-dd51-4cf1-a7e2-166d8fb4b10d', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('689c4d0d-8999-47c2-be92-de5b7f0d1643', '2049a11d-d41c-4bd9-97e4-8c3e2762efdf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('f99b62e9-03fc-436f-912d-260e48f22d07', 'f0324350-154d-43bf-b45e-504590fcfeb1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('76a15c25-70c6-48c9-9c8d-895b09c7e8fe', '6ac64f70-56b3-40ea-84d8-bcec3a135dc4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('16fa261e-43cd-4a53-b0e5-fe944267c66a', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('70a52e14-3d5d-492c-a681-b682da6f55df', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('cdcfd201-8df2-4d28-a0b0-836e58935edd', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('8b6828a3-6267-4680-a5e8-c60ddee4d711', '74a6bef4-5cf4-49eb-913a-b277177153ef', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('f59c95a5-db18-4a78-8cb5-b5e98d3bb4a9', '74a6bef4-5cf4-49eb-913a-b277177153ef', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('693217a8-f5da-4d6d-bc42-8a70c8971416', '74a6bef4-5cf4-49eb-913a-b277177153ef', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('f1f32193-a4f8-45b1-840f-cc9adaa44902', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('9d9d6a80-f68f-48a7-b997-4c24d57eac60', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('ebc8e66b-473b-41d5-9d2c-865973afb7ec', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('8243c085-28bf-4429-bd9e-1765ad4567f4', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('2a5573ec-61ef-4649-8322-3cf056755b30', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('20b3fe8e-0356-4ab9-a1fc-d210b53f515b', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('febcf14f-4b9a-410e-957c-84b9be4f8d54', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('080c0191-32ea-4edd-9219-21e574d16a7c', '7bc19110-5b86-4a32-b439-98de9fa264cd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('e5e65dd0-6a5b-4605-81b7-e76a2f3c159b', '7bc19110-5b86-4a32-b439-98de9fa264cd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('af62409b-b3b4-4d8b-a213-4be15cc65fc2', '7bc19110-5b86-4a32-b439-98de9fa264cd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('c670d862-b7c8-42d5-9afc-696448d5ba2d', '7bc19110-5b86-4a32-b439-98de9fa264cd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('d0dfafe1-6862-40ba-882c-635ddbb75aa0', '7bc19110-5b86-4a32-b439-98de9fa264cd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 2, 7.0, 1.00, 0),
-('8a9beea0-5993-4ea6-96ee-12757160040c', '69c806fa-7158-4564-9a07-3359867ab0d2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('36d99157-81aa-4c59-a494-0ce25da4e240', '69c806fa-7158-4564-9a07-3359867ab0d2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('9763faab-e1e7-4407-a9b5-b8e23ea0c24d', '69c806fa-7158-4564-9a07-3359867ab0d2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('e5a7872e-4e7a-4b59-a3a9-9dbbc54ea1e9', '69c806fa-7158-4564-9a07-3359867ab0d2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 6, 7.0, 0.80, 0),
-('c454d022-727d-4b4c-b71e-63162f13932d', '69c806fa-7158-4564-9a07-3359867ab0d2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('8f8ea57c-32ef-4243-8f60-ec78f91414a6', '38918d3e-5817-4e27-8777-b6392860fad0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('14b78f7f-1ef7-4f06-9479-653aa659c39f', '38918d3e-5817-4e27-8777-b6392860fad0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('1503267a-2043-419a-85aa-b199f005ab41', '38918d3e-5817-4e27-8777-b6392860fad0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('5a8f2261-e856-48bc-aa46-26081de8bcc0', '38918d3e-5817-4e27-8777-b6392860fad0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('6d6ffd9b-a9d2-44c3-a2bb-60a669e77f12', '38918d3e-5817-4e27-8777-b6392860fad0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('b9aea09e-2332-4c15-8cac-13e0aaa949fe', '38918d3e-5817-4e27-8777-b6392860fad0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('f2167705-af1c-4da4-939f-e30c29cb229d', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('e8e2c92b-4db4-42b5-b984-3b770e2122a3', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('5311a5b1-13b7-47d7-85c8-6c7aa9373ddb', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('71392cb1-101e-4ab7-928c-4e73800162e3', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('8c38b89d-2746-4394-9704-3ba620a0fb7e', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('e06db62d-c6ab-42f2-a49e-0995c94e88ff', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('811f9505-368c-4d14-a5c8-2f0fc9fa3e27', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('26da38c9-28f4-451a-9bb5-4c556e92255e', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('84a69fd2-b3be-432a-886f-2649cb99d569', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('92468d3b-a415-4257-baed-4600b53aacdb', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('b52b0105-1b80-4311-a339-0279b59530cf', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('e133100c-d98e-4063-bc35-afc8b306ccf1', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('2fbfde27-320f-4ad4-b227-65e0df101f59', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('e6969a2f-fd5e-4c2e-bae0-3a0a52080e64', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('e774f7c1-3b19-4a63-815a-0b5f33c897fe', '9732d295-062a-402a-80cc-160a196f0d65', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('23213555-97d2-4b68-9514-95b8590a5608', '458b2e63-f20f-4cf5-842e-eda67fed96cb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('2968a5de-b8e3-429e-a427-996c6dc4c368', 'cbe711aa-ef98-4034-859e-c772646c162e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('74b9f785-c1cf-492b-9ba1-f60dbbdf910f', 'cbe711aa-ef98-4034-859e-c772646c162e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('148fd581-b721-4562-93c9-a8d67b76ed9f', '93febc9a-6c81-433c-b121-4926b949daf3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 4, 0.0, 0.90, 0),
-('4b5f316d-68bf-441b-bd30-593e0d75b7f2', '93febc9a-6c81-433c-b121-4926b949daf3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('7b7462db-718b-4635-952c-629b1c1c7a4b', '93febc9a-6c81-433c-b121-4926b949daf3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('bff99854-9db9-49a0-baea-bd20b7cac422', '93febc9a-6c81-433c-b121-4926b949daf3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 2, 3, 6.5, 0.90, 0),
-('afec372a-db84-4319-99e4-f625f4b38aac', '93febc9a-6c81-433c-b121-4926b949daf3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 2, 3, 6.5, 0.70, 0),
-('1e630f66-4340-441a-b5ca-6387eee27a8c', 'f9f98f35-c658-4049-8f78-4e398e919189', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('c7fd27d7-8834-418c-93a5-934274b22477', 'f9f98f35-c658-4049-8f78-4e398e919189', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 6, 0.0, 0.80, 0),
-('044052f0-fa93-47a0-904e-15f3ebe6ebe0', 'f9f98f35-c658-4049-8f78-4e398e919189', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('f4113574-de12-4bed-a333-a011f30a2268', 'f9f98f35-c658-4049-8f78-4e398e919189', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('436f8d9c-b50a-47c8-a9c3-7e68b03946ab', 'f9f98f35-c658-4049-8f78-4e398e919189', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('969450ff-d291-400f-a277-07d8183ef915', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('a13e6f2c-cc24-4154-a427-87abbbe73594', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('932dfc6e-54e5-4efb-b76d-eb342fa5c38a', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('12517b9e-763e-4b3c-8cef-edcaeb127156', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('de5491d9-36bb-4952-b7fa-fc0345ce5a14', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 4, 6.0, 1.10, 0),
-('c58f619a-85fe-4e3c-a3bd-5a11202cfb08', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('e6174b3d-5eb0-4f45-b4bd-33b0ff5eb427', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('69c9250d-10f0-4db3-b714-39994876d03d', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('3ff40e25-cb29-4fb4-84bd-99f4485d2975', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('1b62e8cb-d9db-4860-ab68-dda01c2434ee', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('f210147f-f1a0-43fa-9115-b9574b0f08f2', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('c5730e9a-724c-4d77-bb63-f7fe6b954b38', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('a3316a06-19e6-45b4-af84-1e352e0f38a3', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('3b7cdec9-fa70-4375-bc6e-19510789d0bd', '7e75486c-1daa-4393-945b-0fe36755d3cf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('a4b2ab2c-7f53-4de7-957d-bc6ca397ec07', '0659e202-dfed-4d88-83ee-be1b9dc68bcd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('eb8c94cf-dc5b-4431-84f3-412287186da6', '33fbbd1e-df2e-41b4-b1b0-9471cee6eae0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('ec571546-814d-48d4-8995-23e64f2cba24', '4f9cc3ec-774f-4b57-a74c-6ab2e536fbb3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('31b43aa4-26df-47b6-bc23-cf7e40d2817e', '4f9cc3ec-774f-4b57-a74c-6ab2e536fbb3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('a8fa6a89-801c-4613-af73-05f7bf9590ca', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('cdf56c07-cc12-4438-96b6-ae0ffdb6245d', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('d3396549-69fc-413d-8ec3-a188ed8e86b4', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('627f7fd6-349a-4148-8f14-620a0abf889e', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('bc92f8f5-7c1b-46ae-87fb-3177db5c4f65', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('13d3f196-f88c-4e1e-9282-c8027c6084e8', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('2b088588-1a51-4268-8b84-622a7385ed7b', 'fc753843-b359-448c-acb5-fe6bfa188e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('bcf0ebbe-facb-42d8-8a06-cc456e810a90', 'fc753843-b359-448c-acb5-fe6bfa188e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('1b3389ce-8873-410b-8605-f7cd6cc79af5', 'fc753843-b359-448c-acb5-fe6bfa188e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('def3e245-bf5f-4349-b913-5c4ac33492ba', 'fc753843-b359-448c-acb5-fe6bfa188e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('8bb19ec4-6fc0-4676-9fbe-7821920e6680', 'fc753843-b359-448c-acb5-fe6bfa188e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('6bd8599c-51f5-4033-8419-4bf0d778fe57', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('660366a8-beed-4fdb-8d62-2fabc110b51c', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('45a8ffed-0816-41a2-9c07-1320ede248d2', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('8c7250e1-0380-425a-af80-9133517a20b5', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('d2f34260-437b-4486-b1eb-b568a1915332', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('2bdea9c8-dbb6-4b29-bb42-27c7f9ca52d8', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('6b291ea6-60d8-4d62-97ff-6372b6c93cef', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('1fb48923-8b75-4a9b-871f-7d18c5dc08ea', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('76bcfa44-acd2-4ef5-bade-7467d849c147', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('cf5173c1-36c2-4503-9c19-10d3a12b28ca', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('e98085ba-a6c7-4882-bd11-11a62f7eef90', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('e4823c88-465f-4d39-b41f-7dd2fd617cf4', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('7abe7e71-38d2-46d8-add6-30d2fe18d6f8', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('43fbbee9-bb0d-4255-b533-dd97e4738e4d', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('a3d2ff84-7c25-4955-a621-a32d16b2bb71', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('d9a37493-9e0a-461a-bc3a-bbe96709cfac', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('61aa1cfe-7512-4080-b185-13596cec126d', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('984bd249-c8c0-455d-a48d-0e0079b56c51', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('694c7bfe-2ffb-493c-b45a-5c1226d9dc28', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('a33be408-5e70-4d7d-9ee7-2f776b47a655', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('2aa1a4c8-0f88-4e26-8bb4-9f9de20fa9d6', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('b3dc5772-cf8a-4413-93b0-be910a4034a6', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('ff8544f6-76d8-434c-a4f9-90019bcf45e7', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('2805e361-ceb7-4477-b27e-7648688a0559', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('8d6c49dd-ae8d-49dd-8749-4caa932f9827', '350ec94a-02b8-451c-a1c2-89848a96361f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('b1c60a6c-c6e7-44ef-9e9c-ccf30cf1e6a6', '396924a6-1e4c-4ecc-8463-286e5e90c6fc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('63a57142-0a35-458b-994c-2437a707a86d', '55b30542-2e5c-4291-b2fc-79352f0fb274', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('96ea0b18-752a-4cdf-8327-a416538c9203', 'a774def1-9a30-4b55-85ed-b58591a23cd6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('4aba88b3-5c21-4c68-8f05-15548ed8f6c9', 'a774def1-9a30-4b55-85ed-b58591a23cd6', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('131dc433-1459-4463-9539-337b9d55499c', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('b3548366-71dc-49a7-a13a-5a31b342ee10', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('b9dc6ed1-2118-4f6a-9f26-705fd0d9dbcb', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('f84e72df-cc45-4df0-b479-9d026d15a87c', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('9f73cfdb-aeef-429f-a6ce-8efd30124848', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('d7bcf13e-fddc-45e6-bdac-d90c9e0d8d4c', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('2f707037-b21e-4464-a0c6-7a1c31ddc46e', '8de16a86-208f-4993-9703-c4d47ffe7606', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('63f13fab-245e-48bc-a5b5-40b346af45a6', '8de16a86-208f-4993-9703-c4d47ffe7606', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('fd0e0253-9c59-47ba-8cb0-7aff995d3000', '8de16a86-208f-4993-9703-c4d47ffe7606', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('bed66fee-a861-4a3b-9097-1b17e1523183', '8de16a86-208f-4993-9703-c4d47ffe7606', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('7c21e34d-acf1-4331-a6aa-8f42828cadbd', '8de16a86-208f-4993-9703-c4d47ffe7606', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('914efccd-7d88-4289-be97-87939c2e6762', '2fd0c656-ea76-44ce-b044-395887244e68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('66cd97cb-4201-410a-8595-b9e623e34d80', '2fd0c656-ea76-44ce-b044-395887244e68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('b12e2bda-0a81-48f1-a1a6-d0b48f619f9f', '2fd0c656-ea76-44ce-b044-395887244e68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('b0911d14-41e7-4009-839e-0f17e0957e97', '2fd0c656-ea76-44ce-b044-395887244e68', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('e0e16f91-47b4-436f-906e-9f78ccdb5c80', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('1c25b07c-ed2b-4643-bfcd-4d772f1e08b2', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('03430c5f-db76-4dd4-8d29-3fc681c195aa', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('131590cd-313e-4e0b-9ad4-bae7c224d322', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('0d5efa20-9e9e-4ee5-96ed-f540daacda14', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('94a342d8-10fb-41a3-9813-054ea86ea211', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('e9ef7d90-2a41-459f-b8d6-5c1b5fc40d4c', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('df3ee2b3-c781-4d46-80bc-b692e7055f6b', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('1eb2885f-c716-4c74-9233-aa525429257d', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('732ff3b5-4f3f-434c-9abc-a91110bbd002', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('926853c8-7d8f-4fa8-83ac-8642ca307ef8', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('9c869406-8389-42ac-932b-98bbf20c3df3', 'e09986bc-c813-413d-8178-5cc634665faf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('5c93c6c6-7e6c-4c06-8776-86aa81888eab', 'e09986bc-c813-413d-8178-5cc634665faf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('9a7d100a-29b0-4694-90bf-182acd7bea9d', 'e09986bc-c813-413d-8178-5cc634665faf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('13993faa-53c4-4bbf-ad37-27fd80bcdaa4', 'e09986bc-c813-413d-8178-5cc634665faf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('2836c622-6d85-4834-b54c-8c9335fb0eac', 'e09986bc-c813-413d-8178-5cc634665faf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('d3355fbf-6bcd-4813-b374-b27671e70f53', 'e09986bc-c813-413d-8178-5cc634665faf', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('f6947c22-8dc3-4ff5-b12c-2f1898f17894', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('7daa8d20-060e-4d8c-b79b-2657cfab0059', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('5868a14c-1016-4e56-8612-4241b7e0d32d', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('ad5c89df-d2cd-48a2-9c63-188d066b63a9', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('1793b86e-84c5-41c0-9fe5-f24972461e3e', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('1f0306a6-9001-4c6d-b9e3-8ec6adcce23b', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('3b359ff6-ed5a-42c1-b9c1-833fc8ccf7d0', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('1f8253d5-a344-4848-b83e-35f1b81de552', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('c74c668e-12aa-48fa-8bc6-c98c1286111b', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('90aa6fa4-1396-49b2-b494-d043ae4e8eab', 'ff4a571a-670c-4cd7-9884-1662ea1858be', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('422399df-6d65-43d9-856f-02b6551f1804', '337c34e9-a6ca-4083-837c-3a2aef19afd5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('f669d28e-398c-44a7-8f89-c306acf5036a', '7c25fc37-5a92-4615-899a-24baf681415c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('ac67c251-6a84-4d95-9a94-6b6c034ad6e6', '7c25fc37-5a92-4615-899a-24baf681415c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('43e8eb1a-e3a2-466b-88f6-319a5c088d51', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('a967793d-4840-40bb-a014-43fbf89776e8', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('4ce82a13-78ef-46fb-91d7-dc65503e010d', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('c6e94cf4-bdec-4eac-919e-dfc4f30065b2', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('e2052850-580f-4fdf-b380-f34d7ca05450', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('6973bc44-d3c4-492c-9a2b-4ab45fd241e5', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('48250c1f-10d8-47c4-8841-f9f6062367d5', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('39d60502-4d53-410f-a471-ab96b0dd4723', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('bab71837-e023-4150-929c-aeabf75c173f', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('69f1c8a7-8034-4d00-ae1d-f5a10071b024', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('27f54741-b990-48ce-9b8c-7e71e3b85ef9', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('512eb3d4-da67-4ad6-a2b8-a4f3d9cd37da', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('d1e0de60-6cdf-4337-aa42-7bddd5fa1163', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('aa0a4083-79d6-43ae-a2e7-e8dcdc6ed276', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('556b8acf-7755-408a-bea4-523b45253884', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('e1e98a21-b60d-47bc-819b-c301816f3ece', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('8b58ad44-503f-489c-88a9-e8b85a67cc41', '58300b65-0edc-4ba2-a430-d890b69258d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('78477af3-f594-4974-9534-1b7fed440ce7', '58300b65-0edc-4ba2-a430-d890b69258d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('488c269d-199a-445e-8600-616da3f1f059', '58300b65-0edc-4ba2-a430-d890b69258d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('f628a691-4e48-4af5-8516-0595128606db', '58300b65-0edc-4ba2-a430-d890b69258d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('a2cc4a89-3423-4429-982a-18d1ff37d5ef', '58300b65-0edc-4ba2-a430-d890b69258d1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('3a386036-8bd6-466a-bdf6-fa4930b1972e', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('29a72974-6437-4dd4-9c32-971d3442e434', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('b30a4241-d706-426a-bcea-04615f111749', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('4ee76137-0aa7-49c2-80a4-23ab682236de', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('dc4e7562-aacd-4043-b78f-a2a079446468', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('4fe5ba0a-1649-4ad5-94b1-06e5f10eaf6e', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('da7dbcc2-655e-446c-9f4b-848146b6ef1d', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('775cc22d-6241-43cf-8bc1-cc6e17b88b35', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('941006d2-04a1-4a2c-a88b-613478e597b2', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('c0ac11a6-6d07-46f8-bb19-7ead0c07a2e1', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('8aa17bfe-f62a-46ff-9ec4-a3dfb496599c', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('015289e3-a3a5-4af0-ac69-15e54538f1f4', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('a587f079-4c3d-4277-901c-6c60f1de514c', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('5a4bcf6a-e0a2-45ab-9c71-e6c2c9c7ebdf', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('58790cc9-6117-4706-b422-1181fe6dc6fc', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('bc334c4f-7570-451b-806f-49191517b4da', '30bd3b1c-9180-43b5-a606-574f1a1c9852', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('82dd8bb2-ef63-4f29-b290-17c20481a03f', '8f90e3dd-082d-4025-945d-4187cde84263', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('c7291f81-9898-44d2-974d-9dbe42d7b8bb', 'f9a1db36-2946-4039-ad61-b8627a5a7de8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('c5040604-d8bc-49f5-95bd-3644f961c3fa', 'f9a1db36-2946-4039-ad61-b8627a5a7de8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('a295ba64-8eef-4241-b99a-8abb57d4b8bd', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('8dce1c68-698b-4967-bb11-5ad97bd4adfb', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('ea70572a-d7ff-4756-8269-09dc018d6a7e', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('048b2f85-3e1b-4165-a35a-9918b39bdfc8', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('f64be090-0b67-4072-b196-9be406805d47', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('3169055d-2160-473c-adfe-4be4da2f9c25', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('ded015e8-c976-4cfb-a494-4916aa39182f', 'c65af715-b69f-4cf2-a338-2dead270c603', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('de54b41e-b728-48e3-a75b-06d24c00c478', 'c65af715-b69f-4cf2-a338-2dead270c603', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('2b7379c5-70e4-46a3-a885-8ee3cce5d3b5', 'c65af715-b69f-4cf2-a338-2dead270c603', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('51d3ea71-fac2-4368-b72d-a7e80aa61030', 'c65af715-b69f-4cf2-a338-2dead270c603', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('727ce2ab-7a49-4057-a9bd-63dac4003191', 'c65af715-b69f-4cf2-a338-2dead270c603', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('ecd87047-71e3-4891-b4af-5278de9a336a', '7138f074-0ed4-441b-b355-b569a0079449', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('fd1ad0c7-f494-487d-b30f-55e5bc53d61f', '7138f074-0ed4-441b-b355-b569a0079449', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('9acd01fa-fec7-47db-857c-5b2c042078bc', '7138f074-0ed4-441b-b355-b569a0079449', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('ac2b179b-eded-4a40-a96f-e67a5f54ab6e', '7138f074-0ed4-441b-b355-b569a0079449', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('adb66a47-e788-44ca-b374-dc8a07151b6d', '7138f074-0ed4-441b-b355-b569a0079449', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('7060c158-c21e-464f-bc58-1d30542e1238', 'e0667058-465e-4f6c-848a-1c4608a19870', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('43fce66e-c9ff-4b55-a09f-eee6c3ad8822', 'e0667058-465e-4f6c-848a-1c4608a19870', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('5a55ad78-7627-4e2b-8d5d-21c0e11974b6', 'e0667058-465e-4f6c-848a-1c4608a19870', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('1c586f88-0e0a-4c3b-8846-6bbc9c97cfdf', 'e0667058-465e-4f6c-848a-1c4608a19870', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('16975777-c5d7-4a70-83a0-07d2839eea06', 'e0667058-465e-4f6c-848a-1c4608a19870', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('9f47e101-f7ad-46e7-8a5c-98c56b393f4f', '708fb15a-01aa-44eb-9760-23d53986caa4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('4e5bcdec-1e04-4965-b256-19f88f8d4bae', '708fb15a-01aa-44eb-9760-23d53986caa4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('43733c09-d613-4dac-aee7-ca5fdacb6a93', '708fb15a-01aa-44eb-9760-23d53986caa4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('439c1dff-785f-4f1c-89ec-d0ec1a28308c', '708fb15a-01aa-44eb-9760-23d53986caa4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('9ba1f71a-76f9-417f-8fc9-dd8e791a8108', '708fb15a-01aa-44eb-9760-23d53986caa4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('c274f830-cc52-4dc3-b610-a8cd94509d15', '708fb15a-01aa-44eb-9760-23d53986caa4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('4a12b1e2-d0ab-4bdb-8093-f5bf070bd194', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('1267fc16-9a22-46dd-b175-e5ac14f2d899', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('58b77056-f5c8-4221-801a-99bd2cb23c62', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('a85202d0-e8dc-4194-8138-4cea314bbc27', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('9c4421d0-b451-4fb9-a7df-3f4ce4688a5c', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('50dcd0f6-6af0-4eea-86d4-d71f58b25126', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('a3dabd38-a6ce-4edc-b0f8-e11c7aade33e', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('6a187064-882f-4ae3-97a3-0866e2461748', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('5d532f21-e85d-4786-9bba-746dd1e91e4a', 'e688b265-05ca-4328-9750-0a82f1637c3e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('9622ef21-3ab3-495f-9e4d-2b060a85f620', '58a4045d-cf16-428c-9f46-11d4e29e3305', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('a2fb0b25-8c35-4cc5-b471-3f75b81f208e', '43e72179-bae1-462d-a08c-01f7b7454b3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('97ea9d97-a2ee-40f3-8842-d06fb79df340', '43e72179-bae1-462d-a08c-01f7b7454b3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('5e2381b0-1572-42da-b716-9922782b4638', '43e72179-bae1-462d-a08c-01f7b7454b3d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 1, 6, 5.5, 0.70, 0),
-('13776700-fa37-406d-a0ab-0d4c2d965cf3', '48543733-3925-440d-b783-0f4f2b92a8bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('26e3badd-4f8d-469e-9d4a-4971dd97ea76', '48543733-3925-440d-b783-0f4f2b92a8bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('bd6a5b68-001a-4e25-a3ef-9e77a10c9510', '48543733-3925-440d-b783-0f4f2b92a8bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('a2bb78f4-a3c1-4897-8ac8-6c85e2b84a81', '48543733-3925-440d-b783-0f4f2b92a8bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('51ced527-ab66-4301-9009-b05930c3ad39', '5696e7f8-adae-4976-9da4-826644b94460', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 4, 0.0, 0.90, 0),
-('e50f881e-e412-474f-afa2-eb6b7ad3e74e', '5696e7f8-adae-4976-9da4-826644b94460', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('4335b92b-d51b-457e-ad24-aa69cd38e859', '5696e7f8-adae-4976-9da4-826644b94460', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 2, 7.0, 1.00, 0),
-('440335bf-baad-4886-92c7-cbb16bc27eed', '5696e7f8-adae-4976-9da4-826644b94460', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 2, 3, 6.5, 0.90, 0),
-('2bc7f547-380e-489c-bcd4-4daa8f3e686f', '5696e7f8-adae-4976-9da4-826644b94460', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 2, 3, 6.5, 0.70, 0),
-('86f2676a-e3bf-4a09-9a5e-b58b5d32dfd3', '7d24d7eb-0815-45b6-a516-461d610d6583', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('70707b4b-8fce-4eda-9bdb-db998a894438', '7d24d7eb-0815-45b6-a516-461d610d6583', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('2750f99e-b6b6-409f-8497-842122d941ea', '7d24d7eb-0815-45b6-a516-461d610d6583', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('26687f35-4a0d-4351-8b01-08a45e183fbf', '7d24d7eb-0815-45b6-a516-461d610d6583', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('71e1d147-ff70-4aee-a4e9-92c80300907e', '7d24d7eb-0815-45b6-a516-461d610d6583', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('a16a1d61-8612-4cb2-b91b-3d78da8a8e3c', '7d24d7eb-0815-45b6-a516-461d610d6583', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('62063181-bf55-482a-bc7f-e4df214551d5', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('aefbec07-7e17-4959-9838-9283f9619629', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('0323de7f-7819-408d-a784-c0f82d0b23d8', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('9eb58299-9c0c-4bdb-871d-5fd640a9d437', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('21eeece1-a1a8-4a16-9bce-f37c0f79ae53', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('2e620d26-ce90-4cf0-a6b6-48ff7b2255bd', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('03c7785c-4f4e-43b6-97d3-626a0d61cfba', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('98238473-600b-4a62-81b9-044618d43d5a', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('b183fd6f-51ac-48d3-be76-8f9c7c5eecbe', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('173c6c10-67ed-4cb9-9d1e-45858ac57a80', 'f543c806-6e82-45f6-a358-ed110926aa25', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('2710ad74-352a-4928-813f-21e54a865957', '05bf3865-a193-47d1-8cd8-83d1ba6917b8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('605c7c9e-b224-4c20-8c16-5b2198451d76', '13ed153f-531e-4a0c-b8ad-ed3b59bfbde8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('a3e071dc-016b-4ad0-8fcd-7ff8c0b9ae30', '13ed153f-531e-4a0c-b8ad-ed3b59bfbde8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('131d5b6d-a56a-4b31-8f0a-c55570547abc', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('88ae7f4b-051b-400d-b9d2-d5ba4bf8f3cd', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('bdc15140-68b9-4e2d-be14-926bd2c5ba1d', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('a9a859ab-b071-495e-aed9-74885908257d', '85c91f43-928b-4898-b0c0-611d3c9f6922', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('08772b9e-3853-4069-96dc-be63ceff403f', '85c91f43-928b-4898-b0c0-611d3c9f6922', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('1816a573-fc57-458c-a421-206fca4825a0', '85c91f43-928b-4898-b0c0-611d3c9f6922', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('363214ee-96b3-4bdd-9b8a-7a6796433b37', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('8bf164c0-f41d-4b07-9980-4db859691139', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('24ece4ba-ef44-40b9-a05f-fee0166bffd6', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('2d780a96-0ced-4cdd-8545-0b869675100a', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('e3c9dd6c-a5c9-4e2a-9530-71099e93ccad', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('3bb7d88a-21a4-4ffd-8968-243734310b3f', '357a183e-a563-4676-9d76-b1124d86cbb5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 3, 0.0, 1.10, 0),
-('1f0305a2-5694-4cd6-828f-7bc88d02148e', '357a183e-a563-4676-9d76-b1124d86cbb5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 7.0, 1.00, 0),
-('988a3b70-2e92-417e-abec-455dcc407c44', '357a183e-a563-4676-9d76-b1124d86cbb5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.0, 0.80, 0),
-('25d3fcaf-06c4-4dfe-b565-d935e498b30f', '357a183e-a563-4676-9d76-b1124d86cbb5', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 4, 6.5, 0.90, 0),
-('7b1e7322-9d56-4b3a-a93f-a9ce7b68a170', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('c41ca23d-bf0d-4413-a06f-584cc24e2c15', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('05685faf-85f8-43a0-b79d-5848571c1170', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('975dcc39-9b59-4178-a43b-81b6681c47c1', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('de642a2b-1618-4511-a5d0-997148589eac', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('4dff2016-f283-4c11-a3ad-866da8298a1f', '52bfff3b-2930-4cae-90e8-4244258d6868', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('2abfc6b9-c06a-4bf0-8d91-cfa876c4c540', '52bfff3b-2930-4cae-90e8-4244258d6868', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('a6b0d0e1-420a-42ad-ae28-eed860948cbf', '52bfff3b-2930-4cae-90e8-4244258d6868', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('f9f2ad6f-bca8-47e2-a24f-cc1505927975', '52bfff3b-2930-4cae-90e8-4244258d6868', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('3f47b69e-9193-42ff-8567-dfb4fd0cabbe', '52bfff3b-2930-4cae-90e8-4244258d6868', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('dbc17d73-9ed9-4d86-b29b-99bba17aa543', '52bfff3b-2930-4cae-90e8-4244258d6868', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('825e985b-9381-431b-a5cb-0c17f8deac8b', 'ef771a53-e528-4269-bb83-19ae7b449188', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('84c087bf-ad05-4cf7-a849-ae7cd737a5ae', 'ef771a53-e528-4269-bb83-19ae7b449188', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('3c9b3a89-0d19-4946-bed4-c63335c85b6e', 'ef771a53-e528-4269-bb83-19ae7b449188', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('8472502b-5e59-40b4-812a-0fb7b01f04fa', 'ef771a53-e528-4269-bb83-19ae7b449188', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('b932273d-460c-4c0e-8408-f8e059c6c682', 'ef771a53-e528-4269-bb83-19ae7b449188', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('1c020fc7-fc46-40ad-88b7-33f9fec38f05', 'ef771a53-e528-4269-bb83-19ae7b449188', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('725c4695-8480-4692-bf82-f2fbef717b9a', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 4, 0.0, 1.40, 0),
-('31d68d3b-8022-4634-92f4-883a1237f69e', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('0b7b8b59-9cdf-4059-a929-2c13ff05a6f3', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('34d2e766-1f0c-4ff0-b20b-18983573f673', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 2, 9.0, 1.50, 0),
-('eb483b6a-568c-424a-8267-37a8cca74b5e', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 9.0, 1.30, 0),
-('1b19e155-947e-4cd5-94dc-0516f6fc1bfe', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 2, 2, 8.5, 1.50, 0),
-('31baad21-3fbd-4f00-8e31-da3391ee1705', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 2, 5, 8.5, 0.90, 0),
-('e7ad56e0-199d-4a58-ae3c-2ae016129546', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 7.5, 1.20, 0),
-('6f2ffd19-c814-48b0-8646-5bc2ebcd8ec0', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 3, 5, 7.5, 0.80, 0),
-('3f422a44-2037-4450-8ab3-b57a9ac9f6c2', 'a169f862-a419-445c-b7c7-668c3b96a558', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('ae505666-2b1c-4277-bdc1-8a5074982f3c', '3812469a-8d60-4935-8eca-dd920ea5d764', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('4d5cbd73-16ef-44ca-9d93-0092e73bcd49', '2faa1203-49ed-4539-bc66-66e5436a0993', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('8e69c6bf-7e44-414a-8e5c-eed9f020e219', '2faa1203-49ed-4539-bc66-66e5436a0993', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('44e96cf7-ab89-4533-85b2-3202607e04f1', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('f2bda185-7fad-4cf1-bbb3-50bc3579047a', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('30d3e44a-f94c-4828-ba7e-ae2fdb561e52', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('a154d4e1-311c-4e9b-9f00-439d195c9b04', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('42665e71-36ab-4e70-ab79-d42d76a1b32d', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('084ab832-2af3-4271-94d8-210d8bbce8bb', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('852c57c6-1952-4adf-af88-05ac1e3053b0', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('aa75cd95-73b1-4666-8f3a-70b7c74dbd06', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('d67abd68-2de0-4c81-8f13-e14f00ab0005', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('4b60cf39-ce2d-4962-994c-5fa2f21495f9', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('7322c65f-b5ef-4a8f-aacc-2bf0526d079b', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('e263ab21-d45f-43dd-ac59-d63f39294104', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('c2189f20-7282-499a-80d1-00dd5a9c73b9', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('acec7186-1113-43a4-aae7-e2aca69526fe', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('a853a8c5-b1db-48bd-93ca-b019d1c75377', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('a034388c-6714-4789-aa3a-0d67c9f10325', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('fbf29b83-66df-4fc8-8f50-7e1a81474d51', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('6e1e2d7a-9b44-4759-865e-2b181224251d', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('abdeb08a-d2a9-48c4-9427-d81d4e805f26', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('8a1586b4-21e8-43b9-9131-98411d3b11f5', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('d04c3f3c-78e4-4e82-8b3b-f717c1562859', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('3fa69120-9d3c-4cd1-8917-eb22da157a99', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('1b9a6af9-27e9-473b-a52d-9354d1776bf2', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('8eff1e80-b5e8-46bd-baa8-dc795148128a', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('2fbea9ab-e04d-4649-bc99-691b3231e416', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('a6ade804-87a4-423e-b491-bd761a6ce066', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('309adeda-fa75-4384-9998-9deeab601778', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('2d56b0ec-2175-4106-bd7c-7d0780b0dabb', '1d84a5fa-da8d-4ebc-acad-6271314f7d8e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('91365563-f074-454e-8c05-edbb69c7e077', 'e0d60499-c5db-40e2-9b38-51849b5d2ed1', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('1d300a4c-d344-46be-bf61-cf719b862ac7', '01ce0ba9-da8a-43c7-b77e-7f6ecc8e6759', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('269e09e5-baed-4640-b683-4de277c57461', '01ce0ba9-da8a-43c7-b77e-7f6ecc8e6759', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('01af72b6-34fd-4f64-bd64-b9b1aff0c977', '69eba23a-7741-4460-80cb-b248e0a3893e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('34887c5c-7f45-477c-8012-8f32bcfa8f22', '69eba23a-7741-4460-80cb-b248e0a3893e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('144f5d15-6191-433e-8d07-9f8fe1a611f2', '69eba23a-7741-4460-80cb-b248e0a3893e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('50f8c0b4-a416-4d99-ad3f-debbd7a71126', '69eba23a-7741-4460-80cb-b248e0a3893e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('e03e944c-bbfe-47ed-bc49-961c647c2d76', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('7a084f6e-898c-40f8-8a5f-74a24aff9d9d', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('7edfb9da-90d6-4721-ad97-9ce0eb357893', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('8eec67e0-0a90-40a4-9092-089b05b6f9e0', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('f94566ef-08a0-438d-a9e8-2a1b36b5122d', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('99e36505-ec3e-41f9-b6e4-d3c90802ea89', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 4, 0.0, 0.90, 0),
-('a95231f1-78be-49f0-94ad-de0d12e1016b', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('0bc2cebd-87d3-4add-bd57-25f7d4beb3e9', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('b368b580-c3be-4f3a-ba1b-d1040f7e8e5f', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('2f3064a6-1522-419b-8afa-3fa8a0af35df', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('e004f030-5f7b-4a81-8d8c-f88690641198', '8868fdcb-be86-41e5-a043-8da087b206bc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('e7484d73-4030-4b1f-868f-29c4c5f08253', '8868fdcb-be86-41e5-a043-8da087b206bc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('5117ab30-6b74-4446-bc59-f15307817d4b', '8868fdcb-be86-41e5-a043-8da087b206bc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('d2612d08-f191-4d8b-a509-74e0c0337ee6', '8868fdcb-be86-41e5-a043-8da087b206bc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('0d2eed88-1a6e-4737-9879-4e3e3cca4b59', '8868fdcb-be86-41e5-a043-8da087b206bc', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('35b7c3c5-7d40-4d01-b8a2-3ca9b9f1740e', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('f40ac427-c4a4-4879-8f30-b19618850b30', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('6dcb7bb2-9a52-4a13-8be2-e13a7ae32afa', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('ef4e9d88-f166-4637-82f6-0424020844e5', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('f495e230-342c-48c6-9e30-8bfb542c35bd', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('7a0c8e2c-e211-490c-935a-d5dacc03e9ba', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('56538b73-59b8-4717-b16a-d6b78107f9fb', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('426822ae-2850-47a2-9e63-d1786038b3af', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('6ff34ed8-609b-48d1-bb88-778eeb41677c', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('5600d3bf-04ab-45cb-9065-7f49e1cb50dd', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('95f42938-bc1e-450c-bf65-5203ae2437ad', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('ed493b6e-9fea-42d2-a591-1d0f19df3b9d', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('0f5e8430-5da8-4979-b2b3-b1b37d0584d0', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('4d496237-0d10-4c79-9c7c-056511c60274', '8d608903-c513-4966-a38c-cadbc92b9a85', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0),
-('aca0d32c-4604-4f98-bd08-083c092785cd', '0e400ea6-60de-42e7-ae11-9d8d67d9c303', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('5d13e9ba-41a8-466d-97b6-67cbc93c7864', '13106470-7ba4-4cb7-91f9-88903d92b23f', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('f2b8310a-d127-4152-b7f4-d3e8ebd1832d', 'f94852fe-b5d3-4b10-9316-6f598dc7c74b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('10943b81-c5e3-4fc0-8570-7167d4b0ed17', 'f94852fe-b5d3-4b10-9316-6f598dc7c74b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('5ebb9952-94b1-41df-8450-0828bad37ddd', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('e5370b05-f0c1-47db-9269-9609e7f09e6b', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('f818485d-8c57-4a4b-97dd-95f0e7a9cfe2', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('02a823f1-cff1-4665-9cb9-bb455c2fb9c3', '357061f7-e4d5-420d-814e-84507ba4c98c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('6ce9cee7-d97b-4a08-b666-792863c0313f', '357061f7-e4d5-420d-814e-84507ba4c98c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('b273c17e-bc8d-41c9-b71d-0e6236ae709b', '357061f7-e4d5-420d-814e-84507ba4c98c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('4f819e07-cbb3-4f90-b012-1df84e9876d6', '6f581332-18eb-480f-a738-cd5b66b8884c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('9deff5f7-20fd-4491-807d-16cdde8f8046', '6f581332-18eb-480f-a738-cd5b66b8884c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('18d6c7bf-090c-46f9-874e-75a1f43231c1', '6f581332-18eb-480f-a738-cd5b66b8884c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('a6042e22-9a73-4bd3-8649-b265d1e21637', '6f581332-18eb-480f-a738-cd5b66b8884c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('e0875927-5967-4def-97ed-e199cf5a3261', '6f581332-18eb-480f-a738-cd5b66b8884c', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('ce1ab95c-86f0-467c-813f-95ba909fb256', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('24138bd7-050b-40a4-a365-82fb9fc5dbad', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('693c543d-f951-4592-8815-eca9503e94f2', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('725ea556-9530-4496-bbf9-3a52cfb4b5fb', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('7877c78b-9a4a-4b33-a4af-012485f3b001', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('f394a84c-d6cc-46a0-bb53-a62e47177097', '2b253a98-5606-47ed-a2f1-645681304afd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('16a30a86-7ed7-4756-963b-b7fd19dab2e2', '2b253a98-5606-47ed-a2f1-645681304afd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('dba483b8-da77-41f0-84d5-5dba3996124e', '2b253a98-5606-47ed-a2f1-645681304afd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('db75870d-95f3-4934-a18f-2482fa586d48', '2b253a98-5606-47ed-a2f1-645681304afd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('c0a9b95a-e079-4f81-969a-1202dceb5b9b', '2b253a98-5606-47ed-a2f1-645681304afd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('331950a0-5965-4c95-b533-235811c9bdb2', 'f949b508-3380-4623-8e52-9ee48026e79a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('3e0de4d1-a13c-4b90-aff8-8157470aceca', 'f949b508-3380-4623-8e52-9ee48026e79a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('1f5c5dca-cd8f-432c-9691-4f38a4ee4629', 'f949b508-3380-4623-8e52-9ee48026e79a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('86be0df7-1295-485e-9fd3-6df996d55e55', 'f949b508-3380-4623-8e52-9ee48026e79a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('48a28988-efd0-4fce-9b56-94d1d9d38581', 'f949b508-3380-4623-8e52-9ee48026e79a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('66ce9a90-4283-45b8-aa59-a85bed47023b', 'f949b508-3380-4623-8e52-9ee48026e79a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('32cb3464-1b12-4fb7-a642-b6f453b5ba68', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('a063a7ef-654b-40be-a669-147e9225262d', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('32d34eae-a102-4368-87cd-b0d245182ddd', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('64044246-df44-4002-9ca4-5f4abda51fbd', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('07e513ec-652c-44f7-bbfe-7cdacc588014', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('9ee767ce-eda1-4b47-b2d4-ccd9ba69dd07', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('8c1cad77-9ec8-4606-b185-9c9b53089fdf', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('dbfa37cd-0055-4250-96d6-5fdc8edde0eb', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('7032030d-fc24-43dd-b78f-265d5001e1c6', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('11928fa6-ab29-4955-ad06-792dec8d66ec', '22b76e50-6a55-4d91-b1ff-09dc8644f3e3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('a4e3da78-cf6b-4832-b677-56a0bad1ba86', 'a9dbd5b3-2638-4e06-ab14-2a2f04a81c53', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('c3423072-50aa-464c-9051-d654fa71b2f2', '7e0ccd71-0ea3-4224-94f8-e91b218e51b0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('0f88a2e8-8359-4f51-989b-a28f86234eb6', '7e0ccd71-0ea3-4224-94f8-e91b218e51b0', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('94da3c89-ac9b-449a-aebf-bf03cce87e3e', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('fba174ed-0ff9-4b7a-b7f0-86f8b055307f', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('63ab02da-3dd1-437f-b418-3c16383fd44d', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('de1b9158-d308-415a-acab-eb8dffe1180c', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('c890d726-4246-42de-a995-1ca8fa03c29e', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('693bc99e-dee0-4e19-be0e-235d47533425', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('e71c7edb-e751-4939-9fae-36bd95fb7f69', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('98822ec7-82e2-4579-b4ca-9bad26391bc0', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('9b0e1179-3024-4d50-8349-ef08f426c589', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('c8fa811d-1a3a-481a-b0f0-b264d6caba61', '7620f1fa-54ae-42bb-add7-613ef31be515', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('325acf9c-4fa4-4744-8e7d-88acf7e37258', '7620f1fa-54ae-42bb-add7-613ef31be515', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('14ebc498-5f53-4949-a3f3-b604cf65a6cf', '7620f1fa-54ae-42bb-add7-613ef31be515', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('5fe4369f-f755-4167-81bf-7bfa0256461f', '7620f1fa-54ae-42bb-add7-613ef31be515', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 6.5, 0.90, 0),
-('3005fbbf-cb8b-426f-995b-f8f167f62d44', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('9e49921b-fccb-4ea8-a126-1b46d1a4a000', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('e08e4b30-4337-4a03-9d0d-6cc09e26eea2', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('de5d4420-d823-4bb6-be37-e5b6170feda5', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('65df0509-c05c-4fde-a765-753857654152', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('db02edcb-6b78-44fb-a7e3-a79d66cff7b4', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 0, 2, 0.0, 1.50, 0),
-('894aacc3-0cf2-42a1-8fdf-e365c28dbeba', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.30, 0),
-('a7422044-5d90-4d4d-b18b-e54336573b1b', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 1, 2, 8.5, 1.50, 0),
-('aefdd1c4-58e1-4f73-9fd2-8d5dbd895aef', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 1, 5, 8.5, 0.90, 0),
-('49eaf1fa-6962-4dae-8089-44333375eb06', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('8b103ea1-f415-4268-b267-f0e1385c8ffe', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('ad993d96-f000-4bfb-8442-ae0a539e5700', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 4, 9.0, 1.40, 0),
-('f104b6ed-3ebd-4aae-b05e-20770e5e6214', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 3, 1, 9.0, 1.20, 0),
-('46f4f025-1af2-4b01-9875-da24bf782add', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 3, 5, 9.0, 0.90, 0),
-('84c471e0-c902-4658-ba35-003ab8d49895', 'e01e0a9a-d6ef-4098-b32e-a4e71c04dba7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('d1f59af3-d3ac-4816-bada-7b8bf7d66512', '247de1c3-746e-43f1-8d8d-baa9b5e5c0dd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('ea5f20b7-bac1-4bd5-a80c-b2f8eb5b5045', 'cea78034-5b62-48a3-9c4c-4eeb88e47831', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('0641da8b-947b-4ba6-8e1c-266824e2fb7b', 'cea78034-5b62-48a3-9c4c-4eeb88e47831', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('45e28042-2118-455e-984a-3900fc3aff76', '83327df1-98bf-4684-a484-223b457e31bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('c0af9b2d-f368-474e-a257-8e5ff096bf9c', '83327df1-98bf-4684-a484-223b457e31bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('04c8369b-22b7-4774-be8d-488ede6e3ade', '83327df1-98bf-4684-a484-223b457e31bd', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('c89a48ae-c323-45a3-92c2-3f6d1d127c91', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('d8344402-b9bb-42de-80b6-75b43b585d10', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 3, 0.0, 0.70, 0),
-('a104a0f1-df9d-43b0-a16d-8e107249a7ab', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.0, 0.60, 0),
-('390f8964-d499-4d84-b053-3cd5e20c35a3', '68c612f4-77d8-4c58-b384-8928a2f4baae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 3, 0.0, 0.90, 0),
-('b09a60ba-d074-403b-a8a3-c1f673c43eb8', '68c612f4-77d8-4c58-b384-8928a2f4baae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 3, 0.0, 0.70, 0),
-('7fc9b1fc-a421-4fba-b416-44d0d5cc4f3a', '68c612f4-77d8-4c58-b384-8928a2f4baae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 3, 6.0, 1.10, 0),
-('b96860d1-668b-4566-99b2-92e6f25a3cb6', '68c612f4-77d8-4c58-b384-8928a2f4baae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('c657d834-d165-43b9-9c12-cb39f843b4a6', '68c612f4-77d8-4c58-b384-8928a2f4baae', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.0, 0.80, 0),
-('4b012bbb-e541-4dcd-8ccf-e02e9943d6d2', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('4679d4dd-706a-4fe4-9d99-0d20de58c447', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('6a7d6bd2-3634-4f6b-a4fb-d74414b7ecc9', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('a3da3597-96bd-4644-8645-b87602ee88e2', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('a8d79126-aabf-4777-92d7-85414bf39864', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('d0d28619-2c45-4a63-bdb2-b632d7a3b175', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 0, 5, 0.0, 0.90, 0),
-('ce3a3750-3826-4747-884b-91b7b30ba6e0', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('bcedbb46-afe9-4c87-ae29-0680c25b7a92', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('a17fcd9c-ad28-41a7-935d-8ab3b1792c66', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('ac32b0a4-6c34-4ec4-9520-5c3d5a52369b', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('7ebc1706-579a-43d1-bfbd-5d222bf62c4d', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 0, 2, 0.0, 1.00, 0),
-('2833f518-66db-4707-81f4-9b86bfb2e25b', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 0, 5, 0.0, 0.60, 0),
-('0bf0e2c2-deaa-4400-97ea-5426f0022da2', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 1, 4, 8.0, 1.40, 0),
-('cc5b1ed5-137b-4945-a5a1-268dfa800387', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 1, 1, 8.0, 1.00, 0),
-('c9006e9e-77d2-4434-a9eb-bbd6223f4a86', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 7.5, 1.20, 0),
-('b0e855fb-1a93-4268-8324-4d3efd9fbcd8', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 5, 7.5, 0.80, 0),
-('af0493e7-c5ee-49fb-b210-b626ab0abef1', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 0, 1, 0.0, 1.20, 0),
-('6c44310e-a7eb-4978-b98a-e8dddef09c27', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('d1464975-3282-4785-b049-5ca2996853c7', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 1, 4, 9.0, 1.40, 0),
-('9b739ebc-cdcb-41ce-a810-c3540f643ecd', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 9.0, 1.20, 0),
-('1d1b3bd0-8d62-47e8-98d8-747d615391f5', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 9.0, 0.90, 0),
-('702a1b58-56bc-4931-b6a6-d961229c6a8f', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 2, 9.0, 1.50, 0),
-('58706fa3-4871-4f1b-9bd6-6c39ee9a7788', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 9.0, 1.30, 0),
-('8eed5594-b6e1-4f47-a456-062f75ea29a2', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 3, 2, 8.5, 1.50, 0),
-('80ede78b-3fb6-45ff-a88f-4d8f0a71df2b', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 3, 5, 8.5, 0.90, 0),
-('1d07be90-4146-4343-a5f9-a4324cf2f71a', '410192f4-94b2-4875-b3a5-8811fc49a87e', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 4, 0.0, 0.90, 0),
-('e5ceb193-293c-4b18-8474-83761fffdef7', '5a3bf909-482c-4b02-bcfa-dabf898d9a3b', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 4, 0.0, 0.80, 0),
-('f1437f9c-f31f-40a0-ab41-e0b265f22640', 'a706ca89-21a5-484a-a270-e5463c727445', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Loyalist Militia'), 0, 6, 0.0, 0.70, 0),
-('3d35d2c5-eff8-4109-99d9-ef80477d4b9b', 'a706ca89-21a5-484a-a270-e5463c727445', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 4, 7.0, 0.90, 0),
-('6a5ab6d8-b9f5-41fd-ae9c-b2dde64bcc96', '856715d7-d80a-45d4-9174-3afe149d628a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('a0716fd2-243f-4d7e-b789-79c947ec9d7c', '856715d7-d80a-45d4-9174-3afe149d628a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('2b856f8b-0c52-491a-a966-ea579da7b8c4', '856715d7-d80a-45d4-9174-3afe149d628a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 4, 6.0, 0.70, 0),
-('786c0afc-123a-4806-a7d6-f01b405977ed', '856715d7-d80a-45d4-9174-3afe149d628a', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 3, 6.0, 0.70, 0),
-('5c562610-d703-4973-988e-0c8b01046822', '24f97233-4124-4eab-b358-7c6d5942e332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 0, 5, 0.0, 0.80, 0),
-('afb9fae4-ad14-4b05-aaf5-6e7d2e44c8e0', '24f97233-4124-4eab-b358-7c6d5942e332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 2, 0.0, 1.00, 0),
-('706a6ed0-afcb-48ea-96d4-490d4e06e8c5', '24f97233-4124-4eab-b358-7c6d5942e332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 1, 3, 6.5, 0.90, 0),
-('ea9145df-b8c2-4400-b86b-0b4fc7703441', '24f97233-4124-4eab-b358-7c6d5942e332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 1, 3, 6.5, 0.70, 0),
-('96b91857-d150-486f-896b-a1624e9743da', '24f97233-4124-4eab-b358-7c6d5942e332', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 2, 3, 6.0, 1.10, 0),
-('a0d17ad5-ecd2-4ec7-b86c-c94ef53a9da3', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Jäger'), 0, 4, 0.0, 0.90, 0),
-('c3c9bee1-d166-4fff-a5d9-c86cf03cd0c3', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Infantry'), 0, 4, 0.0, 0.70, 0),
-('11705c46-e1c9-437d-acbb-070f5d158bef', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 1, 4, 6.0, 1.10, 0),
-('ed67055c-fcf7-4e46-807f-cf5cdb242fcb', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 7.0, 1.00, 0),
-('835118ac-7377-4c18-9db3-b65d3c10b655', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 2, 6, 7.0, 0.80, 0),
-('2d5177ff-f377-47cc-b032-a80624a33fc4', '0ea391d5-caf7-468c-bf72-295997de09f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 0, 4, 0.0, 1.40, 0),
-('82f29a9b-60b3-4ad1-971e-cd8dfd04d33c', '0ea391d5-caf7-468c-bf72-295997de09f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 0, 1, 0.0, 1.00, 0),
-('58750880-fa78-4a0e-985e-90c4f0605ee5', '0ea391d5-caf7-468c-bf72-295997de09f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 1, 5, 6.5, 0.90, 0),
-('1ee70fa9-0803-45f1-805a-da00f6e45b11', '0ea391d5-caf7-468c-bf72-295997de09f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 2, 2, 5.5, 1.00, 0),
-('c74fe3e5-be3e-4663-ad32-5ade6f243230', '0ea391d5-caf7-468c-bf72-295997de09f3', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 2, 5, 5.5, 0.60, 0),
-('22b9c433-0de2-4113-9ec3-4398fb28a137', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Light Dragoon'), 0, 4, 0.0, 1.10, 0),
-('9b492b71-c01e-4db9-a702-fb60cc6ebf91', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Spy'), 1, 2, 5.5, 1.00, 0),
-('16feb15c-4555-42ab-bcb8-0388cc1fdf62', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Native Warrior'), 1, 5, 5.5, 0.60, 0),
-('d2563b0f-f94d-4483-8fb5-03026e364244', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 2, 4, 8.0, 1.40, 0),
-('e552ebe3-897c-43f5-a491-5e2e8fb13511', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Regimental Drummer'), 2, 1, 8.0, 1.00, 0),
-('58796f1a-3a4e-4e4f-bc24-bc0eb8fffe6a', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Royal Artillery'), 0, 2, 0.0, 1.50, 0),
-('fd82fb43-c7cd-48a8-ad6e-2df71237b7d4', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Hessian Fusilier'), 0, 5, 0.0, 0.90, 0),
-('034d4a14-fa6f-4846-b0b8-2a653488e252', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 1, 1, 7.5, 1.20, 0),
-('61d7349c-f5d4-499a-aa99-743906098778', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Redcoat Regular'), 1, 5, 7.5, 0.80, 0),
-('5885a6eb-6387-4a04-beeb-e2c03e9cfe69', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 2, 4, 9.0, 1.40, 0),
-('bc86e17a-8f25-4550-8746-0ca19436cb78', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Mounted Officer'), 2, 1, 9.0, 1.20, 0),
-('20e9da80-f15f-4998-baee-10605848a251', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Highlander'), 2, 5, 9.0, 0.90, 0),
-('b8d51ea6-5f81-417e-8b4c-9a589ef77518', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Foot Guards'), 3, 2, 9.0, 1.50, 0),
-('20648ec8-3bc0-4029-9e3f-dad647e30d09', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (SELECT id FROM enemy_type WHERE enemy_type_name = 'Grenadier'), 3, 4, 9.0, 1.30, 0);
+('b6138818-31e2-4760-b0fb-bff3b6c02cef', '79583241-f14e-4609-9459-e75da74a112b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('9ec2136a-e624-4db0-9421-daf22a00e6ad', 'df3dee10-d2fe-4ac6-9832-a4e9f1f84c4e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('977813c7-2bbd-41a9-84b1-98f4d0485264', 'f743d7b8-5632-4b1e-9460-c1ad99fa0d9a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('0f38b179-3125-410f-aaa7-7f2907a70b21', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('245afc61-0d73-48fa-892e-f517ca5e779d', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('6d8412ac-fae8-44f6-86ef-c70c2ba1b012', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('0bab854b-57a9-4f6d-b3ac-0947611a33a6', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('76078c2b-6d25-4f7a-8803-b1d1fce9c8da', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('eeb1662b-546d-4126-9a23-6ef84d71ac76', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('7bd14f21-94de-4925-89ea-7805c7723e71', 'effa0c5f-2ae5-4089-896e-23777602eedd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('2f478b75-db42-4a63-92ce-05e0b3b9397a', 'effa0c5f-2ae5-4089-896e-23777602eedd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('ece8d306-8967-4eab-afdc-4b096ac0786f', 'effa0c5f-2ae5-4089-896e-23777602eedd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('c2e7d08f-63f8-41cc-af8b-190170e9552d', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('3de53f89-9fad-4561-b416-be1b49634316', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('818fd805-c942-4c04-a5ea-d152071f766b', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('4bad238a-618d-4482-8cdb-7041686d6cf7', '8ff2c7f5-b7cf-4a74-9b07-47efbace8406', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('79357476-2485-4bd2-8e4c-dad3870a0c1b', '145ff2ef-a595-43ee-acd2-bbafb3065733', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('b0fb0c90-2cb6-46f7-91b0-140c0686f59b', '145ff2ef-a595-43ee-acd2-bbafb3065733', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('ef59d30d-2819-416e-899f-8701bc491c72', '145ff2ef-a595-43ee-acd2-bbafb3065733', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('9451efe1-163a-46b3-8e21-c7e7318404f5', '145ff2ef-a595-43ee-acd2-bbafb3065733', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('bade5271-a6ac-4c01-9bce-8055f589e3aa', '145ff2ef-a595-43ee-acd2-bbafb3065733', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('c494d8d0-a2b9-43f8-8e50-0a1b6f0d74a0', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('1ccb92d1-0327-449d-9a92-12e8ceb2e77c', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('7f2a07f4-3f49-4b77-9b8f-3769f65e2707', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('3dbd9e1e-b2f2-47e5-a3df-188dba993f99', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('b3920341-4d86-4d0f-9285-988185f33222', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('7b08c352-d9a9-40e0-8a29-edd7fb741f46', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('d08d0ecc-95d9-4549-baba-9b3009e37aa2', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('05fe08fc-1881-4b2c-8c2d-bb26dcf40033', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('66f4a78b-0029-4d66-85ba-9852b768bdf8', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('781821e8-097d-4b83-aa30-49311a211fd9', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('52f49f1d-c074-497a-81c3-c4d55f5da0b8', 'cd21fc9f-d9ca-4a8d-849a-8a1cbcd36041', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('6939034e-27c3-44cb-ab84-8f9475a20d97', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('a5263c0c-2bcd-418b-9e93-32115e0044a2', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('04161128-1186-4ac5-8bb0-ccdae1f4b9ce', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('5e4fa13c-100a-4b58-ba3e-7513efae4d25', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('a041ceb0-ecd7-4dfc-8521-909365e4b1a9', '33cdf863-83b2-4d98-b81f-c2c4f1e50806', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('b9826f15-07f2-4764-ae5e-168df06eb1f3', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('ec206307-459e-49ef-ae79-39d3037b1e12', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('456a5bd4-1aac-4812-be0e-d1a6bdacda7b', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('79c43061-5beb-4bcf-945c-e6ff026da7a3', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('2bdfcaa9-dbd6-45b1-ba38-438f92c658d0', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('73d305e8-fbc8-4410-acb2-65bbe07b917a', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('13befbf5-6c15-4535-95c4-2d556df3a44e', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('141b8a90-5971-4c88-b361-6815c8ff18e4', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('36fdc387-e95a-486e-a7fe-feff6604e1b5', '6be6dc00-62d4-486d-bae8-3a5128974c6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('839c5a11-91be-4943-bce5-37fe09eee9c3', 'ae8d4268-ae43-4f65-932c-cb40bbde3871', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('31c7ac82-185b-45ea-a100-34a7de50e712', 'ffd894b3-d287-4767-8e1c-4e020c1c66c0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('8007c4c4-a542-417b-8ca3-8ffe75721fff', '828304fc-9c2a-4b28-9a41-f6ada73df381', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('73e5f427-5570-4ef1-9798-6e9ab97fd55a', '828304fc-9c2a-4b28-9a41-f6ada73df381', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('41196332-2d88-4867-949d-a0359221fe31', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('1bf80908-6213-4f8a-968a-29b9414fb41f', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('13b86fb8-b040-4f60-9089-ab9449e3d52a', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('8b77d995-51c1-44f5-bf45-e15fb08f574f', 'a23434f1-32ab-4698-9c0c-57932f611081', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('7be8a940-1057-4992-905c-45c4f54956d9', 'a23434f1-32ab-4698-9c0c-57932f611081', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('a2d878c2-c242-4f89-814b-afdd4e01c34f', 'a23434f1-32ab-4698-9c0c-57932f611081', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('66968866-f342-4546-948f-45848c9130d3', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('b83309b3-0bb0-4aa8-a04f-ec95a5090e3a', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('8030e01c-819c-4e5c-a443-30938a715b4e', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('a7120b3d-fdf0-49e0-8231-adb17bc4c5ec', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('f5812606-4fdf-4123-bc86-dd6a2b35f787', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('519f4e3e-0cdd-4cab-8ce3-4b5ed05b60c8', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('f0411fdc-6113-46e7-a6f1-4900a53a2725', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('f4131adb-15e9-4f04-b3f3-d373bd866d48', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('01440cfe-8aae-47ff-a335-6840c4167b01', 'c8c3eeb6-d3e8-4d3a-b29e-64cb5d6a0b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('b67d78f1-a977-4f85-b5ae-13f924e17b65', '559051a0-b358-409e-89c6-310b7870063f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('5cddbf6b-52cb-4b7f-935c-c6e2db1223e3', '559051a0-b358-409e-89c6-310b7870063f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('139276a8-e53f-45f3-86e1-7ee917cca699', '559051a0-b358-409e-89c6-310b7870063f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('2ea938f4-54d4-49c6-bc1b-ee83f4e67f21', '559051a0-b358-409e-89c6-310b7870063f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('2701ed5e-2245-4dfa-b649-17e3618d4830', '559051a0-b358-409e-89c6-310b7870063f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('d409a918-3cf5-4441-97fd-3ef853e02555', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('2ad8f4e5-dac0-44de-b5b6-a25923bf4099', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('fc9afb97-fb08-479c-87a9-a8abf328cf9a', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('a501b698-f850-4281-8612-5fa237df54cb', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('e179d64f-2806-4237-a217-eb0dc8555f78', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('23c7212f-95cc-4a76-887d-69e091cdd2d3', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('4fec3871-3611-4505-bb19-18c300dca86f', '6bb86e4a-c935-463b-88b0-115c37523796', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('c1c9563a-d0e8-4a68-b4d6-1c6dd2935843', '6bb86e4a-c935-463b-88b0-115c37523796', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('75a0a167-74fa-4e2d-ac7e-0c6079e4c6fa', '6bb86e4a-c935-463b-88b0-115c37523796', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('3901b534-22a5-43e4-88cf-aa3d7b472b90', '6bb86e4a-c935-463b-88b0-115c37523796', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('2f0b9e62-f827-4b91-87b3-3a0b5331e82a', '6bb86e4a-c935-463b-88b0-115c37523796', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('cffbaa63-0e3f-4f9b-a218-4e58245b9cc6', '6bb86e4a-c935-463b-88b0-115c37523796', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('4ff61845-f150-4726-a39e-7974300e5f50', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('79d64705-57ec-4352-a7f8-2df0d6905536', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('e03da77d-2164-4389-9246-b770d6cf119f', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('ed0d40c8-54a4-49c4-b09f-3c3230be0383', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('e9b23eac-2372-4da9-b4ba-48a7cd25fb2c', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('1bdabb10-e8e3-4ffd-9161-282219d360c5', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('8d416a6f-02f0-42e3-8b7c-f0c44baa68a6', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('8ccd73fe-2020-4391-940d-be9b7ec46d6b', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('dbf799aa-060a-4516-a538-76f4698a0457', '991f12b3-80a6-44a7-9b16-df7890a43c88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('826b95db-dd1a-4e31-b695-befbbec6d8c6', '7d36e60b-0a9c-4640-ab97-d45d1652593c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('b82aef69-8eb3-4f9d-8122-ec0019a2fd9b', '523c7569-c05c-4b44-b247-50134c90a57f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('e36ab2e3-d3a1-446f-9cd0-f3becf42807a', '92743788-e0b2-49b8-94ad-5ab1b0c2297d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('2150c4bb-9e55-4ae8-9836-6c8f5c48bd8d', '92743788-e0b2-49b8-94ad-5ab1b0c2297d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('17c451c1-6da8-4b4b-be0f-44d5ad88e3f3', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('95f43afd-b7e6-436d-9c72-f546aa91555d', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('f1e2f876-a425-47a7-ba74-519616f98e3e', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('a8c35094-64e1-4574-91a0-5784dd761ea1', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('87be80a1-e5f7-4490-a44d-1b228f62d08a', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('aab565a2-433c-417e-9f8a-fd18772b6c94', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('81b2338a-f2cb-4fa9-a4f0-f671cdd80fee', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('bdcf07c8-584e-420e-bd4b-ac262429e44e', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('6b4038e8-7333-4666-867e-1b47cb951e76', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('7b905e2a-67e9-465f-870c-1d3fde65a785', '7d483edb-09d1-48dd-a574-ff189f606cdf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 4, 0.0, 0.90, 0),
+('bebc8e33-8191-4dd3-b090-84a8a23d3431', '7d483edb-09d1-48dd-a574-ff189f606cdf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('43667185-ae2f-441e-8370-9758102a7b18', '7d483edb-09d1-48dd-a574-ff189f606cdf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('c575e33d-2215-4a2e-b940-8793af2cb730', '7d483edb-09d1-48dd-a574-ff189f606cdf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('6d9d3d7a-ac24-46bb-a42e-47512649ded6', '7d483edb-09d1-48dd-a574-ff189f606cdf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('17c839e8-6f8e-42c8-8b87-4673627e00b5', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('c129a6b0-dd53-4523-a7fa-80670a12dfeb', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('057c6e3d-f2fd-48f6-ab98-ca3dcaee7f64', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('e7d6c3df-9b18-460a-b2bd-bd80fe3dc80e', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('fcdbff84-adf8-49c6-bb28-c89bf52c5eb8', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('409d3673-aaff-4b85-8321-8d377937b7ab', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('e88856c3-4651-4857-9e27-b6239029a4c6', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('3ea4d1a3-f3df-45b3-9b02-72dee0330289', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('33cfac65-d718-4c1a-a2c0-034c7f398ef0', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('7fd96b41-62e6-4c84-b2e1-8c41db9b8e04', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('86873cab-f764-4191-8b4f-012b91a13b07', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('b9326582-cccb-4ea0-b055-0a48f1bec099', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('a3e6a659-d981-4819-a289-be5e43e6b465', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('6043a101-c2da-48ab-b243-6a545f3b9752', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('6b4f50a9-a4cd-4905-adc4-32b5c8eee386', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('5923209a-6757-4c97-b632-1d319b8c8625', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('bc31b91a-ada0-4a90-805e-91980e7ba49c', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('95cc1ec1-bae3-4fec-94cd-f6490751aa62', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('4743525e-26d6-46ca-b203-6123af9828a9', '67c96ac6-9d60-4c1e-89b8-1fa0f79536e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('e504fc45-34ee-4a9a-8e5a-3ee3f4deb06c', '0a5e5836-0375-4012-b563-b9b6c504a105', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('4ac798ee-f1c1-4321-a707-8b332ad95e09', 'faef4c6e-ba43-44b2-aee5-7018b19026af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('f4ecfacd-1356-4efb-b4d4-b516dbd0cba2', 'b8aa7571-f953-4774-9e40-b0322658c8a4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('ba5d43e9-b328-4501-aca1-9c860ed88fa2', 'b8aa7571-f953-4774-9e40-b0322658c8a4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('52abad56-c0c1-4768-b4c4-af2fac1fbe62', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('3ab9e7e2-387f-451e-86e8-b47a0e16048b', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('f91de297-5252-428a-9fe3-91acfc143b01', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('d89d853f-d726-4af1-bdd6-aef8ab68de69', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('75fbebfa-ef6c-4809-bcd1-2f681dfaf187', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('061f7b4f-c30c-480b-8522-655579973049', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('5136fe3a-e4dd-47e7-b553-91907caa8f59', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('4cd2d094-07fd-4de2-8061-c1f926783467', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('5cfc6411-915f-4d57-8152-7fd53042af0d', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('86314ee3-92f5-4ac0-96c9-3af4c26a1197', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 4, 0.0, 0.90, 0),
+('58687ce9-ce15-4b61-a426-8bce2ee3b8c9', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('56451af3-88c8-4849-b586-645546e77293', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('ced07c1b-b762-455d-8d19-93f96a9bde8d', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('36dd6faa-44c6-4c14-8207-813bb1a412eb', 'd1bcc775-5ff4-4dea-8d85-91c50ebfa475', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('005b1b6c-2b75-4524-bd19-320a2c58c7b1', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('2df3e7e7-9fe2-47e8-8939-a5e9e0dadd3e', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('d1ee7928-a508-4ed0-9454-f06992d5bf39', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('338a5db9-9c65-45af-88bb-14bb4c361111', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('d13507bc-0e2d-4202-bc8a-4fb580741c3e', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('347b2578-e3e1-4a87-b4cf-ab021ba73e95', '3c6b891a-1966-470d-b462-90508b93572b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('2be078d3-8cab-4461-b977-cc6c03d96367', '3c6b891a-1966-470d-b462-90508b93572b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('7e69c8c9-278a-431a-952d-fad926b487d6', '3c6b891a-1966-470d-b462-90508b93572b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('acc2aa88-6c64-4ca8-9db0-5efcae22b77d', '3c6b891a-1966-470d-b462-90508b93572b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('f6ceb898-3cf3-4c48-b242-7c32d7d71b46', '3c6b891a-1966-470d-b462-90508b93572b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('146bc0c4-14fa-4551-a290-bde9f95c12c3', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('9e435982-1064-43b0-aea9-6cf57a3ac25b', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('959067c9-4d98-49a9-9394-5bccade74c44', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('520b426d-898d-413c-b2ae-59cf84a2dd3b', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('a07e6107-cf03-48da-bedc-e92593a6d730', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('57a1d07e-9ef5-47d2-a46e-cfdef5628bb6', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('830f33f3-3828-4f2f-bf9a-0163cee2ee13', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('6283169d-0769-4d9e-8ba0-48479464dbf3', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('f05e7694-4a49-43a9-ba45-d4e3cb8776d5', '3286901f-496f-4bc5-8aa1-b7e912fb8bcb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('ea978f10-e398-4161-adca-8de124bd03ce', 'b7c9e1a9-fb10-4d10-8bbd-cc1e3f489159', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('e851f766-61dd-4f10-8565-a77f39ff19fa', '0979286a-f089-4b5c-b824-30a50050b9ff', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('da63977e-795e-446a-958b-358bb20cb428', '12290a33-60d5-4316-8893-eb1c3c6b1840', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('3feb3711-98f7-40a4-babf-2025869d9208', '12290a33-60d5-4316-8893-eb1c3c6b1840', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('ef9b80a6-7772-4a15-b0df-fe7a319605c6', '53fd2b34-890c-434f-8215-0559448ed8d6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('5fe8d527-1d23-49f7-b043-8fe958a2290e', '53fd2b34-890c-434f-8215-0559448ed8d6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('d894c865-6702-4f55-8f84-1ba420f0889e', '53fd2b34-890c-434f-8215-0559448ed8d6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('969560a1-5700-4c34-bfbd-b065ea7795f1', '53fd2b34-890c-434f-8215-0559448ed8d6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('a85f89ac-7f41-4372-b983-a49dfd6b4153', '9d0e2176-f203-4728-b834-ef343fd93372', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('0fc6361f-7241-450a-9b49-5f58a8e9317e', '9d0e2176-f203-4728-b834-ef343fd93372', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('963b3e27-7741-423d-a128-626cd8aaf240', '9d0e2176-f203-4728-b834-ef343fd93372', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('ad1539e3-12a6-4a74-9220-3d316ae429f8', '9d0e2176-f203-4728-b834-ef343fd93372', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('a6258eb7-fa6e-45f5-9a3e-4ea401869e39', '9d0e2176-f203-4728-b834-ef343fd93372', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('2ceffa21-eb19-45bf-9c08-c949ef4acc20', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('fb1c309d-cee3-4407-87dc-8a97270d471d', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('8cf9a4f5-3963-49ab-982a-afaa8346b9c4', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('28b89142-8392-48b2-85ae-883373491fe4', '2f54a1ef-b332-425f-a57b-9f347fc8db76', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('fb99087e-912d-43db-a3a7-03a361ecf446', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('bf7f62a2-4356-4eec-b177-205cb57ed7b4', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('173a8745-a141-4f44-bb8b-81a3ab7f3fd3', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('06e86bb4-c37c-44e3-a432-726e5c34ae5f', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('75bfb1b1-c74f-4ee5-af68-b6c3a67735c0', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('24abfa20-dbc5-402e-88e1-815db0bdd6e4', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('577ec06a-c782-4ba2-893b-cfdd7f7115b5', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('7efacace-84ee-4d29-835d-4adad826b8c6', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('efa24e80-be1b-4f1d-b3be-1319f2132cb2', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('a9bca9cb-cefd-4c43-904e-501b5e632b09', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('aeaa2cb9-aab9-447b-9971-6da2dc9d837e', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('45fc88e1-b983-4ec5-aac8-640b416e428a', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('2c661a40-74be-4bd3-9c4e-a906ab379877', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('5c7ae9b9-ec28-479c-a3f5-4cf50183919a', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('12462ae5-5d94-4f06-b45b-d7c8674822f0', '22f02dbe-bea8-4a08-8fcc-a4136c9b8b8c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('bf3db868-c201-4910-a086-70f185dd953e', 'be7b4449-345c-435d-b8ad-4f247c5b5f75', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('9cde269f-aea8-4136-81ab-0fa1627f42a6', '89799d48-e60a-4383-90cf-628fd50d539f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('2fb34761-4282-4090-b2ff-913f4d023060', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('91a60ed5-9a57-414d-b773-b6d2cacace3d', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('db31a391-352b-4406-8116-3fe8fe235238', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('88c4f65d-f43b-45af-91a7-6f0b32957330', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('07816ce9-6df2-41d0-bc21-79789b298155', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('c28cd616-6ff4-4b76-82d2-ac20306c9522', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('519e8e1e-6739-420d-8b23-a999122cf561', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('6670898e-967d-442b-b666-3af1b1e54447', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('bb4d3cd5-48b1-4d9c-a56f-9175153ea2d4', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('822cfa6e-a672-4e5b-b1cb-109d915debbc', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('2c17d506-624f-4108-b5d6-fad1a7d59a5f', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('8b61ff02-91a3-43a7-a246-ca5348600058', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('0bd4944a-1175-416c-a029-597eb8f0e963', 'c880983b-ad6b-4db4-ab0e-a96be43db46c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('96b250b4-6fbe-4140-af52-1226137df824', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('4abab3e7-bc65-4d6b-80f9-7f4841eb6a9c', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('177810fb-ceb8-4676-b531-206479164baa', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('5b0f0e59-5bd8-4577-83fa-49df27cf9863', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('27437f61-04c7-4561-b155-982d7351f98b', '304ecaa6-dd44-4848-81d5-994aff9b99ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('fb83eab7-9479-4403-8da0-ed5fbbd3f70c', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('a6f21a25-cab2-4603-83c4-a0a23e7cbd2a', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('1e392df0-333b-43ef-9bc9-b503984cf118', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('1e380d20-7fd4-4a4c-83ba-9f1c0e0af166', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('ac785fac-312d-4076-baf9-a26c476b1b72', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('faa5301b-6782-4d2e-a3ab-618a67f210ad', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('895abb54-4e04-43fc-91d0-6ca57d9a14f8', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('0786aee8-1241-4bf9-ab1d-945659f0abe9', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('32cf4cde-d0df-48f5-a32b-6b94666e2c8c', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('b3a7c72e-df01-41e5-923f-f415863e3d0a', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('574b3aef-784d-470c-9d70-72470096ca29', 'c97d4479-479f-42cb-a65f-3b9e9552c2e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('2b74c91d-a561-4861-85b6-57c1bfbb5431', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('e2f8d9e5-b316-410e-a1fa-311cbb94472a', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('88cb40a6-4175-4e5c-96be-711f8a72e149', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('36b24a29-404c-4e7d-aab8-b8ad1b287dce', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('6bc83ff7-c351-48c4-a4ab-6cfa77186dd0', '19fb8926-ddb5-4c49-a33e-f100586a6dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('b65739b0-17db-44b8-9231-c56208af086f', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('aa5ff5c8-27c7-4e65-b2c3-5409493290e9', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('ec69696d-a0df-4ba3-b523-b58331904b35', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('0d6fcc2c-5c79-4f42-9be0-f86e1b51e912', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('12864398-11f6-43dd-ab06-b0920ee11b77', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('eec6e6bf-93a8-43e2-8e31-87eae9120174', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('7459d9d7-0981-446d-b217-79c7f2c4209e', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('8481b4cc-0789-4142-ac71-0bbe8c505788', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('ee703293-1735-4d9e-80e6-a3d893dbf390', '682789e5-979d-4981-bf35-e028303ba620', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('2c827378-0a35-4428-a02f-7f9905142704', 'eb24961a-483f-4d80-ae9f-672d84806693', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('f6ad837c-7de9-4f45-880e-4b67711069d6', 'b00233b9-745a-46a8-84a6-2897d39572d6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('2f20cb1a-c96b-4137-a471-4af418f8a6d7', '83e96119-1ef4-4d52-b269-1f91f9b947fb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('3e71de42-c6c4-4a25-b219-310037422de5', '2c277555-6082-4401-8e8a-c3cb55d6c802', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('f8623f21-44be-4e11-b8f9-49da7ecc3ff2', '2c277555-6082-4401-8e8a-c3cb55d6c802', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('2fc84d3d-fef6-4d0f-9fc4-9bd6f44e5376', '2c277555-6082-4401-8e8a-c3cb55d6c802', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('1f5f9d47-aed4-476a-a754-f4d40f40d1b8', '885838f2-364e-44bf-be0f-4dfc0361a12b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('4e418092-f95d-4477-8c32-8966ea05b4d7', '885838f2-364e-44bf-be0f-4dfc0361a12b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('cb4929af-749f-44b7-8e54-ebe00baa7270', '885838f2-364e-44bf-be0f-4dfc0361a12b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('b46a9bca-744f-4d7d-a825-3337eda42f9f', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('63cac5c6-8f5a-41b1-8de0-c73440778d8d', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('2c4df84c-b90b-4a0f-8263-d8c392c2a308', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('04f0efb6-bc49-4c16-a0cd-6bfd8a1e0a43', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('a7bdd771-1543-451b-b858-ddc90d1195c5', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('402027be-f71a-4d38-8a1f-e4b4f23062a6', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('62111673-4064-477c-af5a-e6afc9afa120', 'bf024d95-2aef-4d8e-b7d2-f549a018db3b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('e1e5d013-89e4-4edd-98d3-480b5e07a166', '4382628a-38fb-4acc-833c-8528bea5bea3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('ece9c691-f6bb-41d7-a0f5-78574bb3a713', '4382628a-38fb-4acc-833c-8528bea5bea3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('426ac4ca-f294-4ec7-bad2-14322cb29023', '4382628a-38fb-4acc-833c-8528bea5bea3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('ca371413-ccc5-4826-806a-9afbfa63ebdb', '4382628a-38fb-4acc-833c-8528bea5bea3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('cf5c4cad-e29e-499d-bef4-b26267c21201', '4382628a-38fb-4acc-833c-8528bea5bea3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('4617b94d-937b-4ea9-93ad-ed7348069e9b', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('8864132e-675c-4c98-97f6-7501b3929127', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('b78ee95a-dabe-4e50-9324-6ecac2836b66', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('4e63f4c4-c3c8-4e94-88c0-7870ae189945', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('1dfbe414-0c2b-4e72-9e91-9299131fea7a', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('85dde5eb-7d71-4525-a40a-6c34f46c3915', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('a892c117-4c92-454f-a0af-e64f2d81ef71', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('8164e264-9cda-41ed-8643-ceebc91df108', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('9f29361b-57e0-4fd0-b595-28fcaf1e0427', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('2a9368fa-73c4-40ec-8965-f39cd76653dc', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('e91ab1ba-0dee-4cd0-8b52-1b21354e028d', 'b7d6360e-2fae-4d6f-bb35-8d3ed7b35102', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('4392ef8b-76a9-4979-85d4-d3fbb640af16', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('d1932349-5322-48c7-af04-a765f965a279', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('52e32451-200b-4a94-a742-f27cbc59db2f', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('30d160c2-9b85-467e-aaa6-d6a1e738f289', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('79985af1-81bc-4451-bfb7-8723d6198cc1', '6b1c8715-8ad6-41c9-aa6b-79946a24fd7a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('0f5db6db-b127-41bd-a1bf-87eb2033b26a', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('a0015b00-4edf-41ba-8828-feab6eae49ae', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('41536bca-8c08-43d2-b003-1ac6a8d8ad01', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('1f72331c-8b71-41f0-b0d5-d1bee7bd4302', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('ecbf61b6-72b0-4d5b-8f2e-c6e0ae4c061b', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('88c33b7d-0cc3-42d9-8d3e-92e52255c03f', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('36f1e824-2e5f-4539-a9f1-365c33058d47', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('bdb13345-0625-4354-913b-284773c31406', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('8f61d16e-3e18-4cdb-8ae0-a1e99a7e611a', 'e1cc6456-109e-4935-acbb-7004c25aa746', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('548d91cd-4b8f-4ac9-baca-4988dcbbfaeb', '0b913a6f-197d-47cd-8fa5-2b956e39e8d6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('b2bbce51-0c60-4394-9248-d6d011aa5148', 'd85836ef-eb51-4f27-ac13-ab59e2b7d881', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('21ba9588-deeb-47a0-9e17-1546adee4b34', '0812523b-dc73-467c-b864-58797c3dca46', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('ac60382a-ae9a-40f0-bf26-1bd71f83d5e7', '0812523b-dc73-467c-b864-58797c3dca46', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('464ee33f-1ad9-4b1f-98e4-93f6c6b44a5c', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('037bbf83-e1d9-4458-8e37-03a4a58b670d', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('6d344ed0-b627-4be9-a7da-6156dd7a7263', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('db34436d-235a-470c-995d-768dfe9fc1d3', '026c399e-554c-44a8-b78c-a76999e8f781', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('482e8b3a-3c81-4afd-b790-e902d57ebaca', '026c399e-554c-44a8-b78c-a76999e8f781', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('06bcdada-0e3b-4c5f-bd68-af50b1bb5cef', '026c399e-554c-44a8-b78c-a76999e8f781', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('205a07e1-91da-4cb5-a0cb-b87219b04897', '996b03fa-0f5f-488b-87ab-e7497edb5490', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('5ddd5f9d-0151-47a8-a014-ef68b0df6ced', '996b03fa-0f5f-488b-87ab-e7497edb5490', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('bb6606fa-987c-4da2-92ad-05280fcb7f44', '996b03fa-0f5f-488b-87ab-e7497edb5490', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('e5540be9-7615-4c6e-ae93-c76ca7f3a5d7', '996b03fa-0f5f-488b-87ab-e7497edb5490', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('bd4346f5-4fa1-4973-9ec6-88f34900c19a', '996b03fa-0f5f-488b-87ab-e7497edb5490', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('9eedba85-5420-4318-8c3a-724c15c1f239', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('ea35a3a6-70f1-40f8-a615-710048e6b127', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('a43e26fc-8f34-4d50-8f79-728076a4547e', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('8f324bb8-9de4-4dbc-9c00-ba717006c558', '8d88ee16-c853-4b6c-bafd-03d7d5d9de70', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('97eb30c4-22ab-4091-bb2c-5fd5b3dce395', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('f34eaf64-c4c8-4a5d-80f6-628106646428', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('0fd5a048-0a01-435f-8635-f6676a448f09', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('752c0db0-df17-439c-a7d6-1d8c186339a8', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('6a7b60b2-ae22-47f6-8f8a-5fbaecd77adf', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('40aa626b-9d7d-4d1d-bff6-32e95350a4f2', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('6698e0a4-99be-448e-b292-fa62b0257744', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('8678971a-a6ff-4838-b0d7-a32ed1c1136e', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('ebaf9a32-09db-43dc-9ca6-054e7e50c8a3', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('fc31bfc9-0403-4061-8c06-4d91915b4fdb', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('9e0dca15-ace8-43f2-bb98-f0dc1f91dadd', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('83bf0c00-fb9d-49d7-a7a9-313ea38ab017', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('959a84ec-a87d-4478-b17a-efd421025daf', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('a9dd0215-3ad2-44c1-932d-c3d0d66995e8', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('6c7b840b-0273-446d-bc2e-534e3e102af0', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('e074a808-36d5-40dd-b05b-ca475a0de29d', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('b1dcb343-78d2-47fc-a97b-ed057c1870d9', 'f50b33ce-dc1c-426c-8ccd-1e5caaacd2ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('3c0a3c16-75df-447b-b52d-508aa6f1e1d5', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('f5e0166c-d82a-4832-8b94-0088b7487b48', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('b7b8448b-63e1-4e9f-b6cb-5bd969b5135e', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('2107ed9d-f31e-465f-9d59-79071296fbc0', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('d948d643-c0b7-43c8-a898-365390db01d7', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('1dda21ec-3ac8-47c1-a62c-a746280c751f', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('5edc9afc-3623-4823-bb9e-0e68a4ec52d6', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('422ffe51-ea64-4f34-b40d-e77c52cf4539', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('633d321f-bd8c-44f7-bac5-25a0d497c65c', '0342a2cb-94c8-423e-b6e6-ba602cd9669a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('8d1f4052-224b-4a17-9356-0c8d0bc9d97e', '442fce88-33a0-4995-8617-bea9d6ef1df6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('08d683ed-787d-43a5-aa87-1a4305e6a311', '324123fc-4f61-4b8a-b4e7-a04079c4d5dd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('c67178d9-0db0-45bb-b96e-10edfe0f4c15', '1955bbf1-97fc-43e9-8e81-8cbe1c4707c0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('c4c0bce9-e537-4301-878e-dd00bcd7dfc7', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('3fc9c2d2-6201-4ba0-b1c7-e04a374a5481', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('603e5038-8362-40c5-9e9e-86c8c1647845', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('87b9d96d-dd91-4719-bfd7-65b2466d45e7', '31e83569-cc40-4f1b-9428-aeb5c64790af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('24a222dc-5faf-45c7-8fb5-3728d77794d0', '31e83569-cc40-4f1b-9428-aeb5c64790af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('b60a44d8-81e0-471b-939f-3ea3cc544cc5', '31e83569-cc40-4f1b-9428-aeb5c64790af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 1, 6, 5.5, 0.70, 0),
+('34fd2304-739b-4b68-9f0d-d122728e1346', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('776f2bc2-7304-479e-b771-50455ae28710', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('57c2d7e6-79e6-44c1-abc0-cb9f24046f2e', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('b15470fd-2e10-498c-a145-f7e8262148a8', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('a8c22a16-92a1-450f-a63f-174a7e2128d2', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('01445458-0e5d-43c8-84df-7a2c22ba2dbe', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('181eaceb-a4e3-4240-baa8-9e92ab87551c', 'fce5b05f-781e-4d55-8bab-fbff5080e6ad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('206e09bd-ddc6-4566-860c-b550ec56f68b', 'f6c93b58-8df8-41be-bc72-61aa66060737', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('6116487e-1b49-415d-b6bf-2c412652a84f', 'f6c93b58-8df8-41be-bc72-61aa66060737', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('94233832-9878-4ea4-85c4-0e158c7e0709', 'f6c93b58-8df8-41be-bc72-61aa66060737', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 4, 6.5, 0.90, 0),
+('41000f14-3deb-468d-9d8d-0660d0fefce0', 'f6c93b58-8df8-41be-bc72-61aa66060737', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('87e125f9-7d65-49fd-bcc4-604d89e8abeb', 'f6c93b58-8df8-41be-bc72-61aa66060737', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('c15af154-26fe-4287-ab7d-cefacc633d02', '2832b647-32e5-40c3-84d9-18715d6c555a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('6fd9cd2c-ba2d-470c-9a46-a8cd20e1ebfa', '2832b647-32e5-40c3-84d9-18715d6c555a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('fc2e8fa2-1f2b-41c0-aad7-00f113c9387b', '2832b647-32e5-40c3-84d9-18715d6c555a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('b8c92dd7-9325-4126-9f2e-41f1f39d285b', '2832b647-32e5-40c3-84d9-18715d6c555a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('fc991805-ec01-4274-accb-09a6cf698e98', '2832b647-32e5-40c3-84d9-18715d6c555a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('2a89af9d-65a1-4c28-bba3-88b516c05f0a', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('b4f07dd4-5180-4cc4-8ef8-e507c1225da9', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('5105df7d-5103-44f6-aa16-14d676d8a473', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('d9a4d482-6651-462a-86bc-05e62fe98070', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('c8dfa828-e71a-4456-b215-2a39bae2dba0', 'd21ae802-9252-4ccb-859f-39f9ef2e263e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('4472107e-8f9f-4211-bb45-b2f04d01cce3', '8493fd0e-3b99-422a-977f-42f854346a34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('29eb11c7-ee3f-4d40-af1f-0dda960c4472', '8493fd0e-3b99-422a-977f-42f854346a34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('68b417fc-3914-446b-a0d7-7e85d212f6bf', '8493fd0e-3b99-422a-977f-42f854346a34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('8e09931e-d7cb-474e-82fc-00d73bdcafb1', '8493fd0e-3b99-422a-977f-42f854346a34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('6e2e4d3a-a1e2-4fc5-bc25-36f1928e6552', '8493fd0e-3b99-422a-977f-42f854346a34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('d57249f9-dda9-4c93-ae45-deef34653bce', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('d168ef54-7071-415f-8366-ac00ca268f1c', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('da0d1bc6-9af6-4b51-8507-995b97f64199', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('85c0fdcd-107c-40c5-a5f7-81211eacbe8d', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('bc5586c9-9cb1-45bc-b831-2f0b8f6af926', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('bb6a76d9-caec-4103-ab4f-c4d8d4c8e411', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('e2f16e3e-1c88-45c6-8cde-47ea6e76a081', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('f493975a-11a1-47df-a56c-ee5e43b9e826', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('98ca55f3-d47a-4483-a840-47fb2472cd56', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('c4b30b18-a23f-4eeb-8724-423c2c465e7c', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('1ae6e0c1-b910-434a-9add-c576492db5fb', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('30b3e8dc-5f94-423c-82a6-59adbe015c3e', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('7cb2cc35-f295-46f3-8c0b-5ae06e8c26fd', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('977b6b80-e812-41ff-9330-114040adbb80', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('2afc2e9c-0ded-4a85-8b65-427cc6e62b6b', 'd3979ea5-a0e8-4a7a-988d-184d4bdc9a88', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('8bbc3f5a-aca8-4bdb-a418-ba2215aad3e2', '889f28f2-0dfb-48d0-b248-f8f6de5e4e32', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('52ebbf0c-e7aa-4127-a397-c60820598667', '618d50e7-e978-4d79-9d27-a4415c0ae8d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('4f6fe217-435d-48bf-a896-9c333e89c31c', '618d50e7-e978-4d79-9d27-a4415c0ae8d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('1c56b4f8-4832-434f-9eff-e90e5286abd1', '8fc03a8f-d6df-404c-a713-53629e264cfe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('58fb1125-3dbb-4120-b073-b9579a1cf70b', '8fc03a8f-d6df-404c-a713-53629e264cfe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('4ba5b39c-9d12-4e14-aa60-27fecd7d860f', '8fc03a8f-d6df-404c-a713-53629e264cfe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('5f460ba5-b792-4020-89a2-5a90b49fdf00', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('d8628028-94cf-4427-98fd-4181b62497e3', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('63aed009-9e9c-4608-8195-fc49f71c3ec1', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('d23708dd-0426-40fa-b296-5903643227d4', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('a07b2a49-db18-4a5f-8ff3-288ab5f7ee46', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('bda67449-c1bb-402f-bcf3-e164fdf771e5', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('7c76db71-e75d-4da8-a8d0-1ab705df619e', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('5dbabc42-3cc5-44e8-80e9-1f2dd2fefea0', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('9f18304d-9eba-4bbf-8858-b9188e810dc6', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('ab29c0a1-a0cf-4511-8700-8591bb0d18c4', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('c233f434-c8cb-43f6-b84f-547efb8e4a93', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('aab4c23e-1be1-4527-aee7-1a01ba253791', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('8d7fb283-df79-4f57-b10e-a2cf554215d3', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('d53a3b38-8279-4bb6-8d91-1d483f1d5689', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('dd457ca2-6bc3-44a5-8a6b-41ca3c7581d9', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('1cc2b6c1-b2f2-412b-ab69-e9637dadb855', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('ac42a656-d17b-4f22-9606-79088425d4fb', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('ff35c39e-5661-49b1-8e5b-806fac37dec1', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('12175370-902e-41ee-bb1b-bcbc07aacbe8', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('eeb5075d-7f05-4ec6-9eba-49b77aa0208e', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('1bc11513-bd55-4c69-8a50-084ea3b80088', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('90e7824f-b23c-492c-a33c-9916bf8ad45e', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('438ae114-fdab-4c95-b17e-ff6a6c8259fb', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('1a89affa-6ff0-439e-ac50-5283464ea750', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('5ccc61fa-9d2f-4f18-bd1b-4a9fea1864a7', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('328c546e-52be-4a04-82d2-a5ba0cb729e9', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('1fddb8be-38fa-42e9-8705-cfe319594825', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('95155211-6abf-416c-a457-edf5827d2594', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('39e9d7a0-f097-4a92-b5e3-0a38b33c5cb0', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('bcb5a683-0fa5-466f-9104-4f420a8f6d36', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('94d87d39-804c-4311-a9ac-1a2272248613', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('742bc965-d019-49d0-8cb5-df7c2275b999', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('7b99a660-7c18-4916-807c-8c5183a70692', 'fcb71cc1-0f0e-4aa1-81f2-cd4b3511a4f0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('6af63040-8b72-427f-9492-4f2571ef8def', 'c17b6c02-83c6-4987-8571-13cad7200389', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('c8e667b2-df8c-45de-b11e-23a5757c5a05', '2dbec270-69e5-4bd6-b6fe-881a02d43728', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('d2ffcaef-2244-43d9-81bc-db3219c8ae4d', '1368e9ff-ccba-418e-b8a6-783cd256cf4e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('9e1f8d1d-20af-4a8d-a235-7e4d5ac2a981', '35078aca-309d-4407-a41b-7a63b1f8cd20', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('86fbbf00-3066-4f3e-b6cf-d8bd3c0c267c', '35078aca-309d-4407-a41b-7a63b1f8cd20', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('303728b6-bb0c-4edd-a272-a8ac89ce04b4', '35078aca-309d-4407-a41b-7a63b1f8cd20', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('26d1c418-e83d-4833-8a6f-039111e2478f', '06f52b41-cf3e-4c76-96a1-b659ede40584', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('5848914e-113d-4c1b-b916-cb10ceab59cd', '06f52b41-cf3e-4c76-96a1-b659ede40584', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('49737cec-5704-4b6b-8d9b-e46c98d877b1', '06f52b41-cf3e-4c76-96a1-b659ede40584', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('e2f47c09-3340-4b0f-a0b0-011039b807e4', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('31bd66c3-3d9b-4f88-b1ff-cea3fdec7a96', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('c1596324-a3db-4329-84bf-802afb0b85c8', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('bd6e599b-2a89-479a-b53d-72cb33acae83', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('1a4b193a-2f5c-434d-a1f0-c2b413fbe5e1', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('6a3f865b-7506-463f-8cd4-8a16fbbb4ca8', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('e2d9ec12-58a1-4396-a289-ade4ef5aeb31', '6fe9659d-9175-4fe6-b875-4d9b711ec4f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('a032f215-ec9d-437a-a037-4436072b3114', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('0c27a893-3301-41e2-81aa-1e1bffdc21a0', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('bb64089a-750b-49c7-927b-d2d271f00a8c', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('1e2514fd-86ff-470e-8a03-2a16e1fad86c', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('2e3b1931-b2ef-461f-9bd1-c29be225669c', '1dba2e42-8fe8-4dad-9c49-098e0f783ad5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('c866f1cc-56ef-458d-a05a-06502acf443f', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('80e05f8b-219a-4fe5-ad86-ebc5232c50db', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('1c20cef1-0801-4db1-a622-765c16fd82d9', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('e40b14e0-4479-4902-b85b-4b8970af6745', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('1fc654d7-d14f-438e-b3c1-b8c81b18c16c', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('774e6ab1-e37d-4366-8fc8-d565971afcfc', 'bd7df686-174a-4414-9054-b8329d458553', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('16e4c887-1cd2-4bb8-b1e9-73df8f4a9a31', 'bd7df686-174a-4414-9054-b8329d458553', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('a92cccc4-6267-44cc-89ad-998f02d7fce6', 'bd7df686-174a-4414-9054-b8329d458553', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('81f422ec-5f5d-43d0-88ec-998d94422cc1', 'bd7df686-174a-4414-9054-b8329d458553', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('2c34013c-84ec-4186-a02d-8198a59c9bac', 'bd7df686-174a-4414-9054-b8329d458553', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('e22afa4b-7846-4189-8a15-e2712921c7e9', 'bd7df686-174a-4414-9054-b8329d458553', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('1128698f-1e16-4701-a532-cffc9bd07190', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('f7c3de6c-8db7-4ba8-a8b6-cd67a53ac0d2', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('ebdfce0f-d2e8-42d3-91f8-83c6a7cb8efd', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('c701a417-fd67-4457-8369-ac02071f0a36', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('c4abce41-94be-49c2-80f9-818aa8f6d1d4', '6fcf47c7-143b-4b4f-8d1b-c9fd1c90b09d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('341e2506-a540-4b98-836f-04f84ad8179b', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('95a5a3dd-8129-488d-bed9-53bd4d37acf5', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('a3a5a0b3-d451-490a-93d0-d0e0a3597888', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('f8a361f5-2ddf-4892-9f41-a133102cb075', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('23feda21-77fe-4abb-b971-0792921f86a7', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('38294d8e-d932-4b59-a932-72f0e15ca634', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('1c74acea-db03-4860-b847-6c9e2a3e6ad2', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('341d82f4-38be-4aaf-a24b-7c133bbc9646', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('6b7013d6-c141-4db0-8048-3f7af9721a66', '6829ccd5-3933-4c4d-aa3e-3593a0728bc5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('73dc0522-71ee-446b-bbfe-1e88752951d2', '2c669a19-a98f-4707-b697-11b6bffe4399', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('5f936546-d2f8-4741-b290-7fc93baec086', '88328d88-6f83-4a96-92ea-52351e672680', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('6c914ef8-332d-48a7-9733-7b6c3d8ad671', '85d8279c-d1eb-4836-b1b0-b5b130b2055c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('aad7d989-bd3d-4433-89f1-e5bfcbd558f9', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('b859cf3a-006d-4acd-a32d-f15f0206cc31', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('3b2571c6-b8fd-4112-9c50-d6ed9af17272', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('7cf2dbcc-d172-424b-a3ac-6c4324829b59', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('c7d43494-2d23-40d7-b8c6-e1f2d0c4c876', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('ae82b04c-3104-4a27-9023-d858227cf644', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 1, 6, 5.5, 0.70, 0),
+('3b8e4d8c-8a2c-4a34-9136-5b26b2dc0e9f', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('db263c0f-5617-4e9b-8b33-afea2d516f73', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('931a0476-5df5-4675-bece-693af843e1e6', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('3a9c8352-f3f4-46c7-a8df-8f1e38d21b67', '670fdcf2-f082-40a0-b502-ed7a548d6555', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('82d1be96-70e9-495f-b73a-510d7f0610b7', '670fdcf2-f082-40a0-b502-ed7a548d6555', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('15c6f713-9bfd-4966-b18a-59a09af1d101', '670fdcf2-f082-40a0-b502-ed7a548d6555', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('f506f3f6-74a1-4b49-bb0e-2dc0d4a1f7a9', '670fdcf2-f082-40a0-b502-ed7a548d6555', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('64dfde37-3344-4608-9ce8-e375456d1d33', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('bcdbd2f3-2d92-4b15-9f9b-a4f28d40044f', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('5692b4ee-7446-40fd-b315-09aab00ca5e6', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 4, 6.5, 0.90, 0),
+('d3076776-5e36-4879-ad8e-58b215e8fada', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('c7bf1eb5-48c9-4ceb-b3f3-424763a42d8d', '2b9af965-bf76-40e3-b87e-dfd1ff879fab', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('232bf2ec-41c2-4f63-8e3c-85f7ca9c73c4', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('8515b9a5-c6d4-4f78-8860-65dad284bda0', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('12017442-6b55-4fe3-89aa-ec5cf91c7c51', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('78d54018-b254-4d76-b63a-cd6b746ab149', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 2, 4, 6.5, 0.90, 0),
+('3419f721-07bc-4256-bcef-d82a5aa33af4', '131393c8-33a5-4eeb-91b0-eb868ab5b8db', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 2, 4, 6.5, 0.70, 0),
+('a1ce265e-c890-41cf-bb97-67efdc40c159', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('b9caaece-a737-4591-a4b8-0102b6b9fd72', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('b2425065-d389-42c9-b2f7-6336c023840d', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('adec190d-f251-44a5-a566-88a5d05a45ba', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('f6f88f2b-d875-4c44-9c05-e885cdae894a', '3c1748e3-0349-4df3-aeac-77ed9755a5e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('0ea0b5dd-3018-4402-99db-40219fb72eba', '127a0865-7817-430f-9551-bc73c81ba903', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('7db6a8ca-6d47-4088-9864-fa83eec0bc04', '127a0865-7817-430f-9551-bc73c81ba903', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('2cee5edb-50f1-4928-9d60-3ca207eb509c', '127a0865-7817-430f-9551-bc73c81ba903', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('43b6f178-9441-42e6-b188-944407b94f8a', '127a0865-7817-430f-9551-bc73c81ba903', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('98178d70-f497-4f25-bcad-64e793b921e2', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('457f7d08-33a9-4b90-a28a-3280db295871', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('1d6fb156-beda-4e42-b732-f24e862350db', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('d53ec495-150e-4e2b-9ccf-6eab27d471c8', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('d8c49701-e8ba-46a7-a268-a4d15754eb72', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('631eb1fc-c8f2-4c1c-9bfa-2ebd45ece16e', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('c390e3f8-c3d2-45d5-b270-9e836d73da1b', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('9c9f9770-35ff-4ea1-98ec-e0b3958db61a', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('712011d8-a1d7-496e-a71c-f1c6c49d5a62', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('022b32a8-5806-45f6-9cf6-e312fe42bdad', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('9af27975-6a73-4e9e-992f-2407969da767', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('415d632d-ab81-403a-932f-5c48bccdbd4c', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('386746ef-fcbc-4b0d-a649-892bb357501f', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('89508b76-0f49-4bc1-9a82-f004690e84ce', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('48540b98-42c2-4b89-a4c7-6bc995f7547f', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('b26d2d3c-18dd-4305-b340-3dfae96ac079', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('a54b2806-cf3a-4543-8690-502f3fadc3f5', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('5ebad54f-46e8-4185-9764-d175555ea1b0', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('3f69e142-4603-4048-b841-14565c40a294', 'e7d4d4f0-7812-47a8-9b29-43258f8a2fe8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('08e4caf0-065c-4af5-9650-925da60ca8ca', '44f52463-32ed-41ce-947d-19018be1fd04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('b2186821-f32c-4d94-8b9f-3df839bbf8b0', '506830a2-1519-4db5-a771-1cd3e17d5fb0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('d17e9557-1734-4998-adbe-6991e3020909', '412027b5-63de-4f73-af49-3a220fa5cda8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('98c47098-3df1-4102-890e-43bb25aedd25', '412027b5-63de-4f73-af49-3a220fa5cda8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('2572f910-be29-4136-b209-d6003830a550', 'e929f52a-3a36-4b23-b732-154226bd5790', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('41854435-451d-4e12-916d-871867e898db', 'e929f52a-3a36-4b23-b732-154226bd5790', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('07389d89-d15c-4613-addb-5eedbc7a85e7', 'e929f52a-3a36-4b23-b732-154226bd5790', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('a45aece9-0b7d-469d-aecb-6b4326cc6e55', 'e929f52a-3a36-4b23-b732-154226bd5790', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('7151b420-248f-49a4-bc69-2e1636fd0255', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('70aa2b03-22c0-41ff-b0bb-170916df2248', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('8c455fbe-a131-4d67-9605-c30d28b5a3b6', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('f5b3334a-5227-4770-9727-2a1f173d9023', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('3d48e731-eb8b-4c8d-b4c6-73bdf0ea8697', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('65d8d7cc-e6de-4db1-9bfe-db7e20e78da2', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('e6b87479-0e9e-4460-87f8-4547b1667067', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('cf5bfcb1-34bd-4189-88e0-77cc38849631', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('3c6203a6-dc2c-4a44-91ea-9eba52f49bf4', '2a58d97e-30d1-4554-8e53-0d9f89bb4ef6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('b186c43a-64df-4c76-93aa-5a195925a5fe', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('c3dd56f6-dfb7-4989-883c-72c9d27a4387', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('2c0c4b9c-cae6-4c80-a936-a6ec872408c4', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('1cbdc837-02fd-4741-ab35-0e4e800bd1d0', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('6245655e-1884-462b-87eb-6da6c703a537', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('28afd92e-7e7a-4e22-9d52-b941283ca7d7', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('5a5a054a-3c80-49cd-bfff-07d8cb585364', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('17fb3e95-36a2-4571-9824-7c444111d128', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('068921b9-d4c3-47aa-a896-db7079578cdf', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('2ca4bc85-23a1-4f85-9fd4-266232f08055', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('1d4a547e-c18b-4a0a-8b56-3d5d70e8910c', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('42378fa9-1df6-453b-bc4d-4a7eaad7b18e', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('c69a8466-bea3-40a2-b544-3fb1ea0c761c', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('87f7ef10-dfac-4c15-ba43-a0ad81b419cf', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('3e46a179-a32f-45cd-8287-309045be8b50', '38761627-d196-4f59-99a3-ba04053cbf53', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('ded2f349-4147-4c47-89f9-4be159060113', 'd4ebfc94-f22b-47de-9cbd-017298f0052b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('4b562bd5-5d62-4ad0-8142-09ab0e90caec', 'fc75741d-549e-4a5d-ac9e-f15925c39fe9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('1fcb165d-9a00-4d61-91e8-7f7d2b049658', '2387b68c-e9a6-43e3-8906-298d9609d5bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('cadeb7cd-a582-4e91-9aa1-022da2402a36', '2387b68c-e9a6-43e3-8906-298d9609d5bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('c83740d1-54aa-4f42-9a93-1d151c565ebb', '2387b68c-e9a6-43e3-8906-298d9609d5bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('e6944ea9-e5e5-4239-82f1-0fd5184c594d', '72166c85-9712-4ca4-a5c9-bd37ca825bff', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('905a31b6-2aa6-4b7f-9239-183c050b25e8', '72166c85-9712-4ca4-a5c9-bd37ca825bff', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('81a8d835-efc6-4bf1-bba7-94293db36145', '72166c85-9712-4ca4-a5c9-bd37ca825bff', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 1, 6, 5.5, 0.70, 0),
+('dae63fb3-1495-4114-9336-89bda1c5f92c', '735152a8-1510-4d92-ab83-6bcc2995b935', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('03d26349-56c8-4340-af1b-b230b652834b', '735152a8-1510-4d92-ab83-6bcc2995b935', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('3661bfd6-416e-4120-a496-7f370f5b8c28', '735152a8-1510-4d92-ab83-6bcc2995b935', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('cb313910-d2ae-4ceb-9257-7febf152ef74', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('6591d92d-1fba-45a3-9c43-4164740e6b3e', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('1d4b315d-9d87-448a-8286-5e712b719a5f', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('87aa96ed-1252-4c9f-b015-6a36d822ed5e', 'e9fddec7-0dc7-4f4c-8a78-3f6e74a73be0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('176d3578-c9e6-426a-ba2b-7f1e0e1da490', '55e72cfe-6459-4958-ac58-00305dceea1a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('aae33de3-f433-482e-8fe9-0b6bc3a81727', '55e72cfe-6459-4958-ac58-00305dceea1a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('12246ab0-0d98-4285-a740-69155afd977b', '55e72cfe-6459-4958-ac58-00305dceea1a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 4, 6.5, 0.90, 0),
+('c026490a-f5de-48a9-9297-064e37f72354', '55e72cfe-6459-4958-ac58-00305dceea1a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('94f04cad-f1bd-491b-aa02-dc4dc516246a', '55e72cfe-6459-4958-ac58-00305dceea1a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('6acd5e31-66d2-4550-957c-bcbc287972b7', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 4, 0.0, 0.90, 0),
+('a2dd8149-d59d-4c31-82df-3c482dd18a40', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('2fee6a51-e921-49eb-9921-921f6fea6567', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('cf1db476-7907-4d2a-ac57-03d2578d8465', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 2, 3, 6.5, 0.90, 0),
+('bfc817c5-baf0-4adf-8805-18404ac00d91', 'ada3ab9c-fb05-4cbf-80ca-85cd1687c27f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 2, 3, 6.5, 0.70, 0),
+('1e5f01e0-8d19-4fa8-a0e2-6f705abaac27', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('af663035-f595-4883-94c5-800b7cd1639a', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('47ec814a-8dbf-41dc-b38a-6eea3cab3dee', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 4, 6.5, 0.90, 0),
+('6d7f4f8e-e6d8-4e33-81b7-21d7dbf00c2d', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.5, 0.70, 0),
+('f72b2695-3308-471e-9918-f4b3559ef8ac', '0f6ed0b0-9170-4af5-ae82-7cbe5a7b9a6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('bbc33adf-ab38-4b73-aea6-9149cd67cc64', '08774df9-658e-4fc4-8db3-8fba95ecd250', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('fccd5ae4-0334-406c-bca5-0f7d6b5b64a6', '08774df9-658e-4fc4-8db3-8fba95ecd250', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('0a4b3cef-1a26-42c9-a218-e0ce39fced1e', '08774df9-658e-4fc4-8db3-8fba95ecd250', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('fac65eea-d930-4dd0-afb1-27cfb30455c0', '08774df9-658e-4fc4-8db3-8fba95ecd250', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('ff549eda-dd1c-45fd-9202-4d7f0cda30d6', 'dcd4486a-a166-47ab-b83f-574daf7db436', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('e3da1021-4a2a-4fa1-b3e3-53b0817178db', 'dcd4486a-a166-47ab-b83f-574daf7db436', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('efc9ebbd-9915-446b-9dc0-448c97525f66', 'dcd4486a-a166-47ab-b83f-574daf7db436', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('f3690864-8dbe-4e6f-99a6-ca565d612bb3', 'dcd4486a-a166-47ab-b83f-574daf7db436', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('b4f83d45-8b2a-4745-ba15-bc700033b6a8', 'dcd4486a-a166-47ab-b83f-574daf7db436', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('1e7a12a8-de34-4372-9b75-8f8fe40df53a', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('ca3208c4-c3ae-493e-9ce5-b7a95cc33d5d', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('ca4da8a3-5569-44b2-a7c8-50d00f1f0bca', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('9094619f-e6ad-4d36-8034-15601c56ab69', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('2940e1cc-6fd1-45fc-947a-53d7bc9e2b88', 'a6caf5d0-62e0-456c-90b9-ab628f999f68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('f6475309-9838-410d-8338-dcb4aa9e0b02', 'a90083fe-1297-4ff3-9204-18807ea580ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('75120a4e-f15d-4fc4-a1cf-4477919a1979', 'a90083fe-1297-4ff3-9204-18807ea580ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('37f09aa6-3f08-416b-b216-9d53aa44ea58', 'a90083fe-1297-4ff3-9204-18807ea580ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('c28188fc-895a-4171-8d27-4ff36f13368a', 'a90083fe-1297-4ff3-9204-18807ea580ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('8ea03fed-d0a7-409c-a4c7-b6cbe48f7681', 'a90083fe-1297-4ff3-9204-18807ea580ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('5ed16418-3d54-473b-b724-3387919794c9', 'a90083fe-1297-4ff3-9204-18807ea580ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('be609fa7-43bc-4bf4-9ee0-c3d399088ac7', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('4e07c29c-4cb7-4ecf-91b2-0845c45df478', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('aa2aeeb5-ccee-424d-88b8-aeed0c48951a', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('966ce481-7423-4cc4-8bad-ed372439a879', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('4cd5b6a8-b544-448a-89f8-8f3498695b96', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('86f96725-5f53-433e-8d98-c461e0258b6c', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('de3b4bb7-eeb8-4ccd-9990-49d2d2023186', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('cfb9da26-384c-46ce-9e9a-cc97f7bf187d', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('0a0ebf7b-d452-43c4-84b0-49279b568489', '48a44e78-6156-459b-83f7-d4ab52abe807', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('3c2daff5-fa75-4b2a-a452-1655e7ba6a06', '0641f3b1-18d0-43aa-968d-bf0a594c39c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('ed8ad486-5a72-4067-802b-2cfe2c1f3857', '95f59d89-8566-446e-ba68-a09c74b12f9a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('de157c50-fb92-4573-b091-bc1767e2abc8', 'bb2ef025-88d8-43bb-9412-7b0cb7dc9e13', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('2b91687f-02f0-468a-9179-0b2bc4ef0197', 'bb2ef025-88d8-43bb-9412-7b0cb7dc9e13', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('9aa479fd-64cf-48ee-b57a-163d30ddcdbd', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('1d994c8c-3d15-4824-9561-65cb878bbc3e', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('f141a9ff-fd03-4bbc-9cbf-1ad92631c6c0', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('33330a96-17de-40c2-bb8d-0ce6a3aaa00d', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('ae0dafb3-1d30-4d1c-a4f7-bba4ca44eb99', '1914b37d-748c-44df-8991-e008f0134224', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('8f2cb8c1-1145-49d5-861c-75da4d99b94f', '1914b37d-748c-44df-8991-e008f0134224', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('0e52b120-dd4e-4b76-908e-fdd81347cd68', '1914b37d-748c-44df-8991-e008f0134224', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('63eb7d29-ef6e-4faf-b90b-8531951afe84', '1914b37d-748c-44df-8991-e008f0134224', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('d50af67c-b404-4a93-b6eb-aab7772dc0d5', '1914b37d-748c-44df-8991-e008f0134224', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('f2500dd1-5803-43c6-9783-be6f95eb682a', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('7826d75b-df33-4fee-8177-42957aa5c7ea', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('a90ccd85-3328-462a-b08f-f58bfbd9eedd', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('8a8ca38b-48d7-4b04-8422-2feda623d8fa', '09ae399e-d6e8-4ccc-a884-588c05b73e31', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('587f0fe8-c94c-4b9c-9783-53c4a436c0d5', 'e53f71f3-412e-46e1-a85d-511568c850a6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('bd0eaa4d-ebb4-4d81-a1dc-9f15ade503d5', 'e53f71f3-412e-46e1-a85d-511568c850a6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('427eb2cd-0bf4-481d-91ae-96b48afd2287', 'e53f71f3-412e-46e1-a85d-511568c850a6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('b4d052d4-afb3-4e90-99a1-bae18fda9b48', 'e53f71f3-412e-46e1-a85d-511568c850a6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('5f8a1c64-b085-4889-96fe-e752fbe83dcc', 'e53f71f3-412e-46e1-a85d-511568c850a6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('cf56f20f-9212-4d12-b1c4-8b4630e3050c', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('ea8a4908-a7ff-41a5-90ac-026141484beb', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('2b3f6829-fb54-48fa-90b1-624bef3eb852', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('7935e89b-1c42-40d9-8b5c-72ec34722dd7', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('8efb867b-5829-437f-94a5-7d007e778d8b', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('0f8cfbb6-0f65-4f8e-8791-7acb1a258086', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('d1475201-04b0-4e9b-bacf-7aa68b458daf', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('573054a0-fa65-469e-a630-a937eae56e9a', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('0b421c97-9b65-4237-b71f-bceb07ee7627', '28857f77-6769-40b2-a4df-577329ee11a0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('c7718ab1-ca8d-48d7-8eec-364d64caba43', '770b4b45-f8cf-4c7e-bdda-03b57cb35d54', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('01d89d35-e327-4b21-b4c3-c7d45fc0c8c6', '9cb5d36a-1dbc-4391-97b0-54e5f5e96380', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('bd81b5a4-18f1-48a5-8578-407d8537c474', '751b9624-dc4e-40fd-8577-6598164c7e07', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('94c01456-b294-4592-bbb9-a4494d78a5fa', '54473831-c73f-4e86-a096-18787e0934f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('1014c337-15de-4808-96a7-22862e49c4e0', '54473831-c73f-4e86-a096-18787e0934f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('5e6f77df-704c-4c91-8c93-8b281b892284', '54473831-c73f-4e86-a096-18787e0934f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('b056256d-3ee6-4029-852f-053a9ee2af9b', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('bd0e4817-3a31-490c-9e73-a6d6dc3e1987', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('ea76ae37-3f90-42a9-b2bc-0fe2c474f204', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('fc372844-7867-4238-b4fb-101d86933568', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('6a67b9da-1201-4f48-a7a1-d5883f03d31c', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('edc07835-1e48-4911-a567-52a5ba6df0d2', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('f1c627b2-115c-436a-9148-09397e2ff380', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('89cbbbd1-40fa-431e-b7ca-fe0e52478254', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('4affb357-26ac-4fb3-80ae-2f72d1950701', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('26f5ad92-315e-46a9-b672-66e878cb5e4a', '31b06ae8-8aa4-4c0a-8b67-2609020ed2c2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('a4a05d90-49c0-4f08-95c9-53b215f4ad4d', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('57bd40bc-16d1-4207-9388-387bd535a460', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('e5945ae3-97bb-470a-b188-913953af1c60', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('c0d66665-fa44-4cb8-816d-65ef150539ad', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('5e65b5b4-037f-43a1-bbb5-8b7a86f57c5c', 'c67f283e-7f2c-43c4-9c29-045e6d28e6be', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('ad2cb2be-2567-4ea1-82f2-9a555afa1d0d', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('0d08a4a7-d49c-46a5-9b68-370a90b88454', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('1a896900-c91b-465b-a072-a2a5f0c5e47a', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('cab9a394-ccfe-4dc2-91f5-6233d1b06e3b', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('6f00f1f5-bc47-47d9-bfae-3aa5645d9046', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('b2c5aff4-4006-4bed-9351-46a080ac2a42', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('159764f1-dbc2-4041-bb26-a6724bd1422e', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('b714b230-1cff-477a-bcf5-5e681be0a39d', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('d26c7a8c-37db-4a25-8fa9-52d7d893b91b', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('380baa5c-6ede-41a2-87f3-615ea946d5c6', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('a4ae5b31-745e-40ae-9039-3d79cf276380', 'ab5d4f9d-cfc3-43ff-b5f7-326695fe1fc1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('4d7563c4-2436-4c3d-b0b9-d33f5f53fd61', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('c95b57ce-d65c-40bc-8eab-c6a6e68ae254', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('a97a555f-9add-4dfe-b37e-6d6f7dd3a938', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('1538ddb2-5bff-4507-a225-7589a0550865', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('b40a9aa7-0ecd-4f4d-ba81-15214b000016', '4c46b402-ef8e-4de7-8a63-e72db771ab1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('3f20853d-ab02-4137-b020-e40770690258', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('0bbe977d-83b4-49ac-a0eb-08d349ad26ff', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('7ba72c25-0e27-41ca-b227-f6c1d8a70521', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('b154a743-8b10-4537-ae54-abf32106d86e', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('608e9728-ad29-4720-ba9c-cbfd9e015973', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('b9de0b60-230a-4e1a-879c-dd23ebd175f2', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('9ce0f2bb-aa00-4ac1-a909-cc11d6c2b36e', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('6704a6a1-4d56-4eae-a59f-ab3afdbf3de0', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('61b09cfd-b57f-4809-b427-8e2a9b7c5848', '2ef21d07-33d1-4233-8efb-a8f77d690013', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('4e27be0c-de82-44af-8106-fe93a0f7a981', '2c3de8d8-5d9b-4ebc-ab6f-709b19543881', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('275ed0c6-9223-4f84-bcc9-7ea5705ad573', '091bab78-c994-4f20-9e51-9abc3b9be607', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('c323fc94-93e6-4a17-8fd1-8db2c91df50c', '8a31e2a0-7ad1-4154-9ae8-02137d83ffbe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('b4e4a683-77ee-4212-92cd-70441e200fd3', '8a31e2a0-7ad1-4154-9ae8-02137d83ffbe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('142578c5-6e8c-49e4-ab16-6f4415e532f9', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('cfec2639-d4e8-4b7f-9f94-6aeff2bb3e89', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('5d185448-be37-4877-8f35-98176c5d14ef', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('a65aafad-69d5-48d6-a871-e5b22e50fd8f', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('2f526cc7-4765-42c9-9174-2775ae8f74ad', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('eec3fd59-a35a-4885-8613-b0e130cc4204', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('998d4e23-461d-4e31-a9f9-37859e2a6c59', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('793a393f-67af-4b01-a3c7-d76d67033d76', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('fb0245ef-086f-4107-b4b5-e1f4ec17b447', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('b50f2a2d-6b55-4e24-9713-a2050afa7579', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('25637e22-d289-4d13-8468-0adaff94eaed', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('732ac4d7-d5d2-446f-a3e1-6ac80306bfc9', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('1df130f1-b554-4a7c-a88f-0000542e79f5', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('c81d8520-4ba3-4c91-b121-dce9355cf5c5', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('0519e4e0-0194-4844-9568-468582187410', 'ed4fac5b-eefd-4be8-9fe1-35e5dfcc4d90', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('0e5e132a-1adf-4c97-9e9c-e8cd3a3a5b80', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('3ecc8b4b-0bc9-4aa4-8dc6-d012b55cb348', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('d6d28975-dfaf-423f-b2c2-da7d31562db7', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('7f75e834-77cd-496d-af87-0c8b3f106539', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('51cad1dd-411e-4594-8384-ea99e0de47c3', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('ab9ab460-218a-4335-b35e-4a44a45e232a', '6aaa8559-9c12-429a-a478-b76f223697f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('b58b4df3-0243-4263-b8c4-1d2928762713', '6aaa8559-9c12-429a-a478-b76f223697f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('8e0591ce-f02e-43da-8e7b-25f38bf6a9b7', '6aaa8559-9c12-429a-a478-b76f223697f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('b7eaddd7-b6da-45c0-a9a1-f0f7e2072a89', '6aaa8559-9c12-429a-a478-b76f223697f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('74c5e6b4-010f-4ca6-a7d9-077b2e57fc08', '6aaa8559-9c12-429a-a478-b76f223697f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('6097aa04-1759-4534-9090-62807c114a51', '6aaa8559-9c12-429a-a478-b76f223697f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('17786713-928f-461f-a329-e2e398071343', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('4c0f9012-54b1-4759-a91c-1c51f33095f2', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('6e807cde-5456-41c1-98a0-08dec89c840b', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('66a4d421-15ae-40b0-a11c-d9b1ecb917d4', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('d9e03d97-ca4f-44d4-bfe9-12a6df0a0809', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('ac4e6c28-96e6-4d8d-9d03-de761b1d24b1', '4c0f8393-0e24-4e85-b993-e3879fe457b3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('40e96d9e-12e9-4181-8a11-2172f12b853f', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('08ecb8bb-8273-4eb5-97e7-87ddc1c06108', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('3483e6f1-fcb1-4011-b2d5-46414d8a744e', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('4f5aad04-093c-4f14-a9aa-bd18140010bc', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('2420bccd-b609-4a43-85e7-5e85ee0b8d00', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('97fcfb63-b41c-46e4-90a7-57fb64778361', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('d92cf84d-f7b3-4986-8780-e6360f22e721', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('90fd622a-471e-4966-81b9-b0c41d19276b', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('cf97f523-61d1-435e-a60e-5caff0ab1511', '7c052c06-118c-4908-9283-eccead8975af', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('5a937b39-6128-4a92-a78e-0e507d9358de', '620793df-d348-463a-bdb2-e167dabc8c3a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('be713833-8716-4cbf-ae88-ec88ef249d59', 'b4f999f4-7af8-478a-a4e9-0d67ac6c73e9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('b8a17740-893c-4efb-9a0f-e2ca366c20c5', 'd7a8d5b3-2507-496b-832c-ae9ba39565d0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('44d13293-5cd0-46d7-9639-81623dd45c05', '44560c8e-4db0-43b4-a895-10760275a09e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('e494dc7e-bc7f-4a79-9735-5157fdc924c1', '44560c8e-4db0-43b4-a895-10760275a09e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('8715f26e-429e-4b1a-a1ba-79b6c92c84d6', '44560c8e-4db0-43b4-a895-10760275a09e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('8b6e5453-7902-4e07-9dca-a8306bea797d', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('9b94861d-871b-4350-afe7-75708ab4e34f', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('af3ebcd1-0812-4bd1-8ca0-b69490c971e3', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 1, 6, 5.5, 0.70, 0),
+('ad791b78-5f50-40f8-aa8e-87a0fc39ea8a', 'be95356a-f320-41e9-b5b0-447621dec054', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('2a57a52d-e1e3-4610-9175-4d5a9f798dce', 'be95356a-f320-41e9-b5b0-447621dec054', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('838d1e85-ec7c-43c6-8093-0c331c7bc443', 'be95356a-f320-41e9-b5b0-447621dec054', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('2e59ea15-2ab7-4569-b4ed-a2238619cd1b', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('2bbbdd0c-340f-4c88-aeb9-fbb4201edab6', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('ed182fa3-397a-4626-a2f7-6e2218bc168e', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('533dec0f-38a7-4f84-99aa-9098a050dd6c', 'dc83cb66-0bb9-45b4-a8bb-9001c9b4bb54', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('fd605f9e-1274-4d07-8a11-7760b208ce9e', '709f802c-65c5-4a45-b9b7-da208ab85221', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('69b9fb0c-2c28-4c56-ba13-606089b16db0', '709f802c-65c5-4a45-b9b7-da208ab85221', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('c9866548-855c-4c76-826d-210d059f3b20', '709f802c-65c5-4a45-b9b7-da208ab85221', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 4, 6.5, 0.90, 0),
+('23ad1197-1f19-4358-aac9-6b6d8349a73c', '709f802c-65c5-4a45-b9b7-da208ab85221', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('3464fd73-1405-427c-b254-5b3a7a452ba6', '709f802c-65c5-4a45-b9b7-da208ab85221', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('05ebcc4d-a266-4ad5-8b26-65abc3f21293', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('4a1e09dc-dbaf-4595-afa9-7906ac26f5b2', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('e9c18116-6597-454a-afa5-cf8988370ce8', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('41daa49c-689f-4fa8-84f4-0c105ae5bd38', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('e7545ec1-c68a-4167-a328-4d212f7ad73e', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('110e9e81-26f6-4369-b96b-63720621be54', 'e455500f-f903-4ce0-894a-96d106300007', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('a5059ee8-88c5-45bc-b57e-359487a872e1', 'e455500f-f903-4ce0-894a-96d106300007', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('9a615f84-92ee-4230-8fa0-a4e235d4d546', 'e455500f-f903-4ce0-894a-96d106300007', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('906b2160-5c64-4db3-9b1e-7ea66f7b3983', 'e455500f-f903-4ce0-894a-96d106300007', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('de5fc2f1-609d-41de-b0f6-e88310d8c399', 'e455500f-f903-4ce0-894a-96d106300007', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('2b1fa664-8644-4813-908f-87755f25562a', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('4e2f7974-4f3f-4fc5-a68a-5620cf10db52', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('c4238ff0-5556-4489-98ca-9720a20fcbfa', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('17196572-42f6-469e-b8dd-a569beed92d3', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('a72f8c1a-0a18-4f3f-8ade-898e13ded3a2', '929dad00-c477-44b1-bde2-1cb40f8c97b4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('70cbd264-c3f9-4191-9113-672735f6b965', '22899a54-e635-4e59-910d-8b029c51cbba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('cab831d1-96e2-4aea-9d4f-fe6818a4dc97', '22899a54-e635-4e59-910d-8b029c51cbba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('2ef62cef-7782-4489-8040-fc35761955ed', '22899a54-e635-4e59-910d-8b029c51cbba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('8804acf9-57ca-4b47-ad5f-bb96adccce13', '22899a54-e635-4e59-910d-8b029c51cbba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('e95b7492-1067-46b2-a2d6-3553147c8c09', '22899a54-e635-4e59-910d-8b029c51cbba', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('58ef6f46-b3ed-4fa2-aad6-a7753a15cbaa', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('abd1de67-ec28-4f06-a596-2f5d786bb215', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('bd912449-4f3d-48e7-87bd-df8515a68a14', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('3422ba41-1fc8-4bfe-a845-f7a143938f5c', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('62b054dc-9d7c-45e6-ae62-6f847638b8e3', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('5b901582-a4fa-4e63-bcb7-c92d89c44d38', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('82bb4d0a-7bd1-4757-9fbe-e5df2b609778', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('d9c7e4ba-6244-4cf4-bf86-7625c7dd215c', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('23a3a786-c7d2-421a-9da8-ecd89d7a91a8', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('3cde9b07-fbc4-4abb-9039-4c91b86bbe91', '32ade549-0ac9-4275-ad35-526bbb1ea6d5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('b7314256-077e-4453-9be5-99a628e8b561', '62aad92f-98ee-49b5-a09a-088fa96c2181', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('dd7ea546-5912-4ede-9a64-d8e138b78fcd', '55632ab6-9e1f-4591-a1e3-23456113e393', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('199d0926-d5d0-44c9-b9c4-ec3d246fb215', '55632ab6-9e1f-4591-a1e3-23456113e393', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('51fb4aa0-13fc-4aa3-a730-465d040b340c', '1faa5e36-4589-47fc-a04a-06388a24af0c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('b5f0f4ec-f8be-4fe4-9a23-7373bd785e3c', '1faa5e36-4589-47fc-a04a-06388a24af0c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('8cc82716-f8a9-4df0-a651-0e1296f5f72c', '1faa5e36-4589-47fc-a04a-06388a24af0c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('2ddb1c23-59dd-4025-824c-5152fc96adea', '1faa5e36-4589-47fc-a04a-06388a24af0c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('9db6007c-70df-4a15-b2dd-a8bfe916e700', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('348b91ef-011c-4825-bbc9-bb30c1c9e9f7', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('d78b51ca-1642-4872-88cb-725162b40d87', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('3e2d8f9b-66cd-48d4-8090-170e30b1b6b4', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('b233d3ec-c89d-4b27-a351-c533601ac7dc', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('f9fdaabb-c770-46fa-8bb9-30808ae8dbfe', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 4, 0.0, 0.90, 0),
+('e99ff35f-f093-4a12-9882-ffd2ba61e15a', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('a09135fc-6ba4-4a94-8b9d-fc1a7c79eafb', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('613d3dba-b5af-4a7a-b26c-2b687a75ca27', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('e0fd9494-5cc0-4337-9d8a-9dafbfffea97', '27c4ce67-a20e-4b52-aca7-e7f290eaf0a8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('f314dc7f-deea-43e3-9e99-425f1c767a03', '49debdf1-af45-454b-901d-e455d0133b40', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('2b3bacf6-ae5a-4462-be65-eb44c0aeca45', '49debdf1-af45-454b-901d-e455d0133b40', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('d9b3fdcc-d2c5-4bc5-8f57-fb13a6eacb9d', '49debdf1-af45-454b-901d-e455d0133b40', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('f2d11519-74c9-4fa3-abf6-89c1ee3dbc04', '49debdf1-af45-454b-901d-e455d0133b40', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('5489291d-31c8-43d6-b759-c4e70ac043be', '49debdf1-af45-454b-901d-e455d0133b40', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('c2fc6fc7-b5bc-4285-b2ec-3ea6dcf28226', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('1b411cfe-ce1b-4a6f-9862-5b3ee8c2762e', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('fd947e6d-7b54-4892-89be-ac0687cd3098', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('bd0cf48b-a00f-40a1-9141-6ee3f1f77ea0', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('832224c1-63a7-42d8-9d5f-c6e0e9ee5157', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('3e020b05-1d67-43a1-b521-2830c106bd4b', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('c5e5f38d-3814-4670-bd75-22dec80a5af2', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('8caa5841-8046-4753-8f1a-d36dc4b6d6b1', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('11631641-27f9-4dd2-967d-df6cae78b117', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('91f3f89a-e7e1-49a9-a546-562f62adf625', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('f07762fb-dd88-4515-b26e-2d4db9311764', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('7e5e92df-c955-4694-8600-fcbd82de5d02', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('4514a0de-44c5-41fe-9fc0-8578902543b8', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('a1457037-f97e-43b5-949d-7b48f243f764', 'be8e5458-a1c8-4d60-8bc2-b30cc78d2463', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('d4dbbf23-e2c8-414c-8a3c-d106b8176263', '09389ed8-5411-4695-9e6c-8aa7f7d05fd0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('f135f51c-1701-480a-8669-49cfbc945d7e', '490eab73-3fe3-424d-82a4-05e8f26b5a99', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('a82cc4f8-554b-4f42-bcdc-b76693ea2629', 'fb80cdea-6540-415d-9d3f-b1e360e61ab5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('77cb8ebe-00f2-47d7-b169-6eb1f50ab431', 'fb80cdea-6540-415d-9d3f-b1e360e61ab5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('90e814d8-b295-4227-b19b-ccee250a8543', '1a504f45-448a-440e-9b89-a22ae914d368', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('56f7ca96-ef25-4663-ab35-1aef27939101', '1a504f45-448a-440e-9b89-a22ae914d368', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('476aef32-549a-4d59-bdbd-9a05decbfdf3', '1a504f45-448a-440e-9b89-a22ae914d368', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('38609b87-d7bb-43d5-8b27-d05405c54aea', '1a504f45-448a-440e-9b89-a22ae914d368', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('156960b4-1d33-455b-97c5-a9177c175978', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('0ac2866c-caba-4639-b4d1-0065867183f3', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('e8f5b049-e04e-4d26-8293-4983cd73d62f', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('67e3ba6c-e505-416e-89e6-6846fd67b3ac', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('56ed19ed-5462-4579-84c2-fbd9a57a4b52', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('995f14de-e1a7-43c5-a6ca-bbf44c8445aa', 'f1d4997f-2803-4306-91ee-f0d08082057f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('1493a06a-1bd3-4653-88ee-44ddfd2cfd35', 'f1d4997f-2803-4306-91ee-f0d08082057f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('7a9f2cf9-e5bc-48e7-b513-d25afd871220', 'f1d4997f-2803-4306-91ee-f0d08082057f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('729f77c9-40c3-40af-89b6-eb580c53a6b5', 'f1d4997f-2803-4306-91ee-f0d08082057f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('e76cbe7e-57c5-4373-9ca2-5595d1cc015e', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('3d935f28-7f85-4879-916d-47f12c4f9057', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('07a7765f-b472-4075-9207-0374c3b40edc', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('fa3bb48d-3f83-40ed-9fcd-c846268f9163', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('cb43d780-63e2-4eba-868f-caf61a5c8e4e', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('9d7de43f-8af8-44f2-a78f-5ecaabb3b4f1', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('7c4faa9d-7cdb-4b51-a23d-6cd0cc489215', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('db1cd76c-dd60-4588-a6e6-90a374552c25', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('0d37f300-41bd-4cb5-b554-a4372f802441', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('c0740d75-cfa8-4720-86c9-d3c555bf68fb', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('28cda8ac-58d5-4281-be16-2e7e02bebfb3', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('611ca478-8331-42d1-ab3d-ed4121720501', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('c0cde6b0-2929-42e8-9a12-53d313f3bc99', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('4f07b1af-16f5-452b-81b2-5338efbd2f75', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('30d078ea-f38d-4d64-be13-32cda7b3c145', 'fb789c91-6319-44e1-8f10-40c25ced2e36', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('5b161b00-ba8c-461e-b674-f9af61368270', '597f4c9e-755c-4d1e-89a5-b97d9904548d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('d0ff810c-bb3e-40c8-93d0-5874688d3c61', 'ef4f9711-c593-4006-a337-0e40af760ce1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('777ab6e4-ec3d-4091-a401-f56706ed3772', 'ef4f9711-c593-4006-a337-0e40af760ce1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('c84539e2-3721-4ee4-b0dc-5c476a7e0eb0', 'd2978720-ca52-472b-9300-68c0f8360e6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('19d3b498-8bcd-4d56-99c5-27824a9c7c44', 'd2978720-ca52-472b-9300-68c0f8360e6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('5844ded9-d83b-420a-a5af-d8a7c7d81668', 'd2978720-ca52-472b-9300-68c0f8360e6a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('21c8b748-e7bc-40c8-922c-3e1b6be20eee', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('2671689d-add8-4170-ad92-9c63959c7bf9', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('70eaea52-b6d8-49f0-bf67-fd8cc5a03506', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('e031d0a4-7edc-4ceb-a683-122050869a58', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('15af9a8b-f5bb-46f5-bb71-127023563f17', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('1c9ba88c-020d-4cff-adab-97c59d9913c0', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('1ec635e0-80ba-4c51-9847-cb0e941b734c', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('f99ef312-92f9-4ec6-8dbd-8f9a60fae3ac', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('4e553863-8671-4722-a2cd-44f72e203d56', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('6e3beac9-c7f9-4863-912e-0476c25d5465', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('75c0cde6-8e52-4206-9270-24b09ce64893', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('392d3a78-8526-4332-92e3-d20f4e3e966b', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('047a5fac-a56f-413a-aee9-4073ff32ffd7', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('50aadc9b-c210-4c73-8050-f31514c78c66', '0218aeda-1725-4a6d-91a9-03532e51280c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('ef2598b1-f165-4d55-a90e-1765973d1765', '0218aeda-1725-4a6d-91a9-03532e51280c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('a13a8722-6a70-4f8c-b799-01a2b1768977', '0218aeda-1725-4a6d-91a9-03532e51280c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('205219cd-9a80-49bc-a4b5-3a60dfa0b3fe', '0218aeda-1725-4a6d-91a9-03532e51280c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('4ecc240c-8dd7-4669-9bab-941f637a4b90', '0218aeda-1725-4a6d-91a9-03532e51280c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('c6a16125-9af6-4015-b1cf-fc4573e901ff', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('2482d4f5-b06b-4afd-a6df-43c58149b6ce', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('c8c5c9b3-b1a5-45f4-8030-e8ab0426183b', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('cc4930ec-48d5-4799-b061-bb1459cb508e', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('75a7339a-3b02-4b8a-be0a-f3b33c736632', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('bbbb0484-406e-4857-bc90-5dfa406e305b', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('debe28e2-0d17-4de5-a50d-623d28386792', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('2c831eb4-0186-4913-9b0f-ad90ac2cad47', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('1c96b923-515d-4c67-ab74-382468a29e14', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('e353b4e7-84c7-469b-a23d-7ed4eee5d0a8', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('8ae5b906-7ea2-44fb-a8a1-37f29a48cddb', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('69f727ea-1f05-429b-9076-c23a9b0f0bbb', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('f6be638c-d4a8-41e1-9fda-35e653211208', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('c19612ed-78e5-484e-abea-e0103d331c55', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('f9e0eb63-d1c6-4c95-b008-60e5501218a6', 'ef07ea16-dfd8-4432-a90c-363de872b011', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('aa43835e-9096-4a1b-8186-f89c89bd375c', '285f8a39-3f19-48bb-a9b5-18c49af74b29', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('d0aabe97-197a-4672-9967-4c54c7293c72', '10b54b0d-e9dc-4e45-ba3a-931a1ec9ad1e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('f4c631fc-7c41-49e9-b52a-028cd5333855', 'fefb9975-e2da-48fc-b0e0-d8a33c8b6cb1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('26588c1a-78a8-4d94-b5ce-06365c6f4253', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('98370bef-c904-4def-abf4-2ee6e6b0739b', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('f6fc46be-628c-4124-b326-36486cb08372', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('5c8b94df-0292-4f8f-b695-5ef4ffd87086', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('80bd3b5f-baba-4bcc-afbc-a18fbe10e61e', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('427b0b07-80bb-44d0-ba80-6ec13c597a5a', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('c033a03c-e08b-4e3f-a1be-024a06d542fe', '31c64363-1703-481a-a4af-20fa5d65016d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('0a316b82-b56a-45ab-8ebe-e8c900402a86', '31c64363-1703-481a-a4af-20fa5d65016d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('781ab1b9-d323-447e-888e-100e0c304d43', '31c64363-1703-481a-a4af-20fa5d65016d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('ddfb90dc-fe71-4e20-a6b3-46f6cabb0079', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('498109db-00ea-4c4e-b53a-96bf82957ae8', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('f54cb433-945c-4b1d-b8af-7e34d25f2cf7', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('96367629-4a2f-4267-9a55-435ca82b5298', '21b4d0bf-95bf-4c05-9c79-2769d5284383', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('bdd8ac50-1a56-43e1-8ee2-870760a9eebf', '0f16ec5f-028c-4bdb-9449-4373c4668774', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('6eed3a2f-64a4-4c08-a16f-7fc05b2443c6', '0f16ec5f-028c-4bdb-9449-4373c4668774', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('669c7e03-c525-4a4c-9f8d-8a29fb4a0623', '0f16ec5f-028c-4bdb-9449-4373c4668774', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('fe3b9536-4957-4b7c-872d-bf30e5560759', '0f16ec5f-028c-4bdb-9449-4373c4668774', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('b508e836-55d0-4c13-90ea-56e4d6c9c651', '0f16ec5f-028c-4bdb-9449-4373c4668774', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('43fec6cf-6a36-4ce0-8190-bbdb1d4e44f8', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('c7f7cb80-463a-4f0a-a868-bc00b6d80c00', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('25c73b95-efbe-4ef0-a24a-04266a7b1017', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('b56321e9-060d-41b1-9c78-80a6b0b00083', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('e0be795a-5c8b-42f4-a9b6-ae32eb8430da', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('26daf934-19c3-4a55-ba57-b8ce43b02e8e', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('a4c48a93-e7f0-4b25-a956-9fc5c41fc39c', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('04baa1d1-bf63-40b1-9572-a32e8d5ce770', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('61ce8280-9422-4091-b838-dc462f47e66b', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('5b715097-d989-428a-88ad-cec59dbd4663', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('a2e19097-dcbb-4dab-ae84-5376b1015eeb', '12e4f3c6-20a8-46a1-b295-23f90ceb862c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('e6ab4073-9f7c-435e-af70-a8f6a7aa9963', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('dad5c334-3946-4a5d-8066-b2163c07ac12', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('cd6570e2-1649-4d8e-b300-e821d1de2874', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('b604e8de-2ba9-482a-87a4-ddf00db3f212', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('aa5825c8-31b7-4557-b39e-5ddf4dc3b4c6', '9e0c4a83-c666-4f73-a80d-7b6c0665bd4d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('59e82ec3-a41a-49e9-8003-0972a275edda', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('696d6eac-c5e0-4978-9b69-9bc422a9f46d', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('e3305516-0abd-428e-baae-e54d3b652fba', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('c1cb030b-1ed9-49b5-84da-65d6a42b569b', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('b11b6fad-a6e0-473d-a5e1-f62149d2b52c', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('708f6a86-80b6-46f2-90bb-a5f0af67a906', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('5cc1dfc3-c005-4884-b1e5-8fb9d2205048', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('1854a0bf-4854-4189-a12b-f50b18c472a1', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('adf9b0a9-d24e-4368-9652-72f2b280f2b9', '06ef2280-d079-4f13-9061-156da0e48191', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('762238a5-a168-4440-8f4a-ba4fbb253ad8', 'ce1bbae5-8f0d-436f-97d0-672434bb80d2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('5516e07c-b342-4fef-9634-6c8989341af6', '7a9cabe5-fe77-4a92-be0c-e17e0b8ad967', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('1a2c0c2f-6fb0-4f89-aee6-b194b958cbb1', '81eead00-4d00-4948-aaef-cc3ba519fb7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('c5199c9f-5e06-415e-a1d2-96fa2a663acd', '81eead00-4d00-4948-aaef-cc3ba519fb7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('c2f01b7e-868a-4e40-86eb-c07a05c98a19', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('bee156de-0c05-4dfa-9469-57269728046c', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('462224c3-3be6-46a1-ab0a-c592700eb054', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('8014e9f2-0061-4d22-aab7-cb398b329c27', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('7110fffb-0ffb-4649-a093-8efb79293007', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('01899fb8-0842-4645-addd-45343bfd180b', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('51a38030-e28d-4610-9b91-6579a8c09ff1', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('a69e1e83-ce84-443a-bf4f-9b95ef2bbd68', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('fb95053a-2f1a-4bba-a310-6724aac9c813', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('e74b3a0a-9a0b-4c9f-8e89-f3878771779f', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 4, 0.0, 0.90, 0),
+('12df1e87-3b99-47b7-9f7d-7571aaedf908', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('dc6f09a2-6134-4ade-a9ba-ee81b6a571f3', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('ffb28ad7-3506-4b82-b781-197ba13bf3ac', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('476984c4-6cbd-48c8-b5cc-3862bd622538', '18708608-b7f9-41eb-ac12-82b9d1741d8d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('c2cebaa5-4774-4698-9d5d-b5b85b51b4c6', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('f5dd625b-99c5-4b3d-90cc-6ce248d223b0', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('707bb188-4f8e-4c9b-8ac9-aa712b1490b7', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('3fbf3d10-f7ba-4e32-9739-dbd3ffaf18b1', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('02dd64d6-ed50-4719-9610-622b1df8ae04', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('d1b1cc23-df09-48c2-9276-c9c65a6e3642', 'e784ce78-343f-41f8-9320-62892464faee', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('1fa2396e-934e-43aa-b06c-1323007529ed', 'e784ce78-343f-41f8-9320-62892464faee', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('f2bf440d-0c59-4011-aba0-d9b2583e198d', 'e784ce78-343f-41f8-9320-62892464faee', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('3588bf59-0f56-48e0-995c-bc01b059e8d1', 'e784ce78-343f-41f8-9320-62892464faee', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('22e5bca0-0dd1-43d5-adc2-7c038997cd69', 'e784ce78-343f-41f8-9320-62892464faee', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('d688de57-a1a6-480d-8a91-ca652d77a2d0', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('33547886-4e45-4d1c-b142-c1840fff5977', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('a35db266-8e25-4de1-a667-7564a81dc370', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('078c856c-819d-4e0d-bd42-d9769bab5c70', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('6111219c-a029-44c2-90c3-7ec6fe715bd6', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('d6ee786a-e8d9-481c-a2f4-08a33e5d31eb', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('bc77c56b-cee0-4593-a3e3-eb5b92a55082', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('c9d49608-32b5-4eab-a8d3-212c644f0be6', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('3558c8fc-bfd9-4df4-9e43-2b2edec2ea0f', 'da93d52f-3736-4d43-aec6-d4bf6d0bdbea', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('1eca4978-25b6-4ca0-8e66-ad7e1edf9f56', 'ece9cd36-93d2-48c1-9dc3-fe0db7acdc8d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('9baf9a7f-fbe6-4f28-85db-005dd554817f', 'e48d6889-dd2d-41c6-8f6b-1dfea3fec7c4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('75db51f6-b19c-48dc-a7a1-0f591a72bf72', '7b450e13-422b-489e-a113-d83e3334f673', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('564b6828-3718-4436-8052-e94c3eb6ce0a', '7b450e13-422b-489e-a113-d83e3334f673', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('fde3069c-6b9d-4c2f-afac-10730d9cf5e1', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('7c0604be-eff8-4eea-816f-766dc6b4b200', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('c0c195af-219a-4161-81e6-f0e39be4019e', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('60fde7f0-2e8c-4c11-86e3-0cee7053ec49', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('d7c78208-07fc-4d15-b240-6d5c351be422', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('beb2ac94-128b-44c3-8dc7-4b3db07a0375', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('dd367893-dcad-4d23-958d-e6023654c0d6', '6c53f019-02d1-4082-b919-8629c45da8f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('95e58d50-8893-4a9e-be28-f4c1a307578a', '6c53f019-02d1-4082-b919-8629c45da8f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('845247f8-0144-4657-be93-67a14b139cf8', '6c53f019-02d1-4082-b919-8629c45da8f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('26e0fd79-abbf-45a9-b89a-58696862295c', '6c53f019-02d1-4082-b919-8629c45da8f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('46f506f2-9db7-4d97-a229-e0fd4540cd58', '6c53f019-02d1-4082-b919-8629c45da8f2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('1758b920-34e8-4b71-8c3c-f765e757289b', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('279e6f3b-ccc9-4ca1-8e84-77704b36425c', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('877965bc-8af2-4231-8857-bdfee2086745', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('5641291a-5fe4-4c52-a9f6-66369c728d9a', '74a68dfa-8289-44f9-8775-f8ed1a9e95f6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('f6a5327b-7778-453c-a8d2-27092c0d1c03', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('70f9f892-b7b8-4498-bf6f-3af7bd29eb29', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('622c5ed8-20ed-4399-b2d0-09dbd09a0fb6', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('5997305a-d8d2-4278-a253-f083ec72e52e', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('55759ea7-5da1-4dfc-95fe-b2f60d24cf8a', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('7a4b352b-cf5f-41ab-a392-7b6b624e449f', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('2a8706d9-b374-43fc-ae5e-20c209ba21ef', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('97106732-da59-4aac-94a7-21b2b7df837d', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('208dcdbd-9065-4cd8-b77e-961908425df0', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('e5863d57-5eb9-4aee-90c3-fba2ffef3f72', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('b2d03463-5108-4ced-bf25-dfac5028e2fc', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('5ba6b149-6354-4cb3-a9d5-c53200a87bcc', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('d5b86e92-369f-4fba-baaf-09c12ddbc46d', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('0d0c0bba-534a-4c19-a4f8-53fef9bbf0aa', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('7b8bcfcd-4b6b-4e97-8ff4-84833da41e07', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('af3a1497-ad47-4a2a-8bc4-fabaec44157c', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('06e28794-6e37-4c37-834b-123d5c9de4dc', '8210461e-09c8-4aa5-8016-2c19d8e4586d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('7c194ddd-17c4-41ab-b084-2da42d3313c9', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('2ba560cf-e89a-49c3-9976-13cf5dbf59b4', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('36c65830-bf28-4cca-932f-cd5355dca5c7', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('85bac4d6-dd87-4406-81dc-9d5f0b89b799', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('cd67282a-7960-4da8-8af7-c14e7367251e', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('1b010ed2-280d-4480-a4dc-a3ae225f8179', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('31782ef1-7380-4e64-b5cf-b33c3eb2a7b9', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('148146da-8c0e-402f-ad58-3119fa1e41cb', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('dd05d695-088f-449a-b772-256f5d66d040', '2e09e869-5d53-450a-bca8-f1f95604506f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('62ea1aa0-aeb4-4841-adf7-d705aca34731', '81d56ddd-3169-48fc-b100-4ea71383e2ce', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('bfb7da86-f182-4552-b9ac-d274f2e2bd19', 'b6b8090b-84a4-4488-88d8-98a3b2f6ac11', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('2e7468aa-160c-42f2-9129-68f45ed74b7f', '1b15df92-c8e5-4d9a-9adb-51077cd200e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('2a3a68a5-5a44-4620-9554-a456f1c7133b', '1b15df92-c8e5-4d9a-9adb-51077cd200e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('865ca6ba-541d-4fb0-a79e-bd7d7fe4296f', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('fcf8fc1e-e1ba-4a74-b8a0-b09472a95cc3', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('89b75c43-1c46-47a8-a4b3-8c11f4b2dcef', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('33212fce-1ac7-4516-9119-7b9a5924cd47', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('8bfd15cb-dad7-4818-945f-944e60903b39', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('b08164bc-3093-4b45-b67a-d10f72faec69', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('60d57fc7-8afd-461a-a2d7-d28e4aeb9de9', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('4341707a-9ff9-4363-8986-a2ab31ff2681', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('e82b5af7-a369-44ce-8846-bad5dfa12fdf', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('cd618ba2-7018-43fc-af9c-e52d6d96dd4d', '9f407c19-d79d-49ad-ba31-812dc255f657', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('64d0acd7-55f6-4d41-9fa6-c8b4544e4fa9', '9f407c19-d79d-49ad-ba31-812dc255f657', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('5c714216-816f-4c45-b44a-d9c258d45247', '9f407c19-d79d-49ad-ba31-812dc255f657', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('960d680f-c44f-4660-8a92-9275862d0849', '9f407c19-d79d-49ad-ba31-812dc255f657', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('e88e8efd-3bcc-4a44-950a-0a2e4f0d4416', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('032564c9-d796-4627-8b14-4d9562b02e6b', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('152c9427-bb05-4bb6-a2f3-5aefc9c92e5b', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('55644032-cc09-4646-b7fb-f57a33caaf5b', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('9b5834dc-cc80-41b5-959d-b432d82590dd', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('9b88b5cb-e493-4520-895a-64940258921f', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('44667fa9-1ccc-4220-8c3c-cd0fc795c6ac', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('157c2270-81d6-4fff-861b-021031933866', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('2ab5441d-1bbd-4863-a0cd-f4de3c8404f0', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('10df6deb-6fa2-4a12-8a8f-84dc116440bc', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('758aa7a1-48be-4c52-88d0-d6a14cf07c15', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('64f66b45-d172-4697-a5a8-12a170be58b9', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('eef2c576-cc55-4579-8da3-068803d2dbf3', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('e23b96e1-fead-4d3d-b1b9-645a5a27eb49', '35e08da8-2565-44ec-a43d-09a963054876', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('c18c3521-e4ea-486a-9409-01479d74d5f0', 'cd1e620f-6577-4c8e-a4e2-cfc0a69cc83d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('d6dd3657-6eff-4d3d-9cf6-b68fa5b938a3', '5c59bf3f-3699-4eaf-9976-d40c6685a27b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('5b3292c1-27a4-4b64-a0bb-49d0d513cc99', '2be0b47b-9a5a-415c-a530-50021adf8378', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('af15faac-d789-41ca-9a62-5e937b3f9b4c', '699e5dd9-7299-4951-bff2-2e309a0c7724', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('a38d3c56-8cf2-42ec-b010-86ecfbe18735', '699e5dd9-7299-4951-bff2-2e309a0c7724', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('f5baad4b-8b8d-49db-949d-945886b206ed', '699e5dd9-7299-4951-bff2-2e309a0c7724', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('f77f3eb9-803a-4b94-9e4f-83c067be20b6', '6586567f-b575-4e69-afc9-979c9af8b646', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('28217671-6728-467f-a8d9-df26ed49de20', '6586567f-b575-4e69-afc9-979c9af8b646', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('14c337d7-1514-4ad9-8f4b-fa0a8ee5df27', '6586567f-b575-4e69-afc9-979c9af8b646', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 1, 6, 5.5, 0.70, 0),
+('6e5f6b8b-8dd4-4dfb-8e12-f3a5fbc7e836', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('06b04e47-7b8b-45cc-ab5b-c3529a367362', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('de42a793-2b6e-4950-8f71-0baebddf185f', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('13a056ee-4c9a-421b-b88c-fe52b8698d72', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('5748405a-ee22-4d5e-ba77-85fa1bb76560', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('73cb929a-1fcd-4a1c-91b4-58055fc53193', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('8d5258f8-58cc-4bfd-89d2-cbf687844577', 'bc31358d-ce73-4bd3-aad4-7e837dadb986', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('c56ad592-f9cf-4b6a-a4da-9daf15805d1f', '20564472-0a47-4953-9328-bb52fe477fdc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('06d4ce4d-e349-4e4d-96ce-a89d06c0d7d9', '20564472-0a47-4953-9328-bb52fe477fdc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('f4e70a14-e3ad-4a80-b094-9e419ecb3ccf', '20564472-0a47-4953-9328-bb52fe477fdc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 4, 6.5, 0.90, 0),
+('4f97b5ce-5fb9-4df8-bcb2-4fc3994fbcd2', '20564472-0a47-4953-9328-bb52fe477fdc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('f5c94235-0aba-4466-b242-a0ad83a6e0d8', '20564472-0a47-4953-9328-bb52fe477fdc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('aa546275-2fa8-4109-8483-39e550a41ee0', '08606007-a519-4c8b-a454-1dacfb77c296', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('67b0bb9d-2bf2-4fee-ab98-0388716fefb8', '08606007-a519-4c8b-a454-1dacfb77c296', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('16312a6c-a23c-49b4-8191-43f322719d8c', '08606007-a519-4c8b-a454-1dacfb77c296', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('22c20728-86d6-4d14-be93-d3f6d7df6850', '08606007-a519-4c8b-a454-1dacfb77c296', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 2, 4, 6.5, 0.90, 0),
+('58c6c782-f525-4333-afec-c57fde85decc', '08606007-a519-4c8b-a454-1dacfb77c296', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 2, 4, 6.5, 0.70, 0),
+('e8fcbb53-9bed-4ac0-92da-639c5ac6b589', '85da6d64-5218-436b-aa1b-3c1496d43593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('64a72542-3949-42d7-81c8-984319dfad85', '85da6d64-5218-436b-aa1b-3c1496d43593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('edd1f9b9-b0d4-4db5-bca4-5ba80f7edb08', '85da6d64-5218-436b-aa1b-3c1496d43593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('db468038-0b39-4baf-8fb3-c5a23bf27be2', '85da6d64-5218-436b-aa1b-3c1496d43593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('6a04cd4e-de6b-415d-820f-b66d3b566f0a', '85da6d64-5218-436b-aa1b-3c1496d43593', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('fe8a044b-2d36-4da8-a84c-fefefc7ccc49', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('dade4580-4194-4463-838a-2ee31afc5581', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('1e1c438c-4537-49be-979d-ec7dac6a6532', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('13451bfe-6784-4a0c-bde7-9c45d7bf6a7f', '42bc57e8-310a-4b91-9636-00ddfd2c9653', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('f9ceeaf0-93c9-4b1d-a8e6-573dac937972', '93a0ad66-da98-4a9a-8edf-791297c000ac', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('ef04eded-5e60-49ab-a3a3-1d7dbb2167b3', '93a0ad66-da98-4a9a-8edf-791297c000ac', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('79e7704f-d324-4ddb-85c9-aa6d6bba5626', '93a0ad66-da98-4a9a-8edf-791297c000ac', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('1e505b24-6783-41be-be13-b4caa93b76fe', '93a0ad66-da98-4a9a-8edf-791297c000ac', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('4f2e308b-f7de-4829-8b4d-aab21e43c0fb', '93a0ad66-da98-4a9a-8edf-791297c000ac', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('91d156e6-09ab-4cc4-a0d9-f93f72515dbf', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('bb42d364-9f41-4ee6-8d52-b55c94d4e9ca', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('29eb8b1f-6c28-4b9f-9683-999b5919d1e6', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('6eb3e632-e8fb-4d17-abd6-ec8d8ec2bea7', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('2c6734e6-ccc6-4306-860c-a4f58dd2cf5e', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('7fb04cdc-7a65-4492-b594-e17ef04c5c20', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('f8a7e47c-0fcb-4399-8430-a87b8371736a', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('66364365-9114-4862-a55e-120a8be094d3', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('28e5280d-fa5f-48bf-9c6b-9fe9cf555b91', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('eda54f82-b1e1-4cda-b4ea-fb0cf8cfe05f', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('21fd1480-e8bd-49d6-ae50-16c23fa37551', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('2717d748-b17a-4cb3-a3ba-5da05e9723b9', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('4287bd14-4178-4c78-9653-418820ee2aee', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('e16c38dc-c8d7-482d-b88b-50358e0d4f74', '890d6698-1439-4df6-b3eb-bc9a51123cc2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('171306e8-9680-4dbf-91fe-27df7057422c', '126dd11f-7d9e-40df-90bb-586612a4f79d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('5de82339-13fb-477b-99ea-abe660bb47ae', '3ae9263a-76d8-4000-9054-7b54a5ebe319', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('6fa219b8-7d6f-44ac-822f-b58e31f98054', '05dc6112-9170-4b9a-b603-eec4807348c6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('9ee06478-5b10-4f8c-a313-c6104ef4cae4', '05dc6112-9170-4b9a-b603-eec4807348c6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('711d1a7f-e082-4b7d-8eeb-865db43a3a90', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('14aa6950-feb7-4292-b542-8e9ec5dc1f89', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('2dc449d5-a203-47bd-ac81-b4081567345b', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('d82c0f48-0048-4bc3-b01b-1b1efd3b6b95', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('81140697-d900-4fda-b0b5-6159c0465496', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('ef99c068-7d82-4646-a69e-383bf38785de', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('f2019484-2705-4286-b6da-0fb91593cc61', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('a3db261d-ff21-412a-9256-e019c53bd48e', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('6bcf3a52-213a-49c0-8431-fd03ec2b5dc8', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('815febdf-2af9-492c-a464-e5210cde2f8f', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('cd6766f7-c431-4a9e-a344-28b4a21ebbb6', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('4940839c-382b-4aff-9b54-4522dafa598c', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('4925e209-f5f2-4b83-9922-e1409b815eff', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('697b3de0-ff91-4d2f-86ec-503432ac7e07', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('02bc4e60-20ef-4821-8c40-a2574b61a020', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('4ce69834-d089-4936-bb3d-1f7645e24ae0', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('62cedd9c-1177-4f89-873d-f69736157124', '9febc13b-740c-4c85-bf96-9a7699904582', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('6786fb1b-1f2d-4ce9-bf03-e2a4c300f614', '9febc13b-740c-4c85-bf96-9a7699904582', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('fe801849-1cd2-4281-ad10-859d1d1b153d', '9febc13b-740c-4c85-bf96-9a7699904582', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('ea0bb5d3-e963-460d-8605-f1d5ca3a9501', '9febc13b-740c-4c85-bf96-9a7699904582', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('b530ef68-c411-4c14-8011-d445c73b67a4', '9febc13b-740c-4c85-bf96-9a7699904582', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('66074d1d-a8e4-45f2-9167-bf35ce39e3a6', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('34a30687-45a1-4f52-a952-3eba5898971a', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('143121b8-dc48-40a1-8e85-e3896cb230e6', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('d42c8597-f8df-4058-98cc-b9a7a143dd4a', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('16e07beb-0fa1-4fec-a17f-e450d6f8448c', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('71b33df5-7531-443b-8cee-07fdaf0020ad', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('6180d69e-22ef-428d-a281-741779d268b7', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('e948f2a0-d677-4ecc-b072-0a4cdf2a98be', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('e40d86f6-1349-4e29-9198-46959267eb34', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('47de9c5d-93f7-4dca-a683-a63845304ef6', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('a412e906-ae84-4f26-a735-d613b475120f', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('7823398a-b444-4a42-b09d-2418d7e795b5', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('e266a422-02a7-4e06-a4f1-4e9fe744f11a', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('cd5d49ed-621b-47ff-9b46-8c3a319d28b3', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('a6deba96-dd51-4cf1-a7e2-166d8fb4b10d', '2c69a63f-7d2f-44da-b9d9-7a86b3f85875', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('689c4d0d-8999-47c2-be92-de5b7f0d1643', '2049a11d-d41c-4bd9-97e4-8c3e2762efdf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('f99b62e9-03fc-436f-912d-260e48f22d07', 'f0324350-154d-43bf-b45e-504590fcfeb1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('76a15c25-70c6-48c9-9c8d-895b09c7e8fe', '6ac64f70-56b3-40ea-84d8-bcec3a135dc4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('16fa261e-43cd-4a53-b0e5-fe944267c66a', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('70a52e14-3d5d-492c-a681-b682da6f55df', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('cdcfd201-8df2-4d28-a0b0-836e58935edd', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('8b6828a3-6267-4680-a5e8-c60ddee4d711', '74a6bef4-5cf4-49eb-913a-b277177153ef', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('f59c95a5-db18-4a78-8cb5-b5e98d3bb4a9', '74a6bef4-5cf4-49eb-913a-b277177153ef', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('693217a8-f5da-4d6d-bc42-8a70c8971416', '74a6bef4-5cf4-49eb-913a-b277177153ef', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('f1f32193-a4f8-45b1-840f-cc9adaa44902', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('9d9d6a80-f68f-48a7-b997-4c24d57eac60', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('ebc8e66b-473b-41d5-9d2c-865973afb7ec', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('8243c085-28bf-4429-bd9e-1765ad4567f4', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('2a5573ec-61ef-4649-8322-3cf056755b30', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('20b3fe8e-0356-4ab9-a1fc-d210b53f515b', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('febcf14f-4b9a-410e-957c-84b9be4f8d54', 'ae64175c-60cd-4dbb-9f71-075d8913112f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('080c0191-32ea-4edd-9219-21e574d16a7c', '7bc19110-5b86-4a32-b439-98de9fa264cd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('e5e65dd0-6a5b-4605-81b7-e76a2f3c159b', '7bc19110-5b86-4a32-b439-98de9fa264cd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('af62409b-b3b4-4d8b-a213-4be15cc65fc2', '7bc19110-5b86-4a32-b439-98de9fa264cd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('c670d862-b7c8-42d5-9afc-696448d5ba2d', '7bc19110-5b86-4a32-b439-98de9fa264cd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('d0dfafe1-6862-40ba-882c-635ddbb75aa0', '7bc19110-5b86-4a32-b439-98de9fa264cd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 2, 7.0, 1.00, 0),
+('8a9beea0-5993-4ea6-96ee-12757160040c', '69c806fa-7158-4564-9a07-3359867ab0d2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('36d99157-81aa-4c59-a494-0ce25da4e240', '69c806fa-7158-4564-9a07-3359867ab0d2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('9763faab-e1e7-4407-a9b5-b8e23ea0c24d', '69c806fa-7158-4564-9a07-3359867ab0d2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('e5a7872e-4e7a-4b59-a3a9-9dbbc54ea1e9', '69c806fa-7158-4564-9a07-3359867ab0d2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 6, 7.0, 0.80, 0),
+('c454d022-727d-4b4c-b71e-63162f13932d', '69c806fa-7158-4564-9a07-3359867ab0d2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('8f8ea57c-32ef-4243-8f60-ec78f91414a6', '38918d3e-5817-4e27-8777-b6392860fad0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('14b78f7f-1ef7-4f06-9479-653aa659c39f', '38918d3e-5817-4e27-8777-b6392860fad0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('1503267a-2043-419a-85aa-b199f005ab41', '38918d3e-5817-4e27-8777-b6392860fad0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('5a8f2261-e856-48bc-aa46-26081de8bcc0', '38918d3e-5817-4e27-8777-b6392860fad0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('6d6ffd9b-a9d2-44c3-a2bb-60a669e77f12', '38918d3e-5817-4e27-8777-b6392860fad0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('b9aea09e-2332-4c15-8cac-13e0aaa949fe', '38918d3e-5817-4e27-8777-b6392860fad0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('f2167705-af1c-4da4-939f-e30c29cb229d', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('e8e2c92b-4db4-42b5-b984-3b770e2122a3', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('5311a5b1-13b7-47d7-85c8-6c7aa9373ddb', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('71392cb1-101e-4ab7-928c-4e73800162e3', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('8c38b89d-2746-4394-9704-3ba620a0fb7e', 'af14bf85-66db-4e8a-b1f9-c9dbcc03d51d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('e06db62d-c6ab-42f2-a49e-0995c94e88ff', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('811f9505-368c-4d14-a5c8-2f0fc9fa3e27', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('26da38c9-28f4-451a-9bb5-4c556e92255e', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('84a69fd2-b3be-432a-886f-2649cb99d569', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('92468d3b-a415-4257-baed-4600b53aacdb', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('b52b0105-1b80-4311-a339-0279b59530cf', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('e133100c-d98e-4063-bc35-afc8b306ccf1', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('2fbfde27-320f-4ad4-b227-65e0df101f59', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('e6969a2f-fd5e-4c2e-bae0-3a0a52080e64', 'a4dabee0-ad81-4e72-8db7-03e922ff5b55', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('e774f7c1-3b19-4a63-815a-0b5f33c897fe', '9732d295-062a-402a-80cc-160a196f0d65', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('23213555-97d2-4b68-9514-95b8590a5608', '458b2e63-f20f-4cf5-842e-eda67fed96cb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('2968a5de-b8e3-429e-a427-996c6dc4c368', 'cbe711aa-ef98-4034-859e-c772646c162e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('74b9f785-c1cf-492b-9ba1-f60dbbdf910f', 'cbe711aa-ef98-4034-859e-c772646c162e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('148fd581-b721-4562-93c9-a8d67b76ed9f', '93febc9a-6c81-433c-b121-4926b949daf3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 4, 0.0, 0.90, 0),
+('4b5f316d-68bf-441b-bd30-593e0d75b7f2', '93febc9a-6c81-433c-b121-4926b949daf3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('7b7462db-718b-4635-952c-629b1c1c7a4b', '93febc9a-6c81-433c-b121-4926b949daf3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('bff99854-9db9-49a0-baea-bd20b7cac422', '93febc9a-6c81-433c-b121-4926b949daf3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 2, 3, 6.5, 0.90, 0),
+('afec372a-db84-4319-99e4-f625f4b38aac', '93febc9a-6c81-433c-b121-4926b949daf3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 2, 3, 6.5, 0.70, 0),
+('1e630f66-4340-441a-b5ca-6387eee27a8c', 'f9f98f35-c658-4049-8f78-4e398e919189', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('c7fd27d7-8834-418c-93a5-934274b22477', 'f9f98f35-c658-4049-8f78-4e398e919189', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 6, 0.0, 0.80, 0),
+('044052f0-fa93-47a0-904e-15f3ebe6ebe0', 'f9f98f35-c658-4049-8f78-4e398e919189', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('f4113574-de12-4bed-a333-a011f30a2268', 'f9f98f35-c658-4049-8f78-4e398e919189', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('436f8d9c-b50a-47c8-a9c3-7e68b03946ab', 'f9f98f35-c658-4049-8f78-4e398e919189', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('969450ff-d291-400f-a277-07d8183ef915', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('a13e6f2c-cc24-4154-a427-87abbbe73594', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('932dfc6e-54e5-4efb-b76d-eb342fa5c38a', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('12517b9e-763e-4b3c-8cef-edcaeb127156', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('de5491d9-36bb-4952-b7fa-fc0345ce5a14', '47256705-5f8e-42ce-a379-358d8d6ad7ca', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 4, 6.0, 1.10, 0),
+('c58f619a-85fe-4e3c-a3bd-5a11202cfb08', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('e6174b3d-5eb0-4f45-b4bd-33b0ff5eb427', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('69c9250d-10f0-4db3-b714-39994876d03d', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('3ff40e25-cb29-4fb4-84bd-99f4485d2975', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('1b62e8cb-d9db-4860-ab68-dda01c2434ee', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('f210147f-f1a0-43fa-9115-b9574b0f08f2', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('c5730e9a-724c-4d77-bb63-f7fe6b954b38', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('a3316a06-19e6-45b4-af84-1e352e0f38a3', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('3b7cdec9-fa70-4375-bc6e-19510789d0bd', '7e75486c-1daa-4393-945b-0fe36755d3cf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('a4b2ab2c-7f53-4de7-957d-bc6ca397ec07', '0659e202-dfed-4d88-83ee-be1b9dc68bcd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('eb8c94cf-dc5b-4431-84f3-412287186da6', '33fbbd1e-df2e-41b4-b1b0-9471cee6eae0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('ec571546-814d-48d4-8995-23e64f2cba24', '4f9cc3ec-774f-4b57-a74c-6ab2e536fbb3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('31b43aa4-26df-47b6-bc23-cf7e40d2817e', '4f9cc3ec-774f-4b57-a74c-6ab2e536fbb3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('a8fa6a89-801c-4613-af73-05f7bf9590ca', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('cdf56c07-cc12-4438-96b6-ae0ffdb6245d', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('d3396549-69fc-413d-8ec3-a188ed8e86b4', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('627f7fd6-349a-4148-8f14-620a0abf889e', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('bc92f8f5-7c1b-46ae-87fb-3177db5c4f65', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('13d3f196-f88c-4e1e-9282-c8027c6084e8', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('2b088588-1a51-4268-8b84-622a7385ed7b', 'fc753843-b359-448c-acb5-fe6bfa188e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('bcf0ebbe-facb-42d8-8a06-cc456e810a90', 'fc753843-b359-448c-acb5-fe6bfa188e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('1b3389ce-8873-410b-8605-f7cd6cc79af5', 'fc753843-b359-448c-acb5-fe6bfa188e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('def3e245-bf5f-4349-b913-5c4ac33492ba', 'fc753843-b359-448c-acb5-fe6bfa188e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('8bb19ec4-6fc0-4676-9fbe-7821920e6680', 'fc753843-b359-448c-acb5-fe6bfa188e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('6bd8599c-51f5-4033-8419-4bf0d778fe57', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('660366a8-beed-4fdb-8d62-2fabc110b51c', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('45a8ffed-0816-41a2-9c07-1320ede248d2', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('8c7250e1-0380-425a-af80-9133517a20b5', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('d2f34260-437b-4486-b1eb-b568a1915332', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('2bdea9c8-dbb6-4b29-bb42-27c7f9ca52d8', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('6b291ea6-60d8-4d62-97ff-6372b6c93cef', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('1fb48923-8b75-4a9b-871f-7d18c5dc08ea', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('76bcfa44-acd2-4ef5-bade-7467d849c147', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('cf5173c1-36c2-4503-9c19-10d3a12b28ca', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('e98085ba-a6c7-4882-bd11-11a62f7eef90', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('e4823c88-465f-4d39-b41f-7dd2fd617cf4', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('7abe7e71-38d2-46d8-add6-30d2fe18d6f8', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('43fbbee9-bb0d-4255-b533-dd97e4738e4d', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('a3d2ff84-7c25-4955-a621-a32d16b2bb71', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('d9a37493-9e0a-461a-bc3a-bbe96709cfac', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('61aa1cfe-7512-4080-b185-13596cec126d', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('984bd249-c8c0-455d-a48d-0e0079b56c51', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('694c7bfe-2ffb-493c-b45a-5c1226d9dc28', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('a33be408-5e70-4d7d-9ee7-2f776b47a655', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('2aa1a4c8-0f88-4e26-8bb4-9f9de20fa9d6', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('b3dc5772-cf8a-4413-93b0-be910a4034a6', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('ff8544f6-76d8-434c-a4f9-90019bcf45e7', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('2805e361-ceb7-4477-b27e-7648688a0559', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('8d6c49dd-ae8d-49dd-8749-4caa932f9827', '350ec94a-02b8-451c-a1c2-89848a96361f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('b1c60a6c-c6e7-44ef-9e9c-ccf30cf1e6a6', '396924a6-1e4c-4ecc-8463-286e5e90c6fc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('63a57142-0a35-458b-994c-2437a707a86d', '55b30542-2e5c-4291-b2fc-79352f0fb274', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('96ea0b18-752a-4cdf-8327-a416538c9203', 'a774def1-9a30-4b55-85ed-b58591a23cd6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('4aba88b3-5c21-4c68-8f05-15548ed8f6c9', 'a774def1-9a30-4b55-85ed-b58591a23cd6', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('131dc433-1459-4463-9539-337b9d55499c', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('b3548366-71dc-49a7-a13a-5a31b342ee10', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('b9dc6ed1-2118-4f6a-9f26-705fd0d9dbcb', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('f84e72df-cc45-4df0-b479-9d026d15a87c', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('9f73cfdb-aeef-429f-a6ce-8efd30124848', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('d7bcf13e-fddc-45e6-bdac-d90c9e0d8d4c', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('2f707037-b21e-4464-a0c6-7a1c31ddc46e', '8de16a86-208f-4993-9703-c4d47ffe7606', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('63f13fab-245e-48bc-a5b5-40b346af45a6', '8de16a86-208f-4993-9703-c4d47ffe7606', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('fd0e0253-9c59-47ba-8cb0-7aff995d3000', '8de16a86-208f-4993-9703-c4d47ffe7606', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('bed66fee-a861-4a3b-9097-1b17e1523183', '8de16a86-208f-4993-9703-c4d47ffe7606', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('7c21e34d-acf1-4331-a6aa-8f42828cadbd', '8de16a86-208f-4993-9703-c4d47ffe7606', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('914efccd-7d88-4289-be97-87939c2e6762', '2fd0c656-ea76-44ce-b044-395887244e68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('66cd97cb-4201-410a-8595-b9e623e34d80', '2fd0c656-ea76-44ce-b044-395887244e68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('b12e2bda-0a81-48f1-a1a6-d0b48f619f9f', '2fd0c656-ea76-44ce-b044-395887244e68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('b0911d14-41e7-4009-839e-0f17e0957e97', '2fd0c656-ea76-44ce-b044-395887244e68', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('e0e16f91-47b4-436f-906e-9f78ccdb5c80', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('1c25b07c-ed2b-4643-bfcd-4d772f1e08b2', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('03430c5f-db76-4dd4-8d29-3fc681c195aa', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('131590cd-313e-4e0b-9ad4-bae7c224d322', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('0d5efa20-9e9e-4ee5-96ed-f540daacda14', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('94a342d8-10fb-41a3-9813-054ea86ea211', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('e9ef7d90-2a41-459f-b8d6-5c1b5fc40d4c', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('df3ee2b3-c781-4d46-80bc-b692e7055f6b', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('1eb2885f-c716-4c74-9233-aa525429257d', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('732ff3b5-4f3f-434c-9abc-a91110bbd002', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('926853c8-7d8f-4fa8-83ac-8642ca307ef8', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('9c869406-8389-42ac-932b-98bbf20c3df3', 'e09986bc-c813-413d-8178-5cc634665faf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('5c93c6c6-7e6c-4c06-8776-86aa81888eab', 'e09986bc-c813-413d-8178-5cc634665faf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('9a7d100a-29b0-4694-90bf-182acd7bea9d', 'e09986bc-c813-413d-8178-5cc634665faf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('13993faa-53c4-4bbf-ad37-27fd80bcdaa4', 'e09986bc-c813-413d-8178-5cc634665faf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('2836c622-6d85-4834-b54c-8c9335fb0eac', 'e09986bc-c813-413d-8178-5cc634665faf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('d3355fbf-6bcd-4813-b374-b27671e70f53', 'e09986bc-c813-413d-8178-5cc634665faf', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('f6947c22-8dc3-4ff5-b12c-2f1898f17894', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('7daa8d20-060e-4d8c-b79b-2657cfab0059', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('5868a14c-1016-4e56-8612-4241b7e0d32d', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('ad5c89df-d2cd-48a2-9c63-188d066b63a9', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('1793b86e-84c5-41c0-9fe5-f24972461e3e', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('1f0306a6-9001-4c6d-b9e3-8ec6adcce23b', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('3b359ff6-ed5a-42c1-b9c1-833fc8ccf7d0', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('1f8253d5-a344-4848-b83e-35f1b81de552', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('c74c668e-12aa-48fa-8bc6-c98c1286111b', '9dcb7100-fe1c-4ee5-ad49-e78d5ec1b3c3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('90aa6fa4-1396-49b2-b494-d043ae4e8eab', 'ff4a571a-670c-4cd7-9884-1662ea1858be', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('422399df-6d65-43d9-856f-02b6551f1804', '337c34e9-a6ca-4083-837c-3a2aef19afd5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('f669d28e-398c-44a7-8f89-c306acf5036a', '7c25fc37-5a92-4615-899a-24baf681415c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('ac67c251-6a84-4d95-9a94-6b6c034ad6e6', '7c25fc37-5a92-4615-899a-24baf681415c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('43e8eb1a-e3a2-466b-88f6-319a5c088d51', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('a967793d-4840-40bb-a014-43fbf89776e8', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('4ce82a13-78ef-46fb-91d7-dc65503e010d', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('c6e94cf4-bdec-4eac-919e-dfc4f30065b2', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('e2052850-580f-4fdf-b380-f34d7ca05450', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('6973bc44-d3c4-492c-9a2b-4ab45fd241e5', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('48250c1f-10d8-47c4-8841-f9f6062367d5', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('39d60502-4d53-410f-a471-ab96b0dd4723', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('bab71837-e023-4150-929c-aeabf75c173f', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('69f1c8a7-8034-4d00-ae1d-f5a10071b024', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('27f54741-b990-48ce-9b8c-7e71e3b85ef9', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('512eb3d4-da67-4ad6-a2b8-a4f3d9cd37da', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('d1e0de60-6cdf-4337-aa42-7bddd5fa1163', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('aa0a4083-79d6-43ae-a2e7-e8dcdc6ed276', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('556b8acf-7755-408a-bea4-523b45253884', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('e1e98a21-b60d-47bc-819b-c301816f3ece', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('8b58ad44-503f-489c-88a9-e8b85a67cc41', '58300b65-0edc-4ba2-a430-d890b69258d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('78477af3-f594-4974-9534-1b7fed440ce7', '58300b65-0edc-4ba2-a430-d890b69258d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('488c269d-199a-445e-8600-616da3f1f059', '58300b65-0edc-4ba2-a430-d890b69258d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('f628a691-4e48-4af5-8516-0595128606db', '58300b65-0edc-4ba2-a430-d890b69258d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('a2cc4a89-3423-4429-982a-18d1ff37d5ef', '58300b65-0edc-4ba2-a430-d890b69258d1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('3a386036-8bd6-466a-bdf6-fa4930b1972e', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('29a72974-6437-4dd4-9c32-971d3442e434', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('b30a4241-d706-426a-bcea-04615f111749', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('4ee76137-0aa7-49c2-80a4-23ab682236de', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('dc4e7562-aacd-4043-b78f-a2a079446468', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('4fe5ba0a-1649-4ad5-94b1-06e5f10eaf6e', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('da7dbcc2-655e-446c-9f4b-848146b6ef1d', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('775cc22d-6241-43cf-8bc1-cc6e17b88b35', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('941006d2-04a1-4a2c-a88b-613478e597b2', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('c0ac11a6-6d07-46f8-bb19-7ead0c07a2e1', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('8aa17bfe-f62a-46ff-9ec4-a3dfb496599c', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('015289e3-a3a5-4af0-ac69-15e54538f1f4', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('a587f079-4c3d-4277-901c-6c60f1de514c', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('5a4bcf6a-e0a2-45ab-9c71-e6c2c9c7ebdf', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('58790cc9-6117-4706-b422-1181fe6dc6fc', 'ce96a976-11b6-4c6b-b237-94b45fda0d1d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('bc334c4f-7570-451b-806f-49191517b4da', '30bd3b1c-9180-43b5-a606-574f1a1c9852', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('82dd8bb2-ef63-4f29-b290-17c20481a03f', '8f90e3dd-082d-4025-945d-4187cde84263', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('c7291f81-9898-44d2-974d-9dbe42d7b8bb', 'f9a1db36-2946-4039-ad61-b8627a5a7de8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('c5040604-d8bc-49f5-95bd-3644f961c3fa', 'f9a1db36-2946-4039-ad61-b8627a5a7de8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('a295ba64-8eef-4241-b99a-8abb57d4b8bd', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('8dce1c68-698b-4967-bb11-5ad97bd4adfb', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('ea70572a-d7ff-4756-8269-09dc018d6a7e', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('048b2f85-3e1b-4165-a35a-9918b39bdfc8', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('f64be090-0b67-4072-b196-9be406805d47', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('3169055d-2160-473c-adfe-4be4da2f9c25', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('ded015e8-c976-4cfb-a494-4916aa39182f', 'c65af715-b69f-4cf2-a338-2dead270c603', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('de54b41e-b728-48e3-a75b-06d24c00c478', 'c65af715-b69f-4cf2-a338-2dead270c603', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('2b7379c5-70e4-46a3-a885-8ee3cce5d3b5', 'c65af715-b69f-4cf2-a338-2dead270c603', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('51d3ea71-fac2-4368-b72d-a7e80aa61030', 'c65af715-b69f-4cf2-a338-2dead270c603', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('727ce2ab-7a49-4057-a9bd-63dac4003191', 'c65af715-b69f-4cf2-a338-2dead270c603', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('ecd87047-71e3-4891-b4af-5278de9a336a', '7138f074-0ed4-441b-b355-b569a0079449', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('fd1ad0c7-f494-487d-b30f-55e5bc53d61f', '7138f074-0ed4-441b-b355-b569a0079449', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('9acd01fa-fec7-47db-857c-5b2c042078bc', '7138f074-0ed4-441b-b355-b569a0079449', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('ac2b179b-eded-4a40-a96f-e67a5f54ab6e', '7138f074-0ed4-441b-b355-b569a0079449', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('adb66a47-e788-44ca-b374-dc8a07151b6d', '7138f074-0ed4-441b-b355-b569a0079449', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('7060c158-c21e-464f-bc58-1d30542e1238', 'e0667058-465e-4f6c-848a-1c4608a19870', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('43fce66e-c9ff-4b55-a09f-eee6c3ad8822', 'e0667058-465e-4f6c-848a-1c4608a19870', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('5a55ad78-7627-4e2b-8d5d-21c0e11974b6', 'e0667058-465e-4f6c-848a-1c4608a19870', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('1c586f88-0e0a-4c3b-8846-6bbc9c97cfdf', 'e0667058-465e-4f6c-848a-1c4608a19870', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('16975777-c5d7-4a70-83a0-07d2839eea06', 'e0667058-465e-4f6c-848a-1c4608a19870', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('9f47e101-f7ad-46e7-8a5c-98c56b393f4f', '708fb15a-01aa-44eb-9760-23d53986caa4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('4e5bcdec-1e04-4965-b256-19f88f8d4bae', '708fb15a-01aa-44eb-9760-23d53986caa4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('43733c09-d613-4dac-aee7-ca5fdacb6a93', '708fb15a-01aa-44eb-9760-23d53986caa4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('439c1dff-785f-4f1c-89ec-d0ec1a28308c', '708fb15a-01aa-44eb-9760-23d53986caa4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('9ba1f71a-76f9-417f-8fc9-dd8e791a8108', '708fb15a-01aa-44eb-9760-23d53986caa4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('c274f830-cc52-4dc3-b610-a8cd94509d15', '708fb15a-01aa-44eb-9760-23d53986caa4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('4a12b1e2-d0ab-4bdb-8093-f5bf070bd194', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('1267fc16-9a22-46dd-b175-e5ac14f2d899', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('58b77056-f5c8-4221-801a-99bd2cb23c62', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('a85202d0-e8dc-4194-8138-4cea314bbc27', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('9c4421d0-b451-4fb9-a7df-3f4ce4688a5c', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('50dcd0f6-6af0-4eea-86d4-d71f58b25126', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('a3dabd38-a6ce-4edc-b0f8-e11c7aade33e', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('6a187064-882f-4ae3-97a3-0866e2461748', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('5d532f21-e85d-4786-9bba-746dd1e91e4a', 'e688b265-05ca-4328-9750-0a82f1637c3e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('9622ef21-3ab3-495f-9e4d-2b060a85f620', '58a4045d-cf16-428c-9f46-11d4e29e3305', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('a2fb0b25-8c35-4cc5-b471-3f75b81f208e', '43e72179-bae1-462d-a08c-01f7b7454b3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('97ea9d97-a2ee-40f3-8842-d06fb79df340', '43e72179-bae1-462d-a08c-01f7b7454b3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('5e2381b0-1572-42da-b716-9922782b4638', '43e72179-bae1-462d-a08c-01f7b7454b3d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 1, 6, 5.5, 0.70, 0),
+('13776700-fa37-406d-a0ab-0d4c2d965cf3', '48543733-3925-440d-b783-0f4f2b92a8bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('26e3badd-4f8d-469e-9d4a-4971dd97ea76', '48543733-3925-440d-b783-0f4f2b92a8bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('bd6a5b68-001a-4e25-a3ef-9e77a10c9510', '48543733-3925-440d-b783-0f4f2b92a8bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('a2bb78f4-a3c1-4897-8ac8-6c85e2b84a81', '48543733-3925-440d-b783-0f4f2b92a8bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('51ced527-ab66-4301-9009-b05930c3ad39', '5696e7f8-adae-4976-9da4-826644b94460', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 4, 0.0, 0.90, 0),
+('e50f881e-e412-474f-afa2-eb6b7ad3e74e', '5696e7f8-adae-4976-9da4-826644b94460', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('4335b92b-d51b-457e-ad24-aa69cd38e859', '5696e7f8-adae-4976-9da4-826644b94460', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 2, 7.0, 1.00, 0),
+('440335bf-baad-4886-92c7-cbb16bc27eed', '5696e7f8-adae-4976-9da4-826644b94460', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 2, 3, 6.5, 0.90, 0),
+('2bc7f547-380e-489c-bcd4-4daa8f3e686f', '5696e7f8-adae-4976-9da4-826644b94460', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 2, 3, 6.5, 0.70, 0),
+('86f2676a-e3bf-4a09-9a5e-b58b5d32dfd3', '7d24d7eb-0815-45b6-a516-461d610d6583', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('70707b4b-8fce-4eda-9bdb-db998a894438', '7d24d7eb-0815-45b6-a516-461d610d6583', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('2750f99e-b6b6-409f-8497-842122d941ea', '7d24d7eb-0815-45b6-a516-461d610d6583', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('26687f35-4a0d-4351-8b01-08a45e183fbf', '7d24d7eb-0815-45b6-a516-461d610d6583', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('71e1d147-ff70-4aee-a4e9-92c80300907e', '7d24d7eb-0815-45b6-a516-461d610d6583', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('a16a1d61-8612-4cb2-b91b-3d78da8a8e3c', '7d24d7eb-0815-45b6-a516-461d610d6583', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('62063181-bf55-482a-bc7f-e4df214551d5', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('aefbec07-7e17-4959-9838-9283f9619629', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('0323de7f-7819-408d-a784-c0f82d0b23d8', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('9eb58299-9c0c-4bdb-871d-5fd640a9d437', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('21eeece1-a1a8-4a16-9bce-f37c0f79ae53', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('2e620d26-ce90-4cf0-a6b6-48ff7b2255bd', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('03c7785c-4f4e-43b6-97d3-626a0d61cfba', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('98238473-600b-4a62-81b9-044618d43d5a', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('b183fd6f-51ac-48d3-be76-8f9c7c5eecbe', '77f4a7f9-c6e4-4afe-b786-43b66a23ac9d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('173c6c10-67ed-4cb9-9d1e-45858ac57a80', 'f543c806-6e82-45f6-a358-ed110926aa25', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('2710ad74-352a-4928-813f-21e54a865957', '05bf3865-a193-47d1-8cd8-83d1ba6917b8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('605c7c9e-b224-4c20-8c16-5b2198451d76', '13ed153f-531e-4a0c-b8ad-ed3b59bfbde8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('a3e071dc-016b-4ad0-8fcd-7ff8c0b9ae30', '13ed153f-531e-4a0c-b8ad-ed3b59bfbde8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('131d5b6d-a56a-4b31-8f0a-c55570547abc', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('88ae7f4b-051b-400d-b9d2-d5ba4bf8f3cd', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('bdc15140-68b9-4e2d-be14-926bd2c5ba1d', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('a9a859ab-b071-495e-aed9-74885908257d', '85c91f43-928b-4898-b0c0-611d3c9f6922', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('08772b9e-3853-4069-96dc-be63ceff403f', '85c91f43-928b-4898-b0c0-611d3c9f6922', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('1816a573-fc57-458c-a421-206fca4825a0', '85c91f43-928b-4898-b0c0-611d3c9f6922', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('363214ee-96b3-4bdd-9b8a-7a6796433b37', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('8bf164c0-f41d-4b07-9980-4db859691139', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('24ece4ba-ef44-40b9-a05f-fee0166bffd6', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('2d780a96-0ced-4cdd-8545-0b869675100a', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('e3c9dd6c-a5c9-4e2a-9530-71099e93ccad', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('3bb7d88a-21a4-4ffd-8968-243734310b3f', '357a183e-a563-4676-9d76-b1124d86cbb5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 3, 0.0, 1.10, 0),
+('1f0305a2-5694-4cd6-828f-7bc88d02148e', '357a183e-a563-4676-9d76-b1124d86cbb5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 7.0, 1.00, 0),
+('988a3b70-2e92-417e-abec-455dcc407c44', '357a183e-a563-4676-9d76-b1124d86cbb5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.0, 0.80, 0),
+('25d3fcaf-06c4-4dfe-b565-d935e498b30f', '357a183e-a563-4676-9d76-b1124d86cbb5', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 4, 6.5, 0.90, 0),
+('7b1e7322-9d56-4b3a-a93f-a9ce7b68a170', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('c41ca23d-bf0d-4413-a06f-584cc24e2c15', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('05685faf-85f8-43a0-b79d-5848571c1170', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('975dcc39-9b59-4178-a43b-81b6681c47c1', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('de642a2b-1618-4511-a5d0-997148589eac', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('4dff2016-f283-4c11-a3ad-866da8298a1f', '52bfff3b-2930-4cae-90e8-4244258d6868', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('2abfc6b9-c06a-4bf0-8d91-cfa876c4c540', '52bfff3b-2930-4cae-90e8-4244258d6868', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('a6b0d0e1-420a-42ad-ae28-eed860948cbf', '52bfff3b-2930-4cae-90e8-4244258d6868', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('f9f2ad6f-bca8-47e2-a24f-cc1505927975', '52bfff3b-2930-4cae-90e8-4244258d6868', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('3f47b69e-9193-42ff-8567-dfb4fd0cabbe', '52bfff3b-2930-4cae-90e8-4244258d6868', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('dbc17d73-9ed9-4d86-b29b-99bba17aa543', '52bfff3b-2930-4cae-90e8-4244258d6868', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('825e985b-9381-431b-a5cb-0c17f8deac8b', 'ef771a53-e528-4269-bb83-19ae7b449188', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('84c087bf-ad05-4cf7-a849-ae7cd737a5ae', 'ef771a53-e528-4269-bb83-19ae7b449188', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('3c9b3a89-0d19-4946-bed4-c63335c85b6e', 'ef771a53-e528-4269-bb83-19ae7b449188', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('8472502b-5e59-40b4-812a-0fb7b01f04fa', 'ef771a53-e528-4269-bb83-19ae7b449188', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('b932273d-460c-4c0e-8408-f8e059c6c682', 'ef771a53-e528-4269-bb83-19ae7b449188', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('1c020fc7-fc46-40ad-88b7-33f9fec38f05', 'ef771a53-e528-4269-bb83-19ae7b449188', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('725c4695-8480-4692-bf82-f2fbef717b9a', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 4, 0.0, 1.40, 0),
+('31d68d3b-8022-4634-92f4-883a1237f69e', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('0b7b8b59-9cdf-4059-a929-2c13ff05a6f3', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('34d2e766-1f0c-4ff0-b20b-18983573f673', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 2, 9.0, 1.50, 0),
+('eb483b6a-568c-424a-8267-37a8cca74b5e', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 9.0, 1.30, 0),
+('1b19e155-947e-4cd5-94dc-0516f6fc1bfe', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 2, 2, 8.5, 1.50, 0),
+('31baad21-3fbd-4f00-8e31-da3391ee1705', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 2, 5, 8.5, 0.90, 0),
+('e7ad56e0-199d-4a58-ae3c-2ae016129546', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 7.5, 1.20, 0),
+('6f2ffd19-c814-48b0-8646-5bc2ebcd8ec0', '1379af06-8b52-4c75-8ab7-5d6e2fb4c618', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 3, 5, 7.5, 0.80, 0),
+('3f422a44-2037-4450-8ab3-b57a9ac9f6c2', 'a169f862-a419-445c-b7c7-668c3b96a558', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('ae505666-2b1c-4277-bdc1-8a5074982f3c', '3812469a-8d60-4935-8eca-dd920ea5d764', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('4d5cbd73-16ef-44ca-9d93-0092e73bcd49', '2faa1203-49ed-4539-bc66-66e5436a0993', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('8e69c6bf-7e44-414a-8e5c-eed9f020e219', '2faa1203-49ed-4539-bc66-66e5436a0993', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('44e96cf7-ab89-4533-85b2-3202607e04f1', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('f2bda185-7fad-4cf1-bbb3-50bc3579047a', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('30d3e44a-f94c-4828-ba7e-ae2fdb561e52', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('a154d4e1-311c-4e9b-9f00-439d195c9b04', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('42665e71-36ab-4e70-ab79-d42d76a1b32d', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('084ab832-2af3-4271-94d8-210d8bbce8bb', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('852c57c6-1952-4adf-af88-05ac1e3053b0', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('aa75cd95-73b1-4666-8f3a-70b7c74dbd06', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('d67abd68-2de0-4c81-8f13-e14f00ab0005', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('4b60cf39-ce2d-4962-994c-5fa2f21495f9', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('7322c65f-b5ef-4a8f-aacc-2bf0526d079b', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('e263ab21-d45f-43dd-ac59-d63f39294104', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('c2189f20-7282-499a-80d1-00dd5a9c73b9', 'be2e4f78-7054-4384-b93b-84c1d6c3cb1b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('acec7186-1113-43a4-aae7-e2aca69526fe', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('a853a8c5-b1db-48bd-93ca-b019d1c75377', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('a034388c-6714-4789-aa3a-0d67c9f10325', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('fbf29b83-66df-4fc8-8f50-7e1a81474d51', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('6e1e2d7a-9b44-4759-865e-2b181224251d', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('abdeb08a-d2a9-48c4-9427-d81d4e805f26', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('8a1586b4-21e8-43b9-9131-98411d3b11f5', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('d04c3f3c-78e4-4e82-8b3b-f717c1562859', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('3fa69120-9d3c-4cd1-8917-eb22da157a99', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('1b9a6af9-27e9-473b-a52d-9354d1776bf2', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('8eff1e80-b5e8-46bd-baa8-dc795148128a', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('2fbea9ab-e04d-4649-bc99-691b3231e416', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('a6ade804-87a4-423e-b491-bd761a6ce066', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('309adeda-fa75-4384-9998-9deeab601778', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('2d56b0ec-2175-4106-bd7c-7d0780b0dabb', '1d84a5fa-da8d-4ebc-acad-6271314f7d8e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('91365563-f074-454e-8c05-edbb69c7e077', 'e0d60499-c5db-40e2-9b38-51849b5d2ed1', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('1d300a4c-d344-46be-bf61-cf719b862ac7', '01ce0ba9-da8a-43c7-b77e-7f6ecc8e6759', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('269e09e5-baed-4640-b683-4de277c57461', '01ce0ba9-da8a-43c7-b77e-7f6ecc8e6759', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('01af72b6-34fd-4f64-bd64-b9b1aff0c977', '69eba23a-7741-4460-80cb-b248e0a3893e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('34887c5c-7f45-477c-8012-8f32bcfa8f22', '69eba23a-7741-4460-80cb-b248e0a3893e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('144f5d15-6191-433e-8d07-9f8fe1a611f2', '69eba23a-7741-4460-80cb-b248e0a3893e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('50f8c0b4-a416-4d99-ad3f-debbd7a71126', '69eba23a-7741-4460-80cb-b248e0a3893e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('e03e944c-bbfe-47ed-bc49-961c647c2d76', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('7a084f6e-898c-40f8-8a5f-74a24aff9d9d', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('7edfb9da-90d6-4721-ad97-9ce0eb357893', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('8eec67e0-0a90-40a4-9092-089b05b6f9e0', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('f94566ef-08a0-438d-a9e8-2a1b36b5122d', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('99e36505-ec3e-41f9-b6e4-d3c90802ea89', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 4, 0.0, 0.90, 0),
+('a95231f1-78be-49f0-94ad-de0d12e1016b', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('0bc2cebd-87d3-4add-bd57-25f7d4beb3e9', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('b368b580-c3be-4f3a-ba1b-d1040f7e8e5f', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('2f3064a6-1522-419b-8afa-3fa8a0af35df', '675a019f-0c4e-496a-9a31-b7193f1aad7c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('e004f030-5f7b-4a81-8d8c-f88690641198', '8868fdcb-be86-41e5-a043-8da087b206bc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('e7484d73-4030-4b1f-868f-29c4c5f08253', '8868fdcb-be86-41e5-a043-8da087b206bc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('5117ab30-6b74-4446-bc59-f15307817d4b', '8868fdcb-be86-41e5-a043-8da087b206bc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('d2612d08-f191-4d8b-a509-74e0c0337ee6', '8868fdcb-be86-41e5-a043-8da087b206bc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('0d2eed88-1a6e-4737-9879-4e3e3cca4b59', '8868fdcb-be86-41e5-a043-8da087b206bc', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('35b7c3c5-7d40-4d01-b8a2-3ca9b9f1740e', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('f40ac427-c4a4-4879-8f30-b19618850b30', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('6dcb7bb2-9a52-4a13-8be2-e13a7ae32afa', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('ef4e9d88-f166-4637-82f6-0424020844e5', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('f495e230-342c-48c6-9e30-8bfb542c35bd', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('7a0c8e2c-e211-490c-935a-d5dacc03e9ba', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('56538b73-59b8-4717-b16a-d6b78107f9fb', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('426822ae-2850-47a2-9e63-d1786038b3af', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('6ff34ed8-609b-48d1-bb88-778eeb41677c', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('5600d3bf-04ab-45cb-9065-7f49e1cb50dd', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('95f42938-bc1e-450c-bf65-5203ae2437ad', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('ed493b6e-9fea-42d2-a591-1d0f19df3b9d', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('0f5e8430-5da8-4979-b2b3-b1b37d0584d0', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('4d496237-0d10-4c79-9c7c-056511c60274', '8d608903-c513-4966-a38c-cadbc92b9a85', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0),
+('aca0d32c-4604-4f98-bd08-083c092785cd', '0e400ea6-60de-42e7-ae11-9d8d67d9c303', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('5d13e9ba-41a8-466d-97b6-67cbc93c7864', '13106470-7ba4-4cb7-91f9-88903d92b23f', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('f2b8310a-d127-4152-b7f4-d3e8ebd1832d', 'f94852fe-b5d3-4b10-9316-6f598dc7c74b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('10943b81-c5e3-4fc0-8570-7167d4b0ed17', 'f94852fe-b5d3-4b10-9316-6f598dc7c74b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('5ebb9952-94b1-41df-8450-0828bad37ddd', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('e5370b05-f0c1-47db-9269-9609e7f09e6b', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('f818485d-8c57-4a4b-97dd-95f0e7a9cfe2', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('02a823f1-cff1-4665-9cb9-bb455c2fb9c3', '357061f7-e4d5-420d-814e-84507ba4c98c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('6ce9cee7-d97b-4a08-b666-792863c0313f', '357061f7-e4d5-420d-814e-84507ba4c98c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('b273c17e-bc8d-41c9-b71d-0e6236ae709b', '357061f7-e4d5-420d-814e-84507ba4c98c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('4f819e07-cbb3-4f90-b012-1df84e9876d6', '6f581332-18eb-480f-a738-cd5b66b8884c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('9deff5f7-20fd-4491-807d-16cdde8f8046', '6f581332-18eb-480f-a738-cd5b66b8884c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('18d6c7bf-090c-46f9-874e-75a1f43231c1', '6f581332-18eb-480f-a738-cd5b66b8884c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('a6042e22-9a73-4bd3-8649-b265d1e21637', '6f581332-18eb-480f-a738-cd5b66b8884c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('e0875927-5967-4def-97ed-e199cf5a3261', '6f581332-18eb-480f-a738-cd5b66b8884c', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('ce1ab95c-86f0-467c-813f-95ba909fb256', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('24138bd7-050b-40a4-a365-82fb9fc5dbad', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('693c543d-f951-4592-8815-eca9503e94f2', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('725ea556-9530-4496-bbf9-3a52cfb4b5fb', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('7877c78b-9a4a-4b33-a4af-012485f3b001', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('f394a84c-d6cc-46a0-bb53-a62e47177097', '2b253a98-5606-47ed-a2f1-645681304afd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('16a30a86-7ed7-4756-963b-b7fd19dab2e2', '2b253a98-5606-47ed-a2f1-645681304afd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('dba483b8-da77-41f0-84d5-5dba3996124e', '2b253a98-5606-47ed-a2f1-645681304afd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('db75870d-95f3-4934-a18f-2482fa586d48', '2b253a98-5606-47ed-a2f1-645681304afd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('c0a9b95a-e079-4f81-969a-1202dceb5b9b', '2b253a98-5606-47ed-a2f1-645681304afd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('331950a0-5965-4c95-b533-235811c9bdb2', 'f949b508-3380-4623-8e52-9ee48026e79a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('3e0de4d1-a13c-4b90-aff8-8157470aceca', 'f949b508-3380-4623-8e52-9ee48026e79a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('1f5c5dca-cd8f-432c-9691-4f38a4ee4629', 'f949b508-3380-4623-8e52-9ee48026e79a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('86be0df7-1295-485e-9fd3-6df996d55e55', 'f949b508-3380-4623-8e52-9ee48026e79a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('48a28988-efd0-4fce-9b56-94d1d9d38581', 'f949b508-3380-4623-8e52-9ee48026e79a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('66ce9a90-4283-45b8-aa59-a85bed47023b', 'f949b508-3380-4623-8e52-9ee48026e79a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('32cb3464-1b12-4fb7-a642-b6f453b5ba68', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('a063a7ef-654b-40be-a669-147e9225262d', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('32d34eae-a102-4368-87cd-b0d245182ddd', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('64044246-df44-4002-9ca4-5f4abda51fbd', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('07e513ec-652c-44f7-bbfe-7cdacc588014', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('9ee767ce-eda1-4b47-b2d4-ccd9ba69dd07', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('8c1cad77-9ec8-4606-b185-9c9b53089fdf', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('dbfa37cd-0055-4250-96d6-5fdc8edde0eb', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('7032030d-fc24-43dd-b78f-265d5001e1c6', '81f08f96-c721-4504-bc53-f68e5f87eeb8', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('11928fa6-ab29-4955-ad06-792dec8d66ec', '22b76e50-6a55-4d91-b1ff-09dc8644f3e3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('a4e3da78-cf6b-4832-b677-56a0bad1ba86', 'a9dbd5b3-2638-4e06-ab14-2a2f04a81c53', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('c3423072-50aa-464c-9051-d654fa71b2f2', '7e0ccd71-0ea3-4224-94f8-e91b218e51b0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('0f88a2e8-8359-4f51-989b-a28f86234eb6', '7e0ccd71-0ea3-4224-94f8-e91b218e51b0', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('94da3c89-ac9b-449a-aebf-bf03cce87e3e', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('fba174ed-0ff9-4b7a-b7f0-86f8b055307f', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('63ab02da-3dd1-437f-b418-3c16383fd44d', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('de1b9158-d308-415a-acab-eb8dffe1180c', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('c890d726-4246-42de-a995-1ca8fa03c29e', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('693bc99e-dee0-4e19-be0e-235d47533425', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('e71c7edb-e751-4939-9fae-36bd95fb7f69', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('98822ec7-82e2-4579-b4ca-9bad26391bc0', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('9b0e1179-3024-4d50-8349-ef08f426c589', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('c8fa811d-1a3a-481a-b0f0-b264d6caba61', '7620f1fa-54ae-42bb-add7-613ef31be515', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('325acf9c-4fa4-4744-8e7d-88acf7e37258', '7620f1fa-54ae-42bb-add7-613ef31be515', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('14ebc498-5f53-4949-a3f3-b604cf65a6cf', '7620f1fa-54ae-42bb-add7-613ef31be515', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('5fe4369f-f755-4167-81bf-7bfa0256461f', '7620f1fa-54ae-42bb-add7-613ef31be515', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 6.5, 0.90, 0),
+('3005fbbf-cb8b-426f-995b-f8f167f62d44', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('9e49921b-fccb-4ea8-a126-1b46d1a4a000', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('e08e4b30-4337-4a03-9d0d-6cc09e26eea2', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('de5d4420-d823-4bb6-be37-e5b6170feda5', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('65df0509-c05c-4fde-a765-753857654152', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('db02edcb-6b78-44fb-a7e3-a79d66cff7b4', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 0, 2, 0.0, 1.50, 0),
+('894aacc3-0cf2-42a1-8fdf-e365c28dbeba', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.30, 0),
+('a7422044-5d90-4d4d-b18b-e54336573b1b', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 1, 2, 8.5, 1.50, 0),
+('aefdd1c4-58e1-4f73-9fd2-8d5dbd895aef', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 1, 5, 8.5, 0.90, 0),
+('49eaf1fa-6962-4dae-8089-44333375eb06', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('8b103ea1-f415-4268-b267-f0e1385c8ffe', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('ad993d96-f000-4bfb-8442-ae0a539e5700', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 4, 9.0, 1.40, 0),
+('f104b6ed-3ebd-4aae-b05e-20770e5e6214', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 3, 1, 9.0, 1.20, 0),
+('46f4f025-1af2-4b01-9875-da24bf782add', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 3, 5, 9.0, 0.90, 0),
+('84c471e0-c902-4658-ba35-003ab8d49895', 'e01e0a9a-d6ef-4098-b32e-a4e71c04dba7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('d1f59af3-d3ac-4816-bada-7b8bf7d66512', '247de1c3-746e-43f1-8d8d-baa9b5e5c0dd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('ea5f20b7-bac1-4bd5-a80c-b2f8eb5b5045', 'cea78034-5b62-48a3-9c4c-4eeb88e47831', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('0641da8b-947b-4ba6-8e1c-266824e2fb7b', 'cea78034-5b62-48a3-9c4c-4eeb88e47831', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('45e28042-2118-455e-984a-3900fc3aff76', '83327df1-98bf-4684-a484-223b457e31bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('c0af9b2d-f368-474e-a257-8e5ff096bf9c', '83327df1-98bf-4684-a484-223b457e31bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('04c8369b-22b7-4774-be8d-488ede6e3ade', '83327df1-98bf-4684-a484-223b457e31bd', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('c89a48ae-c323-45a3-92c2-3f6d1d127c91', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('d8344402-b9bb-42de-80b6-75b43b585d10', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 3, 0.0, 0.70, 0),
+('a104a0f1-df9d-43b0-a16d-8e107249a7ab', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.0, 0.60, 0),
+('390f8964-d499-4d84-b053-3cd5e20c35a3', '68c612f4-77d8-4c58-b384-8928a2f4baae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 3, 0.0, 0.90, 0),
+('b09a60ba-d074-403b-a8a3-c1f673c43eb8', '68c612f4-77d8-4c58-b384-8928a2f4baae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 3, 0.0, 0.70, 0),
+('7fc9b1fc-a421-4fba-b416-44d0d5cc4f3a', '68c612f4-77d8-4c58-b384-8928a2f4baae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 3, 6.0, 1.10, 0),
+('b96860d1-668b-4566-99b2-92e6f25a3cb6', '68c612f4-77d8-4c58-b384-8928a2f4baae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('c657d834-d165-43b9-9c12-cb39f843b4a6', '68c612f4-77d8-4c58-b384-8928a2f4baae', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.0, 0.80, 0),
+('4b012bbb-e541-4dcd-8ccf-e02e9943d6d2', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('4679d4dd-706a-4fe4-9d99-0d20de58c447', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('6a7d6bd2-3634-4f6b-a4fb-d74414b7ecc9', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('a3da3597-96bd-4644-8645-b87602ee88e2', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('a8d79126-aabf-4777-92d7-85414bf39864', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('d0d28619-2c45-4a63-bdb2-b632d7a3b175', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 0, 5, 0.0, 0.90, 0),
+('ce3a3750-3826-4747-884b-91b7b30ba6e0', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('bcedbb46-afe9-4c87-ae29-0680c25b7a92', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('a17fcd9c-ad28-41a7-935d-8ab3b1792c66', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('ac32b0a4-6c34-4ec4-9520-5c3d5a52369b', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('7ebc1706-579a-43d1-bfbd-5d222bf62c4d', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 0, 2, 0.0, 1.00, 0),
+('2833f518-66db-4707-81f4-9b86bfb2e25b', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 0, 5, 0.0, 0.60, 0),
+('0bf0e2c2-deaa-4400-97ea-5426f0022da2', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 1, 4, 8.0, 1.40, 0),
+('cc5b1ed5-137b-4945-a5a1-268dfa800387', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 1, 1, 8.0, 1.00, 0),
+('c9006e9e-77d2-4434-a9eb-bbd6223f4a86', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 7.5, 1.20, 0),
+('b0e855fb-1a93-4268-8324-4d3efd9fbcd8', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 5, 7.5, 0.80, 0),
+('af0493e7-c5ee-49fb-b210-b626ab0abef1', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 0, 1, 0.0, 1.20, 0),
+('6c44310e-a7eb-4978-b98a-e8dddef09c27', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('d1464975-3282-4785-b049-5ca2996853c7', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 1, 4, 9.0, 1.40, 0),
+('9b739ebc-cdcb-41ce-a810-c3540f643ecd', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 9.0, 1.20, 0),
+('1d1b3bd0-8d62-47e8-98d8-747d615391f5', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 9.0, 0.90, 0),
+('702a1b58-56bc-4931-b6a6-d961229c6a8f', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 2, 9.0, 1.50, 0),
+('58706fa3-4871-4f1b-9bd6-6c39ee9a7788', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 9.0, 1.30, 0),
+('8eed5594-b6e1-4f47-a456-062f75ea29a2', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 3, 2, 8.5, 1.50, 0),
+('80ede78b-3fb6-45ff-a88f-4d8f0a71df2b', '2ecc66b9-8fbb-4f65-b441-c4684ae95896', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 3, 5, 8.5, 0.90, 0),
+('1d07be90-4146-4343-a5f9-a4324cf2f71a', '410192f4-94b2-4875-b3a5-8811fc49a87e', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 4, 0.0, 0.90, 0),
+('e5ceb193-293c-4b18-8474-83761fffdef7', '5a3bf909-482c-4b02-bcfa-dabf898d9a3b', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 4, 0.0, 0.80, 0),
+('f1437f9c-f31f-40a0-ab41-e0b265f22640', 'a706ca89-21a5-484a-a270-e5463c727445', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Loyalist Militia'
+), 0, 6, 0.0, 0.70, 0),
+('3d35d2c5-eff8-4109-99d9-ef80477d4b9b', 'a706ca89-21a5-484a-a270-e5463c727445', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 4, 7.0, 0.90, 0),
+('6a5ab6d8-b9f5-41fd-ae9c-b2dde64bcc96', '856715d7-d80a-45d4-9174-3afe149d628a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('a0716fd2-243f-4d7e-b789-79c947ec9d7c', '856715d7-d80a-45d4-9174-3afe149d628a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('2b856f8b-0c52-491a-a966-ea579da7b8c4', '856715d7-d80a-45d4-9174-3afe149d628a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 4, 6.0, 0.70, 0),
+('786c0afc-123a-4806-a7d6-f01b405977ed', '856715d7-d80a-45d4-9174-3afe149d628a', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 3, 6.0, 0.70, 0),
+('5c562610-d703-4973-988e-0c8b01046822', '24f97233-4124-4eab-b358-7c6d5942e332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 0, 5, 0.0, 0.80, 0),
+('afb9fae4-ad14-4b05-aaf5-6e7d2e44c8e0', '24f97233-4124-4eab-b358-7c6d5942e332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 2, 0.0, 1.00, 0),
+('706a6ed0-afcb-48ea-96d4-490d4e06e8c5', '24f97233-4124-4eab-b358-7c6d5942e332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 1, 3, 6.5, 0.90, 0),
+('ea9145df-b8c2-4400-b86b-0b4fc7703441', '24f97233-4124-4eab-b358-7c6d5942e332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 1, 3, 6.5, 0.70, 0),
+('96b91857-d150-486f-896b-a1624e9743da', '24f97233-4124-4eab-b358-7c6d5942e332', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 2, 3, 6.0, 1.10, 0),
+('a0d17ad5-ecd2-4ec7-b86c-c94ef53a9da3', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Jäger'
+), 0, 4, 0.0, 0.90, 0),
+('c3c9bee1-d166-4fff-a5d9-c86cf03cd0c3', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Infantry'
+), 0, 4, 0.0, 0.70, 0),
+('11705c46-e1c9-437d-acbb-070f5d158bef', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 1, 4, 6.0, 1.10, 0),
+('ed67055c-fcf7-4e46-807f-cf5cdb242fcb', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 7.0, 1.00, 0),
+('835118ac-7377-4c18-9db3-b65d3c10b655', 'cc146526-7bd6-4bd8-8adf-24279f89fd95', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 2, 6, 7.0, 0.80, 0),
+('2d5177ff-f377-47cc-b032-a80624a33fc4', '0ea391d5-caf7-468c-bf72-295997de09f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 0, 4, 0.0, 1.40, 0),
+('82f29a9b-60b3-4ad1-971e-cd8dfd04d33c', '0ea391d5-caf7-468c-bf72-295997de09f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 0, 1, 0.0, 1.00, 0),
+('58750880-fa78-4a0e-985e-90c4f0605ee5', '0ea391d5-caf7-468c-bf72-295997de09f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 1, 5, 6.5, 0.90, 0),
+('1ee70fa9-0803-45f1-805a-da00f6e45b11', '0ea391d5-caf7-468c-bf72-295997de09f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 2, 2, 5.5, 1.00, 0),
+('c74fe3e5-be3e-4663-ad32-5ade6f243230', '0ea391d5-caf7-468c-bf72-295997de09f3', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 2, 5, 5.5, 0.60, 0),
+('22b9c433-0de2-4113-9ec3-4398fb28a137', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Light Dragoon'
+), 0, 4, 0.0, 1.10, 0),
+('9b492b71-c01e-4db9-a702-fb60cc6ebf91', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Spy'
+), 1, 2, 5.5, 1.00, 0),
+('16feb15c-4555-42ab-bcb8-0388cc1fdf62', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Native Warrior'
+), 1, 5, 5.5, 0.60, 0),
+('d2563b0f-f94d-4483-8fb5-03026e364244', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 2, 4, 8.0, 1.40, 0),
+('e552ebe3-897c-43f5-a491-5e2e8fb13511', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Regimental Drummer'
+), 2, 1, 8.0, 1.00, 0),
+('58796f1a-3a4e-4e4f-bc24-bc0eb8fffe6a', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Royal Artillery'
+), 0, 2, 0.0, 1.50, 0),
+('fd82fb43-c7cd-48a8-ad6e-2df71237b7d4', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Hessian Fusilier'
+), 0, 5, 0.0, 0.90, 0),
+('034d4a14-fa6f-4846-b0b8-2a653488e252', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 1, 1, 7.5, 1.20, 0),
+('61d7349c-f5d4-499a-aa99-743906098778', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Redcoat Regular'
+), 1, 5, 7.5, 0.80, 0),
+('5885a6eb-6387-4a04-beeb-e2c03e9cfe69', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 2, 4, 9.0, 1.40, 0),
+('bc86e17a-8f25-4550-8746-0ca19436cb78', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Mounted Officer'
+), 2, 1, 9.0, 1.20, 0),
+('20e9da80-f15f-4998-baee-10605848a251', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Highlander'
+), 2, 5, 9.0, 0.90, 0),
+('b8d51ea6-5f81-417e-8b4c-9a589ef77518', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Foot Guards'
+), 3, 2, 9.0, 1.50, 0),
+('20648ec8-3bc0-4029-9e3f-dad647e30d09', '3745a0ea-484c-4764-a23e-8d45fc9d2235', (
+    SELECT id FROM enemy_type
+    WHERE enemy_type_name = 'Grenadier'
+), 3, 4, 9.0, 1.30, 0);
 
 COMMIT;
+
+UPDATE level_wave_enemy_spawn
+SET
+    path_index = (
+        SELECT
+            CASE
+                WHEN lw.wave_index <= 8
+                    THEN ((lw.wave_index - 1) / 2) % 4
+                ELSE ((lw.wave_index - 1) / 2 + level_wave_enemy_spawn.spawn_index) % 4
+            END
+        FROM level_wave AS lw
+        WHERE lw.id = level_wave_enemy_spawn.level_wave_id
+    )
+WHERE level_wave_id IN (
+    SELECT id FROM level_wave
+    WHERE level_info_id = '46157f59-b21b-4b03-9151-d404c6cd6d0b'
+);

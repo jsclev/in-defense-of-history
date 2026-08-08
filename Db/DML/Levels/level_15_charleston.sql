@@ -1,23 +1,22 @@
--- Installs the Yorktown bastion v3 artwork geometry as the playable
--- Siege of Charleston map. Runs after standardized_campaign_levels.sql
--- so rebuilds keep it.
---
--- Playable rect and the 15 tower pads come from the artist's
--- level_016_yorktown_bastion_v3_geometry.json, confirmed against the
--- magenta boundary guide baked into the artwork.
---
--- The three routes are not in that file: they were traced from the
--- v3 playable render by masking the sand roads and walking a
--- centre-weighted shortest path from each bottom entry to its gate.
-
-BEGIN TRANSACTION;
-
-UPDATE level_info
-SET playable_rect_x = 960.0,
-    playable_rect_y = 1080.0,
-    playable_rect_width = 3840.0,
-    playable_rect_height = 2160.0
-WHERE id = '4ca73a47-98f6-41b6-815d-c2c797aa746e';
+INSERT INTO level_info (
+    id, campaign_id, level_name, world_map_x, world_map_y,
+    started_at, ended_at, starting_money, num_starting_lives, num_waves,
+    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
+    map_image_name, map_image_width, map_image_height
+) VALUES (
+    '4ca73a47-98f6-41b6-815d-c2c797aa746e',
+    'f589a28f-54d8-4791-851c-a307f252151a',
+    'Charleston',
+    1551.0,
+    1413.0,
+    julianday('1780-03-29T08:00:00-05:00'),
+    julianday('1780-05-12T14:00:00-05:00'),
+    500,
+    20,
+    15,
+    960.0, 1080.0, 3840.0, 2160.0,
+    'level_014_siege_of_charleston', 6240.0, 4320.0
+);
 
 INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUES
 ('c3000001-7a11-4c4a-8e10-000000000001', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2880.0, 1790.0),
@@ -92,5 +91,3 @@ INSERT INTO level_path_point (
 ('c3120000-0000-4000-8000-00000000000f', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2, 15, 3984.0, 1872.0),
 ('c3120000-0000-4000-8000-000000000010', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2, 16, 3896.0, 1784.0),
 ('c3120000-0000-4000-8000-000000000011', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2, 17, 3896.0, 1768.0);
-
-COMMIT;
