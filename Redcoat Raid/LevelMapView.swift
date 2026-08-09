@@ -122,6 +122,12 @@ struct LevelMapView: View {
     var onExit: () -> Void
 
     @StateObject private var runner: LevelRunner
+
+    /// Slots whose debug ring the player has dismissed by tapping its legend.
+    /// Tapping the slot itself brings it back. Debug mode only, and not
+    /// persisted — a fresh level starts with every ring showing.
+    @State private var hiddenRangeSlots: Set<Int> = []
+
     @AppStorage("debugMode") private var debugMode = true
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
@@ -250,8 +256,12 @@ struct LevelMapView: View {
 
             if debugMode {
                 ForEach(runner.placedTowers) { tower in
-                    if runner.hasAttackRange(tower) {
-                        debugRangeRing(for: tower, projection: projection, metrics: metrics)
+                    if !hiddenRangeSlots.contains(tower.slotIndex),
+                       runner.hasAttackRange(tower),
+                       let range = runner.attackRange(for: tower) {
+                        debugRangeRing(debugRingGeometry(
+                            for: tower, range: range, projection: projection,
+                            safe: safe, metrics: metrics))
                     }
                 }
             }
@@ -321,7 +331,11 @@ struct LevelMapView: View {
 
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                 Button {
-                    if runner.isSlotOccupied(index) {
+                    // Restoring a dismissed ring takes the whole tap, so
+                    // bringing one back never also opens the upgrade menu.
+                    if debugMode, hiddenRangeSlots.contains(index) {
+                        hiddenRangeSlots.remove(index)
+                    } else if runner.isSlotOccupied(index) {
                         runner.selectPlacedTower(atSlot: index)
                     } else {
                         runner.selectSlot(index)
@@ -332,6 +346,21 @@ struct LevelMapView: View {
                         .frame(width: 64, height: 64)
                 }
                 .position(projection.viewPoint(slotPosition))
+            }
+
+            if debugMode {
+                ForEach(runner.placedTowers) { tower in
+                    if !hiddenRangeSlots.contains(tower.slotIndex),
+                       runner.hasAttackRange(tower),
+                       let range = runner.attackRange(for: tower) {
+                        debugRangeLegendLayer(
+                            for: tower, range: range,
+                            ring: debugRingGeometry(
+                                for: tower, range: range, projection: projection,
+                                safe: safe, metrics: metrics),
+                            metrics: metrics)
+                    }
+                }
             }
 
             if let buildSlot = runner.selectedSlotIndex,
@@ -351,40 +380,147 @@ struct LevelMapView: View {
         }
     }
 
-    private func debugRangeRing(for tower: PlacedTower,
-                                projection: LevelMapProjection,
-                                metrics: HudMetrics) -> some View {
-        let range = runner.attackRange(for: tower)
-        let tint = Self.debugRangeTint(for: range)
-        let diameter = projection.viewLength(range) * 2
-        let labelGap = 6 * metrics.scale
+    /// Rows in `debugRangeLegend`. Used to size the panel before it is laid
+    /// out, so keep it in step with the `GridRow`s below.
+    private static let debugLegendRowCount: CGFloat = 5
 
-        return Circle()
-            .fill(tint.opacity(0.12))
+    /// What `debugRangeLegend` will stand, before SwiftUI lays it out — needed
+    /// to choose a side, which has to be decided while building the view. The
+    /// line-height factor deliberately runs high: overestimating flips the
+    /// legend below a touch early, underestimating clips it off screen.
+    private func debugLegendHeight(metrics: HudMetrics) -> CGFloat {
+        let rows = Self.debugLegendRowCount
+        return rows * metrics.rangeLegendTextSize * 1.35
+            + (rows - 1) * (1 * metrics.scale)
+            + 2 * (4 * metrics.scale)
+    }
+
+    /// Shared by the ring pass and the legend pass, which draw at different
+    /// depths in the stack but must agree on size and on which side the legend
+    /// sits.
+    private struct DebugRingGeometry {
+        let center: CGPoint
+        let diameter: CGFloat
+        let tint: Color
+        let gap: CGFloat
+        let legendAbove: Bool
+    }
+
+    private func debugRingGeometry(for tower: PlacedTower,
+                                   range: CGFloat,
+                                   projection: LevelMapProjection,
+                                   safe: CGRect,
+                                   metrics: HudMetrics) -> DebugRingGeometry {
+        let diameter = projection.viewLength(range) * 2
+        let center = projection.viewPoint(tower.position)
+        let gap = 6 * metrics.scale
+
+        // The legend sits above the ring by default. A tower high on the map
+        // puts that off the top of the screen, so when it will not clear the
+        // safe area it flips to the far side of the circle instead.
+        let above = center.y - diameter / 2 - gap
+            - debugLegendHeight(metrics: metrics) >= safe.minY
+
+        return DebugRingGeometry(center: center, diameter: diameter,
+                                 tint: Self.debugRangeTint(for: range),
+                                 gap: gap, legendAbove: above)
+    }
+
+    /// The ring itself, drawn under the tower sprites and never hit-tested so
+    /// it cannot swallow taps meant for the slot buttons beneath it.
+    private func debugRangeRing(_ ring: DebugRingGeometry) -> some View {
+        Circle()
+            .fill(ring.tint.opacity(0.12))
             .overlay(
                 ZStack {
                     Circle().stroke(.black.opacity(0.45), lineWidth: 4)
-                    Circle().stroke(tint, lineWidth: 2)
+                    Circle().stroke(ring.tint, lineWidth: 2)
                 }
             )
-            .frame(width: diameter, height: diameter)
-            .overlay(alignment: .trailing) {
-                Text("\(Int(range))")
-                    .font(.system(size: 20 * metrics.scale,
-                                  weight: .bold, design: .rounded))
-                    .monospacedDigit()
-                    .foregroundStyle(tint)
-                    .padding(.horizontal, 8 * metrics.scale)
-                    .padding(.vertical, 3 * metrics.scale)
-                    .background(Capsule().fill(.black.opacity(0.72)))
-                    .overlay(Capsule().stroke(tint.opacity(0.8), lineWidth: 1))
-                    .fixedSize()
-                    // Puts the label's left edge just past the ring, rather
-                    // than tucking it inside as .trailing would by default.
-                    .alignmentGuide(.trailing) { $0[.leading] - labelGap }
-            }
-            .position(projection.viewPoint(runner.muzzlePoint(for: tower)))
+            .frame(width: ring.diameter, height: ring.diameter)
+            .position(ring.center)
             .allowsHitTesting(false)
+    }
+
+    /// The legend, drawn above the slot buttons so its tap target is never
+    /// covered. The clear circle is only a layout anchor, matching the ring so
+    /// the legend hangs off the right edge of it; it is not hit-tested, so the
+    /// slot button underneath still works.
+    private func debugRangeLegendLayer(for tower: PlacedTower,
+                                       range: CGFloat,
+                                       ring: DebugRingGeometry,
+                                       metrics: HudMetrics) -> some View {
+        let edge: VerticalAlignment = ring.legendAbove ? .top : .bottom
+
+        return Color.clear
+            .frame(width: ring.diameter, height: ring.diameter)
+            .allowsHitTesting(false)
+            .overlay(alignment: Alignment(horizontal: .center, vertical: edge)) {
+                debugRangeLegend(for: tower, range: range,
+                                 tint: ring.tint, metrics: metrics)
+                    .fixedSize()
+                    // Clears the ring rather than overlapping it, which is what
+                    // either edge alignment would do on its own.
+                    .alignmentGuide(edge) {
+                        ring.legendAbove ? $0[.bottom] + ring.gap : $0[.top] - ring.gap
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture { hiddenRangeSlots.insert(tower.slotIndex) }
+            }
+            .position(ring.center)
+    }
+
+    private func debugRangeLegend(for tower: PlacedTower,
+                                  range: CGFloat,
+                                  tint: Color,
+                                  metrics: HudMetrics) -> some View {
+        let size = metrics.rangeLegendTextSize
+        let area = runner.pathAreaInRange(for: tower)
+        let rof = runner.rateOfFire(for: tower)
+        let totalDamage = runner.totalDamageBySlot[tower.slotIndex] ?? 0
+        let targeting = runner.targetingTimeBySlot[tower.slotIndex] ?? 0
+
+        // A Grid sizes each column to its widest cell, so the rows line up
+        // without a fixed width forcing the longer labels to wrap. Column
+        // alignment is declared once, on the first row's cells: labels flush
+        // left, numbers flush right.
+        return Grid(alignment: .leading,
+                    horizontalSpacing: 6 * metrics.scale,
+                    verticalSpacing: 1 * metrics.scale) {
+            GridRow {
+                Text("Range").foregroundStyle(.white.opacity(0.75))
+                    .gridColumnAlignment(.leading)
+                Text("\(Int(range))").foregroundStyle(tint)
+                    .gridColumnAlignment(.trailing)
+            }
+            GridRow {
+                Text("Path coverage").foregroundStyle(.white.opacity(0.75))
+                // Thousands dropped: the figure only matters for comparing
+                // slots on the same level, so 68000 reads as 68.
+                Text("\(Int((area / 1000).rounded()))").foregroundStyle(tint)
+            }
+            GridRow {
+                Text("Rate of fire").foregroundStyle(.white.opacity(0.75))
+                Text(String(format: "%.2f/s", rof)).foregroundStyle(tint)
+            }
+            GridRow {
+                Text("Time targeting").foregroundStyle(.white.opacity(0.75))
+                Text(String(format: "%.1fs", targeting)).foregroundStyle(tint)
+            }
+            GridRow {
+                Text("Total damage").foregroundStyle(.white.opacity(0.75))
+                Text("\(Int(totalDamage.rounded()))").foregroundStyle(tint)
+            }
+        }
+        .lineLimit(1)
+        .monospacedDigit()
+        .font(.system(size: size, weight: .semibold, design: .rounded))
+        .padding(.horizontal, 6 * metrics.scale)
+        .padding(.vertical, 4 * metrics.scale)
+        .background(RoundedRectangle(cornerRadius: 5 * metrics.scale)
+            .fill(.black.opacity(0.72)))
+        .overlay(RoundedRectangle(cornerRadius: 5 * metrics.scale)
+            .stroke(tint.opacity(0.8), lineWidth: 1))
     }
 
     private func dismissCatcher(viewSize: CGSize) -> some View {
@@ -500,7 +636,7 @@ struct LevelMapView: View {
 
     private func counterText(_ value: String, fontSize: CGFloat) -> some View {
         Text(value)
-            .font(.system(size: fontSize, weight: .black, design: .rounded)
+            .font(.system(size: Typography.size(fontSize), weight: .black, design: .rounded)
                 .monospacedDigit())
             .lineLimit(1)
             .foregroundStyle(.white)
@@ -511,7 +647,7 @@ struct LevelMapView: View {
         ZStack {
             Color.black.opacity(0.45)
             Text("Done")
-                .font(.system(size: 104 * metrics.scale, weight: .black, design: .rounded))
+                .font(.system(size: Typography.size(104 * metrics.scale), weight: .black, design: .rounded))
                 .foregroundStyle(Color(red: 0.87, green: 0.09, blue: 0.09))
                 .shadow(color: .black.opacity(0.85), radius: 7 * metrics.scale,
                         y: 3 * metrics.scale)
@@ -593,7 +729,7 @@ private struct UpgradeMenuItem: View {
 
                 if let cost {
                     Label("\(cost)", systemImage: "circle.fill")
-                        .font(.system(size: 12 * scale, weight: .bold))
+                        .font(.system(size: Typography.size(12 * scale), weight: .bold))
                         .labelStyle(.titleOnly)
                         .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
                         .padding(.horizontal, 8 * scale)
@@ -601,7 +737,7 @@ private struct UpgradeMenuItem: View {
                         .background(.black.opacity(0.7), in: Capsule())
                 } else {
                     Text("MAX")
-                        .font(.system(size: 11 * scale, weight: .bold))
+                        .font(.system(size: Typography.size(11 * scale), weight: .bold))
                         .foregroundStyle(.white.opacity(0.8))
                         .padding(.horizontal, 8 * scale)
                         .padding(.vertical, 2 * scale)

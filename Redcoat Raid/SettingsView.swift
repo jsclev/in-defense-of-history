@@ -62,7 +62,7 @@ struct SettingsView: View {
                     .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
                     .foregroundStyle(.white)
                 Text(detail)
-                    .font(.system(size: 13 * metrics.scale))
+                    .font(.system(size: Typography.size(13 * metrics.scale)))
                     .foregroundStyle(.white.opacity(0.65))
             }
         }

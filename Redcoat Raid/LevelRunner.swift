@@ -75,18 +75,9 @@ enum TowerKind: String, CaseIterable, Identifiable {
         self == .areaOfEffect ? MapSpriteSizing.cannonball : MapSpriteSizing.musketBall
     }
 
-    var fireCooldownTicks: Int64 {
-        self == .areaOfEffect ? 72 : 24
-    }
-
-    func projectileDamage(atLevel level: Int) -> Double {
-        switch self {
-        case .ranged: return [1: 12, 2: 20, 3: 30, 4: 45][level] ?? 12
-        case .areaOfEffect: return [1: 18, 2: 28, 3: 40][level] ?? 18
-        case .melee, .special: return 0
-        }
-    }
-
+    // Rate of fire and shot damage are not here: they vary per level and
+    // branch and live in the tower table. LevelRunner reads them from
+    // `towerLevels`, which is the only source for them.
 }
 
 struct PlacedTower: Identifiable {
@@ -139,29 +130,149 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private(set) var slotPositions: [CGPoint] = []
 
-    private static let attackRangeInImagePixels: CGFloat = 260
-    private static let projectileSpeedPerSecond: CGFloat = 520
+    /// How close a shot must get to count as a hit, in map pixels. Purely a
+    /// rendering tolerance — it has no column in the tower table.
     private static let projectileHitRadiusInImagePixels: CGFloat = 10
-    private static let muzzleOffsetInImagePixels: CGFloat = 35
-    private static let splashRadiusInImagePixels: CGFloat = 55
 
-    /// Where shots leave a tower, in map image pixels. Targeting measures from
-    /// here rather than the tower's base, so the debug ring is centred here too.
-    func muzzlePoint(for tower: PlacedTower) -> CGPoint {
-        CGPoint(x: tower.position.x,
-                y: tower.position.y - Self.muzzleOffsetInImagePixels)
+    /// Tuning rows from the tower table, keyed kind → level → branch. Every
+    /// combat number the runner uses comes from here; none are written in
+    /// Swift, so editing the tower table is the only way to retune.
+    private(set) var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] = [:]
+
+    /// The tower table row backing `tower`, or nil if the level and branch it
+    /// carries have no row.
+    func towerLevel(for tower: PlacedTower) -> TowerLevel? {
+        towerLevels[tower.kind]?[tower.level]?[tower.branch]
     }
 
-    /// Firing range in map image pixels. `updateCombat` and the debug range
-    /// overlay both read this, so the ring always draws what actually shoots.
-    func attackRange(for tower: PlacedTower) -> CGFloat {
-        Self.attackRangeInImagePixels
+    /// Firing range in map pixels, from `tower.tower_range`. `updateCombat`
+    /// and the debug range ring both read this, so the ring always draws what
+    /// actually shoots.
+    func attackRange(for tower: PlacedTower) -> CGFloat? {
+        towerLevel(for: tower).map { CGFloat($0.range) }
     }
 
-    /// Whether `tower` uses `attackRange` — only kinds that fire a projectile
-    /// do, so the debug ring stays off the kinds it would misrepresent.
+    /// Whether a range ring means anything for `tower`: it needs both a range
+    /// in the table and a projectile to actually use it.
     func hasAttackRange(_ tower: PlacedTower) -> Bool {
-        tower.kind.projectileAssetName != nil
+        tower.kind.projectileAssetName != nil && (attackRange(for: tower) ?? 0) > 0
+    }
+
+    /// Ticks between shots, from `tower.fire_interval`. A row with no interval
+    /// never comes off cooldown.
+    private func fireCooldownTicks(for tower: PlacedTower) -> Int64 {
+        guard let interval = towerLevel(for: tower)?.fireInterval, interval > 0
+        else { return .max }
+        return max(1, Int64((interval * Double(SimClock.ticksPerSecond)).rounded()))
+    }
+
+    /// Shots per second, from `tower.fire_interval`.
+    func rateOfFire(for tower: PlacedTower) -> Double {
+        guard let interval = towerLevel(for: tower)?.fireInterval, interval > 0
+        else { return 0 }
+        return 1 / interval
+    }
+
+    /// Longest range in the tower table. The per-slot lane coverage below is a
+    /// property of the slot, measured before any tower exists to ask, so it
+    /// reports what the furthest-reaching tower would cover.
+    private var maximumTowerRange: CGFloat {
+        let ranges = towerLevels.values.flatMap { levels in
+            levels.values.flatMap { $0.values.map(\.range) }
+        }
+        return CGFloat(ranges.max() ?? 0)
+    }
+
+    // MARK: - Per-tower running totals
+
+    /// Accumulated on the tick loop, republished once a second so the legend
+    /// updates without driving a view refresh every tick. Both are cumulative
+    /// for the whole level and never reset between waves.
+    private var damageTotalBySlot: [Int: Double] = [:]
+    private var targetingSecondsBySlot: [Int: Double] = [:]
+    private var lastStatsTick: Int64 = 0
+
+    /// Total damage each tower has landed.
+    @Published private(set) var totalDamageBySlot: [Int: Double] = [:]
+
+    /// Cumulative seconds each tower has spent with a target in range.
+    @Published private(set) var targetingTimeBySlot: [Int: Double] = [:]
+
+    private func refreshTowerStatsIfDue() {
+        guard timer.tick - lastStatsTick >= Int64(SimClock.ticksPerSecond) else { return }
+        lastStatsTick = timer.tick
+        totalDamageBySlot = damageTotalBySlot
+        targetingTimeBySlot = targetingSecondsBySlot
+    }
+
+    // MARK: - Path area in range
+
+    /// Half-width of the enemy lane, in map pixels.
+    /// TODO: this belongs in the database alongside the path points. It is the
+    /// last combat number still written in Swift; everything the tower table
+    /// covers now reads from `towerLevels`.
+    private static let pathHalfWidthInImagePixels: CGFloat = 51
+
+    /// Lane coverage per slot, in map pixels squared, computed once at load.
+    ///
+    /// Placing a tower must not cost a frame, so nothing here is derived on
+    /// demand. A coarse boolean raster of the lane is built once, then each
+    /// slot's coverage is summed from it; both happen before the level is
+    /// marked ready.
+    private var laneAreaBySlot: [Int: Double] = [:]
+
+    private static let laneCell: CGFloat = 4
+
+    func pathAreaInRange(for tower: PlacedTower) -> Double {
+        laneAreaBySlot[tower.slotIndex] ?? 0
+    }
+
+    private func precomputeLaneCoverage() {
+        let cell = Self.laneCell
+        let w = Self.pathHalfWidthInImagePixels
+        let cols = Int((mapImageSize.width / cell).rounded(.up)) + 1
+        let rows = Int((mapImageSize.height / cell).rounded(.up)) + 1
+        var lane = [Bool](repeating: false, count: cols * rows)
+
+        // Rasterise the lane by walking each segment's neighbourhood, rather
+        // than distance-testing every cell on the map against every segment.
+        for path in paths {
+            let pts = path.points
+            guard pts.count > 1 else { continue }
+            for i in 0..<(pts.count - 1) {
+                let a = CGPoint(x: pts[i].x, y: pts[i].y)
+                let b = CGPoint(x: pts[i + 1].x, y: pts[i + 1].y)
+                let dx = b.x - a.x, dy = b.y - a.y
+                let l2 = dx * dx + dy * dy
+                let x0 = Int((min(a.x, b.x) - w) / cell), x1 = Int((max(a.x, b.x) + w) / cell)
+                let y0 = Int((min(a.y, b.y) - w) / cell), y1 = Int((max(a.y, b.y) + w) / cell)
+                for gy in max(0, y0)...max(0, min(rows - 1, y1)) {
+                    for gx in max(0, x0)...max(0, min(cols - 1, x1)) {
+                        let idx = gy * cols + gx
+                        if lane[idx] { continue }
+                        let px = (CGFloat(gx) + 0.5) * cell, py = (CGFloat(gy) + 0.5) * cell
+                        let t = l2 == 0 ? 0 : max(0, min(1, ((px - a.x) * dx + (py - a.y) * dy) / l2))
+                        if hypot(px - (a.x + t * dx), py - (a.y + t * dy)) <= w { lane[idx] = true }
+                    }
+                }
+            }
+        }
+
+        let cellArea = Double(cell * cell)
+        let r = maximumTowerRange
+        for (slot, c) in slotPositions.enumerated() {
+            let gx0 = max(0, Int((c.x - r) / cell)), gx1 = min(cols - 1, Int((c.x + r) / cell))
+            let gy0 = max(0, Int((c.y - r) / cell)), gy1 = min(rows - 1, Int((c.y + r) / cell))
+            guard gx0 <= gx1, gy0 <= gy1 else { laneAreaBySlot[slot] = 0; continue }
+            var covered = 0.0
+            for gy in gy0...gy1 {
+                for gx in gx0...gx1 where lane[gy * cols + gx] {
+                    let px = (CGFloat(gx) + 0.5) * cell, py = (CGFloat(gy) + 0.5) * cell
+                    if hypot(px - c.x, py - c.y) <= r { covered += cellArea }
+                }
+            }
+            laneAreaBySlot[slot] = covered
+        }
     }
 
     struct Projectile: Identifiable {
@@ -171,6 +282,12 @@ final class LevelRunner: NSObject, ObservableObject {
         var heading: CGFloat
         let damage: Double
         let targetID: Int
+        /// Which tower fired this, so damage can be attributed back to it.
+        let slotIndex: Int
+        /// Copied off the firing tower's row so a shot already in the air
+        /// keeps the tuning it was fired with, even if the tower upgrades.
+        let speed: CGFloat
+        let splashRadius: CGFloat
     }
 
     struct Walker: Identifiable {
@@ -288,6 +405,11 @@ final class LevelRunner: NSObject, ObservableObject {
             towerNames = Dictionary(uniqueKeysWithValues: levelNameRows.compactMap { category, levels in
                 TowerKind(categoryName: category).map { ($0, levels) }
             })
+
+            let tuningRows = try db.towerTypeDao.getTowerLevelsByBranch()
+            towerLevels = Dictionary(uniqueKeysWithValues: tuningRows.compactMap { category, levels in
+                TowerKind(categoryName: category).map { ($0, levels) }
+            })
             slotPositions = level.towerSlots.map { CGPoint(x: $0.position.x, y: $0.position.y) }
 
             guard !level.paths.isEmpty else {
@@ -302,6 +424,7 @@ final class LevelRunner: NSObject, ObservableObject {
             }
 
             paths = level.paths
+            precomputeLaneCoverage()
             isReady = true
             enterWave(0)
         } catch {
@@ -440,6 +563,7 @@ final class LevelRunner: NSObject, ObservableObject {
         for _ in 0..<timer.dueTicks() {
             timer.advanceTick()
         }
+        refreshTowerStatsIfDue()
 
         while let next = pendingSpawns.first, timer.tick >= next.tick {
             pendingSpawns.removeFirst()
@@ -502,32 +626,40 @@ final class LevelRunner: NSObject, ObservableObject {
         }
 
         for tower in placedTowers where tower.kind.projectileAssetName != nil {
-            guard timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
-            let muzzle = muzzlePoint(for: tower)
+            guard let tuning = towerLevel(for: tower) else { continue }
+            let origin = tower.position
             guard let closest = walkers.min(by: {
-                distanceFrom(muzzle, to: $0) < distanceFrom(muzzle, to: $1)
-            }), distanceFrom(muzzle, to: closest) <= attackRange(for: tower)
+                distanceFrom(origin, to: $0) < distanceFrom(origin, to: $1)
+            }), distanceFrom(origin, to: closest) <= CGFloat(tuning.range)
             else { continue }
 
+            // Engaged this tick, whether or not the gun is off cooldown.
+            targetingSecondsBySlot[tower.slotIndex, default: 0] += gameDt
+
+            guard timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
+
             let target = bodyPoint(closest)
-            nextFireTickBySlot[tower.slotIndex] = timer.tick + tower.kind.fireCooldownTicks
+            nextFireTickBySlot[tower.slotIndex] = timer.tick + fireCooldownTicks(for: tower)
             projectiles.append(Projectile(
                 id: nextProjectileID,
                 kind: tower.kind,
-                position: muzzle,
-                heading: atan2(target.y - muzzle.y, target.x - muzzle.x),
-                damage: tower.kind.projectileDamage(atLevel: tower.level),
-                targetID: closest.id
+                position: origin,
+                heading: atan2(target.y - origin.y, target.x - origin.x),
+                damage: Double.random(in: tuning.shotMin...max(tuning.shotMin, tuning.shotMax)),
+                targetID: closest.id,
+                slotIndex: tower.slotIndex,
+                speed: CGFloat(tuning.projectileSpeed),
+                splashRadius: CGFloat(tuning.aoeRadius)
             ))
             nextProjectileID += 1
         }
 
-        let stepLength = Self.projectileSpeedPerSecond * CGFloat(gameDt)
         var survivors: [Projectile] = []
         for var projectile in projectiles {
                 guard let target = walkers.first(where: { $0.id == projectile.targetID })
             else { continue }
 
+            let stepLength = projectile.speed * CGFloat(gameDt)
             let aim = bodyPoint(target)
             let dx = aim.x - projectile.position.x
             let dy = aim.y - projectile.position.y
@@ -554,12 +686,14 @@ final class LevelRunner: NSObject, ObservableObject {
         for var walker in walkers {
             let isHit: Bool
             if projectile.kind == .areaOfEffect {
-                isHit = distanceFrom(point, to: walker) <= Self.splashRadiusInImagePixels
+                isHit = distanceFrom(point, to: walker) <= projectile.splashRadius
             } else {
                 isHit = walker.id == projectile.targetID
             }
             if isHit {
+                let dealt = min(walker.hp, projectile.damage)
                 walker.hp -= projectile.damage
+                damageTotalBySlot[projectile.slotIndex, default: 0] += dealt
                 if walker.hp <= 0 {
                     money += walker.bounty
                     continue

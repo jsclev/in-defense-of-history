@@ -58,7 +58,7 @@ struct MenuButton: View {
                             lineWidth: 3
                         )
                         Image(systemName: screen.placeholderSymbol)
-                            .font(.system(size: size * 0.42, weight: .bold))
+                            .font(.system(size: Typography.size(size * 0.42), weight: .bold))
                             .foregroundStyle(.white)
                     }
                 }
@@ -138,7 +138,7 @@ struct MenuPlaceholderView: View {
                             )
                     } else {
                         Image(systemName: screen.placeholderSymbol)
-                            .font(.system(size: 64 * metrics.scale, weight: .bold))
+                            .font(.system(size: Typography.size(64 * metrics.scale), weight: .bold))
                             .foregroundStyle(Color(red: 0.85, green: 0.7, blue: 0.3))
                     }
                     Text(screen.title)

@@ -56,7 +56,7 @@ struct SafeAreaOverlayView: View {
 
     private func inset(_ text: String, at point: CGPoint) -> some View {
         Text(text)
-            .font(.system(size: 11, weight: .bold, design: .monospaced))
+            .font(.system(size: Typography.size(11), weight: .bold, design: .monospaced))
             .foregroundStyle(.black)
             .padding(.horizontal, 4)
             .padding(.vertical, 2)

@@ -19,6 +19,8 @@ struct HudMetrics {
 
     var waveTextSize: CGFloat { HudSizing.waveText.resolved(at: scale) }
 
+    var rangeLegendTextSize: CGFloat { HudSizing.rangeLegendText.resolved(at: scale) }
+
     var statSpacing: CGFloat { HudSizing.statSpacing.resolved(at: scale) }
     var statRowSpacing: CGFloat { HudSizing.statRowSpacing.resolved(at: scale) }
     var statPlatePadding: CGFloat { HudSizing.statPlatePadding.resolved(at: scale) }

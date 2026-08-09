@@ -263,7 +263,7 @@ private struct HeroSlot: View {
                     Circle().strokeBorder(Self.shinyGold,
                                           lineWidth: max(1.5, height * 0.01))
                     Image(systemName: "star.fill")
-                        .font(.system(size: height * 0.085, weight: .bold))
+                        .font(.system(size: Typography.size(height * 0.085), weight: .bold))
                         .foregroundStyle(Self.shinyGoldStar)
                 }
                 .frame(width: height * 0.17, height: height * 0.17)
