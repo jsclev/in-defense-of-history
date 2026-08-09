@@ -10,8 +10,6 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     nonisolated struct Road: Codable, Equatable, Sendable {
         var name: String
         var points: [Point]
-        /// Per-waypoint half-width, set when the road was painted with the brush.
-        /// Absent on roads drawn with the pencil, which use `MapGeometry.roadHalfWidth`.
         var halfWidths: [Double]?
 
         init(name: String, points: [Point], halfWidths: [Double]? = nil) {
@@ -29,7 +27,6 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
             points.indices.map { halfWidth(at: $0) }
         }
 
-        /// Closed ring of waypoints tracing the road's outer edge.
         var outerEdge: [Point] {
             BrushGeometry.outerEdge(points: points, halfWidths: resolvedHalfWidths)
         }

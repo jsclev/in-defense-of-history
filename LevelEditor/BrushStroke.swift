@@ -1,23 +1,16 @@
 import Foundation
 import CoreGraphics
 
-/// A single raw sample taken while the brush is down.
 struct BrushSample: Equatable {
     var point: Point
-    /// Half-width in canvas units at this sample, already scaled by pressure.
     var halfWidth: Double
 }
 
-/// Live state for an in-progress brush stroke. Samples come in at whatever rate
-/// the input device delivers; `commit` turns them into a road centreline plus
-/// per-point half-widths.
 struct BrushStroke: Equatable {
     var samples: [BrushSample] = []
 
     var isEmpty: Bool { samples.isEmpty }
 
-    /// Drops samples closer than `minSpacing` so a slow hand doesn't pile up
-    /// hundreds of points in one spot.
     mutating func add(_ sample: BrushSample, minSpacing: Double) {
         guard let last = samples.last else {
             samples.append(sample)
@@ -32,8 +25,6 @@ struct BrushStroke: Equatable {
 }
 
 enum BrushGeometry {
-    /// Chaikin corner-cutting: two passes turn a jittery freehand stroke into
-    /// something that reads as a drawn road without collapsing its shape.
     static func smooth(_ pts: [Point], passes: Int = 2) -> [Point] {
         guard pts.count > 2 else { return pts }
         var out = pts
@@ -51,8 +42,6 @@ enum BrushGeometry {
         return out
     }
 
-    /// Same smoothing applied to the scalar width track, so widths stay aligned
-    /// with the smoothed centreline.
     static func smooth(widths: [Double], passes: Int = 2) -> [Double] {
         guard widths.count > 2 else { return widths }
         var out = widths
@@ -70,9 +59,6 @@ enum BrushGeometry {
         return out
     }
 
-    /// Walks the polyline at a fixed arc-length step, carrying the width track
-    /// along with it. Keeps waypoint spacing even, which is what the path
-    /// follower and the exported geojson both want.
     static func resample(points: [Point], widths: [Double], every step: Double)
         -> (points: [Point], widths: [Double]) {
         guard points.count > 1, step > 0 else { return (points, widths) }
@@ -104,7 +90,6 @@ enum BrushGeometry {
         return (outPts, outWs)
     }
 
-    /// Unit normals (left of travel) for each point on a polyline.
     static func normals(_ pts: [Point]) -> [Point] {
         guard pts.count > 1 else { return pts.map { _ in Point(0, -1) } }
         var out: [Point] = []
@@ -126,7 +111,6 @@ enum BrushGeometry {
         return out
     }
 
-    /// One side of the outer edge. `side` is +1 for the left offset, -1 for the right.
     static func offsetEdge(points: [Point], halfWidths: [Double], side: Double) -> [Point] {
         guard !points.isEmpty else { return [] }
         let ns = normals(points)
@@ -137,9 +121,6 @@ enum BrushGeometry {
         }
     }
 
-    /// The closed outer edge of a painted road: left side out, right side back.
-    /// This is what "waypoints for the outer edge of the path" means — a ring
-    /// you can export as a polygon.
     static func outerEdge(points: [Point], halfWidths: [Double]) -> [Point] {
         guard points.count >= 2 else { return [] }
         let left = offsetEdge(points: points, halfWidths: halfWidths, side: 1)
@@ -147,7 +128,6 @@ enum BrushGeometry {
         return left + right.reversed()
     }
 
-    /// Turns a finished stroke into an evenly-spaced centreline + width track.
     static func commit(_ stroke: BrushStroke, spacing: Double)
         -> (points: [Point], halfWidths: [Double])? {
         let raw = stroke.samples

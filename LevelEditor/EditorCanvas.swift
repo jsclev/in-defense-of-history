@@ -72,9 +72,6 @@ struct EditorCanvas: View {
         )
     }
 
-    /// On iOS the brush runs through raw UIKit touches so Apple Pencil force and
-    /// coalesced touches are available; SwiftUI's DragGesture exposes neither.
-    /// A finger paints exactly like the Pencil, just at a constant width.
     @ViewBuilder
     private func brushInputOverlay(_ t: DesignTransform) -> some View {
         #if os(iOS)
@@ -357,7 +354,6 @@ struct EditorCanvas: View {
         ctx.stroke(SwiftUI.Path(frame), with: .color(.white.opacity(0.2)), lineWidth: 1)
     }
 
-    /// Wet paint: the stroke currently under the pencil, before it becomes a road.
     private func drawLiveStroke(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let samples = state.stroke.samples
         guard samples.count >= 2 else { return }
@@ -380,7 +376,6 @@ struct EditorCanvas: View {
                    style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
     }
 
-    /// The generated outer edge of a committed road, with its waypoint dots.
     private func drawOuterEdge(_ ctx: inout GraphicsContext,
                                _ t: DesignTransform,
                                road: MapDraft.Road,
@@ -473,8 +468,6 @@ struct EditorCanvas: View {
                 for pt in pts.dropFirst() { p.addLine(to: pt) }
 
                 if road.halfWidths != nil {
-                    // Painted road: its width varies per waypoint, so fill the
-                    // outer-edge ring rather than stroking a constant width.
                     let ring = road.outerEdge
                     if ring.count >= 4 {
                         var body = SwiftUI.Path()

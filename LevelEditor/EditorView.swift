@@ -31,17 +31,14 @@ final class EditorState {
     var background: PlatformImage?
     var backgroundPixelSize: CGSize?
 
-    /// Brush half-width in canvas units, before pressure.
     var brushSize: Double = 51
     var brushPressureEnabled = true
-    /// Spacing between generated waypoints along a painted stroke.
     var brushSpacing: Double = 24
     var showOuterEdge = true
     var stroke = BrushStroke()
 
     var zoom: Double?
     var fitScale: Double = 0.4
-    /// Scale captured when a pinch starts, so magnification is applied relatively.
     var pinchBase: Double?
 
     static let zoomLadder: [Double] = [

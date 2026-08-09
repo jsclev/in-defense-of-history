@@ -357,8 +357,8 @@ kernel void simulate(
                     if (dist2(positions[i], origin) > r2) continue;
                     float key;
                     switch (tw.targeting) {
-                        case SIM_TARGET_FIRST: key = S.distance[i]; break;
-                        case SIM_TARGET_LAST: key = -S.distance[i]; break;
+                        case SIM_TARGET_FIRST: key = S.distance[i] - lvl.pathTotalLength[S.pathIndex[i]]; break;
+                        case SIM_TARGET_LAST: key = lvl.pathTotalLength[S.pathIndex[i]] - S.distance[i]; break;
                         case SIM_TARGET_STRONGEST: key = S.hp[i]; break;
                         default: key = S.state[i] == 2 ? -1000000.0f : -S.morale[i]; break;
                     }

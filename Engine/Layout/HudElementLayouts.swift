@@ -67,7 +67,7 @@ public struct StatsPanelLayout: Equatable {
 
         let origin = HudPlacementSolver.origin(
             corner: .topLeading,
-            margin: HudSizing.hudMargin.resolved(at: scale), in: screen)
+            margin: HudSizing.statPanelMargin.resolved(at: scale), in: screen)
 
         let livesOrigin = CGPoint(x: origin.x + groups.frames[0].minX,
                                   y: origin.y + groups.frames[0].minY)

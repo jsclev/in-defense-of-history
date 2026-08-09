@@ -284,6 +284,8 @@ public final class Simulation {
                 }
             }
 
+            let candidates = targetCandidates()
+
             for slot in 0..<towers.count {
                 guard var tower = towers[slot] else { continue }
                 let ranged = catalog.towerTypes[tower.typeIndex].levels[tower.level]
@@ -294,11 +296,7 @@ public final class Simulation {
                 if tower.cooldown <= 0 {
                     let type = catalog.towerTypes[tower.typeIndex]
                     let lvl = type.levels[tower.level]
-                    if let target = selectTarget(
-                        from: level.towerSlots[slot].position,
-                        range: lvl.range,
-                        targeting: lvl.targeting
-                    ) {
+                    if let target = selectTarget(slot: slot, level: lvl, candidates: candidates) {
                         emit(.towerFired(slot: slot, target: positions[target]))
                         if lvl.projectileSpeed > 0 {
                             launch(from: level.towerSlots[slot].position,
@@ -566,27 +564,33 @@ public final class Simulation {
         max(1, Int((fireInterval * Double(SimClock.ticksPerSecond)).rounded()))
     }
 
-    private func selectTarget(from origin: Point, range: Double, targeting: Targeting) -> Int? {
-        let r2 = range * range
-        var best: Int? = nil
-        var bestKey = -Double.infinity
+    private func targetCandidates() -> [TargetCandidate] {
+        var out: [TargetCandidate] = []
+        out.reserveCapacity(enemies.count)
         for i in 0..<enemies.count where !enemies[i].removed {
-            guard positions[i].squaredDistance(to: origin) <= r2 else { continue }
             let e = enemies[i]
-            let key: Double
-            switch targeting {
-            case .first: key = e.distance
-            case .last: key = -e.distance
-            case .strongest: key = e.hp
-            case .shakiest:
-                key = e.state == .broken ? -1_000_000 : -e.morale
-            }
-            if key > bestKey {
-                bestKey = key
-                best = i
-            }
+            out.append(TargetCandidate(id: i,
+                                       position: positions[i],
+                                       pathIndex: e.pathIndex,
+                                       pathDistance: e.distance,
+                                       hp: e.hp,
+                                       morale: e.morale,
+                                       isBroken: e.state == .broken))
         }
-        return best
+        return out
+    }
+
+    private func selectTarget(slot: Int,
+                              level lvl: TowerLevel,
+                              candidates: [TargetCandidate]) -> Int? {
+        RangedTargetCommand(
+            tower: TowerTargetingContext(slotIndex: slot,
+                                         position: level.towerSlots[slot].position,
+                                         range: lvl.range,
+                                         targeting: lvl.targeting),
+            enemies: candidates,
+            paths: level.paths
+        ).execute()?.id
     }
 
     private func fire(level lvl: TowerLevel, at primary: Int) {

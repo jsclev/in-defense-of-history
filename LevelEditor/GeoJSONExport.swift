@@ -6,9 +6,6 @@ extension UTType {
     static let geoJSON = UTType(exportedAs: "com.zippyzen.td.geojson")
 }
 
-/// Writes the document out in the same shape as the hand-authored level
-/// geojson files: a FeatureCollection in canvas pixels (origin top-left, +y
-/// down), carrying the gameplay features the game actually consumes.
 enum GeoJSONExport {
     static func data(for draft: MapDraft) throws -> Data {
         let encoder = JSONEncoder()
@@ -103,8 +100,6 @@ enum GeoJSONExport {
             features: features
         )
     }
-
-    // MARK: - Encodable shapes
 
     struct FeatureCollection: Encodable {
         var type = "FeatureCollection"

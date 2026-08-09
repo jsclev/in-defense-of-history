@@ -23,6 +23,7 @@ struct HudMetrics {
 
     var statSpacing: CGFloat { HudSizing.statSpacing.resolved(at: scale) }
     var statRowSpacing: CGFloat { HudSizing.statRowSpacing.resolved(at: scale) }
+    var statPanelMargin: CGFloat { HudSizing.statPanelMargin.resolved(at: scale) }
     var statPlatePadding: CGFloat { HudSizing.statPlatePadding.resolved(at: scale) }
     var statPlateCorner: CGFloat { HudSizing.statPlateCorner.resolved(at: scale) }
 

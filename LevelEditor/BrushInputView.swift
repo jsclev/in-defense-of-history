@@ -2,15 +2,6 @@
 import SwiftUI
 import UIKit
 
-/// Brush input for both a finger and an Apple Pencil. SwiftUI's `DragGesture`
-/// reports neither touch force nor coalesced touches, so painting goes through
-/// raw UIKit touch handling: force gives the Pencil pressure-sensitive width,
-/// and coalesced touches recover the samples iOS batches between frames, which
-/// is what keeps a fast stroke smooth.
-///
-/// One finger or the Pencil paints; two fingers pinch to zoom. Because this view
-/// sits over the canvas and consumes touches, the zoom that SwiftUI's
-/// `MagnifyGesture` normally provides is re-supplied here.
 struct BrushInputView: UIViewRepresentable {
     var onBegan: (CGPoint, Double) -> Void
     var onMoved: (CGPoint, Double) -> Void
@@ -75,8 +66,6 @@ struct BrushInputView: UIViewRepresentable {
     final class BrushCaptureView: UIView {
         var handler: Coordinator?
 
-        /// The touch currently drawing. Everything else on screen is ignored, so
-        /// a resting palm can't add points to the stroke.
         private weak var activeTouch: UITouch?
 
         func installPinch() {
@@ -85,8 +74,6 @@ struct BrushInputView: UIViewRepresentable {
             addGestureRecognizer(pinch)
         }
 
-        /// Normalised 0...1, and only for the Pencil — a finger carries no usable
-        /// force, so it reports 0 and the caller paints at full brush width.
         private func pressure(_ touch: UITouch) -> Double {
             guard touch.type == .pencil, touch.maximumPossibleForce > 0 else { return 0 }
             return max(0, min(1, Double(touch.force / touch.maximumPossibleForce)))
@@ -104,8 +91,6 @@ struct BrushInputView: UIViewRepresentable {
         }
 
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-            // The Pencil always wins: if it lands mid-stroke, the stroke in
-            // progress was a palm or a stray finger, so throw it away.
             if let active = activeTouch, active.type != .pencil,
                let pencil = touches.first(where: { $0.type == .pencil }) {
                 cancelStroke()
@@ -113,7 +98,6 @@ struct BrushInputView: UIViewRepresentable {
                 return
             }
 
-            // A second touch means a pinch is starting, not a paint stroke.
             if (event?.touches(for: self)?.count ?? touches.count) > 1 {
                 cancelStroke()
                 return

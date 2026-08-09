@@ -45,14 +45,11 @@ enum PlatformPasteboard {
     }
 }
 
-/// `MoveCommandDirection` is macOS-only, so arrow-key nudging speaks this instead.
 enum NudgeDirection {
     case up, down, left, right
 }
 
 extension View {
-    /// `onDeleteCommand` / `onExitCommand` / `onMoveCommand` are macOS-only.
-    /// iPadOS gets the same actions through hardware-keyboard shortcuts.
     @ViewBuilder
     func platformEditingCommands(
         onDelete: @escaping () -> Void,
@@ -83,8 +80,6 @@ extension View {
     }
 }
 
-/// Side-by-side inspector and canvas. `HSplitView` is macOS-only, so iOS gets a
-/// plain fixed-width column instead.
 struct EditorSplit<Sidebar: View, Detail: View>: View {
     @ViewBuilder var sidebar: Sidebar
     @ViewBuilder var detail: Detail

@@ -99,10 +99,13 @@ public enum HudSizing {
     /// Typography floor is what keeps it legible on a phone.
     public static let rangeLegendText = ScaledDimension.text(16)
 
-    public static let statSpacing = ScaledDimension(33)
-    public static let statRowSpacing = ScaledDimension(6)
+    public static let statSpacing = ScaledDimension(27)
 
-    public static let statPlatePadding = ScaledDimension(7)
+    public static let statRowSpacing = ScaledDimension(18)
+
+    public static let statPanelMargin = ScaledDimension(21)
+
+    public static let statPlatePadding = ScaledDimension(5)
     public static let statPlateCorner = ScaledDimension(10)
     public static let statPlateOpacity: CGFloat = 0.40
 

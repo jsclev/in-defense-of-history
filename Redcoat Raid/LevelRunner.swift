@@ -173,14 +173,11 @@ final class LevelRunner: NSObject, ObservableObject {
         return 1 / interval
     }
 
-    /// Longest range in the tower table. The per-slot lane coverage below is a
-    /// property of the slot, measured before any tower exists to ask, so it
-    /// reports what the furthest-reaching tower would cover.
-    private var maximumTowerRange: CGFloat {
+    private var distinctTowerRanges: [CGFloat] {
         let ranges = towerLevels.values.flatMap { levels in
-            levels.values.flatMap { $0.values.map(\.range) }
+            levels.values.flatMap { $0.values.map { CGFloat($0.range) } }
         }
-        return CGFloat(ranges.max() ?? 0)
+        return Array(Set(ranges)).sorted()
     }
 
     // MARK: - Per-tower running totals
@@ -219,12 +216,15 @@ final class LevelRunner: NSObject, ObservableObject {
     /// demand. A coarse boolean raster of the lane is built once, then each
     /// slot's coverage is summed from it; both happen before the level is
     /// marked ready.
-    private var laneAreaBySlot: [Int: Double] = [:]
+    private var laneAreaBySlot: [Int: [Int: Double]] = [:]
 
     private static let laneCell: CGFloat = 4
 
+    private static func rangeKey(_ range: CGFloat) -> Int { Int(range.rounded()) }
+
     func pathAreaInRange(for tower: PlacedTower) -> Double {
-        laneAreaBySlot[tower.slotIndex] ?? 0
+        guard let range = towerLevel(for: tower)?.range else { return 0 }
+        return laneAreaBySlot[tower.slotIndex]?[Self.rangeKey(CGFloat(range))] ?? 0
     }
 
     private func precomputeLaneCoverage() {
@@ -259,19 +259,24 @@ final class LevelRunner: NSObject, ObservableObject {
         }
 
         let cellArea = Double(cell * cell)
-        let r = maximumTowerRange
+        let ranges = distinctTowerRanges
         for (slot, c) in slotPositions.enumerated() {
-            let gx0 = max(0, Int((c.x - r) / cell)), gx1 = min(cols - 1, Int((c.x + r) / cell))
-            let gy0 = max(0, Int((c.y - r) / cell)), gy1 = min(rows - 1, Int((c.y + r) / cell))
-            guard gx0 <= gx1, gy0 <= gy1 else { laneAreaBySlot[slot] = 0; continue }
-            var covered = 0.0
-            for gy in gy0...gy1 {
-                for gx in gx0...gx1 where lane[gy * cols + gx] {
-                    let px = (CGFloat(gx) + 0.5) * cell, py = (CGFloat(gy) + 0.5) * cell
-                    if hypot(px - c.x, py - c.y) <= r { covered += cellArea }
+            var byRange: [Int: Double] = [:]
+            for r in ranges {
+                let key = Self.rangeKey(r)
+                let gx0 = max(0, Int((c.x - r) / cell)), gx1 = min(cols - 1, Int((c.x + r) / cell))
+                let gy0 = max(0, Int((c.y - r) / cell)), gy1 = min(rows - 1, Int((c.y + r) / cell))
+                guard gx0 <= gx1, gy0 <= gy1 else { byRange[key] = 0; continue }
+                var covered = 0.0
+                for gy in gy0...gy1 {
+                    for gx in gx0...gx1 where lane[gy * cols + gx] {
+                        let px = (CGFloat(gx) + 0.5) * cell, py = (CGFloat(gy) + 0.5) * cell
+                        if hypot(px - c.x, py - c.y) <= r { covered += cellArea }
+                    }
                 }
+                byRange[key] = covered
             }
-            laneAreaBySlot[slot] = covered
+            laneAreaBySlot[slot] = byRange
         }
     }
 
@@ -300,6 +305,7 @@ final class LevelRunner: NSObject, ObservableObject {
         let spawnTick: Int64
         let pathIndex: Int
         var position: CGPoint = .zero
+        var pathDistance: Double = 0
     }
 
     @Published private(set) var projectiles: [Projectile] = []
@@ -594,6 +600,7 @@ final class LevelRunner: NSObject, ObservableObject {
             }
             let p = path.point(atDistance: distance)
             walker.position = CGPoint(x: p.x, y: p.y)
+            walker.pathDistance = distance
             marching.append(walker)
         }
         walkers = marching
@@ -625,12 +632,21 @@ final class LevelRunner: NSObject, ObservableObject {
             return
         }
 
+        let candidates = targetCandidates()
+
         for tower in placedTowers where tower.kind.projectileAssetName != nil {
             guard let tuning = towerLevel(for: tower) else { continue }
             let origin = tower.position
-            guard let closest = walkers.min(by: {
-                distanceFrom(origin, to: $0) < distanceFrom(origin, to: $1)
-            }), distanceFrom(origin, to: closest) <= CGFloat(tuning.range)
+            let solution = RangedTargetCommand(
+                tower: TowerTargetingContext(
+                    slotIndex: tower.slotIndex,
+                    position: Point(Double(origin.x), Double(origin.y)),
+                    range: tuning.range,
+                    targeting: tuning.targeting),
+                enemies: candidates,
+                paths: paths
+            ).execute()
+            guard let solution, let leader = walkers.first(where: { $0.id == solution.id })
             else { continue }
 
             // Engaged this tick, whether or not the gun is off cooldown.
@@ -638,7 +654,7 @@ final class LevelRunner: NSObject, ObservableObject {
 
             guard timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
 
-            let target = bodyPoint(closest)
+            let target = bodyPoint(leader)
             nextFireTickBySlot[tower.slotIndex] = timer.tick + fireCooldownTicks(for: tower)
             let minDamage = tuning.shotMinDamage
             let maxDamage = max(minDamage, tuning.shotMaxDamage)
@@ -648,7 +664,7 @@ final class LevelRunner: NSObject, ObservableObject {
                 position: origin,
                 heading: atan2(target.y - origin.y, target.x - origin.x),
                 damage: Double.random(in: minDamage...maxDamage),
-                targetID: closest.id,
+                targetID: leader.id,
                 slotIndex: tower.slotIndex,
                 speed: CGFloat(tuning.projectileSpeed),
                 splashRadius: CGFloat(tuning.aoeRadius)
@@ -681,6 +697,19 @@ final class LevelRunner: NSObject, ObservableObject {
     private func distanceFrom(_ point: CGPoint, to walker: Walker) -> CGFloat {
         let bp = bodyPoint(walker)
         return hypot(bp.x - point.x, bp.y - point.y)
+    }
+
+    private func targetCandidates() -> [TargetCandidate] {
+        walkers.map { walker in
+            TargetCandidate(id: walker.id,
+                            position: Point(Double(walker.position.x),
+                                            Double(walker.position.y)),
+                            pathIndex: walker.pathIndex,
+                            pathDistance: walker.pathDistance,
+                            hp: walker.hp,
+                            morale: Tunables.moraleMax,
+                            isBroken: false)
+        }
     }
 
     private func applyImpact(_ projectile: Projectile, at point: CGPoint) {
