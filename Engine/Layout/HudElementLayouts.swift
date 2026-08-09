@@ -39,26 +39,32 @@ public struct StatsPanelLayout: Equatable {
     static let lineHeightFactor: CGFloat = 1.25
 
     public init(screen: ScreenGeometry, isPortrait: Bool,
-                livesIconAspect: CGFloat, moneyIconAspect: CGFloat) {
+                livesIconAspect: CGFloat, moneyIconAspect: CGFloat,
+                moneyText: String) {
         let scale = HudScale(viewSize: screen.physical.size).value
 
-        func counterSizes(icon: ScaledDimension, valueWidth: ScaledDimension,
+        func counterSizes(icon: ScaledDimension, valueWidth: CGFloat,
                           aspect: CGFloat, spacing: ScaledDimension) -> StackLayout {
             let h = icon.resolved(at: scale)
             return StackLayout.row(
                 [CGSize(width: h * aspect, height: h),
-                 CGSize(width: valueWidth.resolved(at: scale), height: h)],
+                 CGSize(width: valueWidth, height: h)],
                 spacing: spacing.resolved(at: scale))
         }
 
+        let moneyFontSize = HudSizing.moneyText.resolved(at: scale)
         let livesRow = counterSizes(icon: HudSizing.livesIcon,
-                                    valueWidth: HudSizing.livesValueWidth,
+                                    valueWidth: HudSizing.livesValueWidth.resolved(at: scale),
                                     aspect: livesIconAspect,
                                     spacing: HudSizing.livesRowSpacing)
-        let moneyRow = counterSizes(icon: HudSizing.moneyIcon,
-                                    valueWidth: HudSizing.moneyValueWidth,
-                                    aspect: moneyIconAspect,
-                                    spacing: HudSizing.moneyRowSpacing)
+        let moneyRow = counterSizes(
+            icon: HudSizing.moneyIcon,
+            valueWidth: HudSizing.counterValueWidth(
+                moneyText,
+                fontSize: moneyFontSize,
+                trailingPad: HudSizing.counterValueTrailingPad.resolved(at: scale)),
+            aspect: moneyIconAspect,
+            spacing: HudSizing.moneyRowSpacing)
 
         let groupSpacing = HudSizing.statSpacing.resolved(at: scale)
         let groups = isPortrait
@@ -78,7 +84,7 @@ public struct StatsPanelLayout: Equatable {
                            fontSize: HudSizing.livesText.resolved(at: scale))
         money = CounterRow(icon: moneyRow.frames[0].offsetBy(dx: moneyOrigin.x, dy: moneyOrigin.y),
                            valueBox: moneyRow.frames[1].offsetBy(dx: moneyOrigin.x, dy: moneyOrigin.y),
-                           fontSize: HudSizing.moneyText.resolved(at: scale))
+                           fontSize: moneyFontSize)
 
         let platePad = HudSizing.statPlatePadding.resolved(at: scale)
         livesPlate = lives.icon.union(lives.valueBox).insetBy(dx: -platePad, dy: -platePad)
@@ -87,12 +93,13 @@ public struct StatsPanelLayout: Equatable {
         waveFontSize = HudSizing.waveText.resolved(at: scale)
         let waveHeight = waveFontSize * Self.lineHeightFactor
         let waveGap = HudSizing.statRowSpacing.resolved(at: scale)
-        waveBox = CGRect(x: origin.x,
+        let plateSpan = livesPlate.union(moneyPlate)
+        waveBox = CGRect(x: plateSpan.minX,
                          y: origin.y + groups.size.height + waveGap,
-                         width: groups.size.width,
+                         width: plateSpan.width,
                          height: waveHeight)
-        bounds = CGRect(x: origin.x, y: origin.y,
-                        width: groups.size.width,
+        bounds = CGRect(x: plateSpan.minX, y: origin.y,
+                        width: plateSpan.width,
                         height: groups.size.height + waveGap + waveHeight)
     }
 }

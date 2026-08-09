@@ -14,7 +14,6 @@ struct HudMetrics {
 
     var moneyIconHeight: CGFloat { HudSizing.moneyIcon.resolved(at: scale) }
     var moneyTextSize: CGFloat { HudSizing.moneyText.resolved(at: scale) }
-    var moneyValueWidth: CGFloat { HudSizing.moneyValueWidth.resolved(at: scale) }
     var moneyRowSpacing: CGFloat { HudSizing.moneyRowSpacing.resolved(at: scale) }
 
     var waveTextSize: CGFloat { HudSizing.waveText.resolved(at: scale) }

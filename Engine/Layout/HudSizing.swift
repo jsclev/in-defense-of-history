@@ -83,15 +83,29 @@ public enum HudSizing {
                                                    atMost: 110.88 * 1.2)
     public static let menuButtonSpacing = ScaledDimension(14)
 
-    public static let livesIcon = ScaledDimension(43.6)
+    public static let livesIcon = ScaledDimension(41.86)
     public static let livesText = ScaledDimension.text(37.1)
     public static let livesValueWidth = ScaledDimension(60)
     public static let livesRowSpacing = ScaledDimension(8)
 
     public static let moneyIcon = ScaledDimension(43.6)
     public static let moneyText = ScaledDimension.text(37.1)
-    public static let moneyValueWidth = ScaledDimension(122)
     public static let moneyRowSpacing = ScaledDimension(8)
+
+    public static let counterDigitAdvanceFraction: CGFloat = 0.70
+    public static let counterCommaAdvanceFraction: CGFloat = 0.32
+    public static let counterValueTrailingPad = ScaledDimension(3)
+
+    public static func counterValueWidth(_ text: String, fontSize: CGFloat,
+                                         trailingPad: CGFloat) -> CGFloat {
+        var width: CGFloat = 0
+        for character in text {
+            width += character == ","
+                ? counterCommaAdvanceFraction * fontSize
+                : counterDigitAdvanceFraction * fontSize
+        }
+        return width + trailingPad
+    }
 
     public static let waveText = ScaledDimension.text(28.9)
 

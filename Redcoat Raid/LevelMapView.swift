@@ -40,7 +40,7 @@ struct LevelMapProjection {
 enum RadialMenu {
     static let radius: CGFloat = 91.0
 
-    static let buttonSide: CGFloat = 108.38
+    static let buttonSide: CGFloat = 86.70
 
     static let iconFraction: CGFloat = 0.5321
 
@@ -300,13 +300,10 @@ struct LevelMapView: View {
                     let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
                     ZStack(alignment: .leading) {
                         Capsule()
-                            .fill(.black.opacity(0.7))
+                            .fill(Color.red)
                         Capsule()
-                            .fill(fraction > 0.5 ? Color.green
-                                  : fraction > 0.25 ? Color.yellow : Color.red)
-                            .frame(width: (barWidth - 2) * fraction,
-                                   height: barHeight - 2)
-                            .offset(x: 1)
+                            .fill(Color.green)
+                            .frame(width: barWidth * fraction, height: barHeight)
                     }
                     .frame(width: barWidth, height: barHeight)
                     .position(x: footPoint.x,
@@ -590,7 +587,8 @@ struct LevelMapView: View {
         let panel = StatsPanelLayout(
             screen: screen, isPortrait: isPortrait,
             livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
-            moneyIconAspect: HudIcon.aspect(of: "money_icon_12"))
+            moneyIconAspect: HudIcon.aspect(of: "money_icon_12"),
+            moneyText: goldText)
         return ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
                 .fill(.black.opacity(HudSizing.statPlateOpacity))
