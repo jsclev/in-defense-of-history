@@ -1,9 +1,8 @@
 import SwiftUI
-import AppKit
 import UniformTypeIdentifiers
 
 enum EditorTool: Hashable {
-    case select, road, slot
+    case select, road, slot, brush
 }
 
 enum EditorMode: Hashable {
@@ -29,11 +28,21 @@ final class EditorState {
     var showPlayable = true
     var cursor: Point?
     var toast: String?
-    var background: NSImage?
+    var background: PlatformImage?
     var backgroundPixelSize: CGSize?
+
+    /// Brush half-width in canvas units, before pressure.
+    var brushSize: Double = 51
+    var brushPressureEnabled = true
+    /// Spacing between generated waypoints along a painted stroke.
+    var brushSpacing: Double = 24
+    var showOuterEdge = true
+    var stroke = BrushStroke()
 
     var zoom: Double?
     var fitScale: Double = 0.4
+    /// Scale captured when a pinch starts, so magnification is applied relatively.
+    var pinchBase: Double?
 
     static let zoomLadder: [Double] = [
         0.05, 0.0833, 0.125, 0.1667, 0.25, 0.333, 0.5, 0.667,
@@ -66,10 +75,9 @@ final class EditorState {
     }
 
     func loadBackground(from path: String?) {
-        if let path, let img = NSImage(contentsOfFile: path),
-           let cg = img.cgImage(forProposedRect: nil, context: nil, hints: nil) {
-            background = img
-            backgroundPixelSize = CGSize(width: cg.width, height: cg.height)
+        if let path, let loaded = PlatformImageLoader.load(path: path) {
+            background = loaded.image
+            backgroundPixelSize = loaded.pixelSize
         } else {
             background = nil
             backgroundPixelSize = nil
@@ -91,6 +99,8 @@ struct EditorView: View {
     @State private var state = EditorState()
     @State private var session: SimSession?
     @State private var importingImage = false
+    @State private var exportingGeoJSON = false
+    @State private var geoJSONFile = GeoJSONFile(data: Data())
     @Environment(\.undoManager) private var undoManager
 
     var body: some View {
@@ -116,6 +126,17 @@ struct EditorView: View {
                 }
             }
         }
+        .fileExporter(isPresented: $exportingGeoJSON,
+                      document: geoJSONFile,
+                      contentType: .geoJSON,
+                      defaultFilename: GeoJSONExport.filename(for: document.draft)) { result in
+            switch result {
+            case let .success(url):
+                state.flash("Saved \(url.lastPathComponent)")
+            case let .failure(error):
+                state.flash("Save failed: \(error.localizedDescription)")
+            }
+        }
         .onAppear { state.loadBackground(from: document.draft.backgroundImagePath) }
         .onChange(of: document.draft.backgroundImagePath) { _, path in
             state.loadBackground(from: path)
@@ -131,15 +152,22 @@ struct EditorView: View {
     }
 
     private var editorBody: some View {
-        HSplitView {
+        EditorSplit {
             InspectorView(document: document, state: state, importingImage: $importingImage)
-                .frame(minWidth: 290, idealWidth: 330, maxWidth: 420)
-
+        } detail: {
             VStack(spacing: 0) {
                 EditorCanvas(document: document, state: state)
                 statusBar
             }
-            .frame(minWidth: 680, maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    private func exportGeoJSON() {
+        do {
+            geoJSONFile = GeoJSONFile(data: try GeoJSONExport.data(for: document.draft))
+            exportingGeoJSON = true
+        } catch {
+            state.flash("Could not build geojson: \(error.localizedDescription)")
         }
     }
 
@@ -181,10 +209,28 @@ struct EditorView: View {
                         .help("Select and move")
                     Image(systemName: "scribble").tag(EditorTool.road)
                         .help("Road pencil: click to append waypoints, click on a segment to insert")
+                    Image(systemName: "paintbrush.pointed").tag(EditorTool.brush)
+                        .help("Path paintbrush: paint a road freehand; pressure sets its width")
                     Image(systemName: "plus.circle").tag(EditorTool.slot)
                         .help("Place tower slots")
                 }
                 .pickerStyle(.segmented)
+
+                if state.tool == .brush {
+                    Slider(value: $s.brushSize, in: 12...200) {
+                        Image(systemName: "paintbrush.pointed")
+                    }
+                    .frame(width: 110)
+                    .help("Brush width")
+
+                    Toggle(isOn: $s.brushPressureEnabled) {
+                        Image(systemName: "hand.draw")
+                    }
+                    .help("Apple Pencil pressure controls stroke width")
+                }
+
+                Toggle(isOn: $s.showOuterEdge) { Image(systemName: "square.dashed") }
+                    .help("Show the generated outer-edge waypoints of each road")
 
                 Toggle(isOn: $s.showPlayable) { Image(systemName: "rectangle.dashed") }
                     .help("Highlight the 1920×1080 playable rect and dim the bleed")
@@ -193,7 +239,7 @@ struct EditorView: View {
                 Toggle(isOn: $s.snapToGrid) { Image(systemName: "dot.squareshape.split.2x2") }
                     .help("Snap to 10-unit grid")
                 Toggle(isOn: $s.showRanges) { Image(systemName: "circle.dashed") }
-                    .help("Show tower range rings on the selected slot")
+                    .help("Show tower range circular overlays on the selected slot")
 
                 Menu {
                     Button("Blank Map") { applyTemplate(nil) }
@@ -207,15 +253,17 @@ struct EditorView: View {
                 .help("Replace the document with a starter template or an existing blueprint")
 
                 Button {
-                    let code = SwiftExport.code(for: document.draft)
-                    let pb = NSPasteboard.general
-                    pb.clearContents()
-                    pb.setString(code, forType: .string)
+                    PlatformPasteboard.copy(SwiftExport.code(for: document.draft))
                     state.flash("Swift blueprint copied to clipboard")
                 } label: {
                     Label("Export Swift", systemImage: "curlybraces")
                 }
                 .help("Copy a Blueprints.swift-ready LevelBlueprint to the clipboard")
+
+                Button { exportGeoJSON() } label: {
+                    Label("Save GeoJSON", systemImage: "square.and.arrow.down")
+                }
+                .help("Write this level out as a .geojson FeatureCollection")
             }
         }
     }

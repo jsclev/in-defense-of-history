@@ -48,27 +48,30 @@ struct SweepFixedInputs {
         )
     }
 
+    /// Load the level exactly as stored.
+    ///
+    /// This used to rescale positions into a separate 1600x900 design space while
+    /// leaving tower ranges in database units, which silently gave simulated
+    /// towers 2.4x the reach they have in the game. Everything is now in the one
+    /// canonical space, so geometry passes through untouched.
     static func designLevel(db: Db, levelName: String, fixed: SweepFixedInputs) throws -> LevelInfo {
         let level = try db.levelInfoDao.getBy(id: fixed.levelID)
         let rect = level.playableRect
         guard rect.width > 0, rect.height > 0, !level.paths.isEmpty, !level.towerSlots.isEmpty else {
             throw DbError.Db(message: "Level '\(levelName)' has no paths or tower slots in the database")
         }
-        let s = LevelBlueprint.designWidth / Double(rect.width)
-        func norm(_ p: Point) -> Point {
-            Point((p.x - Double(rect.minX)) * s, (p.y - Double(rect.minY)) * s)
+        guard rect == CanvasSpec.playable else {
+            throw DbError.Db(message: "Level '\(levelName)' has playable rect \(rect), "
+                + "expected the canonical \(CanvasSpec.playable). Run migrate_to_canonical_space.py.")
         }
-        let paths = level.paths.map { Path(points: simplify($0.points.map(norm), maxPoints: 16)) }
-        let slots = level.towerSlots.map { TowerSlot(id: $0.id, position: norm($0.position)) }
+        let paths = level.paths.map { Path(points: simplify($0.points, maxPoints: 16)) }
         return LevelInfo(
             id: level.id, name: level.name, campaign: level.campaign,
             startedAt: level.startedAt, endedAt: level.endedAt,
             startingMoney: level.startingMoney, numStartingLives: level.numStartingLives,
             numWaves: fixed.numWaves,
-            playableRect: CGRect(x: 0, y: 0,
-                                 width: LevelBlueprint.designWidth,
-                                 height: LevelBlueprint.designHeight),
-            paths: paths, towerSlots: slots, waves: []
+            playableRect: CanvasSpec.playable,
+            paths: paths, towerSlots: level.towerSlots, waves: []
         )
     }
 
@@ -133,12 +136,15 @@ struct SweepFocus {
 
 struct SweepGrids {
     var upgradeGrowth: [Double] = [1.3, 1.5, 1.7, 1.9, 2.1]
+    // Canonical units. On Battle Road a slot sits ~100 from the lane centreline
+    // and the road is 102 wide, so ~165 is the range that just covers the far
+    // edge - the grid brackets that, from not-quite-covering to comfortably past.
     var rangeGrids: [String: [Double]] = [
-        "ranged": [140, 175, 210, 245, 280],
-        "special": [140, 175, 210, 245, 280],
-        "areaOfEffect": [160, 200, 240, 280, 320],
+        "ranged": [150, 190, 230, 270, 310],
+        "special": [150, 190, 230, 270, 310],
+        "areaOfEffect": [170, 215, 260, 305, 350],
     ]
-    var defaultRangeGrid: [Double] = [140, 175, 210, 245, 280]
+    var defaultRangeGrid: [Double] = [150, 190, 230, 270, 310]
     var rofGrids: [String: [Double]] = [
         "ranged": [0.5, 0.65, 0.8, 1.0, 1.2],
         "special": [0.8, 1.0, 1.2, 1.5, 1.8],
@@ -1123,12 +1129,25 @@ enum Sweep {
         inBandLow: Double, inBandHigh: Double
     ) throws {
         rows.sort { $0.perm.index < $1.perm.index }
-        var out = SweepRow.header + "\n"
-        for row in rows { out += row.csv() + "\n" }
         let outURL = URL(fileURLWithPath: outPath)
         try FileManager.default.createDirectory(
             at: outURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        try out.write(to: outURL, atomically: true, encoding: .utf8)
+        FileManager.default.createFile(atPath: outPath, contents: nil)
+        guard let handle = FileHandle(forWritingAtPath: outPath) else {
+            throw DbError.Db(message: "Unable to open \(outPath) for writing")
+        }
+        var buffer = SweepRow.header + "\n"
+        buffer.reserveCapacity(1 << 22)
+        for row in rows {
+            buffer += row.csv()
+            buffer += "\n"
+            if buffer.utf8.count >= 1 << 22 {
+                handle.write(Data(buffer.utf8))
+                buffer.removeAll(keepingCapacity: true)
+            }
+        }
+        if !buffer.isEmpty { handle.write(Data(buffer.utf8)) }
+        try handle.close()
 
         let elapsed = Date().timeIntervalSince(t0)
         let actualSims = rows.reduce(0) { $0 + $1.seedsUsed * 2 }

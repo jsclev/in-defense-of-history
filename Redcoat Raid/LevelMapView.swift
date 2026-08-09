@@ -10,14 +10,20 @@ struct LevelMapProjection {
     }
 
     private var origin: CGPoint {
+        // y is flipped by viewPoint, so the rect's centre is measured from the
+        // top of the canvas here. Written out rather than relying on the rect
+        // happening to be vertically centred.
         CGPoint(
             x: fitRect.midX - playableRect.midX * scale,
-            y: fitRect.midY - playableRect.midY * scale
+            y: fitRect.midY - (imageSize.height - playableRect.midY) * scale
         )
     }
 
+    /// Canonical (lower-left origin, +y up) to SwiftUI view space (+y down).
+    /// The only place the game flips.
     func viewPoint(_ p: CGPoint) -> CGPoint {
-        CGPoint(x: origin.x + p.x * scale, y: origin.y + p.y * scale)
+        CGPoint(x: origin.x + p.x * scale,
+                y: origin.y + (imageSize.height - p.y) * scale)
     }
 
     func viewLength(_ l: CGFloat) -> CGFloat { l * scale }
@@ -116,8 +122,21 @@ struct LevelMapView: View {
     var onExit: () -> Void
 
     @StateObject private var runner: LevelRunner
+    @AppStorage("debugMode") private var debugMode = true
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
+
+    private static let debugRangeBands: [(upperBound: CGFloat, tint: Color)] = [
+        (200, Color(red: 0.13, green: 0.83, blue: 0.93)),        // cyan
+        (250, Color(red: 0.38, green: 0.65, blue: 0.98)),        // blue
+        (285, Color(red: 0.75, green: 0.52, blue: 0.99)),        // violet
+        (.infinity, Color(red: 1.00, green: 0.31, blue: 0.64)),  // magenta
+    ]
+
+    private static func debugRangeTint(for range: CGFloat) -> Color {
+        debugRangeBands.first { range < $0.upperBound }?.tint
+            ?? debugRangeBands[debugRangeBands.count - 1].tint
+    }
 
     init(node: CampaignNode, onExit: @escaping () -> Void) {
         self.node = node
@@ -229,6 +248,14 @@ struct LevelMapView: View {
                        height: projection.imageFrameSize.height)
                 .position(projection.imageCenter)
 
+            if debugMode {
+                ForEach(runner.placedTowers) { tower in
+                    if runner.hasAttackRange(tower) {
+                        debugRangeRing(for: tower, projection: projection, metrics: metrics)
+                    }
+                }
+            }
+
             ForEach(runner.placedTowers) { tower in
                 if let assetName = tower.kind.assetName(atLevel: tower.level,
                                                         branch: tower.branch) {
@@ -322,6 +349,42 @@ struct LevelMapView: View {
             }
 
         }
+    }
+
+    private func debugRangeRing(for tower: PlacedTower,
+                                projection: LevelMapProjection,
+                                metrics: HudMetrics) -> some View {
+        let range = runner.attackRange(for: tower)
+        let tint = Self.debugRangeTint(for: range)
+        let diameter = projection.viewLength(range) * 2
+        let labelGap = 6 * metrics.scale
+
+        return Circle()
+            .fill(tint.opacity(0.12))
+            .overlay(
+                ZStack {
+                    Circle().stroke(.black.opacity(0.45), lineWidth: 4)
+                    Circle().stroke(tint, lineWidth: 2)
+                }
+            )
+            .frame(width: diameter, height: diameter)
+            .overlay(alignment: .trailing) {
+                Text("\(Int(range))")
+                    .font(.system(size: 20 * metrics.scale,
+                                  weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(tint)
+                    .padding(.horizontal, 8 * metrics.scale)
+                    .padding(.vertical, 3 * metrics.scale)
+                    .background(Capsule().fill(.black.opacity(0.72)))
+                    .overlay(Capsule().stroke(tint.opacity(0.8), lineWidth: 1))
+                    .fixedSize()
+                    // Puts the label's left edge just past the ring, rather
+                    // than tucking it inside as .trailing would by default.
+                    .alignmentGuide(.trailing) { $0[.leading] - labelGap }
+            }
+            .position(projection.viewPoint(runner.muzzlePoint(for: tower)))
+            .allowsHitTesting(false)
     }
 
     private func dismissCatcher(viewSize: CGSize) -> some View {

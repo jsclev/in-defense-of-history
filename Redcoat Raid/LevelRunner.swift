@@ -145,6 +145,25 @@ final class LevelRunner: NSObject, ObservableObject {
     private static let muzzleOffsetInImagePixels: CGFloat = 35
     private static let splashRadiusInImagePixels: CGFloat = 55
 
+    /// Where shots leave a tower, in map image pixels. Targeting measures from
+    /// here rather than the tower's base, so the debug ring is centred here too.
+    func muzzlePoint(for tower: PlacedTower) -> CGPoint {
+        CGPoint(x: tower.position.x,
+                y: tower.position.y - Self.muzzleOffsetInImagePixels)
+    }
+
+    /// Firing range in map image pixels. `updateCombat` and the debug range
+    /// overlay both read this, so the ring always draws what actually shoots.
+    func attackRange(for tower: PlacedTower) -> CGFloat {
+        Self.attackRangeInImagePixels
+    }
+
+    /// Whether `tower` uses `attackRange` — only kinds that fire a projectile
+    /// do, so the debug ring stays off the kinds it would misrepresent.
+    func hasAttackRange(_ tower: PlacedTower) -> Bool {
+        tower.kind.projectileAssetName != nil
+    }
+
     struct Projectile: Identifiable {
         let id: Int
         let kind: TowerKind
@@ -484,11 +503,10 @@ final class LevelRunner: NSObject, ObservableObject {
 
         for tower in placedTowers where tower.kind.projectileAssetName != nil {
             guard timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
-            let muzzle = CGPoint(x: tower.position.x,
-                                 y: tower.position.y - Self.muzzleOffsetInImagePixels)
+            let muzzle = muzzlePoint(for: tower)
             guard let closest = walkers.min(by: {
                 distanceFrom(muzzle, to: $0) < distanceFrom(muzzle, to: $1)
-            }), distanceFrom(muzzle, to: closest) <= Self.attackRangeInImagePixels
+            }), distanceFrom(muzzle, to: closest) <= attackRange(for: tower)
             else { continue }
 
             let target = bodyPoint(closest)

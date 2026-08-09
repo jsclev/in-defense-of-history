@@ -20,17 +20,24 @@ struct DesignTransform {
         self.space = space
     }
 
+    /// Canonical (y-up) to view (y-down). The single place the editor flips;
+    /// `design(_:)` is its inverse.
     func view(_ p: Point) -> CGPoint {
-        CGPoint(x: p.x * scale + offset.x, y: p.y * scale + offset.y)
+        CGPoint(x: p.x * scale + offset.x,
+                y: (space.height - p.y) * scale + offset.y)
     }
 
     func view(_ r: CGRect) -> CGRect {
-        CGRect(x: r.minX * scale + offset.x, y: r.minY * scale + offset.y,
+        // y-up minY is the rect's bottom, so the view's top edge comes from maxY
+        CGRect(x: r.minX * scale + offset.x,
+               y: (space.height - r.maxY) * scale + offset.y,
                width: r.width * scale, height: r.height * scale)
     }
 
+    /// View (y-down) back to canonical (y-up).
     func design(_ p: CGPoint) -> Point {
-        Point(Double((p.x - offset.x) / scale), Double((p.y - offset.y) / scale))
+        Point(Double((p.x - offset.x) / scale),
+              Double(space.height - (p.y - offset.y) / scale))
     }
 
     var frame: CGRect {

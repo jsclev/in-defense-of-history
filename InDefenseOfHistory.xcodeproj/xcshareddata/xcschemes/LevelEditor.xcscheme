@@ -18,7 +18,7 @@
                BlueprintIdentifier = "52AB1A00000000000000BC01"
                BuildableName = "LevelEditor.app"
                BlueprintName = "LevelEditor"
-               ReferencedContainer = "container:td.xcodeproj">
+               ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "52AB1A00000000000000BC01"
             BuildableName = "LevelEditor.app"
             BlueprintName = "LevelEditor"
-            ReferencedContainer = "container:td.xcodeproj">
+            ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "52AB1A00000000000000BC01"
             BuildableName = "LevelEditor.app"
             BlueprintName = "LevelEditor"
-            ReferencedContainer = "container:td.xcodeproj">
+            ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

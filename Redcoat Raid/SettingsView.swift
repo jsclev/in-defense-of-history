@@ -4,6 +4,7 @@ import SwiftUI
 struct SettingsView: View {
     let onExit: () -> Void
 
+    @AppStorage("debugMode") private var debugMode = true
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
 
@@ -24,6 +25,11 @@ struct SettingsView: View {
                     Text("Settings")
                         .font(.custom("Baskerville-Bold", size: 40 * metrics.scale))
                         .foregroundStyle(.white)
+
+                    toggle("Debug mode",
+                           detail: "Firing range ring under each tower you place, "
+                                 + "coloured and labelled by range.",
+                           isOn: $debugMode, metrics: metrics)
 
                     toggle("Layout guides",
                            detail: "Physical screen edge in green, safe area in red, playable rect in orange.",

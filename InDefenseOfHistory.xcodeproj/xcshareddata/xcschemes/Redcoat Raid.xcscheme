@@ -18,7 +18,7 @@
                BlueprintIdentifier = "5263FCBC3002C99600C1546D"
                BuildableName = "Redcoat Raid.app"
                BlueprintName = "Redcoat Raid"
-               ReferencedContainer = "container:td.xcodeproj">
+               ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -48,7 +48,7 @@
             BlueprintIdentifier = "5263FCBC3002C99600C1546D"
             BuildableName = "Redcoat Raid.app"
             BlueprintName = "Redcoat Raid"
-            ReferencedContainer = "container:td.xcodeproj">
+            ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -65,7 +65,7 @@
             BlueprintIdentifier = "5263FCBC3002C99600C1546D"
             BuildableName = "Redcoat Raid.app"
             BlueprintName = "Redcoat Raid"
-            ReferencedContainer = "container:td.xcodeproj">
+            ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

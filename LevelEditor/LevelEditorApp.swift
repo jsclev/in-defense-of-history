@@ -1,4 +1,6 @@
 import SwiftUI
+
+#if os(macOS)
 import AppKit
 
 @MainActor
@@ -24,18 +26,28 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
 }
+#endif
 
 @main
 struct LevelEditorApp: App {
+    #if os(macOS)
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    #endif
 
     var body: some Scene {
+        #if os(macOS)
         DocumentGroup(newDocument: { MapDocument() }) { config in
             EditorView(document: config.document)
         }
         .defaultSize(width: 1380, height: 900)
         .defaultLaunchBehavior(.suppressed)
         .commands { ZoomCommands() }
+        #else
+        DocumentGroup(newDocument: { MapDocument() }) { config in
+            EditorView(document: config.document)
+        }
+        .commands { ZoomCommands() }
+        #endif
     }
 }
 

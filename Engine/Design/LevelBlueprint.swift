@@ -2,8 +2,6 @@ import Foundation
 import CoreGraphics
 
 public struct LevelBlueprint: Sendable {
-    public static let designWidth: Double = 1600
-    public static let designHeight: Double = 900
 
     public struct Road: Sendable {
         public var name: String
@@ -123,7 +121,7 @@ public struct LevelBlueprint: Sendable {
             startingMoney: startingGold,
             numStartingLives: lives,
             numWaves: waves.count,
-            playableRect: CGRect(x: 0, y: 0, width: Self.designWidth, height: Self.designHeight),
+            playableRect: CanvasSpec.playable,
             paths: roads.map { Path(points: $0.waypoints) },
             towerSlots: slots.enumerated().map { i, p in
                 TowerSlot(id: UUID(uuidString: String(format: "b0000000-0000-4000-8000-%012d", i))!, position: p)

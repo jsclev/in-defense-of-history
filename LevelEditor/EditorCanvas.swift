@@ -49,6 +49,7 @@ struct EditorCanvas: View {
         .focusable()
         .focusEffectDisabled()
         .focused($focused)
+        .overlay { brushInputOverlay(t) }
         .gesture(dragGesture(t))
         .simultaneousGesture(
             MagnifyGesture()
@@ -64,15 +65,89 @@ struct EditorCanvas: View {
             case .ended: state.cursor = nil
             }
         }
-        .onDeleteCommand { deleteSelection() }
-        .onExitCommand { state.selection = .none }
-        .onMoveCommand { nudge($0) }
+        .platformEditingCommands(
+            onDelete: { deleteSelection() },
+            onCancel: { state.selection = .none },
+            onMove: { nudge($0) }
+        )
+    }
+
+    /// On iOS the brush runs through raw UIKit touches so Apple Pencil force and
+    /// coalesced touches are available; SwiftUI's DragGesture exposes neither.
+    /// A finger paints exactly like the Pencil, just at a constant width.
+    @ViewBuilder
+    private func brushInputOverlay(_ t: DesignTransform) -> some View {
+        #if os(iOS)
+        if state.tool == .brush {
+            BrushInputView(
+                onBegan: { p, force in beginStroke(at: p, force: force, t) },
+                onMoved: { p, force in extendStroke(to: p, force: force, t) },
+                onEnded: { commitStroke() },
+                onCancelled: { state.stroke = BrushStroke() },
+                onPinchBegan: {
+                    state.stroke = BrushStroke()
+                    state.pinchBase = state.currentScale
+                },
+                onPinchChanged: { magnification in
+                    guard let base = state.pinchBase else { return }
+                    state.setZoom(base * magnification)
+                },
+                onPinchEnded: { state.pinchBase = nil }
+            )
+        }
+        #else
+        EmptyView()
+        #endif
+    }
+
+    private func pressureHalfWidth(_ force: Double) -> Double {
+        guard state.brushPressureEnabled, force > 0 else { return state.brushSize }
+        return state.brushSize * (0.35 + 0.65 * min(force, 1.0))
+    }
+
+    private func beginStroke(at p: CGPoint, force: Double, _ t: DesignTransform) {
+        state.stroke = BrushStroke()
+        extendStroke(to: p, force: force, t)
+    }
+
+    private func extendStroke(to p: CGPoint, force: Double, _ t: DesignTransform) {
+        let canvasPoint = clampToCanvas(t.design(p))
+        state.stroke.add(
+            BrushSample(point: canvasPoint, halfWidth: pressureHalfWidth(force)),
+            minSpacing: max(2, 4 / max(t.scale, 0.05))
+        )
+    }
+
+    private func commitStroke() {
+        defer { state.stroke = BrushStroke() }
+        guard let road = BrushGeometry.commit(state.stroke, spacing: state.brushSpacing) else {
+            return
+        }
+        document.addPaintedRoad(points: road.points,
+                                halfWidths: road.halfWidths,
+                                undoManager)
+        state.selection = .road(document.draft.roads.count - 1)
+        state.flash("Painted road: \(road.points.count) waypoints, "
+                    + "\(road.points.count * 2) outer-edge points")
+    }
+
+    private func clampToCanvas(_ p: Point) -> Point {
+        Point(min(max(p.x, 0), CanvasSpec.width), min(max(p.y, 0), CanvasSpec.height))
     }
 
     private func dragGesture(_ t: DesignTransform) -> some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { v in
                 focused = true
+                #if !os(iOS)
+                if state.tool == .brush {
+                    if state.stroke.isEmpty {
+                        beginStroke(at: v.startLocation, force: 0, t)
+                    }
+                    extendStroke(to: v.location, force: 0, t)
+                    return
+                }
+                #endif
                 if preDrag == nil {
                     preDrag = document.draft
                     dragMoved = false
@@ -100,6 +175,12 @@ struct EditorCanvas: View {
             }
             .onEnded { v in
                 defer { preDrag = nil; dragTarget = nil; dragMoved = false }
+                #if !os(iOS)
+                if state.tool == .brush {
+                    commitStroke()
+                    return
+                }
+                #endif
                 if dragMoved, dragTarget != nil {
                     if let before = preDrag, before != document.draft {
                         document.registerUndo(from: before, undoManager)
@@ -143,6 +224,9 @@ struct EditorCanvas: View {
         case .slot:
             document.edit(undoManager) { $0.slots.append(dp) }
             state.selection = .slot(document.draft.slots.count - 1)
+
+        case .brush:
+            break
         }
     }
 
@@ -175,14 +259,13 @@ struct EditorCanvas: View {
         state.selection = .none
     }
 
-    private func nudge(_ direction: MoveCommandDirection) {
+    private func nudge(_ direction: NudgeDirection) {
         let step = 1.0
         let (dx, dy): (Double, Double) = switch direction {
         case .up: (0, -step)
         case .down: (0, step)
         case .left: (-step, 0)
         case .right: (step, 0)
-        @unknown default: (0, 0)
         }
         document.edit(undoManager) { d in
             switch state.selection {
@@ -264,13 +347,62 @@ struct EditorCanvas: View {
             var bg = ctx
             bg.opacity = draft.backgroundOpacity
             bg.clip(to: SwiftUI.Path(frame))
-            bg.draw(Image(nsImage: img), in: t.view(backgroundCanvasRect(draft)))
+            bg.draw(Image(platformImage: img), in: t.view(backgroundCanvasRect(draft)))
         }
         if state.showGrid { drawGrid(&ctx, t, frame) }
         drawRoads(&ctx, t)
         drawSlots(&ctx, t)
+        drawLiveStroke(&ctx, t)
         if state.showPlayable { drawPlayableOverlay(&ctx, t) }
         ctx.stroke(SwiftUI.Path(frame), with: .color(.white.opacity(0.2)), lineWidth: 1)
+    }
+
+    /// Wet paint: the stroke currently under the pencil, before it becomes a road.
+    private func drawLiveStroke(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        let samples = state.stroke.samples
+        guard samples.count >= 2 else { return }
+        let pts = samples.map(\.point)
+        let widths = samples.map(\.halfWidth)
+        let ring = BrushGeometry.outerEdge(points: pts, halfWidths: widths)
+        guard ring.count >= 4 else { return }
+
+        var body = SwiftUI.Path()
+        body.move(to: t.view(ring[0]))
+        for p in ring.dropFirst() { body.addLine(to: t.view(p)) }
+        body.closeSubpath()
+        ctx.fill(body, with: .color(.cyan.opacity(0.28)))
+        ctx.stroke(body, with: .color(.cyan.opacity(0.75)), lineWidth: 1.5)
+
+        var spine = SwiftUI.Path()
+        spine.move(to: t.view(pts[0]))
+        for p in pts.dropFirst() { spine.addLine(to: t.view(p)) }
+        ctx.stroke(spine, with: .color(.white.opacity(0.7)),
+                   style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
+    }
+
+    /// The generated outer edge of a committed road, with its waypoint dots.
+    private func drawOuterEdge(_ ctx: inout GraphicsContext,
+                               _ t: DesignTransform,
+                               road: MapDraft.Road,
+                               highlighted: Bool) {
+        let ring = road.outerEdge
+        guard ring.count >= 4 else { return }
+        var p = SwiftUI.Path()
+        p.move(to: t.view(ring[0]))
+        for pt in ring.dropFirst() { p.addLine(to: t.view(pt)) }
+        p.closeSubpath()
+        ctx.stroke(p, with: .color(.orange.opacity(highlighted ? 0.95 : 0.5)),
+                   style: StrokeStyle(lineWidth: highlighted ? 2 : 1.2, dash: [5, 4]))
+
+        guard highlighted else { return }
+        let r: CGFloat = max(1.6, 2.6 * t.scale)
+        for pt in ring {
+            let v = t.view(pt)
+            ctx.fill(
+                SwiftUI.Path(ellipseIn: CGRect(x: v.x - r, y: v.y - r, width: 2 * r, height: 2 * r)),
+                with: .color(.orange.opacity(0.9))
+            )
+        }
     }
 
     private func backgroundCanvasRect(_ d: MapDraft) -> CGRect {
@@ -335,26 +467,46 @@ struct EditorCanvas: View {
             default: false
             }
 
-            let ds = CanvasSpec.designScale
             if pts.count >= 2 {
                 var p = SwiftUI.Path()
                 p.move(to: pts[0])
                 for pt in pts.dropFirst() { p.addLine(to: pt) }
 
-                if isSelected {
-                    ctx.stroke(p, with: .color(.cyan.opacity(0.45)),
-                               style: StrokeStyle(lineWidth: 36 * ds * s, lineCap: .round, lineJoin: .round))
+                if road.halfWidths != nil {
+                    // Painted road: its width varies per waypoint, so fill the
+                    // outer-edge ring rather than stroking a constant width.
+                    let ring = road.outerEdge
+                    if ring.count >= 4 {
+                        var body = SwiftUI.Path()
+                        body.move(to: t.view(ring[0]))
+                        for pt in ring.dropFirst() { body.addLine(to: t.view(pt)) }
+                        body.closeSubpath()
+                        if isSelected {
+                            ctx.stroke(body, with: .color(.cyan.opacity(0.5)), lineWidth: 6 * s)
+                        }
+                        ctx.fill(body, with: .color(Palette.roadFill))
+                        ctx.stroke(body, with: .color(Palette.roadEdge), lineWidth: max(1, 3 * s))
+                    }
+                } else {
+                    if isSelected {
+                        ctx.stroke(p, with: .color(.cyan.opacity(0.45)),
+                                   style: StrokeStyle(lineWidth: 43.2 * s, lineCap: .round, lineJoin: .round))
+                    }
+                    ctx.stroke(p, with: .color(Palette.roadEdge),
+                               style: StrokeStyle(lineWidth: 36 * s, lineCap: .round, lineJoin: .round))
+                    ctx.stroke(p, with: .color(Palette.roadFill),
+                               style: StrokeStyle(lineWidth: 28.8 * s, lineCap: .round, lineJoin: .round))
                 }
-                ctx.stroke(p, with: .color(Palette.roadEdge),
-                           style: StrokeStyle(lineWidth: 30 * ds * s, lineCap: .round, lineJoin: .round))
-                ctx.stroke(p, with: .color(Palette.roadFill),
-                           style: StrokeStyle(lineWidth: 24 * ds * s, lineCap: .round, lineJoin: .round))
+
+                if state.showOuterEdge {
+                    drawOuterEdge(&ctx, t, road: road, highlighted: isSelected)
+                }
 
                 let epath = Path(points: road.points)
-                var d = 70.0 * ds
+                var d = 84.0
                 while d < epath.totalLength {
-                    let a = t.view(epath.point(atDistance: d - 8 * ds))
-                    let b = t.view(epath.point(atDistance: d + 8 * ds))
+                    let a = t.view(epath.point(atDistance: d - 9.6))
+                    let b = t.view(epath.point(atDistance: d + 9.6))
                     let ang = atan2(b.y - a.y, b.x - a.x)
                     var chev = SwiftUI.Path()
                     let back: CGFloat = 9 * s
@@ -364,7 +516,7 @@ struct EditorCanvas: View {
                     chev.addLine(to: CGPoint(x: b.x - back * cos(ang + spread), y: b.y - back * sin(ang + spread)))
                     ctx.stroke(chev, with: .color(.white.opacity(0.25)),
                                style: StrokeStyle(lineWidth: 2.5 * s, lineCap: .round, lineJoin: .round))
-                    d += 140 * ds
+                    d += 168
                 }
             }
 
@@ -432,8 +584,8 @@ struct EditorCanvas: View {
             let rect = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
 
             if selected, state.showRanges {
-                for (range, label) in [(140.0, "Minuteman 140"), (220.0, "Long Rifles 220")] {
-                    let rr = range * CanvasSpec.designScale * s
+                for (range, label) in [(210.0, "Musketmen 210"), (240.0, "4-pounder 240")] {
+                    let rr = range * s
                     let rangeRect = CGRect(x: c.x - rr, y: c.y - rr, width: 2 * rr, height: 2 * rr)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
                                with: .color(.cyan.opacity(0.4)),

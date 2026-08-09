@@ -354,9 +354,9 @@ if let sweepLevel = opts.sweep {
         if opts.fineGrids {
             grids.upgradeGrowth = Array(stride(from: 1.2, through: 2.2, by: 0.1)).map { ($0 * 10).rounded() / 10 }
             grids.rangeGrids = [
-                "ranged": Array(stride(from: 130.0, through: 290, by: 10)),
-                "special": Array(stride(from: 130.0, through: 290, by: 10)),
-                "areaOfEffect": Array(stride(from: 160.0, through: 320, by: 10)),
+                "ranged": Array(stride(from: 140.0, through: 320, by: 10)),
+                "special": Array(stride(from: 140.0, through: 320, by: 10)),
+                "areaOfEffect": Array(stride(from: 160.0, through: 360, by: 10)),
             ]
             grids.rofGrids = [
                 "ranged": Array(stride(from: 0.5, through: 1.2, by: 0.05)).map { ($0 * 100).rounded() / 100 },

@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 cd "$(dirname "$0")" || exit 1
 
 for db in redcoat_raid.sqlite "$HOME/Documents/redcoat_raid.sqlite"; do
@@ -10,7 +11,7 @@ for db in redcoat_raid.sqlite "$HOME/Documents/redcoat_raid.sqlite"; do
     fi
 done
 
-rm redcoat_raid.sqlite 2>/dev/null
+rm -f redcoat_raid.sqlite
 sqlite3 redcoat_raid.sqlite ""
 
 sqlite3 redcoat_raid.sqlite < DDL/create_tables.sql

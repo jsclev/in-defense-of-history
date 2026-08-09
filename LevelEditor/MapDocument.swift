@@ -10,6 +10,29 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     nonisolated struct Road: Codable, Equatable, Sendable {
         var name: String
         var points: [Point]
+        /// Per-waypoint half-width, set when the road was painted with the brush.
+        /// Absent on roads drawn with the pencil, which use `MapGeometry.roadHalfWidth`.
+        var halfWidths: [Double]?
+
+        init(name: String, points: [Point], halfWidths: [Double]? = nil) {
+            self.name = name
+            self.points = points
+            self.halfWidths = halfWidths
+        }
+
+        func halfWidth(at i: Int) -> Double {
+            guard let halfWidths, !halfWidths.isEmpty else { return MapGeometry.roadHalfWidth }
+            return halfWidths.indices.contains(i) ? halfWidths[i] : halfWidths[halfWidths.count - 1]
+        }
+
+        var resolvedHalfWidths: [Double] {
+            points.indices.map { halfWidth(at: $0) }
+        }
+
+        /// Closed ring of waypoints tracing the road's outer edge.
+        var outerEdge: [Point] {
+            BrushGeometry.outerEdge(points: points, halfWidths: resolvedHalfWidths)
+        }
     }
 
     nonisolated struct SpawnLine: Codable, Equatable, Sendable {
@@ -32,7 +55,26 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
         var slot: Int
     }
 
-    static let canvasSpace = "canvas2868x2064"
+    /// The canonical space: 2868x2064, lower-left origin, +y up. Documents saved
+    /// under an older token are upgraded on load by `upgrade(from:)`.
+    static let canvasSpace = "canonical2868x2064"
+
+    /// Bring a saved document's points into the canonical space.
+    ///
+    /// - `design1600x900`: the old LevelBlueprint space - scale onto the playable
+    ///   rect, then flip.
+    /// - `canvas2868x2064`: already the right size and origin, but y-down.
+    private static func upgrade(from space: String) -> (Point) -> Point {
+        if space == "design1600x900" {
+            let legacyDesignWidth = 1600.0
+            let s = CanvasSpec.playable.width / legacyDesignWidth
+            return { p in
+                Point(p.x * s + CanvasSpec.playable.minX,
+                      CanvasSpec.flipY(p.y * s + CanvasSpec.playable.minY))
+            }
+        }
+        return { Point($0.x, CanvasSpec.flipY($0.y)) }
+    }
 
     var name: String
     var startingGold: Int
@@ -78,10 +120,11 @@ extension MapDraft {
         backgroundOpacity = try c.decodeIfPresent(Double.self, forKey: .backgroundOpacity) ?? 0.35
         coordinateSpace = try c.decodeIfPresent(String.self, forKey: .coordinateSpace) ?? "design1600x900"
         if coordinateSpace != Self.canvasSpace {
+            let upgrade = Self.upgrade(from: coordinateSpace)
             for r in roads.indices {
-                roads[r].points = roads[r].points.map(CanvasSpec.fromDesign)
+                roads[r].points = roads[r].points.map(upgrade)
             }
-            slots = slots.map(CanvasSpec.fromDesign)
+            slots = slots.map(upgrade)
             coordinateSpace = Self.canvasSpace
         }
     }
@@ -91,8 +134,8 @@ extension MapDraft {
             name: bp.name,
             startingGold: bp.startingGold,
             lives: bp.lives,
-            roads: bp.roads.map { Road(name: $0.name, points: $0.waypoints.map(CanvasSpec.fromDesign)) },
-            slots: bp.slots.map(CanvasSpec.fromDesign),
+            roads: bp.roads.map { Road(name: $0.name, points: $0.waypoints) },
+            slots: bp.slots,
             waves: bp.waves.map { w in
                 Wave(breather: w.breather, lines: w.lines.map {
                     SpawnLine(foe: $0.foe.rawValue, count: $0.count, every: $0.every,
@@ -118,8 +161,8 @@ extension MapDraft {
             startingGold: startingGold,
             lives: lives,
             roads: roads.filter { $0.points.count >= 2 }
-                .map { LevelBlueprint.Road($0.name, $0.points.map(CanvasSpec.toDesign)) },
-            slots: slots.map(CanvasSpec.toDesign),
+                .map { LevelBlueprint.Road($0.name, $0.points) },
+            slots: slots,
             waves: waves.map { w in
                 LevelBlueprint.WaveSketch(breather: w.breather, lines: w.lines.map { l in
                     LevelBlueprint.SpawnLine(
@@ -228,14 +271,30 @@ final class MapDocument: ReferenceFileDocument {
         edit(undoManager) { d in
             guard d.roads.indices.contains(r), d.roads[r].points.indices.contains(i) else { return }
             d.roads[r].points.remove(at: i)
+            if d.roads[r].halfWidths?.indices.contains(i) == true {
+                d.roads[r].halfWidths?.remove(at: i)
+            }
+        }
+    }
+
+    @MainActor
+    func addPaintedRoad(points: [Point], halfWidths: [Double], _ undoManager: UndoManager?) {
+        edit(undoManager) { d in
+            d.roads.append(.init(name: "Road \(d.roads.count + 1)",
+                                 points: points,
+                                 halfWidths: halfWidths))
         }
     }
 }
 
 enum MapGeometry {
-    static let roadHalfWidth = 15.0 * CanvasSpec.designScale
-    static let slotRadius = 16.0 * CanvasSpec.designScale
-    static let maxTowerRange = 220.0 * CanvasSpec.designScale
+    // Canonical units. Blueprints and documents are authored in this space now,
+    // so these are plain constants rather than scaled design-space values.
+    static let roadHalfWidth = 18.0
+    static let slotRadius = 19.2
+    // The longest range any tower can reach in the sweep grids, so the "out of
+    // range of every road" check does not reject slots a long-range tower could use.
+    static let maxTowerRange = 350.0
 
     static func distance(_ p: Point, segment a: Point, _ b: Point) -> Double {
         let ab = Point(b.x - a.x, b.y - a.y)

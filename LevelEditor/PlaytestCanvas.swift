@@ -7,7 +7,7 @@ struct PlaytestCanvas: View {
     var body: some View {
         GeometryReader { geo in
             let t = DesignTransform(fitting: geo.size, space: CGSize(
-                width: LevelBlueprint.designWidth, height: LevelBlueprint.designHeight))
+                width: CanvasSpec.width, height: CanvasSpec.height))
             Canvas { ctx, _ in
                 draw(in: &ctx, transform: t)
             }
@@ -16,7 +16,7 @@ struct PlaytestCanvas: View {
                 handleTap(at: location, transform: t)
             }
         }
-        .aspectRatio(LevelBlueprint.designWidth / LevelBlueprint.designHeight, contentMode: .fit)
+        .aspectRatio(CanvasSpec.width / CanvasSpec.height, contentMode: .fit)
     }
 
     private func handleTap(at p: CGPoint, transform t: DesignTransform) {

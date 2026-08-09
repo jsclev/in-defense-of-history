@@ -12,8 +12,7 @@ enum SwiftExport {
             out += "            LevelBlueprint.Road(\"\(road.name)\", [\n"
             let indent = "                "
             var line = indent
-            for cp in road.points {
-                let p = CanvasSpec.toDesign(cp)
+            for p in road.points {
                 let piece = "Point(\(num(p.x)), \(num(p.y))), "
                 if line.count + piece.count > 96, line != indent {
                     out += rtrim(line) + "\n"
@@ -29,8 +28,7 @@ enum SwiftExport {
         out += "        ],\n"
 
         out += "        slots: [\n"
-        for (i, cp) in d.slots.enumerated() {
-            let p = CanvasSpec.toDesign(cp)
+        for (i, p) in d.slots.enumerated() {
             out += "            Point(\(num(p.x)), \(num(p.y))),   // \(i)\n"
         }
         out += "        ],\n"
