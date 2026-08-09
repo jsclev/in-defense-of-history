@@ -343,7 +343,7 @@ kernel void simulate(
                 int tl = S.towerLevel[slot];
                 if (tl < 0) continue;
                 constant TowerLevelGPU& tw = perm.towers[S.towerKind[slot]][tl];
-                if (!(tw.shotMax > 0 || tw.terrorMax > 0 || tw.contagionChance > 0)) {
+                if (!(tw.shotMaxDamage > 0 || tw.terrorMax > 0 || tw.contagionChance > 0)) {
                     continue;   // melee garrisons fight in their own step
                 }
                 S.towerCooldown[slot] -= 1;
@@ -403,13 +403,13 @@ kernel void simulate(
                         continue;
                     }
                     constant EnemyTypeGPU& type = lvl.enemyTypes[S.typeIndex[i]];
-                    if (tw.shotMax > 0) {
+                    if (tw.shotMaxDamage > 0) {
                         float damage, effCover;
                         if (isBlast) {
-                            damage = tw.shotMax - (tw.shotMax - tw.shotMin) * blastT;
+                            damage = tw.shotMaxDamage - (tw.shotMaxDamage - tw.shotMinDamage) * blastT;
                             effCover = type.cover * (1.0f - tw.splashCoverPierce);
                         } else {
-                            damage = rngCombat.range(tw.shotMin, tw.shotMax);
+                            damage = rngCombat.range(tw.shotMinDamage, tw.shotMaxDamage);
                             effCover = type.cover;
                         }
                         S.hp[i] -= damage * (1.0f - effCover);
@@ -461,8 +461,8 @@ kernel void simulate(
                     if (S.projTarget[pj] >= 0) {
                         uint i = uint(targetIndex);
                         constant EnemyTypeGPU& type = lvl.enemyTypes[S.typeIndex[i]];
-                        if (tw.shotMax > 0) {
-                            float roll = rngCombat.range(tw.shotMin, tw.shotMax);
+                        if (tw.shotMaxDamage > 0) {
+                            float roll = rngCombat.range(tw.shotMinDamage, tw.shotMaxDamage);
                             S.hp[i] -= roll * (1.0f - type.cover);
                         }
                         if (tw.terrorMax > 0) {
@@ -491,8 +491,8 @@ kernel void simulate(
                             if (d2 > aoe2) continue;
                             float blastT = pow(min(1.0f, sqrt(d2) / tw.aoeRadius), tw.aoeFalloffExponent);
                             constant EnemyTypeGPU& type = lvl.enemyTypes[S.typeIndex[i]];
-                            if (tw.shotMax > 0) {
-                                float damage = tw.shotMax - (tw.shotMax - tw.shotMin) * blastT;
+                            if (tw.shotMaxDamage > 0) {
+                                float damage = tw.shotMaxDamage - (tw.shotMaxDamage - tw.shotMinDamage) * blastT;
                                 float effCover = type.cover * (1.0f - tw.splashCoverPierce);
                                 S.hp[i] -= damage * (1.0f - effCover);
                             }

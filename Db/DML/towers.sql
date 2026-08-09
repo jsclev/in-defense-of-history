@@ -2,7 +2,7 @@
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, projectile_speed
+    shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '0a4b1c62-8f3e-4d97-b120-6e5a9c8d7f01', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Musketmen',
     1, 1, 70, 210.0, 0.8,
@@ -13,7 +13,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, projectile_speed
+    shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '1b5c2d73-9a4f-4ea8-8c31-7f6b0d9e8a02', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Marksmen',
     2, 1, 90, 240.0, 0.8,
@@ -24,7 +24,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, projectile_speed
+    shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '2c6d3e84-0b5a-4fb9-9d42-8a7c1e0f9b03', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Riflemen',
     3, 1, 130, 270.0, 0.8,
@@ -35,7 +35,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, projectile_speed
+    shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '1008b722-563a-44a0-8b31-c9cca93b9927', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Morgan''s Sharpshooters',
     4, 1, 300, 300.0, 0.8,
@@ -46,7 +46,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, projectile_speed
+    shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '72788425-7677-418a-a06c-6b3120f94631', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Knowlton''s Rangers',
     4, 2, 300, 300.0, 0.8,
@@ -57,7 +57,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, projectile_speed
+    shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     'c5cc2d7b-b08c-4ba7-a532-52ba070589a5', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Whitcomb''s Rangers',
     4, 3, 300, 300.0, 0.8,
@@ -146,7 +146,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, aoe_radius, splash_cover_pierce, projectile_speed
+    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
     '6a0b7c28-4f9e-4df3-d186-2e1a5c4d3f07', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '4-pounder',
     1, 1, 125, 240.0, 2.4,
@@ -157,7 +157,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, aoe_radius, splash_cover_pierce, projectile_speed
+    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
     '7b1c8d39-5a0f-4ea4-e297-3f2b6d5e4a08', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '6-pounder',
     2, 1, 160, 240.0, 2.4,
@@ -168,7 +168,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, aoe_radius, splash_cover_pierce, projectile_speed
+    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
     '8c2d9e40-6b1a-4fb5-f3a8-4a3c7e6f5b09', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Howitzer',
     3, 1, 240, 270.0, 2.4,
@@ -179,7 +179,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, aoe_radius, splash_cover_pierce, projectile_speed
+    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
     'f614aea2-b5cb-4cd3-a30d-e33a02c27c90', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Mortar Battery',
     4, 1, 300, 300.0, 2.4,
@@ -190,7 +190,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, aoe_radius, splash_cover_pierce, projectile_speed
+    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
     '01b02f93-d2ff-4754-9072-35a1aa65cd6d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Mobile Field Battery',
     4, 2, 300, 300.0, 2.4,
@@ -201,7 +201,7 @@ INSERT INTO tower (
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
-    shot_min, shot_max, aoe_radius, splash_cover_pierce, projectile_speed
+    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
     '0a0648b8-9771-45f5-b947-46c5a478062d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Knox''s Siege Guns',
     4, 3, 300, 300.0, 2.4,

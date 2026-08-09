@@ -221,7 +221,7 @@ struct SweepSpace {
         self.combatKinds = fixed.unlocks.keys.sorted().filter { kind in
             guard let base = fixed.towerLevels[kind], !base.isEmpty else { return false }
             let capped = base.prefix(fixed.unlocks[kind] ?? 0)
-            let ranged = capped.contains { $0.shotMax > 0 || $0.terrorMax > 0 || $0.contagionChance > 0 }
+            let ranged = capped.contains { $0.shotMaxDamage > 0 || $0.terrorMax > 0 || $0.contagionChance > 0 }
             let melee = fixed.fieldMelee && capped.contains { $0.meleeUnitCount > 0 }
             return ranged || melee
         }
@@ -635,7 +635,7 @@ struct GreedyCommander: CommanderPolicy {
     init(level: LevelInfo, catalog: ContentCatalog) {
         func dps(_ t: TowerType) -> Double {
             guard let l = t.levels.first, l.fireInterval > 0 else { return 0 }
-            return (l.shotMin + l.shotMax + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
+            return (l.shotMinDamage + l.shotMaxDamage + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
         }
         let ranked = catalog.towerTypes.sorted { dps($0) > dps($1) }
         let melee = catalog.towerTypes.first { ($0.levels.first?.meleeUnitCount ?? 0) > 0 }
@@ -707,7 +707,7 @@ struct NaiveCommander: CommanderPolicy {
     init(level: LevelInfo, catalog: ContentCatalog, seed: UInt64) {
         func dps(_ t: TowerType) -> Double {
             guard let l = t.levels.first, l.fireInterval > 0 else { return 0 }
-            return (l.shotMin + l.shotMax + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
+            return (l.shotMinDamage + l.shotMaxDamage + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
         }
         let ranked = catalog.towerTypes.sorted { dps($0) > dps($1) }
         let melee = catalog.towerTypes.first { ($0.levels.first?.meleeUnitCount ?? 0) > 0 }
@@ -930,10 +930,32 @@ enum Sweep {
         var done = 0
         let t0 = Date()
 
+        // Status is recorded in its own database so it survives create_db.sh and
+        // never blocks a content rebuild. A failure to record must not take the
+        // sweep down with it, hence the optional.
+        let runs = try? SimulatorRunDAO()
+        let runID = try? runs?.begin(levelName: levelName,
+                                     focus: grids.focus?.label ?? "",
+                                     totalIterations: indices.count,
+                                     outputPath: outPath)
+        if let runID = runID ?? nil {
+            FileHandle.standardError.write(Data("  run id: \(runID.uuidString)\n".utf8))
+        }
+        func report(_ completed: Int, _ rate: Double) {
+            if let runs, let id = runID ?? nil { runs.progress(id: id, completed: completed,
+                                                               iterationsPerSecond: rate) }
+        }
+        func conclude(_ status: String, report reportPath: String? = nil, error: String? = nil) {
+            if let runs, let id = runID ?? nil {
+                runs.finish(id: id, status: status, reportPath: reportPath, errorMessage: error)
+            }
+        }
+
         if useGPU {
             rows = try GPUHarness.sweepRows(
                 db: db, fixed: fixed, base: base, space: space,
-                indices: indices, grids: grids, checkpointPath: outPath
+                indices: indices, grids: grids, checkpointPath: outPath,
+                onProgress: { report($0, $1) }
             )
             try finish(rows: &rows, fixed: fixed, grids: grids, outPath: outPath,
                        sims: sims, t0: t0, levelName: levelName,
@@ -945,6 +967,7 @@ enum Sweep {
             if let focus = grids.focus {
                 try FocusReport.emit(rows: rows, focus: focus, space: space, sweepOut: outPath)
             }
+            conclude(SimulatorRunStatus.completed)
             return
         }
 
@@ -1027,6 +1050,7 @@ enum Sweep {
             if done % 500 == 0 {
                 let rate = Double(done) / max(0.001, Date().timeIntervalSince(t0))
                 let eta = Double(indices.count - done) / max(0.001, rate)
+                report(done, rate)
                 FileHandle.standardError.write(Data(
                     String(format: "  %d/%d permutations  (%.1f/s, eta %.0fs)\n",
                            done, indices.count, rate, eta).utf8))
@@ -1070,6 +1094,7 @@ enum Sweep {
         if let focus = grids.focus {
             try FocusReport.emit(rows: rows, focus: focus, space: space, sweepOut: outPath)
         }
+        conclude(SimulatorRunStatus.completed)
     }
 
     static func deriveAndStoreBounds(

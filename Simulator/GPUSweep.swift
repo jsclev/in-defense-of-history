@@ -202,7 +202,7 @@ enum GPUBuild {
                     t.cost = Int32(l.cost)
                     t.range = Float(l.range)
                     t.fireInterval = Float(l.fireInterval)
-                    t.shotMin = Float(l.shotMin); t.shotMax = Float(l.shotMax)
+                    t.shotMinDamage = Float(l.shotMinDamage); t.shotMaxDamage = Float(l.shotMaxDamage)
                     t.terrorMin = Float(l.terrorMin); t.terrorMax = Float(l.terrorMax)
                     t.aoeRadius = Float(l.aoeRadius)
                     t.aoeFalloffExponent = Float(l.aoeFalloffExponent)
@@ -831,7 +831,8 @@ enum GPUHarness {
 
     static func sweepRows(
         db: Db, fixed: SweepFixedInputs, base: LevelInfo, space: SweepSpace,
-        indices: [Int], grids: SweepGrids, checkpointPath: String? = nil
+        indices: [Int], grids: SweepGrids, checkpointPath: String? = nil,
+        onProgress: ((Int, Double) -> Void)? = nil
     ) throws -> [SweepRow] {
         let engine = try GPUEngine()
         var rows: [SweepRow] = []
@@ -931,6 +932,7 @@ enum GPUHarness {
 
             batchStart += permBatchSize
             let rate = Double(rows.count) / max(0.001, Date().timeIntervalSince(t0))
+            onProgress?(rows.count, rate)
             FileHandle.standardError.write(Data(
                 String(format: "  gpu: %d/%d permutations (%.0f/s)\n",
                        rows.count, indices.count, rate).utf8))

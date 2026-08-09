@@ -15,6 +15,8 @@ struct Options {
     var sweepStride = 1
     var sweepSeeds = 40
     var limit: Int?
+    var showRuns = false
+    var runStatusID: UUID?
     var fixes: [(stat: String, kind: String, value: Double)] = []
     var dimPins: [(dim: String, value: String)] = []
     var focus: (stat: String, kind: String)?
@@ -149,6 +151,11 @@ func parseOptions() throws -> Options? {
         case "--sweep-seeds":
             guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
             opts.sweepSeeds = n
+        case "--runs":
+            opts.showRuns = true
+        case "--run-status":
+            guard let v = args.popFirst(), let id = UUID(uuidString: v) else { return nil }
+            opts.runStatusID = id
         case "--limit":
             guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
             opts.limit = n
@@ -238,6 +245,45 @@ func parseOptions() throws -> Options? {
 guard let opts = try parseOptions() else {
     printUsage()
     exit(2)
+}
+
+if opts.showRuns || opts.runStatusID != nil {
+    do {
+        let runs = try SimulatorRunDAO()
+        let list = try opts.runStatusID.map { id in try runs.get(id: id).map { [$0] } ?? [] }
+            ?? runs.recent(limit: 15)
+        if list.isEmpty {
+            print("no simulator runs recorded")
+        } else {
+            let df = DateFormatter()
+            df.dateFormat = "MM-dd HH:mm:ss"
+            print("run id                                status      progress"
+                + "                       rate      started         level / focus")
+            for r in list {
+                let bar = { () -> String in
+                    let w = 16
+                    let filled = max(0, min(w, Int((r.percentComplete / 100 * Double(w)).rounded())))
+                    return String(repeating: "#", count: filled)
+                        + String(repeating: ".", count: w - filled)
+                }()
+                let eta = r.estimatedSecondsRemaining.map {
+                    $0 >= 3600 ? String(format: " eta %.1fh", $0 / 3600)
+                               : String(format: " eta %.0fm", $0 / 60)
+                } ?? ""
+                print(String(format: "%@  %-10@  %@ %5.1f%%  %8.0f/s  %@  %@%@",
+                             r.id.uuidString, r.status as NSString, bar, r.percentComplete,
+                             r.iterationsPerSecond, df.string(from: r.startedAt),
+                             "\(r.levelName)\(r.focus.isEmpty ? "" : " / " + r.focus)", eta))
+                print(String(format: "  %@ of %@ permutations%@",
+                             r.completedIterations.formatted(), r.totalIterations.formatted(),
+                             r.reportPath.map { "  report: " + $0 } ?? ""))
+            }
+        }
+    } catch {
+        print("Unable to read simulator runs: \(error)")
+        exit(1)
+    }
+    exit(0)
 }
 
 if let levelName = opts.meleeDemo {
@@ -538,8 +584,8 @@ do {
         id: UUID(),
         name: "Minuteman Post",
         levels: [
-            TowerLevel(cost: 70, range: 140, fireInterval: 0.9, shotMin: 4, shotMax: 7),
-            TowerLevel(cost: 90, range: 150, fireInterval: 0.85, shotMin: 7, shotMax: 11),
+            TowerLevel(cost: 70, range: 140, fireInterval: 0.9, shotMinDamage: 4, shotMaxDamage: 7),
+            TowerLevel(cost: 90, range: 150, fireInterval: 0.85, shotMinDamage: 7, shotMaxDamage: 11),
         ]
     )
     let enemyTypes = try db.enemyTypeDao.getAll()

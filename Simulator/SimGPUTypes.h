@@ -88,8 +88,8 @@ typedef struct {
     int cost;
     float range;
     float fireInterval;
-    float shotMin;
-    float shotMax;
+    float shotMinDamage;
+    float shotMaxDamage;
     float terrorMin;
     float terrorMax;
     float aoeRadius;

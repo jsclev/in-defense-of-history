@@ -640,12 +640,14 @@ final class LevelRunner: NSObject, ObservableObject {
 
             let target = bodyPoint(closest)
             nextFireTickBySlot[tower.slotIndex] = timer.tick + fireCooldownTicks(for: tower)
+            let minDamage = tuning.shotMinDamage
+            let maxDamage = max(minDamage, tuning.shotMaxDamage)
             projectiles.append(Projectile(
                 id: nextProjectileID,
                 kind: tower.kind,
                 position: origin,
                 heading: atan2(target.y - origin.y, target.x - origin.x),
-                damage: Double.random(in: tuning.shotMin...max(tuning.shotMin, tuning.shotMax)),
+                damage: Double.random(in: minDamage...maxDamage),
                 targetID: closest.id,
                 slotIndex: tower.slotIndex,
                 speed: CGFloat(tuning.projectileSpeed),

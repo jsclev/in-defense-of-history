@@ -11,8 +11,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
     public var cost: Int
     public var range: Double
     public var fireInterval: Double
-    public var shotMin: Double
-    public var shotMax: Double
+    public var shotMinDamage: Double
+    public var shotMaxDamage: Double
     public var terrorMin: Double
     public var terrorMax: Double
     public var aoeRadius: Double
@@ -33,8 +33,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         cost: Int,
         range: Double,
         fireInterval: Double,
-        shotMin: Double = 0,
-        shotMax: Double = 0,
+        shotMinDamage: Double = 0,
+        shotMaxDamage: Double = 0,
         terrorMin: Double = 0,
         terrorMax: Double = 0,
         aoeRadius: Double = 0,
@@ -54,8 +54,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         self.cost = cost
         self.range = range
         self.fireInterval = fireInterval
-        self.shotMin = shotMin
-        self.shotMax = shotMax
+        self.shotMinDamage = shotMinDamage
+        self.shotMaxDamage = shotMaxDamage
         self.terrorMin = terrorMin
         self.terrorMax = terrorMax
         self.aoeRadius = aoeRadius

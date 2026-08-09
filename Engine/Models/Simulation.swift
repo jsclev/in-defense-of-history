@@ -287,7 +287,7 @@ public final class Simulation {
             for slot in 0..<towers.count {
                 guard var tower = towers[slot] else { continue }
                 let ranged = catalog.towerTypes[tower.typeIndex].levels[tower.level]
-                guard ranged.shotMax > 0 || ranged.terrorMax > 0 || ranged.contagionChance > 0 else {
+                guard ranged.shotMaxDamage > 0 || ranged.terrorMax > 0 || ranged.contagionChance > 0 else {
                     continue
                 }
                 tower.cooldown -= 1
@@ -612,14 +612,14 @@ public final class Simulation {
         guard !e.removed else { return }
         let stats = catalog.enemyTypes[e.typeIndex].stats
 
-        if lvl.shotMax > 0 {
+        if lvl.shotMaxDamage > 0 {
             let damage: Double
             let effCover: Double
             if let t = blastFraction {
-                damage = lvl.shotMax - (lvl.shotMax - lvl.shotMin) * t
+                damage = lvl.shotMaxDamage - (lvl.shotMaxDamage - lvl.shotMinDamage) * t
                 effCover = stats.cover * (1.0 - lvl.splashCoverPierce)
             } else {
-                damage = rngCombat.double(in: lvl.shotMin...lvl.shotMax)
+                damage = rngCombat.double(in: lvl.shotMinDamage...lvl.shotMaxDamage)
                 effCover = stats.cover
             }
             e.hp -= damage * (1.0 - effCover)
