@@ -392,14 +392,14 @@ final class LevelRunner: NSObject, ObservableObject {
             status = "This campaign node has no level_info id."
             return
         }
-        guard Bundle.main.url(forResource: "redcoat_raid", withExtension: "sqlite") != nil else {
-            status = "redcoat_raid.sqlite is not in the app bundle."
+        guard Bundle.main.url(forResource: "liberty_line", withExtension: "sqlite") != nil else {
+            status = "liberty_line.sqlite is not in the app bundle."
             return
         }
 
         do {
             let db = Db(
-                dbPath: Db.getAbsolutePathToDb(dbFilename: "redcoat_raid", fullRefresh: true),
+                dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: true),
                 fullRefresh: true
             )
             let level = try db.levelInfoDao.getBy(id: levelInfoID)

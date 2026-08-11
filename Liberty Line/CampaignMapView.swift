@@ -17,7 +17,7 @@ struct CampaignMapView: View {
             let menu = MenuBarLayout(screen: screen,
                                      itemCount: MenuScreen.allCases.count)
             let title = TitleLayout(screen: screen,
-                                    aspect: 1 / max(HudIcon.aspect(of: "redcoat_raid_title"), 0.01))
+                                    aspect: 1 / max(HudIcon.aspect(of: "liberty_line_title"), 0.01))
             ZStack(alignment: .topLeading) {
                 GeometryReader { mapGeometry in
                     let scale = CampaignMarkers.scale(for: mapGeometry.size)
@@ -125,7 +125,7 @@ struct CampaignMapView: View {
                         .ignoresSafeArea()
                 }
 
-                Image("redcoat_raid_title")
+                Image("liberty_line_title")
                     .resizable()
                     .scaledToFit()
                     .shadow(color: .black.opacity(0.45),

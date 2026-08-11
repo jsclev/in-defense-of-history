@@ -105,11 +105,11 @@ struct HeroesView: View {
 
     private func loadHeroes() {
         guard heroes.isEmpty else { return }
-        guard Bundle.main.url(forResource: "redcoat_raid", withExtension: "sqlite") != nil else {
+        guard Bundle.main.url(forResource: "liberty_line", withExtension: "sqlite") != nil else {
             return
         }
         let db = Db(
-            dbPath: Db.getAbsolutePathToDb(dbFilename: "redcoat_raid", fullRefresh: true),
+            dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: true),
             fullRefresh: true
         )
         heroes = (try? db.heroDao.getAll()) ?? []
@@ -465,7 +465,7 @@ struct HeroDetailsView: View {
                                     .compactMap { UUID(uuidString: String($0)) }
                                 let db = Db(
                                     dbPath: Db.getAbsolutePathToDb(
-                                        dbFilename: "redcoat_raid", fullRefresh: false),
+                                        dbFilename: "liberty_line", fullRefresh: false),
                                     fullRefresh: false
                                 )
                                 try? db.heroDao.setSelectedHeroes(ids)

@@ -27,7 +27,7 @@ extension CampaignNode {
 
     static func load(campaignName: String = mainCampaignName) -> [CampaignNode] {
         let db = Db(
-            dbPath: Db.getAbsolutePathToDb(dbFilename: "redcoat_raid", fullRefresh: true),
+            dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: true),
             fullRefresh: true
         )
         let levels = (try? db.levelInfoDao.getCampaignLevels(campaignName: campaignName)) ?? []

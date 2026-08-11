@@ -87,7 +87,7 @@ struct LevelBriefingView: View {
 
     private func loadDifficulties() {
         let db = Db(
-            dbPath: Db.getAbsolutePathToDb(dbFilename: "redcoat_raid", fullRefresh: true),
+            dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: true),
             fullRefresh: true
         )
         difficulties = (try? db.difficultyDao.getAll()) ?? []

@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct RedcoatRaidApp: App {
+struct LibertyLineApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
