@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "5263FCBC3002C99600C1546D"
-               BuildableName = "Liberty Line.app"
-               BlueprintName = "Liberty Line"
+               BuildableName = "Mobile App.app"
+               BlueprintName = "Mobile App"
                ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,8 +46,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5263FCBC3002C99600C1546D"
-            BuildableName = "Liberty Line.app"
-            BlueprintName = "Liberty Line"
+            BuildableName = "Mobile App.app"
+            BlueprintName = "Mobile App"
             ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -63,8 +63,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "5263FCBC3002C99600C1546D"
-            BuildableName = "Liberty Line.app"
-            BlueprintName = "Liberty Line"
+            BuildableName = "Mobile App.app"
+            BlueprintName = "Mobile App"
             ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

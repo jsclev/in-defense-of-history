@@ -4,7 +4,7 @@ import os
 
 /// Progress and status for simulator sweeps.
 ///
-/// This lives in its own database file, **not** in `liberty_line.sqlite`.
+/// This lives in its own database file, **not** in `in_defense_of_history.sqlite`.
 /// `create_db.sh` deletes and rebuilds the content database from the DML on
 /// every run, which would destroy run history — and the content database is
 /// meant to be reproducible from its `.sql` files, which runtime status is not.

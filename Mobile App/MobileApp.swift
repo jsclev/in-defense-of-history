@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct LibertyLineApp: App {
+struct MobileAppApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()

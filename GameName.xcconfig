@@ -1,0 +1,10 @@
+// The game's user-facing name — location 1 of exactly 2.
+//
+// This value becomes the app's home-screen name (CFBundleDisplayName). The
+// other location is Engine/Core/GameIdentity.swift, which serves code that
+// wants to print or draw the name. Change BOTH when renaming the game;
+// nothing else in the repo carries the name. The target, folder, scheme,
+// product, asset catalog and database are all deliberately name-agnostic
+// ("Mobile App", "game_title", "in_defense_of_history.sqlite") so a rename
+// never touches project structure again.
+GAME_DISPLAY_NAME = Liberty Line

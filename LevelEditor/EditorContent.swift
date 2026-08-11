@@ -29,8 +29,8 @@ final class EditorContent: ObservableObject {
 
     func reload() {
         // Same route the Simulator uses: not bundled, so this resolves to
-        // ~/Documents/liberty_line.sqlite, which Db/create_db.sh maintains.
-        let path = Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false)
+        // ~/Documents/in_defense_of_history.sqlite, which Db/create_db.sh maintains.
+        let path = Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false)
         guard FileManager.default.fileExists(atPath: path) else {
             ringsByName = []
             maxTowerRange = nil

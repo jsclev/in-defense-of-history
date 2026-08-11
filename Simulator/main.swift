@@ -288,7 +288,7 @@ if opts.showRuns || opts.runStatusID != nil {
 
 if let levelName = opts.meleeDemo {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false),
+        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
                     fullRefresh: false)
         let fixed = try SweepFixedInputs.load(db: db, levelName: levelName)
         var base = try SweepFixedInputs.designLevel(db: db, levelName: levelName, fixed: fixed)
@@ -356,7 +356,7 @@ if let levelName = opts.meleeDemo {
 
 if let level = opts.benchGPU {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false),
+        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
                     fullRefresh: false)
         try GPUHarness.bench(db: db, levelName: level, sims: opts.benchSims)
         exit(0)
@@ -368,7 +368,7 @@ if let level = opts.benchGPU {
 
 if let level = opts.gpuValidate {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false),
+        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
                     fullRefresh: false)
         try GPUHarness.validate(db: db, levelName: level, seeds: opts.validateSeeds)
         exit(0)
@@ -380,7 +380,7 @@ if let level = opts.gpuValidate {
 
 if let benchLevel = opts.bench {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false),
+        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
                     fullRefresh: false)
         try Sweep.bench(db: db, levelName: benchLevel, sims: opts.benchSims)
         exit(0)
@@ -392,7 +392,7 @@ if let benchLevel = opts.bench {
 
 if let sweepLevel = opts.sweep {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false),
+        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
                     fullRefresh: false)
         var grids = SweepGrids()
         grids.seedsPerPermutation = opts.sweepSeeds
@@ -572,7 +572,7 @@ do {
         try? FileManager.default.removeItem(atPath: opts.dbPath)
     }
 
-    let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "liberty_line", fullRefresh: false), fullRefresh: false)
+    let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false), fullRefresh: false)
     
     guard let levelInfoId = UUID(uuidString: "be3cf809-f71e-4209-bc4d-8b25b0b5f2a0") else {
         throw DbError.Db(message: "Unable to get level info id")
