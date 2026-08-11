@@ -361,6 +361,10 @@ extension GPUEngine {
                     enc.setBytes(&dp, length: MemoryLayout<DispatchParamsGPU>.stride, index: 2)
                     enc.setBuffer(resultBuf, offset: 0, index: 3)
                     enc.setBuffer(stateBuf, offset: 0, index: 4)
+                    // 64, not the pipeline maximum. Simulations diverge hard - 62s to 191s of
+                    // game time - and a threadgroup only retires when its slowest thread
+                    // finishes, so wide groups strand lanes. Measured on an idle machine:
+                    // 640 wide is 1.36x SLOWER than 64 (58.5s vs 43.2s over 40k permutations).
                     let tgWidth = min(pipeline.maxTotalThreadsPerThreadgroup, 64)
                     enc.dispatchThreads(
                         MTLSize(width: chunk, height: 1, depth: 1),
@@ -831,7 +835,7 @@ enum GPUHarness {
 
     static func sweepRows(
         db: Db, fixed: SweepFixedInputs, base: LevelInfo, space: SweepSpace,
-        indices: [Int], grids: SweepGrids, checkpointPath: String? = nil,
+        indices: [Int], grids: SweepGrids, store: SweepResultStore? = nil,
         onProgress: ((Int, Double) -> Void)? = nil
     ) throws -> [SweepRow] {
         let engine = try GPUEngine()
@@ -842,17 +846,6 @@ enum GPUHarness {
         let extra = grids.seedsPerPermutation - probe
         let t0 = Date()
 
-        var checkpoint: FileHandle?
-        if let path = checkpointPath {
-            let url = URL(fileURLWithPath: path + ".partial")
-            try? FileManager.default.createDirectory(
-                at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
-            FileManager.default.createFile(atPath: url.path,
-                                           contents: Data((SweepRow.header + "\n").utf8))
-            checkpoint = try? FileHandle(forWritingTo: url)
-            _ = try? checkpoint?.seekToEnd()
-        }
-        defer { try? checkpoint?.close() }
 
         var batchStart = 0
         while batchStart < indices.count {
@@ -925,10 +918,7 @@ enum GPUHarness {
                 batchRows.append(makeRow(perm: perm, fixed: fixed, greedy: greedy, naive: naive))
             }
             rows += batchRows
-            if let checkpoint {
-                let chunk = batchRows.map { $0.csv() + "\n" }.joined()
-                try? checkpoint.write(contentsOf: Data(chunk.utf8))
-            }
+            store?.insert(batchRows)
 
             batchStart += permBatchSize
             let rate = Double(rows.count) / max(0.001, Date().timeIntervalSince(t0))
@@ -937,9 +927,6 @@ enum GPUHarness {
                 String(format: "  gpu: %d/%d permutations (%.0f/s)\n",
                        rows.count, indices.count, rate).utf8))
             }
-        }
-        if let checkpointPath {
-            try? FileManager.default.removeItem(atPath: checkpointPath + ".partial")
         }
         return rows
     }

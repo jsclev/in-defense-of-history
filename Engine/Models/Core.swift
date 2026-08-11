@@ -24,6 +24,37 @@ public struct Point: Sendable, Hashable, Codable {
     public static func lerp(_ a: Point, _ b: Point, _ t: Double) -> Point {
         Point(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t)
     }
+
+    /// Distance to the closest point on segment `a`–`b`.
+    ///
+    /// The editor's slot validation, the simulator's path simplification and the
+    /// game's lane rasteriser all need this; it lives here so there is one
+    /// implementation rather than three that can drift apart.
+    public func distance(toSegment a: Point, _ b: Point) -> Double {
+        distance(to: closestPoint(onSegment: a, b))
+    }
+
+    public func closestPoint(onSegment a: Point, _ b: Point) -> Point {
+        let dx = b.x - a.x
+        let dy = b.y - a.y
+        let len2 = dx * dx + dy * dy
+        guard len2 > 0 else { return a }
+        let t = max(0, min(1, ((x - a.x) * dx + (y - a.y) * dy) / len2))
+        return Point(a.x + dx * t, a.y + dy * t)
+    }
+
+    /// Distance to the closest point anywhere on a polyline.
+    public func distance(toPolyline points: [Point]) -> Double {
+        guard points.count > 1 else {
+            return points.first.map { distance(to: $0) } ?? .greatestFiniteMagnitude
+        }
+        var best = Double.greatestFiniteMagnitude
+        for i in 0..<(points.count - 1) {
+            best = min(best, distance(toSegment: points[i], points[i + 1]))
+            if best == 0 { break }
+        }
+        return best
+    }
 }
 
 struct SplitMix64 {

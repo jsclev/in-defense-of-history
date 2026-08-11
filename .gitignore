@@ -6,6 +6,26 @@
 Sounds/
 sounds/
 
+## Binary media, wherever it lands. Source belongs in git — SQL, Swift,
+## GeoJSON, level JSON — but the pixels and audio live in the data folder
+## and reach the app through the external asset catalog. Matching by
+## extension rather than by folder, because a map PNG dropped into a new
+## directory is exactly how an 8 MB blob got committed once already.
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.heic
+*.tiff
+*.wav
+*.mp3
+*.aiff
+*.m4a
+
+# The LevelEditor's own app icon is small and genuinely part of the tool.
+!LevelEditor/Assets.xcassets/AppIcon.appiconset/*.png
+
 ## User settings
 xcuserdata/
 

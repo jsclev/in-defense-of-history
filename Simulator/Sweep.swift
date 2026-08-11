@@ -97,7 +97,7 @@ struct SweepFixedInputs {
         var maxDist = 0.0
         var maxIndex = 0
         for i in 1..<(points.count - 1) {
-            let d = perpendicularDistance(points[i], a, b)
+            let d = points[i].distance(toSegment: a, b)
             if d > maxDist { maxDist = d; maxIndex = i }
         }
         if maxDist > epsilon {
@@ -106,15 +106,6 @@ struct SweepFixedInputs {
             return left.dropLast() + right
         }
         return [a, b]
-    }
-
-    private static func perpendicularDistance(_ p: Point, _ a: Point, _ b: Point) -> Double {
-        let dx = b.x - a.x
-        let dy = b.y - a.y
-        let len2 = dx * dx + dy * dy
-        guard len2 > 0 else { return p.distance(to: a) }
-        let t = max(0, min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2))
-        return p.distance(to: Point(a.x + t * dx, a.y + t * dy))
     }
 
     static func normalizeKind(_ s: String) -> String {
@@ -945,6 +936,8 @@ enum Sweep {
             if let runs, let id = runID ?? nil { runs.progress(id: id, completed: completed,
                                                                iterationsPerSecond: rate) }
         }
+        let store = try? SweepResultStore(diskPath: outPath, runID: runID ?? nil)
+
         func conclude(_ status: String, report reportPath: String? = nil, error: String? = nil) {
             if let runs, let id = runID ?? nil {
                 runs.finish(id: id, status: status, reportPath: reportPath, errorMessage: error)
@@ -954,12 +947,12 @@ enum Sweep {
         if useGPU {
             rows = try GPUHarness.sweepRows(
                 db: db, fixed: fixed, base: base, space: space,
-                indices: indices, grids: grids, checkpointPath: outPath,
+                indices: indices, grids: grids, store: store,
                 onProgress: { report($0, $1) }
             )
             try finish(rows: &rows, fixed: fixed, grids: grids, outPath: outPath,
                        sims: sims, t0: t0, levelName: levelName,
-                       inBandLow: 0.6, inBandHigh: 0.95)
+                       inBandLow: 0.6, inBandHigh: 0.95, store: store)
             if storeBounds {
                 try deriveAndStoreBounds(db: db, fixed: fixed, space: space,
                                          rows: rows, outPath: outPath)
@@ -1086,7 +1079,7 @@ enum Sweep {
 
         try finish(rows: &rows, fixed: fixed, grids: grids, outPath: outPath,
                    sims: sims, t0: t0, levelName: levelName,
-                   inBandLow: 0.6, inBandHigh: 0.95)
+                   inBandLow: 0.6, inBandHigh: 0.95, store: store)
         if storeBounds {
             try deriveAndStoreBounds(db: db, fixed: fixed, space: space,
                                      rows: rows, outPath: outPath)
@@ -1151,28 +1144,13 @@ enum Sweep {
     static func finish(
         rows: inout [SweepRow], fixed: SweepFixedInputs, grids: SweepGrids,
         outPath: String, sims: Int, t0: Date, levelName: String,
-        inBandLow: Double, inBandHigh: Double
+        inBandLow: Double, inBandHigh: Double, store: SweepResultStore? = nil
     ) throws {
         rows.sort { $0.perm.index < $1.perm.index }
-        let outURL = URL(fileURLWithPath: outPath)
-        try FileManager.default.createDirectory(
-            at: outURL.deletingLastPathComponent(), withIntermediateDirectories: true)
-        FileManager.default.createFile(atPath: outPath, contents: nil)
-        guard let handle = FileHandle(forWritingAtPath: outPath) else {
-            throw DbError.Db(message: "Unable to open \(outPath) for writing")
-        }
-        var buffer = SweepRow.header + "\n"
-        buffer.reserveCapacity(1 << 22)
-        for row in rows {
-            buffer += row.csv()
-            buffer += "\n"
-            if buffer.utf8.count >= 1 << 22 {
-                handle.write(Data(buffer.utf8))
-                buffer.removeAll(keepingCapacity: true)
-            }
-        }
-        if !buffer.isEmpty { handle.write(Data(buffer.utf8)) }
-        try handle.close()
+        // The CPU path accumulates rows in memory and writes them here; the GPU
+        // path has already streamed each batch into the store as it went.
+        if let store, store.rowCount == 0 { store.insert(rows) }
+        store?.finish()
 
         let elapsed = Date().timeIntervalSince(t0)
         let actualSims = rows.reduce(0) { $0 + $1.seedsUsed * 2 }

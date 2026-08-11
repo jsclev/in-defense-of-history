@@ -86,10 +86,20 @@ static inline float dist2(float2 a, float2 b) {
 // Live index of the enemy with this spawnID; -1 if gone. Claims are unique
 // (one unit per enemy), so a live scan matches the CPU engine's
 // built-once-per-militia-step spawnID index observably.
+//
+// spawnID[] is always ascending - enemies are appended with a monotonic id and
+// the compaction pass preserves order - so this binary searches instead of
+// scanning. That is ~7 probes against an average of n/2 for a linear walk, with
+// no extra state: a spawnID-indexed lookup table measured 6-7% SLOWER, because
+// the kernel is bound by per-thread memory traffic rather than by instructions.
 static int findEnemy(device SimStateGPU& S, uint n, int spawnID) {
-    if (spawnID < 0) return -1;
-    for (uint i = 0; i < n; i++) {
-        if (!S.removed[i] && int(S.spawnID[i]) == spawnID) return int(i);
+    if (spawnID < 0 || n == 0) return -1;
+    uint lo = 0, hi = n;
+    while (lo < hi) {
+        uint mid = (lo + hi) >> 1;
+        int v = int(S.spawnID[mid]);
+        if (v == spawnID) return S.removed[mid] ? -1 : int(mid);
+        if (v < spawnID) lo = mid + 1; else hi = mid;
     }
     return -1;
 }

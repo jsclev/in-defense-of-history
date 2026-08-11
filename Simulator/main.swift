@@ -11,7 +11,7 @@ struct Options {
     var idle = false
     var trace = false
     var sweep: String?
-    var sweepOut = "sweeps/sweep.csv"
+    var sweepOut = "sweeps/sweep.sqlite"
     var sweepStride = 1
     var sweepSeeds = 40
     var limit: Int?
@@ -52,7 +52,7 @@ func printUsage() {
                        unlocks, base stats + L1 costs, lives, wave count,
                        enemy roster) are read from the DB; starting money,
                        upgrade costs, and wave compositions are swept.
-      --sweep-out <p>  CSV output path (default: sweeps/sweep.csv)
+      --sweep-out <p>  SQLite output path (default: sweeps/sweep.sqlite)
       --sweep-stride <n>  Sample every nth permutation (default 1 = all)
       --sweep-seeds <n>   Seeds per permutation (default 40)
       --limit <n>      Run at most n permutations, then stop and write the

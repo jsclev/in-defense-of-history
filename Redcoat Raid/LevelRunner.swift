@@ -75,6 +75,14 @@ enum TowerKind: String, CaseIterable, Identifiable {
         self == .areaOfEffect ? MapSpriteSizing.cannonball : MapSpriteSizing.musketBall
     }
 
+    /// Whether this kind's art is drawn on the same canvas as tower_slot.png.
+    /// Those sprites are placed in the slot's own box on the map, so they land
+    /// exactly on it; the older tight-cropped art is sized by `spriteHeight`
+    /// instead. This is a fact about which art pipeline produced the sprites,
+    /// not level content, and it goes away once every kind is redrawn on the
+    /// slot canvas.
+    var usesSlotCanvasArt: Bool { self == .ranged }
+
     // Rate of fire and shot damage are not here: they vary per level and
     // branch and live in the tower table. LevelRunner reads them from
     // `towerLevels`, which is the only source for them.
@@ -96,6 +104,11 @@ final class LevelRunner: NSObject, ObservableObject {
     private(set) var mapImageSize: CGSize
     private(set) var mapImageName: String
     private(set) var playableRect: CGRect
+
+    /// Box the map renderer fits the slot sprite into, in map image pixels.
+    /// Tower art drawn on the slot's own canvas is placed in this same box so
+    /// it lands on the slot baked into the map. `.zero` on levels without it.
+    private(set) var slotSize: CGSize = .zero
     private(set) var startingMoney = 0
 
     @Published private(set) var money = 0
@@ -240,19 +253,15 @@ final class LevelRunner: NSObject, ObservableObject {
             let pts = path.points
             guard pts.count > 1 else { continue }
             for i in 0..<(pts.count - 1) {
-                let a = CGPoint(x: pts[i].x, y: pts[i].y)
-                let b = CGPoint(x: pts[i + 1].x, y: pts[i + 1].y)
-                let dx = b.x - a.x, dy = b.y - a.y
-                let l2 = dx * dx + dy * dy
+                let a = pts[i], b = pts[i + 1]
                 let x0 = Int((min(a.x, b.x) - w) / cell), x1 = Int((max(a.x, b.x) + w) / cell)
                 let y0 = Int((min(a.y, b.y) - w) / cell), y1 = Int((max(a.y, b.y) + w) / cell)
                 for gy in max(0, y0)...max(0, min(rows - 1, y1)) {
                     for gx in max(0, x0)...max(0, min(cols - 1, x1)) {
                         let idx = gy * cols + gx
                         if lane[idx] { continue }
-                        let px = (CGFloat(gx) + 0.5) * cell, py = (CGFloat(gy) + 0.5) * cell
-                        let t = l2 == 0 ? 0 : max(0, min(1, ((px - a.x) * dx + (py - a.y) * dy) / l2))
-                        if hypot(px - (a.x + t * dx), py - (a.y + t * dy)) <= w { lane[idx] = true }
+                        let centre = Point((Double(gx) + 0.5) * cell, (Double(gy) + 0.5) * cell)
+                        if centre.distance(toSegment: a, b) <= w { lane[idx] = true }
                     }
                 }
             }
@@ -354,10 +363,14 @@ final class LevelRunner: NSObject, ObservableObject {
     private let timer = Timer(tickDuration: LevelRunner.normalTickDuration)
     private var displayLink: CADisplayLink?
 
-    init(levelInfoID: UUID?, mapImageName: String, mapImageSize: CGSize) {
+    private let enemyHPMultiplier: Double
+
+    init(levelInfoID: UUID?, mapImageName: String, mapImageSize: CGSize,
+         enemyHPMultiplier: Double = 1.0) {
         self.mapImageName = mapImageName
         self.mapImageSize = mapImageSize
         self.playableRect = CGRect(origin: .zero, size: mapImageSize)
+        self.enemyHPMultiplier = enemyHPMultiplier
         super.init()
         load(levelInfoID: levelInfoID)
     }
@@ -387,6 +400,7 @@ final class LevelRunner: NSObject, ObservableObject {
 
             levelName = level.name
             playableRect = level.playableRect
+            slotSize = level.slotSize
             if !level.mapImageName.isEmpty,
                level.mapImageSize.width > 0, level.mapImageSize.height > 0 {
                 mapImageName = level.mapImageName
@@ -575,12 +589,13 @@ final class LevelRunner: NSObject, ObservableObject {
             pendingSpawns.removeFirst()
             guard let type = enemyTypesByID[next.enemyTypeID] else { continue }
             let stats = type.stats
+            let maxHP = stats.maxHP * enemyHPMultiplier
             walkers.append(Walker(
                 id: nextWalkerID,
                 assetName: Self.assetName(for: type.name),
                 speed: stats.speed,
-                maxHP: stats.maxHP,
-                hp: stats.maxHP,
+                maxHP: maxHP,
+                hp: maxHP,
                 bounty: stats.gold,
                 spawnTick: next.tick,
                 pathIndex: next.pathIndex

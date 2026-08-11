@@ -3,12 +3,20 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct RootView: View {
     @State private var selectedNode: CampaignNode?
+    @State private var playingDifficulty: Difficulty?
     @State private var menuScreen: MenuScreen?
 
     var body: some View {
         if let selectedNode {
-            LevelMapView(node: selectedNode) {
-                self.selectedNode = nil
+            if let playingDifficulty {
+                LevelMapView(node: selectedNode, difficulty: playingDifficulty) {
+                    self.playingDifficulty = nil
+                    self.selectedNode = nil
+                }
+            } else {
+                LevelBriefingView(node: selectedNode) { difficulty in
+                    self.playingDifficulty = difficulty
+                }
             }
         } else if menuScreen == .heroes {
             HeroesView {

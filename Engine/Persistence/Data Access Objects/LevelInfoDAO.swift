@@ -118,7 +118,9 @@ public class LevelInfoDAO: BaseDAO {
                 l.map_image_name,
                 l.map_image_width,
                 l.map_image_height,
-                l.num_waves
+                l.num_waves,
+                l.slot_width,
+                l.slot_height
             FROM
                 level_info l
             INNER JOIN
@@ -155,6 +157,8 @@ public class LevelInfoDAO: BaseDAO {
                 let mapImageSize = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
                                           height: getDouble(stmt: stmt, colIndex: 14))
                 let numWaves = getInt(stmt: stmt, colIndex: 15)
+                let slotSize = CGSize(width: getDouble(stmt: stmt, colIndex: 16),
+                                      height: getDouble(stmt: stmt, colIndex: 17))
 
                 sqlite3_finalize(stmt)
                 stmt = nil
@@ -174,6 +178,7 @@ public class LevelInfoDAO: BaseDAO {
                                  playableRect: playableRect,
                                  mapImageName: mapImageName,
                                  mapImageSize: mapImageSize,
+                                 slotSize: slotSize,
                                  paths: paths,
                                  towerSlots: towerSlots,
                                  waves: waves)

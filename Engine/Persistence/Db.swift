@@ -21,6 +21,7 @@ public class Db {
     public let simMeleeUnitDao: SimMeleeUnitDAO
     public let heroDao: HeroDAO
     public let waveDao: WaveDAO
+    public let difficultyDao: DifficultyDAO
     
     public static func getAbsolutePathToDb(dbFilename: String, fullRefresh: Bool) -> String {
         let logger = LogUtility.getLogger(LogCategory.Db, Db.self)
@@ -122,6 +123,7 @@ public class Db {
         simEnemyTypeDao = SimEnemyTypeDAO(conn: conn)
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)
         heroDao = HeroDAO(conn: conn)
+        difficultyDao = DifficultyDAO(conn: conn)
     }
 
     public func close() {

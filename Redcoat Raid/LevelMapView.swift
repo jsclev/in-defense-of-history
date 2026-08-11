@@ -119,6 +119,7 @@ enum RadialMenu {
 
 struct LevelMapView: View {
     var node: CampaignNode
+    var difficulty: Difficulty
     var onExit: () -> Void
 
     @StateObject private var runner: LevelRunner
@@ -144,13 +145,15 @@ struct LevelMapView: View {
             ?? debugRangeBands[debugRangeBands.count - 1].tint
     }
 
-    init(node: CampaignNode, onExit: @escaping () -> Void) {
+    init(node: CampaignNode, difficulty: Difficulty, onExit: @escaping () -> Void) {
         self.node = node
+        self.difficulty = difficulty
         self.onExit = onExit
         _runner = StateObject(wrappedValue: LevelRunner(
             levelInfoID: node.levelInfoID,
             mapImageName: node.mapImageName,
-            mapImageSize: node.mapImageSize
+            mapImageSize: node.mapImageSize,
+            enemyHPMultiplier: difficulty.enemyHPMultiplier
         ))
     }
 
@@ -271,17 +274,37 @@ struct LevelMapView: View {
                                                         branch: tower.branch) {
                     let towerHeight = sprites.points(tower.kind.spriteHeight)
                     let basePoint = projection.viewPoint(tower.position)
-                    ZStack(alignment: .bottom) {
+
+                    if tower.kind.usesSlotCanvasArt, runner.slotSize.width > 0,
+                       runner.slotSize.height > 0 {
+                        // Drawn on tower_slot.png's canvas, so it goes in the
+                        // slot's own box, scaled by the same projection that
+                        // fits the playable rect to the screen. scaledToFit
+                        // matches the renderer's `fit: "inside"`, and because
+                        // the art shares the slot's aspect it lands on it
+                        // exactly — no sprite height or base lift involved.
                         Image(assetName)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: towerHeight)
+                            .frame(width: projection.viewLength(runner.slotSize.width),
+                                   height: projection.viewLength(runner.slotSize.height))
+                            .position(basePoint)
+                    } else {
+                        // Tight-cropped art, sized by its own sprite height and
+                        // lifted so the base sits on the slot.
+                        ZStack(alignment: .bottom) {
+                            Image(assetName)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: towerHeight)
+                        }
+                        .position(
+                            x: basePoint.x,
+                            y: basePoint.y - towerHeight / 2
+                                + sprites.points(MapSpriteSizing.towerBaseLift)
+                                + towerHeight * 0.20
+                        )
                     }
-                    .position(
-                        x: basePoint.x,
-                        y: basePoint.y - towerHeight / 2 + sprites.points(MapSpriteSizing.towerBaseLift)
-                            + towerHeight * 0.20
-                    )
                 }
             }
 
@@ -750,5 +773,8 @@ private struct UpgradeMenuItem: View {
 }
 
 #Preview {
-    LevelMapView(node: CampaignNode.load()[0], onExit: {})
+    LevelMapView(node: CampaignNode.load()[0],
+                 difficulty: Difficulty(id: UUID(), level: 4, name: "Hardened",
+                                        detail: "", enemyHPMultiplier: 1.75),
+                 onExit: {})
 }

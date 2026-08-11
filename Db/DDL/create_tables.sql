@@ -55,6 +55,20 @@ CREATE TABLE tower (
     unit_heal_per_second REAL NOT NULL DEFAULT 0
 );
 
+CREATE TABLE difficulty (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    difficulty_level INTEGER NOT NULL UNIQUE CHECK (difficulty_level BETWEEN 1 AND 4),
+    difficulty_name TEXT NOT NULL UNIQUE,
+    difficulty_description TEXT NOT NULL DEFAULT '',
+    enemy_hp_multiplier REAL NOT NULL CHECK (enemy_hp_multiplier > 0)
+);
+
+CREATE TABLE player_selected_difficulty (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    difficulty_id TEXT NOT NULL REFERENCES difficulty (id),
+    selection_slot INTEGER NOT NULL UNIQUE CHECK (selection_slot = 1)
+);
+
 CREATE TABLE player_selected_hero (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id),
@@ -84,6 +98,13 @@ CREATE TABLE level_info (
     map_image_name TEXT NOT NULL DEFAULT '',
     map_image_width REAL NOT NULL DEFAULT 0.0 CHECK (map_image_width >= 0.0),
     map_image_height REAL NOT NULL DEFAULT 0.0 CHECK (map_image_height >= 0.0),
+    -- Box the map renderer fits the tower slot sprite into, in map image
+    -- pixels. Tower art drawn on the same canvas as tower_slot.png is placed
+    -- in this same box so it lands exactly on the slot baked into the map.
+    -- Zero means the level has no slot-canvas art and towers fall back to
+    -- their own sprite heights.
+    slot_width REAL NOT NULL DEFAULT 0.0 CHECK (slot_width >= 0.0),
+    slot_height REAL NOT NULL DEFAULT 0.0 CHECK (slot_height >= 0.0),
     CHECK (map_image_width = 0.0 OR playable_rect_x + playable_rect_width <= map_image_width),
     CHECK (map_image_height = 0.0 OR playable_rect_y + playable_rect_height <= map_image_height)
 );

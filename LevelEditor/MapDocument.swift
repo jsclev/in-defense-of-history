@@ -186,7 +186,10 @@ final class MapDocument: ReferenceFileDocument {
 
     @Published var draft: MapDraft
 
-    static var readableContentTypes: [UTType] { [.tdmap] }
+    // .geojson is readable so a level can be opened straight from its single
+    // source of truth. Writing stays .tdmap only: the GeoJSON is authored by the
+    // generator, and the editor saving over it would fork the source.
+    static var readableContentTypes: [UTType] { [.tdmap, .geoJSON] }
     static var writableContentTypes: [UTType] { [.tdmap] }
 
     init() {
@@ -197,7 +200,11 @@ final class MapDocument: ReferenceFileDocument {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        draft = try JSONDecoder().decode(MapDraft.self, from: data)
+        if configuration.contentType == .geoJSON {
+            draft = try GeoJSONImport.draft(from: data)
+        } else {
+            draft = try JSONDecoder().decode(MapDraft.self, from: data)
+        }
     }
 
     func snapshot(contentType: UTType) throws -> MapDraft { draft }
@@ -294,21 +301,11 @@ enum MapGeometry {
     static let maxTowerRange = 350.0
 
     static func distance(_ p: Point, segment a: Point, _ b: Point) -> Double {
-        let ab = Point(b.x - a.x, b.y - a.y)
-        let len2 = ab.x * ab.x + ab.y * ab.y
-        guard len2 > 0 else { return p.distance(to: a) }
-        let t = max(0, min(1, ((p.x - a.x) * ab.x + (p.y - a.y) * ab.y) / len2))
-        return p.distance(to: Point(a.x + ab.x * t, a.y + ab.y * t))
+        p.distance(toSegment: a, b)
     }
 
     static func distance(_ p: Point, polyline pts: [Point]) -> Double {
-        guard let first = pts.first else { return .infinity }
-        guard pts.count > 1 else { return p.distance(to: first) }
-        var best = Double.infinity
-        for i in 0..<(pts.count - 1) {
-            best = min(best, distance(p, segment: pts[i], pts[i + 1]))
-        }
-        return best
+        p.distance(toPolyline: pts)
     }
 
     static func slotWarning(_ slot: Point, roads: [MapDraft.Road]) -> String? {

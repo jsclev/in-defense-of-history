@@ -61,6 +61,8 @@ sqlite3 redcoat_raid.sqlite < DML/Levels/level_40_guilford_courthouse.sql
 sqlite3 redcoat_raid.sqlite < DML/Levels/level_41_eutaw_springs.sql
 sqlite3 redcoat_raid.sqlite < DML/level_tower_unlocks.sql
 sqlite3 redcoat_raid.sqlite < DML/enemy_types.sql
+sqlite3 redcoat_raid.sqlite < DML/difficulties.sql
+sqlite3 redcoat_raid.sqlite < DML/selected_difficulty.sql
 sqlite3 redcoat_raid.sqlite < DML/tower_types.sql
 sqlite3 redcoat_raid.sqlite < DML/towers.sql
 sqlite3 redcoat_raid.sqlite < DML/level_waves.sql
