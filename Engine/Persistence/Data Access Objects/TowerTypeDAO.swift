@@ -175,6 +175,51 @@ public class TowerTypeDAO: BaseDAO {
         return levels
     }
 
+    /// Every tower type as the engine models it, keyed by `tower_type_category`:
+    /// real database id, display name and the branch-1 upgrade spine.
+    ///
+    /// Keyed by category because that is the join key callers hold - the editor's
+    /// `Emplacement` raw values are exactly these category strings.
+    ///
+    /// This is what a ContentCatalog needs. `DesignArsenal` used to carry a
+    /// hardcoded copy of the same numbers, under its own invented UUIDs, and it
+    /// had drifted from the tower table - tier-1 range read 140 there against
+    /// 150 here.
+    public func getTowerTypes() throws -> [String: TowerType] {
+        var stmt: OpaquePointer?
+        let sql = getCleanedSql("""
+            SELECT
+                tt.id,
+                tt.tower_type_category,
+                tt.tower_type_name
+            FROM
+                tower_type tt
+        """)
+
+        try prepare(conn: conn, stmt: &stmt, sql: sql)
+
+        var identities: [(id: UUID, category: String, name: String)] = []
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            guard let category = try getString(stmt: stmt, colIndex: 1),
+                  let name = try getString(stmt: stmt, colIndex: 2) else { continue }
+            let id = try getUUID(stmt: stmt, colIndex: 0, msg: "tower_type id")
+            identities.append((id, category, name))
+        }
+
+        sqlite3_finalize(stmt)
+        stmt = nil
+
+        let levelsByCategory = try getTowerLevels()
+        var byCategory: [String: TowerType] = [:]
+        for identity in identities {
+            guard let levels = levelsByCategory[identity.category], !levels.isEmpty else { continue }
+            byCategory[identity.category] = TowerType(id: identity.id,
+                                                      name: identity.name,
+                                                      levels: levels)
+        }
+        return byCategory
+    }
+
     public func getDisplayNames() throws -> [String: String] {
         var names: [String: String] = [:]
 

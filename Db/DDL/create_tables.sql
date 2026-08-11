@@ -151,7 +151,12 @@ CREATE TABLE tower_slot (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     level_info_id TEXT NOT NULL REFERENCES level_info (id),
     map_position_x REAL NOT NULL,
-    map_position_y REAL NOT NULL
+    map_position_y REAL NOT NULL,
+    -- Physical footprint of the slot pad on the map, in canonical units,
+    -- synced from the level GeoJSON's per-slot footprint. 0 means the level
+    -- default in level_info.slot_width/slot_height applies.
+    slot_width REAL NOT NULL DEFAULT 0.0 CHECK (slot_width >= 0.0),
+    slot_height REAL NOT NULL DEFAULT 0.0 CHECK (slot_height >= 0.0)
 );
 
 CREATE TABLE hero (

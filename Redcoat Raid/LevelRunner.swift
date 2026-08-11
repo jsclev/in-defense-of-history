@@ -143,6 +143,18 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private(set) var slotPositions: [CGPoint] = []
 
+    /// Per-slot pad footprints in canonical units, from tower_slot.slot_width/
+    /// slot_height. A slot with no per-slot size falls back to the level-wide
+    /// default - both come from the database, never from a Swift constant.
+    private var slotFootprints: [CGSize] = []
+
+    func slotSize(at index: Int) -> CGSize {
+        guard slotFootprints.indices.contains(index),
+              slotFootprints[index].width > 0, slotFootprints[index].height > 0
+        else { return slotSize }
+        return slotFootprints[index]
+    }
+
     /// How close a shot must get to count as a hit, in map pixels. Purely a
     /// rendering tolerance — it has no column in the tower table.
     private static let projectileHitRadiusInImagePixels: CGFloat = 10
@@ -431,6 +443,7 @@ final class LevelRunner: NSObject, ObservableObject {
                 TowerKind(categoryName: category).map { ($0, levels) }
             })
             slotPositions = level.towerSlots.map { CGPoint(x: $0.position.x, y: $0.position.y) }
+            slotFootprints = level.towerSlots.map { CGSize(width: $0.size.width, height: $0.size.height) }
 
             guard !level.paths.isEmpty else {
                 status = "\(level.name): no path in the database."

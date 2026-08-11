@@ -296,9 +296,9 @@ enum MapGeometry {
     // so these are plain constants rather than scaled design-space values.
     static let roadHalfWidth = 18.0
     static let slotRadius = 19.2
-    // The longest range any tower can reach in the sweep grids, so the "out of
-    // range of every road" check does not reject slots a long-range tower could use.
-    static let maxTowerRange = 350.0
+
+
+
 
     static func distance(_ p: Point, segment a: Point, _ b: Point) -> Double {
         p.distance(toSegment: a, b)
@@ -308,18 +308,25 @@ enum MapGeometry {
         p.distance(toPolyline: pts)
     }
 
-    static func slotWarning(_ slot: Point, roads: [MapDraft.Road]) -> String? {
+    /// `maxTowerRange` is the longest range in the tower table, supplied by the
+    /// caller rather than read from a singleton so this stays pure geometry.
+    /// Passing nil skips the range check instead of comparing against an
+    /// invented constant.
+    static func slotWarning(_ slot: Point, roads: [MapDraft.Road],
+                            maxTowerRange: Double?) -> String? {
         let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }
         guard let d = ds.min() else { return nil }
         if d < roadHalfWidth + slotRadius { return "overlaps a road" }
-        if d - roadHalfWidth > maxTowerRange { return "out of range of every road" }
+        if let maxTowerRange, d - roadHalfWidth > maxTowerRange {
+            return "out of range of every road"
+        }
         return nil
     }
 
-    static func warnings(for draft: MapDraft) -> [Int: String] {
+    static func warnings(for draft: MapDraft, maxTowerRange: Double?) -> [Int: String] {
         var out: [Int: String] = [:]
         for (i, s) in draft.slots.enumerated() {
-            if let w = slotWarning(s, roads: draft.roads) { out[i] = w }
+            if let w = slotWarning(s, roads: draft.roads, maxTowerRange: maxTowerRange) { out[i] = w }
         }
         return out
     }

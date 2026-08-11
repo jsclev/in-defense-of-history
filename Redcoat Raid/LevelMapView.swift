@@ -140,10 +140,26 @@ struct LevelMapView: View {
         (.infinity, Color(red: 1.00, green: 0.31, blue: 0.64)),  // magenta
     ]
 
+    /// Tap box for a slot: its own footprint at this projection, margin past
+    /// it, floored at Apple's minimum. One definition for the button and the
+    /// debug readout.
+    private func slotTapSize(at index: Int, projection: LevelMapProjection) -> CGSize {
+        SlotTapTarget.size(slotSize: runner.slotSize(at: index),
+                           pointsPerMapUnit: projection.scale)
+    }
+
     private static func debugRangeTint(for range: CGFloat) -> Color {
         debugRangeBands.first { range < $0.upperBound }?.tint
             ?? debugRangeBands[debugRangeBands.count - 1].tint
     }
+
+    /// Display tuning for slot-canvas tower art, judged on device. Scale is
+    /// relative to the slot box the art would otherwise fit exactly; lift is
+    /// a fraction of the drawn tower height, moving it up the screen. Render
+    /// tuning for the art pipeline, like `usesSlotCanvasArt` — not level
+    /// content, which is why it lives here and not in the database.
+    private static let slotTowerScale: CGFloat = 1.309
+    private static let slotTowerLift: CGFloat = 0.11
 
     init(node: CampaignNode, difficulty: Difficulty, onExit: @escaping () -> Void) {
         self.node = node
@@ -192,7 +208,9 @@ struct LevelMapView: View {
         .onDisappear { runner.stop() }
     }
 
-    private static let controlGlyphFraction: CGFloat = 0.66
+    /// Fraction of the corner-button frame the glyph fills. 0.66 crowded the
+    /// frame on device; this is 18% down from that.
+    private static let controlGlyphFraction: CGFloat = 0.5412
 
     private func cornerButtons(screen: ScreenGeometry) -> some View {
         let layout = CornerButtonsLayout(screen: screen)
@@ -234,7 +252,6 @@ struct LevelMapView: View {
         let metrics = HudMetrics(viewSize: viewSize)
         let sprites = MapSpriteScale(playableRect: runner.playableRect,
                                      viewSize: viewSize)
-
         return ZStack(alignment: .topLeading) {
             Color.black
 
@@ -257,6 +274,22 @@ struct LevelMapView: View {
                        height: projection.imageFrameSize.height)
                 .position(projection.imageCenter)
 
+            // The slot pads. Each is placed and sized from its footprint in the
+            // level data (GeoJSON -> tower_slot.slot_width/height), scaled by the
+            // same projection that fits the virtual playable rect to the screen.
+            ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
+                let pad = runner.slotSize(at: index)
+                if pad.width > 0, pad.height > 0 {
+                    Image("tower_slot_field")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: projection.viewLength(pad.width),
+                               height: projection.viewLength(pad.height))
+                        .position(projection.viewPoint(slotPosition))
+                        .allowsHitTesting(false)
+                }
+            }
+
             if debugMode {
                 ForEach(runner.placedTowers) { tower in
                     if !hiddenRangeSlots.contains(tower.slotIndex),
@@ -275,20 +308,27 @@ struct LevelMapView: View {
                     let towerHeight = sprites.points(tower.kind.spriteHeight)
                     let basePoint = projection.viewPoint(tower.position)
 
-                    if tower.kind.usesSlotCanvasArt, runner.slotSize.width > 0,
-                       runner.slotSize.height > 0 {
-                        // Drawn on tower_slot.png's canvas, so it goes in the
-                        // slot's own box, scaled by the same projection that
-                        // fits the playable rect to the screen. scaledToFit
-                        // matches the renderer's `fit: "inside"`, and because
-                        // the art shares the slot's aspect it lands on it
-                        // exactly — no sprite height or base lift involved.
+                    if tower.kind.usesSlotCanvasArt,
+                       runner.slotSize(at: tower.slotIndex).width > 0,
+                       runner.slotSize(at: tower.slotIndex).height > 0 {
+                        let slotBox = runner.slotSize(at: tower.slotIndex)
+                        // Drawn on tower_slot.png's canvas, so it starts from
+                        // the slot's own box, scaled by the same projection
+                        // that fits the playable rect to the screen —
+                        // scaledToFit matches the renderer's `fit: "inside"`.
+                        // On device that exact fit read too small and too
+                        // sunken, so the art draws scaled up and lifted; both
+                        // knobs are the constants below.
+                        let towerW = projection.viewLength(slotBox.width)
+                            * Self.slotTowerScale
+                        let towerH = projection.viewLength(slotBox.height)
+                            * Self.slotTowerScale
                         Image(assetName)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: projection.viewLength(runner.slotSize.width),
-                                   height: projection.viewLength(runner.slotSize.height))
-                            .position(basePoint)
+                            .frame(width: towerW, height: towerH)
+                            .position(x: basePoint.x,
+                                      y: basePoint.y - towerH * Self.slotTowerLift)
                     } else {
                         // Tight-cropped art, sized by its own sprite height and
                         // lifted so the base sits on the slot.
@@ -350,6 +390,7 @@ struct LevelMapView: View {
             .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
 
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
+                let slotTap = slotTapSize(at: index, projection: projection)
                 Button {
                     // Restoring a dismissed ring takes the whole tap, so
                     // bringing one back never also opens the upgrade menu.
@@ -361,11 +402,35 @@ struct LevelMapView: View {
                         runner.selectSlot(index)
                     }
                 } label: {
-                    Circle()
-                        .fill(Color.white.opacity(0.001))
-                        .frame(width: 64, height: 64)
+                    // In debug mode the hit area shows itself; the fill IS the
+                    // tappable shape, so what you see is exactly what taps.
+                    // Sized by SlotTapTarget: the slot's own footprint at this
+                    // projection, a margin past it, floored at Apple's 44pt.
+                    Ellipse()
+                        .fill(debugMode ? Color.black.opacity(0.35)
+                                        : Color.white.opacity(0.001))
+                        .frame(width: slotTap.width, height: slotTap.height)
                 }
                 .position(projection.viewPoint(slotPosition))
+            }
+
+            if debugMode {
+                ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
+                    let p = projection.viewPoint(slotPosition)
+                    let slotTap = slotTapSize(at: index, projection: projection)
+                    Text("tap \(Int(slotTap.width.rounded()))×\(Int(slotTap.height.rounded()))pt · Apple min \(Int(TouchTarget.minimum))×\(Int(TouchTarget.minimum))")
+                        .font(.system(size: Typography.size(11 * metrics.scale),
+                                      weight: .semibold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 5 * metrics.scale)
+                        .padding(.vertical, 2 * metrics.scale)
+                        .background(Capsule().fill(.black.opacity(0.6)))
+                        .fixedSize()
+                        .position(x: p.x,
+                                  y: p.y + slotTap.height / 2 + 11 * metrics.scale)
+                        .allowsHitTesting(false)
+                }
             }
 
             if debugMode {

@@ -11,7 +11,7 @@ public enum TouchTarget {
 /// applies the same floor. Nothing renders smaller than this, at any HUD scale
 /// or on any device; below it the smallest phones become unreadable.
 public enum Typography {
-    public static let minimumFontSize: CGFloat = 11.7
+    public static let minimumFontSize: CGFloat = 12.87
 
     /// Clamp a point size to the readable floor.
     public static func size(_ requested: CGFloat) -> CGFloat {
@@ -63,7 +63,7 @@ public struct ScaledDimension: Equatable {
     /// A dimension for text, floored at `Typography.minimumFontSize` so it can
     /// never resolve below the readable minimum however far the HUD scales down.
     public static func text(_ reference: CGFloat,
-                            floor: CGFloat = 0.62,
+                            floor: CGFloat = 0.682,
                             ceiling: CGFloat = 1.2) -> ScaledDimension {
         ScaledDimension(reference,
                         atLeast: Swift.max(reference * floor, Typography.minimumFontSize),

@@ -1,4 +1,5 @@
 import Foundation
+import CoreGraphics
 import SQLite3
 
 public class TowerSlotDAO: BaseDAO {
@@ -14,7 +15,9 @@ public class TowerSlotDAO: BaseDAO {
             SELECT
                 ts.id,
                 ts.map_position_x,
-                ts.map_position_y
+                ts.map_position_y,
+                ts.slot_width,
+                ts.slot_height
             FROM
                 tower_slot ts
             WHERE
@@ -33,8 +36,10 @@ public class TowerSlotDAO: BaseDAO {
             let map_position_x = getDouble(stmt: stmt, colIndex: 1)
             let map_position_y = getDouble(stmt: stmt, colIndex: 2)
             let position = Point(map_position_x, map_position_y)
+            let size = CGSize(width: getDouble(stmt: stmt, colIndex: 3),
+                              height: getDouble(stmt: stmt, colIndex: 4))
 
-            towerSlots.append(TowerSlot(id: towerSlotId, position: position))
+            towerSlots.append(TowerSlot(id: towerSlotId, position: position, size: size))
         }
 
         sqlite3_finalize(stmt)

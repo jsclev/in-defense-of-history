@@ -161,7 +161,7 @@ struct InspectorView: View {
     }
 
     private var slotsBox: some View {
-        let warnings = MapGeometry.warnings(for: document.draft)
+        let warnings = MapGeometry.warnings(for: document.draft, maxTowerRange: EditorContent.shared.maxTowerRange)
         return GroupBox("Tower Slots") {
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(document.draft.slots.indices, id: \.self) { i in

@@ -3,6 +3,7 @@ import SwiftUI
 @MainActor
 struct EditorCanvas: View {
     @ObservedObject var document: MapDocument
+    @ObservedObject private var content = EditorContent.shared
     var state: EditorState
     @Environment(\.undoManager) private var undoManager
     @FocusState private var focused: Bool
@@ -562,7 +563,7 @@ struct EditorCanvas: View {
     private func drawSlots(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
-        let warnings = MapGeometry.warnings(for: draft)
+        let warnings = MapGeometry.warnings(for: draft, maxTowerRange: EditorContent.shared.maxTowerRange)
         var planned: [Int: Emplacement] = [:]
         for step in draft.intendedSolution where step.kind == "place" {
             if planned[step.slot] == nil, let e = step.emplacement.flatMap(Emplacement.init(rawValue:)) {
@@ -577,8 +578,12 @@ struct EditorCanvas: View {
             let rect = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
 
             if selected, state.showRanges {
-                for (range, label) in [(210.0, "Musketmen 210"), (240.0, "4-pounder 240")] {
-                    let rr = range * s
+                // Ranges come from the tower table. They were hardcoded here as
+                // 210 and 240 with tower names copied alongside them, and had
+                // already drifted from the real values.
+                for ring in content.ringsByName {
+                    let label = "\(ring.name) \(Int(ring.range))"
+                    let rr = ring.range * s
                     let rangeRect = CGRect(x: c.x - rr, y: c.y - rr, width: 2 * rr, height: 2 * rr)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
                                with: .color(.cyan.opacity(0.4)),

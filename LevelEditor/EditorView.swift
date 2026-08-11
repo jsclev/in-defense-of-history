@@ -290,7 +290,7 @@ struct EditorView: View {
     }
 
     private var statusBar: some View {
-        let warnings = MapGeometry.warnings(for: document.draft)
+        let warnings = MapGeometry.warnings(for: document.draft, maxTowerRange: EditorContent.shared.maxTowerRange)
         return HStack(spacing: 14) {
             Text(cursorText)
                 .monospacedDigit()
