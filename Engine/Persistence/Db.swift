@@ -9,6 +9,7 @@ public class Db {
     private var conn: OpaquePointer?
     public let fullRefresh: Bool
     
+    public let canvasSpecDao: CanvasSpecDAO
     public let campaignDao: CampaignDAO
     public let levelInfoDao: LevelInfoDAO
     public let towerSlotDao: TowerSlotDAO
@@ -110,6 +111,7 @@ public class Db {
         
         self.fullRefresh = fullRefresh
         
+        canvasSpecDao = CanvasSpecDAO(conn: conn)
         campaignDao = CampaignDAO(conn: conn)
         towerSlotDao = TowerSlotDAO(conn: conn)
         pathDao = PathDAO(conn: conn)
@@ -124,6 +126,15 @@ public class Db {
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)
         heroDao = HeroDAO(conn: conn)
         difficultyDao = DifficultyDAO(conn: conn)
+
+        // Every target reads the shared coordinate system through CanvasSpec,
+        // so it loads the moment any connection opens. A database without the
+        // row is unusable; failing here beats a trap at first draw.
+        do {
+            CanvasSpec.load(try canvasSpecDao.get())
+        } catch {
+            fatalError("Unable to load canvas_spec from \(dbPath): \(error)")
+        }
     }
 
     public func close() {

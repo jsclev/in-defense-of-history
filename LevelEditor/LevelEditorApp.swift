@@ -34,6 +34,17 @@ struct LevelEditorApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
 
+    init() {
+        // The editor cannot draw a canvas without the coordinate system in
+        // canvas_spec. EditorContent opens the database and loads it; if the
+        // file is missing there is nothing sane to fall back to.
+        _ = EditorContent.shared
+        guard CanvasSpec.isLoaded else {
+            fatalError("LevelEditor needs ~/Documents/in_defense_of_history.sqlite "
+                + "for the canvas_spec table - run Db/create_db.sh first")
+        }
+    }
+
     var body: some Scene {
         #if os(macOS)
         DocumentGroup(newDocument: { MapDocument() }) { config in

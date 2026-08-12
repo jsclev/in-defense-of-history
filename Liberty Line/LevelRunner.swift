@@ -101,14 +101,14 @@ struct PlacedTower: Identifiable {
 @MainActor
 final class LevelRunner: NSObject, ObservableObject {
     private static let normalTickDuration: Duration = .seconds(1) / SimClock.ticksPerSecond
-    private(set) var mapImageSize: CGSize
     private(set) var mapImageName: String
     private(set) var playableRect: CGRect
 
-    /// Box the map renderer fits the slot sprite into, in map image pixels.
+    /// Box the map renderer fits the slot sprite into, in canonical units.
     /// Tower art drawn on the slot's own canvas is placed in this same box so
-    /// it lands on the slot baked into the map. `.zero` on levels without it.
-    private(set) var slotSize: CGSize = .zero
+    /// it sits on the slot pad. One size for every slot in the game, from the
+    /// canvas_spec table.
+    var slotSize: CGSize { CanvasSpec.slotSize }
     private(set) var startingMoney = 0
 
     @Published private(set) var money = 0
@@ -142,18 +142,6 @@ final class LevelRunner: NSObject, ObservableObject {
     var availableTowerKinds: Set<TowerKind> { Set(towerUnlocks.keys) }
 
     private(set) var slotPositions: [CGPoint] = []
-
-    /// Per-slot pad footprints in canonical units, from tower_slot.slot_width/
-    /// slot_height. A slot with no per-slot size falls back to the level-wide
-    /// default - both come from the database, never from a Swift constant.
-    private var slotFootprints: [CGSize] = []
-
-    func slotSize(at index: Int) -> CGSize {
-        guard slotFootprints.indices.contains(index),
-              slotFootprints[index].width > 0, slotFootprints[index].height > 0
-        else { return slotSize }
-        return slotFootprints[index]
-    }
 
     /// How close a shot must get to count as a hit, in map pixels. Purely a
     /// rendering tolerance — it has no column in the tower table.
@@ -255,8 +243,8 @@ final class LevelRunner: NSObject, ObservableObject {
     private func precomputeLaneCoverage() {
         let cell = Self.laneCell
         let w = Self.pathHalfWidthInImagePixels
-        let cols = Int((mapImageSize.width / cell).rounded(.up)) + 1
-        let rows = Int((mapImageSize.height / cell).rounded(.up)) + 1
+        let cols = Int((CanvasSpec.width / cell).rounded(.up)) + 1
+        let rows = Int((CanvasSpec.height / cell).rounded(.up)) + 1
         var lane = [Bool](repeating: false, count: cols * rows)
 
         // Rasterise the lane by walking each segment's neighbourhood, rather
@@ -377,11 +365,10 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private let enemyHPMultiplier: Double
 
-    init(levelInfoID: UUID?, mapImageName: String, mapImageSize: CGSize,
+    init(levelInfoID: UUID?, mapImageName: String,
          enemyHPMultiplier: Double = 1.0) {
         self.mapImageName = mapImageName
-        self.mapImageSize = mapImageSize
-        self.playableRect = CGRect(origin: .zero, size: mapImageSize)
+        self.playableRect = CanvasSpec.playable
         self.enemyHPMultiplier = enemyHPMultiplier
         super.init()
         load(levelInfoID: levelInfoID)
@@ -412,11 +399,8 @@ final class LevelRunner: NSObject, ObservableObject {
 
             levelName = level.name
             playableRect = level.playableRect
-            slotSize = level.slotSize
-            if !level.mapImageName.isEmpty,
-               level.mapImageSize.width > 0, level.mapImageSize.height > 0 {
+            if !level.mapImageName.isEmpty {
                 mapImageName = level.mapImageName
-                mapImageSize = level.mapImageSize
             }
             startingMoney = level.startingMoney
             money = level.startingMoney
@@ -443,7 +427,6 @@ final class LevelRunner: NSObject, ObservableObject {
                 TowerKind(categoryName: category).map { ($0, levels) }
             })
             slotPositions = level.towerSlots.map { CGPoint(x: $0.position.x, y: $0.position.y) }
-            slotFootprints = level.towerSlots.map { CGSize(width: $0.size.width, height: $0.size.height) }
 
             guard !level.paths.isEmpty else {
                 status = "\(level.name): no path in the database."

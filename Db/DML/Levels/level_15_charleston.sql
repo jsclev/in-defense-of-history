@@ -1,8 +1,7 @@
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
     started_at, ended_at, starting_money, num_starting_lives, num_waves,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
-    map_image_name, map_image_width, map_image_height
+    map_image_name
 ) VALUES (
     '4ca73a47-98f6-41b6-815d-c2c797aa746e',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -14,8 +13,7 @@ INSERT INTO level_info (
     500,
     20,
     15,
-    474.0, 492.0, 1920.0, 1080.0,
-    'level_014_siege_of_charleston', 2868.0, 2064.0
+    'level_014_siege_of_charleston'
 );
 
 INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUES
@@ -38,7 +36,6 @@ INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUE
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index, map_position_x, map_position_y
 ) VALUES
--- Western approach: south-west entry to the left redoubt gate.
 ('c3100000-0000-4000-8000-000000000000', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 0, 0, 702.0, 508.0),
 ('c3100000-0000-4000-8000-000000000001', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 0, 1, 730.0, 536.0),
 ('c3100000-0000-4000-8000-000000000002', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 0, 2, 754.0, 584.0),
@@ -54,7 +51,6 @@ INSERT INTO level_path_point (
 ('c3100000-0000-4000-8000-00000000000c', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 0, 12, 1078.0, 1172.0),
 ('c3100000-0000-4000-8000-00000000000d', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 0, 13, 1130.0, 1224.0),
 ('c3100000-0000-4000-8000-00000000000e', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 0, 14, 1142.0, 1228.0),
--- Centre approach: south entry to the main gate.
 ('c3110000-0000-4000-8000-000000000000', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 1, 0, 1426.0, 508.0),
 ('c3110000-0000-4000-8000-000000000001', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 1, 1, 1426.0, 516.0),
 ('c3110000-0000-4000-8000-000000000002', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 1, 2, 1462.0, 560.0),
@@ -72,7 +68,6 @@ INSERT INTO level_path_point (
 ('c3110000-0000-4000-8000-00000000000e', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 1, 14, 1598.0, 1104.0),
 ('c3110000-0000-4000-8000-00000000000f', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 1, 15, 1562.0, 1140.0),
 ('c3110000-0000-4000-8000-000000000010', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 1, 16, 1562.0, 1228.0),
--- Eastern approach: south-east entry to the right redoubt gate.
 ('c3120000-0000-4000-8000-000000000000', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2, 0, 2270.0, 508.0),
 ('c3120000-0000-4000-8000-000000000001', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2, 1, 2254.0, 524.0),
 ('c3120000-0000-4000-8000-000000000002', '4ca73a47-98f6-41b6-815d-c2c797aa746e', 2, 2, 2254.0, 536.0),

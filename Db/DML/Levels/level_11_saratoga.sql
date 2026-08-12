@@ -1,8 +1,7 @@
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
     started_at, ended_at, starting_money, num_starting_lives, num_waves,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
-    map_image_name, map_image_width, map_image_height
+    map_image_name
 ) VALUES (
     '549a67d9-f721-4cdf-8ba7-8916ba71b040',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -14,8 +13,7 @@ INSERT INTO level_info (
     450,
     20,
     15,
-    474.0, 492.0, 1920.0, 1080.0,
-    'level_011_saratoga', 2868.0, 2064.0
+    'level_011_saratoga'
 );
 
 INSERT INTO tower_slot (

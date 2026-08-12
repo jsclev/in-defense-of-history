@@ -1,8 +1,7 @@
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
     started_at, ended_at, starting_money, num_starting_lives, num_waves,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
-    map_image_name, map_image_width, map_image_height
+    map_image_name
 ) VALUES (
     '46157f59-b21b-4b03-9151-d404c6cd6d0b',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -14,8 +13,7 @@ INSERT INTO level_info (
     480,
     20,
     15,
-    474.0, 492.0, 1920.0, 1080.0,
-    'level_014_savannah_bastion_v7', 2868.0, 2064.0
+    'level_014_savannah_bastion_v7'
 );
 
 INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUES
@@ -36,7 +34,6 @@ INSERT INTO tower_slot (id, level_info_id, map_position_x, map_position_y) VALUE
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index, map_position_x, map_position_y
 ) VALUES
--- Path 0: ship deck, down the gangplank, to the upper-left exit.
 ('e9100000-0000-4000-8000-000000000000', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 0, 0, 1109.3, 1551.3),
 ('e9100000-0000-4000-8000-000000000001', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 0, 1, 1159.5, 1521.8),
 ('e9100000-0000-4000-8000-000000000002', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 0, 2, 1199.6, 1482.0),
@@ -58,7 +55,6 @@ INSERT INTO level_path_point (
 ('e9100000-0000-4000-8000-000000000012', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 0, 18, 657.3, 1201.1),
 ('e9100000-0000-4000-8000-000000000013', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 0, 19, 640.6, 1218.1),
 ('e9100000-0000-4000-8000-000000000014', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 0, 20, 590.3, 1216.1),
--- Path 1: out of the manor arch (mid-right) to the middle-left exit.
 ('e9110000-0000-4000-8000-000000000000', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 1, 0, 2274.3, 1283.3),
 ('e9110000-0000-4000-8000-000000000001', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 1, 1, 2254.2, 1241.1),
 ('e9110000-0000-4000-8000-000000000002', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 1, 2, 2230.8, 1216.8),
@@ -97,7 +93,6 @@ INSERT INTO level_path_point (
 ('e9110000-0000-4000-8000-000000000023', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 1, 35, 647.3, 948.5),
 ('e9110000-0000-4000-8000-000000000024', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 1, 36, 630.5, 942.1),
 ('e9110000-0000-4000-8000-000000000025', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 1, 37, 523.4, 941.6),
--- Path 2: out of the gatehouse door (bottom-right) to the lower-left exit.
 ('e9120000-0000-4000-8000-000000000000', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 2, 0, 2331.2, 662.1),
 ('e9120000-0000-4000-8000-000000000001', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 2, 1, 2297.7, 627.9),
 ('e9120000-0000-4000-8000-000000000002', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 2, 2, 2254.2, 614.7),
@@ -141,7 +136,6 @@ INSERT INTO level_path_point (
 ('e9120000-0000-4000-8000-000000000028', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 2, 40, 677.4, 728.3),
 ('e9120000-0000-4000-8000-000000000029', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 2, 41, 670.7, 734.5),
 ('e9120000-0000-4000-8000-00000000002a', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 2, 42, 556.9, 734.0),
--- Path 3: off the boat's bow to the lower-left exit.
 ('e9130000-0000-4000-8000-000000000000', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 3, 0, 1485.9, 549.1),
 ('e9130000-0000-4000-8000-000000000001', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 3, 1, 1435.7, 532.3),
 ('e9130000-0000-4000-8000-000000000002', '46157f59-b21b-4b03-9151-d404c6cd6d0b', 3, 2, 1383.8, 514.1),

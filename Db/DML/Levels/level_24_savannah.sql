@@ -1,7 +1,6 @@
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
-    started_at, ended_at, starting_money, num_starting_lives, num_waves,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height
+    started_at, ended_at, starting_money, num_starting_lives, num_waves
 ) VALUES (
     'b01bfd74-6f62-4f66-ba84-1af4d08112c0',
     'a97b80f7-a291-4408-9071-771aa208f413',
@@ -12,6 +11,5 @@ INSERT INTO level_info (
     julianday('1779-10-18T12:00:00-05:00'),
     300,
     20,
-    15,
-    474.0, 492.0, 1920.0, 1080.0
+    15
 );

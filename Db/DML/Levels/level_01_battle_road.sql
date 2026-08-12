@@ -1,9 +1,7 @@
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
     started_at, ended_at, starting_money, num_starting_lives, num_waves,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
-    map_image_name, map_image_width, map_image_height,
-    slot_width, slot_height
+    map_image_name
 ) VALUES (
     'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -15,26 +13,20 @@ INSERT INTO level_info (
     270,
     20,
     6,
-    474.0, 492.0, 1920.0, 1080.0,
-    'level_01_battle_road', 2868.0, 2064.0,
-    -- Matches SLOT_BOX in Images/Level Maps/01/compose_level_01_map.py, which
-    -- bakes the slots into the map at this size. Change both together or the
-    -- towers drift off their slots. 139.1 x 119.2 is the original 112 x 96
-    -- grown 15% for phone readability.
-    139.1, 119.2
+    'level_01_battle_road'
 );
 
 INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y, slot_width, slot_height
+    id, level_info_id, map_position_x, map_position_y
 ) VALUES
-('cf747ffd-db8a-5a7a-aeaf-30b1e0e0e982', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 755.32, 910.79, 139.1, 107.24),
-('520c59eb-910e-513f-9544-49aad0b4cec6', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1013.18, 640.68, 139.1, 107.24),
-('6d0cc5bc-75cc-522e-92ea-477bc8bdc5bb', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1473.02, 1131.22, 139.1, 107.24),
-('d4f66e80-2b58-537e-b15d-b5a941dc7416', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1167.61, 908.68, 139.1, 107.24),
-('a4e7cb06-8829-5fab-b9eb-84445034bf9e', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1652.68, 1324.42, 139.1, 107.24),
-('7ab5f971-ae82-50f1-a474-b93a97ad94e5', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1812.03, 1226.01, 139.1, 107.24),
-('4002f923-75e8-525d-82ce-70d76469a0a0', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 2006.89, 931.07, 139.1, 107.24),
-('f4f06aae-017f-5620-8957-dba7c8ac5c1c', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1026.03, 867.49, 139.1, 107.24);
+('cf747ffd-db8a-5a7a-aeaf-30b1e0e0e982', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 758.0, 925.4),
+('520c59eb-910e-513f-9544-49aad0b4cec6', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1013.1, 626.6),
+('6d0cc5bc-75cc-522e-92ea-477bc8bdc5bb', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1477.8, 1100.2),
+('d4f66e80-2b58-537e-b15d-b5a941dc7416', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1157.5, 943.1),
+('a4e7cb06-8829-5fab-b9eb-84445034bf9e', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1659.9, 1339.2),
+('7ab5f971-ae82-50f1-a474-b93a97ad94e5', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1816.6, 1243.4),
+('4002f923-75e8-525d-82ce-70d76469a0a0', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1995.9, 917.2),
+('f4f06aae-017f-5620-8957-dba7c8ac5c1c', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 981.1, 884.6);
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

@@ -10,7 +10,6 @@ struct CampaignNode: Identifiable {
     var levelInfoID: UUID?
 
     var mapImageName: String
-    var mapImageSize: CGSize
 }
 
 extension CampaignNode {
@@ -21,8 +20,7 @@ extension CampaignNode {
                   title: level.name,
                   imagePosition: level.worldMapPosition,
                   levelInfoID: level.id,
-                  mapImageName: level.mapImageName,
-                  mapImageSize: level.mapImageSize)
+                  mapImageName: level.mapImageName)
     }
 
     static func load(campaignName: String = mainCampaignName) -> [CampaignNode] {

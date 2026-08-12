@@ -492,6 +492,10 @@ if let bpName = opts.blueprint {
         FileHandle.standardError.write(Data("Unknown blueprint '\(bpName)'. Known: \(Blueprints.all.map { $0.name }.joined(separator: ", "))\n".utf8))
         exit(2)
     }
+    // Blueprints carry no level data of their own, but the coordinate system
+    // they build in lives in canvas_spec — opening the database loads it.
+    _ = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
+           fullRefresh: false)
     let level = bp.makeLevel()
     let catalog = DesignArsenal.catalog()
 

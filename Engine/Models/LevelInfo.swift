@@ -12,10 +12,6 @@ public struct LevelInfo: Codable, Sendable, Identifiable, Equatable {
     public let endedAt: Date
     public let playableRect: CGRect
     public let mapImageName: String
-    public let mapImageSize: CGSize
-    /// Box the map renderer fits the tower slot sprite into, in map image
-    /// pixels. `.zero` when the level has no slot-canvas tower art.
-    public let slotSize: CGSize
     public var paths: [Path]
     public var towerSlots: [TowerSlot]
     public var waves: [Wave]
@@ -30,8 +26,6 @@ public struct LevelInfo: Codable, Sendable, Identifiable, Equatable {
                 numWaves: Int = 0,
                 playableRect: CGRect,
                 mapImageName: String = "",
-                mapImageSize: CGSize = .zero,
-                slotSize: CGSize = .zero,
                 paths: [Path],
                 towerSlots: [TowerSlot],
                 waves: [Wave]) {
@@ -45,8 +39,6 @@ public struct LevelInfo: Codable, Sendable, Identifiable, Equatable {
         self.numWaves = numWaves
         self.playableRect = playableRect
         self.mapImageName = mapImageName
-        self.mapImageSize = mapImageSize
-        self.slotSize = slotSize
         self.paths = paths
         self.towerSlots = towerSlots
         self.waves = waves

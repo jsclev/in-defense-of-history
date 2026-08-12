@@ -1,7 +1,9 @@
 import SwiftUI
 
 struct LevelMapProjection {
-    let imageSize: CGSize
+    /// The virtual canvas, from canvas_spec. Map artwork is required to be
+    /// exactly this size, so the projection never asks the image.
+    var canvasSize: CGSize { CanvasSpec.size }
     let playableRect: CGRect
     let fitRect: CGRect
 
@@ -15,7 +17,7 @@ struct LevelMapProjection {
         // happening to be vertically centred.
         CGPoint(
             x: fitRect.midX - playableRect.midX * scale,
-            y: fitRect.midY - (imageSize.height - playableRect.midY) * scale
+            y: fitRect.midY - (canvasSize.height - playableRect.midY) * scale
         )
     }
 
@@ -23,38 +25,52 @@ struct LevelMapProjection {
     /// The only place the game flips.
     func viewPoint(_ p: CGPoint) -> CGPoint {
         CGPoint(x: origin.x + p.x * scale,
-                y: origin.y + (imageSize.height - p.y) * scale)
+                y: origin.y + (canvasSize.height - p.y) * scale)
     }
 
     func viewLength(_ l: CGFloat) -> CGFloat { l * scale }
 
     var imageFrameSize: CGSize {
-        CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+        CGSize(width: canvasSize.width * scale, height: canvasSize.height * scale)
     }
 
     var imageCenter: CGPoint {
-        viewPoint(CGPoint(x: imageSize.width / 2, y: imageSize.height / 2))
+        viewPoint(CGPoint(x: canvasSize.width / 2, y: canvasSize.height / 2))
     }
 }
 
 enum RadialMenu {
     static let radius: CGFloat = 91.0
 
-    static let buttonSide: CGFloat = 86.70
+    /// 10% up from the tuned 86.70, judged on device.
+    static let buttonSide: CGFloat = 95.37
 
-    static let iconFraction: CGFloat = 0.5321
+    /// Fraction of the parchment well an icon fills. ONE number for every
+    /// menu item — build choices, upgrade choices, locked and MAX states all
+    /// read `iconSide(count:)`; nothing sizes a menu icon any other way.
+    static let iconWellFraction: CGFloat = 0.72
 
-    static var iconSide: CGFloat { buttonSide * iconFraction }
+    /// Icon side for a menu with `count` choices, derived from that art's
+    /// own well size — the wells differ between the 4-choice art and the
+    /// 1-3 choice art, so icon size must too.
+    static func iconSide(count: Int) -> CGFloat {
+        iconWellDiameter(count: count) * iconWellFraction
+    }
+
+    /// The menu's visual centre sits this fraction of the drawn background
+    /// diameter BELOW the anchor (the slot point) — the menu read as centred
+    /// too high on the slot. Applied once, in menuCenter, which background
+    /// and every item share.
+    static let centerDropFraction: CGFloat = 0.15
+
+    static func menuCenter(anchor: CGPoint, count: Int, scale: CGFloat) -> CGPoint {
+        CGPoint(x: anchor.x,
+                y: anchor.y + backgroundDiameter(count: count) * centerDropFraction * scale)
+    }
 
     private static let fourChoiceArtScale: CGFloat = (90.5 / 409.5) * 0.9 * 0.92 * 0.96
 
     private static let variantArtScale: CGFloat = radius / 541
-
-    static let iconDropFraction: CGFloat = 0
-
-    static func iconDropFraction(for _: TowerKind) -> CGFloat {
-        iconDropFraction
-    }
 
     private struct Art {
         let assetName: String
@@ -103,17 +119,20 @@ enum RadialMenu {
         return art.parchmentPx * art.pointsPerPx
     }
 
-    static let itemSpread: CGFloat = 1.134
-
+    /// Menu icons sit dead-centre on the parchment bubbles baked into the
+    /// radial background art, so item positions are exactly the art's bubble
+    /// offsets — no spread factor. (`itemSpread` existed to push the old
+    /// framed buttons outward; with the frames gone it only displaced icons
+    /// off their bubbles.)
     static func itemOffset(index: Int, count: Int) -> CGSize {
         let art = art(count: count)
         guard art.bubbleOffsetsPx.indices.contains(index) else {
             let angle = Angle.degrees(-90 + Double(index) * 360 / Double(count))
-            return CGSize(width: radius * itemSpread * cos(angle.radians),
-                          height: radius * itemSpread * sin(angle.radians))
+            return CGSize(width: radius * cos(angle.radians),
+                          height: radius * sin(angle.radians))
         }
-        return CGSize(width: art.bubbleOffsetsPx[index].width * art.pointsPerPx * itemSpread,
-                      height: art.bubbleOffsetsPx[index].height * art.pointsPerPx * itemSpread)
+        return CGSize(width: art.bubbleOffsetsPx[index].width * art.pointsPerPx,
+                      height: art.bubbleOffsetsPx[index].height * art.pointsPerPx)
     }
 }
 
@@ -140,11 +159,11 @@ struct LevelMapView: View {
         (.infinity, Color(red: 1.00, green: 0.31, blue: 0.64)),  // magenta
     ]
 
-    /// Tap box for a slot: its own footprint at this projection, margin past
+    /// Tap box for a slot: the slot footprint at this projection, margin past
     /// it, floored at Apple's minimum. One definition for the button and the
     /// debug readout.
-    private func slotTapSize(at index: Int, projection: LevelMapProjection) -> CGSize {
-        SlotTapTarget.size(slotSize: runner.slotSize(at: index),
+    private func slotTapSize(projection: LevelMapProjection) -> CGSize {
+        SlotTapTarget.size(slotSize: runner.slotSize,
                            pointsPerMapUnit: projection.scale)
     }
 
@@ -174,7 +193,6 @@ struct LevelMapView: View {
         _runner = StateObject(wrappedValue: LevelRunner(
             levelInfoID: node.levelInfoID,
             mapImageName: node.mapImageName,
-            mapImageSize: node.mapImageSize,
             enemyHPMultiplier: difficulty.enemyHPMultiplier
         ))
     }
@@ -245,7 +263,10 @@ struct LevelMapView: View {
                               action: @escaping () -> Void) -> some View {
         Button(action: action) {
             ZStack {
-                Image("tower_menu_square_frame")
+                // The same parchment bubble the tower menu's choices sit on,
+                // so the corner controls and the radial menu read as one
+                // family of circular buttons.
+                Image("radial_menu_bubble")
                     .resizable()
                     .interpolation(.high)
                     .scaledToFit()
@@ -255,7 +276,7 @@ struct LevelMapView: View {
                     .frame(width: frame.width * Self.controlGlyphFraction,
                            height: frame.height * Self.controlGlyphFraction)
             }
-            .contentShape(Rectangle())
+            .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .hudFrame(frame, in: screen)
@@ -263,7 +284,6 @@ struct LevelMapView: View {
 
     private func content(in viewSize: CGSize, safe: CGRect) -> some View {
         let projection = LevelMapProjection(
-            imageSize: runner.mapImageSize,
             playableRect: runner.playableRect,
             fitRect: safe
         )
@@ -276,7 +296,7 @@ struct LevelMapView: View {
             Group {
                 Image(RadialMenu.backgroundAssetName(count: TowerKind.allCases.count))
                 Image(RadialMenu.backgroundAssetName(count: 1))
-                Image("tower_menu_square_frame")
+                Image("radial_menu_bubble")
                 ForEach(TowerKind.allCases) { kind in
                     Image(kind.menuIconName)
                 }
@@ -292,20 +312,17 @@ struct LevelMapView: View {
                        height: projection.imageFrameSize.height)
                 .position(projection.imageCenter)
 
-            // The slot pads. Each is placed and sized from its footprint in the
-            // level data (GeoJSON -> tower_slot.slot_width/height), scaled by the
-            // same projection that fits the virtual playable rect to the screen.
-            ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
-                let pad = runner.slotSize(at: index)
-                if pad.width > 0, pad.height > 0 {
-                    Image("tower_slot_field")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: projection.viewLength(pad.width),
-                               height: projection.viewLength(pad.height))
-                        .position(projection.viewPoint(slotPosition))
-                        .allowsHitTesting(false)
-                }
+            // The slot pads. Every slot renders at the one footprint in
+            // canvas_spec, scaled by the same projection that fits the
+            // virtual playable rect to the screen.
+            ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { _, slotPosition in
+                Image("tower_slot_field")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: projection.viewLength(runner.slotSize.width),
+                           height: projection.viewLength(runner.slotSize.height))
+                    .position(projection.viewPoint(slotPosition))
+                    .allowsHitTesting(false)
             }
 
             if debugMode {
@@ -326,10 +343,8 @@ struct LevelMapView: View {
                     let towerHeight = sprites.points(tower.kind.spriteHeight)
                     let basePoint = projection.viewPoint(tower.position)
 
-                    if tower.kind.usesSlotCanvasArt,
-                       runner.slotSize(at: tower.slotIndex).width > 0,
-                       runner.slotSize(at: tower.slotIndex).height > 0 {
-                        let slotBox = runner.slotSize(at: tower.slotIndex)
+                    if tower.kind.usesSlotCanvasArt {
+                        let slotBox = runner.slotSize
                         // Drawn on tower_slot.png's canvas, so it starts from
                         // the slot's own box, scaled by the same projection
                         // that fits the playable rect to the screen —
@@ -408,7 +423,7 @@ struct LevelMapView: View {
             .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
 
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
-                let slotTap = slotTapSize(at: index, projection: projection)
+                let slotTap = slotTapSize(projection: projection)
                 Button {
                     // Restoring a dismissed ring takes the whole tap, so
                     // bringing one back never also opens the upgrade menu.
@@ -435,7 +450,7 @@ struct LevelMapView: View {
             if debugMode, Self.showSlotTapInfo {
                 ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                     let p = projection.viewPoint(slotPosition)
-                    let slotTap = slotTapSize(at: index, projection: projection)
+                    let slotTap = slotTapSize(projection: projection)
                     Text("tap \(Int(slotTap.width.rounded()))×\(Int(slotTap.height.rounded()))pt · Apple min \(Int(TouchTarget.minimum))×\(Int(TouchTarget.minimum))")
                         .font(.system(size: Typography.size(11 * metrics.scale),
                                       weight: .semibold, design: .rounded))
@@ -632,14 +647,18 @@ struct LevelMapView: View {
             .onTapGesture { runner.dismissMenu() }
     }
 
-    private func radialBuildMenu(around center: CGPoint, scale: CGFloat) -> some View {
+    private func radialBuildMenu(around anchor: CGPoint, scale: CGFloat) -> some View {
         let kinds = TowerKind.allCases
+        // One adjusted centre for the background and every item, so nothing
+        // in the menu can drift from anything else.
+        let center = RadialMenu.menuCenter(anchor: anchor, count: kinds.count,
+                                           scale: scale)
         return Group {
             radialMenuBackground(count: kinds.count, center: center, scale: scale)
             ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
                 let offset = RadialMenu.itemOffset(index: index, count: kinds.count)
                 BuildMenuItem(kind: kind, isAvailable: runner.maxLevel(for: kind) >= 1,
-                              scale: scale) {
+                              count: kinds.count, scale: scale) {
                     runner.buildTower(kind)
                 }
                 .position(x: center.x + offset.width * scale,
@@ -648,16 +667,21 @@ struct LevelMapView: View {
         }
     }
 
-    private func upgradeMenu(for tower: PlacedTower, around center: CGPoint,
+    private func upgradeMenu(for tower: PlacedTower, around anchor: CGPoint,
                              scale: CGFloat) -> some View {
         let offers = runner.upgradeOffers
         let count = max(offers.count, 1)
+        // Same shared centre as the build menu: background and items move as
+        // one, always.
+        let center = RadialMenu.menuCenter(anchor: anchor, count: count,
+                                           scale: scale)
         return Group {
             radialMenuBackground(count: count, center: center, scale: scale)
             if offers.isEmpty {
                 let offset = RadialMenu.itemOffset(index: 0, count: 1)
                 UpgradeMenuItem(iconName: tower.kind.menuIconName,
-                                dropKind: tower.kind, cost: nil, scale: scale) {}
+                                dropKind: tower.kind, cost: nil,
+                                count: count, scale: scale) {}
                     .position(x: center.x + offset.width * scale,
                               y: center.y + offset.height * scale)
             } else {
@@ -668,7 +692,7 @@ struct LevelMapView: View {
                                                 branch: offer.branch) ?? tower.kind.menuIconName)
                         : tower.kind.menuIconName
                     UpgradeMenuItem(iconName: iconName, dropKind: tower.kind,
-                                    cost: offer.cost, scale: scale) {
+                                    cost: offer.cost, count: count, scale: scale) {
                         runner.upgradeSelectedTower(branch: offer.branch)
                     }
                     .position(x: center.x + offset.width * scale,
@@ -772,6 +796,7 @@ struct LevelMapView: View {
 private struct BuildMenuItem: View {
     let kind: TowerKind
     let isAvailable: Bool
+    let count: Int
     let scale: CGFloat
     let action: () -> Void
 
@@ -782,24 +807,19 @@ private struct BuildMenuItem: View {
 
     private var icon: some View {
         let buttonSide = RadialMenu.buttonSide * scale
-        let iconSize = RadialMenu.iconSide * scale
+        let iconSize = RadialMenu.iconSide(count: count) * scale
+        // The icon is centred in the tap box, and the tap box is centred on
+        // the bubble by itemOffset — no offsets anywhere in between. Size
+        // comes from the well, the same as every other menu item.
         return ZStack {
-            Image("tower_menu_square_frame")
-                .resizable()
-                .interpolation(.high)
-                .scaledToFit()
-                .frame(width: buttonSide, height: buttonSide)
             Image(isAvailable ? kind.menuIconName : "tower_locked_icon")
                 .resizable()
                 .scaledToFit()
                 .frame(width: isAvailable ? iconSize : iconSize * 0.81,
                        height: isAvailable ? iconSize : iconSize * 0.81)
-                .offset(y: iconSize * (isAvailable
-                    ? RadialMenu.iconDropFraction(for: kind)
-                    : RadialMenu.iconDropFraction))
         }
         .frame(width: buttonSide, height: buttonSide)
-        .contentShape(RoundedRectangle(cornerRadius: buttonSide * 0.10))
+        .contentShape(Circle())
     }
 }
 
@@ -807,51 +827,56 @@ private struct UpgradeMenuItem: View {
     let iconName: String
     let dropKind: TowerKind
     let cost: Int?
+    let count: Int
     let scale: CGFloat
     let action: () -> Void
 
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 3 * scale) {
-                ZStack {
-                    let iconSize = RadialMenu.iconSide * scale
-                    Image("tower_menu_square_frame")
-                        .resizable()
-                        .interpolation(.high)
-                        .scaledToFit()
-                        .frame(width: RadialMenu.buttonSide * scale,
-                               height: RadialMenu.buttonSide * scale)
-                    Image(iconName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: iconSize, height: iconSize)
-                        .offset(y: iconSize * RadialMenu.iconDropFraction(for: dropKind))
-                        .opacity(cost != nil ? 1 : 0.5)
-                }
-                .frame(width: RadialMenu.buttonSide * scale,
-                       height: RadialMenu.buttonSide * scale)
-
-                if let cost {
-                    Label("\(cost)", systemImage: "circle.fill")
-                        .font(.system(size: Typography.size(12 * scale), weight: .bold))
-                        .labelStyle(.titleOnly)
-                        .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
-                        .padding(.horizontal, 8 * scale)
-                        .padding(.vertical, 2 * scale)
-                        .background(.black.opacity(0.7), in: Capsule())
-                } else {
-                    Text("MAX")
-                        .font(.system(size: Typography.size(11 * scale), weight: .bold))
-                        .foregroundStyle(.white.opacity(0.8))
-                        .padding(.horizontal, 8 * scale)
-                        .padding(.vertical, 2 * scale)
-                        .background(.black.opacity(0.55), in: Capsule())
-                }
+        let buttonSide = RadialMenu.buttonSide * scale
+        let iconSize = RadialMenu.iconSide(count: count) * scale
+        // The button's layout box is exactly the tap box, with the icon
+        // centred in it, so positioning the button centres the icon on its
+        // parchment bubble. The cost capsule hangs below as an overlay and
+        // never shifts the icon — a VStack here would centre the icon+capsule
+        // pair instead, riding the icon up off the bubble.
+        return Button(action: action) {
+            ZStack {
+                Image(iconName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: iconSize, height: iconSize)
+                    .opacity(cost != nil ? 1 : 0.5)
             }
-            .contentShape(Rectangle())
+            .frame(width: buttonSide, height: buttonSide)
+            .overlay(alignment: .bottom) {
+                costCapsule
+                    .fixedSize()
+                    // Sits the capsule's top just under the tap box.
+                    .alignmentGuide(.bottom) { $0[.top] - 3 * scale }
+            }
+            .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .disabled(cost == nil)
+    }
+
+    @ViewBuilder private var costCapsule: some View {
+        if let cost {
+            Label("\(cost)", systemImage: "circle.fill")
+                .font(.system(size: Typography.size(12 * scale), weight: .bold))
+                .labelStyle(.titleOnly)
+                .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
+                .padding(.horizontal, 8 * scale)
+                .padding(.vertical, 2 * scale)
+                .background(.black.opacity(0.7), in: Capsule())
+        } else {
+            Text("MAX")
+                .font(.system(size: Typography.size(11 * scale), weight: .bold))
+                .foregroundStyle(.white.opacity(0.8))
+                .padding(.horizontal, 8 * scale)
+                .padding(.vertical, 2 * scale)
+                .background(.black.opacity(0.55), in: Capsule())
+        }
     }
 }
 

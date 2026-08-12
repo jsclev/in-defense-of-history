@@ -230,7 +230,7 @@ struct EditorView: View {
                     .help("Show the generated outer-edge waypoints of each road")
 
                 Toggle(isOn: $s.showPlayable) { Image(systemName: "rectangle.dashed") }
-                    .help("Highlight the 1920×1080 playable rect and dim the bleed")
+                    .help("Highlight the \(Int(CanvasSpec.playable.width))×\(Int(CanvasSpec.playable.height)) playable rect and dim the bleed")
                 Toggle(isOn: $s.showGrid) { Image(systemName: "grid") }
                     .help("Show grid (15 px minor, 120 px major)")
                 Toggle(isOn: $s.snapToGrid) { Image(systemName: "dot.squareshape.split.2x2") }
@@ -295,7 +295,7 @@ struct EditorView: View {
             Text(cursorText)
                 .monospacedDigit()
                 .frame(width: 150, alignment: .leading)
-            Text("canvas 2868×2064")
+            Text("canvas \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
                 .foregroundStyle(.tertiary)
             Text("\(document.draft.roads.count) roads · \(document.draft.slots.count) slots · \(document.draft.waves.count) waves")
                 .foregroundStyle(.secondary)

@@ -52,15 +52,8 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
         var slot: Int
     }
 
-    /// The canonical space: 2868x2064, lower-left origin, +y up. Documents saved
-    /// under an older token are upgraded on load by `upgrade(from:)`.
     static let canvasSpace = "canonical2868x2064"
 
-    /// Bring a saved document's points into the canonical space.
-    ///
-    /// - `design1600x900`: the old LevelBlueprint space - scale onto the playable
-    ///   rect, then flip.
-    /// - `canvas2868x2064`: already the right size and origin, but y-down.
     private static func upgrade(from space: String) -> (Point) -> Point {
         if space == "design1600x900" {
             let legacyDesignWidth = 1600.0

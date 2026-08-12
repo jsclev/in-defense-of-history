@@ -56,9 +56,7 @@ public class LevelInfoDAO: BaseDAO {
                 l.level_name,
                 l.world_map_x,
                 l.world_map_y,
-                l.map_image_name,
-                l.map_image_width,
-                l.map_image_height
+                l.map_image_name
             FROM
                 level_info l
             INNER JOIN
@@ -87,9 +85,7 @@ public class LevelInfoDAO: BaseDAO {
                 name: name,
                 worldMapPosition: CGPoint(x: getDouble(stmt: stmt, colIndex: 2),
                                           y: getDouble(stmt: stmt, colIndex: 3)),
-                mapImageName: (try getString(stmt: stmt, colIndex: 4)) ?? "",
-                mapImageSize: CGSize(width: getDouble(stmt: stmt, colIndex: 5),
-                                     height: getDouble(stmt: stmt, colIndex: 6))
+                mapImageName: (try getString(stmt: stmt, colIndex: 4)) ?? ""
             ))
         }
 
@@ -111,20 +107,18 @@ public class LevelInfoDAO: BaseDAO {
                 l.num_starting_lives,
                 c.id AS campaign_id,
                 c.campaign_name,
-                l.playable_rect_x,
-                l.playable_rect_y,
-                l.playable_rect_width,
-                l.playable_rect_height,
+                d.playable_rect_x,
+                d.playable_rect_y,
+                d.playable_rect_width,
+                d.playable_rect_height,
                 l.map_image_name,
-                l.map_image_width,
-                l.map_image_height,
-                l.num_waves,
-                l.slot_width,
-                l.slot_height
+                l.num_waves
             FROM
                 level_info l
             INNER JOIN
                 campaign c ON c.id = l.campaign_id
+            CROSS JOIN
+                canvas_spec d
             WHERE
                 l.id = ?
         """)
@@ -154,11 +148,7 @@ public class LevelInfoDAO: BaseDAO {
                 )
 
                 let mapImageName = (try getString(stmt: stmt, colIndex: 12)) ?? ""
-                let mapImageSize = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
-                                          height: getDouble(stmt: stmt, colIndex: 14))
-                let numWaves = getInt(stmt: stmt, colIndex: 15)
-                let slotSize = CGSize(width: getDouble(stmt: stmt, colIndex: 16),
-                                      height: getDouble(stmt: stmt, colIndex: 17))
+                let numWaves = getInt(stmt: stmt, colIndex: 13)
 
                 sqlite3_finalize(stmt)
                 stmt = nil
@@ -177,8 +167,6 @@ public class LevelInfoDAO: BaseDAO {
                                  numWaves: numWaves,
                                  playableRect: playableRect,
                                  mapImageName: mapImageName,
-                                 mapImageSize: mapImageSize,
-                                 slotSize: slotSize,
                                  paths: paths,
                                  towerSlots: towerSlots,
                                  waves: waves)

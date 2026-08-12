@@ -80,6 +80,20 @@ CREATE TABLE player_unlocked_hero (
     hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id)
 );
 
+CREATE TABLE canvas_spec (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    canvas_width REAL NOT NULL CHECK (canvas_width > 0.0),
+    canvas_height REAL NOT NULL CHECK (canvas_height > 0.0),
+    playable_rect_x REAL NOT NULL CHECK (playable_rect_x >= 0.0),
+    playable_rect_y REAL NOT NULL CHECK (playable_rect_y >= 0.0),
+    playable_rect_width REAL NOT NULL CHECK (playable_rect_width > 0.0),
+    playable_rect_height REAL NOT NULL CHECK (playable_rect_height > 0.0),
+    slot_width REAL NOT NULL CHECK (slot_width > 0.0),
+    slot_height REAL NOT NULL CHECK (slot_height > 0.0),
+    CHECK (playable_rect_x + playable_rect_width <= canvas_width),
+    CHECK (playable_rect_y + playable_rect_height <= canvas_height)
+);
+
 CREATE TABLE level_info (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     campaign_id TEXT NOT NULL REFERENCES campaign (id),
@@ -91,17 +105,7 @@ CREATE TABLE level_info (
     starting_money INTEGER NOT NULL CHECK (starting_money > 0),
     num_starting_lives INTEGER NOT NULL CHECK (num_starting_lives > 0),
     num_waves INTEGER NOT NULL DEFAULT 0 CHECK (num_waves >= 0),
-    playable_rect_x REAL NOT NULL CHECK (playable_rect_x >= 0.0),
-    playable_rect_y REAL NOT NULL CHECK (playable_rect_y >= 0.0),
-    playable_rect_width REAL NOT NULL CHECK (playable_rect_width >= 0.0),
-    playable_rect_height REAL NOT NULL CHECK (playable_rect_height >= 0.0),
-    map_image_name TEXT NOT NULL DEFAULT '',
-    map_image_width REAL NOT NULL DEFAULT 0.0 CHECK (map_image_width >= 0.0),
-    map_image_height REAL NOT NULL DEFAULT 0.0 CHECK (map_image_height >= 0.0),
-    slot_width REAL NOT NULL DEFAULT 0.0 CHECK (slot_width >= 0.0),
-    slot_height REAL NOT NULL DEFAULT 0.0 CHECK (slot_height >= 0.0),
-    CHECK (map_image_width = 0.0 OR playable_rect_x + playable_rect_width <= map_image_width),
-    CHECK (map_image_height = 0.0 OR playable_rect_y + playable_rect_height <= map_image_height)
+    map_image_name TEXT NOT NULL DEFAULT ''
 );
 
 CREATE TABLE level_tower_unlock (
@@ -146,9 +150,7 @@ CREATE TABLE tower_slot (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     level_info_id TEXT NOT NULL REFERENCES level_info (id),
     map_position_x REAL NOT NULL,
-    map_position_y REAL NOT NULL,
-    slot_width REAL NOT NULL DEFAULT 0.0 CHECK (slot_width >= 0.0),
-    slot_height REAL NOT NULL DEFAULT 0.0 CHECK (slot_height >= 0.0)
+    map_position_y REAL NOT NULL
 );
 
 CREATE TABLE hero (

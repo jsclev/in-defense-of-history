@@ -63,16 +63,12 @@ struct SweepFixedInputs {
     /// This used to rescale positions into a separate 1600x900 design space while
     /// leaving tower ranges in database units, which silently gave simulated
     /// towers 2.4x the reach they have in the game. Everything is now in the one
-    /// canonical space, so geometry passes through untouched.
+    /// canonical space - the playable rect comes from the canvas_spec table
+    /// through LevelInfoDAO - so geometry passes through untouched.
     static func designLevel(db: Db, levelName: String, fixed: SweepFixedInputs) throws -> LevelInfo {
         let level = try db.levelInfoDao.getBy(id: fixed.levelID)
-        let rect = level.playableRect
-        guard rect.width > 0, rect.height > 0, !level.paths.isEmpty, !level.towerSlots.isEmpty else {
+        guard !level.paths.isEmpty, !level.towerSlots.isEmpty else {
             throw DbError.Db(message: "Level '\(levelName)' has no paths or tower slots in the database")
-        }
-        guard rect == CanvasSpec.playable else {
-            throw DbError.Db(message: "Level '\(levelName)' has playable rect \(rect), "
-                + "expected the canonical \(CanvasSpec.playable). Run migrate_to_canonical_space.py.")
         }
         let paths = level.paths.map { Path(points: simplify($0.points, maxPoints: 16)) }
         return LevelInfo(
@@ -80,7 +76,7 @@ struct SweepFixedInputs {
             startedAt: level.startedAt, endedAt: level.endedAt,
             startingMoney: level.startingMoney, numStartingLives: level.numStartingLives,
             numWaves: fixed.numWaves,
-            playableRect: CanvasSpec.playable,
+            playableRect: level.playableRect,
             paths: paths, towerSlots: level.towerSlots, waves: []
         )
     }

@@ -419,7 +419,7 @@ struct EditorCanvas: View {
         ctx.stroke(SwiftUI.Path(playable), with: .color(.green.opacity(0.85)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [8, 5]))
         ctx.draw(
-            Text("playable 1920×1080")
+            Text("playable \(Int(CanvasSpec.playable.width))×\(Int(CanvasSpec.playable.height))")
                 .font(.system(size: max(10, 11 * t.scale), weight: .medium))
                 .foregroundStyle(.green.opacity(0.85)),
             at: CGPoint(x: playable.minX + 60 * t.scale, y: playable.minY - 10),

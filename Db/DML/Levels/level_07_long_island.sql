@@ -1,8 +1,7 @@
 INSERT INTO level_info (
     id, campaign_id, level_name, world_map_x, world_map_y,
     started_at, ended_at, starting_money, num_starting_lives, num_waves,
-    playable_rect_x, playable_rect_y, playable_rect_width, playable_rect_height,
-    map_image_name, map_image_width, map_image_height
+    map_image_name
 ) VALUES (
     '99633efd-f135-44fc-8248-b8635a6db957',
     'f589a28f-54d8-4791-851c-a307f252151a',
@@ -14,8 +13,7 @@ INSERT INTO level_info (
     420,
     20,
     15,
-    474.0, 492.0, 1920.0, 1080.0,
-    'level_007_long_island', 2868.0, 2064.0
+    'level_007_long_island'
 );
 
 INSERT INTO tower_slot (

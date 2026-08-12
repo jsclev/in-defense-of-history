@@ -197,7 +197,9 @@ struct InspectorView: View {
                     .onTapGesture { state.selection = .slot(i) }
                 }
                 Button {
-                    document.edit(undoManager) { $0.slots.append(Point(1434, 1032)) }
+                    document.edit(undoManager) {
+                        $0.slots.append(Point(CanvasSpec.playable.midX, CanvasSpec.playable.midY))
+                    }
                     state.selection = .slot(document.draft.slots.count - 1)
                 } label: {
                     Label("Add Slot", systemImage: "plus")
