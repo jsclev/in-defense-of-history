@@ -89,6 +89,7 @@ sqlite3 in_defense_of_history.sqlite < DML/unlocked_heroes.sql
 sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_enemy_types.sql
 sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_enemy_type_bounty.sql
 sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_melee_units.sql
+sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_tower_ranges.sql
 
 # cp in_defense_of_history.sqlite "../Tests App/Resources/Db/test_in_defense_of_history.sqlite"
 

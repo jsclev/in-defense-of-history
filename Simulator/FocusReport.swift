@@ -1,31 +1,33 @@
 import Foundation
 
+/// One focus value (e.g. range = 137) and everything measured at it.
+///
+/// Every statistic here is a mean, never a percentile. A permutation's win
+/// rate is the share of its seeds that won, and with deterministic damage
+/// that share is always exactly 0 or 1 — so percentiles of it are also 0 or
+/// 1 and carry no information. The mean of a 0/1 sample is the fraction of
+/// permutations that won, which is the quantity worth plotting.
 struct FocusBucket {
     var value: Double
     var label: String
-    var wins: [Double] = []
-    var unwinnable = 0
-    var struggle = 0
-    var band = 0
-    var comfortable = 0
-    var trivial = 0
-    var naiveClearSum = 0.0
-    var greedyClearSum = 0.0
-    var histogram = [Int](repeating: 0, count: 10)
+    var n = 0
+    var winSum = 0.0
+    var livesFractionSum = 0.0
+    var leakedSum = 0.0
+    var zeroWin = 0
 
-    var n: Int { wins.count }
-    var winMean: Double { wins.isEmpty ? 0 : wins.reduce(0, +) / Double(wins.count) }
-    var bandShare: Double { n == 0 ? 0 : Double(band) / Double(n) }
-    var naiveClear: Double { n == 0 ? 0 : naiveClearSum / Double(n) }
-    var greedyClear: Double { n == 0 ? 0 : greedyClearSum / Double(n) }
+    var winMean: Double { n == 0 ? 0 : winSum / Double(n) }
+    var livesFraction: Double { n == 0 ? 0 : livesFractionSum / Double(n) }
+    var meanLeaked: Double { n == 0 ? 0 : leakedSum / Double(n) }
+    var zeroShare: Double { n == 0 ? 0 : Double(zeroWin) / Double(n) }
 
-    func winPercentile(_ p: Double) -> Double {
-        guard !wins.isEmpty else { return 0 }
-        let idx = p / 100 * Double(wins.count - 1)
-        let lo = Int(idx.rounded(.down))
-        let hi = Int(idx.rounded(.up))
-        let frac = idx - Double(lo)
-        return wins[lo] * (1 - frac) + wins[hi] * frac
+    /// Half-width of the 95% confidence interval on `winMean`, treating each
+    /// permutation as one Bernoulli draw. Anything smaller than this is
+    /// sampling noise, not a real change in the curve.
+    var winMarginOfError: Double {
+        guard n > 1 else { return 0 }
+        let p = winMean
+        return 1.96 * (p * (1 - p) / Double(n)).squareRoot()
     }
 }
 
@@ -50,12 +52,12 @@ enum FocusReport {
     ]
 
     static let units: [String: String] = [
-        "range": "design units",
+        "range": "canonical units",
         "rof": "seconds",
         "growth": "× per level",
-        "splash": "design units",
+        "splash": "canonical units",
         "falloff": "exponent",
-        "projspeed": "design units/s",
+        "projspeed": "canonical units/s",
         "money": "gold",
         "lives": "lives",
         "enemyspeed": "bracket position 0–1",
@@ -90,38 +92,41 @@ enum FocusReport {
         }
     }
 
+    /// The identity of a permutation's *other* variables, recovered from its
+    /// grid index. The paired design lays out index as
+    /// `lo + (f + hi * count) * place`, so stripping `f` leaves a key that is
+    /// identical across every focus value — which is what lets the report
+    /// compare the same opponent under different focus values.
+    static func otherSampleKey(index: Int, place: Int, count: Int) -> Int {
+        let lo = index % place
+        let hi = index / place / count
+        return lo + hi * place
+    }
+
+    struct Curve {
+        var name: String
+        var points: [Double]
+    }
+
     static func emit(rows: [SweepRow], focus: SweepFocus, space: SweepSpace, sweepOut: String) throws {
         var byLabel: [String: FocusBucket] = [:]
         for row in rows {
             guard let (num, label) = value(of: row.perm, focus: focus, space: space) else { continue }
             var b = byLabel[label] ?? FocusBucket(value: num, label: label)
-            b.wins.append(row.winRate)
-            if row.winRate == 0 {
-                b.unwinnable += 1
-            } else if row.winRate == 1 && row.livesP10 >= Double(row.perm.lives) {
-                b.trivial += 1
-            } else if row.winRate < 0.6 {
-                b.struggle += 1
-            } else if row.winRate <= 0.95 {
-                b.band += 1
-            } else {
-                b.comfortable += 1
-            }
-            b.naiveClearSum += row.w1NaiveClear
-            b.greedyClearSum += row.w1GreedyClear
-            b.histogram[min(9, Int(row.winRate * 10))] += 1
+            b.n += 1
+            b.winSum += row.winRate
+            b.livesFractionSum += row.livesP50 / Double(max(1, row.perm.lives))
+            b.leakedSum += row.meanLeaked
+            if row.winRate == 0 { b.zeroWin += 1 }
             byLabel[label] = b
         }
-        var buckets = byLabel.values.sorted { $0.value < $1.value }
-        for i in buckets.indices { buckets[i].wins.sort() }
+        let buckets = byLabel.values.sorted { $0.value < $1.value }
         guard !buckets.isEmpty else {
             print("focus: no rows to aggregate")
             return
         }
 
-        let best = buckets.max {
-            ($0.bandShare, -abs($0.winPercentile(50) - 0.775)) < ($1.bandShare, -abs($1.winPercentile(50) - 0.775))
-        }!
+        let terciles = tercileCurves(rows: rows, focus: focus, space: space, buckets: buckets)
 
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd_HH.mm.ss"
@@ -137,24 +142,22 @@ enum FocusReport {
         let csvPath = stem + ".csv"
         let htmlPath = stem + ".html"
 
-        var csv = "focus_value,label,perms,win_mean,win_p10,win_p25,win_p50,win_p75,win_p90,"
-            + "unwinnable_share,struggle_share,band_share,comfortable_share,trivial_share,"
-            + "naive_w1_clear,greedy_w1_clear\n"
-        for b in buckets {
-            let d = Double(max(1, b.n))
+        var csv = "focus_value,label,perms,win_mean,win_moe_95,zero_win_share,"
+            + "lives_fraction,mean_leaked"
+        for c in terciles { csv += ",win_\(c.name.replacingOccurrences(of: " ", with: "_"))" }
+        csv += "\n"
+        for (i, b) in buckets.enumerated() {
             csv += "\(b.value),\(b.label),\(b.n),"
-                + String(format: "%.4f,%.4f,%.4f,%.4f,%.4f,%.4f,",
-                         b.winMean, b.winPercentile(10), b.winPercentile(25),
-                         b.winPercentile(50), b.winPercentile(75), b.winPercentile(90))
-                + String(format: "%.4f,%.4f,%.4f,%.4f,%.4f,",
-                         Double(b.unwinnable) / d, Double(b.struggle) / d, Double(b.band) / d,
-                         Double(b.comfortable) / d, Double(b.trivial) / d)
-                + String(format: "%.4f,%.4f\n", b.naiveClear, b.greedyClear)
+                + String(format: "%.4f,%.4f,%.4f,%.4f,%.4f",
+                         b.winMean, b.winMarginOfError, b.zeroShare,
+                         b.livesFraction, b.meanLeaked)
+            for c in terciles { csv += String(format: ",%.4f", c.points[i]) }
+            csv += "\n"
         }
         try csv.write(toFile: csvPath, atomically: true, encoding: .utf8)
 
-        let html = try renderHTML(buckets: buckets, focus: focus, space: space,
-                                  best: best, rows: rows, csvPath: csvPath)
+        let html = try renderHTML(buckets: buckets, terciles: terciles, focus: focus,
+                                  space: space, rows: rows, csvPath: csvPath)
         try html.write(toFile: htmlPath, atomically: true, encoding: .utf8)
 
         let pretty = prettyNames[focus.stat] ?? focus.stat
@@ -164,20 +167,69 @@ enum FocusReport {
             let filled = max(0, min(width, Int((v * Double(width)).rounded())))
             return String(repeating: "█", count: filled) + String(repeating: "·", count: width - filled)
         }
+        let maxWin = buckets.map(\.winMean).max() ?? 0
+        let knee = buckets.first { $0.winMean >= maxWin - 0.01 }
         print("\n── focus: \(pretty)\(kindNote) — \(space.fixedInputs.levelName) ──────────")
-        print("  value      perms   win p50   in 60–95% band     sloppy W1")
+        print("  value      perms   win mean  ±95%    lives kept        leaked")
         for b in buckets {
-            let marker = b.label == best.label ? "  ← best band share" : ""
+            let marker = b.label == knee?.label ? "  ← plateau starts" : ""
             print("  \(b.label.padding(toLength: 9, withPad: " ", startingAt: 0))"
                 + "\(String(b.n).padding(toLength: 8, withPad: " ", startingAt: 0))"
-                + "\(pct(b.winPercentile(50)))      \(bar(b.bandShare)) \(pct(b.bandShare))"
-                + "      \(pct(b.naiveClear))\(marker)")
+                + "\(pct(b.winMean))     ±\(String(format: "%.1f", b.winMarginOfError * 100))%"
+                + "   \(bar(b.livesFraction)) \(pct(b.livesFraction))"
+                + "  \(String(format: "%5.1f", b.meanLeaked))\(marker)")
         }
         print("""
           aggregates: \(csvPath)
           charts:     \(htmlPath)  (open in a browser)
         ──────────────────────────────────────────────────────
         """)
+    }
+
+    /// Split the other-variable samples into thirds by how well they do
+    /// overall, then re-plot the focus curve within each third.
+    ///
+    /// The paired design guarantees every third meets every focus value, so
+    /// the horizontal distance between the three curves is the interaction
+    /// between the focus variable and everything else: curves on top of one
+    /// another mean the focus answer is independent of the rest of the
+    /// design; curves far apart mean the answer moves when the rest moves.
+    static func tercileCurves(rows: [SweepRow], focus: SweepFocus, space: SweepSpace,
+                              buckets: [FocusBucket]) -> [Curve] {
+        guard let (place, count) = space.focusPlacement(stat: focus.stat, kind: focus.kind),
+              count > 1, buckets.count > 1 else { return [] }
+        let slotOf = Dictionary(uniqueKeysWithValues: buckets.enumerated().map { ($0.element.label, $0.offset) })
+
+        var byOther: [Int: [Double?]] = [:]
+        for row in rows {
+            guard let (_, label) = value(of: row.perm, focus: focus, space: space),
+                  let slot = slotOf[label] else { continue }
+            let key = otherSampleKey(index: row.perm.index, place: place, count: count)
+            var series = byOther[key] ?? [Double?](repeating: nil, count: buckets.count)
+            series[slot] = row.winRate
+            byOther[key] = series
+        }
+        let complete = byOther.values.filter { series in series.allSatisfy { $0 != nil } }
+            .map { $0.map { $0! } }
+        guard complete.count >= 6 else { return [] }
+
+        let ranked = complete.sorted {
+            $0.reduce(0, +) / Double($0.count) < $1.reduce(0, +) / Double($1.count)
+        }
+        let cut = ranked.count / 3
+        let groups: [(String, ArraySlice<[Double]>)] = [
+            ("hardest third", ranked[0..<cut]),
+            ("middle third", ranked[cut..<(ranked.count - cut)]),
+            ("easiest third", ranked[(ranked.count - cut)...]),
+        ]
+        return groups.map { name, slice in
+            var points = [Double](repeating: 0, count: buckets.count)
+            for series in slice {
+                for i in points.indices { points[i] += series[i] }
+            }
+            let d = Double(max(1, slice.count))
+            return Curve(name: name, points: points.map { $0 / d })
+        }
     }
 
     static func faviconTag() -> String {
@@ -194,30 +246,20 @@ enum FocusReport {
         return ""
     }
 
-    static func renderHTML(buckets: [FocusBucket], focus: SweepFocus, space: SweepSpace,
-                           best: FocusBucket, rows: [SweepRow], csvPath: String) throws -> String {
+    static func renderHTML(buckets: [FocusBucket], terciles: [Curve], focus: SweepFocus,
+                           space: SweepSpace, rows: [SweepRow], csvPath: String) throws -> String {
         func r4(_ v: Double) -> Double { (v * 10000).rounded() / 10000 }
         var values: [[String: Any]] = []
         for b in buckets {
-            let d = Double(max(1, b.n))
             values.append([
                 "value": b.value,
                 "label": b.label,
                 "n": b.n,
                 "mean": r4(b.winMean),
-                "p10": r4(b.winPercentile(10)),
-                "p25": r4(b.winPercentile(25)),
-                "p50": r4(b.winPercentile(50)),
-                "p75": r4(b.winPercentile(75)),
-                "p90": r4(b.winPercentile(90)),
-                "unwinnable": r4(Double(b.unwinnable) / d),
-                "struggle": r4(Double(b.struggle) / d),
-                "band": r4(Double(b.band) / d),
-                "comfortable": r4(Double(b.comfortable) / d),
-                "trivial": r4(Double(b.trivial) / d),
-                "naive": r4(b.naiveClear),
-                "greedy": r4(b.greedyClear),
-                "hist": b.histogram.map { r4(Double($0) / d) },
+                "moe": r4(b.winMarginOfError),
+                "zero": r4(b.zeroShare),
+                "lives": r4(b.livesFraction),
+                "leaked": r4(b.meanLeaked),
             ])
         }
         let pretty = prettyNames[focus.stat] ?? focus.stat
@@ -230,10 +272,10 @@ enum FocusReport {
             "unit": unit,
             "level": space.fixedInputs.levelName,
             "categorical": ["curve", "mix", "spacing"].contains(focus.stat),
-            "best": best.label,
             "seedsPerPerm": space.grids.seedsPerPermutation,
             "totalRows": rows.count,
             "values": values,
+            "terciles": terciles.map { ["name": $0.name, "points": $0.points.map(r4)] },
         ]
         let json = try JSONSerialization.data(withJSONObject: payload, options: [.sortedKeys])
         let jsonString = String(data: json, encoding: .utf8) ?? "{}"
@@ -266,24 +308,24 @@ __FAVICON__
   .viz-root {
     max-width: 1060px; margin: 0 auto;
     color: var(--ink);
-    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e;
+    --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e;
     --muted: #898781; --grid: #e1e0d9; --axis: #c3c2b7;
     --border: rgba(11,11,11,0.10);
-    --s1: #2a78d6; --s2: #eb6834;
+    --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
   }
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) .viz-root {
-      --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7;
+      --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7;
       --muted: #898781; --grid: #2c2c2a; --axis: #383835;
       --border: rgba(255,255,255,0.10);
-      --s1: #3987e5; --s2: #d95926;
+      --s1: #3987e5; --s2: #d95926; --s3: #199e70;
     }
   }
   :root[data-theme="dark"] .viz-root {
-    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7;
+    --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7;
     --muted: #898781; --grid: #2c2c2a; --axis: #383835;
     --border: rgba(255,255,255,0.10);
-    --s1: #3987e5; --s2: #d95926;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
   }
   body { background: #f9f9f7; }
   @media (prefers-color-scheme: dark) {
@@ -307,36 +349,33 @@ __FAVICON__
   }
   .card h2 { font-size: 15px; font-weight: 600; }
   .chart-sub { font-size: 12px; color: var(--ink2); margin-top: 3px; margin-bottom: 8px; }
+  .chart-why { font-size: 12px; color: var(--muted); margin-top: 2px; margin-bottom: 8px; }
   .chart { position: relative; }
   .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--ink2); margin: 6px 0 4px; }
   .legend .item { display: inline-flex; align-items: center; gap: 6px; }
-  .legend .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
   .legend .linekey { width: 16px; height: 2px; border-radius: 1px; display: inline-block; }
+  .legend .swatch { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
   .tooltip {
     position: fixed; z-index: 10; pointer-events: none;
     background: var(--surface); color: var(--ink);
     border: 1px solid var(--border); border-radius: 8px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.14);
-    padding: 9px 12px; font-size: 12px; max-width: 260px;
+    padding: 9px 12px; font-size: 12px; max-width: 280px;
   }
   .tooltip .tt-title { font-weight: 600; margin-bottom: 5px; }
   .tooltip .tt-row { display: flex; align-items: baseline; gap: 8px; margin-top: 2px; }
   .tooltip .tt-key { width: 12px; height: 2px; border-radius: 1px; flex: none; align-self: center; }
-  .tooltip .tt-key.box { height: 9px; width: 9px; border-radius: 2px; }
   .tooltip .tt-val { font-weight: 600; font-variant-numeric: tabular-nums; }
   .tooltip .tt-name { color: var(--ink2); }
-  .tablewrap { overflow-x: auto; }
+  .tablewrap { overflow-x: auto; max-height: 460px; }
   table { border-collapse: collapse; font-size: 12px; width: 100%; }
   th, td { text-align: right; padding: 6px 10px; font-variant-numeric: tabular-nums; white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
-  th { color: var(--ink2); font-weight: 600; border-bottom: 1px solid var(--axis); }
+  th { color: var(--ink2); font-weight: 600; border-bottom: 1px solid var(--axis);
+       position: sticky; top: 0; background: var(--surface); }
   td { border-bottom: 1px solid var(--grid); color: var(--ink); }
-  tr.best td { font-weight: 650; }
   footer { color: var(--muted); font-size: 11px; margin-top: 20px; }
   svg text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
-  .hit:focus { outline: none; }
-  .hit:focus-visible { stroke: var(--s1); stroke-width: 1.5; }
-  .scalebar { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); margin: 4px 0 6px 44px; }
 </style>
 </head>
 <body>
@@ -347,27 +386,24 @@ __FAVICON__
   </header>
   <section class="kpis" id="kpis"></section>
   <section class="card">
-    <h2>Win rate across the focus grid</h2>
-    <p class="chart-sub">Median win rate of the reference player; the dark band spans p25–p75 and the pale band p10–p90 across all sampled permutations of the other variables. Hairlines mark the 60–95% target band.</p>
+    <h2>Win rate</h2>
+    <p class="chart-sub">Share of sampled permutations the reference player wins at each value, with a 95% confidence band.</p>
+    <p class="chart-why">Why this chart: a permutation either wins or it does not, so the mean is the only summary that carries information — it is literally the fraction that won. Read the flat zero region as impossible, the steep part as the tuning window, and the flat top as the value no longer mattering. Wiggles smaller than the band are sampling noise.</p>
     <div class="chart" id="winCurve"></div>
   </section>
   <section class="card">
-    <h2>Difficulty composition</h2>
-    <p class="chart-sub">How the permutations behind each focus value split by outcome, centered on the target band — the best value is the one holding the most weight near the center line.</p>
-    <div class="legend" id="stackLegend"></div>
-    <div class="chart" id="stack"></div>
+    <h2>Margin of victory</h2>
+    <p class="chart-sub">Lives kept at the end, as a share of starting lives, against the same win rate.</p>
+    <p class="chart-why">Why this chart: win rate saturates — once nearly everything wins it can no longer tell a comfortable value from a marginal one. Lives kept keeps resolving past that point. Where the two curves separate, the player is winning by a hair.</p>
+    <div class="legend" id="marginLegend"></div>
+    <div class="chart" id="margin"></div>
   </section>
   <section class="card">
-    <h2>Wave-1 economics</h2>
-    <p class="chart-sub">Share of runs clearing wave 1 without a leak: optimal placement (greedy commander) vs sloppy placement (random slots). A gap that never closes means placement is doing all the work.</p>
-    <div class="legend" id="w1Legend"></div>
-    <div class="chart" id="w1"></div>
-  </section>
-  <section class="card">
-    <h2>Win-rate distribution</h2>
-    <p class="chart-sub">Full distribution behind the medians — each column is one focus value, binned by win rate; darker means more permutations landed in that bin. Split blobs reveal cliffs the median hides.</p>
-    <div class="chart" id="heat"></div>
-    <div class="scalebar" id="heatScale"></div>
+    <h2>Does the answer hold when everything else changes?</h2>
+    <p class="chart-sub">The same curve, computed separately for the hardest, middle and easiest third of the other-variable samples. Every third meets every value — the design is paired.</p>
+    <p class="chart-why">Why this chart: a single averaged curve hides whether the answer is stable. If the three curves are horizontally close, this variable can be tuned on its own. If they are far apart, the right value depends on what the rest of the design is doing, and a single recommended number is a fiction.</p>
+    <div class="legend" id="tercileLegend"></div>
+    <div class="chart" id="terciles"></div>
   </section>
   <section class="card">
     <h2>Data table</h2>
@@ -391,25 +427,12 @@ function isDark() {
 function colors() {
   return isDark() ? {
     ink: "#ffffff", ink2: "#c3c2b7", muted: "#898781", grid: "#2c2c2a",
-    axis: "#383835", surface: "#1a1a19", s1: "#3987e5", s2: "#d95926",
-    stack: { unwinnable: "#ee6a61", struggle: "#742f2a", band: "#787771",
-             comfortable: "#2c5a96", trivial: "#9cc3f2" },
-    ramp: ["#184f95", "#256abf", "#3987e5", "#5598e7", "#6da7ec", "#86b6ef", "#9ec5f4", "#b7d3f6", "#cde2fb"]
+    axis: "#383835", surface: "#1a1a19", s1: "#3987e5", s2: "#d95926", s3: "#199e70"
   } : {
     ink: "#0b0b0b", ink2: "#52514e", muted: "#898781", grid: "#e1e0d9",
-    axis: "#c3c2b7", surface: "#fcfcfb", s1: "#2a78d6", s2: "#eb6834",
-    stack: { unwinnable: "#8f1d1a", struggle: "#f6b3af", band: "#92918a",
-             comfortable: "#aecdf6", trivial: "#16457f" },
-    ramp: ["#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#256abf", "#1c5cab", "#104281"]
+    axis: "#c3c2b7", surface: "#fcfcfb", s1: "#2a78d6", s2: "#eb6834", s3: "#1baf7a"
   };
 }
-
-const STACK_ORDER = ["unwinnable", "struggle", "band", "comfortable", "trivial"];
-const STACK_NAMES = {
-  unwinnable: "Unwinnable (0% win)", struggle: "Struggle (<60%)",
-  band: "Target band (60–95%)", comfortable: "Comfortable (>95%)",
-  trivial: "Trivial (100%, no lives lost)"
-};
 
 function el(tag, attrs, parent) {
   const e = document.createElementNS(NS, tag);
@@ -437,7 +460,7 @@ function showTooltip(evt, title, rows) {
     row.className = "tt-row";
     if (r.key) {
       const k = document.createElement("span");
-      k.className = "tt-key" + (r.box ? " box" : "");
+      k.className = "tt-key";
       k.style.background = r.key;
       row.appendChild(k);
     }
@@ -465,11 +488,26 @@ function positionTooltip(evt) {
 }
 function hideTooltip() { tooltip.hidden = true; }
 
+function legendInto(id, items) {
+  const box = document.getElementById(id);
+  box.replaceChildren();
+  for (const it of items) {
+    const item = document.createElement("span");
+    item.className = "item";
+    const sw = document.createElement("span");
+    sw.className = it.box ? "swatch" : "linekey";
+    sw.style.background = it.color;
+    item.appendChild(sw);
+    item.appendChild(document.createTextNode(it.name));
+    box.appendChild(item);
+  }
+}
+
 function geometry(container, height) {
   const w = Math.max(420, container.clientWidth);
   return { w, h: height, ml: 44, mr: 14, mt: 12, mb: 26 };
 }
-function slotX(g, i, n) { return g.ml + (i + 0.5) * ((g.w - g.ml - g.mr) / n); }
+function slotX(g, i, n) { return n === 1 ? g.ml : g.ml + (i + 0.5) * ((g.w - g.ml - g.mr) / n); }
 function slotW(g, n) { return (g.w - g.ml - g.mr) / n; }
 
 function xTicks(svg, g, C) {
@@ -495,239 +533,121 @@ function linePath(pts) {
   return pts.map((p, i) => (i === 0 ? "M" : "L") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
 }
 
-function renderWinCurve() {
-  const box = document.getElementById("winCurve");
-  box.replaceChildren();
-  const C = colors();
-  const g = geometry(box, 300);
-  const svg = el("svg", { width: g.w, height: g.h, viewBox: `0 0 ${g.w} ${g.h}` }, null);
-  box.appendChild(svg);
-  const n = DATA.values.length;
-  const y = v => g.mt + (1 - v) * (g.h - g.mt - g.mb);
-  yAxisPct(svg, g, C, [0, 0.25, 0.5, 0.75, 1]);
-  for (const lvl of [0.6, 0.95]) {
-    el("line", { x1: g.ml, x2: g.w - g.mr, y1: y(lvl), y2: y(lvl), stroke: C.axis, "stroke-width": 1 }, svg);
-    textEl(svg, g.w - g.mr - 2, y(lvl) - 4, "target " + pct(lvl), C.muted, 10, "end");
-  }
-  const px = i => slotX(g, i, n);
-  const outer = DATA.values.map((d, i) => [px(i), y(d.p90)])
-    .concat(DATA.values.map((d, i) => [px(n - 1 - i), y(DATA.values[n - 1 - i].p10)]));
-  el("path", { d: linePath(outer) + " Z", fill: C.s1, opacity: 0.10 }, svg);
-  const inner = DATA.values.map((d, i) => [px(i), y(d.p75)])
-    .concat(DATA.values.map((d, i) => [px(n - 1 - i), y(DATA.values[n - 1 - i].p25)]));
-  el("path", { d: linePath(inner) + " Z", fill: C.s1, opacity: 0.18 }, svg);
-  el("path", { d: linePath(DATA.values.map((d, i) => [px(i), y(d.p50)])),
-               fill: "none", stroke: C.s1, "stroke-width": 2,
-               "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
-  DATA.values.forEach((d, i) => {
-    el("circle", { cx: px(i), cy: y(d.p50), r: 4, fill: C.s1, stroke: C.surface, "stroke-width": 2 }, svg);
-    if (d.label === DATA.best) {
-      const ly = y(d.p50) - 12;
-      textEl(svg, px(i), ly < g.mt + 10 ? y(d.p50) + 22 : ly, pct(d.p50), C.ink2, 11, "middle", 600);
-    }
-  });
-  xTicks(svg, g, C);
-  const cross = el("line", { y1: g.mt, y2: g.h - g.mb, stroke: C.axis, "stroke-width": 1, visibility: "hidden" }, svg);
-  const hit = el("rect", { x: g.ml, y: 0, width: g.w - g.ml - g.mr, height: g.h, fill: "transparent" }, svg);
-  hit.addEventListener("pointermove", evt => {
-    const rect = svg.getBoundingClientRect();
-    const mx = evt.clientX - rect.left;
-    let i = Math.round((mx - g.ml) / slotW(g, n) - 0.5);
-    i = Math.max(0, Math.min(n - 1, i));
-    const d = DATA.values[i];
-    cross.setAttribute("x1", px(i)); cross.setAttribute("x2", px(i));
-    cross.setAttribute("visibility", "visible");
-    showTooltip(evt, DATA.focusPretty + " " + d.label, [
-      { name: "median win", value: pct(d.p50, 1), key: C.s1 },
-      { name: "mean win", value: pct(d.mean, 1) },
-      { name: "p25 – p75", value: pct(d.p25) + " – " + pct(d.p75) },
-      { name: "p10 – p90", value: pct(d.p10) + " – " + pct(d.p90) },
-      { name: "permutations", value: String(d.n) }
-    ]);
-  });
-  hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTooltip(); });
-}
-
-function renderStack() {
-  const box = document.getElementById("stack");
-  box.replaceChildren();
-  const C = colors();
-  const legend = document.getElementById("stackLegend");
-  legend.replaceChildren();
-  for (const key of STACK_ORDER) {
-    const item = document.createElement("span");
-    item.className = "item";
-    const sw = document.createElement("span");
-    sw.className = "swatch";
-    sw.style.background = C.stack[key];
-    item.appendChild(sw);
-    item.appendChild(document.createTextNode(STACK_NAMES[key]));
-    legend.appendChild(item);
-  }
-  const g = geometry(box, 300);
-  const svg = el("svg", { width: g.w, height: g.h, viewBox: `0 0 ${g.w} ${g.h}` }, null);
-  box.appendChild(svg);
-  const n = DATA.values.length;
-  let extent = 0;
-  for (const d of DATA.values) {
-    extent = Math.max(extent, d.unwinnable + d.struggle + d.band / 2,
-                      d.comfortable + d.trivial + d.band / 2);
-  }
-  extent = Math.max(extent, 0.05);
-  const mid = g.mt + (g.h - g.mt - g.mb) / 2;
-  const scale = (g.h - g.mt - g.mb) / 2 / extent;
-  const bw = Math.min(24, slotW(g, n) - 8);
-  textEl(svg, g.ml + 4, g.mt + 9, "too easy", C.muted, 10);
-  textEl(svg, g.ml + 4, g.h - g.mb - 5, "too hard", C.muted, 10);
-  DATA.values.forEach((d, i) => {
-    const x = slotX(g, i, n) - bw / 2;
-    let yTop = mid + (d.unwinnable + d.struggle + d.band / 2) * scale;
-    for (const key of STACK_ORDER) {
-      const hpx = d[key] * scale;
-      if (hpx > 0.5) {
-        el("rect", { x, y: yTop - hpx + 1, width: bw, height: Math.max(1, hpx - 2),
-                     rx: 1.5, fill: C.stack[key] }, svg);
-      }
-      yTop -= hpx;
-    }
-    const hit = el("rect", { x: slotX(g, i, n) - slotW(g, n) / 2, y: g.mt,
-                             width: slotW(g, n), height: g.h - g.mt - g.mb,
-                             fill: "transparent", tabindex: 0, class: "hit" }, svg);
-    const show = evt => showTooltip(evt.clientX !== undefined ? evt : { clientX: g.w / 2, clientY: 200 },
-      DATA.focusPretty + " " + d.label, STACK_ORDER.slice().reverse().map(key => (
-        { name: STACK_NAMES[key], value: pct(d[key]), key: C.stack[key], box: true }
-      )).concat([{ name: "permutations", value: String(d.n) }]));
-    hit.addEventListener("pointermove", show);
-    hit.addEventListener("pointerleave", hideTooltip);
-    hit.addEventListener("focus", show);
-    hit.addEventListener("blur", hideTooltip);
-  });
-  el("line", { x1: g.ml, x2: g.w - g.mr, y1: mid, y2: mid, stroke: C.axis, "stroke-width": 1 }, svg);
-  xTicks(svg, g, C);
-}
-
-function renderW1() {
-  const box = document.getElementById("w1");
-  box.replaceChildren();
-  const C = colors();
-  const legend = document.getElementById("w1Legend");
-  legend.replaceChildren();
-  const series = [
-    { key: "greedy", name: "Optimal opening", color: C.s1 },
-    { key: "naive", name: "Sloppy opening", color: C.s2 }
-  ];
-  for (const s of series) {
-    const item = document.createElement("span");
-    item.className = "item";
-    const sw = document.createElement("span");
-    sw.className = "linekey";
-    sw.style.background = s.color;
-    item.appendChild(sw);
-    item.appendChild(document.createTextNode(s.name));
-    legend.appendChild(item);
-  }
-  const g = geometry(box, 240);
-  g.mr = 76;
-  const svg = el("svg", { width: g.w, height: g.h, viewBox: `0 0 ${g.w} ${g.h}` }, null);
-  box.appendChild(svg);
-  const n = DATA.values.length;
-  const y = v => g.mt + (1 - v) * (g.h - g.mt - g.mb);
-  yAxisPct(svg, g, C, [0, 0.5, 1]);
-  for (const s of series) {
-    el("path", { d: linePath(DATA.values.map((d, i) => [slotX(g, i, n), y(d[s.key])])),
-                 fill: "none", stroke: s.color, "stroke-width": 2,
-                 "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
-    const last = DATA.values[n - 1];
-    el("circle", { cx: slotX(g, n - 1, n), cy: y(last[s.key]), r: 4,
-                   fill: s.color, stroke: C.surface, "stroke-width": 2 }, svg);
-    textEl(svg, slotX(g, n - 1, n) + 10, y(last[s.key]) + 4,
-           s.key === "greedy" ? "optimal" : "sloppy", C.ink2, 11);
-  }
-  xTicks(svg, g, C);
-  const cross = el("line", { y1: g.mt, y2: g.h - g.mb, stroke: C.axis, "stroke-width": 1, visibility: "hidden" }, svg);
+function crosshair(svg, g, n, box, build) {
+  const cross = el("line", { y1: g.mt, y2: g.h - g.mb, stroke: C0.axis, "stroke-width": 1, visibility: "hidden" }, svg);
   const hit = el("rect", { x: g.ml, y: 0, width: g.w - g.ml - g.mr, height: g.h, fill: "transparent" }, svg);
   hit.addEventListener("pointermove", evt => {
     const rect = svg.getBoundingClientRect();
     let i = Math.round((evt.clientX - rect.left - g.ml) / slotW(g, n) - 0.5);
     i = Math.max(0, Math.min(n - 1, i));
-    const d = DATA.values[i];
-    cross.setAttribute("x1", slotX(g, i, n)); cross.setAttribute("x2", slotX(g, i, n));
+    const x = slotX(g, i, n);
+    cross.setAttribute("x1", x); cross.setAttribute("x2", x);
     cross.setAttribute("visibility", "visible");
-    showTooltip(evt, DATA.focusPretty + " " + d.label, [
-      { name: "optimal W1 clear", value: pct(d.greedy, 1), key: C.s1 },
-      { name: "sloppy W1 clear", value: pct(d.naive, 1), key: C.s2 }
-    ]);
+    showTooltip(evt, DATA.focusPretty + " " + DATA.values[i].label, build(i));
   });
   hit.addEventListener("pointerleave", () => { cross.setAttribute("visibility", "hidden"); hideTooltip(); });
 }
 
-function lerpHex(a, b, t) {
-  const pa = [1, 3, 5].map(i => parseInt(a.slice(i, i + 2), 16));
-  const pb = [1, 3, 5].map(i => parseInt(b.slice(i, i + 2), 16));
-  return "#" + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, "0")).join("");
-}
-function rampColor(C, t) {
-  const r = C.ramp;
-  const x = Math.max(0, Math.min(1, t)) * (r.length - 1);
-  const i = Math.min(r.length - 2, Math.floor(x));
-  return lerpHex(r[i], r[i + 1], x - i);
-}
+let C0 = colors();
 
-function renderHeat() {
-  const box = document.getElementById("heat");
+function renderWinCurve() {
+  const box = document.getElementById("winCurve");
   box.replaceChildren();
-  const C = colors();
-  const bins = 10;
-  const g = geometry(box, 280);
+  const C = C0;
+  const g = geometry(box, 300);
   const svg = el("svg", { width: g.w, height: g.h, viewBox: `0 0 ${g.w} ${g.h}` }, null);
   box.appendChild(svg);
   const n = DATA.values.length;
-  const plotH = g.h - g.mt - g.mb;
-  const cellH = plotH / bins;
-  const cw = Math.min(40, slotW(g, n) - 4);
-  let maxShare = 0.0001;
-  for (const d of DATA.values) for (const s of d.hist) maxShare = Math.max(maxShare, s);
-  for (const frac of [0, 0.5, 1]) {
-    textEl(svg, g.ml - 6, g.mt + (1 - frac) * plotH + 4, pct(frac), C.muted, 10, "end");
+  const y = v => g.mt + (1 - Math.max(0, Math.min(1, v))) * (g.h - g.mt - g.mb);
+  yAxisPct(svg, g, C, [0, 0.25, 0.5, 0.75, 1]);
+  const px = i => slotX(g, i, n);
+  const band = DATA.values.map((d, i) => [px(i), y(d.mean + d.moe)])
+    .concat(DATA.values.map((d, i) => [px(n - 1 - i), y(DATA.values[n - 1 - i].mean - DATA.values[n - 1 - i].moe)]));
+  el("path", { d: linePath(band) + " Z", fill: C.s1, opacity: 0.18 }, svg);
+  el("path", { d: linePath(DATA.values.map((d, i) => [px(i), y(d.mean)])),
+               fill: "none", stroke: C.s1, "stroke-width": 2,
+               "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+  if (n <= 40) {
+    DATA.values.forEach((d, i) => {
+      el("circle", { cx: px(i), cy: y(d.mean), r: 4, fill: C.s1, stroke: C.surface, "stroke-width": 2 }, svg);
+    });
   }
-  DATA.values.forEach((d, i) => {
-    for (let b = 0; b < bins; b++) {
-      const share = d.hist[b];
-      const cy = g.mt + (bins - 1 - b) * cellH;
-      const rect = el("rect", {
-        x: slotX(g, i, n) - cw / 2, y: cy + 1, width: cw, height: cellH - 2, rx: 2,
-        fill: share > 0 ? rampColor(C, share / maxShare) : "transparent",
-        stroke: share > 0 ? "none" : C.grid, "stroke-width": share > 0 ? 0 : 0.5,
-        tabindex: 0, class: "hit"
-      }, svg);
-      const show = evt => showTooltip(evt.clientX !== undefined ? evt : { clientX: g.w / 2, clientY: 300 },
-        DATA.focusPretty + " " + d.label, [
-          { name: "win rate " + (b * 10) + "–" + (b + 1) * 10 + "%", value: pct(share, 1) + " of permutations" },
-          { name: "count", value: Math.round(share * d.n) + " of " + d.n }
-        ]);
-      rect.addEventListener("pointermove", show);
-      rect.addEventListener("pointerleave", hideTooltip);
-      rect.addEventListener("focus", show);
-      rect.addEventListener("blur", hideTooltip);
-    }
-  });
-  el("line", { x1: g.ml, x2: g.w - g.mr, y1: g.h - g.mb, y2: g.h - g.mb, stroke: C.axis, "stroke-width": 1 }, svg);
   xTicks(svg, g, C);
-  const scale = document.getElementById("heatScale");
-  scale.replaceChildren();
-  scale.appendChild(document.createTextNode("0%"));
-  const bar = document.createElement("span");
-  bar.style.cssText = "display:inline-block;width:120px;height:10px;border-radius:5px;"
-    + "background:linear-gradient(to right," + C.ramp.join(",") + ")";
-  scale.appendChild(bar);
-  scale.appendChild(document.createTextNode(pct(maxShare) + " of a value's permutations"));
+  crosshair(svg, g, n, box, i => {
+    const d = DATA.values[i];
+    return [
+      { name: "win rate", value: pct(d.mean, 1), key: C.s1 },
+      { name: "95% band", value: "±" + pct(d.moe, 1) },
+      { name: "never won", value: pct(d.zero, 1) + " of permutations" },
+      { name: "permutations", value: String(d.n) }
+    ];
+  });
+}
+
+function renderMargin() {
+  const box = document.getElementById("margin");
+  box.replaceChildren();
+  const C = C0;
+  legendInto("marginLegend", [
+    { name: "Win rate", color: C.s1 },
+    { name: "Lives kept (share of starting lives)", color: C.s2 }
+  ]);
+  const g = geometry(box, 240);
+  const svg = el("svg", { width: g.w, height: g.h, viewBox: `0 0 ${g.w} ${g.h}` }, null);
+  box.appendChild(svg);
+  const n = DATA.values.length;
+  const y = v => g.mt + (1 - Math.max(0, Math.min(1, v))) * (g.h - g.mt - g.mb);
+  yAxisPct(svg, g, C, [0, 0.5, 1]);
+  for (const s of [{ key: "mean", color: C.s1 }, { key: "lives", color: C.s2 }]) {
+    el("path", { d: linePath(DATA.values.map((d, i) => [slotX(g, i, n), y(d[s.key])])),
+                 fill: "none", stroke: s.color, "stroke-width": 2,
+                 "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+  }
+  xTicks(svg, g, C);
+  crosshair(svg, g, n, box, i => {
+    const d = DATA.values[i];
+    return [
+      { name: "win rate", value: pct(d.mean, 1), key: C.s1 },
+      { name: "lives kept", value: pct(d.lives, 1), key: C.s2 },
+      { name: "enemies leaked", value: d.leaked.toFixed(1) + " per run" }
+    ];
+  });
+}
+
+function renderTerciles() {
+  const box = document.getElementById("terciles");
+  box.replaceChildren();
+  const C = C0;
+  if (!DATA.terciles.length) {
+    const p = document.createElement("p");
+    p.className = "chart-sub";
+    p.textContent = "Not enough complete paired samples to split into thirds.";
+    box.appendChild(p);
+    document.getElementById("tercileLegend").replaceChildren();
+    return;
+  }
+  const palette = [C.s2, C.s1, C.s3];
+  legendInto("tercileLegend", DATA.terciles.map((t, k) => ({ name: t.name, color: palette[k] })));
+  const g = geometry(box, 260);
+  const svg = el("svg", { width: g.w, height: g.h, viewBox: `0 0 ${g.w} ${g.h}` }, null);
+  box.appendChild(svg);
+  const n = DATA.values.length;
+  const y = v => g.mt + (1 - Math.max(0, Math.min(1, v))) * (g.h - g.mt - g.mb);
+  yAxisPct(svg, g, C, [0, 0.5, 1]);
+  DATA.terciles.forEach((t, k) => {
+    el("path", { d: linePath(t.points.map((v, i) => [slotX(g, i, n), y(v)])),
+                 fill: "none", stroke: palette[k], "stroke-width": 2,
+                 "stroke-linecap": "round", "stroke-linejoin": "round" }, svg);
+  });
+  xTicks(svg, g, C);
+  crosshair(svg, g, n, box, i =>
+    DATA.terciles.map((t, k) => ({ name: t.name, value: pct(t.points[i], 1), key: palette[k] })));
 }
 
 function renderKpis() {
   const box = document.getElementById("kpis");
   box.replaceChildren();
-  const best = DATA.values.find(d => d.label === DATA.best);
-  if (!best) return;
+  const V = DATA.values;
   function tile(label, value, note, hero) {
     const t = document.createElement("div");
     t.className = "tile" + (hero ? " hero" : "");
@@ -737,11 +657,16 @@ function renderKpis() {
     if (note) { const nt = document.createElement("div"); nt.className = "note"; nt.textContent = note; t.appendChild(nt); }
     box.appendChild(t);
   }
-  tile("Best value — " + DATA.focusPretty, best.label,
-       (DATA.unit ? DATA.unit + " · " : "") + "largest target-band share", true);
-  tile("Target-band share at best", pct(best.band), "permutations landing at 60–95% win");
-  tile("Median win at best", pct(best.p50, 1), "across " + best.n + " permutations");
-  tile("Sloppy wave-1 clear at best", pct(best.naive), "random-slot opening survives wave 1");
+  const maxWin = Math.max(...V.map(d => d.mean));
+  const knee = V.find(d => d.mean >= maxWin - 0.01);
+  const half = V.find(d => d.mean >= 0.5);
+  const dead = V.filter(d => d.mean === 0);
+  tile("Plateau starts at", knee ? knee.label : "—",
+       (DATA.unit ? DATA.unit + " · " : "") + "first value within 1 point of the best", true);
+  tile("Best win rate", pct(maxWin, 1), "highest value on the grid");
+  tile("Crosses 50% at", half ? half.label : "never", "coin-flip difficulty");
+  tile("Never wins", dead.length ? dead.length + " values" : "none",
+       dead.length ? "up to " + dead[dead.length - 1].label : "every value wins sometimes");
 }
 
 function renderTable() {
@@ -750,8 +675,9 @@ function renderTable() {
   const table = document.createElement("table");
   const thead = document.createElement("thead");
   const hr = document.createElement("tr");
-  for (const h of ["Value", "Perms", "Win mean", "p10", "p50", "p90", "Unwinnable",
-                   "Struggle", "Target band", "Comfortable", "Trivial", "Sloppy W1", "Optimal W1"]) {
+  const heads = ["Value", "Perms", "Win rate", "±95%", "Never won", "Lives kept", "Leaked"]
+    .concat(DATA.terciles.map(t => t.name));
+  for (const h of heads) {
     const th = document.createElement("th");
     th.textContent = h;
     hr.appendChild(th);
@@ -759,28 +685,28 @@ function renderTable() {
   thead.appendChild(hr);
   table.appendChild(thead);
   const tbody = document.createElement("tbody");
-  for (const d of DATA.values) {
+  DATA.values.forEach((d, i) => {
     const tr = document.createElement("tr");
-    if (d.label === DATA.best) tr.className = "best";
-    for (const v of [d.label, d.n, pct(d.mean, 1), pct(d.p10, 1), pct(d.p50, 1), pct(d.p90, 1),
-                     pct(d.unwinnable, 1), pct(d.struggle, 1), pct(d.band, 1),
-                     pct(d.comfortable, 1), pct(d.trivial, 1), pct(d.naive, 1), pct(d.greedy, 1)]) {
+    const cells = [d.label, d.n, pct(d.mean, 1), "±" + pct(d.moe, 1), pct(d.zero, 1),
+                   pct(d.lives, 1), d.leaked.toFixed(1)]
+      .concat(DATA.terciles.map(t => pct(t.points[i], 1)));
+    for (const v of cells) {
       const td = document.createElement("td");
       td.textContent = String(v);
       tr.appendChild(td);
     }
     tbody.appendChild(tr);
-  }
+  });
   table.appendChild(tbody);
   box.appendChild(table);
 }
 
 function renderAll() {
+  C0 = colors();
   renderKpis();
   renderWinCurve();
-  renderStack();
-  renderW1();
-  renderHeat();
+  renderMargin();
+  renderTerciles();
   renderTable();
 }
 renderAll();

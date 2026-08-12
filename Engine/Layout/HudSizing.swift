@@ -79,6 +79,12 @@ public enum HudSizing {
 
     public static let hudMargin = ScaledDimension(12)
 
+    /// The SINGLE top margin for the in-level top bar. Every element along
+    /// the top of the screen — counter plates, wave readout, speed/pause
+    /// buttons — takes its vertical position from TopBarLayout, which reads
+    /// only this. To move the whole bar, change this one number.
+    public static let topBarMargin = ScaledDimension(16)
+
     public static let menuButton = ScaledDimension(110.88, atLeast: TouchTarget.minimum,
                                                    atMost: 110.88 * 1.2)
     public static let menuButtonSpacing = ScaledDimension(14)

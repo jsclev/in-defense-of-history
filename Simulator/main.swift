@@ -78,8 +78,9 @@ func printUsage() {
                        against the identical sample of permutations of every
                        other variable, then the run emits <sweep-out>.focus.csv
                        (per-value aggregates) and <sweep-out>.focus.html
-                       (charts: win-rate curve with spread bands, difficulty
-                       composition, wave-1 economics, win distribution).
+                       (charts: mean win rate with a 95% band, margin of
+                       victory, and the same curve split by the hardest,
+                       middle and easiest third of the other variables).
                        Tower stats take stat:kind (e.g. --focus range:ranged);
                        scalar dimensions stand alone: --focus money, lives,
                        curve, mix, spacing, enemyspeed, enemyhp, enemybounty,
@@ -399,11 +400,8 @@ if let sweepLevel = opts.sweep {
         grids.baseSeed = opts.baseSeed
         if opts.fineGrids {
             grids.upgradeGrowth = Array(stride(from: 1.2, through: 2.2, by: 0.1)).map { ($0 * 10).rounded() / 10 }
-            grids.rangeGrids = [
-                "ranged": Array(stride(from: 140.0, through: 320, by: 10)),
-                "special": Array(stride(from: 140.0, through: 320, by: 10)),
-                "areaOfEffect": Array(stride(from: 160.0, through: 360, by: 10)),
-            ]
+            // Range is deliberately absent: it always walks every integer in
+            // sim_tower_range, so there is no coarse version of it to refine.
             grids.rofGrids = [
                 "ranged": Array(stride(from: 0.5, through: 1.2, by: 0.05)).map { ($0 * 100).rounded() / 100 },
                 "special": Array(stride(from: 0.8, through: 1.8, by: 0.1)).map { ($0 * 10).rounded() / 10 },

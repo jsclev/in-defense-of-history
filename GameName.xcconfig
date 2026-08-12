@@ -1,10 +1,13 @@
-// The game's user-facing name — location 1 of exactly 2.
+// The game's user-facing DISPLAY name: the home-screen label
+// (CFBundleDisplayName) and the Info.plist GameName key that
+// Engine/Core/GameIdentity.swift reads at runtime. Change it here and both
+// follow — no Swift edit needed.
 //
-// This value becomes the app's home-screen name (CFBundleDisplayName). The
-// other location is Engine/Core/GameIdentity.swift, which serves code that
-// wants to print or draw the name. Change BOTH when renaming the game;
-// nothing else in the repo carries the name. The target, folder, scheme,
-// product, asset catalog and database are all deliberately name-agnostic
-// ("Mobile App", "game_title", "in_defense_of_history.sqlite") so a rename
-// never touches project structure again.
+// The target, folder, scheme and product are ALSO named "Liberty Line", by
+// deliberate choice: name-agnostic structure ("Mobile App") made the app too
+// hard to identify in Xcode and App Store Connect. A future game rename
+// therefore means editing this value AND renaming the target/folder/scheme,
+// plus the App Store Connect product name. The database
+// (in_defense_of_history.sqlite) and title asset (game_title) stay
+// name-agnostic so data and art identifiers never churn.
 GAME_DISPLAY_NAME = Liberty Line

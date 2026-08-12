@@ -19,22 +19,22 @@ INSERT INTO level_info (
     'level_01_battle_road', 2868.0, 2064.0,
     -- Matches SLOT_BOX in Images/Level Maps/01/compose_level_01_map.py, which
     -- bakes the slots into the map at this size. Change both together or the
-    -- towers drift off their slots. 128.8 x 110.4 is the original 112 x 96
+    -- towers drift off their slots. 139.1 x 119.2 is the original 112 x 96
     -- grown 15% for phone readability.
-    128.8, 110.4
+    139.1, 119.2
 );
 
 INSERT INTO tower_slot (
     id, level_info_id, map_position_x, map_position_y, slot_width, slot_height
 ) VALUES
-('cf747ffd-db8a-5a7a-aeaf-30b1e0e0e982', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 755.3, 910.8, 128.8, 99.3),
-('520c59eb-910e-513f-9544-49aad0b4cec6', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1013.2, 640.7, 128.8, 99.3),
-('6d0cc5bc-75cc-522e-92ea-477bc8bdc5bb', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1472.4, 1135.2, 128.8, 99.3),
-('d4f66e80-2b58-537e-b15d-b5a941dc7416', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1169.11, 899.71, 128.8, 99.3),
-('a4e7cb06-8829-5fab-b9eb-84445034bf9e', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1652.0, 1323.0, 128.8, 99.3),
-('7ab5f971-ae82-50f1-a474-b93a97ad94e5', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1810.93, 1221.76, 128.8, 99.3),
-('4002f923-75e8-525d-82ce-70d76469a0a0', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 2009.67, 934.57, 128.8, 99.3),
-('f4f06aae-017f-5620-8957-dba7c8ac5c1c', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1035.96, 863.75, 128.8, 99.3);
+('cf747ffd-db8a-5a7a-aeaf-30b1e0e0e982', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 755.32, 910.79, 139.1, 107.24),
+('520c59eb-910e-513f-9544-49aad0b4cec6', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1013.18, 640.68, 139.1, 107.24),
+('6d0cc5bc-75cc-522e-92ea-477bc8bdc5bb', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1473.02, 1131.22, 139.1, 107.24),
+('d4f66e80-2b58-537e-b15d-b5a941dc7416', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1167.61, 908.68, 139.1, 107.24),
+('a4e7cb06-8829-5fab-b9eb-84445034bf9e', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1652.68, 1324.42, 139.1, 107.24),
+('7ab5f971-ae82-50f1-a474-b93a97ad94e5', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1812.03, 1226.01, 139.1, 107.24),
+('4002f923-75e8-525d-82ce-70d76469a0a0', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 2006.89, 931.07, 139.1, 107.24),
+('f4f06aae-017f-5620-8957-dba7c8ac5c1c', 'be3cf809-f71e-4209-bc4d-8b25b0b5f2a0', 1026.03, 867.49, 139.1, 107.24);
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

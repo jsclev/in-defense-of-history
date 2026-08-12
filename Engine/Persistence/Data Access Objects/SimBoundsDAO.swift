@@ -9,6 +9,19 @@ public struct SimStatBounds {
     public var derivedFrom: String
 }
 
+/// Inclusive integer range the sweep searches for one tower row.
+public struct SimTowerRange: Sendable {
+    public var towerID: UUID
+    public var towerKind: String
+    public var towerLevel: Int
+    public var branch: Int
+    public var minRange: Int
+    public var maxRange: Int
+
+    /// Every value the sweep will try: whole numbers, step 1, min through max.
+    public var values: [Int] { Array(minRange...Swift.max(minRange, maxRange)) }
+}
+
 public class SimBoundsDAO: BaseDAO {
     init(conn: OpaquePointer?) {
         super.init(conn: conn, table: "sim_stat_bounds", loggerName: SimBoundsDAO.self)
@@ -51,6 +64,54 @@ public class SimBoundsDAO: BaseDAO {
                 derivedFrom: (try getString(stmt: stmt, colIndex: 4)) ?? ""
             )
             out[kind, default: [:]][stat] = bounds
+        }
+
+        sqlite3_finalize(stmt)
+        stmt = nil
+
+        return out
+    }
+
+    /// Range search bounds from sim_tower_range, one entry per tower row that
+    /// has one, keyed category then tower level.
+    ///
+    /// A tower with no row is not swept over range: the sweep uses its own
+    /// tower_range instead. That is how the search stays confined to the levels
+    /// the table actually describes.
+    public func getTowerRanges() throws -> [String: [Int: SimTowerRange]] {
+        var out: [String: [Int: SimTowerRange]] = [:]
+
+        var stmt: OpaquePointer?
+        let sql = getCleanedSql("""
+            SELECT
+                r.tower_id,
+                tt.tower_type_category,
+                t.tower_level,
+                t.branch,
+                r.min_range,
+                r.max_range
+            FROM
+                sim_tower_range r
+            INNER JOIN
+                tower t ON t.id = r.tower_id
+            INNER JOIN
+                tower_type tt ON tt.id = t.tower_type_id
+        """)
+
+        try prepare(conn: conn, stmt: &stmt, sql: sql)
+
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            guard let category = try getString(stmt: stmt, colIndex: 1) else { continue }
+            let towerID = try getUUID(stmt: stmt, colIndex: 0, msg: "sim_tower_range tower_id")
+            let level = getInt(stmt: stmt, colIndex: 2)
+            out[category, default: [:]][level] = SimTowerRange(
+                towerID: towerID,
+                towerKind: category,
+                towerLevel: level,
+                branch: getInt(stmt: stmt, colIndex: 3),
+                minRange: getInt(stmt: stmt, colIndex: 4),
+                maxRange: getInt(stmt: stmt, colIndex: 5)
+            )
         }
 
         sqlite3_finalize(stmt)

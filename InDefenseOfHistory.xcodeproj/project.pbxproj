@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		520082C0300C300000DF4F64 /* MobileAppAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520082C1300C300000DF4F64 /* MobileAppAssets.xcassets */; };
+		520082C0300C300000DF4F64 /* LibertyLineAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,19 +24,19 @@
 
 /* Begin PBXFileReference section */
 		520082B7300C245B00DF4F64 /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
+		520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = LibertyLineAssets.xcassets; path = "../in-defense-of-history-data/LibertyLineAssets.xcassets"; sourceTree = SOURCE_ROOT; };
 		520082C2300C300000DF4F64 /* GameName.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GameName.xcconfig; sourceTree = "<group>"; };
-		520082C1300C300000DF4F64 /* MobileAppAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = MobileAppAssets.xcassets; path = "../in-defense-of-history-data/MobileAppAssets.xcassets"; sourceTree = SOURCE_ROOT; };
-		5263FCBD3002C99600C1546D /* Mobile App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mobile App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5263FCBD3002C99600C1546D /* Liberty Line.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Liberty Line.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52AB1A00000000000000BA01 /* LevelEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		520082B2300C140600DF4F64 /* Exceptions for "Mobile App" folder in "Mobile App" target */ = {
+		520082B2300C140600DF4F64 /* Exceptions for "Liberty Line" folder in "Liberty Line" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 5263FCBC3002C99600C1546D /* Mobile App */;
+			target = 5263FCBC3002C99600C1546D /* Liberty Line */;
 		};
 		52AB1A00000000000000BF01 /* Exceptions for "LevelEditor" folder in "LevelEditor" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -48,7 +48,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		520082B0300C136200DF4F64 /* Exceptions for "Mobile App" folder in "Compile Sources" phase from "Mobile App" target */ = {
+		520082B0300C136200DF4F64 /* Exceptions for "Liberty Line" folder in "Compile Sources" phase from "Liberty Line" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
 			buildPhase = 5263FCB93002C99600C1546D /* Sources */;
 			membershipExceptions = (
@@ -73,13 +73,13 @@
 			path = Db;
 			sourceTree = "<group>";
 		};
-		5263FCBF3002C99600C1546D /* Mobile App */ = {
+		5263FCBF3002C99600C1546D /* Liberty Line */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				520082B2300C140600DF4F64 /* Exceptions for "Mobile App" folder in "Mobile App" target */,
-				520082B0300C136200DF4F64 /* Exceptions for "Mobile App" folder in "Compile Sources" phase from "Mobile App" target */,
+				520082B2300C140600DF4F64 /* Exceptions for "Liberty Line" folder in "Liberty Line" target */,
+				520082B0300C136200DF4F64 /* Exceptions for "Liberty Line" folder in "Compile Sources" phase from "Liberty Line" target */,
 			);
-			path = "Mobile App";
+			path = "Liberty Line";
 			sourceTree = "<group>";
 		};
 		52AB1A00000000000000BB01 /* LevelEditor */ = {
@@ -123,9 +123,9 @@
 				5200839F300C399D00DF4F64 /* Db */,
 				5200827F300C09D400DF4F64 /* Engine */,
 				52AB1A00000000000000BB01 /* LevelEditor */,
-				5263FCBF3002C99600C1546D /* Mobile App */,
+				5263FCBF3002C99600C1546D /* Liberty Line */,
 				520082C2300C300000DF4F64 /* GameName.xcconfig */,
-				520082C1300C300000DF4F64 /* MobileAppAssets.xcassets */,
+				520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */,
 				520082B8300C245B00DF4F64 /* Simulator */,
 				5263FCBE3002C99600C1546D /* Products */,
 			);
@@ -134,7 +134,7 @@
 		5263FCBE3002C99600C1546D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5263FCBD3002C99600C1546D /* Mobile App.app */,
+				5263FCBD3002C99600C1546D /* Liberty Line.app */,
 				520082B7300C245B00DF4F64 /* Simulator */,
 				52AB1A00000000000000BA01 /* LevelEditor.app */,
 			);
@@ -168,9 +168,9 @@
 			productReference = 520082B7300C245B00DF4F64 /* Simulator */;
 			productType = "com.apple.product-type.tool";
 		};
-		5263FCBC3002C99600C1546D /* Mobile App */ = {
+		5263FCBC3002C99600C1546D /* Liberty Line */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5263FCD23002C99800C1546D /* Build configuration list for PBXNativeTarget "Mobile App" */;
+			buildConfigurationList = 5263FCD23002C99800C1546D /* Build configuration list for PBXNativeTarget "Liberty Line" */;
 			buildPhases = (
 				5263FCB93002C99600C1546D /* Sources */,
 				5263FCBA3002C99600C1546D /* Frameworks */,
@@ -183,13 +183,13 @@
 			fileSystemSynchronizedGroups = (
 				5200827F300C09D400DF4F64 /* Engine */,
 				5200839F300C399D00DF4F64 /* Db */,
-				5263FCBF3002C99600C1546D /* Mobile App */,
+				5263FCBF3002C99600C1546D /* Liberty Line */,
 			);
-			name = "Mobile App";
+			name = "Liberty Line";
 			packageProductDependencies = (
 			);
 			productName = td;
-			productReference = 5263FCBD3002C99600C1546D /* Mobile App.app */;
+			productReference = 5263FCBD3002C99600C1546D /* Liberty Line.app */;
 			productType = "com.apple.product-type.application";
 		};
 		52AB1A00000000000000BC01 /* LevelEditor */ = {
@@ -247,7 +247,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				5263FCBC3002C99600C1546D /* Mobile App */,
+				5263FCBC3002C99600C1546D /* Liberty Line */,
 				520082B6300C245B00DF4F64 /* Simulator */,
 				52AB1A00000000000000BC01 /* LevelEditor */,
 			);
@@ -259,7 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				520082C0300C300000DF4F64 /* MobileAppAssets.xcassets in Resources */,
+				520082C0300C300000DF4F64 /* LibertyLineAssets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,8 +340,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mobile App/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "$(GAME_DISPLAY_NAME)";
+				INFOPLIST_FILE = "Liberty Line/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Liberty Line";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
@@ -351,7 +351,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zippyzen.td;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zippyzen.liberty-line";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -374,8 +374,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Mobile App/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "$(GAME_DISPLAY_NAME)";
+				INFOPLIST_FILE = "Liberty Line/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Liberty Line";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIRequiredDeviceCapabilities = metal;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
@@ -385,7 +385,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.zippyzen.td;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.zippyzen.liberty-line";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -620,7 +620,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5263FCD23002C99800C1546D /* Build configuration list for PBXNativeTarget "Mobile App" */ = {
+		5263FCD23002C99800C1546D /* Build configuration list for PBXNativeTarget "Liberty Line" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5263FCD33002C99800C1546D /* Debug */,

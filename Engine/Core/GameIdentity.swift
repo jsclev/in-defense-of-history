@@ -1,12 +1,21 @@
-/// The game's user-facing name — location 2 of exactly 2.
+import Foundation
+
+/// The game's user-facing name, read from the app bundle at runtime.
 ///
-/// The other location is GameName.xcconfig at the repo root, which stamps the
-/// same name into the app's home-screen label (CFBundleDisplayName). Change
-/// both when renaming the game; nothing else in the repo carries the name.
+/// GameName.xcconfig authors the display name. At build time
+/// GAME_DISPLAY_NAME lands in the app's Info.plist twice: as
+/// CFBundleDisplayName, which the home screen shows, and as the custom
+/// GameName key this reads. No Swift file carries the name. (The Xcode
+/// target/folder/scheme also say "Liberty Line" — a deliberate choice for
+/// identifiability; see the note in GameName.xcconfig.)
 ///
-/// Any code that shows or logs the game's name reads this constant — never a
-/// string literal. The Simulator and LevelEditor share it too, which is why
-/// it lives in the Engine rather than the app target.
+/// The fallback covers targets whose bundle has no GameName key: the
+/// command-line Simulator (no Info.plist at all) and the LevelEditor (its
+/// display name is the tool's, not the game's). It is deliberately the
+/// franchise name, not a stale copy of the game name.
 public enum GameIdentity {
-    public static let name = "Liberty Line"
+    public static var name: String {
+        (Bundle.main.object(forInfoDictionaryKey: "GameName") as? String)
+            ?? "In Defense of History"
+    }
 }

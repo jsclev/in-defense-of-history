@@ -173,9 +173,10 @@ final class SweepResultStore {
     /// Final flush plus the indexes that make the results worth querying.
     func finish() {
         flushToDisk()
-        exec("CREATE INDEX IF NOT EXISTS idx_sweep_row_run ON disk.sweep_row (run_id);")
-        exec("CREATE INDEX IF NOT EXISTS idx_sweep_row_range ON disk.sweep_row (tower_range);")
-        exec("CREATE INDEX IF NOT EXISTS idx_sweep_row_win ON disk.sweep_row (win_rate);")
+        // The schema qualifier goes on the INDEX name in SQLite, not the table.
+        exec("CREATE INDEX IF NOT EXISTS disk.idx_sweep_row_run ON sweep_row (run_id);")
+        exec("CREATE INDEX IF NOT EXISTS disk.idx_sweep_row_range ON sweep_row (tower_range);")
+        exec("CREATE INDEX IF NOT EXISTS disk.idx_sweep_row_win ON sweep_row (win_rate);")
         exec("DETACH DATABASE disk;")
     }
 

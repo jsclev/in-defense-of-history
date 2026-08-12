@@ -1,23 +1,41 @@
 import CoreGraphics
 
+/// The one Y every top-of-screen HUD element aligns to. Both the counters
+/// panel and the corner buttons take their vertical position from `top`, so
+/// `HudSizing.topBarMargin` is the single number that moves the whole bar.
+/// `top` is the visible edge: button frames and counter plates sit exactly
+/// on it, and nothing in the bar reaches above it.
+public struct TopBarLayout: Equatable {
+    public let top: CGFloat
+
+    public init(screen: ScreenGeometry) {
+        let scale = HudScale(viewSize: screen.physical.size).value
+        top = HudPlacementSolver.origin(
+            corner: .topLeading,
+            margin: HudSizing.topBarMargin.resolved(at: scale), in: screen).y
+    }
+}
+
 public struct CornerButtonsLayout: Equatable {
     public let speed: CGRect
     public let pause: CGRect
     public let block: CGRect
 
-    public init(screen: ScreenGeometry) {
+    public init(screen: ScreenGeometry, topBar: TopBarLayout) {
         let scale = HudScale(viewSize: screen.physical.size).value
         let side = HudSizing.cornerButton.resolved(at: scale)
         let item = CGSize(width: side, height: side)
         let row = StackLayout.row([item, item],
                                   spacing: HudSizing.cornerButtonSpacing.resolved(at: scale))
+        // The solver still supplies the trailing X; the top bar owns the Y.
         let anchored = HudPlacementSolver.frame(
             size: row.size, corner: .topTrailing,
             margin: HudSizing.hudMargin.resolved(at: scale), in: screen)
-        let frames = row.placed(at: anchored.origin)
+        let origin = CGPoint(x: anchored.origin.x, y: topBar.top)
+        let frames = row.placed(at: origin)
         speed = frames[0]
         pause = frames[1]
-        block = anchored
+        block = CGRect(origin: origin, size: row.size)
     }
 }
 
@@ -38,7 +56,7 @@ public struct StatsPanelLayout: Equatable {
 
     static let lineHeightFactor: CGFloat = 1.25
 
-    public init(screen: ScreenGeometry, isPortrait: Bool,
+    public init(screen: ScreenGeometry, topBar: TopBarLayout, isPortrait: Bool,
                 livesIconAspect: CGFloat, moneyIconAspect: CGFloat,
                 moneyText: String) {
         let scale = HudScale(viewSize: screen.physical.size).value
@@ -71,9 +89,15 @@ public struct StatsPanelLayout: Equatable {
             ? StackLayout.column([livesRow.size, moneyRow.size], spacing: groupSpacing)
             : StackLayout.row([livesRow.size, moneyRow.size], spacing: groupSpacing)
 
-        let origin = HudPlacementSolver.origin(
+        // The solver still supplies the leading X; the top bar owns the Y.
+        // The plate reaches platePad above the icon row, so the icon origin
+        // sits platePad below the bar's top and the plate's visible edge
+        // lands exactly on it, flush with the corner-button frames.
+        let platePadding = HudSizing.statPlatePadding.resolved(at: scale)
+        let solved = HudPlacementSolver.origin(
             corner: .topLeading,
             margin: HudSizing.statPanelMargin.resolved(at: scale), in: screen)
+        let origin = CGPoint(x: solved.x, y: topBar.top + platePadding)
 
         let livesOrigin = CGPoint(x: origin.x + groups.frames[0].minX,
                                   y: origin.y + groups.frames[0].minY)

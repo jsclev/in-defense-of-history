@@ -14,6 +14,9 @@ struct SweepFixedInputs {
     var hpBounds: [UUID: ClosedRange<Double>]
     var bountyBounds: [UUID: ClosedRange<Double>]
     var meleeBrackets: [String: [Int: SimMeleeBrackets]]
+    /// Range search bounds from sim_tower_range, keyed kind then tower level.
+    /// The sweep walks every integer between them; there is no grid in Swift.
+    var towerRanges: [String: [Int: SimTowerRange]]
     var fieldMelee: Bool = false
 
     static func load(db: Db, levelName: String) throws -> SweepFixedInputs {
@@ -41,6 +44,13 @@ struct SweepFixedInputs {
             meleeBrackets: try {
                 var out: [String: [Int: SimMeleeBrackets]] = [:]
                 for (category, byLevel) in try db.simMeleeUnitDao.getBrackets() {
+                    out[normalizeKind(category)] = byLevel
+                }
+                return out
+            }(),
+            towerRanges: try {
+                var out: [String: [Int: SimTowerRange]] = [:]
+                for (category, byLevel) in try db.simBoundsDao.getTowerRanges() {
                     out[normalizeKind(category)] = byLevel
                 }
                 return out
@@ -127,15 +137,6 @@ struct SweepFocus {
 
 struct SweepGrids {
     var upgradeGrowth: [Double] = [1.3, 1.5, 1.7, 1.9, 2.1]
-    // Canonical units. On Battle Road a slot sits ~100 from the lane centreline
-    // and the road is 102 wide, so ~165 is the range that just covers the far
-    // edge - the grid brackets that, from not-quite-covering to comfortably past.
-    var rangeGrids: [String: [Double]] = [
-        "ranged": [150, 190, 230, 270, 310],
-        "special": [150, 190, 230, 270, 310],
-        "areaOfEffect": [170, 215, 260, 305, 350],
-    ]
-    var defaultRangeGrid: [Double] = [150, 190, 230, 270, 310]
     var rofGrids: [String: [Double]] = [
         "ranged": [0.5, 0.65, 0.8, 1.0, 1.2],
         "special": [0.8, 1.0, 1.2, 1.5, 1.8],
@@ -281,16 +282,29 @@ struct SweepSpace {
         (fixedInputs.towerLevels[kind]?.first?.meleeUnitCount ?? 0) > 0
     }
 
+    /// Every range the sweep tries for `kind`, as whole numbers.
+    ///
+    /// The values come from sim_tower_range: min through max, stepping by one.
+    /// There is no hardcoded grid and no sample count - widening or narrowing
+    /// the search is an edit to that table.
     func rangeGrid(for kind: String) -> [Double] {
         if isMeleeKind(kind) {
-            return [fixedInputs.towerLevels[kind]?.first?.range ?? 0]
+            return [fixedInputs.towerLevels[kind]?.first?.range.rounded() ?? 0]
         }
         if let override = grids.rangeGridOverride[kind] { return override }
-        if let pinned = grids.fixedRange[kind] { return [pinned] }
+        if let pinned = grids.fixedRange[kind] { return [pinned.rounded()] }
         if let b = bounds[kind]?["range"] {
             return Self.gridFromBounds(b.minValue, b.maxValue, step: grids.boundsStep)
         }
-        return grids.rangeGrids[kind] ?? grids.defaultRangeGrid
+        // Level 1 is the anchor: the sweep picks one range per kind and scales
+        // the higher tiers from it in the same proportion the tower table has.
+        // A kind with no level-1 row is not swept over range at all - it keeps
+        // its own tower_range, which is what confines the search to the tower
+        // levels sim_tower_range actually describes.
+        guard let r = fixedInputs.towerRanges[kind]?[1] else {
+            return [fixedInputs.towerLevels[kind]?.first?.range.rounded() ?? 0]
+        }
+        return r.values.map(Double.init)
     }
 
     static func gridFromBounds(_ lo: Double, _ hi: Double, step: Double) -> [Double] {

@@ -98,11 +98,6 @@ CREATE TABLE level_info (
     map_image_name TEXT NOT NULL DEFAULT '',
     map_image_width REAL NOT NULL DEFAULT 0.0 CHECK (map_image_width >= 0.0),
     map_image_height REAL NOT NULL DEFAULT 0.0 CHECK (map_image_height >= 0.0),
-    -- Box the map renderer fits the tower slot sprite into, in map image
-    -- pixels. Tower art drawn on the same canvas as tower_slot.png is placed
-    -- in this same box so it lands exactly on the slot baked into the map.
-    -- Zero means the level has no slot-canvas art and towers fall back to
-    -- their own sprite heights.
     slot_width REAL NOT NULL DEFAULT 0.0 CHECK (slot_width >= 0.0),
     slot_height REAL NOT NULL DEFAULT 0.0 CHECK (slot_height >= 0.0),
     CHECK (map_image_width = 0.0 OR playable_rect_x + playable_rect_width <= map_image_width),
@@ -152,9 +147,6 @@ CREATE TABLE tower_slot (
     level_info_id TEXT NOT NULL REFERENCES level_info (id),
     map_position_x REAL NOT NULL,
     map_position_y REAL NOT NULL,
-    -- Physical footprint of the slot pad on the map, in canonical units,
-    -- synced from the level GeoJSON's per-slot footprint. 0 means the level
-    -- default in level_info.slot_width/slot_height applies.
     slot_width REAL NOT NULL DEFAULT 0.0 CHECK (slot_width >= 0.0),
     slot_height REAL NOT NULL DEFAULT 0.0 CHECK (slot_height >= 0.0)
 );
@@ -195,6 +187,13 @@ CREATE TABLE sim_melee_unit (
     max_hp REAL NOT NULL CHECK (max_hp >= min_hp),
     min_damage REAL NOT NULL CHECK (min_damage > 0),
     max_damage REAL NOT NULL CHECK (max_damage >= min_damage)
+);
+
+CREATE TABLE sim_tower_range (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    tower_id TEXT NOT NULL UNIQUE REFERENCES tower (id),
+    min_range INTEGER NOT NULL CHECK (min_range > 0),
+    max_range INTEGER NOT NULL CHECK (max_range >= min_range)
 );
 
 CREATE TABLE sim_stat_bounds (

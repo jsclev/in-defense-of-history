@@ -148,6 +148,12 @@ struct LevelMapView: View {
                            pointsPerMapUnit: projection.scale)
     }
 
+    /// The per-slot tap-size readout is parked, not resolved: John wants to
+    /// come back to the tap-target question, so the display is switched off
+    /// here while everything that computes it stays live. Flip to true to see
+    /// the capsules under each slot again in debug mode.
+    private static let showSlotTapInfo = false
+
     private static func debugRangeTint(for range: CGFloat) -> Color {
         debugRangeBands.first { range < $0.upperBound }?.tint
             ?? debugRangeBands[debugRangeBands.count - 1].tint
@@ -158,7 +164,7 @@ struct LevelMapView: View {
     /// a fraction of the drawn tower height, moving it up the screen. Render
     /// tuning for the art pipeline, like `usesSlotCanvasArt` — not level
     /// content, which is why it lives here and not in the database.
-    private static let slotTowerScale: CGFloat = 1.309
+    private static let slotTowerScale: CGFloat = 1.270
     private static let slotTowerLift: CGFloat = 0.11
 
     init(node: CampaignNode, difficulty: Difficulty, onExit: @escaping () -> Void) {
@@ -194,12 +200,9 @@ struct LevelMapView: View {
                         .ignoresSafeArea()
                 }
 
-                hud(metrics: metrics,
-                    isPortrait: geometry.size.height > geometry.size.width,
-                    screen: screen)
-                    .ignoresSafeArea()
-
-                cornerButtons(screen: screen)
+                topBar(metrics: metrics,
+                       isPortrait: geometry.size.height > geometry.size.width,
+                       screen: screen)
                     .ignoresSafeArea()
             }
         }
@@ -209,11 +212,26 @@ struct LevelMapView: View {
     }
 
     /// Fraction of the corner-button frame the glyph fills. 0.66 crowded the
-    /// frame on device; this is 18% down from that.
-    private static let controlGlyphFraction: CGFloat = 0.5412
+    /// frame on device; trimmed 18% then a further 10%, judged on device.
+    private static let controlGlyphFraction: CGFloat = 0.4871
 
-    private func cornerButtons(screen: ScreenGeometry) -> some View {
-        let layout = CornerButtonsLayout(screen: screen)
+    /// The single top-of-screen HUD entity. Everything that sits along the
+    /// top — counters, wave readout, speed/pause buttons — renders inside
+    /// this one container, vertically positioned by one TopBarLayout, whose
+    /// margin is the one number in HudSizing.topBarMargin.
+    private func topBar(metrics: HudMetrics, isPortrait: Bool,
+                        screen: ScreenGeometry) -> some View {
+        let bar = TopBarLayout(screen: screen)
+        return ZStack(alignment: .topLeading) {
+            hud(metrics: metrics, isPortrait: isPortrait,
+                screen: screen, topBar: bar)
+            cornerButtons(screen: screen, topBar: bar)
+        }
+    }
+
+    private func cornerButtons(screen: ScreenGeometry,
+                               topBar: TopBarLayout) -> some View {
+        let layout = CornerButtonsLayout(screen: screen, topBar: topBar)
         return ZStack(alignment: .topLeading) {
             cornerButton(glyph: "speed_up_icon_glyph", frame: layout.speed,
                          in: screen) { runner.speedUp() }
@@ -414,7 +432,7 @@ struct LevelMapView: View {
                 .position(projection.viewPoint(slotPosition))
             }
 
-            if debugMode {
+            if debugMode, Self.showSlotTapInfo {
                 ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                     let p = projection.viewPoint(slotPosition)
                     let slotTap = slotTapSize(at: index, projection: projection)
@@ -671,9 +689,9 @@ struct LevelMapView: View {
     }
 
     private func hud(metrics: HudMetrics, isPortrait: Bool,
-                     screen: ScreenGeometry) -> some View {
+                     screen: ScreenGeometry, topBar: TopBarLayout) -> some View {
         let panel = StatsPanelLayout(
-            screen: screen, isPortrait: isPortrait,
+            screen: screen, topBar: topBar, isPortrait: isPortrait,
             livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
             moneyIconAspect: HudIcon.aspect(of: "money_icon_12"),
             moneyText: goldText)
