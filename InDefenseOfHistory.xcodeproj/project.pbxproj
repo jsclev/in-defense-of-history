@@ -7,6 +7,33 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52A55E710000000000000000 /* CampaignBeaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000000 /* CampaignBeaver.swift */; };
+		52A55E710000000000000001 /* CampaignCompass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000001 /* CampaignCompass.swift */; };
+		52A55E710000000000000002 /* CampaignDecor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000002 /* CampaignDecor.swift */; };
+		52A55E710000000000000003 /* CampaignMapAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000003 /* CampaignMapAsset.swift */; };
+		52A55E710000000000000004 /* CampaignMapLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000004 /* CampaignMapLayout.swift */; };
+		52A55E710000000000000005 /* CampaignMapMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000005 /* CampaignMapMetalView.swift */; };
+		52A55E710000000000000006 /* CampaignMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000006 /* CampaignMapView.swift */; };
+		52A55E710000000000000007 /* CampaignMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000007 /* CampaignMarkers.swift */; };
+		52A55E710000000000000008 /* CampaignNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000008 /* CampaignNode.swift */; };
+		52A55E710000000000000009 /* CampaignPirateVoyage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000009 /* CampaignPirateVoyage.swift */; };
+		52A55E71000000000000000A /* CampaignRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000A /* CampaignRoute.swift */; };
+		52A55E71000000000000000B /* CampaignWildlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000B /* CampaignWildlife.swift */; };
+		52A55E71000000000000000C /* EncyclopediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000C /* EncyclopediaView.swift */; };
+		52A55E71000000000000000D /* HeroesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000D /* HeroesView.swift */; };
+		52A55E71000000000000000E /* HudMetrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000E /* HudMetrics.swift */; };
+		52A55E71000000000000000F /* LevelBriefingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000F /* LevelBriefingView.swift */; };
+		52A55E710000000000000010 /* LevelMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000010 /* LevelMapView.swift */; };
+		52A55E710000000000000011 /* LevelRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000011 /* LevelRunner.swift */; };
+		52A55E710000000000000012 /* LibertyLineApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000012 /* LibertyLineApp.swift */; };
+		52A55E710000000000000013 /* MenuScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000013 /* MenuScreens.swift */; };
+		52A55E710000000000000014 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000014 /* Renderer.swift */; };
+		52A55E710000000000000015 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000015 /* RootView.swift */; };
+		52A55E710000000000000016 /* SafeAreaOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000016 /* SafeAreaOverlay.swift */; };
+		52A55E710000000000000017 /* ScreenGeometry+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000017 /* ScreenGeometry+SwiftUI.swift */; };
+		52A55E710000000000000018 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000018 /* SettingsView.swift */; };
+		52A55E710000000000000019 /* TiledBackgroundMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000019 /* TiledBackgroundMetalView.swift */; };
+		52A55E71000000000000001A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000001A /* Shaders.metal */; };
 		520082C0300C300000DF4F64 /* LibertyLineAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +50,35 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		52A55E700000000000000000 /* CampaignBeaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignBeaver.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000001 /* CampaignCompass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignCompass.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000002 /* CampaignDecor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignDecor.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000003 /* CampaignMapAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignMapAsset.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000004 /* CampaignMapLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignMapLayout.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000005 /* CampaignMapMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignMapMetalView.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000006 /* CampaignMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignMapView.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000007 /* CampaignMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignMarkers.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000008 /* CampaignNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignNode.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000009 /* CampaignPirateVoyage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignPirateVoyage.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000000A /* CampaignRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignRoute.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000000B /* CampaignWildlife.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CampaignWildlife.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000000C /* EncyclopediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EncyclopediaView.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000000D /* HeroesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HeroesView.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000000E /* HudMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HudMetrics.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000000F /* LevelBriefingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LevelBriefingView.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000010 /* LevelMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LevelMapView.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000011 /* LevelRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LevelRunner.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000012 /* LibertyLineApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibertyLineApp.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000013 /* MenuScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MenuScreens.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000014 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Renderer.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000015 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootView.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000016 /* SafeAreaOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafeAreaOverlay.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000017 /* ScreenGeometry+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenGeometry+SwiftUI.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000018 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
+		52A55E700000000000000019 /* TiledBackgroundMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TiledBackgroundMetalView.swift"; sourceTree = "<group>"; };
+		52A55E70000000000000001A /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = "Shaders.metal"; sourceTree = "<group>"; };
+		52A55E70000000000000001B /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ShaderTypes.h"; sourceTree = "<group>"; };
+		52A55E70000000000000001C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
 		520082B7300C245B00DF4F64 /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = LibertyLineAssets.xcassets; path = "../in-defense-of-history-data/LibertyLineAssets.xcassets"; sourceTree = SOURCE_ROOT; };
 		520082C2300C300000DF4F64 /* GameName.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GameName.xcconfig; sourceTree = "<group>"; };
@@ -31,13 +87,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		520082B2300C140600DF4F64 /* Exceptions for "Liberty Line" folder in "Liberty Line" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 5263FCBC3002C99600C1546D /* Liberty Line */;
-		};
 		52AB1A00000000000000BF01 /* Exceptions for "LevelEditor" folder in "LevelEditor" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -46,16 +95,6 @@
 			target = 52AB1A00000000000000BC01 /* LevelEditor */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		520082B0300C136200DF4F64 /* Exceptions for "Liberty Line" folder in "Compile Sources" phase from "Liberty Line" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 5263FCB93002C99600C1546D /* Sources */;
-			membershipExceptions = (
-				ShaderTypes.h,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5200827F300C09D400DF4F64 /* Engine */ = {
@@ -71,15 +110,6 @@
 		5200839F300C399D00DF4F64 /* Db */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Db;
-			sourceTree = "<group>";
-		};
-		5263FCBF3002C99600C1546D /* Liberty Line */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				520082B2300C140600DF4F64 /* Exceptions for "Liberty Line" folder in "Liberty Line" target */,
-				520082B0300C136200DF4F64 /* Exceptions for "Liberty Line" folder in "Compile Sources" phase from "Liberty Line" target */,
-			);
-			path = "Liberty Line";
 			sourceTree = "<group>";
 		};
 		52AB1A00000000000000BB01 /* LevelEditor */ = {
@@ -117,16 +147,52 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5263FCBF3002C99600C1546D /* Liberty Line */ = {
+			isa = PBXGroup;
+			children = (
+				52A55E700000000000000000 /* CampaignBeaver.swift */,
+				52A55E700000000000000001 /* CampaignCompass.swift */,
+				52A55E700000000000000002 /* CampaignDecor.swift */,
+				52A55E700000000000000003 /* CampaignMapAsset.swift */,
+				52A55E700000000000000004 /* CampaignMapLayout.swift */,
+				52A55E700000000000000005 /* CampaignMapMetalView.swift */,
+				52A55E700000000000000006 /* CampaignMapView.swift */,
+				52A55E700000000000000007 /* CampaignMarkers.swift */,
+				52A55E700000000000000008 /* CampaignNode.swift */,
+				52A55E700000000000000009 /* CampaignPirateVoyage.swift */,
+				52A55E70000000000000000A /* CampaignRoute.swift */,
+				52A55E70000000000000000B /* CampaignWildlife.swift */,
+				52A55E70000000000000000C /* EncyclopediaView.swift */,
+				52A55E70000000000000000D /* HeroesView.swift */,
+				52A55E70000000000000000E /* HudMetrics.swift */,
+				52A55E70000000000000000F /* LevelBriefingView.swift */,
+				52A55E700000000000000010 /* LevelMapView.swift */,
+				52A55E700000000000000011 /* LevelRunner.swift */,
+				52A55E700000000000000012 /* LibertyLineApp.swift */,
+				52A55E700000000000000013 /* MenuScreens.swift */,
+				52A55E700000000000000014 /* Renderer.swift */,
+				52A55E700000000000000015 /* RootView.swift */,
+				52A55E700000000000000016 /* SafeAreaOverlay.swift */,
+				52A55E700000000000000017 /* ScreenGeometry+SwiftUI.swift */,
+				52A55E700000000000000018 /* SettingsView.swift */,
+				52A55E700000000000000019 /* TiledBackgroundMetalView.swift */,
+				52A55E70000000000000001A /* Shaders.metal */,
+				52A55E70000000000000001B /* ShaderTypes.h */,
+				52A55E70000000000000001C /* Info.plist */,
+				520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */,
+			);
+			path = "Liberty Line";
+			sourceTree = "<group>";
+		};
 		5263FCB43002C99600C1546D = {
 			isa = PBXGroup;
 			children = (
-				5200839F300C399D00DF4F64 /* Db */,
 				5200827F300C09D400DF4F64 /* Engine */,
-				52AB1A00000000000000BB01 /* LevelEditor */,
+				5200839F300C399D00DF4F64 /* Db */,
 				5263FCBF3002C99600C1546D /* Liberty Line */,
-				520082C2300C300000DF4F64 /* GameName.xcconfig */,
-				520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */,
 				520082B8300C245B00DF4F64 /* Simulator */,
+				52AB1A00000000000000BB01 /* LevelEditor */,
+				520082C2300C300000DF4F64 /* GameName.xcconfig */,
 				5263FCBE3002C99600C1546D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -148,6 +214,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 520082BB300C245B00DF4F64 /* Build configuration list for PBXNativeTarget "Simulator" */;
 			buildPhases = (
+				52C0FFEE000000000000A003 /* Generate Build Version */,
 				520082B3300C245B00DF4F64 /* Sources */,
 				520082B4300C245B00DF4F64 /* Frameworks */,
 				520082B5300C245B00DF4F64 /* CopyFiles */,
@@ -175,6 +242,7 @@
 				5263FCB93002C99600C1546D /* Sources */,
 				5263FCBA3002C99600C1546D /* Frameworks */,
 				5263FCBB3002C99600C1546D /* Resources */,
+				52C0FFEE000000000000A001 /* Stamp Build Number */,
 			);
 			buildRules = (
 			);
@@ -183,7 +251,6 @@
 			fileSystemSynchronizedGroups = (
 				5200827F300C09D400DF4F64 /* Engine */,
 				5200839F300C399D00DF4F64 /* Db */,
-				5263FCBF3002C99600C1546D /* Liberty Line */,
 			);
 			name = "Liberty Line";
 			packageProductDependencies = (
@@ -199,6 +266,7 @@
 				52AB1A00000000000000BD01 /* Sources */,
 				52AB1A00000000000000BD02 /* Frameworks */,
 				52AB1A00000000000000BD03 /* Resources */,
+				52C0FFEE000000000000A002 /* Stamp Build Number */,
 			);
 			buildRules = (
 			);
@@ -272,6 +340,59 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		52C0FFEE000000000000A001 /* Stamp Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Stamp Build Number";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/buildstamp.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/Tools/bump_build.sh\" plist\n";
+		};
+		52C0FFEE000000000000A002 /* Stamp Build Number */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+			);
+			name = "Stamp Build Number";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/buildstamp.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/Tools/bump_build.sh\" plist\n";
+		};
+		52C0FFEE000000000000A003 /* Generate Build Version */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Build Version";
+			outputPaths = (
+				"$(SRCROOT)/Simulator/BuildVersion.swift",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$SRCROOT/Tools/bump_build.sh\" swift\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		520082B3300C245B00DF4F64 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -284,6 +405,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52A55E710000000000000000 /* CampaignBeaver.swift in Sources */,
+				52A55E710000000000000001 /* CampaignCompass.swift in Sources */,
+				52A55E710000000000000002 /* CampaignDecor.swift in Sources */,
+				52A55E710000000000000003 /* CampaignMapAsset.swift in Sources */,
+				52A55E710000000000000004 /* CampaignMapLayout.swift in Sources */,
+				52A55E710000000000000005 /* CampaignMapMetalView.swift in Sources */,
+				52A55E710000000000000006 /* CampaignMapView.swift in Sources */,
+				52A55E710000000000000007 /* CampaignMarkers.swift in Sources */,
+				52A55E710000000000000008 /* CampaignNode.swift in Sources */,
+				52A55E710000000000000009 /* CampaignPirateVoyage.swift in Sources */,
+				52A55E71000000000000000A /* CampaignRoute.swift in Sources */,
+				52A55E71000000000000000B /* CampaignWildlife.swift in Sources */,
+				52A55E71000000000000000C /* EncyclopediaView.swift in Sources */,
+				52A55E71000000000000000D /* HeroesView.swift in Sources */,
+				52A55E71000000000000000E /* HudMetrics.swift in Sources */,
+				52A55E71000000000000000F /* LevelBriefingView.swift in Sources */,
+				52A55E710000000000000010 /* LevelMapView.swift in Sources */,
+				52A55E710000000000000011 /* LevelRunner.swift in Sources */,
+				52A55E710000000000000012 /* LibertyLineApp.swift in Sources */,
+				52A55E710000000000000013 /* MenuScreens.swift in Sources */,
+				52A55E710000000000000014 /* Renderer.swift in Sources */,
+				52A55E710000000000000015 /* RootView.swift in Sources */,
+				52A55E710000000000000016 /* SafeAreaOverlay.swift in Sources */,
+				52A55E710000000000000017 /* ScreenGeometry+SwiftUI.swift in Sources */,
+				52A55E710000000000000018 /* SettingsView.swift in Sources */,
+				52A55E710000000000000019 /* TiledBackgroundMetalView.swift in Sources */,
+				52A55E71000000000000001A /* Shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +451,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -319,7 +469,9 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				MACOSX_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -339,6 +491,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Liberty Line/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Liberty Line";
@@ -373,6 +526,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Liberty Line/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Liberty Line";
@@ -527,6 +681,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LevelEditor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Level Editor";
@@ -567,6 +722,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SNJW4KBXLV;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = LevelEditor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Level Editor";

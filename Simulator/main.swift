@@ -37,7 +37,7 @@ struct Options {
 
 func printUsage() {
     print("""
-    revsim — headless balance simulator
+    revsim \(BuildVersion.version) — headless balance simulator
 
     USAGE: revsim [options]
       --db <path>      Content database path (default: revwar.sqlite)

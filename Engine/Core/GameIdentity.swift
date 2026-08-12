@@ -18,4 +18,9 @@ public enum GameIdentity {
         (Bundle.main.object(forInfoDictionaryKey: "GameName") as? String)
             ?? "In Defense of History"
     }
+
+    public static var version: String {
+        (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String)
+            ?? "0.0.0"
+    }
 }

@@ -40,6 +40,10 @@ struct SettingsView: View {
                            isOn: $showDebugInfo, metrics: metrics)
 
                     Spacer()
+
+                    Text("Version \(GameIdentity.version)")
+                        .font(.system(size: Typography.size(12 * metrics.scale)))
+                        .foregroundStyle(.white.opacity(0.5))
                 }
                 .padding(28 * metrics.scale)
                 .frame(maxWidth: 620 * metrics.scale, alignment: .leading)
