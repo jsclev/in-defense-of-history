@@ -10,7 +10,7 @@ public struct LevelInfo: Codable, Sendable, Identifiable, Equatable {
     public var numWaves: Int
     public let startedAt: Date
     public let endedAt: Date
-    public let playableRect: CGRect
+    public let playArea: CGRect
     public let mapImageName: String
     public var paths: [Path]
     public var towerSlots: [TowerSlot]
@@ -24,7 +24,7 @@ public struct LevelInfo: Codable, Sendable, Identifiable, Equatable {
                 startingMoney: Int,
                 numStartingLives: Int,
                 numWaves: Int = 0,
-                playableRect: CGRect,
+                playArea: CGRect,
                 mapImageName: String = "",
                 paths: [Path],
                 towerSlots: [TowerSlot],
@@ -37,7 +37,7 @@ public struct LevelInfo: Codable, Sendable, Identifiable, Equatable {
         self.startingMoney = startingMoney
         self.numStartingLives = numStartingLives
         self.numWaves = numWaves
-        self.playableRect = playableRect
+        self.playArea = playArea
         self.mapImageName = mapImageName
         self.paths = paths
         self.towerSlots = towerSlots

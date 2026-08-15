@@ -6,21 +6,26 @@ import CoreGraphics
 /// every tower slot renders at.
 ///
 /// Origin is the LOWER-LEFT corner of the canvas, +x runs right and +y runs
-/// UP. Every stored coordinate - path points, tower slots, the playable rect -
+/// UP. Every stored coordinate - path points, tower slots, the play area -
 /// is in this space, and tower ranges, radii and slot footprints are in these
 /// same units. Nothing rescales on the way in or out.
 public struct CanvasSpecValues: Equatable, Sendable {
     public let canvasWidth: Double
     public let canvasHeight: Double
-    public let playableRect: CGRect
+    public let playArea: CGRect
     public let slotSize: CGSize
+    public let pathWidth: Double
+    public let occlusionCornerFraction: CGSize
 
     public init(canvasWidth: Double, canvasHeight: Double,
-                playableRect: CGRect, slotSize: CGSize) {
+                playArea: CGRect, slotSize: CGSize, pathWidth: Double,
+                occlusionCornerFraction: CGSize) {
         self.canvasWidth = canvasWidth
         self.canvasHeight = canvasHeight
-        self.playableRect = playableRect
+        self.playArea = playArea
         self.slotSize = slotSize
+        self.pathWidth = pathWidth
+        self.occlusionCornerFraction = occlusionCornerFraction
     }
 }
 
@@ -48,10 +53,31 @@ public enum CanvasSpec {
 
     public static var width: Double { values.canvasWidth }
     public static var height: Double { values.canvasHeight }
-    public static var playable: CGRect { values.playableRect }
+    public static var playArea: CGRect { values.playArea }
     public static var slotSize: CGSize { values.slotSize }
 
+    /// Full width of an enemy path, edge to edge. The shipped Battle Road
+    /// lane and the game's lane-coverage half-width (51) both derive from
+    /// this one number.
+    public static var pathWidth: Double { values.pathWidth }
+
     public static var size: CGSize { CGSize(width: width, height: height) }
+
+    /// The four corner occlusion areas of the play area, one per corner,
+    /// sized as canvas_spec's fractions of the play area (20% of its width,
+    /// 5% of its height). Occlusion art covers these bands so entrances and
+    /// exits near a corner can swallow enemies cleanly.
+    public static var cornerOcclusionAreas: [CGRect] {
+        let area = playArea
+        let w = area.width * values.occlusionCornerFraction.width
+        let h = area.height * values.occlusionCornerFraction.height
+        return [
+            CGRect(x: area.minX, y: area.minY, width: w, height: h),
+            CGRect(x: area.maxX - w, y: area.minY, width: w, height: h),
+            CGRect(x: area.minX, y: area.maxY - h, width: w, height: h),
+            CGRect(x: area.maxX - w, y: area.maxY - h, width: w, height: h),
+        ]
+    }
 
     /// Convert a y measured from the top of the canvas into this space, or back
     /// again - the transform is its own inverse. Only rendering layers that draw

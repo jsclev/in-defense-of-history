@@ -50,11 +50,15 @@ enum GeoJSONImport {
     ///
     /// Slots come back in `slotNumber` order so the editor's slot indices match
     /// the numbering the level was authored and balanced against.
-    static func geometry(from data: Data) throws -> (roads: [MapDraft.Road], slots: [Point]) {
+    static func geometry(from data: Data) throws
+        -> (roads: [MapDraft.Road], slots: [Point],
+            entrances: [Point], exits: [Point]) {
         let collection = try JSONDecoder().decode(Collection.self, from: data)
 
         var roads: [MapDraft.Road] = []
         var numberedSlots: [(number: Int, point: Point)] = []
+        var entrances: [Point] = []
+        var exits: [Point] = []
 
         for feature in collection.features {
             let props = feature.properties
@@ -73,18 +77,24 @@ enum GeoJSONImport {
                 numberedSlots.append((props.slotNumber ?? numberedSlots.count + 1,
                                       Point(xy[0], xy[1])))
 
+            case let ("spawn_point", .point(xy)) where xy.count >= 2:
+                entrances.append(Point(xy[0], xy[1]))
+
+            case let ("goal_point", .point(xy)) where xy.count >= 2:
+                exits.append(Point(xy[0], xy[1]))
+
             default:
                 continue
             }
         }
 
         numberedSlots.sort { $0.number < $1.number }
-        return (roads, numberedSlots.map(\.point))
+        return (roads, numberedSlots.map(\.point), entrances, exits)
     }
 
     /// A full draft from a GeoJSON, for opening one directly in the editor.
     static func draft(from data: Data) throws -> MapDraft {
-        let (roads, slots) = try geometry(from: data)
+        let (roads, slots, entrances, exits) = try geometry(from: data)
         guard !roads.isEmpty else {
             throw DbError.Db(message: "GeoJSON has no gameplay road to edit")
         }
@@ -93,6 +103,8 @@ enum GeoJSONImport {
         draft.name = collection.name ?? "Imported Level"
         draft.roads = roads
         draft.slots = slots
+        draft.entrances = entrances
+        draft.exits = exits
         draft.coordinateSpace = MapDraft.canvasSpace
         return draft
     }

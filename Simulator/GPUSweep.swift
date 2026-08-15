@@ -162,7 +162,7 @@ enum GPUBuild {
         guard catalog.towerTypes.count <= Int(SIM_MAX_TOWER_KINDS),
               catalog.towerTypes.allSatisfy({ $0.levels.count <= Int(SIM_MAX_TOWER_LEVELS) }),
               catalog.towerTypes.allSatisfy({ $0.levels.allSatisfy {
-                  $0.meleeUnitCount <= Int(SIM_MAX_MELEE_UNITS_PER) } })
+                  ($0.meleeUnit?.soldierCount ?? 0) <= Int(SIM_MAX_MELEE_UNITS_PER) } })
         else { throw DbError.Db(message: "Catalog exceeds GPU tower caps") }
 
         var sched: [(time: Double, type: Int, path: Int, wave: Int)] = []
@@ -210,13 +210,16 @@ enum GPUBuild {
                     t.contagionChance = Float(l.contagionChance)
                     t.fireTicks = Int32(Simulation.fireTicks(l.fireInterval))
                     t.projectileSpeed = Float(l.projectileSpeed)
-                    t.meleeUnitCount = Int32(l.meleeUnitCount)
-                    t.meleeUnitHP = Float(l.meleeUnitHP)
-                    t.meleeDamageMin = Float(l.meleeUnitDamageMin)
-                    t.meleeDamageMax = Float(l.meleeUnitDamageMax)
-                    t.meleeAttackTicks = Int32(Simulation.fireTicks(l.meleeUnitAttackInterval))
-                    t.meleeRespawnTicks = Int32(Simulation.fireTicks(l.meleeUnitRespawnSeconds))
-                    t.meleeHealPerSecond = Float(l.meleeUnitHealPerSecond)
+                    if let melee = l.meleeUnit {
+                        t.meleeUnitCount = Int32(melee.soldierCount)
+                        t.meleeUnitHP = Float(melee.hp)
+                        t.meleeDamageMin = Float(melee.damageRange.lowerBound)
+                        t.meleeDamageMax = Float(melee.damageRange.upperBound)
+                        t.meleeDefenseRating = Float(melee.defenseRating)
+                        t.meleeAttackTicks = Int32(Simulation.fireTicks(melee.attackInterval))
+                        t.meleeRespawnTicks = Int32(Simulation.fireTicks(melee.respawnSeconds))
+                        t.meleeHealPerSecond = Float(melee.healPerSecond)
+                    }
                     switch l.targeting {
                     case .first: t.targeting = UInt32(SIM_TARGET_FIRST)
                     case .last: t.targeting = UInt32(SIM_TARGET_LAST)
@@ -250,9 +253,8 @@ enum GPUBuild {
                 raw.storeBytes(of: Float(type.stats.maxHP), toByteOffset: hpOff + i * 4, as: Float.self)
                 raw.storeBytes(of: Int32(type.stats.gold), toByteOffset: goldOff + i * 4, as: Int32.self)
             }
-            if let melee = catalog.towerTypes.first(where: {
-                ($0.levels.first?.meleeUnitCount ?? 0) > 0
-            }), let flagRange = melee.levels.first?.range {
+            if let flagRange = catalog.towerTypes
+                .compactMap({ $0.levels.first?.meleeUnit?.rallyPointRadius }).first {
                 let rallyOff = MemoryLayout<PermGPU>.offset(of: \.rallyPoints)!
                 for (i, slot) in level.towerSlots.enumerated() {
                     let rally = Simulation.defaultRallyPoint(
@@ -413,7 +415,7 @@ enum GPUHarness {
             id: base.id, name: base.name, campaign: base.campaign,
             startedAt: base.startedAt, endedAt: base.endedAt,
             startingMoney: perm.money, numStartingLives: perm.lives,
-            playableRect: base.playableRect,
+            playArea: base.playArea,
             paths: base.paths, towerSlots: base.towerSlots, waves: waves
         )
         return (level, catalog)
@@ -453,7 +455,7 @@ enum GPUHarness {
                                       seeds: seeds, fieldMelee: false)
         let inputs = try SweepFixedInputs.load(db: db, levelName: levelName)
         let hasMelee = inputs.unlocks.keys.contains {
-            (inputs.towerLevels[$0]?.first?.meleeUnitCount ?? 0) > 0
+            inputs.towerLevels[$0]?.first?.meleeUnit != nil
         }
         if hasMelee {
             failures += try meleeDuelProbe(db: db, engine: engine, levelName: levelName,
@@ -668,7 +670,7 @@ enum GPUHarness {
                                seeds: Int) throws -> Int {
         let (fixed, space, base) = try makeInputs(db: db, levelName: levelName, fieldMelee: true)
         guard let meleeLevels = fixed.towerLevels["melee"],
-              (meleeLevels.first?.meleeUnitCount ?? 0) > 0 else {
+              meleeLevels.first?.meleeUnit != nil else {
             print("  (no melee line in DB — duel probes skipped)")
             return 0
         }
@@ -743,7 +745,7 @@ enum GPUHarness {
                 id: level.id, name: level.name, campaign: level.campaign,
                 startedAt: level.startedAt, endedAt: level.endedAt,
                 startingMoney: money, numStartingLives: 50,
-                playableRect: level.playableRect,
+                playArea: level.playArea,
                 paths: level.paths, towerSlots: level.towerSlots, waves: waves
             )
             let duelProto = GreedyCommander(level: duelLevel, catalog: catalog)

@@ -23,6 +23,8 @@ public struct MilitiaUnit: Sendable {
 }
 
 public enum MilitiaTunables {
+    /// Swing damage rolls uniformly within ±this fraction of attack_rating.
+    public static let attackSpread: Double = 0.25
     public static let moveSpeed: Double = 70
     public static let engageScanRadius: Double = 80
     public static let meleeReach: Double = 26

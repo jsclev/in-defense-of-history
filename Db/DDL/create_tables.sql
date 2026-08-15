@@ -45,14 +45,25 @@ CREATE TABLE tower (
     splash_cover_pierce REAL NOT NULL DEFAULT 0.0 CHECK (splash_cover_pierce BETWEEN 0.0 AND 1.0),
     contagion_chance REAL NOT NULL DEFAULT 0,
     targeting TEXT NOT NULL DEFAULT 'first',
-    projectile_speed REAL NOT NULL DEFAULT 0 CHECK (projectile_speed >= 0),
-    unit_count INTEGER NOT NULL DEFAULT 0 CHECK (unit_count >= 0),
-    unit_hp REAL NOT NULL DEFAULT 0,
-    unit_damage_min REAL NOT NULL DEFAULT 0,
-    unit_damage_max REAL NOT NULL DEFAULT 0 CHECK (unit_damage_max >= unit_damage_min),
-    unit_attack_interval REAL NOT NULL DEFAULT 0,
-    unit_respawn_seconds REAL NOT NULL DEFAULT 0,
-    unit_heal_per_second REAL NOT NULL DEFAULT 0
+    projectile_speed REAL NOT NULL DEFAULT 0 CHECK (projectile_speed >= 0)
+);
+
+-- attack_rating is the soldier's average swing damage; the engine rolls a
+-- fixed band around it. defense_rating is the fraction of incoming damage
+-- the soldier turns away.
+CREATE TABLE melee_unit (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    tower_id TEXT NOT NULL UNIQUE REFERENCES tower (id),
+    -- Capped at 4: the GPU simulator packs 4 soldier slots per tower
+    -- (SIM_MAX_MELEE_UNITS_PER) and rejects catalogs above it.
+    soldier_count INTEGER NOT NULL CHECK (soldier_count BETWEEN 1 AND 4),
+    attack_rating REAL NOT NULL CHECK (attack_rating > 0),
+    defense_rating REAL NOT NULL CHECK (defense_rating >= 0.0 AND defense_rating < 1.0),
+    hp REAL NOT NULL CHECK (hp > 0),
+    rally_point_radius REAL NOT NULL CHECK (rally_point_radius > 0),
+    attack_interval REAL NOT NULL CHECK (attack_interval > 0),
+    respawn_seconds REAL NOT NULL CHECK (respawn_seconds > 0),
+    heal_per_second REAL NOT NULL DEFAULT 0 CHECK (heal_per_second >= 0)
 );
 
 CREATE TABLE difficulty (
@@ -84,14 +95,19 @@ CREATE TABLE canvas_spec (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     canvas_width REAL NOT NULL CHECK (canvas_width > 0.0),
     canvas_height REAL NOT NULL CHECK (canvas_height > 0.0),
-    playable_rect_x REAL NOT NULL CHECK (playable_rect_x >= 0.0),
-    playable_rect_y REAL NOT NULL CHECK (playable_rect_y >= 0.0),
-    playable_rect_width REAL NOT NULL CHECK (playable_rect_width > 0.0),
-    playable_rect_height REAL NOT NULL CHECK (playable_rect_height > 0.0),
+    play_area_x REAL NOT NULL CHECK (play_area_x >= 0.0),
+    play_area_y REAL NOT NULL CHECK (play_area_y >= 0.0),
+    play_area_width REAL NOT NULL CHECK (play_area_width > 0.0),
+    play_area_height REAL NOT NULL CHECK (play_area_height > 0.0),
     slot_width REAL NOT NULL CHECK (slot_width > 0.0),
     slot_height REAL NOT NULL CHECK (slot_height > 0.0),
-    CHECK (playable_rect_x + playable_rect_width <= canvas_width),
-    CHECK (playable_rect_y + playable_rect_height <= canvas_height)
+    path_width REAL NOT NULL CHECK (path_width > 0.0),
+    occlusion_corner_width_fraction REAL NOT NULL
+        CHECK (occlusion_corner_width_fraction > 0.0 AND occlusion_corner_width_fraction <= 1.0),
+    occlusion_corner_height_fraction REAL NOT NULL
+        CHECK (occlusion_corner_height_fraction > 0.0 AND occlusion_corner_height_fraction <= 1.0),
+    CHECK (play_area_x + play_area_width <= canvas_width),
+    CHECK (play_area_y + play_area_height <= canvas_height)
 );
 
 CREATE TABLE level_info (

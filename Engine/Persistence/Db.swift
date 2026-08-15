@@ -16,6 +16,7 @@ public class Db {
     public let pathDao: PathDAO
     public let enemyTypeDao: EnemyTypeDAO
     public let towerUnlockDao: TowerUnlockDAO
+    public let meleeUnitDao: MeleeUnitDAO
     public let towerTypeDao: TowerTypeDAO
     public let simBoundsDao: SimBoundsDAO
     public let simEnemyTypeDao: SimEnemyTypeDAO
@@ -120,7 +121,8 @@ public class Db {
                                     pathDao: pathDao, waveDao: waveDao)
         enemyTypeDao = EnemyTypeDAO(conn: conn)
         towerUnlockDao = TowerUnlockDAO(conn: conn)
-        towerTypeDao = TowerTypeDAO(conn: conn)
+        meleeUnitDao = MeleeUnitDAO(conn: conn)
+        towerTypeDao = TowerTypeDAO(conn: conn, meleeUnitDao: meleeUnitDao)
         simBoundsDao = SimBoundsDAO(conn: conn)
         simEnemyTypeDao = SimEnemyTypeDAO(conn: conn)
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)
@@ -139,7 +141,15 @@ public class Db {
 
     public func close() {
         if let conn = conn {
-            sqlite3_close(conn)
+            let rc = sqlite3_close_v2(conn)
+            if rc != SQLITE_OK {
+                logger.error("sqlite3_close_v2 failed with code \(rc)")
+            }
+            self.conn = nil
         }
+    }
+
+    deinit {
+        close()
     }
 }

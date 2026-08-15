@@ -7,6 +7,10 @@ struct HudMetrics {
         scale = HudScale(viewSize: viewSize).value
     }
 
+    init(scale: CGFloat) {
+        self.scale = scale
+    }
+
     var livesIconHeight: CGFloat { HudSizing.livesIcon.resolved(at: scale) }
     var livesTextSize: CGFloat { HudSizing.livesText.resolved(at: scale) }
     var livesValueWidth: CGFloat { HudSizing.livesValueWidth.resolved(at: scale) }

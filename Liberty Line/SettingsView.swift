@@ -32,7 +32,7 @@ struct SettingsView: View {
                            isOn: $debugMode, metrics: metrics)
 
                     toggle("Layout guides",
-                           detail: "Physical screen edge in green, safe area in red, playable rect in orange.",
+                           detail: "Physical screen edge in green, safe area in red, play area in orange.",
                            isOn: $showSafeAreaOverlay, metrics: metrics)
 
                     toggle("Simulation readout",

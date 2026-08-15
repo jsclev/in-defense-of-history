@@ -124,17 +124,8 @@ struct PlaytestCanvas: View {
                     at: c
                 )
             } else {
-                ctx.stroke(
-                    SwiftUI.Path(ellipseIn: rect),
-                    with: .color(.white.opacity(session.selectedSlot == i ? 0.95 : 0.4)),
-                    style: StrokeStyle(lineWidth: session.selectedSlot == i ? 3 : 2, dash: [5 * s, 4 * s])
-                )
-                ctx.draw(
-                    Text("\(i)")
-                        .font(.system(size: max(9, 10 * s), weight: .medium))
-                        .foregroundStyle(.white.opacity(0.5)),
-                    at: c
-                )
+                SlotArt.draw(&ctx, at: c, index: i, scale: s,
+                             selected: session.selectedSlot == i)
             }
         }
     }

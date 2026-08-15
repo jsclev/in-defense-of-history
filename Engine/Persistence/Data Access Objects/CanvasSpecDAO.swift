@@ -16,12 +16,15 @@ public class CanvasSpecDAO: BaseDAO {
             SELECT
                 d.canvas_width,
                 d.canvas_height,
-                d.playable_rect_x,
-                d.playable_rect_y,
-                d.playable_rect_width,
-                d.playable_rect_height,
+                d.play_area_x,
+                d.play_area_y,
+                d.play_area_width,
+                d.play_area_height,
                 d.slot_width,
-                d.slot_height
+                d.slot_height,
+                d.path_width,
+                d.occlusion_corner_width_fraction,
+                d.occlusion_corner_height_fraction
             FROM
                 canvas_spec d
         """)
@@ -37,14 +40,17 @@ public class CanvasSpecDAO: BaseDAO {
         let values = CanvasSpecValues(
             canvasWidth: getDouble(stmt: stmt, colIndex: 0),
             canvasHeight: getDouble(stmt: stmt, colIndex: 1),
-            playableRect: CGRect(
+            playArea: CGRect(
                 x: getDouble(stmt: stmt, colIndex: 2),
                 y: getDouble(stmt: stmt, colIndex: 3),
                 width: getDouble(stmt: stmt, colIndex: 4),
                 height: getDouble(stmt: stmt, colIndex: 5)
             ),
             slotSize: CGSize(width: getDouble(stmt: stmt, colIndex: 6),
-                             height: getDouble(stmt: stmt, colIndex: 7))
+                             height: getDouble(stmt: stmt, colIndex: 7)),
+            pathWidth: getDouble(stmt: stmt, colIndex: 8),
+            occlusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 9),
+                                            height: getDouble(stmt: stmt, colIndex: 10))
         )
 
         let extraRow = sqlite3_step(stmt) == SQLITE_ROW

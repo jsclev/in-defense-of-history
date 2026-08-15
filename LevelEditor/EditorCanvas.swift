@@ -16,6 +16,8 @@ struct EditorCanvas: View {
     private enum DragTarget: Equatable {
         case slot(Int)
         case waypoint(road: Int, point: Int)
+        case entrance(Int)
+        case exitPoint(Int)
     }
 
     var body: some View {
@@ -33,6 +35,7 @@ struct EditorCanvas: View {
                         canvasContent(t)
                     }
                     .defaultScrollAnchor(.center)
+                    .scrollDisabled(state.tool == .brush)
                 }
             }
             .onChange(of: geo.size, initial: true) { _, _ in
@@ -71,6 +74,25 @@ struct EditorCanvas: View {
             onCancel: { state.selection = .none },
             onMove: { nudge($0) }
         )
+        .overlay(alignment: .topLeading) { activeLayerChip }
+    }
+
+    @ViewBuilder
+    private var activeLayerChip: some View {
+        if let layer = state.activeLayer {
+            HStack(spacing: 6) {
+                Image(systemName: layer.icon)
+                Text("\(state.tool.title) · \(layer.title) layer")
+                    .font(.callout.weight(.semibold))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .background(.cyan.opacity(0.22), in: Capsule())
+            .overlay(Capsule().stroke(.cyan.opacity(0.8), lineWidth: 1.5))
+            .foregroundStyle(.cyan)
+            .padding(10)
+            .allowsHitTesting(false)
+        }
     }
 
     @ViewBuilder
@@ -78,8 +100,8 @@ struct EditorCanvas: View {
         #if os(iOS)
         if state.tool == .brush {
             BrushInputView(
-                onBegan: { p, force in beginStroke(at: p, force: force, t) },
-                onMoved: { p, force in extendStroke(to: p, force: force, t) },
+                onBegan: { p, _ in beginStroke(at: p, t) },
+                onMoved: { p, _ in extendStroke(to: p, t) },
                 onEnded: { commitStroke() },
                 onCancelled: { state.stroke = BrushStroke() },
                 onPinchBegan: {
@@ -98,35 +120,24 @@ struct EditorCanvas: View {
         #endif
     }
 
-    private func pressureHalfWidth(_ force: Double) -> Double {
-        guard state.brushPressureEnabled, force > 0 else { return state.brushSize }
-        return state.brushSize * (0.35 + 0.65 * min(force, 1.0))
-    }
-
-    private func beginStroke(at p: CGPoint, force: Double, _ t: DesignTransform) {
+    private func beginStroke(at p: CGPoint, _ t: DesignTransform) {
         state.stroke = BrushStroke()
-        extendStroke(to: p, force: force, t)
+        extendStroke(to: p, t)
     }
 
-    private func extendStroke(to p: CGPoint, force: Double, _ t: DesignTransform) {
-        let canvasPoint = clampToCanvas(t.design(p))
-        state.stroke.add(
-            BrushSample(point: canvasPoint, halfWidth: pressureHalfWidth(force)),
-            minSpacing: max(2, 4 / max(t.scale, 0.05))
-        )
+    private func extendStroke(to p: CGPoint, _ t: DesignTransform) {
+        state.stroke.add(clampToCanvas(t.design(p)),
+                         minSpacing: max(0.5, 1 / max(t.scale, 0.05)))
     }
 
     private func commitStroke() {
         defer { state.stroke = BrushStroke() }
-        guard let road = BrushGeometry.commit(state.stroke, spacing: state.brushSpacing) else {
+        guard let points = BrushGeometry.commit(state.stroke, spacing: state.brushSpacing) else {
             return
         }
-        document.addPaintedRoad(points: road.points,
-                                halfWidths: road.halfWidths,
-                                undoManager)
+        document.addPaintedRoad(points: points, undoManager)
         state.selection = .road(document.draft.roads.count - 1)
-        state.flash("Painted road: \(road.points.count) waypoints, "
-                    + "\(road.points.count * 2) outer-edge points")
+        state.flash("Painted road: \(points.count) waypoints")
     }
 
     private func clampToCanvas(_ p: Point) -> Point {
@@ -140,16 +151,22 @@ struct EditorCanvas: View {
                 #if !os(iOS)
                 if state.tool == .brush {
                     if state.stroke.isEmpty {
-                        beginStroke(at: v.startLocation, force: 0, t)
+                        beginStroke(at: v.startLocation, t)
                     }
-                    extendStroke(to: v.location, force: 0, t)
+                    extendStroke(to: v.location, t)
                     return
                 }
                 #endif
                 if preDrag == nil {
                     preDrag = document.draft
                     dragMoved = false
-                    dragTarget = state.tool == .select ? hitHandle(at: v.startLocation, t) : nil
+                    dragTarget = switch state.tool {
+                    case .select: hitHandle(at: v.startLocation, t)
+                    // The slot tool moves existing slots too: touch one and
+                    // drag, the pad follows, lifting drops it there.
+                    case .slot: slotTarget(at: v.startLocation, t)
+                    default: nil
+                    }
                     if let target = dragTarget {
                         state.selection = selection(for: target)
                     }
@@ -168,6 +185,14 @@ struct EditorCanvas: View {
                     if document.draft.roads.indices.contains(r),
                        document.draft.roads[r].points.indices.contains(i) {
                         document.draft.roads[r].points[i] = p
+                    }
+                case let .entrance(i):
+                    if document.draft.entrances.indices.contains(i) {
+                        document.draft.entrances[i] = p
+                    }
+                case let .exitPoint(i):
+                    if document.draft.exits.indices.contains(i) {
+                        document.draft.exits[i] = p
                     }
                 }
             }
@@ -195,33 +220,28 @@ struct EditorCanvas: View {
         case .select:
             if let handle = hitHandle(at: p, t) {
                 state.selection = selection(for: handle)
-            } else if let (ri, _) = hitRoad(at: t.design(p), tolerance: 18) {
+            } else if state.isVisible(.path), let (ri, _) = hitRoad(at: t.design(p), tolerance: 18) {
                 state.selection = .road(ri)
             } else {
                 state.selection = .none
             }
 
-        case .road:
-            document.edit(undoManager) { d in
-                guard !d.roads.isEmpty else {
-                    d.roads.append(.init(name: "Road 1", points: [dp]))
-                    state.selection = .waypoint(road: 0, point: 0)
-                    return
-                }
-                let r = activeRoad(in: d)
-                let raw = t.design(p)
-                if let seg = nearestSegment(of: d.roads[r].points, to: raw, within: 14) {
-                    d.roads[r].points.insert(dp, at: seg + 1)
-                    state.selection = .waypoint(road: r, point: seg + 1)
-                } else {
-                    d.roads[r].points.append(dp)
-                    state.selection = .waypoint(road: r, point: d.roads[r].points.count - 1)
-                }
+        case .slot:
+            // Tapping an existing slot selects it (dragging moves it); only
+            // a tap on open ground adds a new one.
+            if let existing = slotTarget(at: p, t) {
+                state.selection = selection(for: existing)
+            } else {
+                state.selection = .slot(document.addSlot(at: dp, undoManager))
             }
 
-        case .slot:
-            document.edit(undoManager) { $0.slots.append(dp) }
-            state.selection = .slot(document.draft.slots.count - 1)
+        case .entrance:
+            document.edit(undoManager) { $0.entrances.append(dp) }
+            state.selection = .entrance(document.draft.entrances.count - 1)
+
+        case .exitPoint:
+            document.edit(undoManager) { $0.exits.append(dp) }
+            state.selection = .exitPoint(document.draft.exits.count - 1)
 
         case .brush:
             break
@@ -232,14 +252,8 @@ struct EditorCanvas: View {
         switch target {
         case let .slot(i): .slot(i)
         case let .waypoint(r, i): .waypoint(road: r, point: i)
-        }
-    }
-
-    private func activeRoad(in d: MapDraft) -> Int {
-        switch state.selection {
-        case let .road(r) where d.roads.indices.contains(r): return r
-        case let .waypoint(r, _) where d.roads.indices.contains(r): return r
-        default: return d.roads.count - 1
+        case let .entrance(i): .entrance(i)
+        case let .exitPoint(i): .exitPoint(i)
         }
     }
 
@@ -251,6 +265,10 @@ struct EditorCanvas: View {
             document.deleteWaypoint(road: r, point: i, undoManager)
         case let .road(r):
             document.deleteRoad(r, undoManager)
+        case let .entrance(i):
+            document.deleteEntrance(i, undoManager)
+        case let .exitPoint(i):
+            document.deleteExit(i, undoManager)
         case .none:
             return
         }
@@ -273,6 +291,10 @@ struct EditorCanvas: View {
                 where d.roads.indices.contains(r) && d.roads[r].points.indices.contains(i):
                 let p = d.roads[r].points[i]
                 d.roads[r].points[i] = Point(p.x + dx, p.y + dy)
+            case let .entrance(i) where d.entrances.indices.contains(i):
+                d.entrances[i] = Point(d.entrances[i].x + dx, d.entrances[i].y + dy)
+            case let .exitPoint(i) where d.exits.indices.contains(i):
+                d.exits[i] = Point(d.exits[i].x + dx, d.exits[i].y + dy)
             default:
                 break
             }
@@ -282,7 +304,7 @@ struct EditorCanvas: View {
     private func snap(_ p: Point) -> Point {
         var out = p
         if state.snapToGrid {
-            out = Point((p.x / 12).rounded() * 12, (p.y / 12).rounded() * 12)
+            out = Point((p.x / 6).rounded() * 6, (p.y / 6).rounded() * 6)
         }
         out.x = min(max(out.x, 0), CanvasSpec.width)
         out.y = min(max(out.y, 0), CanvasSpec.height)
@@ -291,19 +313,50 @@ struct EditorCanvas: View {
 
     private func hitHandle(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
         var best: (DragTarget, CGFloat)?
-        let wpRadius = max(10, 7 * t.scale)
-        for (ri, road) in document.draft.roads.enumerated() {
-            for (pi, wp) in road.points.enumerated() {
-                let vp = t.view(wp)
+        if state.isVisible(.path) {
+            let wpRadius = max(10, 7 * t.scale)
+            for (ri, road) in document.draft.roads.enumerated() {
+                for (pi, wp) in road.points.enumerated() {
+                    let vp = t.view(wp)
+                    let d = hypot(vp.x - p.x, vp.y - p.y)
+                    if d <= wpRadius, best == nil || d < best!.1 {
+                        best = (.waypoint(road: ri, point: pi), d)
+                    }
+                }
+            }
+            if best != nil { return best!.0 }
+        }
+
+        let markerRadius = max(14, 20 * t.scale)
+        if state.isVisible(.entrances) {
+            for (i, marker) in document.draft.entrances.enumerated() {
+                let vp = t.view(marker)
                 let d = hypot(vp.x - p.x, vp.y - p.y)
-                if d <= wpRadius, best == nil || d < best!.1 {
-                    best = (.waypoint(road: ri, point: pi), d)
+                if d <= markerRadius, best == nil || d < best!.1 {
+                    best = (.entrance(i), d)
+                }
+            }
+        }
+        if state.isVisible(.exits) {
+            for (i, marker) in document.draft.exits.enumerated() {
+                let vp = t.view(marker)
+                let d = hypot(vp.x - p.x, vp.y - p.y)
+                if d <= markerRadius, best == nil || d < best!.1 {
+                    best = (.exitPoint(i), d)
                 }
             }
         }
         if best != nil { return best!.0 }
 
-        let slotRadius = max(14, MapGeometry.slotRadius * t.scale + 4)
+        return slotTarget(at: p, t)
+    }
+
+    /// The ONE hit test for slot pads, used by the select tool and the slot
+    /// tool alike.
+    private func slotTarget(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
+        guard state.isVisible(.slots) else { return nil }
+        let slotRadius = max(14, CanvasSpec.slotSize.width / 2 * t.scale + 4)
+        var best: (DragTarget, CGFloat)?
         for (i, slot) in document.draft.slots.enumerated() {
             let vp = t.view(slot)
             let d = hypot(vp.x - p.x, vp.y - p.y)
@@ -325,56 +378,90 @@ struct EditorCanvas: View {
         return best
     }
 
-    private func nearestSegment(of pts: [Point], to p: Point, within tolerance: Double) -> Int? {
-        guard pts.count >= 2 else { return nil }
-        var best: (Int, Double)?
-        for i in 0..<(pts.count - 1) {
-            let d = MapGeometry.distance(p, segment: pts[i], pts[i + 1])
-            if d <= tolerance, best == nil || d < best!.1 {
-                best = (i, d)
-            }
-        }
-        return best?.0
-    }
-
     private func draw(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let draft = document.draft
         let frame = t.frame
 
-        if let img = state.background {
+        if state.isVisible(.background), let img = state.background {
             var bg = ctx
-            bg.opacity = draft.backgroundOpacity
             bg.clip(to: SwiftUI.Path(frame))
             bg.draw(Image(platformImage: img), in: t.view(backgroundCanvasRect(draft)))
         }
+        // The map guide - typically a Kingdom Rush screenshot traced by hand.
+        // Fitted to the play area, since that is the space the traced
+        // geometry must land in.
+        if state.isVisible(.mapGuide), let guide = state.guide {
+            var layer = ctx
+            layer.opacity = draft.guideOpacity
+            layer.clip(to: SwiftUI.Path(frame))
+            layer.draw(Image(platformImage: guide), in: t.view(CanvasSpec.playArea))
+        }
         if state.showGrid { drawGrid(&ctx, t, frame) }
-        drawRoads(&ctx, t)
-        drawSlots(&ctx, t)
+        if state.isVisible(.path) {
+            var layer = ctx
+            drawRoads(&layer, t)
+        }
+        if state.isVisible(.slots) {
+            var layer = ctx
+            drawSlots(&layer, t)
+        }
+        if state.isVisible(.exits) {
+            var layer = ctx
+            drawMarkers(&layer, t, points: draft.exits, isEntrance: false)
+        }
+        if state.isVisible(.entrances) {
+            var layer = ctx
+            drawMarkers(&layer, t, points: draft.entrances, isEntrance: true)
+        }
         drawLiveStroke(&ctx, t)
-        if state.showPlayable { drawPlayableOverlay(&ctx, t) }
+        // The occlusion art sits above every playable layer, exactly as the
+        // game will draw it, so entrance and exit cover can be judged here.
+        if state.isVisible(.occlusion), let overlay = state.overlay {
+            var layer = ctx
+            layer.clip(to: SwiftUI.Path(frame))
+            layer.draw(Image(platformImage: overlay),
+                       in: t.view(canvasRect(for: state.overlayPixelSize)))
+        }
+        if state.showPlayArea { drawPlayAreaOverlay(&ctx, t) }
+        drawMenuPreview(&ctx, t)
         ctx.stroke(SwiftUI.Path(frame), with: .color(.white.opacity(0.2)), lineWidth: 1)
     }
 
+    private func drawMarkers(_ ctx: inout GraphicsContext, _ t: DesignTransform,
+                             points: [Point], isEntrance: Bool) {
+        let s = t.scale
+        let r = max(11, 20 * s)
+        for (i, marker) in points.enumerated() {
+            let c = t.view(marker)
+            let selected = state.selection == (isEntrance ? .entrance(i) : .exitPoint(i))
+            let rect = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
+            let fill: Color = isEntrance
+                ? Color(red: 0.20, green: 0.55, blue: 0.24)
+                : Color(red: 0.67, green: 0.16, blue: 0.16)
+            if isEntrance {
+                ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(fill))
+                ctx.stroke(SwiftUI.Path(ellipseIn: rect),
+                           with: .color(selected ? .yellow : .white),
+                           lineWidth: selected ? 3 : 1.5)
+            } else {
+                let box = SwiftUI.Path(roundedRect: rect, cornerRadius: r * 0.25)
+                ctx.fill(box, with: .color(fill))
+                ctx.stroke(box, with: .color(selected ? .yellow : .white),
+                           lineWidth: selected ? 3 : 1.5)
+            }
+            ctx.draw(
+                Text("\(Image(systemName: isEntrance ? "arrow.right" : "flag.fill")) \(i)")
+                    .font(.system(size: max(9, 11 * s), weight: .bold))
+                    .foregroundStyle(.white),
+                at: c
+            )
+        }
+    }
+
     private func drawLiveStroke(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let samples = state.stroke.samples
-        guard samples.count >= 2 else { return }
-        let pts = samples.map(\.point)
-        let widths = samples.map(\.halfWidth)
-        let ring = BrushGeometry.outerEdge(points: pts, halfWidths: widths)
-        guard ring.count >= 4 else { return }
-
-        var body = SwiftUI.Path()
-        body.move(to: t.view(ring[0]))
-        for p in ring.dropFirst() { body.addLine(to: t.view(p)) }
-        body.closeSubpath()
-        ctx.fill(body, with: .color(.cyan.opacity(0.28)))
-        ctx.stroke(body, with: .color(.cyan.opacity(0.75)), lineWidth: 1.5)
-
-        var spine = SwiftUI.Path()
-        spine.move(to: t.view(pts[0]))
-        for p in pts.dropFirst() { spine.addLine(to: t.view(p)) }
-        ctx.stroke(spine, with: .color(.white.opacity(0.7)),
-                   style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
+        let points = state.stroke.points
+        guard points.count >= 2 else { return }
+        PathArtist.draw(&ctx, points: BrushGeometry.smooth(points, passes: 1), t, wet: true)
     }
 
     private func drawOuterEdge(_ ctx: inout GraphicsContext,
@@ -402,7 +489,13 @@ struct EditorCanvas: View {
     }
 
     private func backgroundCanvasRect(_ d: MapDraft) -> CGRect {
-        let px = state.backgroundPixelSize ?? CanvasSpec.size
+        canvasRect(for: state.backgroundPixelSize)
+    }
+
+    /// An image's rect on the canvas: centred, at its own pixel size, so a
+    /// correctly sized image covers the canvas exactly.
+    private func canvasRect(for pixelSize: CGSize?) -> CGRect {
+        let px = pixelSize ?? CanvasSpec.size
         return CGRect(
             x: (CanvasSpec.width - px.width) / 2,
             y: (CanvasSpec.height - px.height) / 2,
@@ -411,20 +504,110 @@ struct EditorCanvas: View {
         )
     }
 
-    private func drawPlayableOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let playable = t.view(CanvasSpec.playable)
+    private func drawPlayAreaOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        let playable = t.view(CanvasSpec.playArea)
+        var corners = SwiftUI.Path()
+        let play = CanvasSpec.playArea
+        let pad = 6.0
+        for corner in CanvasSpec.cornerOcclusionAreas {
+            var cut = corner
+            if abs(corner.minX - play.minX) < 0.5 {
+                cut.origin.x -= pad
+                cut.size.width += pad
+            }
+            if abs(corner.maxX - play.maxX) < 0.5 {
+                cut.size.width += pad
+            }
+            if abs(corner.minY - play.minY) < 0.5 {
+                cut.origin.y -= pad
+                cut.size.height += pad
+            }
+            if abs(corner.maxY - play.maxY) < 0.5 {
+                cut.size.height += pad
+            }
+            corners.addRect(t.view(cut))
+        }
+        let notched = SwiftUI.Path(
+            SwiftUI.Path(playable).cgPath.subtracting(corners.cgPath, using: .winding))
         var dim = SwiftUI.Path(t.frame)
-        dim.addRect(playable)
+        dim.addPath(notched)
         ctx.fill(dim, with: .color(.black.opacity(0.38)), style: FillStyle(eoFill: true))
-        ctx.stroke(SwiftUI.Path(playable), with: .color(.green.opacity(0.85)),
+        ctx.stroke(notched, with: .color(.red.opacity(0.85)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [8, 5]))
+
+        let toView = CGAffineTransform(a: t.scale, b: 0, c: 0, d: t.scale,
+                                       tx: t.offset.x, ty: t.offset.y)
+        let slotShape = SwiftUI.Path(RadialMenuLayout.slotMenuSafeShape).applying(toView)
+        ctx.stroke(slotShape, with: .color(.blue.opacity(0.85)),
+                   style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+
+        let font = Font.system(size: max(10, 11 * t.scale), weight: .semibold)
+        let playTopView = t.view(Point(play.midX, play.maxY))
         ctx.draw(
-            Text("playable \(Int(CanvasSpec.playable.width))×\(Int(CanvasSpec.playable.height))")
-                .font(.system(size: max(10, 11 * t.scale), weight: .medium))
-                .foregroundStyle(.green.opacity(0.85)),
-            at: CGPoint(x: playable.minX + 60 * t.scale, y: playable.minY - 10),
+            Text("play top y \(Int(play.maxY.rounded()))")
+                .font(font).foregroundStyle(.red.opacity(0.9)),
+            at: CGPoint(x: playTopView.x, y: playTopView.y - 10)
+        )
+        let topInset = RadialMenuLayout.slotSafeInset(.top)
+        let topY = play.maxY - topInset
+        let topView = t.view(Point(play.midX, topY))
+        ctx.draw(
+            Text("slot top y \(Int(topY.rounded())) = \(Int(play.maxY)) − \(Int(topInset.rounded()))")
+                .font(font).foregroundStyle(.blue.opacity(0.9)),
+            at: CGPoint(x: topView.x, y: topView.y - 10)
+        )
+        let bottomInset = RadialMenuLayout.slotSafeInset(.bottom)
+        let bottomY = play.minY + bottomInset
+        let bottomView = t.view(Point(play.midX, bottomY))
+        ctx.draw(
+            Text("slot bottom y \(Int(bottomY.rounded())) = \(Int(play.minY)) + \(Int(bottomInset.rounded()))")
+                .font(font).foregroundStyle(.blue.opacity(0.9)),
+            at: CGPoint(x: bottomView.x, y: bottomView.y + 12)
+        )
+        let leftInset = RadialMenuLayout.slotSafeInset(.left)
+        let leftX = play.minX + leftInset
+        let leftView = t.view(Point(leftX, play.midY))
+        ctx.draw(
+            Text("slot left x \(Int(leftX.rounded())) = \(Int(play.minX)) + \(Int(leftInset.rounded()))")
+                .font(font).foregroundStyle(.blue.opacity(0.9)),
+            at: CGPoint(x: leftView.x + 8, y: leftView.y),
             anchor: .leading
         )
+    }
+
+    private func drawMenuPreview(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        guard let i = state.menuPreviewSlot,
+              document.draft.slots.indices.contains(i) else { return }
+        let slot = document.draft.slots[i]
+        let c = t.view(slot)
+        let artPath = "../in-defense-of-history-data/LibertyLineAssets.xcassets/"
+            + "tower_menu_v02.imageset/tower_menu_v02.png"
+        if let url = EditorResources.url(artPath),
+           let art = PlatformImageLoader.load(path: url.path) {
+            let side = RadialMenuLayout.menuMapCanvasSide(count: 4) * t.scale
+            ctx.draw(Image(platformImage: art.image),
+                     in: CGRect(x: c.x - side / 2, y: c.y - side / 2,
+                                width: side, height: side))
+        } else {
+            let size = RadialMenuLayout.menuMapSize(count: 4)
+            let rect = CGRect(x: c.x - size.width * t.scale / 2,
+                              y: c.y - size.height * t.scale / 2,
+                              width: size.width * t.scale,
+                              height: size.height * t.scale)
+            ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.15)))
+            ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.85)),
+                       lineWidth: max(1, 2 * t.scale))
+            for index in 0..<4 {
+                let offset = RadialMenuLayout.bubbleMapOffset(index: index, count: 4)
+                let d = RadialMenuLayout.bubbleMapDiameter(count: 4) * t.scale
+                let bubble = CGRect(x: c.x + offset.width * t.scale - d / 2,
+                                    y: c.y + offset.height * t.scale - d / 2,
+                                    width: d, height: d)
+                ctx.fill(SwiftUI.Path(ellipseIn: bubble), with: .color(.white.opacity(0.35)))
+                ctx.stroke(SwiftUI.Path(ellipseIn: bubble), with: .color(.white.opacity(0.9)),
+                           lineWidth: max(1, 1.5 * t.scale))
+            }
+        }
     }
 
     private func drawGrid(_ ctx: inout GraphicsContext, _ t: DesignTransform, _ frame: CGRect) {
@@ -464,33 +647,11 @@ struct EditorCanvas: View {
             }
 
             if pts.count >= 2 {
-                var p = SwiftUI.Path()
-                p.move(to: pts[0])
-                for pt in pts.dropFirst() { p.addLine(to: pt) }
-
-                if road.halfWidths != nil {
-                    let ring = road.outerEdge
-                    if ring.count >= 4 {
-                        var body = SwiftUI.Path()
-                        body.move(to: t.view(ring[0]))
-                        for pt in ring.dropFirst() { body.addLine(to: t.view(pt)) }
-                        body.closeSubpath()
-                        if isSelected {
-                            ctx.stroke(body, with: .color(.cyan.opacity(0.5)), lineWidth: 6 * s)
-                        }
-                        ctx.fill(body, with: .color(Palette.roadFill))
-                        ctx.stroke(body, with: .color(Palette.roadEdge), lineWidth: max(1, 3 * s))
-                    }
-                } else {
-                    if isSelected {
-                        ctx.stroke(p, with: .color(.cyan.opacity(0.45)),
-                                   style: StrokeStyle(lineWidth: 43.2 * s, lineCap: .round, lineJoin: .round))
-                    }
-                    ctx.stroke(p, with: .color(Palette.roadEdge),
-                               style: StrokeStyle(lineWidth: 36 * s, lineCap: .round, lineJoin: .round))
-                    ctx.stroke(p, with: .color(Palette.roadFill),
-                               style: StrokeStyle(lineWidth: 28.8 * s, lineCap: .round, lineJoin: .round))
+                if isSelected {
+                    let body = PathArtist.bodyPath(points: road.points, t)
+                    ctx.stroke(body, with: .color(.cyan.opacity(0.5)), lineWidth: 6 * s)
                 }
+                PathArtist.draw(&ctx, points: road.points, t)
 
                 if state.showOuterEdge {
                     drawOuterEdge(&ctx, t, road: road, highlighted: isSelected)
@@ -520,11 +681,18 @@ struct EditorCanvas: View {
                                                    width: 26 * s, height: 26 * s)),
                     with: .color(.red.opacity(0.75))
                 )
+            }
+
+            // The path's identity, sitting inside the band at its midpoint,
+            // matching the row shown in the Paths panel.
+            if road.points.count >= 2 {
+                let arc = Path(points: road.points)
+                let mid = t.view(arc.point(atDistance: arc.totalLength / 2))
                 ctx.draw(
-                    Text(road.name)
-                        .font(.system(size: max(11, 12 * s), weight: .semibold))
-                        .foregroundStyle(.white.opacity(0.85)),
-                    at: CGPoint(x: first.x + 4, y: first.y - 22 * s)
+                    Text("Path \(ri)")
+                        .font(.system(size: max(11, 14 * s), weight: .bold))
+                        .foregroundStyle(.black.opacity(0.75)),
+                    at: mid
                 )
             }
             if pts.count >= 2, let exitP = pts.last {
@@ -540,21 +708,23 @@ struct EditorCanvas: View {
                 ctx.fill(star, with: .color(Color(red: 0.35, green: 0.6, blue: 0.95)))
             }
 
-            for (pi, vp) in pts.enumerated() {
-                let selected = state.selection == .waypoint(road: ri, point: pi)
-                let r: CGFloat = (selected ? 6.5 : 4.5) * max(0.7, s)
-                let rect = CGRect(x: vp.x - r, y: vp.y - r, width: 2 * r, height: 2 * r)
-                ctx.fill(SwiftUI.Path(roundedRect: rect, cornerRadius: 1.5),
-                         with: .color(selected ? .yellow : .white.opacity(0.85)))
-                ctx.stroke(SwiftUI.Path(roundedRect: rect, cornerRadius: 1.5),
-                           with: .color(.black.opacity(0.6)), lineWidth: 1)
-                if isSelected {
-                    ctx.draw(
-                        Text("\(pi)")
-                            .font(.system(size: max(9, 9 * s)))
-                            .foregroundStyle(.cyan),
-                        at: CGPoint(x: vp.x, y: vp.y - 11 * max(0.7, s))
-                    )
+            if state.tool == .select {
+                for (pi, vp) in pts.enumerated() {
+                    let selected = state.selection == .waypoint(road: ri, point: pi)
+                    let r: CGFloat = (selected ? 6.5 : 4.5) * max(0.7, s)
+                    let rect = CGRect(x: vp.x - r, y: vp.y - r, width: 2 * r, height: 2 * r)
+                    ctx.fill(SwiftUI.Path(roundedRect: rect, cornerRadius: 1.5),
+                             with: .color(selected ? .yellow : .white.opacity(0.85)))
+                    ctx.stroke(SwiftUI.Path(roundedRect: rect, cornerRadius: 1.5),
+                               with: .color(.black.opacity(0.6)), lineWidth: 1)
+                    if isSelected {
+                        ctx.draw(
+                            Text("\(pi)")
+                                .font(.system(size: max(9, 9 * s)))
+                                .foregroundStyle(.cyan),
+                            at: CGPoint(x: vp.x, y: vp.y - 11 * max(0.7, s))
+                        )
+                    }
                 }
             }
         }
@@ -574,8 +744,11 @@ struct EditorCanvas: View {
         for (i, slot) in draft.slots.enumerated() {
             let c = t.view(slot)
             let selected = state.selection == .slot(i)
-            let r = MapGeometry.slotRadius * s
-            let rect = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
+            let w = CanvasSpec.slotSize.width * s
+            let h = CanvasSpec.slotSize.height * s
+            let rect = CGRect(x: c.x - w / 2, y: c.y - h / 2, width: w, height: h)
+
+            SlotArt.draw(&ctx, at: c, index: i, scale: s, selected: selected)
 
             if selected, state.showRanges {
                 // Ranges come from the tower table. They were hardcoded here as
@@ -597,23 +770,22 @@ struct EditorCanvas: View {
                 }
             }
 
-            let ringColor: Color = warnings[i] != nil ? .orange
-                : (selected ? .yellow : .white.opacity(0.5))
-            ctx.stroke(
-                SwiftUI.Path(ellipseIn: rect),
-                with: .color(ringColor),
-                style: StrokeStyle(lineWidth: selected ? 3 : 2, dash: [5 * s, 4 * s])
-            )
-            ctx.draw(
-                Text("\(i)")
-                    .font(.system(size: max(9, 10 * s), weight: .medium))
-                    .foregroundStyle(selected ? .yellow : .white.opacity(0.6)),
-                at: c
-            )
+            let ringColor: Color? = switch warnings[i] {
+            case .overlapsPath: .red
+            case .outOfRange: .orange
+            case nil: selected ? .yellow : nil
+            }
+            if let ringColor {
+                ctx.stroke(
+                    SwiftUI.Path(ellipseIn: rect),
+                    with: .color(ringColor),
+                    style: StrokeStyle(lineWidth: selected ? 3 : 2, dash: [5 * s, 4 * s])
+                )
+            }
             if let e = planned[i] {
                 let dr = 4.0 * s
                 ctx.fill(
-                    SwiftUI.Path(ellipseIn: CGRect(x: c.x - dr, y: c.y + r - dr * 0.5,
+                    SwiftUI.Path(ellipseIn: CGRect(x: c.x - dr, y: c.y + h / 2 - dr * 0.5,
                                                    width: 2 * dr, height: 2 * dr)),
                     with: .color(Palette.towerColors[e] ?? .white)
                 )

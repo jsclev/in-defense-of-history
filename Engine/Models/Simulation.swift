@@ -144,13 +144,14 @@ public final class Simulation {
         guard gold >= first.cost else { return .needGold }
         gold -= first.cost
         towers[slot] = Tower(typeIndex: typeIndex, slotIndex: slot)
-        if first.meleeUnitCount > 0 {
+        if let melee = first.meleeUnit {
             let towerPos = level.towerSlots[slot].position
-            let rally = defaultRallyPoint(towerPosition: towerPos, flagRange: first.range)
+            let rally = defaultRallyPoint(towerPosition: towerPos,
+                                          flagRange: melee.rallyPointRadius)
             garrisons[slot] = Garrison(
                 rallyPoint: rally,
-                units: (0..<first.meleeUnitCount).map { _ in
-                    MilitiaUnit(position: towerPos, hp: first.meleeUnitHP)
+                units: (0..<melee.soldierCount).map { _ in
+                    MilitiaUnit(position: towerPos, hp: melee.hp)
                 }
             )
         }
@@ -159,9 +160,11 @@ public final class Simulation {
     }
 
     public func setRallyPoint(slot: Int, to point: Point) {
-        guard var g = garrisons[slot], let tower = towers[slot] else { return }
+        guard var g = garrisons[slot], let tower = towers[slot],
+              let melee = catalog.towerTypes[tower.typeIndex].levels[tower.level].meleeUnit
+        else { return }
         let towerPos = level.towerSlots[slot].position
-        let flagRange = catalog.towerTypes[tower.typeIndex].levels[tower.level].range
+        let flagRange = melee.rallyPointRadius
         let d = towerPos.distance(to: point)
         g.rallyPoint = d <= flagRange ? point
             : Point.lerp(towerPos, point, flagRange / d)
@@ -205,6 +208,14 @@ public final class Simulation {
         gold -= cost
         tower.level = nextLevel
         towers[slot] = tower
+        if let melee = type.levels[nextLevel].meleeUnit, var g = garrisons[slot] {
+            // Upgrading re-equips the garrison: living soldiers come back at
+            // the new tier's full hp; the dead keep their respawn timers.
+            for i in 0..<g.units.count where g.units[i].state != .dead {
+                g.units[i].hp = melee.hp
+            }
+            garrisons[slot] = g
+        }
         emit(.towerUpgraded(slot: slot, level: nextLevel))
         return .ok
     }
@@ -351,6 +362,10 @@ public final class Simulation {
                 }
                 enemies[i] = e
             }
+        } else {
+            // Empty field: garrison upkeep still runs — soldiers respawn,
+            // heal, and walk to the rally point between spawns.
+            stepMilitia(dt: dt)
         }
 
         var w = 0
@@ -388,8 +403,9 @@ public final class Simulation {
         blockedSpawnIDs.removeAll(keepingCapacity: true)
 
         for slot in garrisons.keys.sorted() {
-            guard var g = garrisons[slot], let tower = towers[slot] else { continue }
-            let stats = catalog.towerTypes[tower.typeIndex].levels[tower.level]
+            guard var g = garrisons[slot], let tower = towers[slot],
+                  let melee = catalog.towerTypes[tower.typeIndex].levels[tower.level].meleeUnit
+            else { continue }
             let towerPos = level.towerSlots[slot].position
 
             var free: [(spawnID: Int, position: Point)] = []
@@ -422,10 +438,10 @@ public final class Simulation {
                 case .countdownRespawn:
                     unit.respawnTicksLeft -= 1
                 case .respawn:
-                    unit = MilitiaUnit(position: towerPos, hp: stats.meleeUnitHP)
+                    unit = MilitiaUnit(position: towerPos, hp: melee.hp)
                     militiaRespawns += 1
                 case .heal:
-                    unit.hp = min(stats.meleeUnitHP, unit.hp + stats.meleeUnitHealPerSecond * dt)
+                    unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
                 case let .move(toward):
                     let d = unit.position.distance(to: toward)
                     let step = MilitiaTunables.moveSpeed * dt
@@ -443,7 +459,7 @@ public final class Simulation {
                     }
                     if let ei = bySpawnID[targetSpawnID] {
                         var e = enemies[ei]
-                        let roll = rngCombat.double(in: stats.meleeUnitDamageMin...stats.meleeUnitDamageMax)
+                        let roll = rngCombat.double(in: melee.damageRange)
                         e.hp -= roll * (1.0 - catalog.enemyTypes[e.typeIndex].stats.cover)
                         if e.hp <= 0 {
                             remove(&e, fate: .killed)
@@ -454,7 +470,7 @@ public final class Simulation {
                         }
                         enemies[ei] = e
                     }
-                    unit.swingTicksLeft = Simulation.fireTicks(stats.meleeUnitAttackInterval)
+                    unit.swingTicksLeft = Simulation.fireTicks(melee.attackInterval)
                 case .disengage:
                     if unit.targetSpawnID >= 0 {
                         claimed.remove(unit.targetSpawnID)
@@ -473,6 +489,7 @@ public final class Simulation {
                     if swing <= 0 {
                         let es = catalog.enemyTypes[enemies[ei].typeIndex].stats
                         unit.hp -= rngCombat.double(in: es.damageMin...es.damageMax)
+                            * (1.0 - melee.defenseRating)
                         swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
                         if unit.hp <= 0 {
                             militiaDeaths += 1
@@ -482,7 +499,7 @@ public final class Simulation {
                             unit.state = .dead
                             unit.targetSpawnID = -1
                             unit.respawnTicksLeft =
-                                Simulation.fireTicks(stats.meleeUnitRespawnSeconds)
+                                Simulation.fireTicks(melee.respawnSeconds)
                         }
                     }
                     g.enemySwingTicks[unit.targetSpawnID >= 0 ? unit.targetSpawnID : -1] =

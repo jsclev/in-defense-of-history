@@ -105,6 +105,7 @@ typedef struct {
     float meleeUnitHP;
     float meleeDamageMin;
     float meleeDamageMax;
+    float meleeDefenseRating;  // fraction of the enemy's return blow turned away
     int meleeAttackTicks;
     int meleeRespawnTicks;
     float meleeHealPerSecond;

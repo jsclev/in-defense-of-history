@@ -64,82 +64,60 @@ INSERT INTO tower (
     30.0, 30.0, 550.0
 );
 
+-- Melee soldier stats live in melee_unit (melee_units.sql), keyed by tower id.
+
 -- Melee Level 1 (Militia)
 INSERT INTO tower (
     id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    unit_count, unit_hp, unit_damage_min, unit_damage_max,
-    unit_attack_interval, unit_respawn_seconds, unit_heal_per_second
+    tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '3d7e4f95-1c6b-4ac0-ae53-9b8d2f1a0c04', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Militia',
-    1, 1, 70, 160.0, 0.0,
-    3, 50.0, 1.0, 3.0,
-    1.2, 12.0, 4.0
+    1, 1, 70, 160.0, 0.0
 );
 
 -- Melee Level 2 (Minutemen)
 INSERT INTO tower (
     id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    unit_count, unit_hp, unit_damage_min, unit_damage_max,
-    unit_attack_interval, unit_respawn_seconds, unit_heal_per_second
+    tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '4e8f5a06-2d7c-4bd1-bf64-0c9e3a2b1d05', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Minutemen',
-    2, 1, 120, 160.0, 0.0,
-    3, 80.0, 3.0, 5.0,
-    1.2, 11.0, 4.0
+    2, 1, 120, 160.0, 0.0
 );
 
 -- Melee Level 3 (Continental Line)
 INSERT INTO tower (
     id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    unit_count, unit_hp, unit_damage_min, unit_damage_max,
-    unit_attack_interval, unit_respawn_seconds, unit_heal_per_second
+    tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '5f9a6b17-3e8d-4ce2-c075-1d0f4b3c2e06', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Line',
-    3, 1, 170, 160.0, 0.0,
-    3, 120.0, 5.0, 8.0,
-    1.2, 10.0, 4.0
+    3, 1, 170, 160.0, 0.0
 );
 
 -- Melee Level 4 (Continental Regulars)
 INSERT INTO tower (
     id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    unit_count, unit_hp, unit_damage_min, unit_damage_max,
-    unit_attack_interval, unit_respawn_seconds, unit_heal_per_second
+    tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '9c1aa74b-b783-4fc1-b9c3-daeaf5284146', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Regulars',
-    4, 1, 300, 160.0, 0.0,
-    3, 220.0, 8.0, 12.0,
-    1.2, 9.0, 4.0
+    4, 1, 300, 160.0, 0.0
 );
 
 -- Melee Level 4 (Continental Light Infantry)
 INSERT INTO tower (
     id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    unit_count, unit_hp, unit_damage_min, unit_damage_max,
-    unit_attack_interval, unit_respawn_seconds, unit_heal_per_second
+    tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '634b9957-dce1-4b53-8665-1017904ad89d', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Light Infantry',
-    4, 2, 300, 160.0, 0.0,
-    3, 220.0, 8.0, 12.0,
-    1.2, 9.0, 4.0
+    4, 2, 300, 160.0, 0.0
 );
 
 -- Melee Level 4 (Maryland Line)
 INSERT INTO tower (
     id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    unit_count, unit_hp, unit_damage_min, unit_damage_max,
-    unit_attack_interval, unit_respawn_seconds, unit_heal_per_second
+    tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '550638ec-0f26-4329-9719-2d3f2e697238', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Maryland Line',
-    4, 3, 300, 160.0, 0.0,
-    3, 220.0, 8.0, 12.0,
-    1.2, 9.0, 4.0
+    4, 3, 300, 160.0, 0.0
 );
 
 -- Area of Effect Level 1 (4-pounder)

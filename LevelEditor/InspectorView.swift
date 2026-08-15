@@ -4,14 +4,14 @@ import SwiftUI
 struct InspectorView: View {
     @ObservedObject var document: MapDocument
     var state: EditorState
-    @Binding var importingImage: Bool
+    var requestImport: (EditorView.ImageImportTarget) -> Void
     @Environment(\.undoManager) private var undoManager
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
+                layersBox
                 levelBox
-                backgroundBox
                 roadsBox
                 slotsBox
                 selectionBox
@@ -20,6 +20,194 @@ struct InspectorView: View {
             }
             .padding(12)
         }
+    }
+
+    private var layersBox: some View {
+        GroupBox("Layers") {
+            VStack(alignment: .leading, spacing: 2) {
+                ForEach(EditorLayer.panelOrder) { layer in
+                    layerRow(layer)
+                    if layer == .background {
+                        backgroundDetails
+                    }
+                    if layer == .occlusion {
+                        occlusionDetails
+                    }
+                    if layer == .mapGuide {
+                        guideDetails
+                    }
+                }
+            }
+            .padding(4)
+        }
+    }
+
+    private func layerRow(_ layer: EditorLayer) -> some View {
+        let isActive = state.activeLayer == layer
+        let visible = state.isVisible(layer)
+        return HStack(spacing: 8) {
+            Button {
+                state.toggleVisibility(layer)
+            } label: {
+                Image(systemName: visible ? "eye" : "eye.slash")
+                    .foregroundStyle(visible ? Color.primary : Color.secondary.opacity(0.5))
+                    .frame(width: 20)
+            }
+            .buttonStyle(.plain)
+            .help(visible ? "Hide layer" : "Show layer")
+
+            Image(systemName: layer.icon)
+                .foregroundStyle(isActive ? .cyan : .secondary)
+                .frame(width: 20)
+
+            Text(layer.title)
+                .fontWeight(isActive ? .semibold : .regular)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+
+            Spacer()
+
+            Text(layerDetail(layer))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .truncationMode(.middle)
+
+            if isActive {
+                Text("ACTIVE")
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(.cyan.opacity(0.25), in: Capsule())
+                    .foregroundStyle(.cyan)
+            }
+        }
+        .padding(.vertical, 4)
+        .padding(.horizontal, 6)
+        .background(isActive ? Color.cyan.opacity(0.10) : .clear,
+                    in: RoundedRectangle(cornerRadius: 5))
+        .overlay(alignment: .leading) {
+            if isActive {
+                RoundedRectangle(cornerRadius: 1)
+                    .fill(.cyan)
+                    .frame(width: 3)
+            }
+        }
+        .opacity(visible ? 1 : 0.55)
+    }
+
+    private func layerDetail(_ layer: EditorLayer) -> String {
+        switch layer {
+        case .background:
+            guard let path = document.draft.backgroundImagePath else { return "empty" }
+            return (path as NSString).lastPathComponent
+        case .path:
+            let n = document.draft.roads.count
+            return n == 1 ? "1 path" : "\(n) paths"
+        case .slots:
+            let n = document.draft.slots.count
+            return n == 1 ? "1 slot" : "\(n) slots"
+        case .entrances:
+            let n = document.draft.entrances.count
+            return n == 1 ? "1 entrance" : "\(n) entrances"
+        case .exits:
+            let n = document.draft.exits.count
+            return n == 1 ? "1 exit" : "\(n) exits"
+        case .occlusion:
+            guard let path = document.draft.overlayImagePath else { return "empty" }
+            return (path as NSString).lastPathComponent
+        case .mapGuide:
+            guard let path = document.draft.guideImagePath else { return "empty" }
+            return (path as NSString).lastPathComponent
+        }
+    }
+
+    @ViewBuilder
+    private var occlusionDetails: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Button("Choose…") { requestImport(.overlay) }
+                if document.draft.overlayImagePath != nil {
+                    Button("Clear") {
+                        document.edit(undoManager) { $0.overlayImagePath = nil }
+                    }
+                }
+            }
+            if document.draft.overlayImagePath != nil {
+                if let px = state.overlayPixelSize, px != CanvasSpec.size {
+                    Label("\(Int(px.width))×\(Int(px.height)) — must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))",
+                          systemImage: "xmark.octagon.fill")
+                        .font(.caption.bold())
+                        .foregroundStyle(.red)
+                }
+            }
+        }
+        .padding(.leading, 28)
+        .padding(.bottom, 4)
+    }
+
+    @ViewBuilder
+    private var guideDetails: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Button("Choose…") { requestImport(.guide) }
+                if document.draft.guideImagePath != nil {
+                    Button("Clear") {
+                        document.edit(undoManager) { $0.guideImagePath = nil }
+                    }
+                }
+            }
+            if let path = document.draft.guideImagePath {
+                Text((path as NSString).lastPathComponent)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                    .truncationMode(.middle)
+                HStack {
+                    Text("Opacity")
+                    Slider(value: document.binding(\.guideOpacity, undoManager), in: 0...1)
+                }
+            }
+        }
+        .padding(.leading, 28)
+        .padding(.bottom, 4)
+    }
+
+    @ViewBuilder
+    private var backgroundDetails: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Button("Choose…") { requestImport(.background) }
+                if document.draft.backgroundImagePath != nil {
+                    Button("Clear") {
+                        document.edit(undoManager) { $0.backgroundImagePath = nil }
+                    }
+                }
+            }
+            if document.draft.backgroundImagePath != nil {
+                if let px = state.backgroundPixelSize {
+                    if px != CanvasSpec.size {
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "xmark.octagon.fill")
+                                .font(.title3)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text("WRONG IMAGE SIZE")
+                                    .font(.callout.weight(.heavy))
+                                Text("This image is \(Int(px.width))×\(Int(px.height)) px. All map artwork must be exactly \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height)) px. The art needs to be fixed.")
+                                    .font(.caption.bold())
+                            }
+                        }
+                        .foregroundStyle(.red)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
+                        .overlay(RoundedRectangle(cornerRadius: 6).stroke(.red.opacity(0.6)))
+                    }
+                }
+            }
+        }
+        .padding(.leading, 34)
+        .padding(.bottom, 6)
     }
 
     private var levelBox: some View {
@@ -42,58 +230,8 @@ struct InspectorView: View {
         }
     }
 
-    private var backgroundBox: some View {
-        GroupBox("Reference Image") {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Button("Choose…") { importingImage = true }
-                    if document.draft.backgroundImagePath != nil {
-                        Button("Clear") {
-                            document.edit(undoManager) { $0.backgroundImagePath = nil }
-                        }
-                    }
-                }
-                if let path = document.draft.backgroundImagePath {
-                    Text((path as NSString).lastPathComponent)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                    HStack {
-                        Text("Opacity")
-                        Slider(value: document.binding(\.backgroundOpacity, undoManager), in: 0...1)
-                    }
-                    if let px = state.backgroundPixelSize {
-                        if px == CanvasSpec.size {
-                            Label("\(Int(px.width))×\(Int(px.height)) — matches canvas", systemImage: "checkmark.circle.fill")
-                                .font(.caption)
-                                .foregroundStyle(.green)
-                        } else {
-                            HStack(alignment: .top, spacing: 8) {
-                                Image(systemName: "xmark.octagon.fill")
-                                    .font(.title3)
-                                VStack(alignment: .leading, spacing: 3) {
-                                    Text("WRONG IMAGE SIZE")
-                                        .font(.callout.weight(.heavy))
-                                    Text("This image is \(Int(px.width))×\(Int(px.height)) px. All map artwork must be exactly \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height)) px. The art needs to be fixed.")
-                                        .font(.caption.bold())
-                                }
-                            }
-                            .foregroundStyle(.red)
-                            .padding(8)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
-                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(.red.opacity(0.6)))
-                        }
-                    }
-                }
-            }
-            .padding(4)
-        }
-    }
-
     private var roadsBox: some View {
-        GroupBox("Roads") {
+        GroupBox("Paths") {
             VStack(alignment: .leading, spacing: 6) {
                 ForEach(document.draft.roads.indices, id: \.self) { ri in
                     roadRow(ri)
@@ -101,13 +239,13 @@ struct InspectorView: View {
                 Button {
                     document.edit(undoManager) { d in
                         d.roads.append(.init(
-                            name: "Road \(d.roads.count + 1)",
+                            name: "Path \(d.roads.count + 1)",
                             points: [Point(2520, 1032), Point(2130, 1032)]
                         ))
                     }
                     state.selection = .road(document.draft.roads.count - 1)
                 } label: {
-                    Label("Add Road", systemImage: "plus")
+                    Label("Add Path", systemImage: "plus")
                 }
                 .padding(.top, 2)
             }
@@ -124,13 +262,9 @@ struct InspectorView: View {
         return HStack(spacing: 6) {
             Image(systemName: "point.topleft.down.to.point.bottomright.curvepath")
                 .foregroundStyle(isSelected ? .cyan : .secondary)
-            TextField("Name", text: Binding(
-                get: { document.draft.roads.indices.contains(ri) ? document.draft.roads[ri].name : "" },
-                set: { nv in document.edit(undoManager) { d in
-                    if d.roads.indices.contains(ri) { d.roads[ri].name = nv }
-                } }
-            ))
-            .textFieldStyle(.plain)
+            Text("Path \(ri)")
+                .fontWeight(isSelected ? .semibold : .regular)
+            Spacer()
             Text("\(document.draft.roads.indices.contains(ri) ? document.draft.roads[ri].points.count : 0) pts")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -143,6 +277,18 @@ struct InspectorView: View {
             }
             .buttonStyle(.plain)
             .help("Reverse direction (spawn becomes exit)")
+            if ri < document.draft.roads.count - 1 {
+                Button {
+                    let message = document.mergeRoadDown(ri, undoManager)
+                    state.selection = document.draft.roads.indices.contains(ri)
+                        ? .road(ri) : .none
+                    state.flash(message)
+                } label: {
+                    Image(systemName: "arrow.triangle.merge")
+                }
+                .buttonStyle(.plain)
+                .help("Merge down: replace this road's stretch that overlaps the road below with that road's own waypoints, removing the redundant ones")
+            }
             Button {
                 document.deleteRoad(ri, undoManager)
                 state.selection = .none
@@ -174,12 +320,23 @@ struct InspectorView: View {
                         Text("(\(Int(slot.x)), \(Int(slot.y)))")
                             .monospacedDigit()
                             .foregroundStyle(.secondary)
-                        if let w = warnings[i] {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.orange)
-                                .help(w)
+                        if let issue = warnings[i] {
+                            Image(systemName: issue == .overlapsPath
+                                  ? "xmark.octagon.fill"
+                                  : "exclamationmark.triangle.fill")
+                                .foregroundStyle(issue == .overlapsPath ? .red : .orange)
+                                .help(issue.message)
                         }
                         Spacer()
+                        Button {
+                            state.menuPreviewSlot = state.menuPreviewSlot == i ? nil : i
+                        } label: {
+                            Image(systemName: state.menuPreviewSlot == i
+                                  ? "smallcircle.filled.circle.fill" : "smallcircle.filled.circle")
+                                .foregroundStyle(state.menuPreviewSlot == i ? .cyan : .secondary)
+                        }
+                        .buttonStyle(.plain)
+                        .help("Show the 4-tower radial menu at game size on this slot")
                         Button {
                             document.deleteSlot(i, undoManager)
                             state.selection = .none
@@ -197,10 +354,9 @@ struct InspectorView: View {
                     .onTapGesture { state.selection = .slot(i) }
                 }
                 Button {
-                    document.edit(undoManager) {
-                        $0.slots.append(Point(CanvasSpec.playable.midX, CanvasSpec.playable.midY))
-                    }
-                    state.selection = .slot(document.draft.slots.count - 1)
+                    state.selection = .slot(document.addSlot(
+                        at: Point(CanvasSpec.playArea.midX, CanvasSpec.playArea.midY),
+                        undoManager))
                 } label: {
                     Label("Add Slot", systemImage: "plus")
                 }

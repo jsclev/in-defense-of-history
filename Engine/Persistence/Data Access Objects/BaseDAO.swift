@@ -15,15 +15,6 @@ public class BaseDAO {
         logger = LogUtility.getLogger(LogCategory.Db, loggerName)
     }
     
-    deinit {
-        let rc: Int32 = sqlite3_close_v2(conn)
-       
-        if (rc != SQLITE_OK) {
-            let sqliteMsg = String(cString: sqlite3_errmsg(conn))
-            logger.error("\(sqliteMsg)")
-        }
-    }
-    
     func logInsertAttempt(table: String, numRows: Int) {
     }
     

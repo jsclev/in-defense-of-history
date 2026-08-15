@@ -35,10 +35,8 @@ enum GeoJSONExport {
                 layer: 40,
                 geometry: .lineString(road.points),
                 extra: [
-                    "widthPx": .number((road.resolvedHalfWidths.reduce(0, +)
-                                        / Double(road.points.count)) * 2),
+                    "widthPx": .number(CanvasSpec.pathWidth),
                     "pathIndex": .number(Double(ri)),
-                    "painted": .bool(road.halfWidths != nil),
                 ]
             ))
 
@@ -55,7 +53,10 @@ enum GeoJSONExport {
                 ))
             }
 
-            if let spawn = road.points.first {
+            // Roads without hand-placed markers still describe their own
+            // endpoints, so a draft authored before the entrance and exit
+            // tools existed exports the same features it always did.
+            if draft.entrances.isEmpty, let spawn = road.points.first {
                 features.append(Feature(
                     id: isPrimary ? "gameplay.entry" : "gameplay.entry.\(ri)",
                     name: "Spawn",
@@ -66,7 +67,7 @@ enum GeoJSONExport {
                     extra: ["pathIndex": .number(Double(ri))]
                 ))
             }
-            if let goal = road.points.last {
+            if draft.exits.isEmpty, let goal = road.points.last {
                 features.append(Feature(
                     id: isPrimary ? "gameplay.exit" : "gameplay.exit.\(ri)",
                     name: "Goal",
@@ -77,6 +78,41 @@ enum GeoJSONExport {
                     extra: ["pathIndex": .number(Double(ri))]
                 ))
             }
+        }
+
+        // Hand-placed markers from the entrance and exit layers. Each one is
+        // tagged with the road whose spawn end (entrances) or goal end
+        // (exits) sits nearest, so the game knows which path it belongs to.
+        func nearestRoad(to p: Point, endpoint: (MapDraft.Road) -> Point?) -> Int {
+            var best: (Int, Double)?
+            for (ri, road) in draft.roads.enumerated() {
+                guard let e = endpoint(road) else { continue }
+                let d = p.distance(to: e)
+                if best == nil || d < best!.1 { best = (ri, d) }
+            }
+            return best?.0 ?? 0
+        }
+        for (i, marker) in draft.entrances.enumerated() {
+            features.append(Feature(
+                id: i == 0 ? "gameplay.entry" : "gameplay.entry.\(i)",
+                name: "Entrance \(i)",
+                category: "gameplay",
+                kind: "spawn_point",
+                layer: 75,
+                geometry: .point(marker),
+                extra: ["pathIndex": .number(Double(nearestRoad(to: marker) { $0.points.first }))]
+            ))
+        }
+        for (i, marker) in draft.exits.enumerated() {
+            features.append(Feature(
+                id: i == 0 ? "gameplay.exit" : "gameplay.exit.\(i)",
+                name: "Exit \(i)",
+                category: "gameplay",
+                kind: "goal_point",
+                layer: 75,
+                geometry: .point(marker),
+                extra: ["pathIndex": .number(Double(nearestRoad(to: marker) { $0.points.last }))]
+            ))
         }
 
         for (i, slot) in draft.slots.enumerated() {
@@ -128,10 +164,10 @@ enum GeoJSONExport {
         var note = "NOT WGS84. [x, y] in canonical game units, origin LOWER-LEFT, +y UP. "
             + "The same space the LevelEditor, Simulator and game all use; nothing rescales."
         var canvas = Size(width: CanvasSpec.width, height: CanvasSpec.height)
-        var playableRect = Rect(x: CanvasSpec.playable.minX,
-                                y: CanvasSpec.playable.minY,
-                                width: CanvasSpec.playable.width,
-                                height: CanvasSpec.playable.height)
+        var playArea = Rect(x: CanvasSpec.playArea.minX,
+                                y: CanvasSpec.playArea.minY,
+                                width: CanvasSpec.playArea.width,
+                                height: CanvasSpec.playArea.height)
     }
 
     enum Geometry {
@@ -170,7 +206,7 @@ enum GeoJSONExport {
         }
 
         enum PropertyKeys: String, CodingKey {
-            case id, name, category, kind, layer, playable, insidePlayableRect
+            case id, name, category, kind, layer, playable, insidePlayArea
         }
 
         struct DynamicKey: CodingKey {
@@ -206,21 +242,21 @@ enum GeoJSONExport {
             try p.encode(kind, forKey: DynamicKey(stringValue: "kind")!)
             try p.encode(layer, forKey: DynamicKey(stringValue: "layer")!)
             try p.encode(true, forKey: DynamicKey(stringValue: "playable")!)
-            try p.encode(insidePlayableRect,
-                         forKey: DynamicKey(stringValue: "insidePlayableRect")!)
+            try p.encode(insidePlayArea,
+                         forKey: DynamicKey(stringValue: "insidePlayArea")!)
             for key in extra.keys.sorted() {
                 try p.encode(extra[key]!, forKey: DynamicKey(stringValue: key)!)
             }
         }
 
-        private var insidePlayableRect: Bool {
+        private var insidePlayArea: Bool {
             let pts: [Point] = switch geometry {
             case let .point(p): [p]
             case let .lineString(ps): ps
             case let .polygon(ps): ps
             }
             return pts.allSatisfy {
-                CanvasSpec.playable.contains(CGPoint(x: $0.x, y: $0.y))
+                CanvasSpec.playArea.contains(CGPoint(x: $0.x, y: $0.y))
             }
         }
 

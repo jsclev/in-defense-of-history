@@ -28,15 +28,25 @@ final class EditorContent: ObservableObject {
     private init() { reload() }
 
     func reload() {
-        // Same route the Simulator uses: not bundled, so this resolves to
-        // ~/Documents/in_defense_of_history.sqlite, which Db/create_db.sh maintains.
-        let path = Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false)
+        // On the Mac this resolves to ~/Documents/in_defense_of_history.sqlite,
+        // which Db/create_db.sh maintains — never overwrite it with the copy
+        // baked into the app at build time. On iPad the sandbox copy has no
+        // maintainer, so refresh it from the bundle every launch the way the
+        // game does; keeping a stale copy is how an old schema crashed the
+        // canvas_spec load at startup.
+        #if os(iOS)
+        let refreshFromBundle = true
+        #else
+        let refreshFromBundle = false
+        #endif
+        let path = Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history",
+                                          fullRefresh: refreshFromBundle)
         guard FileManager.default.fileExists(atPath: path) else {
             ringsByName = []
             maxTowerRange = nil
             return
         }
-        let db = Db(dbPath: path, fullRefresh: false)
+        let db = Db(dbPath: path, fullRefresh: refreshFromBundle)
         guard let byCategory = try? db.towerTypeDao.getTowerTypes() else {
             ringsByName = []
             maxTowerRange = nil

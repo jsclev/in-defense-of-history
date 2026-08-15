@@ -10,25 +10,14 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     nonisolated struct Road: Codable, Equatable, Sendable {
         var name: String
         var points: [Point]
-        var halfWidths: [Double]?
 
-        init(name: String, points: [Point], halfWidths: [Double]? = nil) {
+        init(name: String, points: [Point]) {
             self.name = name
             self.points = points
-            self.halfWidths = halfWidths
-        }
-
-        func halfWidth(at i: Int) -> Double {
-            guard let halfWidths, !halfWidths.isEmpty else { return MapGeometry.roadHalfWidth }
-            return halfWidths.indices.contains(i) ? halfWidths[i] : halfWidths[halfWidths.count - 1]
-        }
-
-        var resolvedHalfWidths: [Double] {
-            points.indices.map { halfWidth(at: $0) }
         }
 
         var outerEdge: [Point] {
-            BrushGeometry.outerEdge(points: points, halfWidths: resolvedHalfWidths)
+            BrushGeometry.outerEdge(points: points)
         }
     }
 
@@ -57,10 +46,10 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     private static func upgrade(from space: String) -> (Point) -> Point {
         if space == "design1600x900" {
             let legacyDesignWidth = 1600.0
-            let s = CanvasSpec.playable.width / legacyDesignWidth
+            let s = CanvasSpec.playArea.width / legacyDesignWidth
             return { p in
-                Point(p.x * s + CanvasSpec.playable.minX,
-                      CanvasSpec.flipY(p.y * s + CanvasSpec.playable.minY))
+                Point(p.x * s + CanvasSpec.playArea.minX,
+                      CanvasSpec.flipY(p.y * s + CanvasSpec.playArea.minY))
             }
         }
         return { Point($0.x, CanvasSpec.flipY($0.y)) }
@@ -71,10 +60,15 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     var lives: Int
     var roads: [Road]
     var slots: [Point]
+    var entrances: [Point]
+    var exits: [Point]
     var waves: [Wave]
     var intendedSolution: [BuildStep]
     var backgroundImagePath: String?
     var backgroundOpacity: Double
+    var overlayImagePath: String?
+    var guideImagePath: String?
+    var guideOpacity: Double = 0.5
     var coordinateSpace: String = Self.canvasSpace
 
     static let starter = MapDraft(
@@ -83,12 +77,15 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
         lives: 20,
         roads: [],
         slots: [],
+        entrances: [],
+        exits: [],
         waves: [Wave(breather: 10, lines: [
             SpawnLine(foe: Foe.loyalistMilitia.rawValue, count: 6, every: 2.2, delay: 0, road: 0),
         ])],
         intendedSolution: [],
         backgroundImagePath: nil,
-        backgroundOpacity: 0.35
+        backgroundOpacity: 0.35,
+        overlayImagePath: nil
     )
 
     var isPlayable: Bool {
@@ -104,10 +101,15 @@ extension MapDraft {
         lives = try c.decodeIfPresent(Int.self, forKey: .lives) ?? 20
         roads = try c.decodeIfPresent([Road].self, forKey: .roads) ?? []
         slots = try c.decodeIfPresent([Point].self, forKey: .slots) ?? []
+        entrances = try c.decodeIfPresent([Point].self, forKey: .entrances) ?? []
+        exits = try c.decodeIfPresent([Point].self, forKey: .exits) ?? []
         waves = try c.decodeIfPresent([Wave].self, forKey: .waves) ?? []
         intendedSolution = try c.decodeIfPresent([BuildStep].self, forKey: .intendedSolution) ?? []
         backgroundImagePath = try c.decodeIfPresent(String.self, forKey: .backgroundImagePath)
         backgroundOpacity = try c.decodeIfPresent(Double.self, forKey: .backgroundOpacity) ?? 0.35
+        overlayImagePath = try c.decodeIfPresent(String.self, forKey: .overlayImagePath)
+        guideImagePath = try c.decodeIfPresent(String.self, forKey: .guideImagePath)
+        guideOpacity = try c.decodeIfPresent(Double.self, forKey: .guideOpacity) ?? 0.5
         coordinateSpace = try c.decodeIfPresent(String.self, forKey: .coordinateSpace) ?? "design1600x900"
         if coordinateSpace != Self.canvasSpace {
             let upgrade = Self.upgrade(from: coordinateSpace)
@@ -115,6 +117,8 @@ extension MapDraft {
                 roads[r].points = roads[r].points.map(upgrade)
             }
             slots = slots.map(upgrade)
+            entrances = entrances.map(upgrade)
+            exits = exits.map(upgrade)
             coordinateSpace = Self.canvasSpace
         }
     }
@@ -126,6 +130,8 @@ extension MapDraft {
             lives: bp.lives,
             roads: bp.roads.map { Road(name: $0.name, points: $0.waypoints) },
             slots: bp.slots,
+            entrances: [],
+            exits: [],
             waves: bp.waves.map { w in
                 Wave(breather: w.breather, lines: w.lines.map {
                     SpawnLine(foe: $0.foe.rawValue, count: $0.count, every: $0.every,
@@ -141,7 +147,8 @@ extension MapDraft {
                 }
             },
             backgroundImagePath: nil,
-            backgroundOpacity: 0.35
+            backgroundOpacity: 0.35,
+            overlayImagePath: nil
         )
     }
 
@@ -237,6 +244,15 @@ final class MapDocument: ReferenceFileDocument {
         )
     }
 
+    /// THE one way a slot is added, whatever the input - canvas tap, pencil,
+    /// or the panel button. Returns the new slot's index.
+    @MainActor
+    @discardableResult
+    func addSlot(at p: Point, _ undoManager: UndoManager?) -> Int {
+        edit(undoManager) { $0.slots.append(p) }
+        return draft.slots.count - 1
+    }
+
     @MainActor
     func deleteSlot(_ i: Int, _ undoManager: UndoManager?) {
         edit(undoManager) { d in
@@ -264,31 +280,179 @@ final class MapDocument: ReferenceFileDocument {
     }
 
     @MainActor
-    func deleteWaypoint(road r: Int, point i: Int, _ undoManager: UndoManager?) {
+    func deleteEntrance(_ i: Int, _ undoManager: UndoManager?) {
         edit(undoManager) { d in
-            guard d.roads.indices.contains(r), d.roads[r].points.indices.contains(i) else { return }
-            d.roads[r].points.remove(at: i)
-            if d.roads[r].halfWidths?.indices.contains(i) == true {
-                d.roads[r].halfWidths?.remove(at: i)
-            }
+            guard d.entrances.indices.contains(i) else { return }
+            d.entrances.remove(at: i)
         }
     }
 
     @MainActor
-    func addPaintedRoad(points: [Point], halfWidths: [Double], _ undoManager: UndoManager?) {
+    func deleteExit(_ i: Int, _ undoManager: UndoManager?) {
         edit(undoManager) { d in
-            d.roads.append(.init(name: "Road \(d.roads.count + 1)",
-                                 points: points,
-                                 halfWidths: halfWidths))
+            guard d.exits.indices.contains(i) else { return }
+            d.exits.remove(at: i)
         }
+    }
+
+    @MainActor
+    func deleteWaypoint(road r: Int, point i: Int, _ undoManager: UndoManager?) {
+        edit(undoManager) { d in
+            guard d.roads.indices.contains(r), d.roads[r].points.indices.contains(i) else { return }
+            d.roads[r].points.remove(at: i)
+        }
+    }
+
+    @MainActor
+    func addPaintedRoad(points: [Point], _ undoManager: UndoManager?) {
+        edit(undoManager) { d in
+            d.roads.append(.init(name: "Road \(d.roads.count + 1)", points: points))
+        }
+    }
+
+    /// Merge a road onto the road below it in the list.
+    ///
+    /// The run of this road's waypoints that lies inside the lower road's lane
+    /// (a branch joining a trunk) is replaced by the lower road's OWN
+    /// waypoints from the junction onward, so the shared stretch is described
+    /// by exactly one set of coordinates and this road's redundant
+    /// approximations of it are removed. Both roads remain - the game needs a
+    /// full polyline per path - but their shared trunk is now identical.
+    /// A road that lies entirely inside the lower lane is deleted; roads that
+    /// merely cross are left alone.
+    @MainActor
+    func mergeRoadDown(_ upper: Int, _ undoManager: UndoManager?) -> String {
+        let lower = upper + 1
+        guard draft.roads.indices.contains(upper),
+              draft.roads.indices.contains(lower) else {
+            return "No road below to merge onto"
+        }
+        let a = draft.roads[upper].points
+        let b = draft.roads[lower].points
+        let lowerName = draft.roads[lower].name
+        guard a.count >= 2, b.count >= 2 else {
+            return "Both roads need at least two waypoints"
+        }
+
+        let tolerance = MapGeometry.roadHalfWidth
+        let inside = a.map { $0.distance(toPolyline: b) <= tolerance }
+
+        if inside.allSatisfy({ $0 }) {
+            let name = draft.roads[upper].name
+            deleteRoad(upper, undoManager)
+            return "\(name) lies entirely on \(lowerName) - removed it"
+        }
+        guard inside.contains(true) else {
+            return "The roads do not overlap - nothing to merge"
+        }
+
+        var suffixStart = a.count
+        while suffixStart > 0, inside[suffixStart - 1] { suffixStart -= 1 }
+        var prefixEnd = -1
+        while prefixEnd < a.count - 1, inside[prefixEnd + 1] { prefixEnd += 1 }
+        let suffixLength = a.count - suffixStart
+        let prefixLength = prefixEnd + 1
+        guard suffixLength > 0 || prefixLength > 0 else {
+            return "The roads only cross - nothing to merge"
+        }
+
+        let arcs = MapGeometry.arcPositions(b)
+        // Skip trunk waypoints within this arc distance of the junction so
+        // the splice does not produce a kink against the projected point.
+        let junctionGap = 12.0
+        var merged: [Point]
+
+        if suffixLength >= prefixLength {
+            guard let join = MapGeometry.project(a[suffixStart], onto: b),
+                  let reference = MapGeometry.project(a[a.count - 1], onto: b) else {
+                return "Could not project the junction onto \(lowerName)"
+            }
+            var tail: [Point] = [join.point]
+            if reference.arc >= join.arc {
+                for (i, arc) in arcs.enumerated() where arc > join.arc + junctionGap {
+                    tail.append(b[i])
+                }
+            } else {
+                for (i, arc) in arcs.enumerated().reversed() where arc < join.arc - junctionGap {
+                    tail.append(b[i])
+                }
+            }
+            merged = Array(a[0..<suffixStart]) + tail
+        } else {
+            guard let join = MapGeometry.project(a[prefixEnd], onto: b),
+                  let reference = MapGeometry.project(a[0], onto: b) else {
+                return "Could not project the junction onto \(lowerName)"
+            }
+            var head: [Point] = []
+            if join.arc >= reference.arc {
+                for (i, arc) in arcs.enumerated() where arc < join.arc - junctionGap {
+                    head.append(b[i])
+                }
+            } else {
+                for (i, arc) in arcs.enumerated().reversed() where arc > join.arc + junctionGap {
+                    head.append(b[i])
+                }
+            }
+            head.append(join.point)
+            merged = head + Array(a[(prefixEnd + 1)...])
+        }
+
+        var cleaned: [Point] = []
+        for p in merged where (cleaned.last.map { $0.distance(to: p) >= 3 }) ?? true {
+            cleaned.append(p)
+        }
+        if let last = merged.last, cleaned.last != last { cleaned.append(last) }
+        guard cleaned.count >= 2 else {
+            return "Merging would leave nothing of this road - cancelled"
+        }
+
+        let before = a.count
+        edit(undoManager) { d in d.roads[upper].points = cleaned }
+        return "Merged onto \(lowerName): \(before) waypoints became \(cleaned.count); "
+            + "the shared stretch now uses its exact waypoints"
     }
 }
 
 enum MapGeometry {
-    // Canonical units. Blueprints and documents are authored in this space now,
-    // so these are plain constants rather than scaled design-space values.
-    static let roadHalfWidth = 18.0
-    static let slotRadius = 19.2
+    /// Half of canvas_spec.path_width — the real lane, edge to edge, is one
+    /// database value shared with the game's lane coverage. The editor drew
+    /// 36-wide roads for a 102-wide lane before this read the spec.
+    static var roadHalfWidth: Double { CanvasSpec.pathWidth / 2 }
+
+    /// Vertical semi-axis of the slot footprint in canvas_spec. Roads run
+    /// mostly horizontally, so this is the reach of the pad toward a road for
+    /// the overlap warning; the drawn pad uses the full footprint ellipse.
+    static var slotRadius: Double { CanvasSpec.slotSize.height / 2 }
+
+    struct PolylineHit {
+        let point: Point
+        let arc: Double
+    }
+
+    /// Nearest point on the polyline, with its arc-length position along it.
+    static func project(_ p: Point, onto pts: [Point]) -> PolylineHit? {
+        guard pts.count >= 2 else { return nil }
+        var best: (d: Double, hit: PolylineHit)?
+        var arc = 0.0
+        for i in 0..<(pts.count - 1) {
+            let a = pts[i], b = pts[i + 1]
+            let q = p.closestPoint(onSegment: a, b)
+            let d = p.distance(to: q)
+            if best == nil || d < best!.d {
+                best = (d, PolylineHit(point: q, arc: arc + a.distance(to: q)))
+            }
+            arc += a.distance(to: b)
+        }
+        return best?.hit
+    }
+
+    static func arcPositions(_ pts: [Point]) -> [Double] {
+        var out = [0.0]
+        for i in 0..<(pts.count - 1) {
+            out.append(out[out.count - 1] + pts[i].distance(to: pts[i + 1]))
+        }
+        return out
+    }
 
 
 
@@ -301,25 +465,40 @@ enum MapGeometry {
         p.distance(toPolyline: pts)
     }
 
+    enum SlotIssue {
+        /// The slot footprint reaches inside a path's lane - a hard error,
+        /// nothing may ever sit in the path.
+        case overlapsPath
+        /// No tower placed here could reach any path - a warning.
+        case outOfRange
+
+        var message: String {
+            switch self {
+            case .overlapsPath: "intersects a path"
+            case .outOfRange: "out of range of every path"
+            }
+        }
+    }
+
     /// `maxTowerRange` is the longest range in the tower table, supplied by the
     /// caller rather than read from a singleton so this stays pure geometry.
     /// Passing nil skips the range check instead of comparing against an
     /// invented constant.
-    static func slotWarning(_ slot: Point, roads: [MapDraft.Road],
-                            maxTowerRange: Double?) -> String? {
+    static func slotIssue(_ slot: Point, roads: [MapDraft.Road],
+                          maxTowerRange: Double?) -> SlotIssue? {
         let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }
         guard let d = ds.min() else { return nil }
-        if d < roadHalfWidth + slotRadius { return "overlaps a road" }
+        if d < roadHalfWidth + slotRadius { return .overlapsPath }
         if let maxTowerRange, d - roadHalfWidth > maxTowerRange {
-            return "out of range of every road"
+            return .outOfRange
         }
         return nil
     }
 
-    static func warnings(for draft: MapDraft, maxTowerRange: Double?) -> [Int: String] {
-        var out: [Int: String] = [:]
+    static func warnings(for draft: MapDraft, maxTowerRange: Double?) -> [Int: SlotIssue] {
+        var out: [Int: SlotIssue] = [:]
         for (i, s) in draft.slots.enumerated() {
-            if let w = slotWarning(s, roads: draft.roads, maxTowerRange: maxTowerRange) { out[i] = w }
+            if let w = slotIssue(s, roads: draft.roads, maxTowerRange: maxTowerRange) { out[i] = w }
         }
         return out
     }

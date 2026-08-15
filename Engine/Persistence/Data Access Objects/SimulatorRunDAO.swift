@@ -86,7 +86,7 @@ public final class SimulatorRunDAO {
     /// Where the runs database lives by default: beside the HTML reports, so
     /// everything about a sweep is in one place.
     public static let defaultPath =
-        ("~/projects/in-defense-of-history-data/SimulatorRuns/simulator_runs.sqlite"
+        ("~/projects/td/in-defense-of-history-data/SimulatorRuns/simulator_runs.sqlite"
             as NSString).expandingTildeInPath
 
     public init(path: String = SimulatorRunDAO.defaultPath) throws {

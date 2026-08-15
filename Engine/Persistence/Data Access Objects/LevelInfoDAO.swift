@@ -107,10 +107,10 @@ public class LevelInfoDAO: BaseDAO {
                 l.num_starting_lives,
                 c.id AS campaign_id,
                 c.campaign_name,
-                d.playable_rect_x,
-                d.playable_rect_y,
-                d.playable_rect_width,
-                d.playable_rect_height,
+                d.play_area_x,
+                d.play_area_y,
+                d.play_area_width,
+                d.play_area_height,
                 l.map_image_name,
                 l.num_waves
             FROM
@@ -140,7 +140,7 @@ public class LevelInfoDAO: BaseDAO {
                 let endedAt = try getDate(stmt: stmt, colIndex: 3)
                 let startingMoney = getInt(stmt: stmt, colIndex: 4)
                 let numStartingLives = getInt(stmt: stmt, colIndex: 5)
-                let playableRect = CGRect(
+                let playArea = CGRect(
                     x: getDouble(stmt: stmt, colIndex: 8),
                     y: getDouble(stmt: stmt, colIndex: 9),
                     width: getDouble(stmt: stmt, colIndex: 10),
@@ -165,7 +165,7 @@ public class LevelInfoDAO: BaseDAO {
                                  startingMoney: startingMoney,
                                  numStartingLives: numStartingLives,
                                  numWaves: numWaves,
-                                 playableRect: playableRect,
+                                 playArea: playArea,
                                  mapImageName: mapImageName,
                                  paths: paths,
                                  towerSlots: towerSlots,

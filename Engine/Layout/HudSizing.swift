@@ -127,7 +127,7 @@ public enum HudSizing {
 
     public static let statPlatePadding = ScaledDimension(5)
     public static let statPlateCorner = ScaledDimension(10)
-    public static let statPlateOpacity: CGFloat = 0.40
+    public static let statPlateOpacity: CGFloat = 0.46
 
     public static let hudPadding = ScaledDimension(16)
 

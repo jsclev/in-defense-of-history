@@ -2,6 +2,7 @@ import Foundation
 import CoreGraphics
 import Combine
 import QuartzCore
+import UIKit
 
 enum TowerKind: String, CaseIterable, Identifiable {
     case ranged
@@ -102,7 +103,11 @@ struct PlacedTower: Identifiable {
 final class LevelRunner: NSObject, ObservableObject {
     private static let normalTickDuration: Duration = .seconds(1) / SimClock.ticksPerSecond
     private(set) var mapImageName: String
-    private(set) var playableRect: CGRect
+
+    /// The level's art layers, probed once when the level loads so the
+    /// per-frame render never re-asks the asset library which layers exist.
+    private(set) var mapArt: LevelMapArt
+    private(set) var playArea: CGRect
 
     /// Box the map renderer fits the slot sprite into, in canonical units.
     /// Tower art drawn on the slot's own canvas is placed in this same box so
@@ -120,6 +125,11 @@ final class LevelRunner: NSObject, ObservableObject {
     @Published private(set) var isDefeated = false
 
     @Published private(set) var isCleared = false
+
+    /// True while the level is holding a wave for the player. Nothing
+    /// spawns until an entrance icon is double-tapped, which calls
+    /// startNextWave() and releases it.
+    @Published private(set) var awaitingWaveStart = false
 
     private(set) var towerCosts: [TowerKind: [Int: [Int: Int]]] = [:]
     private(set) var towerDisplayNames: [TowerKind: String] = [:]
@@ -217,11 +227,9 @@ final class LevelRunner: NSObject, ObservableObject {
 
     // MARK: - Path area in range
 
-    /// Half-width of the enemy lane, in map pixels.
-    /// TODO: this belongs in the database alongside the path points. It is the
-    /// last combat number still written in Swift; everything the tower table
-    /// covers now reads from `towerLevels`.
-    private static let pathHalfWidthInImagePixels: CGFloat = 51
+    /// Half-width of the enemy lane, in canonical units, from
+    /// canvas_spec.path_width.
+    private static var pathHalfWidthInImagePixels: CGFloat { CanvasSpec.pathWidth / 2 }
 
     /// Lane coverage per slot, in map pixels squared, computed once at load.
     ///
@@ -311,10 +319,32 @@ final class LevelRunner: NSObject, ObservableObject {
         let maxHP: Double
         var hp: Double
         let bounty: Int
+        let damageMin: Double
+        let damageMax: Double
+        let cover: Double
+        let blockImmune: Bool
         let spawnTick: Int64
         let pathIndex: Int
         var position: CGPoint = .zero
         var pathDistance: Double = 0
+        /// Ticks spent standing still while a militia soldier blocked the way;
+        /// subtracted from the analytic march so the walker resumes where it
+        /// stopped instead of teleporting ahead.
+        var haltedTicks: Double = 0
+    }
+
+    struct MilitiaSoldier: Identifiable {
+        let id: Int
+        let assetName: String
+        var position: CGPoint
+        var hp: Double
+        var maxHP: Double
+    }
+
+    private struct MilitiaGarrison {
+        var rallyPoint: Point
+        var units: [MilitiaUnit]
+        var enemySwingTicks: [Int: Int] = [:]
     }
 
     @Published private(set) var projectiles: [Projectile] = []
@@ -328,8 +358,27 @@ final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var selectedTowerSlotIndex: Int?
 
+    /// Build choice awaiting its confirming second tap: the first tap on a
+    /// tower button arms it (checkmark + range preview), the second builds.
+    @Published private(set) var armedBuildKind: TowerKind?
+
+    /// Upgrade branch awaiting its confirming second tap, same flow as
+    /// armedBuildKind: the range preview shows the upgraded tier's range.
+    @Published private(set) var armedUpgradeBranch: Int?
+
     @Published private(set) var walkers: [Walker] = []
     private var nextWalkerID = 0
+
+    @Published private(set) var militia: [MilitiaSoldier] = []
+    private var garrisonsBySlot: [Int: MilitiaGarrison] = [:]
+    private var blockedWalkerIDs: Set<Int> = []
+    private var lastMilitiaTick: Int64 = 0
+    /// Soldier positions at the previous militia tick, keyed by soldier id.
+    /// Militia step on 30Hz whole ticks; the published positions lerp between
+    /// the last two ticks so they glide like the frame-interpolated walkers.
+    private var militiaPrevPositions: [Int: CGPoint] = [:]
+    private var militiaRespawnedIDs: Set<Int> = []
+    private static let militiaAssetName = "militia_soldier"
 
     private struct ScheduledSpawn {
         let tick: Int64
@@ -346,6 +395,19 @@ final class LevelRunner: NSObject, ObservableObject {
     private(set) var isReady = false
 
     private var paths: [Path] = []
+
+    /// Where the held wave's enemies will enter the map, in canonical
+    /// units: the mouth of each path that wave actually spawns on, not
+    /// every path the level has. The level screen puts an entrance icon on
+    /// each while the wave is waiting.
+    var entrancePositions: [CGPoint] {
+        guard waves.indices.contains(waveIndex) else { return [] }
+        return Set(waves[waveIndex].spawns.map(\.pathIndex))
+            .filter { paths.indices.contains($0) }
+            .sorted()
+            .map { CGPoint(x: paths[$0].points[0].x, y: paths[$0].points[0].y) }
+    }
+
     private var levelName = ""
     private var enemyTypesByID: [UUID: EnemyType] = [:]
     private var waves: [Wave] = []
@@ -368,7 +430,8 @@ final class LevelRunner: NSObject, ObservableObject {
     init(levelInfoID: UUID?, mapImageName: String,
          enemyHPMultiplier: Double = 1.0) {
         self.mapImageName = mapImageName
-        self.playableRect = CanvasSpec.playable
+        self.mapArt = LevelMapArt(mapImageName: mapImageName)
+        self.playArea = CanvasSpec.playArea
         self.enemyHPMultiplier = enemyHPMultiplier
         super.init()
         load(levelInfoID: levelInfoID)
@@ -398,9 +461,10 @@ final class LevelRunner: NSObject, ObservableObject {
             })
 
             levelName = level.name
-            playableRect = level.playableRect
+            playArea = level.playArea
             if !level.mapImageName.isEmpty {
                 mapImageName = level.mapImageName
+                mapArt = LevelMapArt(mapImageName: level.mapImageName)
             }
             startingMoney = level.startingMoney
             money = level.startingMoney
@@ -442,7 +506,7 @@ final class LevelRunner: NSObject, ObservableObject {
             paths = level.paths
             precomputeLaneCoverage()
             isReady = true
-            enterWave(0)
+            holdWave(0)
         } catch {
             status = "Database load failed: \(error)"
         }
@@ -463,18 +527,74 @@ final class LevelRunner: NSObject, ObservableObject {
     func selectSlot(_ index: Int) {
         guard !isSlotOccupied(index) else { return }
         selectedTowerSlotIndex = nil
+        armedBuildKind = nil
+        armedUpgradeBranch = nil
         selectedSlotIndex = selectedSlotIndex == index ? nil : index
     }
 
     func selectPlacedTower(atSlot index: Int) {
         guard isSlotOccupied(index) else { return }
         selectedSlotIndex = nil
+        armedBuildKind = nil
+        armedUpgradeBranch = nil
         selectedTowerSlotIndex = selectedTowerSlotIndex == index ? nil : index
     }
 
     func dismissMenu() {
         selectedSlotIndex = nil
         selectedTowerSlotIndex = nil
+        armedBuildKind = nil
+        armedUpgradeBranch = nil
+    }
+
+    /// First tap on a build button arms that kind; a second tap on the same
+    /// button builds it. Tapping a different button re-arms to that kind.
+    func tapBuildButton(_ kind: TowerKind) {
+        guard maxLevel(for: kind) >= 1 else { return }
+        if armedBuildKind == kind {
+            buildTower(kind)
+        } else {
+            armedBuildKind = kind
+        }
+    }
+
+    /// Radius previewed while a build choice is armed: attack range for
+    /// shooting towers, rally-point radius for melee.
+    func buildPreviewRadius(for kind: TowerKind) -> CGFloat? {
+        towerLevels[kind]?[1]?[1].flatMap(Self.overlayRadius)
+    }
+
+    /// Radius shown while a placed tower's upgrade menu is open, at the
+    /// tower's current level and branch.
+    func rangeOverlayRadius(for tower: PlacedTower) -> CGFloat? {
+        towerLevel(for: tower).flatMap(Self.overlayRadius)
+    }
+
+    /// First tap on an upgrade button arms that branch; a second tap on the
+    /// same button performs the upgrade. Tapping a different branch re-arms.
+    func tapUpgradeButton(branch: Int) {
+        guard upgradeOffers.contains(where: { $0.branch == branch }) else { return }
+        if armedUpgradeBranch == branch {
+            upgradeSelectedTower(branch: branch)
+        } else {
+            armedUpgradeBranch = branch
+        }
+    }
+
+    /// Radius previewed while an upgrade is armed: what the tower's range
+    /// would become at the offered level and branch.
+    func upgradePreviewRadius(branch: Int) -> CGFloat? {
+        guard let slotIndex = selectedTowerSlotIndex,
+              let tower = placedTower(atSlot: slotIndex),
+              let offer = upgradeOffers.first(where: { $0.branch == branch })
+        else { return nil }
+        return towerLevels[tower.kind]?[offer.nextLevel]?[offer.branch]
+            .flatMap(Self.overlayRadius)
+    }
+
+    private static func overlayRadius(for tuning: TowerLevel) -> CGFloat? {
+        if let melee = tuning.meleeUnit { return CGFloat(melee.rallyPointRadius) }
+        return tuning.range > 0 ? CGFloat(tuning.range) : nil
     }
 
     func buildTower(_ kind: TowerKind) {
@@ -487,12 +607,27 @@ final class LevelRunner: NSObject, ObservableObject {
               money >= cost
         else { return }
         money -= cost
-        placedTowers.append(PlacedTower(
+        let tower = PlacedTower(
             slotIndex: slotIndex,
             kind: kind,
             position: slotPositions[slotIndex]
-        ))
+        )
+        placedTowers.append(tower)
+        if let melee = towerLevel(for: tower)?.meleeUnit {
+            let towerPos = Point(Double(tower.position.x), Double(tower.position.y))
+            let rally = Simulation.defaultRallyPoint(
+                towerPosition: towerPos,
+                flagRange: melee.rallyPointRadius,
+                paths: paths)
+            garrisonsBySlot[slotIndex] = MilitiaGarrison(
+                rallyPoint: rally,
+                units: (0..<melee.soldierCount).map { _ in
+                    MilitiaUnit(position: towerPos, hp: melee.hp)
+                })
+            publishMilitia()
+        }
         selectedSlotIndex = nil
+        armedBuildKind = nil
     }
 
     var upgradeOffers: [(nextLevel: Int, branch: Int, cost: Int)] {
@@ -509,11 +644,42 @@ final class LevelRunner: NSObject, ObservableObject {
     func upgradeSelectedTower(branch: Int = 1) {
         guard let slotIndex = selectedTowerSlotIndex,
               let offer = upgradeOffers.first(where: { $0.branch == branch }),
-              let arrayIndex = placedTowers.firstIndex(where: { $0.slotIndex == slotIndex })
+              let arrayIndex = placedTowers.firstIndex(where: { $0.slotIndex == slotIndex }),
+              money >= offer.cost
         else { return }
+        money -= offer.cost
         placedTowers[arrayIndex].level = offer.nextLevel
         placedTowers[arrayIndex].branch = offer.branch
+        if var g = garrisonsBySlot[slotIndex],
+           let melee = towerLevel(for: placedTowers[arrayIndex])?.meleeUnit {
+            // Upgrading re-equips the garrison: living soldiers come back at
+            // the new tier's full hp; the dead keep their respawn timers.
+            for i in 0..<g.units.count where g.units[i].state != .dead {
+                g.units[i].hp = melee.hp
+            }
+            garrisonsBySlot[slotIndex] = g
+            publishMilitia()
+        }
         selectedTowerSlotIndex = nil
+        armedUpgradeBranch = nil
+    }
+
+    /// Parks the level on wave `index`: the wave is announced, but nothing
+    /// spawns until startNextWave() releases it.
+    private func holdWave(_ index: Int) {
+        guard waves.indices.contains(index) else { return }
+        waveIndex = index
+        awaitingWaveStart = true
+        status = "\(levelName)  •  wave \(index + 1)/\(waves.count) waiting  •  "
+            + "double-tap an entrance to start it"
+    }
+
+    /// Releases the held wave. The entrance icons call this on a
+    /// double-tap; until then the level sits quiet.
+    func startNextWave() {
+        guard awaitingWaveStart, isReady, !isDefeated else { return }
+        awaitingWaveStart = false
+        enterWave(waveIndex)
     }
 
     private func enterWave(_ index: Int) {
@@ -544,7 +710,12 @@ final class LevelRunner: NSObject, ObservableObject {
         guard isReady, !isDefeated, displayLink == nil else { return }
         timer.resync()
         lastStepGameTicks = Double(timer.tick) + timer.interpolationAlpha
-        enterWave(waveIndex)
+        lastMilitiaTick = timer.tick
+        // A held wave stays held; a wave already in flight reschedules
+        // against the resynced clock, exactly as before the gate existed.
+        if !awaitingWaveStart {
+            enterWave(waveIndex)
+        }
         let link = CADisplayLink(target: self, selector: #selector(handleFrame))
         link.add(to: .main, forMode: .common)
         displayLink = link
@@ -593,6 +764,10 @@ final class LevelRunner: NSObject, ObservableObject {
                 maxHP: maxHP,
                 hp: maxHP,
                 bounty: stats.gold,
+                damageMin: stats.damageMin,
+                damageMax: stats.damageMax,
+                cover: stats.cover,
+                blockImmune: type.traits.contains(.rideDown),
                 spawnTick: next.tick,
                 pathIndex: next.pathIndex
             ))
@@ -600,9 +775,19 @@ final class LevelRunner: NSObject, ObservableObject {
         }
 
         let alpha = timer.interpolationAlpha
+        let nowTicks = Double(timer.tick) + alpha
+        let frameDtTicks = max(0, nowTicks - lastStepGameTicks)
+        lastStepGameTicks = nowTicks
+
         var marching: [Walker] = []
         for var walker in walkers {
+            if blockedWalkerIDs.contains(walker.id) {
+                walker.haltedTicks += frameDtTicks
+                marching.append(walker)
+                continue
+            }
             let ticksWalking = Double(timer.tick - walker.spawnTick) + alpha
+                - walker.haltedTicks
             let distance = walker.speed * ticksWalking * SimClock.dt
             let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
             if path.totalLength > 0, distance >= path.totalLength {
@@ -618,19 +803,213 @@ final class LevelRunner: NSObject, ObservableObject {
 
         guard !isDefeated else { return }
 
-        if pendingSpawns.isEmpty && walkers.isEmpty {
+        stepMilitia()
+        if !garrisonsBySlot.isEmpty {
+            publishMilitia(alpha: alpha)
+        }
+
+        if pendingSpawns.isEmpty && walkers.isEmpty && !awaitingWaveStart {
             if waveIndex + 1 < waves.count {
-                enterWave(waveIndex + 1)
+                holdWave(waveIndex + 1)
             } else if !isCleared {
                 isCleared = true
                 status = "\(levelName)  •  all \(waves.count) waves cleared"
             }
         }
 
-        let nowTicks = Double(timer.tick) + timer.interpolationAlpha
-        let gameDt = max(0, nowTicks - lastStepGameTicks) * SimClock.dt
-        lastStepGameTicks = nowTicks
-        updateCombat(gameDt: gameDt)
+        updateCombat(gameDt: frameDtTicks * SimClock.dt)
+    }
+
+    /// Mirrors Engine Simulation.stepMilitia on the runner's walkers, run on
+    /// whole ticks so the Int swing/respawn counters keep engine cadence.
+    private func stepMilitia() {
+        guard timer.tick > lastMilitiaTick else { return }
+        let dueTicks = min(Int(timer.tick - lastMilitiaTick), 8)
+        lastMilitiaTick = timer.tick
+        guard !garrisonsBySlot.isEmpty else {
+            blockedWalkerIDs.removeAll()
+            return
+        }
+        militiaPrevPositions = militiaPositionsById()
+        militiaRespawnedIDs.removeAll()
+        for _ in 0..<dueTicks {
+            stepMilitiaTick()
+        }
+        if !militiaRespawnedIDs.isEmpty {
+            let now = militiaPositionsById()
+            for id in militiaRespawnedIDs {
+                militiaPrevPositions[id] = now[id]
+            }
+        }
+    }
+
+    private func militiaPositionsById() -> [Int: CGPoint] {
+        var out: [Int: CGPoint] = [:]
+        for (slot, g) in garrisonsBySlot {
+            for (i, u) in g.units.enumerated() where u.state != .dead {
+                out[slot * 8 + i] = CGPoint(x: u.position.x, y: u.position.y)
+            }
+        }
+        return out
+    }
+
+    private func stepMilitiaTick() {
+        let dt = SimClock.dt
+
+        var claimed: Set<Int> = []
+        for (_, g) in garrisonsBySlot.sorted(by: { $0.key < $1.key }) {
+            for u in g.units where u.targetSpawnID >= 0 {
+                claimed.insert(u.targetSpawnID)
+            }
+        }
+
+        var indexByWalkerID: [Int: Int] = [:]
+        for (i, w) in walkers.enumerated() {
+            indexByWalkerID[w.id] = i
+        }
+        var killedIDs: Set<Int> = []
+
+        blockedWalkerIDs.removeAll(keepingCapacity: true)
+
+        for slot in garrisonsBySlot.keys.sorted() {
+            guard var g = garrisonsBySlot[slot],
+                  let tower = placedTower(atSlot: slot),
+                  let melee = towerLevel(for: tower)?.meleeUnit
+            else { continue }
+            let towerPos = Point(Double(tower.position.x), Double(tower.position.y))
+
+            var free: [(spawnID: Int, position: Point)] = []
+            for w in walkers where !w.blockImmune && !claimed.contains(w.id)
+                && !killedIDs.contains(w.id) {
+                free.append((w.id, Point(Double(w.position.x), Double(w.position.y))))
+            }
+
+            for ui in 0..<g.units.count {
+                var unit = g.units[ui]
+                var targetPos: Point? = nil
+                if unit.targetSpawnID >= 0, !killedIDs.contains(unit.targetSpawnID),
+                   let wi = indexByWalkerID[unit.targetSpawnID] {
+                    targetPos = Point(Double(walkers[wi].position.x),
+                                      Double(walkers[wi].position.y))
+                }
+                let offset = MilitiaAI.formationOffset(index: ui, of: g.units.count)
+                let context = MilitiaContext(
+                    freeEnemies: free,
+                    targetPosition: targetPos,
+                    rallyPoint: Point(g.rallyPoint.x + offset.x, g.rallyPoint.y + offset.y),
+                    towerPosition: towerPos)
+                if unit.swingTicksLeft > 0 { unit.swingTicksLeft -= 1 }
+
+                switch MilitiaAI.decide(unit, context: context) {
+                case .idle:
+                    if unit.state == .returning { unit.state = .holding }
+                case .countdownRespawn:
+                    unit.respawnTicksLeft -= 1
+                case .respawn:
+                    unit = MilitiaUnit(position: towerPos, hp: melee.hp)
+                    militiaRespawnedIDs.insert(slot * 8 + ui)
+                case .heal:
+                    unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
+                case let .move(toward):
+                    let d = unit.position.distance(to: toward)
+                    let step = MilitiaTunables.moveSpeed * dt
+                    unit.position = d <= step ? toward
+                        : Point.lerp(unit.position, toward, step / d)
+                case let .engage(targetSpawnID):
+                    unit.state = .engaging
+                    unit.targetSpawnID = targetSpawnID
+                    claimed.insert(targetSpawnID)
+                    free.removeAll { $0.spawnID == targetSpawnID }
+                case let .strike(targetSpawnID):
+                    if unit.state == .engaging {
+                        unit.state = .fighting
+                        g.enemySwingTicks[targetSpawnID] =
+                            Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                    }
+                    if !killedIDs.contains(targetSpawnID),
+                       let wi = indexByWalkerID[targetSpawnID] {
+                        var w = walkers[wi]
+                        let roll = Double.random(in: melee.damageRange)
+                        let dealt = min(w.hp, roll * (1.0 - w.cover))
+                        w.hp -= roll * (1.0 - w.cover)
+                        damageTotalBySlot[slot, default: 0] += dealt
+                        walkers[wi] = w
+                        if w.hp <= 0 {
+                            money += w.bounty
+                            killedIDs.insert(targetSpawnID)
+                            unit.state = .holding
+                            unit.targetSpawnID = -1
+                            g.enemySwingTicks[targetSpawnID] = nil
+                        }
+                    }
+                    unit.swingTicksLeft = Simulation.fireTicks(melee.attackInterval)
+                case .disengage:
+                    if unit.targetSpawnID >= 0 {
+                        claimed.remove(unit.targetSpawnID)
+                        g.enemySwingTicks[unit.targetSpawnID] = nil
+                    }
+                    unit.state = .returning
+                    unit.targetSpawnID = -1
+                }
+
+                if unit.state == .fighting, unit.targetSpawnID >= 0,
+                   !killedIDs.contains(unit.targetSpawnID),
+                   let wi = indexByWalkerID[unit.targetSpawnID] {
+                    blockedWalkerIDs.insert(unit.targetSpawnID)
+                    var swing = g.enemySwingTicks[unit.targetSpawnID]
+                        ?? Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                    swing -= 1
+                    if swing <= 0 {
+                        let w = walkers[wi]
+                        unit.hp -= Double.random(in: w.damageMin...w.damageMax)
+                            * (1.0 - melee.defenseRating)
+                        swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                        if unit.hp <= 0 {
+                            claimed.remove(unit.targetSpawnID)
+                            blockedWalkerIDs.remove(unit.targetSpawnID)
+                            g.enemySwingTicks[unit.targetSpawnID] = nil
+                            unit.state = .dead
+                            unit.targetSpawnID = -1
+                            unit.respawnTicksLeft =
+                                Simulation.fireTicks(melee.respawnSeconds)
+                        }
+                    }
+                    if unit.targetSpawnID >= 0 {
+                        g.enemySwingTicks[unit.targetSpawnID] = swing
+                    }
+                }
+
+                g.units[ui] = unit
+            }
+            garrisonsBySlot[slot] = g
+        }
+
+        if !killedIDs.isEmpty {
+            walkers.removeAll { killedIDs.contains($0.id) }
+        }
+    }
+
+    private func publishMilitia(alpha: Double = 1) {
+        var out: [MilitiaSoldier] = []
+        for slot in garrisonsBySlot.keys.sorted() {
+            guard let g = garrisonsBySlot[slot],
+                  let tower = placedTower(atSlot: slot),
+                  let melee = towerLevel(for: tower)?.meleeUnit
+            else { continue }
+            for (i, u) in g.units.enumerated() where u.state != .dead {
+                let id = slot * 8 + i
+                let cur = CGPoint(x: u.position.x, y: u.position.y)
+                let prev = militiaPrevPositions[id] ?? cur
+                out.append(MilitiaSoldier(
+                    id: id,
+                    assetName: Self.militiaAssetName,
+                    position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
+                                      y: prev.y + (cur.y - prev.y) * alpha),
+                    hp: u.hp,
+                    maxHP: melee.hp))
+            }
+        }
+        militia = out
     }
 
     private func bodyPoint(_ walker: Walker) -> CGPoint {

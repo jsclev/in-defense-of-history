@@ -149,9 +149,13 @@ public struct MenuBarLayout: Equatable {
 public struct DoneButtonLayout: Equatable {
     public let frame: CGRect
 
-    public init(screen: ScreenGeometry, aspect: CGFloat, scaleOverride: CGFloat? = nil) {
+    /// `magnification` multiplies the resolved height AFTER the dimension's
+    /// clamps, so a screen asking for a bigger button gets the full factor
+    /// even where the ceiling has already cut the base size.
+    public init(screen: ScreenGeometry, aspect: CGFloat, scaleOverride: CGFloat? = nil,
+                magnification: CGFloat = 1) {
         let scale = scaleOverride ?? HudScale(viewSize: screen.physical.size).value
-        let height = HudSizing.doneButton.resolved(at: scale)
+        let height = HudSizing.doneButton.resolved(at: scale) * magnification
         frame = HudPlacementSolver.frame(
             size: CGSize(width: height * aspect, height: height),
             corner: .bottomTrailing,

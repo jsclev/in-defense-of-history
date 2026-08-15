@@ -63,7 +63,7 @@ struct SweepFixedInputs {
     /// This used to rescale positions into a separate 1600x900 design space while
     /// leaving tower ranges in database units, which silently gave simulated
     /// towers 2.4x the reach they have in the game. Everything is now in the one
-    /// canonical space - the playable rect comes from the canvas_spec table
+    /// canonical space - the play area comes from the canvas_spec table
     /// through LevelInfoDAO - so geometry passes through untouched.
     static func designLevel(db: Db, levelName: String, fixed: SweepFixedInputs) throws -> LevelInfo {
         let level = try db.levelInfoDao.getBy(id: fixed.levelID)
@@ -76,7 +76,7 @@ struct SweepFixedInputs {
             startedAt: level.startedAt, endedAt: level.endedAt,
             startingMoney: level.startingMoney, numStartingLives: level.numStartingLives,
             numWaves: fixed.numWaves,
-            playableRect: level.playableRect,
+            playArea: level.playArea,
             paths: paths, towerSlots: level.towerSlots, waves: []
         )
     }
@@ -210,11 +210,11 @@ struct SweepSpace {
             guard let base = fixed.towerLevels[kind], !base.isEmpty else { return false }
             let capped = base.prefix(fixed.unlocks[kind] ?? 0)
             let ranged = capped.contains { $0.shotMaxDamage > 0 || $0.terrorMax > 0 || $0.contagionChance > 0 }
-            let melee = fixed.fieldMelee && capped.contains { $0.meleeUnitCount > 0 }
+            let melee = fixed.fieldMelee && capped.contains { $0.meleeUnit != nil }
             return ranged || melee
         }
         self.meleeFielded = fixed.fieldMelee && combatKinds.contains { kind in
-            fixed.towerLevels[kind]?.first.map { $0.meleeUnitCount > 0 } ?? false
+            fixed.towerLevels[kind]?.first.map { $0.meleeUnit != nil } ?? false
         }
         self.aoeKinds = combatKinds.filter { kind in
             fixed.towerLevels[kind]?.contains { $0.aoeRadius > 0 } ?? false
@@ -275,7 +275,7 @@ struct SweepSpace {
     }
 
     private func isMeleeKind(_ kind: String) -> Bool {
-        (fixedInputs.towerLevels[kind]?.first?.meleeUnitCount ?? 0) > 0
+        fixedInputs.towerLevels[kind]?.first?.meleeUnit != nil
     }
 
     /// Every range the sweep tries for `kind`, as whole numbers.
@@ -504,7 +504,7 @@ enum SweepCatalog {
             guard let id = kindIDs[kind],
                   let baseLevels = fixed.towerLevels[kind], !baseLevels.isEmpty
             else { continue }
-            let isMelee = baseLevels[0].meleeUnitCount > 0
+            let isMelee = baseLevels[0].meleeUnit != nil
             if isMelee {
                 guard fixed.fieldMelee else { continue }
                 let levels = baseLevels.prefix(maxLevel).enumerated().map { n, base -> TowerLevel in
@@ -514,17 +514,11 @@ enum SweepCatalog {
                         l.cost = Int((raw / 5).rounded()) * 5
                     }
                     if let b = fixed.meleeBrackets[kind]?[n + 1] {
-                        l.meleeUnitHP = b.hp.lowerBound
+                        l.meleeUnit?.hp = b.hp.lowerBound
                             + perm.meleeHpBracketPosition * (b.hp.upperBound - b.hp.lowerBound)
-                        let avg = b.averageDamage.lowerBound
+                        l.meleeUnit?.attackRating = b.averageDamage.lowerBound
                             + perm.meleeDamageBracketPosition
                             * (b.averageDamage.upperBound - b.averageDamage.lowerBound)
-                        let designedAvg = (base.meleeUnitDamageMin + base.meleeUnitDamageMax) / 2
-                        if designedAvg > 0 {
-                            let scale = avg / designedAvg
-                            l.meleeUnitDamageMin = base.meleeUnitDamageMin * scale
-                            l.meleeUnitDamageMax = base.meleeUnitDamageMax * scale
-                        }
                     }
                     return l
                 }
@@ -639,7 +633,7 @@ struct GreedyCommander: CommanderPolicy {
             return (l.shotMinDamage + l.shotMaxDamage + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
         }
         let ranked = catalog.towerTypes.sorted { dps($0) > dps($1) }
-        let melee = catalog.towerTypes.first { ($0.levels.first?.meleeUnitCount ?? 0) > 0 }
+        let melee = catalog.towerTypes.first { $0.levels.first?.meleeUnit != nil }
         var order: [UUID] = []
         if let primary = ranked.first {
             order = [primary.id, primary.id]
@@ -711,7 +705,7 @@ struct NaiveCommander: CommanderPolicy {
             return (l.shotMinDamage + l.shotMaxDamage + l.terrorMin + l.terrorMax) / 2 / l.fireInterval
         }
         let ranked = catalog.towerTypes.sorted { dps($0) > dps($1) }
-        let melee = catalog.towerTypes.first { ($0.levels.first?.meleeUnitCount ?? 0) > 0 }
+        let melee = catalog.towerTypes.first { $0.levels.first?.meleeUnit != nil }
         var order: [UUID] = []
         if let primary = ranked.first {
             order = [primary.id, primary.id]
@@ -792,7 +786,7 @@ enum Sweep {
             id: base.id, name: base.name, campaign: base.campaign,
             startedAt: base.startedAt, endedAt: base.endedAt,
             startingMoney: perm.money, numStartingLives: perm.lives,
-            playableRect: base.playableRect,
+            playArea: base.playArea,
             paths: base.paths, towerSlots: base.towerSlots, waves: waves
         )
         let proto = GreedyCommander(level: level, catalog: catalog)
@@ -982,7 +976,7 @@ enum Sweep {
                 id: base.id, name: base.name, campaign: base.campaign,
                 startedAt: base.startedAt, endedAt: base.endedAt,
                 startingMoney: perm.money, numStartingLives: perm.lives,
-                playableRect: base.playableRect,
+                playArea: base.playArea,
                 paths: base.paths, towerSlots: base.towerSlots, waves: waves
             )
             let proto = GreedyCommander(level: level, catalog: catalog)

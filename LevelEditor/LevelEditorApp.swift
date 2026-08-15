@@ -40,8 +40,10 @@ struct LevelEditorApp: App {
         // file is missing there is nothing sane to fall back to.
         _ = EditorContent.shared
         guard CanvasSpec.isLoaded else {
-            fatalError("LevelEditor needs ~/Documents/in_defense_of_history.sqlite "
-                + "for the canvas_spec table - run Db/create_db.sh first")
+            fatalError("LevelEditor could not load the canvas_spec table. "
+                + "On the Mac, run Db/create_db.sh to refresh "
+                + "~/Documents/in_defense_of_history.sqlite; on iPad, "
+                + "reinstall so the bundled database is current.")
         }
     }
 
@@ -78,6 +80,12 @@ struct ZoomCommands: Commands {
 
     var body: some Commands {
         CommandGroup(after: .toolbar) {
+            Button(state?.showInspector == false ? "Show Inspector" : "Hide Inspector") {
+                state?.toggleInspector()
+            }
+            .keyboardShortcut("s", modifiers: [.control, .command])
+            .disabled(state == nil)
+            Divider()
             Button("Zoom In") { state?.zoomIn() }
                 .keyboardShortcut("+", modifiers: .command)
                 .disabled(state == nil)

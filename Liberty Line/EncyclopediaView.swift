@@ -16,7 +16,7 @@ struct EncyclopediaView: View {
     private static let enemiesFrame = CGRect(x: 2027, y: 620, width: 1138, height: 1420)
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .topLeading) {
             GeometryReader { geometry in
                 let rectHeight = ScreenGeometry(
                     fullSize: geometry.size, leading: 0, top: 0, trailing: 0, bottom: 0
@@ -46,17 +46,20 @@ struct EncyclopediaView: View {
                                    asset: "encyclopedia_enemies_category",
                                    frame: Self.enemiesFrame,
                                    scale: scale, origin: origin)
-
-                    let encScale = rectHeight / 680.625
-                    let doneFrame = DoneButtonLayout(
-                        screen: ScreenGeometry(proxy: geometry),
-                        aspect: DoneButton.aspect,
-                        scaleOverride: encScale).frame
-                    DoneButton(action: onExit)
-                        .hudFrame(doneFrame, in: ScreenGeometry(proxy: geometry))
                 }
             }
             .ignoresSafeArea()
+
+            GeometryReader { safeGeometry in
+                let screen = ScreenGeometry(proxy: safeGeometry)
+                DoneButton(action: onExit)
+                    .hudFrame(DoneButtonLayout(
+                        screen: screen,
+                        aspect: DoneButton.aspect,
+                        scaleOverride: screen.playable.height / 680.625).frame,
+                              in: screen)
+                    .ignoresSafeArea()
+            }
         }
         .persistentSystemOverlays(.hidden)
     }

@@ -144,6 +144,193 @@ static void spawnGarrison(device SimStateGPU& S, constant LevelGPU& lvl,
 
 static void removeEnemy(device SimStateGPU& S, constant LevelGPU& lvl,
                         constant PermGPU& perm,
+                        uint i, uint fate, device SimResultGPU* result);
+
+// Militia garrisons: MilitiaAI decides, engine executes — a tick-for-tick
+// mirror of Simulation.stepMilitia, including the rngCombat draw order
+// (strikes, then return blows, per unit). Also called with n == 0 so garrison
+// upkeep (respawn, heal, walk to rally) continues on an empty field; that
+// path draws no RNG. Returns whether any garrison exists (movement reads it
+// alongside muBlocked).
+static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
+                        constant PermGPU& perm, uint n, float dt,
+                        thread float2* positions, thread float* discBonus,
+                        thread uchar* muClaimed, thread uchar* muFree,
+                        thread uchar* muBlocked,
+                        thread Xoshiro& rngCombat,
+                        device SimResultGPU* result) {
+    bool hasMilitia = false;
+    for (uint slot = 0; slot < lvl.slotCount; slot++) {
+        if (S.towerLevel[slot] >= 0
+            && perm.towers[S.towerKind[slot]][0].meleeUnitCount > 0) {
+            hasMilitia = true;
+            break;
+        }
+    }
+    if (!hasMilitia) return false;
+
+    for (uint i = 0; i < n; i++) { muClaimed[i] = 0; muBlocked[i] = 0; }
+    for (uint m = 0; m < SIM_MAX_MELEE_UNITS; m++) {
+        if (S.muState[m] == SIM_MU_NONE) continue;
+        int ei = findEnemy(S, n, S.muTarget[m]);
+        if (ei >= 0) muClaimed[ei] = 1;
+    }
+    for (uint slot = 0; slot < lvl.slotCount; slot++) {
+        int tl = S.towerLevel[slot];
+        if (tl < 0) continue;
+        uint kind = S.towerKind[slot];
+        int unitCount = perm.towers[kind][0].meleeUnitCount;
+        if (unitCount <= 0) continue;
+        constant TowerLevelGPU& ms = perm.towers[kind][tl];
+        float2 towerPos = lvl.slots[slot];
+        float2 rally = perm.rallyPoints[slot];
+        // Free enemies near this post: alive, steady/shaken,
+        // blockable, unclaimed. Snapshot per slot, like the CPU:
+        // a disengage frees the enemy for LATER slots only.
+        for (uint i = 0; i < n; i++) {
+            muFree[i] = !S.removed[i] && S.state[i] != 2 && !muClaimed[i]
+                && !(lvl.enemyTypes[S.typeIndex[i]].flags & SIM_TRAIT_RIDE_DOWN);
+        }
+        uint count = min(uint(unitCount), uint(SIM_MAX_MELEE_UNITS_PER));
+        for (uint ui = 0; ui < count; ui++) {
+            uint m = slot * SIM_MAX_MELEE_UNITS_PER + ui;
+            if (S.muState[m] == SIM_MU_NONE) continue;
+            float2 post = rally;
+            if (count > 1) {
+                float ang = 2.0f * M_PI_F * float(ui) / float(count);
+                post += lvl.militiaRallySpread * float2(cos(ang), sin(ang));
+            }
+            int tei = findEnemy(S, n, S.muTarget[m]);
+            bool hasTarget = tei >= 0 && S.state[tei] != 2;
+            float2 targetPos = hasTarget ? positions[tei] : float2(0);
+            float2 pos = float2(S.muX[m], S.muY[m]);
+            if (S.muSwingTicks[m] > 0) S.muSwingTicks[m]--;
+
+            uint st = S.muState[m];
+            bool doStrike = false;
+            bool doDisengage = false;
+            if (st == SIM_MU_DEAD) {
+                if (S.muRespawnTicks[m] > 0) {
+                    S.muRespawnTicks[m]--;
+                } else {
+                    S.muX[m] = towerPos.x; S.muY[m] = towerPos.y;
+                    S.muHP[m] = ms.meleeUnitHP;
+                    S.muState[m] = SIM_MU_RETURNING;
+                    S.muTarget[m] = -1;
+                    S.muSwingTicks[m] = 0;
+                    S.muEnemySwingTicks[m] = 0;
+                    result->militiaRespawns++;
+                }
+            } else if (st == SIM_MU_RETURNING) {
+                float d = distance(pos, post);
+                if (d <= 2.0f) {
+                    S.muState[m] = SIM_MU_HOLDING;   // arrival
+                } else {
+                    float step = lvl.militiaMoveSpeed * dt;
+                    float2 np = d <= step ? post : mix(pos, post, step / d);
+                    S.muX[m] = np.x; S.muY[m] = np.y;
+                }
+            } else if (st == SIM_MU_HOLDING) {
+                // Nearest free enemy inside the scan radius of the
+                // POST (soldiers defend their ground).
+                int best = -1;
+                float bestDist = lvl.militiaEngageScanRadius;
+                for (uint i = 0; i < n; i++) {
+                    if (!muFree[i]) continue;
+                    float d = distance(positions[i], post);
+                    if (d <= bestDist) { bestDist = d; best = int(i); }
+                }
+                if (best >= 0) {
+                    S.muState[m] = SIM_MU_ENGAGING;
+                    S.muTarget[m] = int(S.spawnID[best]);
+                    muClaimed[best] = 1;
+                    muFree[best] = 0;
+                } else {
+                    S.muHP[m] = min(ms.meleeUnitHP,
+                                    S.muHP[m] + ms.meleeHealPerSecond * dt);
+                }
+            } else if (st == SIM_MU_ENGAGING) {
+                if (!hasTarget
+                    || distance(targetPos, post) > lvl.militiaLeashRadius) {
+                    doDisengage = true;
+                } else if (distance(pos, targetPos) <= lvl.militiaMeleeReach) {
+                    doStrike = true;   // first blow starts the fight
+                } else {
+                    float d = distance(pos, targetPos);
+                    float step = lvl.militiaMoveSpeed * dt;
+                    float2 np = d <= step ? targetPos
+                                          : mix(pos, targetPos, step / d);
+                    S.muX[m] = np.x; S.muY[m] = np.y;
+                }
+            } else if (st == SIM_MU_FIGHTING) {
+                if (!hasTarget
+                    || distance(targetPos, post) > lvl.militiaLeashRadius) {
+                    doDisengage = true;
+                } else if (S.muSwingTicks[m] <= 0) {
+                    doStrike = true;
+                }
+            }
+
+            if (doStrike) {
+                if (S.muState[m] == SIM_MU_ENGAGING) {
+                    S.muState[m] = SIM_MU_FIGHTING;
+                    S.muEnemySwingTicks[m] = short(lvl.militiaEnemySwingTicks);
+                }
+                if (tei >= 0) {
+                    uint i = uint(tei);
+                    constant EnemyTypeGPU& etype = lvl.enemyTypes[S.typeIndex[i]];
+                    float roll = rngCombat.range(ms.meleeDamageMin, ms.meleeDamageMax);
+                    S.hp[i] -= roll * (1.0f - etype.cover);
+                    if (S.hp[i] <= 0) {
+                        removeEnemy(S, lvl, perm, i, 0, result);
+                        result->militiaKills++;
+                        S.muState[m] = SIM_MU_HOLDING;
+                        S.muTarget[m] = -1;
+                        S.muEnemySwingTicks[m] = 0;
+                        commandDeathShock(S, lvl, n, i, positions, discBonus);
+                    }
+                }
+                S.muSwingTicks[m] = short(ms.meleeAttackTicks);
+            }
+            if (doDisengage) {
+                int ei = findEnemy(S, n, S.muTarget[m]);
+                if (ei >= 0) muClaimed[ei] = 0;
+                S.muState[m] = SIM_MU_RETURNING;
+                S.muTarget[m] = -1;
+                S.muEnemySwingTicks[m] = 0;
+            }
+
+            // Fights hold the enemy in place and draw return blows.
+            if (S.muState[m] == SIM_MU_FIGHTING && S.muTarget[m] >= 0) {
+                int fi = findEnemy(S, n, S.muTarget[m]);
+                if (fi >= 0) {
+                    muBlocked[fi] = 1;
+                    short swing = S.muEnemySwingTicks[m] - 1;
+                    if (swing <= 0) {
+                        constant EnemyTypeGPU& et = lvl.enemyTypes[S.typeIndex[fi]];
+                        S.muHP[m] -= rngCombat.range(et.damageMin, et.damageMax)
+                            * (1.0f - ms.meleeDefenseRating);
+                        swing = short(lvl.militiaEnemySwingTicks);
+                        if (S.muHP[m] <= 0) {
+                            result->militiaDeaths++;
+                            muClaimed[fi] = 0;
+                            muBlocked[fi] = 0;
+                            S.muState[m] = SIM_MU_DEAD;
+                            S.muTarget[m] = -1;
+                            S.muRespawnTicks[m] = short(ms.meleeRespawnTicks);
+                            S.muEnemySwingTicks[m] = 0;
+                        }
+                    }
+                    if (S.muTarget[m] >= 0) S.muEnemySwingTicks[m] = swing;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+static void removeEnemy(device SimStateGPU& S, constant LevelGPU& lvl,
+                        constant PermGPU& perm,
                         uint i, uint fate, device SimResultGPU* result) {
     // fate: 0 killed, 1 routed, 2 captured, 3 leaked
     if (S.removed[i]) return;
@@ -269,6 +456,17 @@ kernel void simulate(
                     if (S.gold >= cost + 40) {
                         S.gold -= cost;
                         S.towerLevel[slot] = char(lvlNow + 1);
+                        // Upgrading re-equips the garrison (CPU: Simulation.upgrade).
+                        constant TowerLevelGPU& nt = perm.towers[kind][lvlNow + 1];
+                        if (nt.meleeUnitCount > 0) {
+                            for (uint u = 0; u < uint(SIM_MAX_MELEE_UNITS_PER); u++) {
+                                uint mu = slot * SIM_MAX_MELEE_UNITS_PER + u;
+                                if (S.muState[mu] != SIM_MU_NONE
+                                    && S.muState[mu] != SIM_MU_DEAD) {
+                                    S.muHP[mu] = nt.meleeUnitHP;
+                                }
+                            }
+                        }
                     }
                     acted = true;
                 }
@@ -544,175 +742,12 @@ kernel void simulate(
                 S.projCount = w;
             }
 
-            // 5c. Militia garrisons: MilitiaAI decides, engine executes —
-            // a tick-for-tick mirror of Simulation.stepMilitia, including the
-            // rngCombat draw order (strikes, then return blows, per unit).
-            bool hasMilitia = false;
-            for (uint slot = 0; slot < lvl.slotCount; slot++) {
-                if (S.towerLevel[slot] >= 0
-                    && perm.towers[S.towerKind[slot]][0].meleeUnitCount > 0) {
-                    hasMilitia = true;
-                    break;
-                }
-            }
-            if (hasMilitia) {
-                for (uint i = 0; i < n; i++) { muClaimed[i] = 0; muBlocked[i] = 0; }
-                for (uint m = 0; m < SIM_MAX_MELEE_UNITS; m++) {
-                    if (S.muState[m] == SIM_MU_NONE) continue;
-                    int ei = findEnemy(S, n, S.muTarget[m]);
-                    if (ei >= 0) muClaimed[ei] = 1;
-                }
-                for (uint slot = 0; slot < lvl.slotCount; slot++) {
-                    int tl = S.towerLevel[slot];
-                    if (tl < 0) continue;
-                    uint kind = S.towerKind[slot];
-                    int unitCount = perm.towers[kind][0].meleeUnitCount;
-                    if (unitCount <= 0) continue;
-                    constant TowerLevelGPU& ms = perm.towers[kind][tl];
-                    float2 towerPos = lvl.slots[slot];
-                    float2 rally = perm.rallyPoints[slot];
-                    // Free enemies near this post: alive, steady/shaken,
-                    // blockable, unclaimed. Snapshot per slot, like the CPU:
-                    // a disengage frees the enemy for LATER slots only.
-                    for (uint i = 0; i < n; i++) {
-                        muFree[i] = !S.removed[i] && S.state[i] != 2 && !muClaimed[i]
-                            && !(lvl.enemyTypes[S.typeIndex[i]].flags & SIM_TRAIT_RIDE_DOWN);
-                    }
-                    uint count = min(uint(unitCount), uint(SIM_MAX_MELEE_UNITS_PER));
-                    for (uint ui = 0; ui < count; ui++) {
-                        uint m = slot * SIM_MAX_MELEE_UNITS_PER + ui;
-                        if (S.muState[m] == SIM_MU_NONE) continue;
-                        float2 post = rally;
-                        if (count > 1) {
-                            float ang = 2.0f * M_PI_F * float(ui) / float(count);
-                            post += lvl.militiaRallySpread * float2(cos(ang), sin(ang));
-                        }
-                        int tei = findEnemy(S, n, S.muTarget[m]);
-                        bool hasTarget = tei >= 0 && S.state[tei] != 2;
-                        float2 targetPos = hasTarget ? positions[tei] : float2(0);
-                        float2 pos = float2(S.muX[m], S.muY[m]);
-                        if (S.muSwingTicks[m] > 0) S.muSwingTicks[m]--;
-
-                        uint st = S.muState[m];
-                        bool doStrike = false;
-                        bool doDisengage = false;
-                        if (st == SIM_MU_DEAD) {
-                            if (S.muRespawnTicks[m] > 0) {
-                                S.muRespawnTicks[m]--;
-                            } else {
-                                S.muX[m] = towerPos.x; S.muY[m] = towerPos.y;
-                                S.muHP[m] = ms.meleeUnitHP;
-                                S.muState[m] = SIM_MU_RETURNING;
-                                S.muTarget[m] = -1;
-                                S.muSwingTicks[m] = 0;
-                                S.muEnemySwingTicks[m] = 0;
-                                result->militiaRespawns++;
-                            }
-                        } else if (st == SIM_MU_RETURNING) {
-                            float d = distance(pos, post);
-                            if (d <= 2.0f) {
-                                S.muState[m] = SIM_MU_HOLDING;   // arrival
-                            } else {
-                                float step = lvl.militiaMoveSpeed * dt;
-                                float2 np = d <= step ? post : mix(pos, post, step / d);
-                                S.muX[m] = np.x; S.muY[m] = np.y;
-                            }
-                        } else if (st == SIM_MU_HOLDING) {
-                            // Nearest free enemy inside the scan radius of the
-                            // POST (soldiers defend their ground).
-                            int best = -1;
-                            float bestDist = lvl.militiaEngageScanRadius;
-                            for (uint i = 0; i < n; i++) {
-                                if (!muFree[i]) continue;
-                                float d = distance(positions[i], post);
-                                if (d <= bestDist) { bestDist = d; best = int(i); }
-                            }
-                            if (best >= 0) {
-                                S.muState[m] = SIM_MU_ENGAGING;
-                                S.muTarget[m] = int(S.spawnID[best]);
-                                muClaimed[best] = 1;
-                                muFree[best] = 0;
-                            } else {
-                                S.muHP[m] = min(ms.meleeUnitHP,
-                                                S.muHP[m] + ms.meleeHealPerSecond * dt);
-                            }
-                        } else if (st == SIM_MU_ENGAGING) {
-                            if (!hasTarget
-                                || distance(targetPos, post) > lvl.militiaLeashRadius) {
-                                doDisengage = true;
-                            } else if (distance(pos, targetPos) <= lvl.militiaMeleeReach) {
-                                doStrike = true;   // first blow starts the fight
-                            } else {
-                                float d = distance(pos, targetPos);
-                                float step = lvl.militiaMoveSpeed * dt;
-                                float2 np = d <= step ? targetPos
-                                                      : mix(pos, targetPos, step / d);
-                                S.muX[m] = np.x; S.muY[m] = np.y;
-                            }
-                        } else if (st == SIM_MU_FIGHTING) {
-                            if (!hasTarget
-                                || distance(targetPos, post) > lvl.militiaLeashRadius) {
-                                doDisengage = true;
-                            } else if (S.muSwingTicks[m] <= 0) {
-                                doStrike = true;
-                            }
-                        }
-
-                        if (doStrike) {
-                            if (S.muState[m] == SIM_MU_ENGAGING) {
-                                S.muState[m] = SIM_MU_FIGHTING;
-                                S.muEnemySwingTicks[m] = short(lvl.militiaEnemySwingTicks);
-                            }
-                            if (tei >= 0) {
-                                uint i = uint(tei);
-                                constant EnemyTypeGPU& etype = lvl.enemyTypes[S.typeIndex[i]];
-                                float roll = rngCombat.range(ms.meleeDamageMin, ms.meleeDamageMax);
-                                S.hp[i] -= roll * (1.0f - etype.cover);
-                                if (S.hp[i] <= 0) {
-                                    removeEnemy(S, lvl, perm, i, 0, result);
-                                    result->militiaKills++;
-                                    S.muState[m] = SIM_MU_HOLDING;
-                                    S.muTarget[m] = -1;
-                                    S.muEnemySwingTicks[m] = 0;
-                                    commandDeathShock(S, lvl, n, i, positions, discBonus);
-                                }
-                            }
-                            S.muSwingTicks[m] = short(ms.meleeAttackTicks);
-                        }
-                        if (doDisengage) {
-                            int ei = findEnemy(S, n, S.muTarget[m]);
-                            if (ei >= 0) muClaimed[ei] = 0;
-                            S.muState[m] = SIM_MU_RETURNING;
-                            S.muTarget[m] = -1;
-                            S.muEnemySwingTicks[m] = 0;
-                        }
-
-                        // Fights hold the enemy in place and draw return blows.
-                        if (S.muState[m] == SIM_MU_FIGHTING && S.muTarget[m] >= 0) {
-                            int fi = findEnemy(S, n, S.muTarget[m]);
-                            if (fi >= 0) {
-                                muBlocked[fi] = 1;
-                                short swing = S.muEnemySwingTicks[m] - 1;
-                                if (swing <= 0) {
-                                    constant EnemyTypeGPU& et = lvl.enemyTypes[S.typeIndex[fi]];
-                                    S.muHP[m] -= rngCombat.range(et.damageMin, et.damageMax);
-                                    swing = short(lvl.militiaEnemySwingTicks);
-                                    if (S.muHP[m] <= 0) {
-                                        result->militiaDeaths++;
-                                        muClaimed[fi] = 0;
-                                        muBlocked[fi] = 0;
-                                        S.muState[m] = SIM_MU_DEAD;
-                                        S.muTarget[m] = -1;
-                                        S.muRespawnTicks[m] = short(ms.meleeRespawnTicks);
-                                        S.muEnemySwingTicks[m] = 0;
-                                    }
-                                }
-                                if (S.muTarget[m] >= 0) S.muEnemySwingTicks[m] = swing;
-                            }
-                        }
-                    }
-                }
-            }
+            // 5c. Militia garrisons (tick-for-tick mirror of
+            // Simulation.stepMilitia; body lives in militiaStep above).
+            bool hasMilitia = militiaStep(S, lvl, perm, n, dt,
+                                          positions, discBonus,
+                                          muClaimed, muFree, muBlocked,
+                                          rngCombat, result);
 
             // 6. Contagion.
             S.contagionAcc += dt;
@@ -834,6 +869,12 @@ kernel void simulate(
                 w++;
             }
             S.n = w;
+        } else {
+            // Empty field: garrison upkeep still runs — soldiers respawn,
+            // heal, and walk to the rally point between spawns (mirrors
+            // Simulation.step's else branch); draws no RNG.
+            militiaStep(S, lvl, perm, 0, dt, positions, discBonus,
+                        muClaimed, muFree, muBlocked, rngCombat, result);
         }
 
         // 10. End conditions.

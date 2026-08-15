@@ -4,11 +4,11 @@ struct LevelMapProjection {
     /// The virtual canvas, from canvas_spec. Map artwork is required to be
     /// exactly this size, so the projection never asks the image.
     var canvasSize: CGSize { CanvasSpec.size }
-    let playableRect: CGRect
+    let playArea: CGRect
     let fitRect: CGRect
 
     var scale: CGFloat {
-        min(fitRect.width / playableRect.width, fitRect.height / playableRect.height)
+        min(fitRect.width / playArea.width, fitRect.height / playArea.height)
     }
 
     private var origin: CGPoint {
@@ -16,8 +16,8 @@ struct LevelMapProjection {
         // top of the canvas here. Written out rather than relying on the rect
         // happening to be vertically centred.
         CGPoint(
-            x: fitRect.midX - playableRect.midX * scale,
-            y: fitRect.midY - (canvasSize.height - playableRect.midY) * scale
+            x: fitRect.midX - playArea.midX * scale,
+            y: fitRect.midY - (canvasSize.height - playArea.midY) * scale
         )
     }
 
@@ -39,102 +39,7 @@ struct LevelMapProjection {
     }
 }
 
-enum RadialMenu {
-    static let radius: CGFloat = 91.0
-
-    /// 10% up from the tuned 86.70, judged on device.
-    static let buttonSide: CGFloat = 95.37
-
-    /// Fraction of the parchment well an icon fills. ONE number for every
-    /// menu item — build choices, upgrade choices, locked and MAX states all
-    /// read `iconSide(count:)`; nothing sizes a menu icon any other way.
-    static let iconWellFraction: CGFloat = 0.72
-
-    /// Icon side for a menu with `count` choices, derived from that art's
-    /// own well size — the wells differ between the 4-choice art and the
-    /// 1-3 choice art, so icon size must too.
-    static func iconSide(count: Int) -> CGFloat {
-        iconWellDiameter(count: count) * iconWellFraction
-    }
-
-    /// The menu's visual centre sits this fraction of the drawn background
-    /// diameter BELOW the anchor (the slot point) — the menu read as centred
-    /// too high on the slot. Applied once, in menuCenter, which background
-    /// and every item share.
-    static let centerDropFraction: CGFloat = 0.15
-
-    static func menuCenter(anchor: CGPoint, count: Int, scale: CGFloat) -> CGPoint {
-        CGPoint(x: anchor.x,
-                y: anchor.y + backgroundDiameter(count: count) * centerDropFraction * scale)
-    }
-
-    private static let fourChoiceArtScale: CGFloat = (90.5 / 409.5) * 0.9 * 0.92 * 0.96
-
-    private static let variantArtScale: CGFloat = radius / 541
-
-    private struct Art {
-        let assetName: String
-        let canvasPx: CGFloat
-        let parchmentPx: CGFloat
-        let pointsPerPx: CGFloat
-        let bubbleOffsetsPx: [CGSize]
-    }
-
-    private static let arts: [Int: Art] = [
-        1: Art(assetName: "radial_menu_1_choice", canvasPx: 1536,
-               parchmentPx: 192, pointsPerPx: variantArtScale,
-               bubbleOffsetsPx: [CGSize(width: 0, height: -540)]),
-        2: Art(assetName: "radial_menu_2_choices", canvasPx: 1536,
-               parchmentPx: 192, pointsPerPx: variantArtScale,
-               bubbleOffsetsPx: [CGSize(width: 0, height: -540),
-                                 CGSize(width: 0, height: 543)]),
-        3: Art(assetName: "radial_menu_3_choices", canvasPx: 1536,
-               parchmentPx: 192, pointsPerPx: variantArtScale,
-               bubbleOffsetsPx: [CGSize(width: 0, height: -540),
-                                 CGSize(width: 469, height: 270),
-                                 CGSize(width: -469, height: 271)]),
-        4: Art(assetName: "tower_menu_v02", canvasPx: 1536,
-               parchmentPx: 251, pointsPerPx: fourChoiceArtScale,
-               bubbleOffsetsPx: [CGSize(width: -366, height: -366),
-                                 CGSize(width: 366, height: -366),
-                                 CGSize(width: 366, height: 366),
-                                 CGSize(width: -366, height: 366)]),
-    ]
-
-    private static func art(count: Int) -> Art {
-        arts[min(max(count, 1), 4)]!
-    }
-
-    static func backgroundAssetName(count: Int) -> String {
-        art(count: count).assetName
-    }
-
-    static func backgroundDiameter(count: Int) -> CGFloat {
-        let art = art(count: count)
-        return art.canvasPx * art.pointsPerPx
-    }
-
-    static func iconWellDiameter(count: Int) -> CGFloat {
-        let art = art(count: count)
-        return art.parchmentPx * art.pointsPerPx
-    }
-
-    /// Menu icons sit dead-centre on the parchment bubbles baked into the
-    /// radial background art, so item positions are exactly the art's bubble
-    /// offsets — no spread factor. (`itemSpread` existed to push the old
-    /// framed buttons outward; with the frames gone it only displaced icons
-    /// off their bubbles.)
-    static func itemOffset(index: Int, count: Int) -> CGSize {
-        let art = art(count: count)
-        guard art.bubbleOffsetsPx.indices.contains(index) else {
-            let angle = Angle.degrees(-90 + Double(index) * 360 / Double(count))
-            return CGSize(width: radius * cos(angle.radians),
-                          height: radius * sin(angle.radians))
-        }
-        return CGSize(width: art.bubbleOffsetsPx[index].width * art.pointsPerPx,
-                      height: art.bubbleOffsetsPx[index].height * art.pointsPerPx)
-    }
-}
+typealias RadialMenu = RadialMenuLayout
 
 struct LevelMapView: View {
     var node: CampaignNode
@@ -173,6 +78,44 @@ struct LevelMapView: View {
     /// the capsules under each slot again in debug mode.
     private static let showSlotTapInfo = false
 
+    /// The entrance icon's box: the slot tap target's smaller side, so the
+    /// icon scales with the map yet never drops below Apple's 44pt minimum.
+    private func entranceIconSize(projection: LevelMapProjection) -> CGFloat {
+        let tap = slotTapSize(projection: projection)
+        return min(tap.width, tap.height)
+    }
+
+    /// A path mouth can sit in the canvas bleed outside the play area — past
+    /// the screen edge on some devices — so the icon stays centred on its
+    /// entrance whenever that fits and otherwise pulls the minimum distance
+    /// needed to sit whole inside the safe rect.
+    private func entranceIconPosition(for entrance: CGPoint, size: CGFloat,
+                                      projection: LevelMapProjection,
+                                      safe: CGRect) -> CGPoint {
+        let p = projection.viewPoint(entrance)
+        let half = size / 2
+        return CGPoint(x: min(max(p.x, safe.minX + half), safe.maxX - half),
+                       y: min(max(p.y, safe.minY + half), safe.maxY - half))
+    }
+
+    /// One icon position per held-wave entrance, clamped into the safe
+    /// rect. Mouths that land within an icon of one another collapse to a
+    /// single icon: double-tapping any icon starts the whole wave, so
+    /// near-coincident mouths never need a stack of pulsing bubbles.
+    private func entranceIconPositions(iconSize: CGFloat,
+                                       projection: LevelMapProjection,
+                                       safe: CGRect) -> [CGPoint] {
+        var placed: [CGPoint] = []
+        for entrance in runner.entrancePositions {
+            let p = entranceIconPosition(for: entrance, size: iconSize,
+                                         projection: projection, safe: safe)
+            if placed.allSatisfy({ hypot($0.x - p.x, $0.y - p.y) >= iconSize }) {
+                placed.append(p)
+            }
+        }
+        return placed
+    }
+
     private static func debugRangeTint(for range: CGFloat) -> Color {
         debugRangeBands.first { range < $0.upperBound }?.tint
             ?? debugRangeBands[debugRangeBands.count - 1].tint
@@ -204,7 +147,7 @@ struct LevelMapView: View {
             let metrics = HudMetrics(viewSize: fullSize)
             ZStack(alignment: .topLeading) {
                 GeometryReader { gameGeometry in
-                    content(in: gameGeometry.size, safe: screen.safe)
+                    content(in: gameGeometry.size, screen: screen)
                 }
                 .ignoresSafeArea()
 
@@ -229,10 +172,6 @@ struct LevelMapView: View {
         .onDisappear { runner.stop() }
     }
 
-    /// Fraction of the corner-button frame the glyph fills. 0.66 crowded the
-    /// frame on device; trimmed 18% then a further 10%, judged on device.
-    private static let controlGlyphFraction: CGFloat = 0.4871
-
     /// The single top-of-screen HUD entity. Everything that sits along the
     /// top — counters, wave readout, speed/pause buttons — renders inside
     /// this one container, vertically positioned by one TopBarLayout, whose
@@ -251,52 +190,52 @@ struct LevelMapView: View {
                                topBar: TopBarLayout) -> some View {
         let layout = CornerButtonsLayout(screen: screen, topBar: topBar)
         return ZStack(alignment: .topLeading) {
-            cornerButton(glyph: "speed_up_icon_glyph", frame: layout.speed,
+            cornerButton(asset: "speed_up_icon", frame: layout.speed,
                          in: screen) { runner.speedUp() }
-            cornerButton(glyph: "pause_icon_glyph", frame: layout.pause,
+            cornerButton(asset: "pause_icon", frame: layout.pause,
                          in: screen, action: onExit)
         }
     }
 
-    private func cornerButton(glyph: String, frame: CGRect,
+    private func cornerButton(asset: String, frame: CGRect,
                               in screen: ScreenGeometry,
                               action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            ZStack {
-                // The same parchment bubble the tower menu's choices sit on,
-                // so the corner controls and the radial menu read as one
-                // family of circular buttons.
-                Image("radial_menu_bubble")
-                    .resizable()
-                    .interpolation(.high)
-                    .scaledToFit()
-                Image(glyph)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: frame.width * Self.controlGlyphFraction,
-                           height: frame.height * Self.controlGlyphFraction)
-            }
-            .contentShape(Circle())
+            // The composed square tower-style controls: glyph baked into the
+            // same ashwood frame the tower menu's choices sit on. The explicit
+            // frame pins the tap rect to the layout box, not the fitted image.
+            Image(asset)
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: frame.width, height: frame.height)
+                .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .hudFrame(frame, in: screen)
     }
 
-    private func content(in viewSize: CGSize, safe: CGRect) -> some View {
+    private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
+        // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
+        let safe = screen.safe
         let projection = LevelMapProjection(
-            playableRect: runner.playableRect,
-            fitRect: safe
+            playArea: runner.playArea,
+            fitRect: screen.playable
         )
         let metrics = HudMetrics(viewSize: viewSize)
-        let sprites = MapSpriteScale(playableRect: runner.playableRect,
+        let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
+        let art = runner.mapArt
         return ZStack(alignment: .topLeading) {
             Color.black
 
             Group {
                 Image(RadialMenu.backgroundAssetName(count: TowerKind.allCases.count))
                 Image(RadialMenu.backgroundAssetName(count: 1))
+                Image(RadialMenu.backgroundAssetName(count: 2))
+                Image(RadialMenu.backgroundAssetName(count: 3))
                 Image("radial_menu_bubble")
+                Image("tower_menu_square_frame")
                 ForEach(TowerKind.allCases) { kind in
                     Image(kind.menuIconName)
                 }
@@ -306,15 +245,14 @@ struct LevelMapView: View {
             .opacity(0.001)
             .allowsHitTesting(false)
 
-            Image(runner.mapImageName)
-                .resizable()
+            art.underlay
                 .frame(width: projection.imageFrameSize.width,
                        height: projection.imageFrameSize.height)
                 .position(projection.imageCenter)
 
             // The slot pads. Every slot renders at the one footprint in
             // canvas_spec, scaled by the same projection that fits the
-            // virtual playable rect to the screen.
+            // virtual play area to the screen.
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { _, slotPosition in
                 Image("tower_slot_field")
                     .resizable()
@@ -347,7 +285,7 @@ struct LevelMapView: View {
                         let slotBox = runner.slotSize
                         // Drawn on tower_slot.png's canvas, so it starts from
                         // the slot's own box, scaled by the same projection
-                        // that fits the playable rect to the screen —
+                        // that fits the play area to the screen —
                         // scaledToFit matches the renderer's `fit: "inside"`.
                         // On device that exact fit read too small and too
                         // sunken, so the art draws scaled up and lifted; both
@@ -407,6 +345,46 @@ struct LevelMapView: View {
                 }
             }
 
+            ForEach(runner.militia) { soldier in
+                let spriteHeight = sprites.points(MapSpriteSizing.walker)
+                let footPoint = projection.viewPoint(soldier.position)
+                Image(soldier.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: spriteHeight)
+                    .position(x: footPoint.x, y: footPoint.y - spriteHeight / 2)
+
+                if soldier.hp < soldier.maxHP {
+                    let fraction = CGFloat(max(0, soldier.hp / soldier.maxHP))
+                    let barWidth = sprites.points(MapSpriteSizing.healthBarWidth)
+                    let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color.red)
+                        Capsule()
+                            .fill(Color.blue)
+                            .frame(width: barWidth * fraction, height: barHeight)
+                    }
+                    .frame(width: barWidth, height: barHeight)
+                    .position(x: footPoint.x,
+                              y: footPoint.y - spriteHeight - sprites.points(MapSpriteSizing.walkerLabelLift))
+                }
+            }
+
+            // A path can begin and end close to the play area's side
+            // boundaries.  This full-canvas alpha layer contains only
+            // compact forest clusters at those GeoJSON endpoints.  Rendering
+            // it after walkers makes soldiers enter from and disappear into
+            // foliage on wide iPhones; interactive controls remain above it.
+            if let forestName = art.forestOcclusionName {
+                Image(forestName)
+                    .resizable()
+                    .frame(width: projection.imageFrameSize.width,
+                           height: projection.imageFrameSize.height)
+                    .position(projection.imageCenter)
+                    .allowsHitTesting(false)
+            }
+
             Group {
                 ForEach(runner.projectiles) { projectile in
                     if let assetName = projectile.kind.projectileAssetName {
@@ -421,6 +399,19 @@ struct LevelMapView: View {
             }
             .opacity(runner.isDefeated ? 0 : 1)
             .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
+
+            // The occlusion overlay: level art that covers the entrances and
+            // exits, hiding enemies before they enter and after they leave.
+            // Above every playable layer, below the menus and the HUD, and
+            // transparent to touches so the slots under it stay tappable.
+            if let occlusionName = art.occlusionName {
+                Image(occlusionName)
+                    .resizable()
+                    .frame(width: projection.imageFrameSize.width,
+                           height: projection.imageFrameSize.height)
+                    .position(projection.imageCenter)
+                    .allowsHitTesting(false)
+            }
 
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                 let slotTap = slotTapSize(projection: projection)
@@ -445,6 +436,25 @@ struct LevelMapView: View {
                         .frame(width: slotTap.width, height: slotTap.height)
                 }
                 .position(projection.viewPoint(slotPosition))
+            }
+
+            // The entrance icons: one on each mouth the held wave will
+            // spawn from. Above the occlusion art that covers the entrances
+            // and above the slot buttons — a slot's invisible tap ellipse
+            // can reach an entrance, and while the level waits the icon
+            // must win that overlap — but below the menus. Double-tapping
+            // any one of them starts the wave.
+            if runner.awaitingWaveStart {
+                let iconSize = entranceIconSize(projection: projection)
+                ForEach(Array(entranceIconPositions(iconSize: iconSize,
+                                                    projection: projection,
+                                                    safe: safe).enumerated()),
+                        id: \.offset) { _, position in
+                    EntranceWaveButton(size: iconSize) {
+                        runner.startNextWave()
+                    }
+                    .position(position)
+                }
             }
 
             if debugMode, Self.showSlotTapInfo {
@@ -483,6 +493,12 @@ struct LevelMapView: View {
 
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {
+                if let armed = runner.armedBuildKind,
+                   let radius = runner.buildPreviewRadius(for: armed) {
+                    rangeOverlay(
+                        center: projection.viewPoint(runner.slotPositions[buildSlot]),
+                        diameter: projection.viewLength(radius) * 2)
+                }
                 dismissCatcher(viewSize: viewSize)
                 radialBuildMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
                                 scale: metrics.scale)
@@ -490,6 +506,15 @@ struct LevelMapView: View {
             if let upgradeSlot = runner.selectedTowerSlotIndex,
                runner.slotPositions.indices.contains(upgradeSlot),
                let tower = runner.placedTower(atSlot: upgradeSlot) {
+                // Armed upgrade previews the upgraded tier's range; otherwise
+                // the overlay shows the tower's current range.
+                let previewRadius = runner.armedUpgradeBranch
+                    .flatMap { runner.upgradePreviewRadius(branch: $0) }
+                if let radius = previewRadius ?? runner.rangeOverlayRadius(for: tower) {
+                    rangeOverlay(
+                        center: projection.viewPoint(runner.slotPositions[upgradeSlot]),
+                        diameter: projection.viewLength(radius) * 2)
+                }
                 dismissCatcher(viewSize: viewSize)
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                             scale: metrics.scale)
@@ -641,6 +666,25 @@ struct LevelMapView: View {
             .stroke(tint.opacity(0.8), lineWidth: 1))
     }
 
+    /// Light-green range ring under a radial menu: shown while a build choice
+    /// is armed awaiting its confirming second tap, and while a placed
+    /// tower's upgrade menu is open. Attack range for shooting towers, rally
+    /// radius for melee. Never hit-tested, so it cannot swallow the
+    /// confirming or cancelling tap.
+    private func rangeOverlay(center: CGPoint, diameter: CGFloat) -> some View {
+        Circle()
+            .fill(Color.green.opacity(0.16))
+            .overlay(
+                ZStack {
+                    Circle().stroke(.black.opacity(0.35), lineWidth: 4)
+                    Circle().stroke(Color.green.opacity(0.8), lineWidth: 2)
+                }
+            )
+            .frame(width: diameter, height: diameter)
+            .position(center)
+            .allowsHitTesting(false)
+    }
+
     private func dismissCatcher(viewSize: CGSize) -> some View {
         Color.black.opacity(0.001)
             .frame(width: viewSize.width, height: viewSize.height)
@@ -658,8 +702,9 @@ struct LevelMapView: View {
             ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
                 let offset = RadialMenu.itemOffset(index: index, count: kinds.count)
                 BuildMenuItem(kind: kind, isAvailable: runner.maxLevel(for: kind) >= 1,
-                              count: kinds.count, scale: scale) {
-                    runner.buildTower(kind)
+                              isArmed: runner.armedBuildKind == kind,
+                              scale: scale) {
+                    runner.tapBuildButton(kind)
                 }
                 .position(x: center.x + offset.width * scale,
                           y: center.y + offset.height * scale)
@@ -681,7 +726,7 @@ struct LevelMapView: View {
                 let offset = RadialMenu.itemOffset(index: 0, count: 1)
                 UpgradeMenuItem(iconName: tower.kind.menuIconName,
                                 dropKind: tower.kind, cost: nil,
-                                count: count, scale: scale) {}
+                                isArmed: false, scale: scale) {}
                     .position(x: center.x + offset.width * scale,
                               y: center.y + offset.height * scale)
             } else {
@@ -692,8 +737,10 @@ struct LevelMapView: View {
                                                 branch: offer.branch) ?? tower.kind.menuIconName)
                         : tower.kind.menuIconName
                     UpgradeMenuItem(iconName: iconName, dropKind: tower.kind,
-                                    cost: offer.cost, count: count, scale: scale) {
-                        runner.upgradeSelectedTower(branch: offer.branch)
+                                    cost: offer.cost,
+                                    isArmed: runner.armedUpgradeBranch == offer.branch,
+                                    scale: scale) {
+                        runner.tapUpgradeButton(branch: offer.branch)
                     }
                     .position(x: center.x + offset.width * scale,
                               y: center.y + offset.height * scale)
@@ -793,10 +840,45 @@ struct LevelMapView: View {
 
 }
 
+/// The icon on a path entrance while a wave is waiting to be called.
+/// Double-tap to start the wave — a single tap does nothing, so a stray
+/// tap near an entrance never brings the enemy early. The parchment bubble
+/// sits on the map itself, apart from the square HUD controls; the redcoat
+/// inside says who is coming. The pulse marks it as the thing the level is
+/// waiting on.
+private struct EntranceWaveButton: View {
+    let size: CGFloat
+    let action: () -> Void
+
+    @State private var isPulsing = false
+
+    var body: some View {
+        ZStack {
+            Image("radial_menu_bubble")
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+            Image("redcoat_regular")
+                .resizable()
+                .scaledToFit()
+                .frame(width: size * 0.62, height: size * 0.62)
+        }
+        .frame(width: size, height: size)
+        .scaleEffect(isPulsing ? 1.08 : 0.94)
+        .contentShape(Circle())
+        .onTapGesture(count: 2, perform: action)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true)) {
+                isPulsing = true
+            }
+        }
+    }
+}
+
 private struct BuildMenuItem: View {
     let kind: TowerKind
     let isAvailable: Bool
-    let count: Int
+    let isArmed: Bool
     let scale: CGFloat
     let action: () -> Void
 
@@ -807,11 +889,17 @@ private struct BuildMenuItem: View {
 
     private var icon: some View {
         let buttonSide = RadialMenu.buttonSide * scale
-        let iconSize = RadialMenu.iconSide(count: count) * scale
-        // The icon is centred in the tap box, and the tap box is centred on
-        // the bubble by itemOffset — no offsets anywhere in between. Size
-        // comes from the well, the same as every other menu item.
+        let frameSide = RadialMenu.squareFrameSide * scale
+        let iconSize = RadialMenu.menuIconSide * scale
+        // The opaque square frame covers the round well baked into the radial
+        // art; the pictogram is centred in the tap box, which itemOffset
+        // centres on the bubble — no offsets anywhere in between.
         return ZStack {
+            Image("tower_menu_square_frame")
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: frameSide, height: frameSide)
             Image(isAvailable ? kind.menuIconName : "tower_locked_icon")
                 .resizable()
                 .scaledToFit()
@@ -819,7 +907,16 @@ private struct BuildMenuItem: View {
                        height: isAvailable ? iconSize : iconSize * 0.81)
         }
         .frame(width: buttonSide, height: buttonSide)
-        .contentShape(Circle())
+        .overlay(alignment: .topTrailing) {
+            if isArmed {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: iconSize * 0.38, weight: .bold))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, .green)
+                    .shadow(radius: 1 * scale)
+            }
+        }
+        .contentShape(Rectangle())
     }
 }
 
@@ -827,13 +924,14 @@ private struct UpgradeMenuItem: View {
     let iconName: String
     let dropKind: TowerKind
     let cost: Int?
-    let count: Int
+    let isArmed: Bool
     let scale: CGFloat
     let action: () -> Void
 
     var body: some View {
         let buttonSide = RadialMenu.buttonSide * scale
-        let iconSize = RadialMenu.iconSide(count: count) * scale
+        let frameSide = RadialMenu.squareFrameSide * scale
+        let iconSize = RadialMenu.menuIconSide * scale
         // The button's layout box is exactly the tap box, with the icon
         // centred in it, so positioning the button centres the icon on its
         // parchment bubble. The cost capsule hangs below as an overlay and
@@ -841,6 +939,11 @@ private struct UpgradeMenuItem: View {
         // pair instead, riding the icon up off the bubble.
         return Button(action: action) {
             ZStack {
+                Image("tower_menu_square_frame")
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: frameSide, height: frameSide)
                 Image(iconName)
                     .resizable()
                     .scaledToFit()
@@ -854,7 +957,16 @@ private struct UpgradeMenuItem: View {
                     // Sits the capsule's top just under the tap box.
                     .alignmentGuide(.bottom) { $0[.top] - 3 * scale }
             }
-            .contentShape(Circle())
+            .overlay(alignment: .topTrailing) {
+                if isArmed {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: iconSize * 0.38, weight: .bold))
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.white, .green)
+                        .shadow(radius: 1 * scale)
+                }
+            }
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .disabled(cost == nil)

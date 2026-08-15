@@ -26,6 +26,13 @@ sounds/
 # The LevelEditor's own app icon is small and genuinely part of the tool.
 !LevelEditor/Assets.xcassets/AppIcon.appiconset/*.png
 
+# The common Images folder at the repo root: shared art the tools themselves
+# render with (the tower slot pad and the path edge sprites the editor draws
+# on its canvas). Deliberately version controlled here so the editor never
+# depends on the data repo.
+!Images/*.png
+!Images/**/*.png
+
 ## User settings
 xcuserdata/
 

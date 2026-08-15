@@ -1,25 +1,21 @@
 import Foundation
 import CoreGraphics
 
-struct BrushSample: Equatable {
-    var point: Point
-    var halfWidth: Double
-}
-
+/// A pencil stroke in progress: just the points. Path width is fixed by
+/// canvas_spec.path_width and is not an authoring choice, so the stroke
+/// carries no per-sample width.
 struct BrushStroke: Equatable {
-    var samples: [BrushSample] = []
+    var points: [Point] = []
 
-    var isEmpty: Bool { samples.isEmpty }
+    var isEmpty: Bool { points.isEmpty }
 
-    mutating func add(_ sample: BrushSample, minSpacing: Double) {
-        guard let last = samples.last else {
-            samples.append(sample)
+    mutating func add(_ point: Point, minSpacing: Double) {
+        guard let last = points.last else {
+            points.append(point)
             return
         }
-        if last.point.distance(to: sample.point) >= minSpacing {
-            samples.append(sample)
-        } else if sample.halfWidth > last.halfWidth {
-            samples[samples.count - 1].halfWidth = sample.halfWidth
+        if last.distance(to: point) >= minSpacing {
+            points.append(point)
         }
     }
 }
@@ -42,60 +38,31 @@ enum BrushGeometry {
         return out
     }
 
-    static func smooth(widths: [Double], passes: Int = 2) -> [Double] {
-        guard widths.count > 2 else { return widths }
-        var out = widths
-        for _ in 0..<passes {
-            guard out.count > 2 else { break }
-            var next: [Double] = [out[0]]
-            for i in 0..<(out.count - 1) {
-                let a = out[i], b = out[i + 1]
-                next.append(a * 0.75 + b * 0.25)
-                next.append(a * 0.25 + b * 0.75)
-            }
-            next.append(out[out.count - 1])
-            out = next
-        }
-        return out
-    }
-
-    static func resample(points: [Point], widths: [Double], every step: Double)
-        -> (points: [Point], widths: [Double]) {
-        guard points.count > 1, step > 0 else { return (points, widths) }
-        func width(at i: Int) -> Double { widths.indices.contains(i) ? widths[i] : (widths.last ?? 0) }
-
-        var outPts: [Point] = [points[0]]
-        var outWs: [Double] = [width(at: 0)]
+    static func resample(points: [Point], every step: Double) -> [Point] {
+        guard points.count > 1, step > 0 else { return points }
+        var out: [Point] = [points[0]]
         var carry = 0.0
-
         for i in 0..<(points.count - 1) {
             let a = points[i], b = points[i + 1]
             let segLen = a.distance(to: b)
             guard segLen > 0 else { continue }
-            let wa = width(at: i), wb = width(at: i + 1)
             var travelled = step - carry
             while travelled <= segLen {
-                let t = travelled / segLen
-                outPts.append(Point.lerp(a, b, t))
-                outWs.append(wa + (wb - wa) * t)
+                out.append(Point.lerp(a, b, travelled / segLen))
                 travelled += step
             }
             carry = segLen - (travelled - step)
         }
-
-        if let last = points.last, outPts.last?.distance(to: last) ?? .infinity > step * 0.25 {
-            outPts.append(last)
-            outWs.append(width(at: points.count - 1))
+        if out.count < 2 || out[out.count - 1].distance(to: points[points.count - 1]) > step / 2 {
+            out.append(points[points.count - 1])
         }
-        return (outPts, outWs)
+        return out
     }
 
-    static func normals(_ pts: [Point]) -> [Point] {
-        guard pts.count > 1 else { return pts.map { _ in Point(0, -1) } }
-        var out: [Point] = []
-        for i in pts.indices {
-            let prev = pts[max(0, i - 1)]
-            let next = pts[min(pts.count - 1, i + 1)]
+    static func normals(_ points: [Point]) -> [Point] {
+        points.indices.map { i in
+            let prev = points[max(i - 1, 0)]
+            let next = points[min(i + 1, points.count - 1)]
             var dx = next.x - prev.x
             var dy = next.y - prev.y
             let len = (dx * dx + dy * dy).squareRoot()
@@ -106,36 +73,39 @@ enum BrushGeometry {
                 dx = 1
                 dy = 0
             }
-            out.append(Point(-dy, dx))
+            return Point(-dy, dx)
         }
-        return out
     }
 
-    static func offsetEdge(points: [Point], halfWidths: [Double], side: Double) -> [Point] {
+    static func offsetEdge(points: [Point], side: Double) -> [Point] {
         guard !points.isEmpty else { return [] }
         let ns = normals(points)
+        let hw = MapGeometry.roadHalfWidth
         return points.indices.map { i in
-            let hw = halfWidths.indices.contains(i) ? halfWidths[i] : (halfWidths.last ?? 0)
-            return Point(points[i].x + ns[i].x * hw * side,
-                         points[i].y + ns[i].y * hw * side)
+            Point(points[i].x + ns[i].x * hw * side,
+                  points[i].y + ns[i].y * hw * side)
         }
     }
 
-    static func outerEdge(points: [Point], halfWidths: [Double]) -> [Point] {
+    static func outerEdge(points: [Point]) -> [Point] {
         guard points.count >= 2 else { return [] }
-        let left = offsetEdge(points: points, halfWidths: halfWidths, side: 1)
-        let right = offsetEdge(points: points, halfWidths: halfWidths, side: -1)
+        let left = offsetEdge(points: points, side: 1)
+        let right = offsetEdge(points: points, side: -1)
         return left + right.reversed()
     }
 
-    static func commit(_ stroke: BrushStroke, spacing: Double)
-        -> (points: [Point], halfWidths: [Double])? {
-        let raw = stroke.samples
+    static func commit(_ stroke: BrushStroke, spacing: Double) -> [Point]? {
+        let raw = stroke.points
         guard raw.count >= 2 else { return nil }
-        let smoothPts = smooth(raw.map(\.point))
-        let smoothWs = smooth(widths: raw.map(\.halfWidth))
-        let r = resample(points: smoothPts, widths: smoothWs, every: spacing)
-        guard r.points.count >= 2 else { return nil }
-        return (r.points, r.widths)
+        // Kill hand tremor BEFORE densifying: on samples only a unit or two
+        // apart, corner-cutting smoothing barely changes the shape, so the
+        // jitter would survive straight into the waypoints. Resampling to a
+        // coarse 8-unit polyline first drops every wavelength shorter than a
+        // pencil wobble, the smoothing rounds what remains, and only then are
+        // the final dense waypoints laid out along that clean shape.
+        let coarse = resample(points: raw, every: 8)
+        let smoothed = smooth(coarse)
+        let out = resample(points: smoothed, every: spacing)
+        return out.count >= 2 ? out : nil
     }
 }

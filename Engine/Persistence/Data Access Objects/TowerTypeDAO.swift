@@ -2,7 +2,10 @@ import Foundation
 import SQLite3
 
 public class TowerTypeDAO: BaseDAO {
-    init(conn: OpaquePointer?) {
+    private let meleeUnitDao: MeleeUnitDAO
+
+    init(conn: OpaquePointer?, meleeUnitDao: MeleeUnitDAO) {
+        self.meleeUnitDao = meleeUnitDao
         super.init(conn: conn, table: "tower_type", loggerName: TowerTypeDAO.self)
     }
 
@@ -79,6 +82,7 @@ public class TowerTypeDAO: BaseDAO {
     /// shape this; the column list lives here once so the two can't drift.
     private func getTowerLevelRows() throws -> [TowerLevelRow] {
         var rows: [TowerLevelRow] = []
+        let meleeByTowerId = try meleeUnitDao.getStatsByTowerId()
 
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""
@@ -99,13 +103,7 @@ public class TowerTypeDAO: BaseDAO {
                 t.contagion_chance,
                 t.targeting,
                 t.projectile_speed,
-                t.unit_count,
-                t.unit_hp,
-                t.unit_damage_min,
-                t.unit_damage_max,
-                t.unit_attack_interval,
-                t.unit_respawn_seconds,
-                t.unit_heal_per_second
+                t.id
             FROM
                 tower t
             INNER JOIN
@@ -117,6 +115,7 @@ public class TowerTypeDAO: BaseDAO {
         while sqlite3_step(stmt) == SQLITE_ROW {
             guard let category = try getString(stmt: stmt, colIndex: 0) else { continue }
             let targeting = Targeting(rawValue: (try getString(stmt: stmt, colIndex: 14)) ?? "first") ?? .first
+            let towerId = try getUUID(stmt: stmt, colIndex: 16, msg: "tower id")
             let tuning = TowerLevel(
                 cost: getInt(stmt: stmt, colIndex: 3),
                 range: getDouble(stmt: stmt, colIndex: 4),
@@ -131,13 +130,7 @@ public class TowerTypeDAO: BaseDAO {
                 contagionChance: getDouble(stmt: stmt, colIndex: 13),
                 targeting: targeting,
                 projectileSpeed: getDouble(stmt: stmt, colIndex: 15),
-                meleeUnitCount: getInt(stmt: stmt, colIndex: 16),
-                meleeUnitHP: getDouble(stmt: stmt, colIndex: 17),
-                meleeUnitDamageMin: getDouble(stmt: stmt, colIndex: 18),
-                meleeUnitDamageMax: getDouble(stmt: stmt, colIndex: 19),
-                meleeUnitAttackInterval: getDouble(stmt: stmt, colIndex: 20),
-                meleeUnitRespawnSeconds: getDouble(stmt: stmt, colIndex: 21),
-                meleeUnitHealPerSecond: getDouble(stmt: stmt, colIndex: 22)
+                meleeUnit: meleeByTowerId[towerId]
             )
             rows.append((category,
                          getInt(stmt: stmt, colIndex: 1),
@@ -147,6 +140,19 @@ public class TowerTypeDAO: BaseDAO {
 
         sqlite3_finalize(stmt)
         stmt = nil
+
+        // A melee category with a stats-less level would freeze its garrison
+        // mid-fight (engine) or feed zeroed stats to the GPU kernel; fail at
+        // load instead so the missing melee_unit row is caught immediately.
+        let meleeCategories = Set(rows.filter { $0.tuning.meleeUnit != nil }.map { $0.category })
+        for category in meleeCategories {
+            let missing = rows.filter { $0.category == category && $0.tuning.meleeUnit == nil }
+            if !missing.isEmpty {
+                throw DbError.Db(message: "tower_type '\(category)' has melee_unit rows for "
+                    + "some tower levels but not others; every level of a melee tower "
+                    + "needs a melee_unit row")
+            }
+        }
 
         return rows
     }

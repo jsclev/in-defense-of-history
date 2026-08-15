@@ -12,43 +12,46 @@ struct LevelBriefingView: View {
     private static let brass = Color(red: 0.87, green: 0.72, blue: 0.35)
 
     var body: some View {
-        GeometryReader { geometry in
-            let screen = ScreenGeometry(proxy: geometry)
-            let metrics = HudMetrics(viewSize: geometry.size)
-            ZStack(alignment: .topLeading) {
-                Image("hero_screen_background")
-                    .resizable()
-                    .frame(width: screen.physical.size.width,
-                           height: screen.physical.size.height)
-                    .ignoresSafeArea()
+        // Two readers, the HeroesView pattern: a full-bleed one so the
+        // content centres on the physical screen (a safe-area reader would
+        // shove the union trailing), and a safe-respecting one so the Done
+        // button still honors the real insets.
+        ZStack(alignment: .topLeading) {
+            GeometryReader { geometry in
+                let metrics = HudMetrics(viewSize: geometry.size)
+                ZStack {
+                Image("level_briefing_background")
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geometry.size.width,
+                               height: geometry.size.height)
+                        .clipped()
 
-                Color.black.opacity(0.55).ignoresSafeArea()
+                    Color.black.opacity(0.55)
 
-                VStack(spacing: 16 * metrics.scale) {
-                    Text(node.title)
-                        .font(.custom("Baskerville-Bold", size: 44 * metrics.scale))
-                        .foregroundStyle(.white)
-                        .shadow(color: .black.opacity(0.8), radius: 3 * metrics.scale)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.5)
+                    HStack(spacing: 32 * metrics.scale) {
+                        VStack(spacing: 14 * metrics.scale) {
+                            Text(node.title)
+                                .font(.custom("Baskerville-Bold",
+                                              size: Typography.size(44 * metrics.scale)))
+                                .foregroundStyle(.white)
+                                .shadow(color: .black.opacity(0.8), radius: 3 * metrics.scale)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
 
-                    levelPortrait(metrics: metrics)
-
-                    HStack(spacing: 12 * metrics.scale) {
-                        ForEach(difficulties) { difficulty in
-                            DifficultyCard(
-                                difficulty: difficulty,
-                                isSelected: selected?.id == difficulty.id,
-                                metrics: metrics
-                            ) {
-                                selected = difficulty
-                            }
+                            levelPortrait(metrics: metrics)
                         }
-                    }
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding(24 * metrics.scale)
 
+                        difficultyGrid(metrics: metrics)
+                    }
+                    .padding(24 * metrics.scale)
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height)
+            }
+            .ignoresSafeArea()
+
+            GeometryReader { safeGeometry in
+                let screen = ScreenGeometry(proxy: safeGeometry)
                 DoneButton {
                     if let selected {
                         onStart(selected)
@@ -56,7 +59,8 @@ struct LevelBriefingView: View {
                 }
                 .disabled(selected == nil)
                 .hudFrame(DoneButtonLayout(screen: screen,
-                                           aspect: DoneButton.aspect).frame,
+                                           aspect: DoneButton.aspect,
+                                           magnification: 1.15).frame,
                           in: screen)
                 .ignoresSafeArea()
             }
@@ -65,18 +69,55 @@ struct LevelBriefingView: View {
         .onAppear(perform: loadDifficulties)
     }
 
+    /// Two cards per row: four difficulties stacked singly would overrun a
+    /// phone's height, and one row of four crowds the portrait off center.
+    /// Cards get their own scale floor — at the phone HUD scale the fixed
+    /// card cannot hold three lines of floor-size text, truncating every
+    /// difficulty description mid-sentence.
+    private func difficultyGrid(metrics: HudMetrics) -> some View {
+        let cardMetrics = HudMetrics(scale: max(metrics.scale, 0.92))
+        let rows = stride(from: 0, to: difficulties.count, by: 2).map {
+            Array(difficulties[$0..<min($0 + 2, difficulties.count)])
+        }
+        return Grid(horizontalSpacing: 12 * cardMetrics.scale,
+                    verticalSpacing: 12 * cardMetrics.scale) {
+            ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                GridRow {
+                    ForEach(row) { difficulty in
+                        DifficultyCard(
+                            difficulty: difficulty,
+                            isSelected: selected?.id == difficulty.id,
+                            metrics: cardMetrics
+                        ) {
+                            selected = difficulty
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private func levelPortrait(metrics: HudMetrics) -> some View {
-        let height = 190 * metrics.scale
+        let height = 260 * metrics.scale
+        let frame = CGSize(width: height * 16 / 9, height: height)
         return ZStack {
             if node.mapImageName.isEmpty {
                 Rectangle().fill(Self.ink.opacity(0.55))
             } else {
-                Image(node.mapImageName)
-                    .resizable()
-                    .scaledToFill()
+                // The map exactly as the level constructs it: background,
+                // road art, overlay, occlusion — projected by the same
+                // LevelMapProjection the level screen uses, so the portrait
+                // shows the playable area and not the full canvas.
+                let projection = LevelMapProjection(
+                    playArea: CanvasSpec.playArea,
+                    fitRect: CGRect(origin: .zero, size: frame))
+                LevelMapArt(mapImageName: node.mapImageName).complete
+                    .frame(width: projection.imageFrameSize.width,
+                           height: projection.imageFrameSize.height)
+                    .position(projection.imageCenter)
             }
         }
-        .frame(width: height * 16 / 9, height: height)
+        .frame(width: frame.width, height: frame.height)
         .clipShape(RoundedRectangle(cornerRadius: 10 * metrics.scale, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: 10 * metrics.scale, style: .continuous)
@@ -112,7 +153,8 @@ private struct DifficultyCard: View {
         Button(action: action) {
             VStack(spacing: 6 * metrics.scale) {
                 Text(difficulty.name)
-                    .font(.custom("Baskerville-Bold", size: 22 * metrics.scale))
+                    .font(.custom("Baskerville-Bold",
+                                  size: Typography.size(22 * metrics.scale)))
                     .foregroundStyle(Self.ink)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)

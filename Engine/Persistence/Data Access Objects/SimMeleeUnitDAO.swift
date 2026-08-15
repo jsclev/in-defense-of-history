@@ -29,6 +29,8 @@ public class SimMeleeUnitDAO: BaseDAO {
                 tower t ON t.id = m.tower_id
             INNER JOIN
                 tower_type tt ON tt.id = t.tower_type_id
+            WHERE
+                t.branch = 1
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)

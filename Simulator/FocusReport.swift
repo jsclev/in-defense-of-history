@@ -236,7 +236,7 @@ enum FocusReport {
         let candidates = [
             "Simulator/Images/favicon.ico",
             "Images/favicon.ico",
-            ("~/projects/in-defense-of-history/Simulator/Images/favicon.ico" as NSString).expandingTildeInPath,
+            ("~/projects/td/in-defense-of-history/Simulator/Images/favicon.ico" as NSString).expandingTildeInPath,
         ]
         for path in candidates {
             guard let data = FileManager.default.contents(atPath: path) else { continue }

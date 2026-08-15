@@ -2,7 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum EditorTool: Hashable {
-    case select, road, slot, brush
+    case select, slot, brush, entrance, exitPoint
 }
 
 enum EditorMode: Hashable {
@@ -14,6 +14,8 @@ enum EditorSelection: Equatable {
     case slot(Int)
     case waypoint(road: Int, point: Int)
     case road(Int)
+    case entrance(Int)
+    case exitPoint(Int)
 }
 
 @MainActor
@@ -22,18 +24,59 @@ final class EditorState {
     var mode: EditorMode = .edit
     var tool: EditorTool = .select
     var selection: EditorSelection = .none
+    var visibleLayers: Set<EditorLayer> = Set(EditorLayer.allCases)
+    var menuPreviewSlot: Int?
+
+    var activeLayer: EditorLayer? { tool.layer }
+
+    func isVisible(_ layer: EditorLayer) -> Bool { visibleLayers.contains(layer) }
+
+    func toggleVisibility(_ layer: EditorLayer) {
+        if visibleLayers.contains(layer) {
+            visibleLayers.remove(layer)
+        } else {
+            visibleLayers.insert(layer)
+        }
+    }
+
+    func selectTool(_ newTool: EditorTool) {
+        tool = newTool
+        if let layer = newTool.layer, !visibleLayers.contains(layer) {
+            visibleLayers.insert(layer)
+            flash("\(layer.title) layer shown - the \(newTool.title) works on it")
+        }
+    }
+
     var showGrid = true
     var snapToGrid = true
     var showRanges = true
-    var showPlayable = true
+    var showPlayArea = true
+
+    /// The inspector sidebar. Hidden, it slides off the left edge so the
+    /// canvas takes the full window; the canvas's own fit-scale reacts to
+    /// the size change, so a "Fit" zoom refits automatically.
+    var showInspector = true
+
+    func toggleInspector() {
+        withAnimation(.easeInOut(duration: 0.22)) {
+            showInspector.toggle()
+        }
+    }
+
     var cursor: Point?
     var toast: String?
     var background: PlatformImage?
     var backgroundPixelSize: CGSize?
+    var overlay: PlatformImage?
+    var overlayPixelSize: CGSize?
+    var guide: PlatformImage?
+    var guidePixelSize: CGSize?
 
-    var brushSize: Double = 51
-    var brushPressureEnabled = true
-    var brushSpacing: Double = 24
+    /// Canonical units between committed waypoints of a painted path.
+    /// 2.4 is five times the density of the 12 that still read faceted on
+    /// the iPad - denser than even the level 1 generator's 4.4-unit spacing,
+    /// so the pencil, not the tool, is the resolution limit.
+    var brushSpacing: Double = 2.4
     var showOuterEdge = true
     var stroke = BrushStroke()
 
@@ -81,6 +124,26 @@ final class EditorState {
         }
     }
 
+    func loadOverlay(from path: String?) {
+        if let path, let loaded = PlatformImageLoader.load(path: path) {
+            overlay = loaded.image
+            overlayPixelSize = loaded.pixelSize
+        } else {
+            overlay = nil
+            overlayPixelSize = nil
+        }
+    }
+
+    func loadGuide(from path: String?) {
+        if let path, let loaded = PlatformImageLoader.load(path: path) {
+            guide = loaded.image
+            guidePixelSize = loaded.pixelSize
+        } else {
+            guide = nil
+            guidePixelSize = nil
+        }
+    }
+
     func flash(_ message: String) {
         toast = message
         Task { @MainActor in
@@ -95,7 +158,14 @@ struct EditorView: View {
     @ObservedObject var document: MapDocument
     @State private var state = EditorState()
     @State private var session: SimSession?
+    enum ImageImportTarget {
+        case background, overlay, guide
+    }
+
     @State private var importingImage = false
+    /// Which image the open file chooser is for. Read in the completion, so
+    /// it survives the chooser's dismissal resetting `importingImage`.
+    @State private var importTarget: ImageImportTarget = .background
     @State private var exportingGeoJSON = false
     @State private var geoJSONFile = GeoJSONFile(data: Data())
     @Environment(\.undoManager) private var undoManager
@@ -116,10 +186,22 @@ struct EditorView: View {
                       allowedContentTypes: [.png, .jpeg, .tiff]) { result in
             if case let .success(url) = result {
                 _ = url.startAccessingSecurityScopedResource()
-                state.loadBackground(from: url.path)
-                document.edit(undoManager) { $0.backgroundImagePath = url.path }
-                if let px = state.backgroundPixelSize, px == CanvasSpec.size {
-                    state.flash("Image \(Int(px.width))×\(Int(px.height)) — matches the canvas exactly")
+                switch importTarget {
+                case .background:
+                    state.loadBackground(from: url.path)
+                    document.edit(undoManager) { $0.backgroundImagePath = url.path }
+                    if let px = state.backgroundPixelSize, px != CanvasSpec.size {
+                        state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
+                    }
+                case .overlay:
+                    state.loadOverlay(from: url.path)
+                    document.edit(undoManager) { $0.overlayImagePath = url.path }
+                    if let px = state.overlayPixelSize, px != CanvasSpec.size {
+                        state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
+                    }
+                case .guide:
+                    state.loadGuide(from: url.path)
+                    document.edit(undoManager) { $0.guideImagePath = url.path }
                 }
             }
         }
@@ -134,9 +216,19 @@ struct EditorView: View {
                 state.flash("Save failed: \(error.localizedDescription)")
             }
         }
-        .onAppear { state.loadBackground(from: document.draft.backgroundImagePath) }
+        .onAppear {
+            state.loadBackground(from: document.draft.backgroundImagePath)
+            state.loadOverlay(from: document.draft.overlayImagePath)
+            state.loadGuide(from: document.draft.guideImagePath)
+        }
         .onChange(of: document.draft.backgroundImagePath) { _, path in
             state.loadBackground(from: path)
+        }
+        .onChange(of: document.draft.overlayImagePath) { _, path in
+            state.loadOverlay(from: path)
+        }
+        .onChange(of: document.draft.guideImagePath) { _, path in
+            state.loadGuide(from: path)
         }
         .focusedSceneValue(\.editorState, state)
         .background(
@@ -149,8 +241,11 @@ struct EditorView: View {
     }
 
     private var editorBody: some View {
-        EditorSplit {
-            InspectorView(document: document, state: state, importingImage: $importingImage)
+        EditorSplit(showSidebar: state.showInspector) {
+            InspectorView(document: document, state: state) { target in
+                importTarget = target
+                importingImage = true
+            }
         } detail: {
             VStack(spacing: 0) {
                 EditorCanvas(document: document, state: state)
@@ -170,6 +265,16 @@ struct EditorView: View {
 
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .navigation) {
+            Button {
+                state.toggleInspector()
+            } label: {
+                Image(systemName: "sidebar.left")
+            }
+            .help(state.showInspector
+                  ? "Hide the inspector so the canvas fills the window (⌃⌘S)"
+                  : "Show the inspector (⌃⌘S)")
+        }
         ToolbarItemGroup {
             @Bindable var s = state
 
@@ -201,40 +306,35 @@ struct EditorView: View {
                 }
                 .help("Zoom (⌘+ / ⌘− / ⌘0 fit / ⌘1 100%)")
 
-                Picker("Tool", selection: $s.tool) {
+                Picker("Tool", selection: Binding(
+                    get: { state.tool },
+                    set: { state.selectTool($0) }
+                )) {
                     Image(systemName: "cursorarrow").tag(EditorTool.select)
                         .help("Select and move")
-                    Image(systemName: "scribble").tag(EditorTool.road)
-                        .help("Road pencil: click to append waypoints, click on a segment to insert")
-                    Image(systemName: "paintbrush.pointed").tag(EditorTool.brush)
-                        .help("Path paintbrush: paint a road freehand; pressure sets its width")
-                    Image(systemName: "plus.circle").tag(EditorTool.slot)
+                    Image(systemName: "scribble").tag(EditorTool.brush)
+                        .help("Path tool: draw an enemy path freehand; width is fixed by canvas_spec")
+                    (EditorResources.templateIcon("Images/tower_tool_icon.png", pointSize: 17)
+                        ?? Image(systemName: "building.fill"))
+                        .tag(EditorTool.slot)
                         .help("Place tower slots")
+                    Image(systemName: "arrow.right.circle").tag(EditorTool.entrance)
+                        .help("Place entrance points where enemies spawn")
+                    Image(systemName: "flag.checkered").tag(EditorTool.exitPoint)
+                        .help("Place exit points the enemies march for")
                 }
                 .pickerStyle(.segmented)
 
-                if state.tool == .brush {
-                    Slider(value: $s.brushSize, in: 12...200) {
-                        Image(systemName: "paintbrush.pointed")
-                    }
-                    .frame(width: 110)
-                    .help("Brush width")
-
-                    Toggle(isOn: $s.brushPressureEnabled) {
-                        Image(systemName: "hand.draw")
-                    }
-                    .help("Apple Pencil pressure controls stroke width")
-                }
 
                 Toggle(isOn: $s.showOuterEdge) { Image(systemName: "square.dashed") }
                     .help("Show the generated outer-edge waypoints of each road")
 
-                Toggle(isOn: $s.showPlayable) { Image(systemName: "rectangle.dashed") }
-                    .help("Highlight the \(Int(CanvasSpec.playable.width))×\(Int(CanvasSpec.playable.height)) playable rect and dim the bleed")
+                Toggle(isOn: $s.showPlayArea) { Image(systemName: "rectangle.dashed") }
+                    .help("Highlight the \(Int(CanvasSpec.playArea.width))×\(Int(CanvasSpec.playArea.height)) play area and dim the bleed")
                 Toggle(isOn: $s.showGrid) { Image(systemName: "grid") }
                     .help("Show grid (15 px minor, 120 px major)")
                 Toggle(isOn: $s.snapToGrid) { Image(systemName: "dot.squareshape.split.2x2") }
-                    .help("Snap to 10-unit grid")
+                    .help("Snap to 6-unit grid")
                 Toggle(isOn: $s.showRanges) { Image(systemName: "circle.dashed") }
                     .help("Show tower range circular overlays on the selected slot")
 
@@ -328,7 +428,7 @@ struct EditorView: View {
 
     private var cursorText: String {
         guard let c = state.cursor else { return "—" }
-        let inPlayable = CanvasSpec.playable.contains(CGPoint(x: c.x, y: c.y))
+        let inPlayable = CanvasSpec.playArea.contains(CGPoint(x: c.x, y: c.y))
         return "\(Int(c.x.rounded())), \(Int(c.y.rounded())) px\(inPlayable ? "" : " · bleed")"
     }
 
@@ -338,6 +438,8 @@ struct EditorView: View {
         case let .slot(i): return "Slot \(i)"
         case let .waypoint(r, p): return "Road \(r) · point \(p)"
         case let .road(r): return "Road \(r)"
+        case let .entrance(i): return "Entrance \(i)"
+        case let .exitPoint(i): return "Exit \(i)"
         }
     }
 }

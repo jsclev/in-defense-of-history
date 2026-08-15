@@ -66,8 +66,10 @@ sqlite3 in_defense_of_history.sqlite < DML/difficulties.sql
 sqlite3 in_defense_of_history.sqlite < DML/selected_difficulty.sql
 sqlite3 in_defense_of_history.sqlite < DML/tower_types.sql
 sqlite3 in_defense_of_history.sqlite < DML/towers.sql
+sqlite3 in_defense_of_history.sqlite < DML/melee_units.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_wave_enemy_spawns.sql
+sqlite3 in_defense_of_history.sqlite < DML/level_15_charleston_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/01_Israel_Putnam.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/02_Henry_Knox.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/03_Louis_Duportail.sql

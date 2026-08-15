@@ -7,6 +7,42 @@ public enum Targeting: String, Codable, Sendable, CaseIterable {
     case shakiest
 }
 
+public struct MeleeUnitStats: Codable, Sendable, Equatable {
+    public var soldierCount: Int
+    public var attackRating: Double
+    public var defenseRating: Double
+    public var hp: Double
+    public var rallyPointRadius: Double
+    public var attackInterval: Double
+    public var respawnSeconds: Double
+    public var healPerSecond: Double
+
+    public init(
+        soldierCount: Int,
+        attackRating: Double,
+        defenseRating: Double,
+        hp: Double,
+        rallyPointRadius: Double,
+        attackInterval: Double,
+        respawnSeconds: Double,
+        healPerSecond: Double
+    ) {
+        self.soldierCount = soldierCount
+        self.attackRating = attackRating
+        self.defenseRating = defenseRating
+        self.hp = hp
+        self.rallyPointRadius = rallyPointRadius
+        self.attackInterval = attackInterval
+        self.respawnSeconds = respawnSeconds
+        self.healPerSecond = healPerSecond
+    }
+
+    public var damageRange: ClosedRange<Double> {
+        let spread = attackRating * MilitiaTunables.attackSpread
+        return (attackRating - spread)...(attackRating + spread)
+    }
+}
+
 public struct TowerLevel: Codable, Sendable, Equatable {
     public var cost: Int
     public var range: Double
@@ -21,13 +57,7 @@ public struct TowerLevel: Codable, Sendable, Equatable {
     public var contagionChance: Double
     public var targeting: Targeting
     public var projectileSpeed: Double
-    public var meleeUnitCount: Int
-    public var meleeUnitHP: Double
-    public var meleeUnitDamageMin: Double
-    public var meleeUnitDamageMax: Double
-    public var meleeUnitAttackInterval: Double
-    public var meleeUnitRespawnSeconds: Double
-    public var meleeUnitHealPerSecond: Double
+    public var meleeUnit: MeleeUnitStats?
 
     public init(
         cost: Int,
@@ -43,13 +73,7 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         contagionChance: Double = 0,
         targeting: Targeting = .first,
         projectileSpeed: Double = 0,
-        meleeUnitCount: Int = 0,
-        meleeUnitHP: Double = 0,
-        meleeUnitDamageMin: Double = 0,
-        meleeUnitDamageMax: Double = 0,
-        meleeUnitAttackInterval: Double = 0,
-        meleeUnitRespawnSeconds: Double = 0,
-        meleeUnitHealPerSecond: Double = 0
+        meleeUnit: MeleeUnitStats? = nil
     ) {
         self.cost = cost
         self.range = range
@@ -64,13 +88,7 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         self.contagionChance = contagionChance
         self.targeting = targeting
         self.projectileSpeed = projectileSpeed
-        self.meleeUnitCount = meleeUnitCount
-        self.meleeUnitHP = meleeUnitHP
-        self.meleeUnitDamageMin = meleeUnitDamageMin
-        self.meleeUnitDamageMax = meleeUnitDamageMax
-        self.meleeUnitAttackInterval = meleeUnitAttackInterval
-        self.meleeUnitRespawnSeconds = meleeUnitRespawnSeconds
-        self.meleeUnitHealPerSecond = meleeUnitHealPerSecond
+        self.meleeUnit = meleeUnit
     }
 }
 

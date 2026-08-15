@@ -18,6 +18,45 @@ extension Image {
     }
 }
 
+/// Files from the repo's common Images folder. On a Mac running from the
+/// repo they are read straight from that folder (so a regenerated sprite
+/// shows without rebuilding); on iPad — or any machine without the repo —
+/// they come from the app bundle, where the Images folder is synchronized
+/// into the LevelEditor target and lands flat.
+enum EditorResources {
+    static func url(_ relativePath: String) -> URL? {
+        let repo = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent()
+            .deletingLastPathComponent()
+            .appendingPathComponent(relativePath)
+        if FileManager.default.fileExists(atPath: repo.path) { return repo }
+        let name = (relativePath as NSString).lastPathComponent
+        return Bundle.main.url(
+            forResource: (name as NSString).deletingPathExtension,
+            withExtension: (name as NSString).pathExtension)
+    }
+}
+
+extension EditorResources {
+    /// A repo image as a template-rendered toolbar icon at the given point
+    /// size, so it tints like an SF Symbol on both platforms.
+    static func templateIcon(_ relativePath: String, pointSize: CGFloat) -> Image? {
+        guard let url = url(relativePath),
+              let loaded = PlatformImageLoader.load(path: url.path) else { return nil }
+        #if canImport(AppKit)
+        let image = loaded.image
+        image.size = NSSize(width: pointSize, height: pointSize)
+        image.isTemplate = true
+        return Image(nsImage: image)
+        #else
+        guard let cg = loaded.image.cgImage else { return nil }
+        let scaled = UIImage(cgImage: cg, scale: loaded.pixelSize.width / pointSize,
+                             orientation: .up)
+        return Image(uiImage: scaled).renderingMode(.template)
+        #endif
+    }
+}
+
 enum PlatformImageLoader {
     static func load(path: String) -> (image: PlatformImage, pixelSize: CGSize)? {
         #if canImport(AppKit)
@@ -81,19 +120,27 @@ extension View {
 }
 
 struct EditorSplit<Sidebar: View, Detail: View>: View {
+    var showSidebar = true
     @ViewBuilder var sidebar: Sidebar
     @ViewBuilder var detail: Detail
 
     var body: some View {
         #if os(macOS)
         HSplitView {
-            sidebar.frame(minWidth: 290, idealWidth: 330, maxWidth: 420)
+            if showSidebar {
+                // Wide enough that no layer row in the panel ever wraps.
+                sidebar.frame(minWidth: 340, idealWidth: 380, maxWidth: 460)
+                    .transition(.move(edge: .leading))
+            }
             detail.frame(minWidth: 680, maxWidth: .infinity, maxHeight: .infinity)
         }
         #else
         HStack(spacing: 0) {
-            sidebar.frame(width: 330)
-            Divider()
+            if showSidebar {
+                sidebar.frame(width: 380)
+                    .transition(.move(edge: .leading))
+                Divider()
+            }
             detail.frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         #endif

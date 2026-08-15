@@ -4,16 +4,16 @@ public struct MapSpriteScale: Equatable {
     public let projectionScale: CGFloat
     public let playableHeightOnScreen: CGFloat
 
-    public init(playableRect: CGRect, viewSize: CGSize) {
-        guard playableRect.width > 0, playableRect.height > 0,
+    public init(playArea: CGRect, viewSize: CGSize) {
+        guard playArea.width > 0, playArea.height > 0,
               viewSize.width > 0, viewSize.height > 0 else {
             projectionScale = 0
             playableHeightOnScreen = 0
             return
         }
-        projectionScale = Swift.min(viewSize.width / playableRect.width,
-                                    viewSize.height / playableRect.height)
-        playableHeightOnScreen = playableRect.height * projectionScale
+        projectionScale = Swift.min(viewSize.width / playArea.width,
+                                    viewSize.height / playArea.height)
+        playableHeightOnScreen = playArea.height * projectionScale
     }
 
     public func points(_ height: SpriteHeight) -> CGFloat {
