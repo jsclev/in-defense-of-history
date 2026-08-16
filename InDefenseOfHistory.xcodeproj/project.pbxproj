@@ -16,7 +16,6 @@
 		52A55E710000000000000006 /* CampaignMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000006 /* CampaignMapView.swift */; };
 		52A55E710000000000000007 /* CampaignMarkers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000007 /* CampaignMarkers.swift */; };
 		52A55E710000000000000008 /* CampaignNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000008 /* CampaignNode.swift */; };
-		52A55E710000000000000009 /* CampaignPirateVoyage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000009 /* CampaignPirateVoyage.swift */; };
 		52A55E71000000000000000A /* CampaignRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000A /* CampaignRoute.swift */; };
 		52A55E71000000000000000B /* CampaignWildlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000B /* CampaignWildlife.swift */; };
 		52A55E71000000000000000C /* EncyclopediaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000000C /* EncyclopediaView.swift */; };
@@ -59,7 +58,6 @@
 		52A55E700000000000000006 /* CampaignMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignMapView.swift; sourceTree = "<group>"; };
 		52A55E700000000000000007 /* CampaignMarkers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignMarkers.swift; sourceTree = "<group>"; };
 		52A55E700000000000000008 /* CampaignNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignNode.swift; sourceTree = "<group>"; };
-		52A55E700000000000000009 /* CampaignPirateVoyage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignPirateVoyage.swift; sourceTree = "<group>"; };
 		52A55E70000000000000000A /* CampaignRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignRoute.swift; sourceTree = "<group>"; };
 		52A55E70000000000000000B /* CampaignWildlife.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignWildlife.swift; sourceTree = "<group>"; };
 		52A55E70000000000000000C /* EncyclopediaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncyclopediaView.swift; sourceTree = "<group>"; };
@@ -187,7 +185,6 @@
 				52A55E700000000000000006 /* CampaignMapView.swift */,
 				52A55E700000000000000007 /* CampaignMarkers.swift */,
 				52A55E700000000000000008 /* CampaignNode.swift */,
-				52A55E700000000000000009 /* CampaignPirateVoyage.swift */,
 				52A55E70000000000000000A /* CampaignRoute.swift */,
 				52A55E70000000000000000B /* CampaignWildlife.swift */,
 				52A55E70000000000000000C /* EncyclopediaView.swift */,
@@ -419,7 +416,6 @@
 				52A55E710000000000000006 /* CampaignMapView.swift in Sources */,
 				52A55E710000000000000007 /* CampaignMarkers.swift in Sources */,
 				52A55E710000000000000008 /* CampaignNode.swift in Sources */,
-				52A55E710000000000000009 /* CampaignPirateVoyage.swift in Sources */,
 				52A55E71000000000000000A /* CampaignRoute.swift in Sources */,
 				52A55E71000000000000000B /* CampaignWildlife.swift in Sources */,
 				52A55E71000000000000000C /* EncyclopediaView.swift in Sources */,

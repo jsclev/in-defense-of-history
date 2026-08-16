@@ -57,17 +57,6 @@ struct CampaignMapView: View {
                     } ?? .zero
                     let titleBox = title.frame.insetBy(dx: -title.frame.width * 0.075,
                                                        dy: -title.frame.height * 0.15)
-                    let warshipObstacles = [menuBox, titleBox]
-                        + (compass.map { [CGRect(x: $0.center.x - $0.size.width / 2,
-                                                 y: $0.center.y - $0.size.height / 2,
-                                                 width: $0.size.width,
-                                                 height: $0.size.height)] } ?? [])
-                        + placements.map { $0.rect.insetBy(dx: -6, dy: -6) }
-                        + decor.map(\.frame)
-                    let warshipCenter = CampaignWarshipBerth.center(
-                        viewSize: mapGeometry.size,
-                        avoiding: warshipObstacles
-                    )
                     ZStack {
                         CampaignMapMetalView()
 
@@ -79,19 +68,6 @@ struct CampaignMapView: View {
                         if let compass {
                             CampaignCompassView(placement: compass)
                         }
-
-                        if let warshipCenter {
-                            CampaignAnchoredSprite(kind: .britishWarship,
-                                                   viewSize: mapGeometry.size,
-                                                   center: warshipCenter)
-                        }
-
-                        CampaignPirateShip(viewSize: mapGeometry.size,
-                                           compassBox: compassBox)
-                        CampaignCritter(species: .grizzly,
-                                        viewSize: mapGeometry.size)
-                        CampaignCritter(species: .jackrabbit,
-                                        viewSize: mapGeometry.size)
 
                         CampaignMarkerTethers(placements: placements)
                             .stroke(Color.black.opacity(0.45),

@@ -10,28 +10,6 @@ struct CampaignCritter: View {
         var speedFraction: CGFloat
         var restSeconds: Double
         var phaseOffset: Double
-
-        static let grizzly = Species(
-            framePrefix: "grizzly_bear_walk_",
-            frameCount: 8,
-            framesPerSecond: 8,
-            startImagePoint: CGPoint(x: 1580, y: 1240),
-            widthFraction: 0.052,
-            speedFraction: 0.028,
-            restSeconds: 5,
-            phaseOffset: 0
-        )
-
-        static let jackrabbit = Species(
-            framePrefix: "jackrabbit_run_",
-            frameCount: 32,
-            framesPerSecond: 30,
-            startImagePoint: CGPoint(x: 1220, y: 1000),
-            widthFraction: 0.029,
-            speedFraction: 0.055,
-            restSeconds: 6,
-            phaseOffset: 7
-        )
     }
 
     var species: Species
@@ -89,14 +67,6 @@ struct CampaignAnchoredSprite: View {
         var framesPerSecond: Double
         var imagePosition: CGPoint
         var widthFraction: CGFloat
-
-        static let britishWarship = Kind(
-            framePrefix: "british_warship_",
-            frameCount: 64,
-            framesPerSecond: 30,
-            imagePosition: CGPoint(x: 1980, y: 1420),
-            widthFraction: 0.098
-        )
     }
 
     var kind: Kind
@@ -129,62 +99,5 @@ struct CampaignAnchoredSprite: View {
                 .allowsHitTesting(false)
             }
         }
-    }
-}
-
-enum CampaignWarshipBerth {
-    static func center(viewSize: CGSize, avoiding obstacles: [CGRect]) -> CGPoint? {
-        let kind = CampaignAnchoredSprite.Kind.britishWarship
-        guard viewSize.width > 0, viewSize.height > 0,
-              let sprite = UIImage(named: kind.framePrefix + "0"),
-              sprite.size.width > 0 else { return nil }
-        let width = viewSize.width * kind.widthFraction
-        let height = width * sprite.size.height / sprite.size.width
-
-        let mask = CampaignPirateVoyage.mask
-        let img = CampaignMapAsset.imageSize
-        var cells: [CGPoint] = []
-        for gy in 0..<mask.height {
-            let row = Array(mask.rows[gy])
-            for gx in 0..<min(mask.width, row.count) where row[gx] == "#" {
-                cells.append(CGPoint(
-                    x: (CGFloat(gx) + 0.5) / CGFloat(mask.width) * img.width,
-                    y: (CGFloat(gy) + 0.5) / CGFloat(mask.height) * img.height))
-            }
-        }
-        let preferred = kind.imagePosition
-        cells.sort {
-            hypot($0.x - preferred.x, $0.y - preferred.y)
-                < hypot($1.x - preferred.x, $1.y - preferred.y)
-        }
-
-        let bounds = CGRect(origin: .zero, size: viewSize)
-        for cell in cells {
-            let center = CampaignMapLayout.viewPoint(
-                forImagePoint: cell,
-                imageSize: img,
-                safeRect: CampaignMapAsset.safeRect,
-                viewSize: viewSize
-            )
-            let rect = CGRect(x: center.x - width / 2, y: center.y - height / 2,
-                              width: width, height: height)
-            guard bounds.insetBy(dx: 4, dy: 4).contains(rect) else { continue }
-            guard !obstacles.contains(where: { $0.intersects(rect) }) else { continue }
-            let corners = [
-                CGPoint(x: rect.minX, y: rect.midY), CGPoint(x: rect.maxX, y: rect.midY),
-                CGPoint(x: rect.midX, y: rect.minY), CGPoint(x: rect.midX, y: rect.maxY),
-                CGPoint(x: rect.minX, y: rect.maxY), CGPoint(x: rect.maxX, y: rect.maxY),
-            ]
-            let wet = corners.allSatisfy { corner in
-                mask.allows(CampaignMapLayout.imagePoint(
-                    forViewPoint: corner,
-                    imageSize: img,
-                    safeRect: CampaignMapAsset.safeRect,
-                    viewSize: viewSize), imageSize: img)
-            }
-            guard wet else { continue }
-            return center
-        }
-        return nil
     }
 }
