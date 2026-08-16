@@ -56,6 +56,29 @@ public enum CanvasSpec {
     public static var playArea: CGRect { values.playArea }
     public static var slotSize: CGSize { values.slotSize }
 
+    /// THE slot pad footprint test: whether `point` lies inside the pad
+    /// IMAGE's ellipse (slot_width × slot_height) centred at `slot`, all in
+    /// canvas units. The pad art is a wide ellipse, so a circle of its
+    /// width-radius overreaches it above and below — every surface that
+    /// asks "is this on the pad" (the editor's hit test and its slot-spacing
+    /// check) uses this and not a circle or the touch target.
+    public static func slotFootprintContains(_ point: CGPoint, slot: CGPoint) -> Bool {
+        let a = slotSize.width / 2, b = slotSize.height / 2
+        guard a > 0, b > 0 else { return false }
+        let dx = (point.x - slot.x) / a, dy = (point.y - slot.y) / b
+        return dx * dx + dy * dy <= 1
+    }
+
+    /// Whether two slot pad footprints overlap: the pads' ellipses touch or
+    /// cross. Same axes as `slotFootprintContains`, doubled, so pads placed
+    /// by this test never draw over one another.
+    public static func slotFootprintsOverlap(_ p: CGPoint, _ q: CGPoint) -> Bool {
+        let a = slotSize.width, b = slotSize.height
+        guard a > 0, b > 0 else { return false }
+        let dx = (p.x - q.x) / a, dy = (p.y - q.y) / b
+        return dx * dx + dy * dy < 1
+    }
+
     /// Full width of an enemy path, edge to edge. The shipped Battle Road
     /// lane and the game's lane-coverage half-width (51) both derive from
     /// this one number.

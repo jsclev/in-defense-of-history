@@ -352,17 +352,21 @@ struct EditorCanvas: View {
     }
 
     /// The ONE hit test for slot pads, used by the select tool and the slot
-    /// tool alike.
+    /// tool alike. The pad IMAGE decides — CanvasSpec's slot-footprint
+    /// ellipse, tested in canvas units — not a circle and not the game's
+    /// touch target: a circle of the pad's width-radius reached past the pad
+    /// above and below, so taps on open ground next to a pad hit it and
+    /// refused to place a new one. Ties go to the nearest centre.
     private func slotTarget(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
         guard state.isVisible(.slots) else { return nil }
-        let slotRadius = max(14, CanvasSpec.slotSize.width / 2 * t.scale + 4)
-        var best: (DragTarget, CGFloat)?
+        let dp = t.design(p)
+        let point = CGPoint(x: dp.x, y: dp.y)
+        var best: (DragTarget, Double)?
         for (i, slot) in document.draft.slots.enumerated() {
-            let vp = t.view(slot)
-            let d = hypot(vp.x - p.x, vp.y - p.y)
-            if d <= slotRadius, best == nil || d < best!.1 {
-                best = (.slot(i), d)
-            }
+            let center = CGPoint(x: slot.x, y: slot.y)
+            guard CanvasSpec.slotFootprintContains(point, slot: center) else { continue }
+            let d = hypot(dp.x - slot.x, dp.y - slot.y)
+            if best == nil || d < best!.1 { best = (.slot(i), d) }
         }
         return best?.0
     }
@@ -388,13 +392,18 @@ struct EditorCanvas: View {
             bg.draw(Image(platformImage: img), in: t.view(backgroundCanvasRect(draft)))
         }
         // The map guide - typically a Kingdom Rush screenshot traced by hand.
-        // Fitted to the play area, since that is the space the traced
+        // A guide cut to the canvas's own aspect ratio IS canvas-space art,
+        // so it lands 1:1 on the canvas like the background does, unscaled;
+        // any other shape is fitted to the play area, the space the traced
         // geometry must land in.
         if state.isVisible(.mapGuide), let guide = state.guide {
             var layer = ctx
             layer.opacity = draft.guideOpacity
             layer.clip(to: SwiftUI.Path(frame))
-            layer.draw(Image(platformImage: guide), in: t.view(CanvasSpec.playArea))
+            let rect = guideMatchesCanvasAspect
+                ? canvasRect(for: state.guidePixelSize)
+                : CanvasSpec.playArea
+            layer.draw(Image(platformImage: guide), in: t.view(rect))
         }
         if state.showGrid { drawGrid(&ctx, t, frame) }
         if state.isVisible(.path) {
@@ -492,6 +501,14 @@ struct EditorCanvas: View {
         canvasRect(for: state.backgroundPixelSize)
     }
 
+    /// Whether the loaded guide has the virtual canvas's aspect ratio (to
+    /// within half a percent, absorbing integer pixel rounding).
+    private var guideMatchesCanvasAspect: Bool {
+        guard let px = state.guidePixelSize, px.width > 0, px.height > 0 else { return false }
+        let canvas = CanvasSpec.width / CanvasSpec.height
+        return abs(px.width / px.height - canvas) / canvas < 0.005
+    }
+
     /// An image's rect on the canvas: centred, at its own pixel size, so a
     /// correctly sized image covers the canvas exactly.
     private func canvasRect(for pixelSize: CGSize?) -> CGRect {
@@ -581,7 +598,7 @@ struct EditorCanvas: View {
         let slot = document.draft.slots[i]
         let c = t.view(slot)
         let artPath = "../in-defense-of-history-data/LibertyLineAssets.xcassets/"
-            + "tower_menu_v02.imageset/tower_menu_v02.png"
+            + "tower_menu_bg.imageset/tower_menu_bg.png"
         if let url = EditorResources.url(artPath),
            let art = PlatformImageLoader.load(path: url.path) {
             let side = TowerMenuLayout.menuMapCanvasSide(count: 4) * t.scale
@@ -771,7 +788,7 @@ struct EditorCanvas: View {
             }
 
             let ringColor: Color? = switch warnings[i] {
-            case .overlapsPath: .red
+            case .overlapsPath, .overlapsSlot: .red
             case .outOfRange: .orange
             case nil: selected ? .yellow : nil
             }

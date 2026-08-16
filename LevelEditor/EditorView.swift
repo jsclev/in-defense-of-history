@@ -72,6 +72,15 @@ final class EditorState {
     var guide: PlatformImage?
     var guidePixelSize: CGSize?
 
+    /// Path each image was last loaded from. The document-path onChange
+    /// handlers reload only when the path actually differs, so a pick that
+    /// already loaded the file directly isn't immediately loaded a second
+    /// time (which is wasted work, and would clobber the good image with
+    /// nil if that redundant read ever failed).
+    private var backgroundLoadedPath: String?
+    private var overlayLoadedPath: String?
+    private var guideLoadedPath: String?
+
     /// Canonical units between committed waypoints of a painted path.
     /// 2.4 is five times the density of the 12 that still read faceted on
     /// the iPad - denser than even the level 1 generator's 4.4-unit spacing,
@@ -114,8 +123,38 @@ final class EditorState {
         return "Reference image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))"
     }
 
-    func loadBackground(from path: String?) {
-        if let path, let loaded = PlatformImageLoader.load(path: path) {
+    /// The folder holding the open document, set by the view. Image paths
+    /// stored by another device (an iPad's /private/var/mobile/… path in a
+    /// document synced through iCloud) resolve to the same-named file
+    /// beside the document here.
+    var documentFolder: URL?
+
+    /// THE image-path resolver, shared by every layer: the stored path if
+    /// that file exists here, else the same filename beside the document.
+    func resolveImage(_ path: String?) -> URL? {
+        guard let path, !path.isEmpty else { return nil }
+        let stored = URL(fileURLWithPath: path)
+        if FileManager.default.fileExists(atPath: stored.path) { return stored }
+        if let folder = documentFolder {
+            let sibling = folder.appendingPathComponent(stored.lastPathComponent)
+            if FileManager.default.fileExists(atPath: sibling.path) { return sibling }
+        }
+        return stored
+    }
+
+    /// Document-path driven: reloads only if `path` differs from what's
+    /// already loaded. Pass `force` to reload the same path (a re-picked
+    /// file updated in place).
+    func loadBackground(from path: String?, force: Bool = false) {
+        guard force || path != backgroundLoadedPath else { return }
+        loadBackground(from: resolveImage(path), storedPath: path)
+    }
+
+    /// `storedPath` is what the document records (the loaded-path tracker
+    /// compares against it); defaults to the URL's own path for a fresh pick.
+    func loadBackground(from url: URL?, storedPath: String? = nil) {
+        backgroundLoadedPath = storedPath ?? url?.path
+        if let url, let loaded = PlatformImageLoader.load(url: url) {
             background = loaded.image
             backgroundPixelSize = loaded.pixelSize
         } else {
@@ -124,8 +163,14 @@ final class EditorState {
         }
     }
 
-    func loadOverlay(from path: String?) {
-        if let path, let loaded = PlatformImageLoader.load(path: path) {
+    func loadOverlay(from path: String?, force: Bool = false) {
+        guard force || path != overlayLoadedPath else { return }
+        loadOverlay(from: resolveImage(path), storedPath: path)
+    }
+
+    func loadOverlay(from url: URL?, storedPath: String? = nil) {
+        overlayLoadedPath = storedPath ?? url?.path
+        if let url, let loaded = PlatformImageLoader.load(url: url) {
             overlay = loaded.image
             overlayPixelSize = loaded.pixelSize
         } else {
@@ -134,8 +179,14 @@ final class EditorState {
         }
     }
 
-    func loadGuide(from path: String?) {
-        if let path, let loaded = PlatformImageLoader.load(path: path) {
+    func loadGuide(from path: String?, force: Bool = false) {
+        guard force || path != guideLoadedPath else { return }
+        loadGuide(from: resolveImage(path), storedPath: path)
+    }
+
+    func loadGuide(from url: URL?, storedPath: String? = nil) {
+        guideLoadedPath = storedPath ?? url?.path
+        if let url, let loaded = PlatformImageLoader.load(url: url) {
             guide = loaded.image
             guidePixelSize = loaded.pixelSize
         } else {
@@ -156,6 +207,9 @@ final class EditorState {
 @MainActor
 struct EditorView: View {
     @ObservedObject var document: MapDocument
+    /// Where the document lives, so image paths stored by another device
+    /// can be resolved to the copy sitting beside this document.
+    var documentURL: URL?
     @State private var state = EditorState()
     @State private var session: SimSession?
     enum ImageImportTarget {
@@ -184,23 +238,26 @@ struct EditorView: View {
         .toolbar { toolbarContent }
         .fileImporter(isPresented: $importingImage,
                       allowedContentTypes: [.png, .jpeg, .tiff]) { result in
+            // Loads run here directly (not only via the onChange handlers
+            // below) so re-picking the SAME file, updated in place in iCloud,
+            // reloads it even though its path string hasn't changed. The
+            // loader owns the security scope and reads fresh bytes.
             if case let .success(url) = result {
-                _ = url.startAccessingSecurityScopedResource()
                 switch importTarget {
                 case .background:
-                    state.loadBackground(from: url.path)
+                    state.loadBackground(from: url)
                     document.edit(undoManager) { $0.backgroundImagePath = url.path }
                     if let px = state.backgroundPixelSize, px != CanvasSpec.size {
                         state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
                     }
                 case .overlay:
-                    state.loadOverlay(from: url.path)
+                    state.loadOverlay(from: url)
                     document.edit(undoManager) { $0.overlayImagePath = url.path }
                     if let px = state.overlayPixelSize, px != CanvasSpec.size {
                         state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
                     }
                 case .guide:
-                    state.loadGuide(from: url.path)
+                    state.loadGuide(from: url)
                     document.edit(undoManager) { $0.guideImagePath = url.path }
                 }
             }
@@ -217,9 +274,13 @@ struct EditorView: View {
             }
         }
         .onAppear {
+            state.documentFolder = documentURL?.deletingLastPathComponent()
             state.loadBackground(from: document.draft.backgroundImagePath)
             state.loadOverlay(from: document.draft.overlayImagePath)
             state.loadGuide(from: document.draft.guideImagePath)
+        }
+        .onChange(of: documentURL) { _, url in
+            state.documentFolder = url?.deletingLastPathComponent()
         }
         .onChange(of: document.draft.backgroundImagePath) { _, path in
             state.loadBackground(from: path)

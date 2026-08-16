@@ -59,16 +59,44 @@ extension EditorResources {
 
 enum PlatformImageLoader {
     static func load(path: String) -> (image: PlatformImage, pixelSize: CGSize)? {
+        load(url: URL(fileURLWithPath: path))
+    }
+
+    /// Reads the file's CURRENT bytes and decodes them. NSImage/UIImage
+    /// (contentsOfFile:) does not download an iCloud Drive placeholder and
+    /// can serve a stale copy of a file Finder already shows as up to date.
+    /// This nudges the download for a not-yet-current iCloud item and reads
+    /// the bytes uncached, so a re-picked, updated-in-place file decodes
+    /// fresh. Deliberately no NSFileCoordinator and no blocking wait: both
+    /// can stall the main thread against the file-provider daemon, which in
+    /// the editor showed as a picked layer never appearing.
+    static func load(url: URL) -> (image: PlatformImage, pixelSize: CGSize)? {
+        guard let data = freshRead(url) else { return nil }
         #if canImport(AppKit)
-        guard let image = NSImage(contentsOfFile: path),
+        guard let image = NSImage(data: data),
               let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
         else { return nil }
         return (image, CGSize(width: cg.width, height: cg.height))
         #else
-        guard let image = UIImage(contentsOfFile: path), let cg = image.cgImage
+        guard let image = UIImage(data: data), let cg = image.cgImage
         else { return nil }
         return (image, CGSize(width: cg.width, height: cg.height))
         #endif
+    }
+
+    private static func freshRead(_ url: URL) -> Data? {
+        let scoped = url.startAccessingSecurityScopedResource()
+        defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+
+        let fm = FileManager.default
+        if fm.isUbiquitousItem(at: url) {
+            let status = try? url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey])
+                .ubiquitousItemDownloadingStatus
+            if status != .current {
+                try? fm.startDownloadingUbiquitousItem(at: url)
+            }
+        }
+        return try? Data(contentsOf: url, options: [.uncached])
     }
 }
 

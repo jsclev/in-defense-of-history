@@ -469,12 +469,16 @@ enum MapGeometry {
         /// The slot footprint reaches inside a path's lane - a hard error,
         /// nothing may ever sit in the path.
         case overlapsPath
+        /// The slot's pad image overlaps another slot's pad - a hard error,
+        /// two towers can't share ground.
+        case overlapsSlot
         /// No tower placed here could reach any path - a warning.
         case outOfRange
 
         var message: String {
             switch self {
             case .overlapsPath: "intersects a path"
+            case .overlapsSlot: "overlaps another slot"
             case .outOfRange: "out of range of every path"
             }
         }
@@ -483,13 +487,17 @@ enum MapGeometry {
     /// `maxTowerRange` is the longest range in the tower table, supplied by the
     /// caller rather than read from a singleton so this stays pure geometry.
     /// Passing nil skips the range check instead of comparing against an
-    /// invented constant.
-    static func slotIssue(_ slot: Point, roads: [MapDraft.Road],
+    /// invented constant. `others` are the remaining slots, tested with the
+    /// pad IMAGE's footprint (CanvasSpec), so spacing is set by the art.
+    static func slotIssue(_ slot: Point, roads: [MapDraft.Road], others: [Point] = [],
                           maxTowerRange: Double?) -> SlotIssue? {
         let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }
-        guard let d = ds.min() else { return nil }
-        if d < roadHalfWidth + slotRadius { return .overlapsPath }
-        if let maxTowerRange, d - roadHalfWidth > maxTowerRange {
+        if let d = ds.min(), d < roadHalfWidth + slotRadius { return .overlapsPath }
+        let p = CGPoint(x: slot.x, y: slot.y)
+        if others.contains(where: { CanvasSpec.slotFootprintsOverlap(p, CGPoint(x: $0.x, y: $0.y)) }) {
+            return .overlapsSlot
+        }
+        if let d = ds.min(), let maxTowerRange, d - roadHalfWidth > maxTowerRange {
             return .outOfRange
         }
         return nil
@@ -498,7 +506,10 @@ enum MapGeometry {
     static func warnings(for draft: MapDraft, maxTowerRange: Double?) -> [Int: SlotIssue] {
         var out: [Int: SlotIssue] = [:]
         for (i, s) in draft.slots.enumerated() {
-            if let w = slotIssue(s, roads: draft.roads, maxTowerRange: maxTowerRange) { out[i] = w }
+            var others = draft.slots
+            others.remove(at: i)
+            if let w = slotIssue(s, roads: draft.roads, others: others,
+                                 maxTowerRange: maxTowerRange) { out[i] = w }
         }
         return out
     }

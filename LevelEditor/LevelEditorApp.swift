@@ -50,14 +50,14 @@ struct LevelEditorApp: App {
     var body: some Scene {
         #if os(macOS)
         DocumentGroup(newDocument: { MapDocument() }) { config in
-            EditorView(document: config.document)
+            EditorView(document: config.document, documentURL: config.fileURL)
         }
         .defaultSize(width: 1380, height: 900)
         .defaultLaunchBehavior(.suppressed)
         .commands { ZoomCommands() }
         #else
         DocumentGroup(newDocument: { MapDocument() }) { config in
-            EditorView(document: config.document)
+            EditorView(document: config.document, documentURL: config.fileURL)
         }
         .commands { ZoomCommands() }
         #endif

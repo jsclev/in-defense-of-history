@@ -13,9 +13,12 @@ import SwiftUI
 /// keeps one of these on its runner so the per-frame render never
 /// re-answers which layers exist.
 ///
-/// The level screen and the briefing portrait both construct the map from
-/// this one definition, so the two can never disagree about what a level
-/// looks like.
+/// This is THE map compositor. It owns both which layers exist and how each
+/// is placed: every layer is a full-canvas image projected onto the play
+/// area through one LevelMapProjection. The level screen (full size, its
+/// walkers slotted between the tiers) and the briefing portrait (small, at
+/// rest) both draw through the tiers below and nothing else, so the two can
+/// never disagree about what a level looks like.
 struct LevelMapArt {
     let mapImageName: String
 
@@ -42,35 +45,63 @@ struct LevelMapArt {
         occlusionName = Self.existing(mapImageName + "_occlusion")
     }
 
-    /// The map image below everything that moves: the base terrain, the
-    /// road art over it, then the overlay, each drawn at the same frame so
-    /// the layers register pixel-for-pixel.
-    var underlay: some View {
-        ZStack {
-            Image(mapImageName).resizable()
-            layer(pathName)
-            layer(overlayName)
-        }
+    /// Whether the level has any map art at all.
+    var hasArt: Bool { !mapImageName.isEmpty }
+
+    /// The projection every surface builds to composite this art: the
+    /// canonical play area fitted into `fitRect`. One constructor, so the
+    /// level screen and the briefing portrait fit the map identically.
+    static func projection(fitting fitRect: CGRect) -> LevelMapProjection {
+        LevelMapProjection(playArea: CanvasSpec.playArea, fitRect: fitRect)
     }
 
-    /// The finished map at rest — every layer, in the level screen's order.
-    /// The briefing portrait draws this; the level screen draws the
-    /// occlusion layers itself, above its walkers.
-    var complete: some View {
-        ZStack {
-            underlay
-            layer(forestOcclusionName)
-            layer(occlusionName)
+    // MARK: - Tiers, in draw order
+
+    /// Tier 1 — the map below everything that moves: base terrain, road
+    /// art, overlay.
+    @ViewBuilder func underlay(in projection: LevelMapProjection) -> some View {
+        layer(mapImageName, in: projection)
+        layer(pathName, in: projection)
+        layer(overlayName, in: projection)
+    }
+
+    /// Tier 2 — foliage at the path endpoints. Above the walkers.
+    @ViewBuilder func forestOcclusion(in projection: LevelMapProjection) -> some View {
+        layer(forestOcclusionName, in: projection)
+    }
+
+    /// Tier 3 — the entrance/exit occlusion. Above every playable layer.
+    @ViewBuilder func occlusion(in projection: LevelMapProjection) -> some View {
+        layer(occlusionName, in: projection)
+    }
+
+    /// The finished map at rest — all three tiers, in the level screen's
+    /// order, with nothing between them. What the briefing portrait draws.
+    @ViewBuilder func complete(in projection: LevelMapProjection) -> some View {
+        underlay(in: projection)
+        forestOcclusion(in: projection)
+        occlusion(in: projection)
+    }
+
+    // MARK: - Placement
+
+    /// The one placement rule: a layer is a full-canvas image, sized to the
+    /// projected canvas and centred on it, so every layer registers
+    /// pixel-for-pixel with the terrain. Never hit-tested — art layers sit
+    /// among tappable controls and must not swallow their taps.
+    @ViewBuilder private func layer(_ name: String?,
+                                    in projection: LevelMapProjection) -> some View {
+        if let name, !name.isEmpty {
+            Image(name)
+                .resizable()
+                .frame(width: projection.imageFrameSize.width,
+                       height: projection.imageFrameSize.height)
+                .position(projection.imageCenter)
+                .allowsHitTesting(false)
         }
     }
 
     private static func existing(_ name: String) -> String? {
         UIImage(named: name) != nil ? name : nil
-    }
-
-    @ViewBuilder private func layer(_ name: String?) -> some View {
-        if let name {
-            Image(name).resizable()
-        }
     }
 }

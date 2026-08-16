@@ -321,10 +321,11 @@ struct InspectorView: View {
                             .monospacedDigit()
                             .foregroundStyle(.secondary)
                         if let issue = warnings[i] {
-                            Image(systemName: issue == .overlapsPath
+                            let isError = issue != .outOfRange
+                            Image(systemName: isError
                                   ? "xmark.octagon.fill"
                                   : "exclamationmark.triangle.fill")
-                                .foregroundStyle(issue == .overlapsPath ? .red : .orange)
+                                .foregroundStyle(isError ? .red : .orange)
                                 .help(issue.message)
                         }
                         Spacer()

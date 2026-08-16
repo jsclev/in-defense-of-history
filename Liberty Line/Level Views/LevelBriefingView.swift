@@ -100,21 +100,16 @@ struct LevelBriefingView: View {
     private func levelPortrait(metrics: HudMetrics) -> some View {
         let height = 260 * metrics.scale
         let frame = CGSize(width: height * 16 / 9, height: height)
+        let art = LevelMapArt(mapImageName: node.mapImageName)
         return ZStack {
-            if node.mapImageName.isEmpty {
-                Rectangle().fill(Self.ink.opacity(0.55))
+            if art.hasArt {
+                // The map exactly as the level screen composites it — same
+                // compositor, same tiers, same projection rule — fitted to
+                // this smaller frame instead of the screen.
+                art.complete(in: LevelMapArt.projection(
+                    fitting: CGRect(origin: .zero, size: frame)))
             } else {
-                // The map exactly as the level constructs it: background,
-                // road art, overlay, occlusion — projected by the same
-                // LevelMapProjection the level screen uses, so the portrait
-                // shows the playable area and not the full canvas.
-                let projection = LevelMapProjection(
-                    playArea: CanvasSpec.playArea,
-                    fitRect: CGRect(origin: .zero, size: frame))
-                LevelMapArt(mapImageName: node.mapImageName).complete
-                    .frame(width: projection.imageFrameSize.width,
-                           height: projection.imageFrameSize.height)
-                    .position(projection.imageCenter)
+                Rectangle().fill(Self.ink.opacity(0.55))
             }
         }
         .frame(width: frame.width, height: frame.height)

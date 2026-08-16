@@ -217,10 +217,7 @@ struct LevelMapView: View {
     private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
         let safe = screen.safe
-        let projection = LevelMapProjection(
-            playArea: runner.playArea,
-            fitRect: screen.playable
-        )
+        let projection = LevelMapArt.projection(fitting: screen.playable)
         let metrics = HudMetrics(viewSize: viewSize)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
@@ -244,10 +241,7 @@ struct LevelMapView: View {
             .opacity(0.001)
             .allowsHitTesting(false)
 
-            art.underlay
-                .frame(width: projection.imageFrameSize.width,
-                       height: projection.imageFrameSize.height)
-                .position(projection.imageCenter)
+            art.underlay(in: projection)
 
             LevelTowerSlotsView(
                 debugMode: debugMode,
@@ -363,19 +357,9 @@ struct LevelMapView: View {
                 }
             }
 
-            // A path can begin and end close to the play area's side
-            // boundaries.  This full-canvas alpha layer contains only
-            // compact forest clusters at those GeoJSON endpoints.  Rendering
-            // it after walkers makes soldiers enter from and disappear into
-            // foliage on wide iPhones; interactive controls remain above it.
-            if let forestName = art.forestOcclusionName {
-                Image(forestName)
-                    .resizable()
-                    .frame(width: projection.imageFrameSize.width,
-                           height: projection.imageFrameSize.height)
-                    .position(projection.imageCenter)
-                    .allowsHitTesting(false)
-            }
+            // Rendered after the walkers so soldiers enter from and disappear
+            // into the foliage; interactive controls remain above it.
+            art.forestOcclusion(in: projection)
 
             Group {
                 ForEach(runner.projectiles) { projectile in
@@ -392,18 +376,8 @@ struct LevelMapView: View {
             .opacity(runner.isDefeated ? 0 : 1)
             .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
 
-            // The occlusion overlay: level art that covers the entrances and
-            // exits, hiding enemies before they enter and after they leave.
-            // Above every playable layer, below the menus and the HUD, and
-            // transparent to touches so the slots under it stay tappable.
-            if let occlusionName = art.occlusionName {
-                Image(occlusionName)
-                    .resizable()
-                    .frame(width: projection.imageFrameSize.width,
-                           height: projection.imageFrameSize.height)
-                    .position(projection.imageCenter)
-                    .allowsHitTesting(false)
-            }
+            // Above every playable layer, below the menus and the HUD.
+            art.occlusion(in: projection)
 
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                 let slotTap = slotTapSize(projection: projection)
@@ -687,20 +661,19 @@ struct LevelMapView: View {
         let kinds = TowerKind.allCases
         // One adjusted centre for the background and every item, so nothing
         // in the menu can drift from anything else.
-        let center = TowerMenuLayout.menuCenter(anchor: anchor,
-                                                count: kinds.count,
-                                                scale: scale)
+        let center = TowerMenuLayout.menuCenterPoint(anchor: anchor,
+                                                     count: kinds.count,
+                                                     scale: scale)
         return Group {
             radialMenuBackground(count: kinds.count, center: center, scale: scale)
             ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
-                let offset = TowerMenuLayout.itemOffset(index: index, count: kinds.count)
                 BuildMenuItem(kind: kind, isAvailable: runner.maxLevel(for: kind) >= 1,
                               isArmed: runner.armedBuildKind == kind,
                               scale: scale) {
                     runner.tapBuildButton(kind)
                 }
-                .position(x: center.x + offset.width * scale,
-                          y: center.y + offset.height * scale)
+                .position(TowerMenuLayout.itemPosition(index: index, count: kinds.count,
+                                                       center: center, scale: scale))
             }
         }
     }
@@ -709,21 +682,19 @@ struct LevelMapView: View {
                              scale: CGFloat) -> some View {
         let offers = runner.upgradeOffers
         let count = max(offers.count, 1)
-        let center = TowerMenuLayout.menuCenter(anchor: anchor,
-                                                count: count,
-                                                scale: scale)
+        let center = TowerMenuLayout.menuCenterPoint(anchor: anchor,
+                                                     count: count,
+                                                     scale: scale)
         return Group {
             radialMenuBackground(count: count, center: center, scale: scale)
             if offers.isEmpty {
-                let offset = TowerMenuLayout.itemOffset(index: 0, count: 1)
                 UpgradeMenuItem(iconName: tower.kind.menuIconName,
                                 dropKind: tower.kind, cost: nil,
                                 isArmed: false, scale: scale) {}
-                    .position(x: center.x + offset.width * scale,
-                              y: center.y + offset.height * scale)
+                    .position(TowerMenuLayout.itemPosition(index: 0, count: 1,
+                                                           center: center, scale: scale))
             } else {
                 ForEach(Array(offers.enumerated()), id: \.offset) { index, offer in
-                    let offset = TowerMenuLayout.itemOffset(index: index, count: count)
                     let iconName = offers.count > 1
                         ? (tower.kind.assetName(atLevel: offer.nextLevel,
                                                 branch: offer.branch) ?? tower.kind.menuIconName)
@@ -734,19 +705,22 @@ struct LevelMapView: View {
                                     scale: scale) {
                         runner.tapUpgradeButton(branch: offer.branch)
                     }
-                    .position(x: center.x + offset.width * scale,
-                              y: center.y + offset.height * scale)
+                    .position(TowerMenuLayout.itemPosition(index: index, count: count,
+                                                           center: center, scale: scale))
                 }
             }
         }
     }
 
+    /// The menu's background frame: its size comes from the layout (for the
+    /// build menu, derived from the tower_menu_bg image itself), scaled by
+    /// the HUD, and it's centred on the menu's centre point.
     private func radialMenuBackground(count: Int, center: CGPoint,
                                       scale: CGFloat) -> some View {
-        Image(TowerMenuLayout.backgroundAssetName(count: count))
+        let size = TowerMenuLayout.backgroundSize(count: count)
+        return Image(TowerMenuLayout.backgroundAssetName(count: count))
             .resizable()
-            .frame(width: TowerMenuLayout.backgroundDiameter(count: count) * scale,
-                   height: TowerMenuLayout.backgroundDiameter(count: count) * scale)
+            .frame(width: size.width * scale, height: size.height * scale)
             .position(center)
             .allowsHitTesting(false)
     }
