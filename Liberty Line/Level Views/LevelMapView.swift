@@ -47,6 +47,7 @@ struct LevelMapView: View {
     var onExit: () -> Void
 
     @StateObject private var runner: LevelRunner
+    @State private var towerSlotCount: Int = 0
 
     /// Slots whose debug ring the player has dismissed by tapping its legend.
     /// Tapping the slot itself brings it back. Debug mode only, and not
@@ -250,18 +251,11 @@ struct LevelMapView: View {
                        height: projection.imageFrameSize.height)
                 .position(projection.imageCenter)
 
-            // The slot pads. Every slot renders at the one footprint in
-            // canvas_spec, scaled by the same projection that fits the
-            // virtual play area to the screen.
-            ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { _, slotPosition in
-                Image("tower_slot_field")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: projection.viewLength(runner.slotSize.width),
-                           height: projection.viewLength(runner.slotSize.height))
-                    .position(projection.viewPoint(slotPosition))
-                    .allowsHitTesting(false)
-            }
+            LevelTowerSlotsView(
+                debugMode: debugMode,
+                slotPositions: runner.slotPositions,
+                size: CGSize(width: runner.slotSize.width, height: runner.slotSize.height),
+                projection: projection)
 
             if debugMode {
                 ForEach(runner.placedTowers) { tower in
