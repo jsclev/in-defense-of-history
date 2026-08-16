@@ -597,33 +597,20 @@ struct EditorCanvas: View {
               document.draft.slots.indices.contains(i) else { return }
         let slot = document.draft.slots[i]
         let c = t.view(slot)
+        let size = TowerMenuLayout.getBgSize(playAreaScalingFactor: 1)
+        let rect = CGRect(x: c.x - size.width * t.scale / 2,
+                          y: c.y - size.height * t.scale / 2,
+                          width: size.width * t.scale,
+                          height: size.height * t.scale)
         let artPath = "../in-defense-of-history-data/LibertyLineAssets.xcassets/"
             + "tower_menu_bg.imageset/tower_menu_bg.png"
         if let url = EditorResources.url(artPath),
            let art = PlatformImageLoader.load(path: url.path) {
-            let side = TowerMenuLayout.menuMapCanvasSide(count: 4) * t.scale
-            ctx.draw(Image(platformImage: art.image),
-                     in: CGRect(x: c.x - side / 2, y: c.y - side / 2,
-                                width: side, height: side))
+            ctx.draw(Image(platformImage: art.image), in: rect)
         } else {
-            let size = TowerMenuLayout.menuMapSize(count: 4)
-            let rect = CGRect(x: c.x - size.width * t.scale / 2,
-                              y: c.y - size.height * t.scale / 2,
-                              width: size.width * t.scale,
-                              height: size.height * t.scale)
             ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.15)))
             ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.85)),
                        lineWidth: max(1, 2 * t.scale))
-            for index in 0..<4 {
-                let offset = TowerMenuLayout.bubbleMapOffset(index: index, count: 4)
-                let d = TowerMenuLayout.bubbleMapDiameter(count: 4) * t.scale
-                let bubble = CGRect(x: c.x + offset.width * t.scale - d / 2,
-                                    y: c.y + offset.height * t.scale - d / 2,
-                                    width: d, height: d)
-                ctx.fill(SwiftUI.Path(ellipseIn: bubble), with: .color(.white.opacity(0.35)))
-                ctx.stroke(SwiftUI.Path(ellipseIn: bubble), with: .color(.white.opacity(0.9)),
-                           lineWidth: max(1, 1.5 * t.scale))
-            }
         }
     }
 

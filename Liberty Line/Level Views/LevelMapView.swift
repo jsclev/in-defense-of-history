@@ -218,6 +218,7 @@ struct LevelMapView: View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
         let safe = screen.safe
         let projection = LevelMapArt.projection(fitting: screen.playable)
+        let playAreaScalingFactor = PlayAreaLayout.scalingFactor(runtimePlayArea: screen.playable)
         let metrics = HudMetrics(viewSize: viewSize)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
@@ -226,11 +227,7 @@ struct LevelMapView: View {
             Color.black
 
             Group {
-                Image(TowerMenuLayout.backgroundAssetName(count: TowerKind.allCases.count))
-                Image(TowerMenuLayout.backgroundAssetName(count: 1))
-                Image(TowerMenuLayout.backgroundAssetName(count: 2))
-                Image(TowerMenuLayout.backgroundAssetName(count: 3))
-                Image("radial_menu_bubble")
+                Image("tower_menu_bg")
                 Image("tower_menu_square_frame")
                 ForEach(TowerKind.allCases) { kind in
                     Image(kind.menuIconName)
@@ -466,8 +463,8 @@ struct LevelMapView: View {
                         diameter: projection.viewLength(radius) * 2)
                 }
                 dismissCatcher(viewSize: viewSize)
-                radialBuildMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
-                                scale: metrics.scale)
+                towerMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
+                          playAreaScalingFactor: playAreaScalingFactor)
             }
             if let upgradeSlot = runner.selectedTowerSlotIndex,
                runner.slotPositions.indices.contains(upgradeSlot),
@@ -483,7 +480,7 @@ struct LevelMapView: View {
                 }
                 dismissCatcher(viewSize: viewSize)
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
-                            scale: metrics.scale)
+                            playAreaScalingFactor: playAreaScalingFactor)
             }
 
         }
@@ -657,70 +654,63 @@ struct LevelMapView: View {
             .onTapGesture { runner.dismissMenu() }
     }
 
-    private func radialBuildMenu(around anchor: CGPoint, scale: CGFloat) -> some View {
-        let kinds = TowerKind.allCases
-        // One adjusted centre for the background and every item, so nothing
-        // in the menu can drift from anything else.
-        let center = TowerMenuLayout.menuCenterPoint(anchor: anchor,
-                                                     count: kinds.count,
-                                                     scale: scale)
+    private func towerMenu(around anchor: CGPoint,
+                                 playAreaScalingFactor: CGFloat) -> some View {
+        let menuCenterPoint = TowerMenuLayout.getCenterPoint(anchor: anchor, scale: playAreaScalingFactor)
+        let buttonSize = TowerMenuLayout.getTowerButtonSize(playAreaScalingFactor: playAreaScalingFactor)
         return Group {
-            radialMenuBackground(count: kinds.count, center: center, scale: scale)
-            ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
-                BuildMenuItem(kind: kind, isAvailable: runner.maxLevel(for: kind) >= 1,
+            towerMenuBgImage(center: menuCenterPoint, playAreaScalingFactor: playAreaScalingFactor)
+            ForEach(TowerKind.allCases) { kind in
+                TowerMenuItem(kind: kind,
+                              isAvailable: runner.maxLevel(for: kind) >= 1,
                               isArmed: runner.armedBuildKind == kind,
-                              scale: scale) {
+                              buttonSize: buttonSize) {
                     runner.tapBuildButton(kind)
                 }
-                .position(TowerMenuLayout.itemPosition(index: index, count: kinds.count,
-                                                       center: center, scale: scale))
+                .position(TowerMenuLayout.getTowerButtonCenterPoint(towerKind: kind,
+                                                                    menuCenterPoint: menuCenterPoint,
+                                                                    playAreaScalingFactor: playAreaScalingFactor,
+                                                                    towerButtonSize: buttonSize.width))
             }
         }
     }
 
     private func upgradeMenu(for tower: PlacedTower, around anchor: CGPoint,
-                             scale: CGFloat) -> some View {
-        let offers = runner.upgradeOffers
-        let count = max(offers.count, 1)
-        let center = TowerMenuLayout.menuCenterPoint(anchor: anchor,
-                                                     count: count,
-                                                     scale: scale)
+                             playAreaScalingFactor: CGFloat) -> some View {
+        let offer = runner.upgradeOffers.first
+        let center = TowerMenuLayout.getCenterPoint(anchor: anchor, scale: playAreaScalingFactor)
+        let buttonSize = TowerMenuLayout.getTowerButtonSize(playAreaScalingFactor: playAreaScalingFactor)
         return Group {
-            radialMenuBackground(count: count, center: center, scale: scale)
-            if offers.isEmpty {
-                UpgradeMenuItem(iconName: tower.kind.menuIconName,
-                                dropKind: tower.kind, cost: nil,
-                                isArmed: false, scale: scale) {}
-                    .position(TowerMenuLayout.itemPosition(index: 0, count: 1,
-                                                           center: center, scale: scale))
-            } else {
-                ForEach(Array(offers.enumerated()), id: \.offset) { index, offer in
-                    let iconName = offers.count > 1
-                        ? (tower.kind.assetName(atLevel: offer.nextLevel,
-                                                branch: offer.branch) ?? tower.kind.menuIconName)
-                        : tower.kind.menuIconName
-                    UpgradeMenuItem(iconName: iconName, dropKind: tower.kind,
-                                    cost: offer.cost,
-                                    isArmed: runner.armedUpgradeBranch == offer.branch,
-                                    scale: scale) {
-                        runner.tapUpgradeButton(branch: offer.branch)
+            towerMenuBgImage(center: center, playAreaScalingFactor: playAreaScalingFactor)
+            ForEach(TowerKind.allCases) { kind in
+                Group {
+                    if kind == tower.kind {
+                        UpgradeMenuItem(iconName: kind.menuIconName, dropKind: kind,
+                                        cost: offer?.cost,
+                                        isArmed: offer.map { runner.armedUpgradeBranch == $0.branch } ?? false,
+                                        buttonSize: buttonSize) {
+                            if let offer { runner.tapUpgradeButton(branch: offer.branch) }
+                        }
+                    } else {
+                        TowerMenuItem(kind: kind, isAvailable: false, isArmed: false,
+                                      buttonSize: buttonSize) {}
                     }
-                    .position(TowerMenuLayout.itemPosition(index: index, count: count,
-                                                           center: center, scale: scale))
                 }
+                .position(TowerMenuLayout.getTowerButtonCenterPoint(
+                    towerKind: kind,
+                    menuCenterPoint: center,
+                    playAreaScalingFactor: playAreaScalingFactor,
+                    towerButtonSize: buttonSize.width))
             }
         }
     }
 
-    /// The menu's background frame: its size comes from the layout (for the
-    /// build menu, derived from the tower_menu_bg image itself), scaled by
-    /// the HUD, and it's centred on the menu's centre point.
-    private func radialMenuBackground(count: Int, center: CGPoint,
-                                      scale: CGFloat) -> some View {
-        let size = TowerMenuLayout.backgroundSize(count: count)
-        return Image(TowerMenuLayout.backgroundAssetName(count: count))
+    private func towerMenuBgImage(center: CGPoint, playAreaScalingFactor: CGFloat) -> some View {
+        let size = TowerMenuLayout.getBgSize(playAreaScalingFactor: playAreaScalingFactor)
+        
+        return Image("tower_menu_bg")
             .resizable()
-            .frame(width: size.width * scale, height: size.height * scale)
+            .frame(width: size.width, height: size.height)
             .position(center)
             .allowsHitTesting(false)
     }
@@ -841,11 +831,11 @@ private struct EntranceWaveButton: View {
     }
 }
 
-private struct BuildMenuItem: View {
+private struct TowerMenuItem: View {
     let kind: TowerKind
     let isAvailable: Bool
     let isArmed: Bool
-    let scale: CGFloat
+    let buttonSize: CGSize
     let action: () -> Void
 
     var body: some View {
@@ -854,11 +844,9 @@ private struct BuildMenuItem: View {
     }
 
     private var icon: some View {
-        let frameSize = TowerMenuLayout.towerFrameSize * scale
-        let iconSize = TowerMenuLayout.towerIconSize * scale
-        // The opaque square frame covers the round well baked into the radial
-        // art; the pictogram is centred in the tap box, which itemOffset
-        // centres on the bubble — no offsets anywhere in between.
+        let frameSize = buttonSize.width
+        let iconSize = TowerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
+        
         return ZStack {
             Image("tower_menu_square_frame")
                 .resizable()
@@ -878,7 +866,7 @@ private struct BuildMenuItem: View {
                     .font(.system(size: iconSize * 0.38, weight: .bold))
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(.white, .green)
-                    .shadow(radius: 1 * scale)
+                    .shadow(radius: frameSize * 0.015)
             }
         }
         .contentShape(Rectangle())
@@ -890,17 +878,13 @@ private struct UpgradeMenuItem: View {
     let dropKind: TowerKind
     let cost: Int?
     let isArmed: Bool
-    let scale: CGFloat
+    let buttonSize: CGSize
     let action: () -> Void
 
     var body: some View {
-        let frameSize = TowerMenuLayout.towerFrameSize * scale
-        let iconSize = TowerMenuLayout.towerIconSize * scale
-        // The button's layout box is exactly the tap box, with the icon
-        // centred in it, so positioning the button centres the icon on its
-        // parchment bubble. The cost capsule hangs below as an overlay and
-        // never shifts the icon — a VStack here would centre the icon+capsule
-        // pair instead, riding the icon up off the bubble.
+        let frameSize = buttonSize.width
+        let iconSize = TowerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
+        
         return Button(action: action) {
             ZStack {
                 Image("tower_menu_square_frame")
@@ -916,10 +900,9 @@ private struct UpgradeMenuItem: View {
             }
             .frame(width: frameSize, height: frameSize)
             .overlay(alignment: .bottom) {
-                costCapsule
+                costCapsule(frameSize: frameSize)
                     .fixedSize()
-                    // Sits the capsule's top just under the tap box.
-                    .alignmentGuide(.bottom) { $0[.top] - 3 * scale }
+                    .alignmentGuide(.bottom) { $0[.top] - frameSize * 0.05 }
             }
             .overlay(alignment: .topTrailing) {
                 if isArmed {
@@ -927,7 +910,7 @@ private struct UpgradeMenuItem: View {
                         .font(.system(size: iconSize * 0.38, weight: .bold))
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(.white, .green)
-                        .shadow(radius: 1 * scale)
+                        .shadow(radius: frameSize * 0.015)
                 }
             }
             .contentShape(Rectangle())
@@ -936,7 +919,9 @@ private struct UpgradeMenuItem: View {
         .disabled(cost == nil)
     }
 
-    @ViewBuilder private var costCapsule: some View {
+    @ViewBuilder private func costCapsule(frameSize: CGFloat) -> some View {
+        let scale = frameSize / TowerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
+
         if let cost {
             Label("\(cost)", systemImage: "circle.fill")
                 .font(.system(size: Typography.size(12 * scale), weight: .bold))

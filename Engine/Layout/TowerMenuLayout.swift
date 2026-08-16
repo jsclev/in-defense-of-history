@@ -3,67 +3,58 @@ import CoreGraphics
 import SwiftUI
 
 public enum TowerMenuLayout {
-    public static let radius: CGFloat = 75.0
-    public static let buttonSide: CGFloat = 95.37
-    public static let towerFrameSize: CGFloat = 65.0
-    public static var towerIconSize: CGFloat { towerFrameSize * towerIconFraction }
-    public static let centerDropFraction: CGFloat = 0
-    private static let bgScalingFactor = 0.25
-    private static let towerButtonScalingFactor = 0.05
-    
-    public static func getBgSize(playAreaSize: CGSize) -> CGSize {
-        return CGSize(width: playAreaSize.height * bgScalingFactor,
-                      height: playAreaSize.height * bgScalingFactor)
-    }
-    
-    public static func getTowerButtonSize(playAreaSize: CGSize) -> CGSize {
-        return CGSize(width: playAreaSize.height * towerButtonScalingFactor,
-                      height: playAreaSize.height * towerButtonScalingFactor)
+    private static let bgScalingFactor: CGFloat = 0.41
+    private static let towerButtonScalingFactor: CGFloat = 0.145
+    private static let towerIconScalingFactor: CGFloat = 0.66
+    private static let towerButtonOffsetFactor: CGFloat = 4.0
+    private static let buttonAngleDegrees: [TowerKind: CGFloat] = [
+        TowerKind.ranged: 145,
+        TowerKind.melee: 40,
+        TowerKind.special: 220,
+        TowerKind.areaOfEffect: 320
+    ]
+
+    public static func getBgSize(playAreaScalingFactor: CGFloat) -> CGSize {
+        let side = CanvasSpec.playArea.height * playAreaScalingFactor * bgScalingFactor
+        return CGSize(width: side, height: side)
     }
 
-    public static func getCenterPoint(anchor: CGPoint, count: Int, scale: CGFloat) throws -> CGPoint {
+    public static func getTowerButtonSize(playAreaScalingFactor: CGFloat) -> CGSize {
+        let side = CanvasSpec.playArea.height * playAreaScalingFactor * towerButtonScalingFactor
+        return CGSize(width: side, height: side)
+    }
+    
+    public static func getTowerIconSize(towerButtonSize: CGFloat) -> CGFloat {
+        return towerButtonSize * towerIconScalingFactor
+    }
+
+    public static func getCenterPoint(anchor: CGPoint, scale: CGFloat) -> CGPoint {
         CGPoint(x: anchor.x,
                 y: anchor.y)
     }
 
-    private static let towerIconFraction: CGFloat = 0.625
-    private static let variantArtScale: CGFloat = radius / 541
-
-    /// The 4-choice build menu's frame is `tower_menu_bg`, whose geometry is
-    /// derived from the image itself in BackgroundFrameLayout; the 1–3
-    /// choice upgrade variants keep their measured tables below. Everything
-    /// public here that takes `count` routes 4 to BackgroundFrameLayout.
-    private static let backgroundFrameCount = 4
-
-    private struct Art {
-        let assetName: String
-        let canvasPx: CGFloat
-        let parchmentPx: CGFloat
-        let pointsPerPx: CGFloat
-        let bubbleOffsetsPx: [CGSize]
-        let visualBoundsPx: CGRect
+    public static func getTowerButtonCenterPoint(towerKind: TowerKind,
+                                                 menuCenterPoint: CGPoint,
+                                                 playAreaScalingFactor: CGFloat,
+                                                 towerButtonSize: CGFloat) -> CGPoint {
+        let menuSize = getBgSize(playAreaScalingFactor: playAreaScalingFactor)
+        let menuRadius = getBgSize(playAreaScalingFactor: playAreaScalingFactor).width / 2
+        let distanceFromCenter = menuRadius - (towerButtonSize / towerButtonOffsetFactor)
+        let degrees = buttonAngleDegrees[towerKind]!
+        let radians = degrees * .pi / 180
+        
+        return CGPoint(x: menuCenterPoint.x + distanceFromCenter * cos(radians),
+                       y: menuCenterPoint.y - distanceFromCenter * sin(radians))
     }
 
-    private static let variantArts: [Int: Art] = [
-        1: Art(assetName: "radial_menu_1_choice", canvasPx: 1536,
-               parchmentPx: 192, pointsPerPx: variantArtScale,
-               bubbleOffsetsPx: [CGSize(width: 0, height: -540)],
-               visualBoundsPx: CGRect(x: 204, y: 69, width: 1129, height: 1265)),
-        2: Art(assetName: "radial_menu_2_choices", canvasPx: 1536,
-               parchmentPx: 192, pointsPerPx: variantArtScale,
-               bubbleOffsetsPx: [CGSize(width: 0, height: -540),
-                                 CGSize(width: 0, height: 543)],
-               visualBoundsPx: CGRect(x: 204, y: 69, width: 1129, height: 1402)),
-        3: Art(assetName: "radial_menu_3_choices", canvasPx: 1536,
-               parchmentPx: 192, pointsPerPx: variantArtScale,
-               bubbleOffsetsPx: [CGSize(width: 0, height: -540),
-                                 CGSize(width: 469, height: 270),
-                                 CGSize(width: -469, height: 271)],
-               visualBoundsPx: CGRect(x: 147, y: 69, width: 1244, height: 1265)),
-    ]
+    private static let towerIconFraction: CGFloat = 0.625
 
     public static var menuAnchorLift: CGFloat {
         CanvasSpec.slotSize.height / 2
+    }
+
+    public static var menuMapRadius: CGFloat {
+        getBgSize(playAreaScalingFactor: 1).width / 2
     }
 
     public enum VerticalEdge {
