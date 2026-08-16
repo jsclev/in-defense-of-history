@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		520082C0300C300000DF4F64 /* LibertyLineAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */; };
-		52A55E710000000000000000 /* CampaignBeaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000000 /* CampaignBeaver.swift */; };
 		52A55E710000000000000001 /* CampaignCompass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000001 /* CampaignCompass.swift */; };
 		52A55E710000000000000002 /* CampaignDecor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000002 /* CampaignDecor.swift */; };
 		52A55E710000000000000003 /* CampaignMapAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000003 /* CampaignMapAsset.swift */; };
@@ -52,7 +51,6 @@
 		520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = LibertyLineAssets.xcassets; path = "../in-defense-of-history-data/LibertyLineAssets.xcassets"; sourceTree = SOURCE_ROOT; };
 		520082C2300C300000DF4F64 /* GameName.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GameName.xcconfig; sourceTree = "<group>"; };
 		5263FCBD3002C99600C1546D /* Liberty Line.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Liberty Line.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		52A55E700000000000000000 /* CampaignBeaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignBeaver.swift; sourceTree = "<group>"; };
 		52A55E700000000000000001 /* CampaignCompass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignCompass.swift; sourceTree = "<group>"; };
 		52A55E700000000000000002 /* CampaignDecor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignDecor.swift; sourceTree = "<group>"; };
 		52A55E700000000000000003 /* CampaignMapAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignMapAsset.swift; sourceTree = "<group>"; };
@@ -181,7 +179,6 @@
 			isa = PBXGroup;
 			children = (
 				52D99880303142F400E3C64F /* Level Views */,
-				52A55E700000000000000000 /* CampaignBeaver.swift */,
 				52A55E700000000000000001 /* CampaignCompass.swift */,
 				52A55E700000000000000002 /* CampaignDecor.swift */,
 				52A55E700000000000000003 /* CampaignMapAsset.swift */,
@@ -414,7 +411,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52A55E710000000000000000 /* CampaignBeaver.swift in Sources */,
 				52A55E710000000000000001 /* CampaignCompass.swift in Sources */,
 				52A55E710000000000000002 /* CampaignDecor.swift in Sources */,
 				52A55E710000000000000003 /* CampaignMapAsset.swift in Sources */,

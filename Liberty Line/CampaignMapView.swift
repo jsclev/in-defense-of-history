@@ -88,9 +88,6 @@ struct CampaignMapView: View {
 
                         CampaignPirateShip(viewSize: mapGeometry.size,
                                            compassBox: compassBox)
-
-                        CampaignBeaver(viewSize: mapGeometry.size)
-
                         CampaignCritter(species: .grizzly,
                                         viewSize: mapGeometry.size)
                         CampaignCritter(species: .jackrabbit,
