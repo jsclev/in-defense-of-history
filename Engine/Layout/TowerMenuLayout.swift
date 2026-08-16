@@ -1,26 +1,11 @@
 import Foundation
 import CoreGraphics
 
-public enum RadialMenuLayout {
+public enum TowerMenuLayout {
     public static let radius: CGFloat = 91.0
-
-    /// 10% up from the tuned 86.70, judged on device.
     public static let buttonSide: CGFloat = 95.37
-
-    /// The opaque square ashwood frame every menu choice sits on, at the
-    /// Square Tower Menu v1 spec: ~80pt frame, pictogram at 78.5% of it.
-    public static let squareFrameSide: CGFloat = 80
-    public static let frameIconFraction: CGFloat = 0.785
-
-    /// Icon side for a menu item. ONE number for every menu item — build
-    /// choices, upgrade choices, locked and MAX states all read this;
-    /// nothing sizes a menu icon any other way.
-    public static var menuIconSide: CGFloat { squareFrameSide * frameIconFraction }
-
-    /// The menu's visual centre relative to the anchor (the slot point).
-    /// Zero: the menu opens dead-centred on the slot that was tapped. (An
-    /// earlier 0.15 drop compensated for old art that read too high; on the
-    /// current maps it pushed every menu visibly below its slot.)
+    public static let towerFrameSize: CGFloat = 80
+    public static var towerIconSize: CGFloat { towerFrameSize * towerIconFraction }
     public static let centerDropFraction: CGFloat = 0
 
     public static func menuCenter(anchor: CGPoint, count: Int, scale: CGFloat) -> CGPoint {
@@ -29,7 +14,7 @@ public enum RadialMenuLayout {
     }
 
     private static let fourChoiceArtScale: CGFloat = (90.5 / 409.5) * 0.9 * 0.92 * 0.96
-
+    private static let towerIconFraction: CGFloat = 0.525
     private static let variantArtScale: CGFloat = radius / 541
 
     private struct Art {

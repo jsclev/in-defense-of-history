@@ -5,7 +5,7 @@ INSERT INTO tower (
     shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '0a4b1c62-8f3e-4d97-b120-6e5a9c8d7f01', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Musketmen',
-    1, 1, 70, 150.0, 0.8,
+    1, 1, 70, 180.0, 0.8,
     12.0, 12.0, 550.0
 );
 
@@ -16,7 +16,7 @@ INSERT INTO tower (
     shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '1b5c2d73-9a4f-4ea8-8c31-7f6b0d9e8a02', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Marksmen',
-    2, 1, 90, 171.4, 0.8,
+    2, 1, 90, 210, 0.8,
     20.0, 20.0, 550.0
 );
 
@@ -27,7 +27,7 @@ INSERT INTO tower (
     shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '2c6d3e84-0b5a-4fb9-9d42-8a7c1e0f9b03', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Riflemen',
-    3, 1, 130, 192.9, 0.8,
+    3, 1, 130, 240.0, 0.8,
     30.0, 30.0, 550.0
 );
 
@@ -38,7 +38,7 @@ INSERT INTO tower (
     shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '1008b722-563a-44a0-8b31-c9cca93b9927', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Morgan''s Sharpshooters',
-    4, 1, 300, 214.3, 0.8,
+    4, 1, 300, 250.0, 0.8,
     30.0, 30.0, 550.0
 );
 
@@ -49,7 +49,7 @@ INSERT INTO tower (
     shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     '72788425-7677-418a-a06c-6b3120f94631', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Knowlton''s Rangers',
-    4, 2, 300, 214.3, 0.8,
+    4, 2, 300, 250.0, 0.8,
     30.0, 30.0, 550.0
 );
 
@@ -60,7 +60,7 @@ INSERT INTO tower (
     shot_min_damage, shot_max_damage, projectile_speed
 ) VALUES (
     'c5cc2d7b-b08c-4ba7-a532-52ba070589a5', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Whitcomb''s Rangers',
-    4, 3, 300, 214.3, 0.8,
+    4, 3, 300, 250.0, 0.8,
     30.0, 30.0, 550.0
 );
 

@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct LevelTowerSlotsView: View {
+    let towerSlotImageName = "tower_slot_field"
+    
     let debugMode: Bool
     let slotPositions: [CGPoint]
     let size: CGSize
@@ -10,7 +12,7 @@ struct LevelTowerSlotsView: View {
         ForEach(Array(slotPositions.enumerated()), id: \.offset) { index, slotPosition in
             if debugMode {
                 ZStack {
-                    Image("tower_slot_field")
+                    Image(towerSlotImageName)
                         .resizable()
                         .scaledToFit()
                         .frame(width: projection.viewLength(size.width),
@@ -25,7 +27,7 @@ struct LevelTowerSlotsView: View {
                 }.position(projection.viewPoint(slotPosition))
             }
             else {
-                Image("tower_slot_field")
+                Image(towerSlotImageName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: projection.viewLength(size.width),

@@ -52,7 +52,6 @@ public final class SQLiteDatabase {
         let flags = SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE
         let rc = sqlite3_open_v2(path, &h, flags, nil)
         guard rc == SQLITE_OK, let opened = h else {
-            let msg = h.map { String(cString: sqlite3_errmsg($0)) } ?? "unknown"
             if let h { sqlite3_close_v2(h) }
             throw SQLiteError.OpenDatabase(message: "Unable to open db")
         }
@@ -85,7 +84,6 @@ public final class SQLiteDatabase {
 
     private func lastError(_ context: String) -> SQLiteError {
         let msg = handle.map { String(cString: sqlite3_errmsg($0)) } ?? "unknown"
-        let code = handle.map { sqlite3_errcode($0) } ?? SQLITE_ERROR
         
         return SQLiteError.Bind(message: msg)
     }

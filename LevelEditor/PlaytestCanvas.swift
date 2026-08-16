@@ -124,8 +124,7 @@ struct PlaytestCanvas: View {
                     at: c
                 )
             } else {
-                SlotArt.draw(&ctx, at: c, index: i, scale: s,
-                             selected: session.selectedSlot == i)
+                TowerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: session.selectedSlot == i)
             }
         }
     }

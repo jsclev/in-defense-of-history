@@ -68,7 +68,6 @@ struct HeroesView: View {
             .ignoresSafeArea()
 
             GeometryReader { safeGeometry in
-                let metrics = HudMetrics(viewSize: safeGeometry.size)
                 DoneButton(action: onExit)
                     .hudFrame(DoneButtonLayout(screen: ScreenGeometry(proxy: safeGeometry),
                                                aspect: DoneButton.aspect).frame,

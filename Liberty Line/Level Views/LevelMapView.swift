@@ -39,8 +39,6 @@ struct LevelMapProjection {
     }
 }
 
-typealias RadialMenu = RadialMenuLayout
-
 struct LevelMapView: View {
     var node: CampaignNode
     var difficulty: Difficulty
@@ -231,10 +229,10 @@ struct LevelMapView: View {
             Color.black
 
             Group {
-                Image(RadialMenu.backgroundAssetName(count: TowerKind.allCases.count))
-                Image(RadialMenu.backgroundAssetName(count: 1))
-                Image(RadialMenu.backgroundAssetName(count: 2))
-                Image(RadialMenu.backgroundAssetName(count: 3))
+                Image(TowerMenuLayout.backgroundAssetName(count: TowerKind.allCases.count))
+                Image(TowerMenuLayout.backgroundAssetName(count: 1))
+                Image(TowerMenuLayout.backgroundAssetName(count: 2))
+                Image(TowerMenuLayout.backgroundAssetName(count: 3))
                 Image("radial_menu_bubble")
                 Image("tower_menu_square_frame")
                 ForEach(TowerKind.allCases) { kind in
@@ -689,12 +687,13 @@ struct LevelMapView: View {
         let kinds = TowerKind.allCases
         // One adjusted centre for the background and every item, so nothing
         // in the menu can drift from anything else.
-        let center = RadialMenu.menuCenter(anchor: anchor, count: kinds.count,
-                                           scale: scale)
+        let center = TowerMenuLayout.menuCenter(anchor: anchor,
+                                                count: kinds.count,
+                                                scale: scale)
         return Group {
             radialMenuBackground(count: kinds.count, center: center, scale: scale)
             ForEach(Array(kinds.enumerated()), id: \.element) { index, kind in
-                let offset = RadialMenu.itemOffset(index: index, count: kinds.count)
+                let offset = TowerMenuLayout.itemOffset(index: index, count: kinds.count)
                 BuildMenuItem(kind: kind, isAvailable: runner.maxLevel(for: kind) >= 1,
                               isArmed: runner.armedBuildKind == kind,
                               scale: scale) {
@@ -710,14 +709,13 @@ struct LevelMapView: View {
                              scale: CGFloat) -> some View {
         let offers = runner.upgradeOffers
         let count = max(offers.count, 1)
-        // Same shared centre as the build menu: background and items move as
-        // one, always.
-        let center = RadialMenu.menuCenter(anchor: anchor, count: count,
-                                           scale: scale)
+        let center = TowerMenuLayout.menuCenter(anchor: anchor,
+                                                count: count,
+                                                scale: scale)
         return Group {
             radialMenuBackground(count: count, center: center, scale: scale)
             if offers.isEmpty {
-                let offset = RadialMenu.itemOffset(index: 0, count: 1)
+                let offset = TowerMenuLayout.itemOffset(index: 0, count: 1)
                 UpgradeMenuItem(iconName: tower.kind.menuIconName,
                                 dropKind: tower.kind, cost: nil,
                                 isArmed: false, scale: scale) {}
@@ -725,7 +723,7 @@ struct LevelMapView: View {
                               y: center.y + offset.height * scale)
             } else {
                 ForEach(Array(offers.enumerated()), id: \.offset) { index, offer in
-                    let offset = RadialMenu.itemOffset(index: index, count: count)
+                    let offset = TowerMenuLayout.itemOffset(index: index, count: count)
                     let iconName = offers.count > 1
                         ? (tower.kind.assetName(atLevel: offer.nextLevel,
                                                 branch: offer.branch) ?? tower.kind.menuIconName)
@@ -745,10 +743,10 @@ struct LevelMapView: View {
 
     private func radialMenuBackground(count: Int, center: CGPoint,
                                       scale: CGFloat) -> some View {
-        Image(RadialMenu.backgroundAssetName(count: count))
+        Image(TowerMenuLayout.backgroundAssetName(count: count))
             .resizable()
-            .frame(width: RadialMenu.backgroundDiameter(count: count) * scale,
-                   height: RadialMenu.backgroundDiameter(count: count) * scale)
+            .frame(width: TowerMenuLayout.backgroundDiameter(count: count) * scale,
+                   height: TowerMenuLayout.backgroundDiameter(count: count) * scale)
             .position(center)
             .allowsHitTesting(false)
     }
@@ -882,9 +880,8 @@ private struct BuildMenuItem: View {
     }
 
     private var icon: some View {
-        let buttonSide = RadialMenu.buttonSide * scale
-        let frameSide = RadialMenu.squareFrameSide * scale
-        let iconSize = RadialMenu.menuIconSide * scale
+        let frameSize = TowerMenuLayout.towerFrameSize * scale
+        let iconSize = TowerMenuLayout.towerIconSize * scale
         // The opaque square frame covers the round well baked into the radial
         // art; the pictogram is centred in the tap box, which itemOffset
         // centres on the bubble — no offsets anywhere in between.
@@ -893,14 +890,14 @@ private struct BuildMenuItem: View {
                 .resizable()
                 .interpolation(.high)
                 .scaledToFit()
-                .frame(width: frameSide, height: frameSide)
+                .frame(width: frameSize, height: frameSize)
             Image(isAvailable ? kind.menuIconName : "tower_locked_icon")
                 .resizable()
                 .scaledToFit()
                 .frame(width: isAvailable ? iconSize : iconSize * 0.81,
                        height: isAvailable ? iconSize : iconSize * 0.81)
         }
-        .frame(width: buttonSide, height: buttonSide)
+        .frame(width: frameSize, height: frameSize)
         .overlay(alignment: .topTrailing) {
             if isArmed {
                 Image(systemName: "checkmark.circle.fill")
@@ -923,9 +920,8 @@ private struct UpgradeMenuItem: View {
     let action: () -> Void
 
     var body: some View {
-        let buttonSide = RadialMenu.buttonSide * scale
-        let frameSide = RadialMenu.squareFrameSide * scale
-        let iconSize = RadialMenu.menuIconSide * scale
+        let frameSize = TowerMenuLayout.towerFrameSize * scale
+        let iconSize = TowerMenuLayout.towerIconSize * scale
         // The button's layout box is exactly the tap box, with the icon
         // centred in it, so positioning the button centres the icon on its
         // parchment bubble. The cost capsule hangs below as an overlay and
@@ -937,14 +933,14 @@ private struct UpgradeMenuItem: View {
                     .resizable()
                     .interpolation(.high)
                     .scaledToFit()
-                    .frame(width: frameSide, height: frameSide)
+                    .frame(width: frameSize, height: frameSize)
                 Image(iconName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: iconSize, height: iconSize)
                     .opacity(cost != nil ? 1 : 0.5)
             }
-            .frame(width: buttonSide, height: buttonSide)
+            .frame(width: frameSize, height: frameSize)
             .overlay(alignment: .bottom) {
                 costCapsule
                     .fixedSize()

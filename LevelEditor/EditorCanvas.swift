@@ -537,7 +537,7 @@ struct EditorCanvas: View {
 
         let toView = CGAffineTransform(a: t.scale, b: 0, c: 0, d: t.scale,
                                        tx: t.offset.x, ty: t.offset.y)
-        let slotShape = SwiftUI.Path(RadialMenuLayout.slotMenuSafeShape).applying(toView)
+        let slotShape = SwiftUI.Path(TowerMenuLayout.slotMenuSafeShape).applying(toView)
         ctx.stroke(slotShape, with: .color(.blue.opacity(0.85)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
 
@@ -548,7 +548,7 @@ struct EditorCanvas: View {
                 .font(font).foregroundStyle(.red.opacity(0.9)),
             at: CGPoint(x: playTopView.x, y: playTopView.y - 10)
         )
-        let topInset = RadialMenuLayout.slotSafeInset(.top)
+        let topInset = TowerMenuLayout.slotSafeInset(.top)
         let topY = play.maxY - topInset
         let topView = t.view(Point(play.midX, topY))
         ctx.draw(
@@ -556,7 +556,7 @@ struct EditorCanvas: View {
                 .font(font).foregroundStyle(.blue.opacity(0.9)),
             at: CGPoint(x: topView.x, y: topView.y - 10)
         )
-        let bottomInset = RadialMenuLayout.slotSafeInset(.bottom)
+        let bottomInset = TowerMenuLayout.slotSafeInset(.bottom)
         let bottomY = play.minY + bottomInset
         let bottomView = t.view(Point(play.midX, bottomY))
         ctx.draw(
@@ -564,7 +564,7 @@ struct EditorCanvas: View {
                 .font(font).foregroundStyle(.blue.opacity(0.9)),
             at: CGPoint(x: bottomView.x, y: bottomView.y + 12)
         )
-        let leftInset = RadialMenuLayout.slotSafeInset(.left)
+        let leftInset = TowerMenuLayout.slotSafeInset(.left)
         let leftX = play.minX + leftInset
         let leftView = t.view(Point(leftX, play.midY))
         ctx.draw(
@@ -584,12 +584,12 @@ struct EditorCanvas: View {
             + "tower_menu_v02.imageset/tower_menu_v02.png"
         if let url = EditorResources.url(artPath),
            let art = PlatformImageLoader.load(path: url.path) {
-            let side = RadialMenuLayout.menuMapCanvasSide(count: 4) * t.scale
+            let side = TowerMenuLayout.menuMapCanvasSide(count: 4) * t.scale
             ctx.draw(Image(platformImage: art.image),
                      in: CGRect(x: c.x - side / 2, y: c.y - side / 2,
                                 width: side, height: side))
         } else {
-            let size = RadialMenuLayout.menuMapSize(count: 4)
+            let size = TowerMenuLayout.menuMapSize(count: 4)
             let rect = CGRect(x: c.x - size.width * t.scale / 2,
                               y: c.y - size.height * t.scale / 2,
                               width: size.width * t.scale,
@@ -598,8 +598,8 @@ struct EditorCanvas: View {
             ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.85)),
                        lineWidth: max(1, 2 * t.scale))
             for index in 0..<4 {
-                let offset = RadialMenuLayout.bubbleMapOffset(index: index, count: 4)
-                let d = RadialMenuLayout.bubbleMapDiameter(count: 4) * t.scale
+                let offset = TowerMenuLayout.bubbleMapOffset(index: index, count: 4)
+                let d = TowerMenuLayout.bubbleMapDiameter(count: 4) * t.scale
                 let bubble = CGRect(x: c.x + offset.width * t.scale - d / 2,
                                     y: c.y + offset.height * t.scale - d / 2,
                                     width: d, height: d)
@@ -748,7 +748,7 @@ struct EditorCanvas: View {
             let h = CanvasSpec.slotSize.height * s
             let rect = CGRect(x: c.x - w / 2, y: c.y - h / 2, width: w, height: h)
 
-            SlotArt.draw(&ctx, at: c, index: i, scale: s, selected: selected)
+            TowerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: selected)
 
             if selected, state.showRanges {
                 // Ranges come from the tower table. They were hardcoded here as
