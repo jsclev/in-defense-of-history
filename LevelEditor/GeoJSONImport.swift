@@ -41,9 +41,23 @@ enum GeoJSONImport {
         let properties: Properties
     }
 
+    struct SpawnLine: Decodable {
+        let foe: String
+        let count: Int
+        let every: Double
+        let delay: Double
+        let pathIndex: Int
+    }
+
+    struct Wave: Decodable {
+        let breather: Double
+        let lines: [SpawnLine]
+    }
+
     struct Collection: Decodable {
         let name: String?
         let features: [Feature]
+        let waves: [Wave]?
     }
 
     /// Roads and tower slots from `data`, in canonical coordinates.
@@ -105,6 +119,14 @@ enum GeoJSONImport {
         draft.slots = slots
         draft.entrances = entrances
         draft.exits = exits
+        if let waves = collection.waves, !waves.isEmpty {
+            draft.waves = waves.map { w in
+                MapDraft.Wave(breather: w.breather, lines: w.lines.map { l in
+                    MapDraft.SpawnLine(foe: l.foe, count: l.count, every: l.every,
+                                       delay: l.delay, road: l.pathIndex)
+                })
+            }
+        }
         draft.coordinateSpace = MapDraft.canvasSpace
         return draft
     }

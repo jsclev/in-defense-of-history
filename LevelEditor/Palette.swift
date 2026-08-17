@@ -34,6 +34,11 @@ struct DesignTransform {
                width: r.width * scale, height: r.height * scale)
     }
 
+    var viewTransform: CGAffineTransform {
+        CGAffineTransform(a: scale, b: 0, c: 0, d: -scale,
+                          tx: offset.x, ty: space.height * scale + offset.y)
+    }
+
     /// View (y-down) back to canonical (y-up).
     func design(_ p: CGPoint) -> Point {
         Point(Double((p.x - offset.x) / scale),

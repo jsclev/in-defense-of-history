@@ -1,7 +1,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
 ) VALUES
 (
     'c418c84b-0eb0-46a6-badb-ea0302ca89a7', 'Daniel Morgan', 'Daniel Morgan, the Old Wagoner', 'The Old Wagoner', (
@@ -17,5 +17,5 @@ INSERT INTO hero (
     'A backcountry teamster who survived five hundred British lashes and never forgave them.
 
 His Virginia riflemen picked off officers at Quebec and Saratoga, and at Cowpens in 1781 he laid the war''s most perfect trap, using his militia''s weakness as bait to destroy Tarleton''s legion. Gout-ridden and aching, the Old Wagoner won and went home to his farm.',
-    'hero_daniel_morgan_card_16x15', 'hero_details_daniel_morgan'
+    'hero_daniel_morgan_card_16x15', 'hero_details_daniel_morgan', 'hero_icon_daniel_morgan', 'hero_ability_icon_daniel_morgan'
 );

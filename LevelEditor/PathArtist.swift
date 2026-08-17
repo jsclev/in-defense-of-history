@@ -87,6 +87,13 @@ enum PathArtist {
         return path
     }
 
+    static func drawArea(_ ctx: inout GraphicsContext, _ area: SwiftUI.Path, _ t: DesignTransform) {
+        ctx.fill(area, with: .color(fillColor))
+        ctx.stroke(area, with: .color(borderColor),
+                   style: StrokeStyle(lineWidth: max(1.5, (palette?.borderUnits ?? 3) * t.scale),
+                                      lineCap: .round, lineJoin: .round))
+    }
+
     /// The path's full-width outline, for selection highlights and hit areas.
     static func bodyPath(points: [Point], _ t: DesignTransform) -> SwiftUI.Path {
         guard points.count >= 2 else { return SwiftUI.Path() }

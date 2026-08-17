@@ -1,7 +1,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
 ) VALUES
 (
     '4e290eb7-6af2-4e3e-8bd6-ff0759b1b13d', 'Thaddeus Kosciuszko', 'Colonel Thaddeus Kosciuszko', NULL, (
@@ -17,5 +17,5 @@ INSERT INTO hero (
     'A Polish engineer who offered his sword in 1776 and became the Revolution''s finest military architect.
 
 He chose and fortified Bemis Heights, the ground that made Saratoga unwinnable for Burgoyne, and spent three years building the fortress at West Point. He went home to lead Poland''s own fight for liberty in 1794.',
-    'hero_thaddeus_kosciuszko_card_16x15', 'hero_details_thaddeus_kosciuszko'
+    'hero_thaddeus_kosciuszko_card_16x15', 'hero_details_thaddeus_kosciuszko', 'hero_icon_thaddeus_kosciuszko', 'hero_ability_icon_thaddeus_kosciuszko'
 );

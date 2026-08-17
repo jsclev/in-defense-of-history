@@ -64,6 +64,8 @@ final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var towerUnlocks: [TowerKind: Int] = [:]
 
+    private(set) var selectedHeroes: [Hero] = []
+
     var availableTowerKinds: Set<TowerKind> { Set(towerUnlocks.keys) }
 
     private(set) var slotPositions: [CGPoint] = []
@@ -311,16 +313,14 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private var paths: [Path] = []
 
-    /// Where the held wave's enemies will enter the map, in canonical
-    /// units: the mouth of each path that wave actually spawns on, not
-    /// every path the level has. The level screen puts an entrance icon on
-    /// each while the wave is waiting.
+    private var entrancePoints: [EntrancePoint] = []
+
     var entrancePositions: [CGPoint] {
         guard waves.indices.contains(waveIndex) else { return [] }
-        return Set(waves[waveIndex].spawns.map(\.pathIndex))
-            .filter { paths.indices.contains($0) }
-            .sorted()
-            .map { CGPoint(x: paths[$0].points[0].x, y: paths[$0].points[0].y) }
+        let active = Set(waves[waveIndex].spawns.map(\.pathIndex))
+        return entrancePoints
+            .filter { active.contains($0.pathIndex) }
+            .map { CGPoint(x: $0.position.x, y: $0.position.y) }
     }
 
     private var levelName = ""
@@ -369,6 +369,10 @@ final class LevelRunner: NSObject, ObservableObject {
             )
             let level = try db.levelInfoDao.getBy(id: levelInfoID)
             let enemies = try db.enemyTypeDao.getAll()
+            entrancePoints = try db.levelGeoJSONDao.getEntrancePoints(mapImageName: level.mapImageName)
+
+            let heroesById = Dictionary(uniqueKeysWithValues: try db.heroDao.getAll().map { ($0.id, $0) })
+            selectedHeroes = try db.heroDao.getSelectedHeroIds().compactMap { heroesById[$0] }
 
             let unlockRows = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelInfoID)
             towerUnlocks = Dictionary(uniqueKeysWithValues: unlockRows.compactMap { key, value in

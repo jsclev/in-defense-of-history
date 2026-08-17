@@ -70,6 +70,13 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     var guideImagePath: String?
     var guideOpacity: Double = 0.5
     var coordinateSpace: String = Self.canvasSpace
+    var roadPaint: [PaintStroke] = []
+
+    nonisolated struct PaintStroke: Codable, Equatable, Sendable {
+        var points: [Point]
+        var width: Double
+        var erases: Bool
+    }
 
     static let starter = MapDraft(
         name: "Untitled Map",
@@ -111,6 +118,7 @@ extension MapDraft {
         guideImagePath = try c.decodeIfPresent(String.self, forKey: .guideImagePath)
         guideOpacity = try c.decodeIfPresent(Double.self, forKey: .guideOpacity) ?? 0.5
         coordinateSpace = try c.decodeIfPresent(String.self, forKey: .coordinateSpace) ?? "design1600x900"
+        roadPaint = try c.decodeIfPresent([PaintStroke].self, forKey: .roadPaint) ?? []
         if coordinateSpace != Self.canvasSpace {
             let upgrade = Self.upgrade(from: coordinateSpace)
             for r in roads.indices {
@@ -309,6 +317,7 @@ final class MapDocument: ReferenceFileDocument {
             d.roads.append(.init(name: "Road \(d.roads.count + 1)", points: points))
         }
     }
+
 
     /// Merge a road onto the road below it in the list.
     ///

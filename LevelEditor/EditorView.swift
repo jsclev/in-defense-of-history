@@ -2,7 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum EditorTool: Hashable {
-    case select, slot, brush, entrance, exitPoint
+    case select, slot, brush, paint, eraser, entrance, exitPoint
 }
 
 enum EditorMode: Hashable {
@@ -88,6 +88,8 @@ final class EditorState {
     var brushSpacing: Double = 2.4
     var showOuterEdge = true
     var stroke = BrushStroke()
+    var paintWidth: Double = 60
+    var paintStroke = BrushStroke()
 
     var zoom: Double?
     var fitScale: Double = 0.4
@@ -375,6 +377,10 @@ struct EditorView: View {
                         .help("Select and move")
                     Image(systemName: "scribble").tag(EditorTool.brush)
                         .help("Path tool: draw an enemy path freehand; width is fixed by canvas_spec")
+                    Image(systemName: "paintbrush.pointed").tag(EditorTool.paint)
+                        .help("Path painter: paint road area freehand at any width, added to the path layer")
+                    Image(systemName: "eraser").tag(EditorTool.eraser)
+                        .help("Path eraser: paint away road area wherever the brush passes")
                     (EditorResources.templateIcon("Images/tower_tool_icon.png", pointSize: 17)
                         ?? Image(systemName: "building.fill"))
                         .tag(EditorTool.slot)
@@ -386,6 +392,17 @@ struct EditorView: View {
                 }
                 .pickerStyle(.segmented)
 
+                if state.tool == .paint || state.tool == .eraser {
+                    Slider(value: $s.paintWidth, in: 10...300, step: 5) {
+                        Text("Brush width")
+                    } minimumValueLabel: {
+                        Text("10")
+                    } maximumValueLabel: {
+                        Text("\(Int(state.paintWidth))")
+                    }
+                    .frame(width: 200)
+                    .help("Brush width in canvas units")
+                }
 
                 Toggle(isOn: $s.showOuterEdge) { Image(systemName: "square.dashed") }
                     .help("Show the generated outer-edge waypoints of each road")

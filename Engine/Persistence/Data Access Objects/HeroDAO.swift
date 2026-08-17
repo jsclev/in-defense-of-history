@@ -26,7 +26,9 @@ public class HeroDAO: BaseDAO {
                 li.level_name,
                 c.campaign_name,
                 CASE WHEN u.hero_id IS NULL THEN 0 ELSE 1 END AS unlocked,
-                lw.wave_index
+                lw.wave_index,
+                h.icon_image_name,
+                h.ability_icon_image_name
             FROM
                 hero h
             LEFT JOIN
@@ -50,7 +52,9 @@ public class HeroDAO: BaseDAO {
                let historicalDescription = try getString(stmt: stmt, colIndex: 6),
                let historicalText = try getString(stmt: stmt, colIndex: 7),
                let primaryImageName = try getString(stmt: stmt, colIndex: 8),
-               let detailsImageName = try getString(stmt: stmt, colIndex: 9) {
+               let detailsImageName = try getString(stmt: stmt, colIndex: 9),
+               let iconImageName = try getString(stmt: stmt, colIndex: 15),
+               let abilityIconImageName = try getString(stmt: stmt, colIndex: 16) {
                 heroes.append(Hero(
                     id: try getUUID(stmt: stmt, colIndex: 0, msg: "hero id"),
                     shortName: shortName,
@@ -66,7 +70,9 @@ public class HeroDAO: BaseDAO {
                     historicalDescription: historicalDescription,
                     historicalText: historicalText,
                     primaryImageName: primaryImageName,
-                    detailsImageName: detailsImageName
+                    detailsImageName: detailsImageName,
+                    iconImageName: iconImageName,
+                    abilityIconImageName: abilityIconImageName
                 ))
             }
         }

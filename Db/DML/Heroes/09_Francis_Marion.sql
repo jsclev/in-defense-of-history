@@ -1,7 +1,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
 ) VALUES
 (
     'a72abee1-88a6-4856-a5d4-da460a2233b9', 'Francis Marion', 'Francis Marion, the Swamp Fox', 'The Swamp Fox', (
@@ -17,5 +17,5 @@ INSERT INTO hero (
     'A South Carolina partisan who struck from the swamps with a few dozen riders and vanished before the redcoats could form ranks.
 
 From his hidden camp on Snow''s Island he cut supply lines, freed prisoners, and kept resistance alive in an occupied colony. The exasperated British colonel Tarleton gave him his name: that damned old fox.',
-    'hero_francis_marion_card_16x15', 'hero_details_francis_marion'
+    'hero_francis_marion_card_16x15', 'hero_details_francis_marion', 'hero_icon_francis_marion', 'hero_ability_icon_francis_marion'
 );

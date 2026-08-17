@@ -80,14 +80,15 @@ enum GeoJSONExport {
             }
         }
 
-        // Hand-placed markers from the entrance and exit layers. Each one is
-        // tagged with the road whose spawn end (entrances) or goal end
-        // (exits) sits nearest, so the game knows which path it belongs to.
-        func nearestRoad(to p: Point, endpoint: (MapDraft.Road) -> Point?) -> Int {
+        // A marker sits at one END of its road, but roads may be drawn in
+        // either direction, so tag it to the road with the nearest endpoint of
+        // either kind — never start-only. The sync then orients each road so
+        // its first point is the entrance.
+        func nearestRoad(to p: Point) -> Int {
             var best: (Int, Double)?
             for (ri, road) in draft.roads.enumerated() {
-                guard let e = endpoint(road) else { continue }
-                let d = p.distance(to: e)
+                guard let a = road.points.first, let b = road.points.last else { continue }
+                let d = min(p.distance(to: a), p.distance(to: b))
                 if best == nil || d < best!.1 { best = (ri, d) }
             }
             return best?.0 ?? 0
@@ -100,7 +101,7 @@ enum GeoJSONExport {
                 kind: "spawn_point",
                 layer: 75,
                 geometry: .point(marker),
-                extra: ["pathIndex": .number(Double(nearestRoad(to: marker) { $0.points.first }))]
+                extra: ["pathIndex": .number(Double(nearestRoad(to: marker)))]
             ))
         }
         for (i, marker) in draft.exits.enumerated() {
@@ -111,7 +112,7 @@ enum GeoJSONExport {
                 kind: "goal_point",
                 layer: 75,
                 geometry: .point(marker),
-                extra: ["pathIndex": .number(Double(nearestRoad(to: marker) { $0.points.last }))]
+                extra: ["pathIndex": .number(Double(nearestRoad(to: marker)))]
             ))
         }
 
@@ -133,8 +134,27 @@ enum GeoJSONExport {
         return FeatureCollection(
             name: SwiftExport.identifier(from: draft.name),
             crs: CRS(),
-            features: features
+            features: features,
+            waves: draft.waves.map { w in
+                Wave(breather: w.breather, lines: w.lines.map { l in
+                    SpawnLine(foe: l.foe, count: l.count, every: l.every,
+                              delay: l.delay, pathIndex: l.road)
+                })
+            }
         )
+    }
+
+    struct SpawnLine: Encodable {
+        var foe: String
+        var count: Int
+        var every: Double
+        var delay: Double
+        var pathIndex: Int
+    }
+
+    struct Wave: Encodable {
+        var breather: Double
+        var lines: [SpawnLine]
     }
 
     struct FeatureCollection: Encodable {
@@ -142,9 +162,10 @@ enum GeoJSONExport {
         var name: String
         var crs: CRS
         var features: [Feature]
+        var waves: [Wave]
 
         enum CodingKeys: String, CodingKey {
-            case type, name, features
+            case type, name, features, waves
             case crs = "coordinateReferenceSystem"
         }
     }

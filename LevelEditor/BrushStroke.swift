@@ -94,6 +94,30 @@ enum BrushGeometry {
         return left + right.reversed()
     }
 
+    static func strokeArea(points: [Point], width: Double) -> CGPath {
+        let line = CGMutablePath()
+        guard let first = points.first else { return line }
+        line.move(to: CGPoint(x: first.x, y: first.y))
+        if points.count == 1 {
+            line.addLine(to: CGPoint(x: first.x, y: first.y))
+        } else {
+            for p in points.dropFirst() { line.addLine(to: CGPoint(x: p.x, y: p.y)) }
+        }
+        return line.copy(strokingWithWidth: width, lineCap: .round, lineJoin: .round, miterLimit: 10)
+    }
+
+    static func roadArea(roads: [MapDraft.Road], paint: [MapDraft.PaintStroke]) -> CGPath {
+        var area = CGMutablePath() as CGPath
+        for road in roads where road.points.count >= 2 {
+            area = area.union(strokeArea(points: road.points, width: MapGeometry.roadHalfWidth * 2))
+        }
+        for stroke in paint where !stroke.points.isEmpty {
+            let s = strokeArea(points: stroke.points, width: stroke.width)
+            area = stroke.erases ? area.subtracting(s) : area.union(s)
+        }
+        return area
+    }
+
     static func commit(_ stroke: BrushStroke, spacing: Double) -> [Point]? {
         let raw = stroke.points
         guard raw.count >= 2 else { return nil }

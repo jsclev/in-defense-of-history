@@ -16,6 +16,8 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
     public let historicalText: String
     public let primaryImageName: String
     public let detailsImageName: String
+    public let iconImageName: String
+    public let abilityIconImageName: String
 
     public init(
         id: UUID,
@@ -32,7 +34,9 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         historicalDescription: String,
         historicalText: String,
         primaryImageName: String,
-        detailsImageName: String
+        detailsImageName: String,
+        iconImageName: String,
+        abilityIconImageName: String
     ) {
         self.id = id
         self.shortName = shortName
@@ -49,5 +53,7 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         self.historicalText = historicalText
         self.primaryImageName = primaryImageName
         self.detailsImageName = detailsImageName
+        self.iconImageName = iconImageName
+        self.abilityIconImageName = abilityIconImageName
     }
 }

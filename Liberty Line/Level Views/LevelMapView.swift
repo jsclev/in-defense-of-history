@@ -30,6 +30,11 @@ struct LevelMapProjection {
 
     func viewLength(_ l: CGFloat) -> CGFloat { l * scale }
 
+    var viewTransform: CGAffineTransform {
+        CGAffineTransform(a: scale, b: 0, c: 0, d: -scale,
+                          tx: origin.x, ty: origin.y + canvasSize.height * scale)
+    }
+
     var imageFrameSize: CGSize {
         CGSize(width: canvasSize.width * scale, height: canvasSize.height * scale)
     }
@@ -88,26 +93,15 @@ struct LevelMapView: View {
     /// the screen edge on some devices — so the icon stays centred on its
     /// entrance whenever that fits and otherwise pulls the minimum distance
     /// needed to sit whole inside the safe rect.
-    private func entranceIconPosition(for entrance: CGPoint, size: CGFloat,
-                                      projection: LevelMapProjection,
-                                      safe: CGRect) -> CGPoint {
-        let p = projection.viewPoint(entrance)
-        let half = size / 2
-        return CGPoint(x: min(max(p.x, safe.minX + half), safe.maxX - half),
-                       y: min(max(p.y, safe.minY + half), safe.maxY - half))
-    }
-
     /// One icon position per held-wave entrance, clamped into the safe
     /// rect. Mouths that land within an icon of one another collapse to a
     /// single icon: double-tapping any icon starts the whole wave, so
     /// near-coincident mouths never need a stack of pulsing bubbles.
     private func entranceIconPositions(iconSize: CGFloat,
-                                       projection: LevelMapProjection,
-                                       safe: CGRect) -> [CGPoint] {
+                                       projection: LevelMapProjection) -> [CGPoint] {
         var placed: [CGPoint] = []
         for entrance in runner.entrancePositions {
-            let p = entranceIconPosition(for: entrance, size: iconSize,
-                                         projection: projection, safe: safe)
+            let p = projection.viewPoint(entrance)
             if placed.allSatisfy({ hypot($0.x - p.x, $0.y - p.y) >= iconSize }) {
                 placed.append(p)
             }
@@ -164,6 +158,17 @@ struct LevelMapView: View {
                        isPortrait: geometry.size.height > geometry.size.width,
                        screen: screen)
                     .ignoresSafeArea()
+
+                heroBar(metrics: metrics, screen: screen)
+                    .ignoresSafeArea()
+
+                miscBar(metrics: metrics, screen: screen)
+                    .ignoresSafeArea()
+
+                GeometryReader { gameGeometry in
+                    towerMenuLayer(in: gameGeometry.size, screen: screen)
+                }
+                .ignoresSafeArea()
             }
         }
         .persistentSystemOverlays(.hidden)
@@ -183,6 +188,30 @@ struct LevelMapView: View {
                 screen: screen, topBar: bar)
             cornerButtons(screen: screen, topBar: bar)
         }
+    }
+
+    private func heroBar(metrics: HudMetrics, screen: ScreenGeometry) -> some View {
+        let side = HudSizing.cornerButton.resolved(at: metrics.scale) * 1.05
+        let button = CGSize(width: side, height: side)
+        let spacing = HudSizing.cornerButtonSpacing.resolved(at: metrics.scale) * 0.3696
+        let count = LevelHeroBarView.slotCount
+        let row = StackLayout.row(Array(repeating: button, count: count), spacing: spacing)
+        let frame = HudPlacementSolver.frame(
+            size: row.size, corner: .bottomLeading,
+            margin: HudSizing.topBarMargin.resolved(at: metrics.scale), in: screen)
+        return LevelHeroBarView(heroes: runner.selectedHeroes,
+                                buttonSize: button, spacing: spacing)
+            .hudFrame(frame, in: screen, alignment: .leading)
+    }
+
+    private func miscBar(metrics: HudMetrics, screen: ScreenGeometry) -> some View {
+        let side = HudSizing.cornerButton.resolved(at: metrics.scale) * 1.05
+        let button = CGSize(width: side, height: side)
+        let frame = HudPlacementSolver.frame(
+            size: button, corner: .bottomTrailing,
+            margin: HudSizing.topBarMargin.resolved(at: metrics.scale), in: screen)
+        return LevelMiscView(buttonSize: button)
+            .hudFrame(frame, in: screen)
     }
 
     private func cornerButtons(screen: ScreenGeometry,
@@ -410,8 +439,7 @@ struct LevelMapView: View {
             if runner.awaitingWaveStart {
                 let iconSize = entranceIconSize(projection: projection)
                 ForEach(Array(entranceIconPositions(iconSize: iconSize,
-                                                    projection: projection,
-                                                    safe: safe).enumerated()),
+                                                    projection: projection).enumerated()),
                         id: \.offset) { _, position in
                     EntranceWaveButton(size: iconSize) {
                         runner.startNextWave()
@@ -454,6 +482,13 @@ struct LevelMapView: View {
                 }
             }
 
+        }
+    }
+
+    private func towerMenuLayer(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
+        let projection = LevelMapArt.projection(fitting: screen.playable)
+        let playAreaScalingFactor = PlayAreaLayout.scalingFactor(runtimePlayArea: screen.playable)
+        return ZStack(alignment: .topLeading) {
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {
                 if let armed = runner.armedBuildKind,
@@ -469,8 +504,6 @@ struct LevelMapView: View {
             if let upgradeSlot = runner.selectedTowerSlotIndex,
                runner.slotPositions.indices.contains(upgradeSlot),
                let tower = runner.placedTower(atSlot: upgradeSlot) {
-                // Armed upgrade previews the upgraded tier's range; otherwise
-                // the overlay shows the tower's current range.
                 let previewRadius = runner.armedUpgradeBranch
                     .flatMap { runner.upgradePreviewRadius(branch: $0) }
                 if let radius = previewRadius ?? runner.rangeOverlayRadius(for: tower) {
@@ -482,7 +515,6 @@ struct LevelMapView: View {
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                             playAreaScalingFactor: playAreaScalingFactor)
             }
-
         }
     }
 

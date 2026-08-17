@@ -41,7 +41,7 @@ enum EditorLayer: String, CaseIterable, Identifiable {
 extension EditorTool {
     var layer: EditorLayer? {
         switch self {
-        case .brush: .path
+        case .brush, .paint, .eraser: .path
         case .slot: .slots
         case .entrance: .entrances
         case .exitPoint: .exits
@@ -53,6 +53,8 @@ extension EditorTool {
         switch self {
         case .select: "Select"
         case .brush: "Path tool"
+        case .paint: "Path painter"
+        case .eraser: "Path eraser"
         case .slot: "Slot placer"
         case .entrance: "Entrance placer"
         case .exitPoint: "Exit placer"

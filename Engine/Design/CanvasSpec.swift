@@ -15,17 +15,26 @@ public struct CanvasSpecValues: Equatable, Sendable {
     public let playArea: CGRect
     public let slotSize: CGSize
     public let pathWidth: Double
-    public let occlusionCornerFraction: CGSize
+    public let upperLeftOcclusionCornerFraction: CGSize
+    public let upperRightOcclusionCornerFraction: CGSize
+    public let lowerLeftOcclusionCornerFraction: CGSize
+    public let lowerRightOcclusionCornerFraction: CGSize
 
     public init(canvasWidth: Double, canvasHeight: Double,
                 playArea: CGRect, slotSize: CGSize, pathWidth: Double,
-                occlusionCornerFraction: CGSize) {
+                upperLeftOcclusionCornerFraction: CGSize,
+                upperRightOcclusionCornerFraction: CGSize,
+                lowerLeftOcclusionCornerFraction: CGSize,
+                lowerRightOcclusionCornerFraction: CGSize) {
         self.canvasWidth = canvasWidth
         self.canvasHeight = canvasHeight
         self.playArea = playArea
         self.slotSize = slotSize
         self.pathWidth = pathWidth
-        self.occlusionCornerFraction = occlusionCornerFraction
+        self.upperLeftOcclusionCornerFraction = upperLeftOcclusionCornerFraction
+        self.upperRightOcclusionCornerFraction = upperRightOcclusionCornerFraction
+        self.lowerLeftOcclusionCornerFraction = lowerLeftOcclusionCornerFraction
+        self.lowerRightOcclusionCornerFraction = lowerRightOcclusionCornerFraction
     }
 }
 
@@ -92,13 +101,16 @@ public enum CanvasSpec {
     /// exits near a corner can swallow enemies cleanly.
     public static var cornerOcclusionAreas: [CGRect] {
         let area = playArea
-        let w = area.width * values.occlusionCornerFraction.width
-        let h = area.height * values.occlusionCornerFraction.height
+        func size(_ f: CGSize) -> CGSize { CGSize(width: area.width * f.width, height: area.height * f.height) }
+        let ul = size(values.upperLeftOcclusionCornerFraction)
+        let ur = size(values.upperRightOcclusionCornerFraction)
+        let ll = size(values.lowerLeftOcclusionCornerFraction)
+        let lr = size(values.lowerRightOcclusionCornerFraction)
         return [
-            CGRect(x: area.minX, y: area.minY, width: w, height: h),
-            CGRect(x: area.maxX - w, y: area.minY, width: w, height: h),
-            CGRect(x: area.minX, y: area.maxY - h, width: w, height: h),
-            CGRect(x: area.maxX - w, y: area.maxY - h, width: w, height: h),
+            CGRect(x: area.minX, y: area.minY, width: ll.width, height: ll.height),
+            CGRect(x: area.maxX - lr.width, y: area.minY, width: lr.width, height: lr.height),
+            CGRect(x: area.minX, y: area.maxY - ul.height, width: ul.width, height: ul.height),
+            CGRect(x: area.maxX - ur.width, y: area.maxY - ur.height, width: ur.width, height: ur.height),
         ]
     }
 
@@ -106,4 +118,24 @@ public enum CanvasSpec {
     /// again - the transform is its own inverse. Only rendering layers that draw
     /// into a y-down surface should need this.
     public static func flipY(_ y: Double) -> Double { height - y }
+
+    public static let playAreaLineRGB: (red: Double, green: Double, blue: Double) = (0.75, 0.15, 1.0)
+
+    public static var playAreaShape: CGPath {
+        let play = playArea
+        // Cuts extend past the boundary so subtraction removes the shared edge cleanly.
+        let pad = 6.0
+        let shape = CGMutablePath()
+        shape.addRect(play)
+        let cuts = CGMutablePath()
+        for corner in cornerOcclusionAreas {
+            var cut = corner
+            if abs(corner.minX - play.minX) < 0.5 { cut.origin.x -= pad; cut.size.width += pad }
+            if abs(corner.maxX - play.maxX) < 0.5 { cut.size.width += pad }
+            if abs(corner.minY - play.minY) < 0.5 { cut.origin.y -= pad; cut.size.height += pad }
+            if abs(corner.maxY - play.maxY) < 0.5 { cut.size.height += pad }
+            cuts.addRect(cut)
+        }
+        return shape.subtracting(cuts, using: .winding)
+    }
 }

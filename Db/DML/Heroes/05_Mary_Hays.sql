@@ -1,7 +1,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
 ) VALUES
 (
     'ca5f165f-d3e1-44e4-a224-65c8a798c022', 'Mary Hays', 'Mary Molly Pitcher Hays', 'Molly Pitcher', (
@@ -17,5 +17,5 @@ INSERT INTO hero (
     'At Monmouth, in hundred-degree heat, Mary Hays carried pitcher after pitcher of water to the gun crews while the army''s soldiers cried Molly, pitcher!
 
 When her husband fell at his cannon she stepped into his place and served the piece through the rest of the battle. Pennsylvania later granted her a soldier''s pension for services rendered.',
-    'hero_molly_pitcher_card_16x15', 'hero_details_molly_pitcher'
+    'hero_molly_pitcher_card_16x15', 'hero_details_molly_pitcher', 'hero_icon_molly_pitcher', 'hero_ability_icon_molly_pitcher'
 );

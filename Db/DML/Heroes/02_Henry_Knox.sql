@@ -1,7 +1,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
 ) VALUES
 (
     '43b37067-8f24-4f3e-ba9b-3c7f10cc629d', 'Henry Knox', 'Colonel Henry Knox', NULL, (
@@ -19,5 +19,5 @@ INSERT INTO hero (
     || 'sail away.
 
 As chief of artillery he directed the guns at Trenton, Monmouth, and Yorktown, and became the new republic''s first Secretary of War.',
-    'hero_henry_knox_card_16x15', 'hero_details_henry_knox'
+    'hero_henry_knox_card_16x15', 'hero_details_henry_knox', 'hero_icon_henry_knox', 'hero_ability_icon_henry_knox'
 );

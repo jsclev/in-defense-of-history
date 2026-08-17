@@ -23,8 +23,14 @@ public class CanvasSpecDAO: BaseDAO {
                 d.slot_width,
                 d.slot_height,
                 d.path_width,
-                d.occlusion_corner_width_fraction,
-                d.occlusion_corner_height_fraction
+                d.upper_left_occlusion_corner_width_fraction,
+                d.upper_left_occlusion_corner_height_fraction,
+                d.upper_right_occlusion_corner_width_fraction,
+                d.upper_right_occlusion_corner_height_fraction,
+                d.lower_left_occlusion_corner_width_fraction,
+                d.lower_left_occlusion_corner_height_fraction,
+                d.lower_right_occlusion_corner_width_fraction,
+                d.lower_right_occlusion_corner_height_fraction
             FROM
                 canvas_spec d
         """)
@@ -49,8 +55,14 @@ public class CanvasSpecDAO: BaseDAO {
             slotSize: CGSize(width: getDouble(stmt: stmt, colIndex: 6),
                              height: getDouble(stmt: stmt, colIndex: 7)),
             pathWidth: getDouble(stmt: stmt, colIndex: 8),
-            occlusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 9),
-                                            height: getDouble(stmt: stmt, colIndex: 10))
+            upperLeftOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 9),
+                                                     height: getDouble(stmt: stmt, colIndex: 10)),
+            upperRightOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 11),
+                                                      height: getDouble(stmt: stmt, colIndex: 12)),
+            lowerLeftOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 13),
+                                                     height: getDouble(stmt: stmt, colIndex: 14)),
+            lowerRightOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 15),
+                                                      height: getDouble(stmt: stmt, colIndex: 16))
         )
 
         let extraRow = sqlite3_step(stmt) == SQLITE_ROW

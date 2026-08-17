@@ -8,7 +8,7 @@ public enum TowerMenuLayout {
     private static let towerIconScalingFactor: CGFloat = 0.66
     private static let towerButtonOffsetFactor: CGFloat = 4.0
     private static let buttonAngleDegrees: [TowerKind: CGFloat] = [
-        TowerKind.ranged: 145,
+        TowerKind.ranged: 140,
         TowerKind.melee: 40,
         TowerKind.special: 220,
         TowerKind.areaOfEffect: 320
@@ -53,8 +53,17 @@ public enum TowerMenuLayout {
         CanvasSpec.slotSize.height / 2
     }
 
-    public static var menuMapRadius: CGFloat {
-        getBgSize(playAreaScalingFactor: 1).width / 2
+    public static var menuMapExtent: (x: CGFloat, y: CGFloat) {
+        let bg = getBgSize(playAreaScalingFactor: 1)
+        let button = getTowerButtonSize(playAreaScalingFactor: 1).width
+        var x = bg.width / 2, y = bg.height / 2
+        for kind in TowerKind.allCases {
+            let c = getTowerButtonCenterPoint(towerKind: kind, menuCenterPoint: .zero,
+                                              playAreaScalingFactor: 1, towerButtonSize: button)
+            x = max(x, abs(c.x) + button / 2)
+            y = max(y, abs(c.y) + button / 2)
+        }
+        return (x, y)
     }
 
     public enum VerticalEdge {
@@ -70,14 +79,14 @@ public enum TowerMenuLayout {
     public static func slotSafeInset(_ edge: VerticalEdge) -> CGFloat {
         switch edge {
         case .top, .bottom:
-            menuMapRadius - CanvasSpec.slotSize.height / 2
+            menuMapExtent.y - CanvasSpec.slotSize.height / 2
         }
     }
 
     public static func slotSafeInset(_ edge: HorizontalEdge) -> CGFloat {
         switch edge {
         case .left, .right:
-            menuMapRadius - CanvasSpec.slotSize.width / 2
+            menuMapExtent.x - CanvasSpec.slotSize.width / 2
         }
     }
 

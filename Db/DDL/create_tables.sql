@@ -102,10 +102,22 @@ CREATE TABLE canvas_spec (
     slot_width REAL NOT NULL CHECK (slot_width > 0.0),
     slot_height REAL NOT NULL CHECK (slot_height > 0.0),
     path_width REAL NOT NULL CHECK (path_width > 0.0),
-    occlusion_corner_width_fraction REAL NOT NULL
-        CHECK (occlusion_corner_width_fraction > 0.0 AND occlusion_corner_width_fraction <= 1.0),
-    occlusion_corner_height_fraction REAL NOT NULL
-        CHECK (occlusion_corner_height_fraction > 0.0 AND occlusion_corner_height_fraction <= 1.0),
+    upper_left_occlusion_corner_width_fraction REAL NOT NULL
+        CHECK (upper_left_occlusion_corner_width_fraction > 0.0 AND upper_left_occlusion_corner_width_fraction <= 1.0),
+    upper_left_occlusion_corner_height_fraction REAL NOT NULL
+        CHECK (upper_left_occlusion_corner_height_fraction > 0.0 AND upper_left_occlusion_corner_height_fraction <= 1.0),
+    upper_right_occlusion_corner_width_fraction REAL NOT NULL
+        CHECK (upper_right_occlusion_corner_width_fraction > 0.0 AND upper_right_occlusion_corner_width_fraction <= 1.0),
+    upper_right_occlusion_corner_height_fraction REAL NOT NULL
+        CHECK (upper_right_occlusion_corner_height_fraction > 0.0 AND upper_right_occlusion_corner_height_fraction <= 1.0),
+    lower_left_occlusion_corner_width_fraction REAL NOT NULL
+        CHECK (lower_left_occlusion_corner_width_fraction > 0.0 AND lower_left_occlusion_corner_width_fraction <= 1.0),
+    lower_left_occlusion_corner_height_fraction REAL NOT NULL
+        CHECK (lower_left_occlusion_corner_height_fraction > 0.0 AND lower_left_occlusion_corner_height_fraction <= 1.0),
+    lower_right_occlusion_corner_width_fraction REAL NOT NULL
+        CHECK (lower_right_occlusion_corner_width_fraction > 0.0 AND lower_right_occlusion_corner_width_fraction <= 1.0),
+    lower_right_occlusion_corner_height_fraction REAL NOT NULL
+        CHECK (lower_right_occlusion_corner_height_fraction > 0.0 AND lower_right_occlusion_corner_height_fraction <= 1.0),
     CHECK (play_area_x + play_area_width <= canvas_width),
     CHECK (play_area_y + play_area_height <= canvas_height)
 );
@@ -179,7 +191,9 @@ CREATE TABLE hero (
     historical_description TEXT NOT NULL,
     historical_text TEXT NOT NULL,
     primary_image_name TEXT NOT NULL,
-    details_image_name TEXT NOT NULL
+    details_image_name TEXT NOT NULL,
+    icon_image_name TEXT NOT NULL,
+    ability_icon_image_name TEXT NOT NULL
 );
 
 CREATE TABLE sim_enemy_type (

@@ -14,6 +14,8 @@ struct InspectorView: View {
                 levelBox
                 roadsBox
                 slotsBox
+                entrancesBox
+                exitsBox
                 selectionBox
                 wavesBox
                 solutionBox
@@ -367,6 +369,68 @@ struct InspectorView: View {
         }
     }
 
+    private var entrancesBox: some View {
+        markerBox(title: "Entrances", points: document.draft.entrances,
+                  select: { .entrance($0) }, isSelected: { state.selection == .entrance($0) },
+                  delete: { document.deleteEntrance($0, undoManager) },
+                  add: { p in document.edit(undoManager) { $0.entrances.append(p) } },
+                  addLabel: "Add Entrance")
+    }
+
+    private var exitsBox: some View {
+        markerBox(title: "Exits", points: document.draft.exits,
+                  select: { .exitPoint($0) }, isSelected: { state.selection == .exitPoint($0) },
+                  delete: { document.deleteExit($0, undoManager) },
+                  add: { p in document.edit(undoManager) { $0.exits.append(p) } },
+                  addLabel: "Add Exit")
+    }
+
+    private func markerBox(title: String, points: [Point],
+                           select: @escaping (Int) -> EditorSelection,
+                           isSelected: @escaping (Int) -> Bool,
+                           delete: @escaping (Int) -> Void,
+                           add: @escaping (Point) -> Void,
+                           addLabel: String) -> some View {
+        GroupBox(title) {
+            VStack(alignment: .leading, spacing: 4) {
+                ForEach(points.indices, id: \.self) { i in
+                    let point = points[i]
+                    HStack(spacing: 6) {
+                        Text("\(i)")
+                            .monospacedDigit()
+                            .frame(width: 22, alignment: .trailing)
+                        Text("(\(Int(point.x)), \(Int(point.y)))")
+                            .monospacedDigit()
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                        Button {
+                            delete(i)
+                            state.selection = .none
+                        } label: {
+                            Image(systemName: "trash")
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    .font(.callout)
+                    .padding(.vertical, 1)
+                    .padding(.horizontal, 4)
+                    .background(isSelected(i) ? Color.yellow.opacity(0.15) : .clear,
+                                in: RoundedRectangle(cornerRadius: 4))
+                    .contentShape(Rectangle())
+                    .onTapGesture { state.selection = select(i) }
+                }
+                Button {
+                    add(Point(CanvasSpec.playArea.midX, CanvasSpec.playArea.midY))
+                    state.selection = select(points.count)
+                } label: {
+                    Label(addLabel, systemImage: "plus")
+                }
+                .padding(.top, 2)
+            }
+            .padding(4)
+        }
+    }
+
     @ViewBuilder
     private var selectionBox: some View {
         if let (label, get, set) = selectedPointAccessor() {
@@ -410,6 +474,18 @@ struct InspectorView: View {
                         if d.roads.indices.contains(r), d.roads[r].points.indices.contains(i) {
                             d.roads[r].points[i] = p
                         }
+                    } })
+        case let .entrance(i) where document.draft.entrances.indices.contains(i):
+            return ("Entrance \(i)",
+                    { document.draft.entrances.indices.contains(i) ? document.draft.entrances[i] : .zero },
+                    { p in document.edit(undoManager) { d in
+                        if d.entrances.indices.contains(i) { d.entrances[i] = p }
+                    } })
+        case let .exitPoint(i) where document.draft.exits.indices.contains(i):
+            return ("Exit \(i)",
+                    { document.draft.exits.indices.contains(i) ? document.draft.exits[i] : .zero },
+                    { p in document.edit(undoManager) { d in
+                        if d.exits.indices.contains(i) { d.exits[i] = p }
                     } })
         default:
             return nil

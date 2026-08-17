@@ -22,6 +22,7 @@ public class Db {
     public let simEnemyTypeDao: SimEnemyTypeDAO
     public let simMeleeUnitDao: SimMeleeUnitDAO
     public let heroDao: HeroDAO
+    public let levelGeoJSONDao: LevelGeoJSONDAO
     public let waveDao: WaveDAO
     public let difficultyDao: DifficultyDAO
     
@@ -127,6 +128,7 @@ public class Db {
         simEnemyTypeDao = SimEnemyTypeDAO(conn: conn)
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)
         heroDao = HeroDAO(conn: conn)
+        levelGeoJSONDao = LevelGeoJSONDAO()
         difficultyDao = DifficultyDAO(conn: conn)
 
         // Every target reads the shared coordinate system through CanvasSpec,

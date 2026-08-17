@@ -1,7 +1,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
 ) VALUES
 (
     '5c689e4f-5105-4bab-8dd9-63f61124bd35', 'Benedict Arnold', 'Benedict Dark Eagle Arnold', 'Dark Eagle', (
@@ -18,5 +18,5 @@ INSERT INTO hero (
     || 'Island, and broke the enemy line at Saratoga, wounded in the same leg twice.
 
 Passed over, indebted, and embittered, he sold West Point to the enemy in 1780, and made his name a synonym for treason.',
-    'hero_benedict_arnold_card_16x15', 'hero_details_benedict_arnold'
+    'hero_benedict_arnold_card_16x15', 'hero_details_benedict_arnold', 'hero_icon_benedict_arnold', 'hero_ability_icon_benedict_arnold'
 );

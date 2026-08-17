@@ -35,7 +35,7 @@ struct EditorCanvas: View {
                         canvasContent(t)
                     }
                     .defaultScrollAnchor(.center)
-                    .scrollDisabled(state.tool == .brush)
+                    .scrollDisabled(state.tool == .brush || state.tool == .paint || state.tool == .eraser)
                 }
             }
             .onChange(of: geo.size, initial: true) { _, _ in
@@ -114,10 +114,45 @@ struct EditorCanvas: View {
                 },
                 onPinchEnded: { state.pinchBase = nil }
             )
+        } else if state.tool == .paint || state.tool == .eraser {
+            BrushInputView(
+                onBegan: { p, _ in beginPaint(at: p, t) },
+                onMoved: { p, _ in extendPaint(to: p, t) },
+                onEnded: { commitPaint() },
+                onCancelled: { state.paintStroke = BrushStroke() },
+                onPinchBegan: {
+                    state.paintStroke = BrushStroke()
+                    state.pinchBase = state.currentScale
+                },
+                onPinchChanged: { magnification in
+                    guard let base = state.pinchBase else { return }
+                    state.setZoom(base * magnification)
+                },
+                onPinchEnded: { state.pinchBase = nil }
+            )
         }
         #else
         EmptyView()
         #endif
+    }
+
+    private func beginPaint(at p: CGPoint, _ t: DesignTransform) {
+        state.paintStroke = BrushStroke()
+        extendPaint(to: p, t)
+    }
+
+    private func extendPaint(to p: CGPoint, _ t: DesignTransform) {
+        state.paintStroke.add(clampToCanvas(t.design(p)),
+                              minSpacing: max(0.5, 1 / max(t.scale, 0.05)))
+    }
+
+    private func commitPaint() {
+        defer { state.paintStroke = BrushStroke() }
+        let points = state.paintStroke.points
+        guard !points.isEmpty else { return }
+        let stroke = MapDraft.PaintStroke(points: points, width: state.paintWidth,
+                                          erases: state.tool == .eraser)
+        document.edit(undoManager) { $0.roadPaint.append(stroke) }
     }
 
     private func beginStroke(at p: CGPoint, _ t: DesignTransform) {
@@ -156,6 +191,13 @@ struct EditorCanvas: View {
                     extendStroke(to: v.location, t)
                     return
                 }
+                if state.tool == .paint || state.tool == .eraser {
+                    if state.paintStroke.isEmpty {
+                        beginPaint(at: v.startLocation, t)
+                    }
+                    extendPaint(to: v.location, t)
+                    return
+                }
                 #endif
                 if preDrag == nil {
                     preDrag = document.draft
@@ -165,6 +207,8 @@ struct EditorCanvas: View {
                     // The slot tool moves existing slots too: touch one and
                     // drag, the pad follows, lifting drops it there.
                     case .slot: slotTarget(at: v.startLocation, t)
+                    case .entrance: markerTarget(at: v.startLocation, t, exits: false)
+                    case .exitPoint: markerTarget(at: v.startLocation, t, entrances: false)
                     default: nil
                     }
                     if let target = dragTarget {
@@ -203,6 +247,10 @@ struct EditorCanvas: View {
                     commitStroke()
                     return
                 }
+                if state.tool == .paint || state.tool == .eraser {
+                    commitPaint()
+                    return
+                }
                 #endif
                 if dragMoved, dragTarget != nil {
                     if let before = preDrag, before != document.draft {
@@ -236,14 +284,22 @@ struct EditorCanvas: View {
             }
 
         case .entrance:
-            document.edit(undoManager) { $0.entrances.append(dp) }
-            state.selection = .entrance(document.draft.entrances.count - 1)
+            if let existing = markerTarget(at: p, t, exits: false) {
+                state.selection = selection(for: existing)
+            } else {
+                document.edit(undoManager) { $0.entrances.append(dp) }
+                state.selection = .entrance(document.draft.entrances.count - 1)
+            }
 
         case .exitPoint:
-            document.edit(undoManager) { $0.exits.append(dp) }
-            state.selection = .exitPoint(document.draft.exits.count - 1)
+            if let existing = markerTarget(at: p, t, entrances: false) {
+                state.selection = selection(for: existing)
+            } else {
+                document.edit(undoManager) { $0.exits.append(dp) }
+                state.selection = .exitPoint(document.draft.exits.count - 1)
+            }
 
-        case .brush:
+        case .brush, .paint, .eraser:
             break
         }
     }
@@ -327,26 +383,7 @@ struct EditorCanvas: View {
             if best != nil { return best!.0 }
         }
 
-        let markerRadius = max(14, 20 * t.scale)
-        if state.isVisible(.entrances) {
-            for (i, marker) in document.draft.entrances.enumerated() {
-                let vp = t.view(marker)
-                let d = hypot(vp.x - p.x, vp.y - p.y)
-                if d <= markerRadius, best == nil || d < best!.1 {
-                    best = (.entrance(i), d)
-                }
-            }
-        }
-        if state.isVisible(.exits) {
-            for (i, marker) in document.draft.exits.enumerated() {
-                let vp = t.view(marker)
-                let d = hypot(vp.x - p.x, vp.y - p.y)
-                if d <= markerRadius, best == nil || d < best!.1 {
-                    best = (.exitPoint(i), d)
-                }
-            }
-        }
-        if best != nil { return best!.0 }
+        if let marker = markerTarget(at: p, t) { return marker }
 
         return slotTarget(at: p, t)
     }
@@ -367,6 +404,27 @@ struct EditorCanvas: View {
             guard CanvasSpec.slotFootprintContains(point, slot: center) else { continue }
             let d = hypot(dp.x - slot.x, dp.y - slot.y)
             if best == nil || d < best!.1 { best = (.slot(i), d) }
+        }
+        return best?.0
+    }
+
+    private func markerTarget(at p: CGPoint, _ t: DesignTransform,
+                              entrances: Bool = true, exits: Bool = true) -> DragTarget? {
+        let markerRadius = max(14, 20 * t.scale)
+        var best: (DragTarget, CGFloat)?
+        if entrances, state.isVisible(.entrances) {
+            for (i, marker) in document.draft.entrances.enumerated() {
+                let vp = t.view(marker)
+                let d = hypot(vp.x - p.x, vp.y - p.y)
+                if d <= markerRadius, best == nil || d < best!.1 { best = (.entrance(i), d) }
+            }
+        }
+        if exits, state.isVisible(.exits) {
+            for (i, marker) in document.draft.exits.enumerated() {
+                let vp = t.view(marker)
+                let d = hypot(vp.x - p.x, vp.y - p.y)
+                if d <= markerRadius, best == nil || d < best!.1 { best = (.exitPoint(i), d) }
+            }
         }
         return best?.0
     }
@@ -423,6 +481,7 @@ struct EditorCanvas: View {
             drawMarkers(&layer, t, points: draft.entrances, isEntrance: true)
         }
         drawLiveStroke(&ctx, t)
+        drawPaintCursor(&ctx, t)
         // The occlusion art sits above every playable layer, exactly as the
         // game will draw it, so entrance and exit cover can be judged here.
         if state.isVisible(.occlusion), let overlay = state.overlay {
@@ -471,6 +530,17 @@ struct EditorCanvas: View {
         let points = state.stroke.points
         guard points.count >= 2 else { return }
         PathArtist.draw(&ctx, points: BrushGeometry.smooth(points, passes: 1), t, wet: true)
+    }
+
+    private func drawPaintCursor(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        guard state.tool == .paint || state.tool == .eraser, let cursor = state.cursor else { return }
+        let d = state.paintWidth * t.scale
+        let c = t.view(cursor)
+        let rect = CGRect(x: c.x - d / 2, y: c.y - d / 2, width: d, height: d)
+        let tint: Color = state.tool == .eraser ? .red : PathArtist.fillColor
+        ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(tint.opacity(0.15)))
+        ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(tint.opacity(0.9)),
+                   style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
     }
 
     private func drawOuterEdge(_ ctx: inout GraphicsContext,
@@ -522,34 +592,15 @@ struct EditorCanvas: View {
     }
 
     private func drawPlayAreaOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let playable = t.view(CanvasSpec.playArea)
-        var corners = SwiftUI.Path()
         let play = CanvasSpec.playArea
-        let pad = 6.0
-        for corner in CanvasSpec.cornerOcclusionAreas {
-            var cut = corner
-            if abs(corner.minX - play.minX) < 0.5 {
-                cut.origin.x -= pad
-                cut.size.width += pad
-            }
-            if abs(corner.maxX - play.maxX) < 0.5 {
-                cut.size.width += pad
-            }
-            if abs(corner.minY - play.minY) < 0.5 {
-                cut.origin.y -= pad
-                cut.size.height += pad
-            }
-            if abs(corner.maxY - play.maxY) < 0.5 {
-                cut.size.height += pad
-            }
-            corners.addRect(t.view(cut))
-        }
-        let notched = SwiftUI.Path(
-            SwiftUI.Path(playable).cgPath.subtracting(corners.cgPath, using: .winding))
+        let notched = SwiftUI.Path(CanvasSpec.playAreaShape).applying(t.viewTransform)
         var dim = SwiftUI.Path(t.frame)
         dim.addPath(notched)
         ctx.fill(dim, with: .color(.black.opacity(0.38)), style: FillStyle(eoFill: true))
-        ctx.stroke(notched, with: .color(.red.opacity(0.85)),
+        let lineColor = Color(red: CanvasSpec.playAreaLineRGB.red,
+                              green: CanvasSpec.playAreaLineRGB.green,
+                              blue: CanvasSpec.playAreaLineRGB.blue)
+        ctx.stroke(notched, with: .color(lineColor),
                    style: StrokeStyle(lineWidth: 1.5, dash: [8, 5]))
 
         let toView = CGAffineTransform(a: t.scale, b: 0, c: 0, d: t.scale,
@@ -562,7 +613,7 @@ struct EditorCanvas: View {
         let playTopView = t.view(Point(play.midX, play.maxY))
         ctx.draw(
             Text("play top y \(Int(play.maxY.rounded()))")
-                .font(font).foregroundStyle(.red.opacity(0.9)),
+                .font(font).foregroundStyle(lineColor),
             at: CGPoint(x: playTopView.x, y: playTopView.y - 10)
         )
         let topInset = TowerMenuLayout.slotSafeInset(.top)
@@ -642,6 +693,16 @@ struct EditorCanvas: View {
     private func drawRoads(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
+        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint))
+            .applying(t.viewTransform)
+        PathArtist.drawArea(&ctx, area, t)
+        if !state.paintStroke.isEmpty {
+            let wet = SwiftUI.Path(BrushGeometry.strokeArea(points: state.paintStroke.points,
+                                                            width: state.paintWidth))
+                .applying(t.viewTransform)
+            let tint: Color = state.tool == .eraser ? .red : PathArtist.fillColor
+            ctx.fill(wet, with: .color(tint.opacity(0.45)))
+        }
         for (ri, road) in draft.roads.enumerated() {
             let pts = road.points.map { t.view($0) }
             let isSelected: Bool = switch state.selection {
@@ -655,7 +716,6 @@ struct EditorCanvas: View {
                     let body = PathArtist.bodyPath(points: road.points, t)
                     ctx.stroke(body, with: .color(.cyan.opacity(0.5)), lineWidth: 6 * s)
                 }
-                PathArtist.draw(&ctx, points: road.points, t)
 
                 if state.showOuterEdge {
                     drawOuterEdge(&ctx, t, road: road, highlighted: isSelected)
