@@ -2,6 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct LevelBriefingView: View {
+    let db: Db
     let node: CampaignNode
     let onStart: (Difficulty) -> Void
 
@@ -122,10 +123,6 @@ struct LevelBriefingView: View {
     }
 
     private func loadDifficulties() {
-        let db = Db(
-            dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
-            fullRefresh: true
-        )
         difficulties = (try? db.difficultyDao.getAll()) ?? []
         if selected == nil {
             selected = (try? db.difficultyDao.getSelected()) ?? difficulties.last

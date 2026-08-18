@@ -10,6 +10,7 @@ struct CampaignMapView: View {
     @State private var nodes: [CampaignNode] = []
     
     public var canvasSpec: CanvasSpec
+    public let db: Db
 
     var body: some View {
         GeometryReader { geometry in
@@ -106,7 +107,7 @@ struct CampaignMapView: View {
         }
         .persistentSystemOverlays(.hidden)
         .task {
-            if nodes.isEmpty { nodes = CampaignNode.load() }
+            if nodes.isEmpty { nodes = CampaignNode.load(db: db) }
         }
     }
 }

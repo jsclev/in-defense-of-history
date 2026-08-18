@@ -23,11 +23,7 @@ extension CampaignNode {
                   mapImageName: level.mapImageName)
     }
 
-    static func load(campaignName: String = mainCampaignName) -> [CampaignNode] {
-        let db = Db(
-            dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
-            fullRefresh: true
-        )
+    static func load(db: Db, campaignName: String = mainCampaignName) -> [CampaignNode] {
         let levels = (try? db.levelInfoDao.getCampaignLevels(campaignName: campaignName)) ?? []
         return levels.enumerated().map { CampaignNode(order: $0.offset + 1, level: $0.element) }
     }

@@ -25,12 +25,12 @@ struct RootView: View {
                     self.selectedNode = nil
                 }
             } else {
-                LevelBriefingView(node: selectedNode) { difficulty in
+                LevelBriefingView(db: store.db, node: selectedNode) { difficulty in
                     self.playingDifficulty = difficulty
                 }
             }
         } else if menuScreen == .heroes {
-            HeroesView {
+            HeroesView(db: store.db) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .encyclopedia {
@@ -48,7 +48,7 @@ struct RootView: View {
         } else {
             CampaignMapView(
                 onSelectNode: { selectedNode = $0 },
-                onSelectMenu: { menuScreen = $0 }, canvasSpec: store.canvasSpec
+                onSelectMenu: { menuScreen = $0 }, canvasSpec: store.canvasSpec, db: store.db
             )
         }
     }

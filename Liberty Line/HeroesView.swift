@@ -2,6 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct HeroesView: View {
+    let db: Db
     let onExit: () -> Void
 
     @State private var heroes: [Hero] = []
@@ -12,7 +13,7 @@ struct HeroesView: View {
 
     var body: some View {
         if let selectedHero {
-            HeroDetailsView(hero: selectedHero) {
+            HeroDetailsView(db: db, hero: selectedHero) {
                 self.selectedHero = nil
             }
         } else {
@@ -107,10 +108,6 @@ struct HeroesView: View {
         guard Bundle.main.url(forResource: "in_defense_of_history", withExtension: "sqlite") != nil else {
             return
         }
-        let db = Db(
-            dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
-            fullRefresh: true
-        )
         heroes = (try? db.heroDao.getAll()) ?? []
 
         let unlocked = Set(heroes.filter(\.unlocked).map(\.id.uuidString))
@@ -403,6 +400,7 @@ private struct HeroCardButtonStyle: ButtonStyle {
 
 @available(iOS 26.0, *)
 struct HeroDetailsView: View {
+    let db: Db
     let hero: Hero
     let onExit: () -> Void
 
@@ -462,11 +460,6 @@ struct HeroDetailsView: View {
                                     .string(forKey: "selectedHeroIDs") ?? ""
                                 let ids = selectedIDs.split(separator: ",")
                                     .compactMap { UUID(uuidString: String($0)) }
-                                let db = Db(
-                                    dbPath: Db.getAbsolutePathToDb(
-                                        dbFilename: "in_defense_of_history", fullRefresh: false),
-                                    fullRefresh: false
-                                )
                                 try? db.heroDao.setSelectedHeroes(ids)
                             } label: {
                                 Text(isSelected ? "Selected — tap to remove" : "Select Hero")

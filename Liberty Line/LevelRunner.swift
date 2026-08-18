@@ -398,10 +398,6 @@ final class LevelRunner: NSObject, ObservableObject {
         }
 
         do {
-//            let db = Db(
-//                dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
-//                fullRefresh: true
-//            )
             let level = try db.levelInfoDao.getBy(id: levelInfoID)
             let enemies = try db.enemyTypeDao.getAll()
             entrancePoints = try db.levelGeoJSONDao.getEntrancePoints(mapImageName: level.mapImageName)
