@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LevelHeroBarView: View {
+    let towerMenuLayout: TowerMenuLayout
     let heroes: [Hero]
     let buttonSize: CGSize
     let spacing: CGFloat
@@ -25,18 +26,19 @@ struct LevelHeroBarView: View {
     }
 
     private func button(iconName: String?) -> some View {
-        HudFrameButton(iconName: iconName, buttonSize: buttonSize) {}
+        HudFrameButton(towerMenuLayout: towerMenuLayout, iconName: iconName, buttonSize: buttonSize) {}
     }
 }
 
 struct HudFrameButton: View {
+    let towerMenuLayout: TowerMenuLayout
     let iconName: String?
     let buttonSize: CGSize
     let action: () -> Void
 
     var body: some View {
         let side = buttonSize.width
-        let iconSide = TowerMenuLayout.getTowerIconSize(towerButtonSize: side)
+        let iconSide = towerMenuLayout.getTowerIconSize(towerButtonSize: side)
         Button(action: action) {
             ZStack {
                 Image("tower_menu_square_frame")
@@ -60,11 +62,12 @@ struct HudFrameButton: View {
 }
 
 struct LevelMiscView: View {
+    let towerMenuLayout: TowerMenuLayout
     let buttonSize: CGSize
 
     static let iconName = "hero_ability_icon_daniel_morgan"
 
     var body: some View {
-        HudFrameButton(iconName: Self.iconName, buttonSize: buttonSize) {}
+        HudFrameButton(towerMenuLayout: towerMenuLayout, iconName: Self.iconName, buttonSize: buttonSize) {}
     }
 }

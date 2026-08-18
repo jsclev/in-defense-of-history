@@ -98,6 +98,66 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     var isPlayable: Bool {
         roads.contains { $0.points.count >= 2 } && !waves.isEmpty
     }
+
+    /// Merges an eraser stroke straight into the waypoints. Covered waypoints go
+    /// away, a road cut through the middle becomes two roads, and painted area
+    /// under the eraser is cut the same way. The stroke itself is not kept.
+    mutating func applyErase(_ eraser: PaintStroke) {
+        var taken = Set(roads.map(\.name))
+        var cut: [Road] = []
+        var firstPiece: [Int: Int] = [:]
+        for (old, road) in roads.enumerated() {
+            let pieces = BrushGeometry.erase(polyline: road.points,
+                                             halfWidth: MapGeometry.roadHalfWidth,
+                                             with: eraser)
+                .filter { $0.count >= 2 }
+            for (i, points) in pieces.enumerated() {
+                if i == 0 { firstPiece[old] = cut.count }
+                let name = i == 0 ? road.name : Self.freeRoadName(taken: taken)
+                taken.insert(name)
+                cut.append(Road(name: name, points: points))
+            }
+        }
+        roads = cut
+        // Spawn lines address a road by position, so a split or a road erased
+        // away renumbers them. A line follows its road to the first piece that
+        // survived; a road erased away entirely falls back to road 0, the same
+        // fallback deleteRoad uses.
+        for w in waves.indices {
+            for l in waves[w].lines.indices {
+                waves[w].lines[l].road = firstPiece[waves[w].lines[l].road] ?? 0
+            }
+        }
+        roadPaint = roadPaint.flatMap { stroke in
+            BrushGeometry.erase(polyline: stroke.points, halfWidth: stroke.width / 2,
+                                with: eraser)
+                .map { PaintStroke(points: $0, width: stroke.width, erases: false) }
+        }
+    }
+
+    /// A draft authored before the eraser merged down stored its eraser strokes
+    /// as a layer. Replay them in author order and drop them, so no draft in
+    /// memory ever carries one.
+    mutating func bakeStoredErasures() {
+        guard roadPaint.contains(where: \.erases) else { return }
+        let strokes = roadPaint
+        roadPaint = []
+        for stroke in strokes {
+            if stroke.erases {
+                applyErase(stroke)
+            } else {
+                roadPaint.append(stroke)
+            }
+        }
+    }
+
+    /// THE road name allocator. Erasing can split and drop roads, so a name
+    /// taken from the count alone would collide with a road already there.
+    static func freeRoadName(taken: Set<String>) -> String {
+        var n = taken.count + 1
+        while taken.contains("Road \(n)") { n += 1 }
+        return "Road \(n)"
+    }
 }
 
 extension MapDraft {
@@ -129,6 +189,7 @@ extension MapDraft {
             exits = exits.map(upgrade)
             coordinateSpace = Self.canvasSpace
         }
+        bakeStoredErasures()
     }
 
     init(blueprint bp: LevelBlueprint) {
@@ -161,19 +222,19 @@ extension MapDraft {
     }
 
     func makeBlueprint() -> LevelBlueprint {
-        LevelBlueprint(
+        let routes = roads.filter { $0.points.count >= 2 }
+        return LevelBlueprint(
             name: name,
             startingGold: startingGold,
             lives: lives,
-            roads: roads.filter { $0.points.count >= 2 }
-                .map { LevelBlueprint.Road($0.name, $0.points) },
+            roads: routes.map { LevelBlueprint.Road($0.name, $0.points) },
             slots: slots,
             waves: waves.map { w in
                 LevelBlueprint.WaveSketch(breather: w.breather, lines: w.lines.map { l in
                     LevelBlueprint.SpawnLine(
                         Foe(rawValue: l.foe) ?? .loyalistMilitia,
                         count: l.count, every: l.every, delay: l.delay,
-                        road: min(l.road, max(0, roads.count - 1))
+                        road: min(l.road, max(0, routes.count - 1))
                     )
                 })
             },
@@ -314,7 +375,8 @@ final class MapDocument: ReferenceFileDocument {
     @MainActor
     func addPaintedRoad(points: [Point], _ undoManager: UndoManager?) {
         edit(undoManager) { d in
-            d.roads.append(.init(name: "Road \(d.roads.count + 1)", points: points))
+            d.roads.append(.init(name: MapDraft.freeRoadName(taken: Set(d.roads.map(\.name))),
+                                 points: points))
         }
     }
 

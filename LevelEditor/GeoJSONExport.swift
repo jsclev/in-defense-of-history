@@ -24,8 +24,9 @@ enum GeoJSONExport {
 
     static func document(for draft: MapDraft) -> FeatureCollection {
         var features: [Feature] = []
+        let roads = draft.roads.filter { $0.points.count >= 2 }
 
-        for (ri, road) in draft.roads.enumerated() where road.points.count >= 2 {
+        for (ri, road) in roads.enumerated() {
             let isPrimary = ri == 0
             features.append(Feature(
                 id: isPrimary ? "gameplay.road" : "gameplay.road.\(ri)",
@@ -86,7 +87,7 @@ enum GeoJSONExport {
         // its first point is the entrance.
         func nearestRoad(to p: Point) -> Int {
             var best: (Int, Double)?
-            for (ri, road) in draft.roads.enumerated() {
+            for (ri, road) in roads.enumerated() {
                 guard let a = road.points.first, let b = road.points.last else { continue }
                 let d = min(p.distance(to: a), p.distance(to: b))
                 if best == nil || d < best!.1 { best = (ri, d) }
@@ -113,6 +114,26 @@ enum GeoJSONExport {
                 layer: 75,
                 geometry: .point(marker),
                 extra: ["pathIndex": .number(Double(nearestRoad(to: marker)))]
+            ))
+        }
+
+        // Painted road is area the roads cannot describe — it has its own width
+        // and follows no waypoints — so the strokes travel as themselves. Eraser
+        // strokes are never here: they are merged into the waypoints on commit.
+        for (i, stroke) in draft.roadPaint.enumerated() where !stroke.points.isEmpty {
+            features.append(Feature(
+                id: "gameplay.road_paint.\(i)",
+                name: "Paint \(i)",
+                category: "gameplay",
+                kind: "road_paint",
+                layer: 41,
+                geometry: .lineString(stroke.points.count == 1
+                                      ? [stroke.points[0], stroke.points[0]]
+                                      : stroke.points),
+                extra: [
+                    "widthPx": .number(stroke.width),
+                    "strokeIndex": .number(Double(i)),
+                ]
             ))
         }
 

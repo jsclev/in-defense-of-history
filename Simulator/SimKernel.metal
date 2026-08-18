@@ -245,6 +245,11 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                     S.muTarget[m] = int(S.spawnID[best]);
                     muClaimed[best] = 1;
                     muFree[best] = 0;
+                } else if (distance(pos, post) > 2.0f) {
+                    float d = distance(pos, post);
+                    float step = lvl.militiaMoveSpeed * dt;
+                    float2 np = d <= step ? post : mix(pos, post, step / d);
+                    S.muX[m] = np.x; S.muY[m] = np.y;
                 } else {
                     S.muHP[m] = min(ms.meleeUnitHP,
                                     S.muHP[m] + ms.meleeHealPerSecond * dt);

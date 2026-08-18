@@ -5,11 +5,22 @@ struct RootView: View {
     @State private var selectedNode: CampaignNode?
     @State private var playingDifficulty: Difficulty?
     @State private var menuScreen: MenuScreen?
+    
+//    private var db: Db
+//    private var canvasSpec: CanvasSpec
+    
+    var store = Store()
+//    @StateObject var store = Store()
+
+
 
     var body: some View {
         if let selectedNode {
             if let playingDifficulty {
-                LevelMapView(node: selectedNode, difficulty: playingDifficulty) {
+                LevelMapView(db: store.db,
+                             canvasSpec: store.canvasSpec,
+                             towerMenuLayout: store.towerMenuLayout,
+                             node: selectedNode, difficulty: playingDifficulty) {
                     self.playingDifficulty = nil
                     self.selectedNode = nil
                 }
@@ -37,7 +48,7 @@ struct RootView: View {
         } else {
             CampaignMapView(
                 onSelectNode: { selectedNode = $0 },
-                onSelectMenu: { menuScreen = $0 }
+                onSelectMenu: { menuScreen = $0 }, canvasSpec: store.canvasSpec
             )
         }
     }

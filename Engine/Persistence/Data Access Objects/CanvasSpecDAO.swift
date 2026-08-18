@@ -7,10 +7,7 @@ public class CanvasSpecDAO: BaseDAO {
         super.init(conn: conn, table: "canvas_spec", loggerName: CanvasSpecDAO.self)
     }
 
-    /// The canvas_spec row. Exactly one must exist; zero means the database
-    /// predates the table (rebuild with Db/create_db.sh) and more than one
-    /// means the seed DML ran twice.
-    public func get() throws -> CanvasSpecValues {
+    public func get() throws -> CanvasSpec {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""
             SELECT
@@ -39,40 +36,70 @@ public class CanvasSpecDAO: BaseDAO {
 
         guard sqlite3_step(stmt) == SQLITE_ROW else {
             sqlite3_finalize(stmt)
-            throw DbError.Db(message:
-                "canvas_spec is empty - rebuild the database with Db/create_db.sh")
+            throw DbError.Db(message:"canvas_spec table cannot be empty")
         }
-
-        let values = CanvasSpecValues(
-            canvasWidth: getDouble(stmt: stmt, colIndex: 0),
-            canvasHeight: getDouble(stmt: stmt, colIndex: 1),
-            playArea: CGRect(
-                x: getDouble(stmt: stmt, colIndex: 2),
-                y: getDouble(stmt: stmt, colIndex: 3),
-                width: getDouble(stmt: stmt, colIndex: 4),
-                height: getDouble(stmt: stmt, colIndex: 5)
-            ),
-            slotSize: CGSize(width: getDouble(stmt: stmt, colIndex: 6),
-                             height: getDouble(stmt: stmt, colIndex: 7)),
-            pathWidth: getDouble(stmt: stmt, colIndex: 8),
-            upperLeftOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 9),
-                                                     height: getDouble(stmt: stmt, colIndex: 10)),
-            upperRightOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 11),
-                                                      height: getDouble(stmt: stmt, colIndex: 12)),
-            lowerLeftOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 13),
-                                                     height: getDouble(stmt: stmt, colIndex: 14)),
-            lowerRightOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 15),
-                                                      height: getDouble(stmt: stmt, colIndex: 16))
+        
+        let canvasSize = CGSize(width: getDouble(stmt: stmt, colIndex: 0),
+                                height: getDouble(stmt: stmt, colIndex: 1))
+        let playAreaRect = CGRect(
+            x: getDouble(stmt: stmt, colIndex: 2),
+            y: getDouble(stmt: stmt, colIndex: 3),
+            width: getDouble(stmt: stmt, colIndex: 4),
+            height: getDouble(stmt: stmt, colIndex: 5)
         )
+        let pathWidth = getDouble(stmt: stmt, colIndex: 6)
+        let towerSlotSize = CGSize(width: getDouble(stmt: stmt, colIndex: 6),
+                                   height: getDouble(stmt: stmt, colIndex: 7))
+        let upperLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 9),
+                                                      height: getDouble(stmt: stmt, colIndex: 10))
+        let upperRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 11),
+                                                       height: getDouble(stmt: stmt, colIndex: 12))
+        let lowerLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
+                                                      height: getDouble(stmt: stmt, colIndex: 14))
+        let lowerRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 15),
+                                                       height: getDouble(stmt: stmt, colIndex: 16))
+        
+        let canvasSpec = CanvasSpec(size: canvasSize,
+                                    playAreaRect: playAreaRect,
+                                    pathWidth: pathWidth,
+                                    towerSlotSize: towerSlotSize,
+                                    upperLeftOcclusionCornerFraction: upperLeftOcclusionCornerFraction,
+                                    upperRightOcclusionCornerFraction: upperRightOcclusionCornerFraction,
+                                    lowerLeftOcclusionCornerFraction: lowerLeftOcclusionCornerFraction,
+                                    lowerRightOcclusionCornerFraction: lowerRightOcclusionCornerFraction)
+        
+        return canvasSpec
 
-        let extraRow = sqlite3_step(stmt) == SQLITE_ROW
-        sqlite3_finalize(stmt)
-        stmt = nil
+//        let values = CanvasSpecValues(
+//            canvasWidth: getDouble(stmt: stmt, colIndex: 0),
+//            canvasHeight: getDouble(stmt: stmt, colIndex: 1),
+//            playArea: CGRect(
+//                x: getDouble(stmt: stmt, colIndex: 2),
+//                y: getDouble(stmt: stmt, colIndex: 3),
+//                width: getDouble(stmt: stmt, colIndex: 4),
+//                height: getDouble(stmt: stmt, colIndex: 5)
+//            ),
+//            slotSize: CGSize(width: getDouble(stmt: stmt, colIndex: 6),
+//                             height: getDouble(stmt: stmt, colIndex: 7)),
+//            pathWidth: getDouble(stmt: stmt, colIndex: 8),
+//            upperLeftOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 9),
+//                                                     height: getDouble(stmt: stmt, colIndex: 10)),
+//            upperRightOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 11),
+//                                                      height: getDouble(stmt: stmt, colIndex: 12)),
+//            lowerLeftOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 13),
+//                                                     height: getDouble(stmt: stmt, colIndex: 14)),
+//            lowerRightOcclusionCornerFraction: CGSize(width: getDouble(stmt: stmt, colIndex: 15),
+//                                                      height: getDouble(stmt: stmt, colIndex: 16))
+//        )
 
-        guard !extraRow else {
-            throw DbError.Db(message: "canvas_spec has more than one row")
-        }
-
-        return values
+//        let extraRow = sqlite3_step(stmt) == SQLITE_ROW
+//        sqlite3_finalize(stmt)
+//        stmt = nil
+//
+//        guard !extraRow else {
+//            throw DbError.Db(message: "canvas_spec has more than one row")
+//        }
+//
+//        return values
     }
 }

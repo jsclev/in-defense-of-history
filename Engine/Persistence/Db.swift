@@ -130,15 +130,6 @@ public class Db {
         heroDao = HeroDAO(conn: conn)
         levelGeoJSONDao = LevelGeoJSONDAO()
         difficultyDao = DifficultyDAO(conn: conn)
-
-        // Every target reads the shared coordinate system through CanvasSpec,
-        // so it loads the moment any connection opens. A database without the
-        // row is unusable; failing here beats a trap at first draw.
-        do {
-            CanvasSpec.load(try canvasSpecDao.get())
-        } catch {
-            fatalError("Unable to load canvas_spec from \(dbPath): \(error)")
-        }
     }
 
     public func close() {

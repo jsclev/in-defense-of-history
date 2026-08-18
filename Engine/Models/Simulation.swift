@@ -164,16 +164,36 @@ public final class Simulation {
               let melee = catalog.towerTypes[tower.typeIndex].levels[tower.level].meleeUnit
         else { return }
         let towerPos = level.towerSlots[slot].position
-        let flagRange = melee.rallyPointRadius
-        let d = towerPos.distance(to: point)
-        g.rallyPoint = d <= flagRange ? point
-            : Point.lerp(towerPos, point, flagRange / d)
+        g.rallyPoint = Simulation.rallyPoint(requested: point, towerPosition: towerPos,
+                                             flagRange: melee.rallyPointRadius, paths: level.paths)
         garrisons[slot] = g
     }
 
     private func defaultRallyPoint(towerPosition: Point, flagRange: Double) -> Point {
         Simulation.defaultRallyPoint(towerPosition: towerPosition, flagRange: flagRange,
                                      paths: level.paths)
+    }
+
+    public static func rallyPoint(
+        requested: Point, towerPosition: Point, flagRange: Double, paths: [Path]
+    ) -> Point {
+        var best = requested
+        var bestDist = Double.infinity
+        for path in paths {
+            var d = 0.0
+            while d <= path.totalLength {
+                let p = path.point(atDistance: d)
+                let dist = p.distance(to: requested)
+                if dist < bestDist {
+                    bestDist = dist
+                    best = p
+                }
+                d += 12
+            }
+        }
+        let reach = towerPosition.distance(to: best)
+        guard reach > flagRange else { return best }
+        return Point.lerp(towerPosition, best, flagRange / reach)
     }
 
     public static func defaultRallyPoint(

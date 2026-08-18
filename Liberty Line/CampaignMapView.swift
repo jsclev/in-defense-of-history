@@ -8,6 +8,8 @@ struct CampaignMapView: View {
     @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
 
     @State private var nodes: [CampaignNode] = []
+    
+    public var canvasSpec: CanvasSpec
 
     var body: some View {
         GeometryReader { geometry in
@@ -39,24 +41,7 @@ struct CampaignMapView: View {
                         callouts: placements,
                         menuBox: menuBox
                     )
-                    let compassBox: CGRect = compass.map { c in
-                        let a = CampaignMapLayout.imagePoint(
-                            forViewPoint: CGPoint(x: c.center.x - c.size.width / 2,
-                                                  y: c.center.y - c.size.height / 2),
-                            imageSize: CampaignMapAsset.imageSize,
-                            safeRect: CampaignMapAsset.safeRect,
-                            viewSize: mapGeometry.size)
-                        let b = CampaignMapLayout.imagePoint(
-                            forViewPoint: CGPoint(x: c.center.x + c.size.width / 2,
-                                                  y: c.center.y + c.size.height / 2),
-                            imageSize: CampaignMapAsset.imageSize,
-                            safeRect: CampaignMapAsset.safeRect,
-                            viewSize: mapGeometry.size)
-                        return CGRect(x: min(a.x, b.x), y: min(a.y, b.y),
-                                      width: abs(b.x - a.x), height: abs(b.y - a.y))
-                    } ?? .zero
-                    let titleBox = title.frame.insetBy(dx: -title.frame.width * 0.075,
-                                                       dy: -title.frame.height * 0.15)
+
                     ZStack {
                         CampaignMapMetalView()
 
@@ -94,7 +79,7 @@ struct CampaignMapView: View {
                 .ignoresSafeArea()
 
                 if showSafeAreaOverlay {
-                    SafeAreaOverlayView(screen: screen)
+                    SafeAreaOverlayView(screen: screen, canvasSpec: canvasSpec)
                         .ignoresSafeArea()
                 }
 
@@ -141,8 +126,4 @@ private struct CampaignMarkerButtonStyle: ButtonStyle {
                 }
             }
     }
-}
-
-#Preview {
-    CampaignMapView(onSelectNode: { _ in }, onSelectMenu: { _ in })
 }

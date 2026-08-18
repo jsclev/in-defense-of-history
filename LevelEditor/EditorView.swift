@@ -380,7 +380,7 @@ struct EditorView: View {
                     Image(systemName: "paintbrush.pointed").tag(EditorTool.paint)
                         .help("Path painter: paint road area freehand at any width, added to the path layer")
                     Image(systemName: "eraser").tag(EditorTool.eraser)
-                        .help("Path eraser: paint away road area wherever the brush passes")
+                        .help("Path eraser: erase road wherever the brush passes, cutting the waypoints themselves")
                     (EditorResources.templateIcon("Images/tower_tool_icon.png", pointSize: 17)
                         ?? Image(systemName: "building.fill"))
                         .tag(EditorTool.slot)

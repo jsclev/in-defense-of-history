@@ -75,6 +75,9 @@ public enum MilitiaAI {
             if let target = nearestFreeEnemy(in: context) {
                 return .engage(targetSpawnID: target)
             }
+            if unit.position.distance(to: context.rallyPoint) > 2 {
+                return .move(toward: context.rallyPoint)
+            }
             return .heal
 
         case .engaging:

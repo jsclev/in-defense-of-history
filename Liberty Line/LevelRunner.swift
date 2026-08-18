@@ -28,7 +28,7 @@ final class LevelRunner: NSObject, ObservableObject {
     /// Tower art drawn on the slot's own canvas is placed in this same box so
     /// it sits on the slot pad. One size for every slot in the game, from the
     /// canvas_spec table.
-    var slotSize: CGSize { CanvasSpec.slotSize }
+    var slotSize: CGSize { canvasSpec.towerSlotSize }
     private(set) var startingMoney = 0
 
     @Published private(set) var money = 0
@@ -146,7 +146,7 @@ final class LevelRunner: NSObject, ObservableObject {
 
     /// Half-width of the enemy lane, in canonical units, from
     /// canvas_spec.path_width.
-    private static var pathHalfWidthInImagePixels: CGFloat { CanvasSpec.pathWidth / 2 }
+    private var pathHalfWidthInImagePixels: CGFloat { canvasSpec.pathWidth / 2 }
 
     /// Lane coverage per slot, in map pixels squared, computed once at load.
     ///
@@ -167,9 +167,9 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private func precomputeLaneCoverage() {
         let cell = Self.laneCell
-        let w = Self.pathHalfWidthInImagePixels
-        let cols = Int((CanvasSpec.width / cell).rounded(.up)) + 1
-        let rows = Int((CanvasSpec.height / cell).rounded(.up)) + 1
+        let w = pathHalfWidthInImagePixels
+        let cols = Int((canvasSpec.size.width / cell).rounded(.up)) + 1
+        let rows = Int((canvasSpec.size.height / cell).rounded(.up)) + 1
         var lane = [Bool](repeating: false, count: cols * rows)
 
         // Rasterise the lane by walking each segment's neighbourhood, rather
@@ -275,6 +275,33 @@ final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var selectedTowerSlotIndex: Int?
 
+    @Published private(set) var rallyPointsBySlot: [Int: CGPoint] = [:]
+
+    @Published private(set) var isPlacingRallyPoint = false
+
+    func toggleRallyPlacement() { isPlacingRallyPoint.toggle() }
+
+    func placeRallyPoint(at point: CGPoint) {
+        guard isPlacingRallyPoint, let slot = selectedTowerSlotIndex else { return }
+        setRallyPoint(slot: slot, to: point)
+        isPlacingRallyPoint = false
+        selectedTowerSlotIndex = nil
+    }
+
+    func rallyPoint(forSlot slot: Int) -> CGPoint? { rallyPointsBySlot[slot] }
+
+    func setRallyPoint(slot: Int, to point: CGPoint) {
+        guard var g = garrisonsBySlot[slot],
+              let tower = placedTower(atSlot: slot),
+              let melee = towerLevel(for: tower)?.meleeUnit else { return }
+        let towerPos = Point(Double(tower.position.x), Double(tower.position.y))
+        g.rallyPoint = Simulation.rallyPoint(requested: Point(Double(point.x), Double(point.y)),
+                                             towerPosition: towerPos,
+                                             flagRange: melee.rallyPointRadius, paths: paths)
+        garrisonsBySlot[slot] = g
+        rallyPointsBySlot[slot] = CGPoint(x: g.rallyPoint.x, y: g.rallyPoint.y)
+    }
+
     /// Build choice awaiting its confirming second tap: the first tap on a
     /// tower button arms it (checkmark + range preview), the second builds.
     @Published private(set) var armedBuildKind: TowerKind?
@@ -341,12 +368,20 @@ final class LevelRunner: NSObject, ObservableObject {
     private var displayLink: CADisplayLink?
 
     private let enemyHPMultiplier: Double
+    
+    private let db: Db
+    private let canvasSpec: CanvasSpec
 
-    init(levelInfoID: UUID?, mapImageName: String,
+    init(db: Db,
+         canvasSpec: CanvasSpec,
+         levelInfoID: UUID?,
+         mapImageName: String,
          enemyHPMultiplier: Double = 1.0) {
+        self.db = db
+        self.canvasSpec = canvasSpec
         self.mapImageName = mapImageName
         self.mapArt = LevelMapArt(mapImageName: mapImageName)
-        self.playArea = CanvasSpec.playArea
+        self.playArea = canvasSpec.playAreaRect
         self.enemyHPMultiplier = enemyHPMultiplier
         super.init()
         load(levelInfoID: levelInfoID)
@@ -363,10 +398,10 @@ final class LevelRunner: NSObject, ObservableObject {
         }
 
         do {
-            let db = Db(
-                dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
-                fullRefresh: true
-            )
+//            let db = Db(
+//                dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
+//                fullRefresh: true
+//            )
             let level = try db.levelInfoDao.getBy(id: levelInfoID)
             let enemies = try db.enemyTypeDao.getAll()
             entrancePoints = try db.levelGeoJSONDao.getEntrancePoints(mapImageName: level.mapImageName)
@@ -456,6 +491,7 @@ final class LevelRunner: NSObject, ObservableObject {
         selectedSlotIndex = nil
         armedBuildKind = nil
         armedUpgradeBranch = nil
+        isPlacingRallyPoint = false
         selectedTowerSlotIndex = selectedTowerSlotIndex == index ? nil : index
     }
 
@@ -464,6 +500,7 @@ final class LevelRunner: NSObject, ObservableObject {
         selectedTowerSlotIndex = nil
         armedBuildKind = nil
         armedUpgradeBranch = nil
+        isPlacingRallyPoint = false
     }
 
     /// First tap on a build button arms that kind; a second tap on the same
@@ -538,6 +575,7 @@ final class LevelRunner: NSObject, ObservableObject {
                 towerPosition: towerPos,
                 flagRange: melee.rallyPointRadius,
                 paths: paths)
+            rallyPointsBySlot[slotIndex] = CGPoint(x: rally.x, y: rally.y)
             garrisonsBySlot[slotIndex] = MilitiaGarrison(
                 rallyPoint: rally,
                 units: (0..<melee.soldierCount).map { _ in

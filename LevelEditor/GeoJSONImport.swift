@@ -35,6 +35,8 @@ enum GeoJSONImport {
             let kind: String?
             let name: String?
             let slotNumber: Int?
+            let widthPx: Double?
+            let erases: Bool?
         }
         let id: String?
         let geometry: Geometry
@@ -119,6 +121,20 @@ enum GeoJSONImport {
         draft.slots = slots
         draft.entrances = entrances
         draft.exits = exits
+        // A GeoJSON's enemy_path features ARE the routes, already cut. Eraser
+        // strokes in one come from a build that stored them as a layer, so
+        // replaying them here would cut the same roads a second time; only the
+        // additive paint is still geometry the roads cannot describe.
+        draft.roadPaint = collection.features.compactMap { f in
+            guard f.properties.kind == "road_paint", f.properties.erases != true,
+                  case let .line(coords) = f.geometry.coordinates,
+                  let width = f.properties.widthPx else { return nil }
+            let points = coords.compactMap { xy -> Point? in
+                xy.count >= 2 ? Point(xy[0], xy[1]) : nil
+            }
+            guard !points.isEmpty else { return nil }
+            return MapDraft.PaintStroke(points: points, width: width, erases: false)
+        }
         if let waves = collection.waves, !waves.isEmpty {
             draft.waves = waves.map { w in
                 MapDraft.Wave(breather: w.breather, lines: w.lines.map { l in

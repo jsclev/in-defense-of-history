@@ -106,14 +106,117 @@ enum BrushGeometry {
         return line.copy(strokingWithWidth: width, lineCap: .round, lineJoin: .round, miterLimit: 10)
     }
 
+    /// Cuts one width-carrying polyline with an eraser stroke, returning the
+    /// pieces that survive. A cut through the middle returns two.
+    ///
+    /// The cut lands where the line CROSSES the eraser band, not merely where a
+    /// point of it lands inside: a road whose waypoints sit further apart than
+    /// the brush is wide would otherwise be uncuttable, and a run left holding a
+    /// single waypoint would have no length to trim. Every piece end the eraser
+    /// created is then pulled back by `halfWidth`, because the piece is drawn
+    /// with a round cap of that radius — without the pull-back the cap fills the
+    /// hole straight back in and a 60-wide erase across a 140-wide road would
+    /// leave no visible gap at all.
+    static func erase(polyline: [Point], halfWidth: Double,
+                      with eraser: MapDraft.PaintStroke) -> [[Point]] {
+        guard !polyline.isEmpty else { return [] }
+        guard !eraser.points.isEmpty else { return [polyline] }
+        let reach = eraser.width / 2
+        func covers(_ p: Point) -> Bool {
+            let d = eraser.points.count == 1
+                ? p.distance(to: eraser.points[0])
+                : p.distance(toPolyline: eraser.points)
+            return d <= reach
+        }
+        guard polyline.count > 1 else { return covers(polyline[0]) ? [] : [polyline] }
+
+        return survivingRuns(polyline, step: max(0.5, reach / 2), covers: covers)
+            .compactMap { run in
+                var piece = run.points
+                if run.cutAtStart { piece = trimmingFront(piece, by: halfWidth) }
+                if run.cutAtEnd { piece = trimmingBack(piece, by: halfWidth) }
+                return piece.count >= 2 ? piece : nil
+            }
+    }
+
+    private struct SurvivingRun {
+        var points: [Point] = []
+        var cutAtStart = false
+        var cutAtEnd = false
+    }
+
+    /// The stretches of the polyline outside the covered region, each ending on
+    /// the boundary itself. Segments are walked in `step` increments and each
+    /// crossing is bisected onto the boundary, so the original points are kept
+    /// and only the crossings are added.
+    private static func survivingRuns(_ polyline: [Point], step: Double,
+                                      covers: (Point) -> Bool) -> [SurvivingRun] {
+        var runs: [SurvivingRun] = []
+        var run: SurvivingRun?
+        var state = covers(polyline[0])
+        if !state { run = SurvivingRun(points: [polyline[0]]) }
+
+        for i in 0..<(polyline.count - 1) {
+            let a = polyline[i], b = polyline[i + 1]
+            let length = a.distance(to: b)
+            let steps = length > step ? Int((length / step).rounded(.up)) : 1
+            var previousT = 0.0
+            for s in 1...steps {
+                let t = Double(s) / Double(steps)
+                let covered = covers(Point.lerp(a, b, t))
+                if covered != state {
+                    var old = previousT, new = t
+                    while (new - old) * length > 0.05 {
+                        let mid = (old + new) / 2
+                        if covers(Point.lerp(a, b, mid)) == state { old = mid } else { new = mid }
+                    }
+                    // The boundary point belongs to the surviving side.
+                    let boundary = Point.lerp(a, b, covered ? old : new)
+                    if covered {
+                        run?.points.append(boundary)
+                        run?.cutAtEnd = true
+                        if let run { runs.append(run) }
+                        run = nil
+                    } else {
+                        run = SurvivingRun(points: [boundary], cutAtStart: true)
+                    }
+                    state = covered
+                }
+                if s == steps, !state { run?.points.append(b) }
+                previousT = t
+            }
+        }
+        if let run { runs.append(run) }
+        return runs
+    }
+
+    private static func trimmingFront(_ input: some Sequence<Point>,
+                                      by distance: Double) -> [Point] {
+        let pts = Array(input)
+        guard distance > 0, pts.count > 1 else { return [] }
+        var remaining = distance
+        for i in 0..<(pts.count - 1) {
+            let seg = pts[i].distance(to: pts[i + 1])
+            if seg >= remaining {
+                let cut = Point.lerp(pts[i], pts[i + 1], seg > 0 ? remaining / seg : 1)
+                return [cut] + pts[(i + 1)...]
+            }
+            remaining -= seg
+        }
+        return []
+    }
+
+    private static func trimmingBack(_ pts: [Point], by distance: Double) -> [Point] {
+        Array(trimmingFront(pts.reversed(), by: distance).reversed())
+    }
+
     static func roadArea(roads: [MapDraft.Road], paint: [MapDraft.PaintStroke]) -> CGPath {
         var area = CGMutablePath() as CGPath
         for road in roads where road.points.count >= 2 {
             area = area.union(strokeArea(points: road.points, width: MapGeometry.roadHalfWidth * 2))
         }
         for stroke in paint where !stroke.points.isEmpty {
-            let s = strokeArea(points: stroke.points, width: stroke.width)
-            area = stroke.erases ? area.subtracting(s) : area.union(s)
+            area = area.union(strokeArea(points: stroke.points, width: stroke.width))
         }
         return area
     }

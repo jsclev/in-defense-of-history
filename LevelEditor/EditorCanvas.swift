@@ -152,7 +152,13 @@ struct EditorCanvas: View {
         guard !points.isEmpty else { return }
         let stroke = MapDraft.PaintStroke(points: points, width: state.paintWidth,
                                           erases: state.tool == .eraser)
-        document.edit(undoManager) { $0.roadPaint.append(stroke) }
+        if stroke.erases {
+            document.edit(undoManager) { $0.applyErase(stroke) }
+            // A split renumbers the roads, and selection is held by index.
+            state.selection = .none
+        } else {
+            document.edit(undoManager) { $0.roadPaint.append(stroke) }
+        }
     }
 
     private func beginStroke(at p: CGPoint, _ t: DesignTransform) {
@@ -820,8 +826,8 @@ struct EditorCanvas: View {
                 // already drifted from the real values.
                 for ring in content.ringsByName {
                     let label = "\(ring.name) \(Int(ring.range))"
-                    let rr = ring.range * s
-                    let rangeRect = CGRect(x: c.x - rr, y: c.y - rr, width: 2 * rr, height: 2 * rr)
+                    let rangeRect = MapRangeShape.rect(center: c, range: ring.range,
+                                                       pointsPerMapUnit: s)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
                                with: .color(.cyan.opacity(0.4)),
                                style: StrokeStyle(lineWidth: 1.5, dash: [6, 5]))
@@ -829,7 +835,7 @@ struct EditorCanvas: View {
                         Text(label)
                             .font(.system(size: max(9, 10 * s)))
                             .foregroundStyle(.cyan.opacity(0.7)),
-                        at: CGPoint(x: c.x, y: c.y - rr - 8)
+                        at: CGPoint(x: c.x, y: rangeRect.minY - 8)
                     )
                 }
             }

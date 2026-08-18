@@ -241,7 +241,7 @@ struct InspectorView: View {
                 Button {
                     document.edit(undoManager) { d in
                         d.roads.append(.init(
-                            name: "Path \(d.roads.count + 1)",
+                            name: MapDraft.freeRoadName(taken: Set(d.roads.map(\.name))),
                             points: [Point(2520, 1032), Point(2130, 1032)]
                         ))
                     }
