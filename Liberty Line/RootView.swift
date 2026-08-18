@@ -25,7 +25,7 @@ struct RootView: View {
                     self.selectedNode = nil
                 }
             } else {
-                LevelBriefingView(db: store.db, node: selectedNode) { difficulty in
+                LevelBriefingView(db: store.db, canvasSpec: store.canvasSpec, node: selectedNode) { difficulty in
                     self.playingDifficulty = difficulty
                 }
             }

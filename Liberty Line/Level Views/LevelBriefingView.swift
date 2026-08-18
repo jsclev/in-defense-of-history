@@ -3,6 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct LevelBriefingView: View {
     let db: Db
+    let canvasSpec: CanvasSpec
     let node: CampaignNode
     let onStart: (Difficulty) -> Void
 
@@ -103,15 +104,16 @@ struct LevelBriefingView: View {
         let frame = CGSize(width: height * 16 / 9, height: height)
         let art = LevelMapArt(mapImageName: node.mapImageName)
         return ZStack {
-//            if art.hasArt {
-//                // The map exactly as the level screen composites it — same
-//                // compositor, same tiers, same projection rule — fitted to
-//                // this smaller frame instead of the screen.
-//                art.complete(in: LevelMapArt.projection(
-//                    fitting: CGRect(origin: .zero, size: frame)))
-//            } else {
-//                Rectangle().fill(Self.ink.opacity(0.55))
-//            }
+            if art.hasArt {
+                // The map exactly as the level screen composites it — same
+                // compositor, same tiers, same projection rule — fitted to
+                // this smaller frame instead of the screen.
+                art.complete(in: LevelMapArt.projection(
+                    canvasSpec: canvasSpec,
+                    fitting: CGRect(origin: .zero, size: frame)))
+            } else {
+                Rectangle().fill(Self.ink.opacity(0.55))
+            }
         }
         .frame(width: frame.width, height: frame.height)
         .clipShape(RoundedRectangle(cornerRadius: 10 * metrics.scale, style: .continuous))
