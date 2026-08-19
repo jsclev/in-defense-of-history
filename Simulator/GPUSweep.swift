@@ -27,14 +27,18 @@ final class GPUEngine {
         }
         self.queue = queue
 
-        let library = try Self.loadLibrary(device: device)
+        let library = try loadSimulationLibrary(device: device)
         guard let fn = library.makeFunction(name: "simulate") else {
             throw DbError.Db(message: "Kernel 'simulate' not found in Metal library")
         }
         self.pipeline = try device.makeComputePipelineState(function: fn)
     }
 
-    private static func loadLibrary(device: MTLDevice) throws -> MTLLibrary {
+}
+
+/// The compiled kernel beside the executable, else the source in the working
+/// directory (a from-Xcode run).
+private func loadSimulationLibrary(device: MTLDevice) throws -> MTLLibrary {
         if let execURL = Bundle.main.executableURL {
             let lib = execURL.deletingLastPathComponent().appendingPathComponent("default.metallib")
             if FileManager.default.fileExists(atPath: lib.path),
@@ -52,11 +56,11 @@ final class GPUEngine {
             return try device.makeLibrary(source: source, options: nil)
         }
         throw DbError.Db(message: "No default.metallib beside executable and no Simulator/SimKernel.metal in cwd")
-    }
 }
 
-enum GPUBuild {
-    static func levelGPU(level: LevelInfo, catalog: ContentCatalog) throws -> LevelGPU {
+/// Encoding a level and a permutation for the kernel.
+extension GPUEngine {
+    func levelGPU(level: LevelInfo, catalog: ContentCatalog) throws -> LevelGPU {
         guard level.paths.count <= Int(SIM_MAX_PATHS),
               level.paths.allSatisfy({ $0.points.count <= Int(SIM_MAX_PATH_POINTS) }),
               level.towerSlots.count <= Int(SIM_MAX_SLOTS),
@@ -152,7 +156,7 @@ enum GPUBuild {
         return lvl
     }
 
-    static func permGPU(
+    func permGPU(
         level: LevelInfo, catalog: ContentCatalog, money: Int
     ) throws -> PermGPU {
         var perm = PermGPU()
@@ -396,21 +400,28 @@ extension GPUEngine {
     }
 }
 
-enum GPUHarness {
-    static func makeInputs(
-        db: Db, levelName: String, fieldMelee: Bool = false
+/// The GPU engine's bench, validation probes and sweep driver. Reads the
+/// one shared database it is given.
+struct GPUHarness {
+    let db: Db
+
+    init(db: Db) {
+        self.db = db
+    }
+
+    func makeInputs(
+        levelName: String, fieldMelee: Bool = false
     ) throws -> (fixed: SweepFixedInputs, space: SweepSpace, base: LevelInfo) {
-        var fixed = try SweepFixedInputs.load(db: db, levelName: levelName)
-        fixed.fieldMelee = fieldMelee
-        let base = try SweepFixedInputs.designLevel(db: db, levelName: levelName, fixed: fixed)
+        let fixed = try SweepFixedInputs(db: db, levelName: levelName, fieldMelee: fieldMelee)
+        let base = try fixed.designLevel(db: db)
         let space = SweepSpace(grids: SweepGrids(), fixed: fixed, slotCount: base.towerSlots.count)
         return (fixed, space, base)
     }
 
-    static func levelFor(perm: SweepPermutation, fixed: SweepFixedInputs, base: LevelInfo)
+    func levelFor(perm: SweepPermutation, fixed: SweepFixedInputs, base: LevelInfo)
         -> (LevelInfo, ContentCatalog) {
-        let catalog = SweepCatalog.make(perm: perm, fixed: fixed)
-        let waves = SweepWaves.make(perm: perm, fixed: fixed, pathCount: base.paths.count)
+        let catalog = SweepCatalog(fixed: fixed).make(perm: perm)
+        let waves = SweepWaves(fixed: fixed, pathCount: base.paths.count).make(perm: perm)
         let level = LevelInfo(
             id: base.id, name: base.name, campaign: base.campaign,
             startedAt: base.startedAt, endedAt: base.endedAt,
@@ -421,14 +432,14 @@ enum GPUHarness {
         return (level, catalog)
     }
 
-    static func bench(db: Db, levelName: String, sims: Int) throws {
-        let (fixed, space, base) = try makeInputs(db: db, levelName: levelName)
+    func bench(levelName: String, sims: Int) throws {
+        let (fixed, space, base) = try makeInputs(levelName: levelName)
         let perm = space.permutation(at: space.permutationCount / 2)
         let (level, catalog) = levelFor(perm: perm, fixed: fixed, base: base)
-        let lvlGPU = try GPUBuild.levelGPU(level: level, catalog: catalog)
-        let permGPU = try GPUBuild.permGPU(level: level, catalog: catalog, money: perm.money)
-
         let engine = try GPUEngine()
+        let lvlGPU = try engine.levelGPU(level: level, catalog: catalog)
+        let permGPU = try engine.permGPU(level: level, catalog: catalog, money: perm.money)
+
         _ = try engine.run(level: lvlGPU, perms: [permGPU], seedsPerPerm: 256,
                            baseSeed: 1776, mode: UInt32(SIM_MODE_GREEDY))
         let t0 = Date()
@@ -449,33 +460,33 @@ enum GPUHarness {
         Double(wins) / Double(max(1, sims)) * 100, overflow))
     }
 
-    static func validate(db: Db, levelName: String, seeds: Int) throws {
+    func validate(levelName: String, seeds: Int) throws {
         let engine = try GPUEngine()
-        var failures = try probeSuite(db: db, engine: engine, levelName: levelName,
+        var failures = try probeSuite(engine: engine, levelName: levelName,
                                       seeds: seeds, fieldMelee: false)
-        let inputs = try SweepFixedInputs.load(db: db, levelName: levelName)
+        let inputs = try SweepFixedInputs(db: db, levelName: levelName)
         let hasMelee = inputs.unlocks.keys.contains {
             inputs.towerLevels[$0]?.first?.meleeUnit != nil
         }
         if hasMelee {
-            failures += try meleeDuelProbe(db: db, engine: engine, levelName: levelName,
+            failures += try meleeDuelProbe(engine: engine, levelName: levelName,
                                            seeds: seeds)
-            failures += try probeSuite(db: db, engine: engine, levelName: levelName,
+            failures += try probeSuite(engine: engine, levelName: levelName,
                                        seeds: seeds, fieldMelee: true)
         } else {
             print("  (no melee kind unlocked for this level — melee probes skipped)")
         }
-        failures += try artilleryProbe(db: db, engine: engine, levelName: levelName, seeds: seeds)
+        failures += try artilleryProbe(engine: engine, levelName: levelName, seeds: seeds)
         print(failures == 0
               ? "  all probes agree within sampling error — GPU engine validated ✓\n"
               : "  ⚠ \(failures) probe(s) disagree — GPU engine NOT valid, do not sweep with --gpu\n")
         if failures > 0 { exit(1) }
     }
 
-    private static func probeSuite(
-        db: Db, engine: GPUEngine, levelName: String, seeds: Int, fieldMelee: Bool
+    private func probeSuite(
+        engine: GPUEngine, levelName: String, seeds: Int, fieldMelee: Bool
     ) throws -> Int {
-        let (fixed, space, base) = try makeInputs(db: db, levelName: levelName,
+        let (fixed, space, base) = try makeInputs(levelName: levelName,
                                                   fieldMelee: fieldMelee)
         let count = space.permutationCount
 
@@ -542,8 +553,8 @@ enum GPUHarness {
                 if sim.run(maxSeconds: w1Cutoff).leaksByWave.first == 0 { cpuW1Clear += 1 }
             }
 
-            let lvlGPU = try GPUBuild.levelGPU(level: level, catalog: catalog)
-            let permGPU = try GPUBuild.permGPU(level: level, catalog: catalog, money: perm.money)
+            let lvlGPU = try engine.levelGPU(level: level, catalog: catalog)
+            let permGPU = try engine.permGPU(level: level, catalog: catalog, money: perm.money)
             let batch = try engine.run(level: lvlGPU, perms: [permGPU], seedsPerPerm: seeds,
                                        baseSeed: 1776, mode: UInt32(SIM_MODE_GREEDY))
             let naive = try engine.run(level: lvlGPU, perms: [permGPU], seedsPerPerm: seeds,
@@ -666,9 +677,10 @@ enum GPUHarness {
         return failures
     }
 
-    static func meleeDuelProbe(db: Db, engine: GPUEngine, levelName: String,
-                               seeds: Int) throws -> Int {
-        let (fixed, space, base) = try makeInputs(db: db, levelName: levelName, fieldMelee: true)
+    func meleeDuelProbe(engine: GPUEngine, levelName: String,
+                        seeds: Int) throws -> Int {
+        let (fixed, space, base) = try makeInputs(levelName: levelName, fieldMelee: true)
+        let kindIDs = SweepCatalog(fixed: fixed).kindIDs
         guard let meleeLevels = fixed.towerLevels["melee"],
               meleeLevels.first?.meleeUnit != nil else {
             print("  (no melee line in DB — duel probes skipped)")
@@ -678,7 +690,7 @@ enum GPUHarness {
         let (level, _) = levelFor(perm: midPerm, fixed: fixed, base: base)
         let catalog = ContentCatalog(
             enemyTypes: fixed.roster,
-            towerTypes: [TowerType(id: SweepCatalog.kindIDs["melee"]!, name: "melee",
+            towerTypes: [TowerType(id: kindIDs["melee"]!, name: "melee",
                                    levels: Array(meleeLevels.prefix(2)))]
         )
         guard let walker = fixed.roster.first(where: { $0.name == "Loyalist Militia" })
@@ -730,9 +742,9 @@ enum GPUHarness {
                     ContentCatalog(
                         enemyTypes: fixed.roster,
                         towerTypes: [
-                            TowerType(id: SweepCatalog.kindIDs["ranged"]!, name: "ranged",
+                            TowerType(id: kindIDs["ranged"]!, name: "ranged",
                                       levels: levels),
-                            TowerType(id: SweepCatalog.kindIDs["melee"]!, name: "melee",
+                            TowerType(id: kindIDs["melee"]!, name: "melee",
                                       levels: Array(meleeLevels.prefix(2))),
                         ])))
             }
@@ -749,8 +761,8 @@ enum GPUHarness {
                 paths: level.paths, towerSlots: level.towerSlots, waves: waves
             )
             let duelProto = GreedyCommander(level: duelLevel, catalog: catalog)
-            let duelLvlGPU = try GPUBuild.levelGPU(level: duelLevel, catalog: catalog)
-            let duelPermGPU = try GPUBuild.permGPU(level: duelLevel, catalog: catalog,
+            let duelLvlGPU = try engine.levelGPU(level: duelLevel, catalog: catalog)
+            let duelPermGPU = try engine.permGPU(level: duelLevel, catalog: catalog,
                                                    money: money)
             let duelBatch = try engine.run(level: duelLvlGPU, perms: [duelPermGPU],
                                            seedsPerPerm: seeds,
@@ -785,21 +797,22 @@ enum GPUHarness {
         return failures
     }
 
-    private static func artilleryProbe(
-        db: Db, engine: GPUEngine, levelName: String, seeds: Int
+    private func artilleryProbe(
+        engine: GPUEngine, levelName: String, seeds: Int
     ) throws -> Int {
-        let (fixed, space, base) = try makeInputs(db: db, levelName: levelName)
+        let (fixed, space, base) = try makeInputs(levelName: levelName)
+        let kindIDs = SweepCatalog(fixed: fixed).kindIDs
         var failures = 0
         if let aoeLevels = fixed.towerLevels["areaOfEffect"], !aoeLevels.isEmpty {
             let midPerm = space.permutation(at: space.permutationCount / 2)
             let (level, _) = levelFor(perm: midPerm, fixed: fixed, base: base)
             let rangedLevels = Array((fixed.towerLevels["ranged"] ?? []).prefix(2))
             var towers: [TowerType] = [
-                TowerType(id: SweepCatalog.kindIDs["areaOfEffect"]!, name: "areaOfEffect",
+                TowerType(id: kindIDs["areaOfEffect"]!, name: "areaOfEffect",
                           levels: Array(aoeLevels.prefix(3))),
             ]
             if !rangedLevels.isEmpty {
-                towers.append(TowerType(id: SweepCatalog.kindIDs["ranged"]!, name: "ranged",
+                towers.append(TowerType(id: kindIDs["ranged"]!, name: "ranged",
                                         levels: rangedLevels))
             }
             let catalog = ContentCatalog(enemyTypes: fixed.roster, towerTypes: towers)
@@ -814,8 +827,8 @@ enum GPUHarness {
                 if r.outcome == .victory { cpuWins += 1 }
                 cpuLives += Double(r.livesRemaining)
             }
-            let lvlGPU = try GPUBuild.levelGPU(level: level, catalog: catalog)
-            let permGPU = try GPUBuild.permGPU(level: level, catalog: catalog, money: midPerm.money)
+            let lvlGPU = try engine.levelGPU(level: level, catalog: catalog)
+            let permGPU = try engine.permGPU(level: level, catalog: catalog, money: midPerm.money)
             let batch = try engine.run(level: lvlGPU, perms: [permGPU], seedsPerPerm: seeds,
                                        baseSeed: 1776, mode: UInt32(SIM_MODE_GREEDY))
             let gpuWins = batch.results.filter { $0.outcome == SIM_OUTCOME_VICTORY }.count
@@ -835,8 +848,8 @@ enum GPUHarness {
         return failures
     }
 
-    static func sweepRows(
-        db: Db, fixed: SweepFixedInputs, base: LevelInfo, space: SweepSpace,
+    func sweepRows(
+        fixed: SweepFixedInputs, base: LevelInfo, space: SweepSpace,
         indices: [Int], grids: SweepGrids, store: SweepResultStore? = nil,
         onProgress: ((Int, Double) -> Void)? = nil
     ) throws -> [SweepRow] {
@@ -858,7 +871,7 @@ enum GPUHarness {
                 throw DbError.Db(message: "Empty permutation batch")
             }
             let (level0, catalog0) = levelFor(perm: firstPerm, fixed: fixed, base: base)
-            let lvl = try GPUBuild.levelGPU(level: level0, catalog: catalog0)
+            let lvl = try engine.levelGPU(level: level0, catalog: catalog0)
             var permsGPU = [PermGPU](repeating: PermGPU(), count: perms.count)
             var buildError: Error?
             let errLock = NSLock()
@@ -866,7 +879,7 @@ enum GPUHarness {
                 DispatchQueue.concurrentPerform(iterations: perms.count) { k in
                     let (level, catalog) = levelFor(perm: perms[k], fixed: fixed, base: base)
                     do {
-                        buf[k] = try GPUBuild.permGPU(level: level, catalog: catalog,
+                        buf[k] = try engine.permGPU(level: level, catalog: catalog,
                                                       money: perms[k].money)
                     } catch {
                         errLock.lock(); buildError = error; errLock.unlock()
@@ -933,7 +946,7 @@ enum GPUHarness {
         return rows
     }
 
-    private static func makeRow(
+    private func makeRow(
         perm: SweepPermutation, fixed: SweepFixedInputs,
         greedy: [SimResultGPU], naive: [SimResultGPU]
     ) -> SweepRow {
@@ -973,18 +986,18 @@ enum GPUHarness {
         )
     }
 
-    private static func progressArray(_ r: SimResultGPU, count: Int) -> [Double] {
+    private func progressArray(_ r: SimResultGPU, count: Int) -> [Double] {
         withUnsafeBytes(of: r.waveMaxProgress) { raw in
             let arr = raw.bindMemory(to: Float.self)
             return (0..<min(count, Int(SIM_MAX_WAVES))).map { Double(arr[$0]) }
         }
     }
 
-    private static func leaksWave0(_ r: SimResultGPU) -> UInt32 {
+    private func leaksWave0(_ r: SimResultGPU) -> UInt32 {
         withUnsafeBytes(of: r.leaksByWave) { $0.bindMemory(to: UInt32.self)[0] }
     }
 
-    private static func maxProgress(_ r: SimResultGPU) -> Float {
+    private func maxProgress(_ r: SimResultGPU) -> Float {
         var m: Float = 0
         withUnsafeBytes(of: r.waveMaxProgress) { raw in
             let arr = raw.bindMemory(to: Float.self)

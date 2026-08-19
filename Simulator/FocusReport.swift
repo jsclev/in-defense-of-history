@@ -31,8 +31,18 @@ struct FocusBucket {
     }
 }
 
-enum FocusReport {
-    static let prettyNames: [String: String] = [
+/// The single-variable focus study report for one sweep: per-value
+/// aggregates as CSV and charts as HTML.
+struct FocusReport {
+    let focus: SweepFocus
+    let space: SweepSpace
+
+    init(focus: SweepFocus, space: SweepSpace) {
+        self.focus = focus
+        self.space = space
+    }
+
+    let prettyNames: [String: String] = [
         "range": "Range",
         "rof": "Fire interval",
         "growth": "Upgrade cost growth",
@@ -51,7 +61,7 @@ enum FocusReport {
         "spacing": "Spawn spacing",
     ]
 
-    static let units: [String: String] = [
+    let units: [String: String] = [
         "range": "canonical units",
         "rof": "seconds",
         "growth": "× per level",
@@ -67,7 +77,7 @@ enum FocusReport {
         "meleedamage": "bracket position 0–1",
     ]
 
-    static func value(of perm: SweepPermutation, focus: SweepFocus, space: SweepSpace) -> (num: Double, label: String)? {
+    func value(of perm: SweepPermutation) -> (num: Double, label: String)? {
         func fmt(_ v: Double) -> String {
             v == v.rounded() ? String(Int(v)) : String(format: "%g", v)
         }
@@ -97,7 +107,7 @@ enum FocusReport {
     /// `lo + (f + hi * count) * place`, so stripping `f` leaves a key that is
     /// identical across every focus value — which is what lets the report
     /// compare the same opponent under different focus values.
-    static func otherSampleKey(index: Int, place: Int, count: Int) -> Int {
+    func otherSampleKey(index: Int, place: Int, count: Int) -> Int {
         let lo = index % place
         let hi = index / place / count
         return lo + hi * place
@@ -108,10 +118,10 @@ enum FocusReport {
         var points: [Double]
     }
 
-    static func emit(rows: [SweepRow], focus: SweepFocus, space: SweepSpace, sweepOut: String) throws {
+    func emit(rows: [SweepRow], sweepOut: String) throws {
         var byLabel: [String: FocusBucket] = [:]
         for row in rows {
-            guard let (num, label) = value(of: row.perm, focus: focus, space: space) else { continue }
+            guard let (num, label) = value(of: row.perm) else { continue }
             var b = byLabel[label] ?? FocusBucket(value: num, label: label)
             b.n += 1
             b.winSum += row.winRate
@@ -126,7 +136,7 @@ enum FocusReport {
             return
         }
 
-        let terciles = tercileCurves(rows: rows, focus: focus, space: space, buckets: buckets)
+        let terciles = tercileCurves(rows: rows, buckets: buckets)
 
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd_HH.mm.ss"
@@ -156,8 +166,8 @@ enum FocusReport {
         }
         try csv.write(toFile: csvPath, atomically: true, encoding: .utf8)
 
-        let html = try renderHTML(buckets: buckets, terciles: terciles, focus: focus,
-                                  space: space, rows: rows, csvPath: csvPath)
+        let html = try renderHTML(buckets: buckets, terciles: terciles,
+                                  rows: rows, csvPath: csvPath)
         try html.write(toFile: htmlPath, atomically: true, encoding: .utf8)
 
         let pretty = prettyNames[focus.stat] ?? focus.stat
@@ -194,15 +204,14 @@ enum FocusReport {
     /// between the focus variable and everything else: curves on top of one
     /// another mean the focus answer is independent of the rest of the
     /// design; curves far apart mean the answer moves when the rest moves.
-    static func tercileCurves(rows: [SweepRow], focus: SweepFocus, space: SweepSpace,
-                              buckets: [FocusBucket]) -> [Curve] {
+    func tercileCurves(rows: [SweepRow], buckets: [FocusBucket]) -> [Curve] {
         guard let (place, count) = space.focusPlacement(stat: focus.stat, kind: focus.kind),
               count > 1, buckets.count > 1 else { return [] }
         let slotOf = Dictionary(uniqueKeysWithValues: buckets.enumerated().map { ($0.element.label, $0.offset) })
 
         var byOther: [Int: [Double?]] = [:]
         for row in rows {
-            guard let (_, label) = value(of: row.perm, focus: focus, space: space),
+            guard let (_, label) = value(of: row.perm),
                   let slot = slotOf[label] else { continue }
             let key = otherSampleKey(index: row.perm.index, place: place, count: count)
             var series = byOther[key] ?? [Double?](repeating: nil, count: buckets.count)
@@ -232,7 +241,7 @@ enum FocusReport {
         }
     }
 
-    static func faviconTag() -> String {
+    func faviconTag() -> String {
         let candidates = [
             "Simulator/Images/favicon.ico",
             "Images/favicon.ico",
@@ -246,8 +255,8 @@ enum FocusReport {
         return ""
     }
 
-    static func renderHTML(buckets: [FocusBucket], terciles: [Curve], focus: SweepFocus,
-                           space: SweepSpace, rows: [SweepRow], csvPath: String) throws -> String {
+    func renderHTML(buckets: [FocusBucket], terciles: [Curve],
+                    rows: [SweepRow], csvPath: String) throws -> String {
         func r4(_ v: Double) -> Double { (v * 10000).rounded() / 10000 }
         var values: [[String: Any]] = []
         for b in buckets {
@@ -290,7 +299,7 @@ enum FocusReport {
             .replacingOccurrences(of: "__PAYLOAD__", with: jsonString)
     }
 
-    static let htmlTemplate = #"""
+    var htmlTemplate: String { #"""
 <!doctype html>
 <html lang="en">
 <head>
@@ -717,4 +726,5 @@ new MutationObserver(renderAll).observe(document.documentElement, { attributes: 
 </body>
 </html>
 """#
+    }
 }

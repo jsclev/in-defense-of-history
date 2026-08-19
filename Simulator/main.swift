@@ -33,9 +33,10 @@ struct Options {
     var benchGPU: String?
     var gpuValidate: String?
     var validateSeeds = 2000
+    var help = false
 }
 
-func printUsage() {
+func printUsage(blueprints: Blueprints) {
     print("""
     revsim \(BuildVersion.version) — headless balance simulator
 
@@ -104,7 +105,7 @@ func printUsage() {
                        window automatically (pin overrides; static grid if none).
       --help           Show this help
 
-    Blueprints: \(Blueprints.all.map { $0.name }.joined(separator: ", "))
+    Blueprints: \(blueprints.all.map { $0.name }.joined(separator: ", "))
     """)
 }
 
@@ -233,8 +234,7 @@ func parseOptions() throws -> Options? {
         case "--melee":
             opts.melee = true
         case "--help", "-h":
-            printUsage()
-            exit(0)
+            opts.help = true
         default:
             FileHandle.standardError.write(Data("Unknown option: \(arg)\n".utf8))
             return nil
@@ -243,14 +243,30 @@ func parseOptions() throws -> Options? {
     return opts
 }
 
+// The composition root: the one database connection, canvas spec and design
+// lab are built here and handed to every mode below. Nothing else opens a Db.
+let store: SimulatorStore
+do {
+    store = try SimulatorStore()
+} catch {
+    FileHandle.standardError.write(Data("revsim: unable to open the content database: \(error)\n".utf8))
+    exit(1)
+}
+
 guard let opts = try parseOptions() else {
-    printUsage()
+    printUsage(blueprints: store.blueprints)
     exit(2)
+}
+if opts.help {
+    printUsage(blueprints: store.blueprints)
+    exit(0)
 }
 
 if opts.showRuns || opts.runStatusID != nil {
     do {
-        let runs = try SimulatorRunDAO()
+        guard let runs = store.runs else {
+            throw DbError.Db(message: "the simulator runs database could not be opened")
+        }
         let list = try opts.runStatusID.map { id in try runs.get(id: id).map { [$0] } ?? [] }
             ?? runs.recent(limit: 15)
         if list.isEmpty {
@@ -289,16 +305,15 @@ if opts.showRuns || opts.runStatusID != nil {
 
 if let levelName = opts.meleeDemo {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-                    fullRefresh: false)
-        let fixed = try SweepFixedInputs.load(db: db, levelName: levelName)
-        var base = try SweepFixedInputs.designLevel(db: db, levelName: levelName, fixed: fixed)
+        let fixed = try SweepFixedInputs(db: store.db, levelName: levelName)
+        var base = try fixed.designLevel(db: store.db)
         let space = SweepSpace(grids: SweepGrids(), fixed: fixed, slotCount: base.towerSlots.count)
         let perm = space.permutation(at: space.permutationCount / 2)
-        base.waves = SweepWaves.make(perm: perm, fixed: fixed, pathCount: base.paths.count)
+        base.waves = SweepWaves(fixed: fixed, pathCount: base.paths.count).make(perm: perm)
 
-        let rangedID = UUID(uuidString: "5e0e91a1-0001-4000-8000-000000000001")!
-        let meleeID = UUID(uuidString: "5e0e91a1-0004-4000-8000-000000000004")!
+        let kindIDs = SweepCatalog(fixed: fixed).kindIDs
+        let rangedID = kindIDs["ranged"]!
+        let meleeID = kindIDs["melee"]!
         var towers: [TowerType] = []
         if let r = fixed.towerLevels["ranged"] {
             towers.append(TowerType(id: rangedID, name: "ranged", levels: Array(r.prefix(2))))
@@ -357,9 +372,7 @@ if let levelName = opts.meleeDemo {
 
 if let level = opts.benchGPU {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-                    fullRefresh: false)
-        try GPUHarness.bench(db: db, levelName: level, sims: opts.benchSims)
+        try GPUHarness(db: store.db).bench(levelName: level, sims: opts.benchSims)
         exit(0)
     } catch {
         FileHandle.standardError.write(Data("bench-gpu error: \(error)\n".utf8))
@@ -369,9 +382,7 @@ if let level = opts.benchGPU {
 
 if let level = opts.gpuValidate {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-                    fullRefresh: false)
-        try GPUHarness.validate(db: db, levelName: level, seeds: opts.validateSeeds)
+        try GPUHarness(db: store.db).validate(levelName: level, seeds: opts.validateSeeds)
         exit(0)
     } catch {
         FileHandle.standardError.write(Data("gpu-validate error: \(error)\n".utf8))
@@ -381,9 +392,7 @@ if let level = opts.gpuValidate {
 
 if let benchLevel = opts.bench {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-                    fullRefresh: false)
-        try Sweep.bench(db: db, levelName: benchLevel, sims: opts.benchSims)
+        try Sweep(db: store.db, runs: store.runs).bench(levelName: benchLevel, sims: opts.benchSims)
         exit(0)
     } catch {
         FileHandle.standardError.write(Data("bench error: \(error)\n".utf8))
@@ -393,8 +402,6 @@ if let benchLevel = opts.bench {
 
 if let sweepLevel = opts.sweep {
     do {
-        let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-                    fullRefresh: false)
         var grids = SweepGrids()
         grids.seedsPerPermutation = opts.sweepSeeds
         grids.baseSeed = opts.baseSeed
@@ -476,10 +483,11 @@ if let sweepLevel = opts.sweep {
         grids.reportDir = opts.reportDir
         grids.limit = opts.limit
         grids.budgetHours = opts.budgetHours
-        try Sweep.run(db: db, levelName: sweepLevel, grids: grids,
-                      stride: opts.sweepStride, outPath: opts.sweepOut,
-                      useGPU: opts.gpu, storeBounds: opts.storeBounds,
-                      fieldMelee: opts.melee)
+        try Sweep(db: store.db, runs: store.runs).run(
+            levelName: sweepLevel, grids: grids,
+            stride: opts.sweepStride, outPath: opts.sweepOut,
+            useGPU: opts.gpu, storeBounds: opts.storeBounds,
+            fieldMelee: opts.melee)
         exit(0)
     } catch {
         FileHandle.standardError.write(Data("sweep error: \(error)\n".utf8))
@@ -488,16 +496,12 @@ if let sweepLevel = opts.sweep {
 }
 
 if let bpName = opts.blueprint {
-    guard let bp = Blueprints.named(bpName) else {
-        FileHandle.standardError.write(Data("Unknown blueprint '\(bpName)'. Known: \(Blueprints.all.map { $0.name }.joined(separator: ", "))\n".utf8))
+    guard let bp = store.blueprints.named(bpName) else {
+        FileHandle.standardError.write(Data("Unknown blueprint '\(bpName)'. Known: \(store.blueprints.all.map { $0.name }.joined(separator: ", "))\n".utf8))
         exit(2)
     }
-    // Blueprints carry no level data of their own, but the coordinate system
-    // they build in lives in canvas_spec — opening the database loads it.
-    _ = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-           fullRefresh: false)
     let level = bp.makeLevel()
-    let catalog = DesignArsenal.catalog()
+    let catalog = store.arsenal.catalog(roster: store.roster)
 
     if opts.trace {
         final class Tracer: SimulationObserver {
@@ -531,11 +535,9 @@ if let bpName = opts.blueprint {
         exit(0)
     }
 
-    let report = try Batch.run(
+    let report = try Batch(baseSeed: opts.baseSeed, count: opts.seeds).run(
         level: level,
-        catalog: catalog,
-        baseSeed: opts.baseSeed,
-        count: opts.seeds
+        catalog: catalog
     ) { _ -> any CommanderPolicy in
         if opts.idle { return IdleCommander() }
         return bp.scriptedSolution()
@@ -574,13 +576,11 @@ do {
         try? FileManager.default.removeItem(atPath: opts.dbPath)
     }
 
-    let db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false), fullRefresh: false)
-    
     guard let levelInfoId = UUID(uuidString: "be3cf809-f71e-4209-bc4d-8b25b0b5f2a0") else {
         throw DbError.Db(message: "Unable to get level info id")
     }
-    
-    let levelInfo = try db.levelInfoDao.getBy(id: levelInfoId)
+
+    let levelInfo = try store.db.levelInfoDao.getBy(id: levelInfoId)
 
     let minutemanPost = TowerType(
         id: UUID(),
@@ -590,7 +590,7 @@ do {
             TowerLevel(cost: 90, range: 150, fireInterval: 0.85, shotMinDamage: 7, shotMaxDamage: 11),
         ]
     )
-    let enemyTypes = try db.enemyTypeDao.getAll()
+    let enemyTypes = try store.db.enemyTypeDao.getAll()
     let catalog = ContentCatalog(enemyTypes: enemyTypes, towerTypes: [minutemanPost])
 
     let sim = try Simulation(

@@ -77,13 +77,22 @@ public struct BatchReport: Sendable {
     }
 }
 
-public enum Batch {
-    public static func run(
+/// A run of `count` seeded simulations of one level, seeds `baseSeed`,
+/// `baseSeed + 1`, ...
+public struct Batch: Sendable {
+    public let baseSeed: UInt64
+    public let count: Int
+    public let maxSeconds: Double
+
+    public init(baseSeed: UInt64, count: Int, maxSeconds: Double = 900) {
+        self.baseSeed = baseSeed
+        self.count = count
+        self.maxSeconds = maxSeconds
+    }
+
+    public func run(
         level: LevelInfo,
         catalog: ContentCatalog,
-        baseSeed: UInt64,
-        count: Int,
-        maxSeconds: Double = 900,
         makePolicy: (UInt64) -> any CommanderPolicy
     ) throws -> BatchReport {
         var results: [SimulationResult] = []

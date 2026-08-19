@@ -345,9 +345,28 @@ final class LevelRunner: NSObject, ObservableObject {
     var entrancePositions: [CGPoint] {
         guard waves.indices.contains(waveIndex) else { return [] }
         let active = Set(waves[waveIndex].spawns.map(\.pathIndex))
-        return entrancePoints
-            .filter { active.contains($0.pathIndex) }
-            .map { CGPoint(x: $0.position.x, y: $0.position.y) }
+        return active.sorted().compactMap { entrancePosition(forPath: $0) }
+    }
+
+    /// The geojson spawn point tagged to the path; else the spawn point at
+    /// the path's mouth (two roads can share one entrance and the exporter
+    /// tags a marker to only one of them). Entrances live only in the
+    /// geojson: a path with no marker at its mouth has no icon.
+    private func entrancePosition(forPath pathIndex: Int) -> CGPoint? {
+        if let tagged = entrancePoints.first(where: { $0.pathIndex == pathIndex }) {
+            return CGPoint(x: tagged.position.x, y: tagged.position.y)
+        }
+        guard paths.indices.contains(pathIndex), let mouth = paths[pathIndex].points.first else {
+            return nil
+        }
+        let sameMouth = canvasSpec.pathWidth * 2
+        guard let atMouth = entrancePoints
+            .map({ ($0.position, $0.position.distance(to: mouth)) })
+            .filter({ $0.1 <= sameMouth })
+            .min(by: { $0.1 < $1.1 })?.0 else {
+            return nil
+        }
+        return CGPoint(x: atMouth.x, y: atMouth.y)
     }
 
     private var levelName = ""

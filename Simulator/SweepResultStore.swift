@@ -20,7 +20,7 @@ final class SweepResultStore {
     private let flushEvery: Int
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
-    private static let columns = """
+    private let columns = """
         run_id, perm, money, starting_lives, upgrade_growth, tower_range, tower_rof,
         tower_projectile_speed, tower_splash, tower_falloff,
         enemy_speed_bracket_position, enemy_hp_bracket_position,
@@ -31,7 +31,7 @@ final class SweepResultStore {
         w1_greedy_clear, w1_greedy_leaks, w1_naive_clear, w1_naive_leaks
         """
 
-    private static func schema(_ prefix: String) -> String {
+    private func schema(_ prefix: String) -> String {
         """
         CREATE TABLE IF NOT EXISTS \(prefix)sweep_row (
             id                            INTEGER PRIMARY KEY,
@@ -82,7 +82,7 @@ final class SweepResultStore {
         exec("PRAGMA journal_mode=OFF;")
         exec("PRAGMA synchronous=OFF;")
         exec("PRAGMA temp_store=MEMORY;")
-        exec(Self.schema(""))
+        exec(schema(""))
 
         try? FileManager.default.removeItem(atPath: diskPath)
         try? FileManager.default.createDirectory(
@@ -92,10 +92,10 @@ final class SweepResultStore {
         exec("ATTACH DATABASE '\(escaped)' AS disk;")
         exec("PRAGMA disk.journal_mode=OFF;")
         exec("PRAGMA disk.synchronous=OFF;")
-        exec(Self.schema("disk."))
+        exec(schema("disk."))
 
         let placeholders = Array(repeating: "?", count: 33).joined(separator: ",")
-        let sql = "INSERT INTO sweep_row (\(Self.columns)) VALUES (\(placeholders));"
+        let sql = "INSERT INTO sweep_row (\(columns)) VALUES (\(placeholders));"
         guard sqlite3_prepare_v2(conn, sql, -1, &insertStmt, nil) == SQLITE_OK else {
             throw DbError.Db(message: "sweep_row insert prepare failed: "
                 + String(cString: sqlite3_errmsg(conn)))

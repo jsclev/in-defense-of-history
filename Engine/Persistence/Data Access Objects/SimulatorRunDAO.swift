@@ -38,18 +38,18 @@ public struct SimulatorRun: Sendable {
 
     /// Seconds of work left at the current rate, or nil if it cannot be judged.
     public var estimatedSecondsRemaining: Double? {
-        guard status == SimulatorRunStatus.running,
+        guard status == SimulatorRunStatus.running.rawValue,
               iterationsPerSecond > 0,
               totalIterations > completedIterations else { return nil }
         return Double(totalIterations - completedIterations) / iterationsPerSecond
     }
 }
 
-public enum SimulatorRunStatus {
-    public static let running = "running"
-    public static let completed = "completed"
-    public static let failed = "failed"
-    public static let cancelled = "cancelled"
+public enum SimulatorRunStatus: String, Sendable {
+    case running
+    case completed
+    case failed
+    case cancelled
 }
 
 public final class SimulatorRunDAO {
@@ -60,7 +60,7 @@ public final class SimulatorRunDAO {
     /// Timestamps this class writes always carry a timezone, but a row can also
     /// be written by hand or by a script. Falling back silently to 1970 makes a
     /// bad row look like an ancient one, so try the common variants first.
-    private static let fallbackFormats = [
+    private let fallbackFormats = [
         "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
         "yyyy-MM-dd'T'HH:mm:ss.SSS",
         "yyyy-MM-dd'T'HH:mm:ss",
@@ -73,7 +73,7 @@ public final class SimulatorRunDAO {
         let withFraction = ISO8601DateFormatter()
         withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         if let d = withFraction.date(from: s) { return d }
-        for format in Self.fallbackFormats {
+        for format in fallbackFormats {
             let df = DateFormatter()
             df.locale = Locale(identifier: "en_US_POSIX")
             df.dateFormat = format
@@ -83,13 +83,10 @@ public final class SimulatorRunDAO {
         return nil
     }
 
-    /// Where the runs database lives by default: beside the HTML reports, so
+    /// The runs database lives beside the HTML reports by default, so
     /// everything about a sweep is in one place.
-    public static let defaultPath =
-        ("~/projects/td/in-defense-of-history-data/SimulatorRuns/simulator_runs.sqlite"
-            as NSString).expandingTildeInPath
-
-    public init(path: String = SimulatorRunDAO.defaultPath) throws {
+    public init(path: String = ("~/projects/td/in-defense-of-history-data/SimulatorRuns/simulator_runs.sqlite"
+                                    as NSString).expandingTildeInPath) throws {
         let dir = (path as NSString).deletingLastPathComponent
         try? FileManager.default.createDirectory(atPath: dir,
                                                  withIntermediateDirectories: true)
@@ -159,7 +156,7 @@ public final class SimulatorRunDAO {
         bindText(stmt, 1, id.uuidString)
         bindText(stmt, 2, levelName)
         bindText(stmt, 3, focus)
-        bindText(stmt, 4, SimulatorRunStatus.running)
+        bindText(stmt, 4, SimulatorRunStatus.running.rawValue)
         sqlite3_bind_int64(stmt, 5, Int64(totalIterations))
         bindText(stmt, 6, now)
         bindText(stmt, 7, now)
@@ -188,7 +185,7 @@ public final class SimulatorRunDAO {
         sqlite3_step(stmt)
     }
 
-    public func finish(id: UUID, status: String, reportPath: String? = nil,
+    public func finish(id: UUID, status: SimulatorRunStatus, reportPath: String? = nil,
                        errorMessage: String? = nil) {
         let now = iso.string(from: Date())
         let sql = """
@@ -204,12 +201,12 @@ public final class SimulatorRunDAO {
         var stmt: OpaquePointer?
         guard sqlite3_prepare_v2(conn, sql, -1, &stmt, nil) == SQLITE_OK else { return }
         defer { sqlite3_finalize(stmt) }
-        bindText(stmt, 1, status)
+        bindText(stmt, 1, status.rawValue)
         bindText(stmt, 2, now)
         bindText(stmt, 3, now)
         bindText(stmt, 4, reportPath)
         bindText(stmt, 5, errorMessage)
-        bindText(stmt, 6, status)
+        bindText(stmt, 6, status.rawValue)
         bindText(stmt, 7, id.uuidString)
         sqlite3_step(stmt)
     }
@@ -227,7 +224,7 @@ public final class SimulatorRunDAO {
     }
 
     public func running() throws -> [SimulatorRun] {
-        try recent(limit: 100).filter { $0.status == SimulatorRunStatus.running }
+        try recent(limit: 100).filter { $0.status == SimulatorRunStatus.running.rawValue }
     }
 
     public func get(id: UUID) throws -> SimulatorRun? {

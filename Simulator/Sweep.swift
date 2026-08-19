@@ -17,45 +17,50 @@ struct SweepFixedInputs {
     /// Range search bounds from sim_tower_range, keyed kind then tower level.
     /// The sweep walks every integer between them; there is no grid in Swift.
     var towerRanges: [String: [Int: SimTowerRange]]
-    var fieldMelee: Bool = false
+    var fieldMelee: Bool
 
-    static func load(db: Db, levelName: String) throws -> SweepFixedInputs {
+    /// The sweep's designer-fixed inputs for one level, read from the database.
+    init(db: Db, levelName: String, fieldMelee: Bool = false) throws {
+        func normalizeKind(_ s: String) -> String {
+            switch s.lowercased() {
+            case "ranged": return "ranged"
+            case "melee": return "melee"
+            case "area of effect", "areaofeffect": return "areaOfEffect"
+            case "special", "special forces": return "special"
+            default: return s
+            }
+        }
         guard let levelID = try db.levelInfoDao.getIdBy(levelName: levelName) else {
             throw DbError.Db(message: "No level named '\(levelName)' in the database")
         }
         let level = try db.levelInfoDao.getBy(id: levelID)
-        let unlocks = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelID)
         var towerLevels: [String: [TowerLevel]] = [:]
         for (category, levels) in try db.towerTypeDao.getTowerLevels() {
             towerLevels[normalizeKind(category)] = levels
         }
-        return SweepFixedInputs(
-            levelID: levelID,
-            levelName: levelName,
-            lives: level.numStartingLives,
-            numWaves: level.numWaves > 0 ? level.numWaves : level.waves.count,
-            unlocks: unlocks,
-            towerLevels: towerLevels,
-            roster: try db.enemyTypeDao.getAll(),
-            bounds: try db.simBoundsDao.getBoundsFor(levelInfoId: levelID),
-            speedBounds: try db.simEnemyTypeDao.getSpeedBounds(),
-            hpBounds: try db.simEnemyTypeDao.getHpBounds(),
-            bountyBounds: try db.simEnemyTypeDao.getBountyBounds(),
-            meleeBrackets: try {
-                var out: [String: [Int: SimMeleeBrackets]] = [:]
-                for (category, byLevel) in try db.simMeleeUnitDao.getBrackets() {
-                    out[normalizeKind(category)] = byLevel
-                }
-                return out
-            }(),
-            towerRanges: try {
-                var out: [String: [Int: SimTowerRange]] = [:]
-                for (category, byLevel) in try db.simBoundsDao.getTowerRanges() {
-                    out[normalizeKind(category)] = byLevel
-                }
-                return out
-            }()
-        )
+        var meleeBrackets: [String: [Int: SimMeleeBrackets]] = [:]
+        for (category, byLevel) in try db.simMeleeUnitDao.getBrackets() {
+            meleeBrackets[normalizeKind(category)] = byLevel
+        }
+        var towerRanges: [String: [Int: SimTowerRange]] = [:]
+        for (category, byLevel) in try db.simBoundsDao.getTowerRanges() {
+            towerRanges[normalizeKind(category)] = byLevel
+        }
+
+        self.levelID = levelID
+        self.levelName = levelName
+        self.lives = level.numStartingLives
+        self.numWaves = level.numWaves > 0 ? level.numWaves : level.waves.count
+        self.unlocks = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelID)
+        self.towerLevels = towerLevels
+        self.roster = try db.enemyTypeDao.getAll()
+        self.bounds = try db.simBoundsDao.getBoundsFor(levelInfoId: levelID)
+        self.speedBounds = try db.simEnemyTypeDao.getSpeedBounds()
+        self.hpBounds = try db.simEnemyTypeDao.getHpBounds()
+        self.bountyBounds = try db.simEnemyTypeDao.getBountyBounds()
+        self.meleeBrackets = meleeBrackets
+        self.towerRanges = towerRanges
+        self.fieldMelee = fieldMelee
     }
 
     /// Load the level exactly as stored.
@@ -65,8 +70,8 @@ struct SweepFixedInputs {
     /// towers 2.4x the reach they have in the game. Everything is now in the one
     /// canonical space - the play area comes from the canvas_spec table
     /// through LevelInfoDAO - so geometry passes through untouched.
-    static func designLevel(db: Db, levelName: String, fixed: SweepFixedInputs) throws -> LevelInfo {
-        let level = try db.levelInfoDao.getBy(id: fixed.levelID)
+    func designLevel(db: Db) throws -> LevelInfo {
+        let level = try db.levelInfoDao.getBy(id: levelID)
         guard !level.paths.isEmpty, !level.towerSlots.isEmpty else {
             throw DbError.Db(message: "Level '\(levelName)' has no paths or tower slots in the database")
         }
@@ -75,13 +80,13 @@ struct SweepFixedInputs {
             id: level.id, name: level.name, campaign: level.campaign,
             startedAt: level.startedAt, endedAt: level.endedAt,
             startingMoney: level.startingMoney, numStartingLives: level.numStartingLives,
-            numWaves: fixed.numWaves,
+            numWaves: numWaves,
             playArea: level.playArea,
             paths: paths, towerSlots: level.towerSlots, waves: []
         )
     }
 
-    static func simplify(_ points: [Point], maxPoints: Int) -> [Point] {
+    private func simplify(_ points: [Point], maxPoints: Int) -> [Point] {
         guard points.count > maxPoints else { return points }
         var epsilon = 2.0
         var result = points
@@ -96,7 +101,7 @@ struct SweepFixedInputs {
         return result
     }
 
-    private static func rdp(_ points: [Point], epsilon: Double) -> [Point] {
+    private func rdp(_ points: [Point], epsilon: Double) -> [Point] {
         guard points.count > 2 else { return points }
         let a = points[0]
         let b = points[points.count - 1]
@@ -112,16 +117,6 @@ struct SweepFixedInputs {
             return left.dropLast() + right
         }
         return [a, b]
-    }
-
-    static func normalizeKind(_ s: String) -> String {
-        switch s.lowercased() {
-        case "ranged": return "ranged"
-        case "melee": return "melee"
-        case "area of effect", "areaofeffect": return "areaOfEffect"
-        case "special", "special forces": return "special"
-        default: return s
-        }
     }
 }
 
@@ -290,7 +285,7 @@ struct SweepSpace {
         if let override = grids.rangeGridOverride[kind] { return override }
         if let pinned = grids.fixedRange[kind] { return [pinned.rounded()] }
         if let b = bounds[kind]?["range"] {
-            return Self.gridFromBounds(b.minValue, b.maxValue, step: grids.boundsStep)
+            return gridFromBounds(b.minValue, b.maxValue, step: grids.boundsStep)
         }
         // Level 1 is the anchor: the sweep picks one range per kind and scales
         // the higher tiers from it in the same proportion the tower table has.
@@ -303,7 +298,7 @@ struct SweepSpace {
         return r.values.map(Double.init)
     }
 
-    static func gridFromBounds(_ lo: Double, _ hi: Double, step: Double) -> [Double] {
+    private func gridFromBounds(_ lo: Double, _ hi: Double, step: Double) -> [Double] {
         guard hi > lo else { return [lo] }
         if step > 0 {
             return Array(stride(from: lo, through: hi, by: step))
@@ -477,15 +472,22 @@ struct SweepPermutation {
     }
 }
 
-enum SweepCatalog {
-    static let kindIDs: [String: UUID] = [
+/// Builds the content catalog a permutation plays with: the fixed roster
+/// and tower levels, bent by the permutation's swept values.
+struct SweepCatalog {
+    let fixed: SweepFixedInputs
+    let kindIDs: [String: UUID] = [
         "ranged": UUID(uuidString: "5e0e91a1-0001-4000-8000-000000000001")!,
         "areaOfEffect": UUID(uuidString: "5e0e91a1-0002-4000-8000-000000000002")!,
         "special": UUID(uuidString: "5e0e91a1-0003-4000-8000-000000000003")!,
         "melee": UUID(uuidString: "5e0e91a1-0004-4000-8000-000000000004")!,
     ]
 
-    static func make(perm: SweepPermutation, fixed: SweepFixedInputs) -> ContentCatalog {
+    init(fixed: SweepFixedInputs) {
+        self.fixed = fixed
+    }
+
+    func make(perm: SweepPermutation) -> ContentCatalog {
         let roster = fixed.roster.map { type -> EnemyType in
             var t = type
             if let b = fixed.speedBounds[type.id] {
@@ -559,22 +561,31 @@ enum SweepCatalog {
     }
 }
 
-enum SweepWaves {
-    static let curveWeights: [String: [Double]] = [
+/// Builds the wave list a permutation plays: the fixed wave count, budgeted
+/// along the permutation's curve, mix and spacing.
+struct SweepWaves {
+    let fixed: SweepFixedInputs
+    let pathCount: Int
+    let curveWeights: [String: [Double]] = [
         "gentle": [1.0, 1.15, 1.3, 1.45, 1.6, 1.75],
         "standard": [1.0, 1.3, 1.7, 2.1, 2.6, 3.2],
         "steep": [0.7, 1.0, 1.5, 2.2, 3.2, 4.6],
     ]
-    static let mixFractions: [String: [(name: String, frac: Double)]] = [
+    let mixFractions: [String: [(name: String, frac: Double)]] = [
         "swarm": [("Loyalist Militia", 0.7), ("Redcoat Regular", 0.3)],
         "balanced": [("Loyalist Militia", 0.4), ("Redcoat Regular", 0.4), ("Light Infantry", 0.2)],
         "elite": [("Redcoat Regular", 0.5), ("Light Infantry", 0.5)],
         "combined": [("Loyalist Militia", 0.3), ("Redcoat Regular", 0.4),
                      ("Light Infantry", 0.2), ("Regimental Drummer", 0.1)],
     ]
-    static let budgetPerWave = 110.0
+    let budgetPerWave = 110.0
 
-    static func make(perm: SweepPermutation, fixed: SweepFixedInputs, pathCount: Int = 1) -> [Wave] {
+    init(fixed: SweepFixedInputs, pathCount: Int = 1) {
+        self.fixed = fixed
+        self.pathCount = pathCount
+    }
+
+    func make(perm: SweepPermutation) -> [Wave] {
         let totalBudget = budgetPerWave * Double(fixed.numWaves)
         let interval = perm.spacing == "tight" ? 1.4 : 2.2
         var weights = curveWeights[perm.curve] ?? curveWeights["standard"]!
@@ -755,12 +766,6 @@ struct SweepRow {
     var w1NaiveClear: Double
     var w1NaiveLeaks: Double
 
-    static let header = "perm,money,starting_lives,upgrade_growth,tower_range,tower_rof,tower_projectile_speed,tower_splash,tower_falloff,enemy_speed_bracket_position,enemy_hp_bracket_position,enemy_bounty_bracket_position,melee_hp_bracket_position,melee_damage_bracket_position,"
-        + "comp_curve,comp_mix,comp_spacing,seeds,win_rate,"
-        + "lives_p10,lives_p50,lives_p90,mean_leaked,rout_share,"
-        + "tension_mean,tension_peak,tension_final,mean_seconds,"
-        + "w1_greedy_clear,w1_greedy_leaks,w1_naive_clear,w1_naive_leaks"
-
     func csv() -> String {
         let p = perm
         return "\(p.index),\(p.money),\(p.lives),\(p.growthLabel),\(p.rangeLabel),\(p.rofLabel),"
@@ -774,14 +779,24 @@ struct SweepRow {
     }
 }
 
-enum Sweep {
-    static func bench(db: Db, levelName: String, sims: Int) throws {
-        let fixed = try SweepFixedInputs.load(db: db, levelName: levelName)
-        let base = try SweepFixedInputs.designLevel(db: db, levelName: levelName, fixed: fixed)
+/// The permutation sweep of a level: every input it needs comes through
+/// init, and every run reads the one shared database.
+struct Sweep {
+    let db: Db
+    let runs: SimulatorRunDAO?
+
+    init(db: Db, runs: SimulatorRunDAO?) {
+        self.db = db
+        self.runs = runs
+    }
+
+    func bench(levelName: String, sims: Int) throws {
+        let fixed = try SweepFixedInputs(db: db, levelName: levelName)
+        let base = try fixed.designLevel(db: db)
         let space = SweepSpace(grids: SweepGrids(), fixed: fixed, slotCount: base.towerSlots.count)
         let perm = space.permutation(at: space.permutationCount / 2)
-        let catalog = SweepCatalog.make(perm: perm, fixed: fixed)
-        let waves = SweepWaves.make(perm: perm, fixed: fixed, pathCount: base.paths.count)
+        let catalog = SweepCatalog(fixed: fixed).make(perm: perm)
+        let waves = SweepWaves(fixed: fixed, pathCount: base.paths.count).make(perm: perm)
         let level = LevelInfo(
             id: base.id, name: base.name, campaign: base.campaign,
             startedAt: base.startedAt, endedAt: base.endedAt,
@@ -826,8 +841,7 @@ enum Sweep {
         simsPerSec * 8 * 3600 / 1_000_000))
     }
 
-    static func run(
-        db: Db,
+    func run(
         levelName: String,
         grids: SweepGrids,
         stride sampleStride: Int,
@@ -836,10 +850,11 @@ enum Sweep {
         storeBounds: Bool = false,
         fieldMelee: Bool = false
     ) throws {
-        var fixed = try SweepFixedInputs.load(db: db, levelName: levelName)
-        fixed.fieldMelee = fieldMelee
-        let base = try SweepFixedInputs.designLevel(db: db, levelName: levelName, fixed: fixed)
+        let fixed = try SweepFixedInputs(db: db, levelName: levelName, fieldMelee: fieldMelee)
+        let base = try fixed.designLevel(db: db)
         let space = SweepSpace(grids: grids, fixed: fixed, slotCount: base.towerSlots.count)
+        let catalogs = SweepCatalog(fixed: fixed)
+        let waveBuilder = SweepWaves(fixed: fixed, pathCount: base.paths.count)
 
         let allPerms = space.permutationCount
         var indices: [Int]
@@ -928,7 +943,6 @@ enum Sweep {
         // Status is recorded in its own database so it survives create_db.sh and
         // never blocks a content rebuild. A failure to record must not take the
         // sweep down with it, hence the optional.
-        let runs = try? SimulatorRunDAO()
         let runID = try? runs?.begin(levelName: levelName,
                                      focus: grids.focus?.label ?? "",
                                      totalIterations: indices.count,
@@ -942,15 +956,15 @@ enum Sweep {
         }
         let store = try? SweepResultStore(diskPath: outPath, runID: runID ?? nil)
 
-        func conclude(_ status: String, report reportPath: String? = nil, error: String? = nil) {
+        func conclude(_ status: SimulatorRunStatus, report reportPath: String? = nil, error: String? = nil) {
             if let runs, let id = runID ?? nil {
                 runs.finish(id: id, status: status, reportPath: reportPath, errorMessage: error)
             }
         }
 
         if useGPU {
-            rows = try GPUHarness.sweepRows(
-                db: db, fixed: fixed, base: base, space: space,
+            rows = try GPUHarness(db: db).sweepRows(
+                fixed: fixed, base: base, space: space,
                 indices: indices, grids: grids, store: store,
                 onProgress: { report($0, $1) }
             )
@@ -958,20 +972,20 @@ enum Sweep {
                        sims: sims, t0: t0, levelName: levelName,
                        inBandLow: 0.6, inBandHigh: 0.95, store: store)
             if storeBounds {
-                try deriveAndStoreBounds(db: db, fixed: fixed, space: space,
+                try deriveAndStoreBounds(fixed: fixed, space: space,
                                          rows: rows, outPath: outPath)
             }
             if let focus = grids.focus {
-                try FocusReport.emit(rows: rows, focus: focus, space: space, sweepOut: outPath)
+                try FocusReport(focus: focus, space: space).emit(rows: rows, sweepOut: outPath)
             }
-            conclude(SimulatorRunStatus.completed)
+            conclude(.completed)
             return
         }
 
         func processPerm(_ index: Int) -> SweepRow {
             let perm = space.permutation(at: index)
-            let catalog = SweepCatalog.make(perm: perm, fixed: fixed)
-            let waves = SweepWaves.make(perm: perm, fixed: fixed, pathCount: base.paths.count)
+            let catalog = catalogs.make(perm: perm)
+            let waves = waveBuilder.make(perm: perm)
             let level = LevelInfo(
                 id: base.id, name: base.name, campaign: base.campaign,
                 startedAt: base.startedAt, endedAt: base.endedAt,
@@ -1085,17 +1099,17 @@ enum Sweep {
                    sims: sims, t0: t0, levelName: levelName,
                    inBandLow: 0.6, inBandHigh: 0.95, store: store)
         if storeBounds {
-            try deriveAndStoreBounds(db: db, fixed: fixed, space: space,
+            try deriveAndStoreBounds(fixed: fixed, space: space,
                                      rows: rows, outPath: outPath)
         }
         if let focus = grids.focus {
-            try FocusReport.emit(rows: rows, focus: focus, space: space, sweepOut: outPath)
+            try FocusReport(focus: focus, space: space).emit(rows: rows, sweepOut: outPath)
         }
-        conclude(SimulatorRunStatus.completed)
+        conclude(.completed)
     }
 
-    static func deriveAndStoreBounds(
-        db: Db, fixed: SweepFixedInputs, space: SweepSpace,
+    private func deriveAndStoreBounds(
+        fixed: SweepFixedInputs, space: SweepSpace,
         rows: [SweepRow], outPath: String
     ) throws {
         for kind in space.combatKinds {
@@ -1145,7 +1159,7 @@ enum Sweep {
         }
     }
 
-    static func finish(
+    private func finish(
         rows: inout [SweepRow], fixed: SweepFixedInputs, grids: SweepGrids,
         outPath: String, sims: Int, t0: Date, levelName: String,
         inBandLow: Double, inBandHigh: Double, store: SweepResultStore? = nil
