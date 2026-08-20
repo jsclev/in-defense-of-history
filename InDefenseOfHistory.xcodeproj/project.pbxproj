@@ -25,7 +25,6 @@
 		52A55E710000000000000013 /* MenuScreens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000013 /* MenuScreens.swift */; };
 		52A55E710000000000000014 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000014 /* Renderer.swift */; };
 		52A55E710000000000000015 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000015 /* RootView.swift */; };
-		52A55E710000000000000016 /* SafeAreaOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000016 /* SafeAreaOverlay.swift */; };
 		52A55E710000000000000017 /* ScreenGeometry+SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000017 /* ScreenGeometry+SwiftUI.swift */; };
 		52A55E710000000000000018 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000018 /* SettingsView.swift */; };
 		52A55E710000000000000019 /* TiledBackgroundMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000019 /* TiledBackgroundMetalView.swift */; };
@@ -66,7 +65,6 @@
 		52A55E700000000000000013 /* MenuScreens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScreens.swift; sourceTree = "<group>"; };
 		52A55E700000000000000014 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		52A55E700000000000000015 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
-		52A55E700000000000000016 /* SafeAreaOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafeAreaOverlay.swift; sourceTree = "<group>"; };
 		52A55E700000000000000017 /* ScreenGeometry+SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenGeometry+SwiftUI.swift"; sourceTree = "<group>"; };
 		52A55E700000000000000018 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		52A55E700000000000000019 /* TiledBackgroundMetalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiledBackgroundMetalView.swift; sourceTree = "<group>"; };
@@ -77,6 +75,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		5259E55730379578005250EE /* Exceptions for "Engine" folder in "Simulator" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Debug/DebugLayoutGuidesView.swift,
+			);
+			target = 520082B6300C245B00DF4F64 /* Simulator */;
+		};
+		5259E55830379578005250EE /* Exceptions for "Engine" folder in "LevelEditor" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Debug/DebugLayoutGuidesView.swift,
+			);
+			target = 52AB1A00000000000000BC01 /* LevelEditor */;
+		};
 		52AB1A00000000000000BF01 /* Exceptions for "LevelEditor" folder in "LevelEditor" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -89,6 +101,10 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		5200827F300C09D400DF4F64 /* Engine */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				5259E55730379578005250EE /* Exceptions for "Engine" folder in "Simulator" target */,
+				5259E55830379578005250EE /* Exceptions for "Engine" folder in "LevelEditor" target */,
+			);
 			path = Engine;
 			sourceTree = "<group>";
 		};
@@ -192,7 +208,6 @@
 				52A55E700000000000000013 /* MenuScreens.swift */,
 				52A55E700000000000000014 /* Renderer.swift */,
 				52A55E700000000000000015 /* RootView.swift */,
-				52A55E700000000000000016 /* SafeAreaOverlay.swift */,
 				52A55E700000000000000017 /* ScreenGeometry+SwiftUI.swift */,
 				52A55E700000000000000018 /* SettingsView.swift */,
 				52A55E700000000000000019 /* TiledBackgroundMetalView.swift */,
@@ -422,7 +437,6 @@
 				52A55E710000000000000013 /* MenuScreens.swift in Sources */,
 				52A55E710000000000000014 /* Renderer.swift in Sources */,
 				52A55E710000000000000015 /* RootView.swift in Sources */,
-				52A55E710000000000000016 /* SafeAreaOverlay.swift in Sources */,
 				52A55E710000000000000017 /* ScreenGeometry+SwiftUI.swift in Sources */,
 				52A55E710000000000000018 /* SettingsView.swift in Sources */,
 				52A55E710000000000000019 /* TiledBackgroundMetalView.swift in Sources */,

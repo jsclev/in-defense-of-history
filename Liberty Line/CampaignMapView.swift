@@ -5,7 +5,7 @@ struct CampaignMapView: View {
     var onSelectNode: (CampaignNode) -> Void
     var onSelectMenu: (MenuScreen) -> Void
 
-    @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
+    @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     @State private var nodes: [CampaignNode] = []
     
@@ -79,11 +79,6 @@ struct CampaignMapView: View {
                 }
                 .ignoresSafeArea()
 
-                if showSafeAreaOverlay {
-                    SafeAreaOverlayView(screen: screen, canvasSpec: canvasSpec)
-                        .ignoresSafeArea()
-                }
-
                 Image("game_title")
                     .resizable()
                     .scaledToFit()
@@ -103,6 +98,12 @@ struct CampaignMapView: View {
                     }
                 }
                 .ignoresSafeArea()
+
+                // Last, so the guides draw over every HUD element.
+                if showDebugLayoutGuides {
+                    DebugLayoutGuidesView(screen: screen, canvasSpec: canvasSpec)
+                        .ignoresSafeArea()
+                }
             }
         }
         .persistentSystemOverlays(.hidden)

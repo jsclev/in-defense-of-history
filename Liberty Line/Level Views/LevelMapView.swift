@@ -67,7 +67,7 @@ struct LevelMapView: View {
 
     @AppStorage("debugMode") private var debugMode = true
     @AppStorage("showDebugInfo") private var showDebugInfo = false
-    @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
+    @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     private static let debugRangeBands: [(upperBound: CGFloat, tint: Color)] = [
         (200, Color(red: 0.13, green: 0.83, blue: 0.93)),        // cyan
@@ -164,11 +164,6 @@ struct LevelMapView: View {
                 }
                 .ignoresSafeArea()
 
-                if showSafeAreaOverlay {
-                    SafeAreaOverlayView(screen: screen, canvasSpec: canvasSpec)
-                        .ignoresSafeArea()
-                }
-
                 if runner.isDefeated {
                     failBanner(metrics: metrics)
                         .ignoresSafeArea()
@@ -189,6 +184,12 @@ struct LevelMapView: View {
                     towerMenuLayer(in: gameGeometry.size, screen: screen)
                 }
                 .ignoresSafeArea()
+
+                // Last, so the guides draw over every HUD element.
+                if showDebugLayoutGuides {
+                    DebugLayoutGuidesView(screen: screen, canvasSpec: canvasSpec)
+                        .ignoresSafeArea()
+                }
             }
         }
         .persistentSystemOverlays(.hidden)

@@ -24,16 +24,15 @@ public struct Constants {
     public static let mapWidth: CGFloat = 1000.0 / 3.0
     public static let mapHeight: CGFloat = 1000.0 / 3.0
     public static let noScore = 0.0
-    public static let riverTiledId = 50
     public static let maxCommandCost = 1000000.0
-    public static let maxUtility = 100.0
-    public static let numAITurns = 441
     
     public static let minScale = 0.4
     public static let maxScale = CGSize(width: 512, height: 286).width / 20.0
     public static let minZoom = log2(Constants.minScale)
     public static let maxZoom = log2(Constants.maxScale)
     
+    public static let showDebugLayoutGuidesKey = "showSafeAreaOverlay"
+
     #if canImport(UIKit)
     
     #if os(visionOS)
@@ -60,42 +59,6 @@ public struct Constants {
     public static let mapMomentumScaleSpringMass: CGFloat = 25
     
     public static let mapMomentumScaleGestureMaxTimeDifference = 0.15
-
-    public static let terrainTypes: [String: TerrainType] = [
-        "0": TerrainType.Grassland,
-        "1": TerrainType.Forest,
-        "2": TerrainType.Forest,
-        "3": TerrainType.Forest,
-        "4": TerrainType.Forest,
-        "5": TerrainType.Forest,
-        "6": TerrainType.Forest,
-        "7": TerrainType.Forest,
-        "8": TerrainType.Forest,
-        "9": TerrainType.Forest,
-        "10": TerrainType.Forest,
-        "11": TerrainType.Forest,
-        "12": TerrainType.Forest,
-        "13": TerrainType.Forest,
-        "14": TerrainType.Forest,
-        "15": TerrainType.Forest,
-        "16": TerrainType.Forest,
-        "17": TerrainType.Mountains,
-        "18": TerrainType.Mountains,
-        "19": TerrainType.Hills,
-        "20": TerrainType.Forest,
-        "21": TerrainType.Desert,
-        "22": TerrainType.Jungle,
-        "23": TerrainType.Swamp,
-        "24": TerrainType.Ocean,
-        "47": TerrainType.Glacier,
-        "48": TerrainType.Glacier,
-        "49": TerrainType.Plains,
-        "52": TerrainType.Tundra,
-        "53": TerrainType.Forest,
-        "54": TerrainType.Jungle,
-        "55": TerrainType.Mountains,
-        "56": TerrainType.Hills
-    ]
     
     public static let tiledResources: [String: ResourceType] = [
         "28": ResourceType.Wine,

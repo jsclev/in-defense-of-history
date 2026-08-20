@@ -7,7 +7,7 @@ struct SettingsView: View {
 
     @AppStorage("debugMode") private var debugMode = true
     @AppStorage("showDebugInfo") private var showDebugInfo = false
-    @AppStorage(SafeAreaOverlay.defaultsKey) private var showSafeAreaOverlay = false
+    @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     var body: some View {
         GeometryReader { geometry in
@@ -34,7 +34,7 @@ struct SettingsView: View {
 
                     toggle("Layout guides",
                            detail: "Physical screen edge in green, safe area in red, play area in orange.",
-                           isOn: $showSafeAreaOverlay, metrics: metrics)
+                           isOn: $showDebugLayoutGuides, metrics: metrics)
 
                     toggle("Simulation readout",
                            detail: "Wave and spawn state, top-left of the level map.",

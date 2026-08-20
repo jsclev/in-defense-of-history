@@ -93,7 +93,6 @@ public struct CanvasSpec {
                       width: width, height: height)
     }
 
-    public static let playAreaLineRGB: (red: Double, green: Double, blue: Double) = (0.75, 0.15, 1.0)
 
     public var playAreaShape: CGPath {
         let play = playAreaRect

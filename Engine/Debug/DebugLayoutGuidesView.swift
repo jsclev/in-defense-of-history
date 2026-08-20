@@ -1,22 +1,13 @@
 import SwiftUI
 
-enum SafeAreaOverlay {
-    static let defaultsKey = "showSafeAreaOverlay"
-
-    static let physical = Color(red: 1.0, green: 0.16, blue: 0.16)
-    static let safe = Color(red: 0.18, green: 1.0, blue: 0.33)
-    static let playable = Color(red: CanvasSpec.playAreaLineRGB.red,
-                                green: CanvasSpec.playAreaLineRGB.green,
-                                blue: CanvasSpec.playAreaLineRGB.blue)
-
-    static let physicalWidth: CGFloat = 9
-    static let playableWidth: CGFloat = 6
-    static let safeWidth: CGFloat = 3
-}
-
-struct SafeAreaOverlayView: View {
-    var screen: ScreenGeometry
-    var canvasSpec: CanvasSpec
+public struct DebugLayoutGuidesView: View {
+    private let physicalLineWidth: CGFloat = 9
+    private let playAreaLineWidth: CGFloat = 6
+    private let safeInsetsLineWidth: CGFloat = 3
+    
+    private let physicalColor = Color(red: 1.0, green: 0.16, blue: 0.16)
+    private let playAreaColor = Color(red: 0.75, green: 0.15, blue: 1.0)
+    private let safeInsetsColor = Color(red: 0.18, green: 1.0, blue: 0.33)
 
     private var fullSize: CGSize { screen.physical.size }
     private var safeRect: CGRect { screen.safe }
@@ -26,13 +17,22 @@ struct SafeAreaOverlayView: View {
                    bottom: screen.safeAreaInset(.bottom),
                    trailing: screen.safeAreaInset(.trailing))
     }
+    
+    
+    private var screen: ScreenGeometry
+    private var canvasSpec: CanvasSpec
+    
+    public init(screen: ScreenGeometry, canvasSpec: CanvasSpec) {
+        self.screen = screen
+        self.canvasSpec = canvasSpec
+    }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .topLeading) {
-            border(screen.physical, SafeAreaOverlay.physical,
-                   SafeAreaOverlay.physicalWidth)
+            border(screen.physical, physicalColor,
+                   physicalLineWidth)
             playAreaGuide
-            border(safeRect, SafeAreaOverlay.safe, SafeAreaOverlay.safeWidth)
+            border(safeRect, safeInsetsColor, safeInsetsLineWidth)
 
             inset("L \(fmt(insets.leading))", at: CGPoint(x: insets.leading / 2, y: safeRect.midY))
             inset("R \(fmt(insets.trailing))",
@@ -58,8 +58,8 @@ struct SafeAreaOverlayView: View {
         let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen.playable)
         SwiftUI.Path(canvasSpec.playAreaShape)
             .applying(projection.viewTransform)
-            .stroke(SafeAreaOverlay.playable,
-                    style: StrokeStyle(lineWidth: SafeAreaOverlay.playableWidth,
+            .stroke(playAreaColor,
+                    style: StrokeStyle(lineWidth: playAreaLineWidth,
                                        dash: [16, 10]))
     }
 
@@ -71,7 +71,7 @@ struct SafeAreaOverlayView: View {
             .foregroundStyle(.black)
             .padding(.horizontal, 4)
             .padding(.vertical, 2)
-            .background(SafeAreaOverlay.safe.opacity(0.9),
+            .background(safeInsetsColor.opacity(0.9),
                         in: RoundedRectangle(cornerRadius: 3))
             .position(point)
     }
