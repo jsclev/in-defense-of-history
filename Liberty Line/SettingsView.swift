@@ -2,6 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct SettingsView: View {
+    let canvasSpec: CanvasSpec
     let onExit: () -> Void
 
     @AppStorage("debugMode") private var debugMode = true
@@ -10,7 +11,7 @@ struct SettingsView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let metrics = HudMetrics(viewSize: geometry.size)
+            let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
             ZStack(alignment: .topLeading) {
                 Image("hero_screen_background")
                     .resizable()
@@ -48,10 +49,11 @@ struct SettingsView: View {
                 .padding(28 * metrics.scale)
                 .frame(maxWidth: 620 * metrics.scale, alignment: .leading)
 
+                let screen = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
                 DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: ScreenGeometry(proxy: geometry),
+                    .hudFrame(DoneButtonLayout(screen: screen,
                                                aspect: DoneButton.aspect).frame,
-                              in: ScreenGeometry(proxy: geometry))
+                              in: screen)
                     .ignoresSafeArea()
             }
         }

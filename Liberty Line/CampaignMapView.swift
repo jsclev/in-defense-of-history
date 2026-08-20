@@ -14,9 +14,9 @@ struct CampaignMapView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let screen = ScreenGeometry(proxy: geometry)
+            let screen = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
             let fullSize = screen.physical.size
-            let metrics = HudMetrics(viewSize: fullSize)
+            let metrics = HudMetrics(viewSize: fullSize, canvasSpec: canvasSpec)
             let menu = MenuBarLayout(screen: screen,
                                      itemCount: MenuScreen.allCases.count)
             let title = TitleLayout(screen: screen,

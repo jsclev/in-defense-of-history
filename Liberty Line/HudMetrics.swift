@@ -3,8 +3,8 @@ import SwiftUI
 struct HudMetrics {
     let scale: CGFloat
 
-    init(viewSize: CGSize) {
-        scale = HudScale(viewSize: viewSize).value
+    init(viewSize: CGSize, canvasSpec: CanvasSpec) {
+        scale = HudScale(viewSize: viewSize, canvasSpec: canvasSpec).value
     }
 
     init(scale: CGFloat) {

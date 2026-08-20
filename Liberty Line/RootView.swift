@@ -5,13 +5,8 @@ struct RootView: View {
     @State private var selectedNode: CampaignNode?
     @State private var playingDifficulty: Difficulty?
     @State private var menuScreen: MenuScreen?
-    
-//    private var db: Db
-//    private var canvasSpec: CanvasSpec
-    
-    var store = Store()
-//    @StateObject var store = Store()
 
+    var store = Store()
 
 
     var body: some View {
@@ -30,19 +25,19 @@ struct RootView: View {
                 }
             }
         } else if menuScreen == .heroes {
-            HeroesView(db: store.db) {
+            HeroesView(db: store.db, canvasSpec: store.canvasSpec) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .encyclopedia {
-            EncyclopediaView {
+            EncyclopediaView(canvasSpec: store.canvasSpec) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .settings {
-            SettingsView {
+            SettingsView(canvasSpec: store.canvasSpec) {
                 self.menuScreen = nil
             }
         } else if let menuScreen {
-            MenuPlaceholderView(screen: menuScreen) {
+            MenuPlaceholderView(screen: menuScreen, canvasSpec: store.canvasSpec) {
                 self.menuScreen = nil
             }
         } else {

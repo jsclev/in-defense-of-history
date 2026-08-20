@@ -7,20 +7,20 @@ public enum ScreenEdge {
 public struct ScreenGeometry: Equatable {
     public let physical: CGRect
     public let safe: CGRect
+
+    /// Where the play area lands on this screen. Not computed here: the
+    /// canvas spec owns play-area geometry and supplies this rect.
     public let playable: CGRect
 
     public init(fullSize: CGSize,
                 leading: CGFloat, top: CGFloat,
-                trailing: CGFloat, bottom: CGFloat) {
+                trailing: CGFloat, bottom: CGFloat,
+                canvasSpec: CanvasSpec) {
         physical = CGRect(origin: .zero, size: fullSize)
         safe = CGRect(x: leading, y: top,
                       width: max(0, fullSize.width - leading - trailing),
                       height: max(0, fullSize.height - top - bottom))
-        let height = min(fullSize.width * 9 / 16, fullSize.height)
-        let width = height * 16 / 9
-        playable = CGRect(x: (fullSize.width - width) / 2,
-                          y: (fullSize.height - height) / 2,
-                          width: width, height: height)
+        playable = canvasSpec.playableRect(in: fullSize)
     }
 
     public func safeAreaInset(_ edge: ScreenEdge) -> CGFloat {

@@ -155,9 +155,9 @@ struct LevelMapView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let screen = ScreenGeometry(proxy: geometry)
+            let screen = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
             let fullSize = screen.physical.size
-            let metrics = HudMetrics(viewSize: fullSize)
+            let metrics = HudMetrics(viewSize: fullSize, canvasSpec: canvasSpec)
             ZStack(alignment: .topLeading) {
                 GeometryReader { gameGeometry in
                     content(in: gameGeometry.size, screen: screen)
@@ -267,8 +267,7 @@ struct LevelMapView: View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
         let safe = screen.safe
         let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen.playable)
-        let playAreaScalingFactor = PlayAreaLayout.scalingFactor(canvasSpec: canvasSpec, runtimePlayArea: screen.playable)
-        let metrics = HudMetrics(viewSize: viewSize)
+        let metrics = HudMetrics(viewSize: viewSize, canvasSpec: canvasSpec)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
         let art = runner.mapArt
@@ -539,7 +538,7 @@ struct LevelMapView: View {
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                             playAreaScalingFactor: playAreaScalingFactor)
                 if let rally = runner.rallyPoint(forSlot: upgradeSlot) {
-                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(viewSize: viewSize).scale) * 0.6)
+                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(viewSize: viewSize, canvasSpec: canvasSpec).scale) * 0.6)
                         .position(projection.viewPoint(rally))
                         .allowsHitTesting(false)
                 }

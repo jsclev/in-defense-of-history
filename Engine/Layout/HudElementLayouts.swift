@@ -9,7 +9,7 @@ public struct TopBarLayout: Equatable {
     public let top: CGFloat
 
     public init(screen: ScreenGeometry) {
-        let scale = HudScale(viewSize: screen.physical.size).value
+        let scale = HudScale(playableHeight: screen.playable.height).value
         top = HudPlacementSolver.origin(
             corner: .topLeading,
             margin: HudSizing.topBarMargin.resolved(at: scale), in: screen).y
@@ -22,7 +22,7 @@ public struct CornerButtonsLayout: Equatable {
     public let block: CGRect
 
     public init(screen: ScreenGeometry, topBar: TopBarLayout) {
-        let scale = HudScale(viewSize: screen.physical.size).value
+        let scale = HudScale(playableHeight: screen.playable.height).value
         let side = HudSizing.cornerButton.resolved(at: scale)
         let item = CGSize(width: side, height: side)
         let row = StackLayout.row([item, item],
@@ -59,7 +59,7 @@ public struct StatsPanelLayout: Equatable {
     public init(screen: ScreenGeometry, topBar: TopBarLayout, isPortrait: Bool,
                 livesIconAspect: CGFloat, moneyIconAspect: CGFloat,
                 moneyText: String) {
-        let scale = HudScale(viewSize: screen.physical.size).value
+        let scale = HudScale(playableHeight: screen.playable.height).value
 
         func counterSizes(icon: ScaledDimension, valueWidth: CGFloat,
                           aspect: CGFloat, spacing: ScaledDimension) -> StackLayout {
@@ -133,7 +133,7 @@ public struct MenuBarLayout: Equatable {
     public let bar: CGRect
 
     public init(screen: ScreenGeometry, itemCount: Int) {
-        let scale = HudScale(viewSize: screen.physical.size).value
+        let scale = HudScale(playableHeight: screen.playable.height).value
         let side = HudSizing.menuButton.resolved(at: scale)
         let item = CGSize(width: side, height: side)
         let row = StackLayout.row(Array(repeating: item, count: max(itemCount, 0)),
@@ -154,7 +154,7 @@ public struct DoneButtonLayout: Equatable {
     /// even where the ceiling has already cut the base size.
     public init(screen: ScreenGeometry, aspect: CGFloat, scaleOverride: CGFloat? = nil,
                 magnification: CGFloat = 1) {
-        let scale = scaleOverride ?? HudScale(viewSize: screen.physical.size).value
+        let scale = scaleOverride ?? HudScale(playableHeight: screen.playable.height).value
         let height = HudSizing.doneButton.resolved(at: scale) * magnification
         frame = HudPlacementSolver.frame(
             size: CGSize(width: height * aspect, height: height),
@@ -167,7 +167,7 @@ public struct TitleLayout: Equatable {
     public let frame: CGRect
 
     public init(screen: ScreenGeometry, aspect: CGFloat) {
-        let scale = HudScale(viewSize: screen.physical.size).value
+        let scale = HudScale(playableHeight: screen.playable.height).value
         let width = min(screen.physical.width * HudSizing.titleWidthFraction,
                         HudSizing.titleMaxWidth)
         frame = HudPlacementSolver.frame(

@@ -119,11 +119,12 @@ private struct FloatingMenuButtonStyle: ButtonStyle {
 
 struct MenuPlaceholderView: View {
     let screen: MenuScreen
+    let canvasSpec: CanvasSpec
     let onExit: () -> Void
 
     var body: some View {
         GeometryReader { geometry in
-            let metrics = HudMetrics(viewSize: geometry.size)
+            let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
             ZStack(alignment: .topLeading) {
                 Color(red: 0.14, green: 0.11, blue: 0.08).ignoresSafeArea()
 
@@ -150,7 +151,7 @@ struct MenuPlaceholderView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-                let sg = ScreenGeometry(proxy: geometry)
+                let sg = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
                 DoneButton(action: onExit)
                     .hudFrame(DoneButtonLayout(screen: sg,
                                                aspect: DoneButton.aspect).frame,

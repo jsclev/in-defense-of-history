@@ -1,4 +1,4 @@
 enum BuildVersion {
-    static let version = "1.0.46"
-    static let build = 46
+    static let version = "1.0.51"
+    static let build = 51
 }

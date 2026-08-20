@@ -1,43 +1,6 @@
 import Foundation
 import CoreGraphics
 
-/// The values in the canvas_spec table: the one virtual coordinate system
-/// shared by the LevelEditor, the Simulator and the game, and the footprint
-/// every tower slot renders at.
-///
-/// Origin is the LOWER-LEFT corner of the canvas, +x runs right and +y runs
-/// UP. Every stored coordinate - path points, tower slots, the play area -
-/// is in this space, and tower ranges, radii and slot footprints are in these
-/// same units. Nothing rescales on the way in or out.
-//public struct CanvasSpecValues: Equatable, Sendable {
-//    public let canvasWidth: Double
-//    public let canvasHeight: Double
-//    public let playArea: CGRect
-//    public let slotSize: CGSize
-//    public let pathWidth: Double
-//    public let upperLeftOcclusionCornerFraction: CGSize
-//    public let upperRightOcclusionCornerFraction: CGSize
-//    public let lowerLeftOcclusionCornerFraction: CGSize
-//    public let lowerRightOcclusionCornerFraction: CGSize
-//
-//    public init(canvasWidth: Double, canvasHeight: Double,
-//                playArea: CGRect, slotSize: CGSize, pathWidth: Double,
-//                upperLeftOcclusionCornerFraction: CGSize,
-//                upperRightOcclusionCornerFraction: CGSize,
-//                lowerLeftOcclusionCornerFraction: CGSize,
-//                lowerRightOcclusionCornerFraction: CGSize) {
-//        self.canvasWidth = canvasWidth
-//        self.canvasHeight = canvasHeight
-//        self.playArea = playArea
-//        self.slotSize = slotSize
-//        self.pathWidth = pathWidth
-//        self.upperLeftOcclusionCornerFraction = upperLeftOcclusionCornerFraction
-//        self.upperRightOcclusionCornerFraction = upperRightOcclusionCornerFraction
-//        self.lowerLeftOcclusionCornerFraction = lowerLeftOcclusionCornerFraction
-//        self.lowerRightOcclusionCornerFraction = lowerRightOcclusionCornerFraction
-//    }
-//}
-
 public struct CanvasSpec {
     
     public init(size: CGSize,
@@ -58,20 +21,6 @@ public struct CanvasSpec {
         self.lowerRightOcclusionCornerFraction = lowerRightOcclusionCornerFraction
     }
     
-    /// Written once per Db open, read-only everywhere else.
-//    nonisolated(unsafe) private static var loaded: CanvasSpecValues?
-
-//    public static func load(_ values: CanvasSpecValues) { loaded = values }
-
-//    public static var isLoaded: Bool { loaded != nil }
-
-//    private static var values: CanvasSpecValues {
-//        guard let loaded else {
-//            preconditionFailure(
-//                "CanvasSpec read before any database was opened - construct a Db first")
-//        }
-//        return loaded
-//    }
     public let size: CGSize
     public let pathWidth: Double
 
@@ -128,6 +77,21 @@ public struct CanvasSpec {
     /// again - the transform is its own inverse. Only rendering layers that draw
     /// into a y-down surface should need this.
     public func flipY(_ y: Double) -> Double { size.height - y }
+
+    /// The rect the play area occupies on a screen of `fullSize`: the play
+    /// area's own aspect, fitted and centred. The one place the on-screen
+    /// playable rectangle is computed.
+    public func playableRect(in fullSize: CGSize) -> CGRect {
+        guard playAreaRect.width > 0, playAreaRect.height > 0 else {
+            return CGRect(origin: .zero, size: fullSize)
+        }
+        let aspect = playAreaRect.width / playAreaRect.height
+        let height = min(fullSize.width / aspect, fullSize.height)
+        let width = height * aspect
+        return CGRect(x: (fullSize.width - width) / 2,
+                      y: (fullSize.height - height) / 2,
+                      width: width, height: height)
+    }
 
     public static let playAreaLineRGB: (red: Double, green: Double, blue: Double) = (0.75, 0.15, 1.0)
 

@@ -1,13 +1,14 @@
 import SwiftUI
 
 extension ScreenGeometry {
-    init(proxy: GeometryProxy) {
+    init(proxy: GeometryProxy, canvasSpec: CanvasSpec) {
         let insets = proxy.safeAreaInsets
         self.init(
             fullSize: CGSize(width: proxy.size.width + insets.leading + insets.trailing,
                              height: proxy.size.height + insets.top + insets.bottom),
             leading: insets.leading, top: insets.top,
-            trailing: insets.trailing, bottom: insets.bottom)
+            trailing: insets.trailing, bottom: insets.bottom,
+            canvasSpec: canvasSpec)
     }
 }
 

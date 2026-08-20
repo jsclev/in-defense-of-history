@@ -2,6 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct EncyclopediaView: View {
+    let canvasSpec: CanvasSpec
     let onExit: () -> Void
 
     enum Category {
@@ -18,15 +19,9 @@ struct EncyclopediaView: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             GeometryReader { geometry in
-                let rectHeight = ScreenGeometry(
-                    fullSize: geometry.size, leading: 0, top: 0, trailing: 0, bottom: 0
-                ).playable.height
-                let rectWidth = rectHeight * 16 / 9
-                let scale = rectWidth / Self.layoutSize.width
-                let origin = CGPoint(
-                    x: (geometry.size.width - rectWidth) / 2,
-                    y: (geometry.size.height - rectHeight) / 2
-                )
+                let playable = canvasSpec.playableRect(in: geometry.size)
+                let scale = playable.width / Self.layoutSize.width
+                let origin = playable.origin
 
                 ZStack {
                     Image("hero_screen_background")
@@ -51,12 +46,12 @@ struct EncyclopediaView: View {
             .ignoresSafeArea()
 
             GeometryReader { safeGeometry in
-                let screen = ScreenGeometry(proxy: safeGeometry)
+                let screen = ScreenGeometry(proxy: safeGeometry, canvasSpec: canvasSpec)
                 DoneButton(action: onExit)
                     .hudFrame(DoneButtonLayout(
                         screen: screen,
                         aspect: DoneButton.aspect,
-                        scaleOverride: screen.playable.height / 680.625).frame,
+                        scaleOverride: screen.playable.height / HudScale.referencePlayableHeight).frame,
                               in: screen)
                     .ignoresSafeArea()
             }

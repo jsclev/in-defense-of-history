@@ -20,7 +20,9 @@ public enum Typography {
 }
 
 public struct HudScale: Equatable {
-    public static let referencePlayableHeight: CGFloat = 1210 * 9 / 16
+    /// Playable height on the 1210-pt reference screen the HUD was tuned
+    /// against. A frozen tuning anchor, not live play-area geometry.
+    public static let referencePlayableHeight: CGFloat = 680.625
 
     public static let minimum: CGFloat = 0.66
     public static let maximum: CGFloat = 1.15
@@ -32,10 +34,8 @@ public struct HudScale: Equatable {
         value = Swift.min(Swift.max(raw, Self.minimum), Self.maximum)
     }
 
-    public init(viewSize: CGSize) {
-        let w = Swift.max(viewSize.width, viewSize.height)
-        let h = Swift.min(viewSize.width, viewSize.height)
-        self.init(playableHeight: Swift.min(w * 9 / 16, h))
+    public init(viewSize: CGSize, canvasSpec: CanvasSpec) {
+        self.init(playableHeight: canvasSpec.playableRect(in: viewSize).height)
     }
 }
 

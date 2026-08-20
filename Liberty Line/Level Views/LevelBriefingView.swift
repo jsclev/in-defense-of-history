@@ -20,7 +20,7 @@ struct LevelBriefingView: View {
         // button still honors the real insets.
         ZStack(alignment: .topLeading) {
             GeometryReader { geometry in
-                let metrics = HudMetrics(viewSize: geometry.size)
+                let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
                 ZStack {
                 Image("level_briefing_background")
                         .resizable()
@@ -53,7 +53,7 @@ struct LevelBriefingView: View {
             .ignoresSafeArea()
 
             GeometryReader { safeGeometry in
-                let screen = ScreenGeometry(proxy: safeGeometry)
+                let screen = ScreenGeometry(proxy: safeGeometry, canvasSpec: canvasSpec)
                 DoneButton {
                     if let selected {
                         onStart(selected)
@@ -101,7 +101,8 @@ struct LevelBriefingView: View {
 
     private func levelPortrait(metrics: HudMetrics) -> some View {
         let height = 260 * metrics.scale
-        let frame = CGSize(width: height * 16 / 9, height: height)
+        let aspect = canvasSpec.playAreaRect.width / canvasSpec.playAreaRect.height
+        let frame = CGSize(width: height * aspect, height: height)
         let art = LevelMapArt(mapImageName: node.mapImageName)
         return ZStack {
             if art.hasArt {

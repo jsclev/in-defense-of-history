@@ -61,17 +61,6 @@ struct SafeAreaOverlayView: View {
             .stroke(SafeAreaOverlay.playable,
                     style: StrokeStyle(lineWidth: SafeAreaOverlay.playableWidth,
                                        dash: [16, 10]))
-//        if CanvasSpec.isLoaded {
-//            let projection = LevelMapArt.projection(fitting: screen.playable)
-//            SwiftUI.Path(CanvasSpec.playAreaShape)
-//                .applying(projection.viewTransform)
-//                .stroke(SafeAreaOverlay.playable,
-//                        style: StrokeStyle(lineWidth: SafeAreaOverlay.playableWidth,
-//                                           dash: [16, 10]))
-//        } else {
-//            border(screen.playable, SafeAreaOverlay.playable,
-//                   SafeAreaOverlay.playableWidth, dashed: true)
-//        }
     }
 
     private func fmt(_ v: CGFloat) -> String { String(format: "%.0f", v) }

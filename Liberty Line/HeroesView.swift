@@ -3,6 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct HeroesView: View {
     let db: Db
+    let canvasSpec: CanvasSpec
     let onExit: () -> Void
 
     @State private var heroes: [Hero] = []
@@ -13,7 +14,7 @@ struct HeroesView: View {
 
     var body: some View {
         if let selectedHero {
-            HeroDetailsView(db: db, hero: selectedHero) {
+            HeroDetailsView(db: db, canvasSpec: canvasSpec, hero: selectedHero) {
                 self.selectedHero = nil
             }
         } else {
@@ -24,10 +25,9 @@ struct HeroesView: View {
     private var heroGrid: some View {
         ZStack(alignment: .topLeading) {
             GeometryReader { geometry in
-                let rectHeight = ScreenGeometry(
-                    fullSize: geometry.size, leading: 0, top: 0, trailing: 0, bottom: 0
-                ).playable.height
-                let rectWidth = rectHeight * 16 / 9
+                let playable = canvasSpec.playableRect(in: geometry.size)
+                let rectHeight = playable.height
+                let rectWidth = playable.width
                 let margin = rectHeight * 0.028
                 let gap = rectHeight * 0.02
                 let cellWidth = (rectWidth - 2 * margin - CGFloat(Self.columns - 1) * gap)
@@ -69,10 +69,11 @@ struct HeroesView: View {
             .ignoresSafeArea()
 
             GeometryReader { safeGeometry in
+                let screen = ScreenGeometry(proxy: safeGeometry, canvasSpec: canvasSpec)
                 DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: ScreenGeometry(proxy: safeGeometry),
+                    .hudFrame(DoneButtonLayout(screen: screen,
                                                aspect: DoneButton.aspect).frame,
-                              in: ScreenGeometry(proxy: safeGeometry))
+                              in: screen)
                     .ignoresSafeArea()
             }
         }
@@ -401,6 +402,7 @@ private struct HeroCardButtonStyle: ButtonStyle {
 @available(iOS 26.0, *)
 struct HeroDetailsView: View {
     let db: Db
+    let canvasSpec: CanvasSpec
     let hero: Hero
     let onExit: () -> Void
 
@@ -413,7 +415,7 @@ struct HeroDetailsView: View {
 
     var body: some View {
         GeometryReader { geometry in
-            let metrics = HudMetrics(viewSize: geometry.size)
+            let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
             ZStack(alignment: .topLeading) {
                 Image("hero_screen_background")
                     .resizable()
@@ -486,9 +488,9 @@ struct HeroDetailsView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: ScreenGeometry(proxy: geometry),
+                    .hudFrame(DoneButtonLayout(screen: ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec),
                                                aspect: DoneButton.aspect).frame,
-                              in: ScreenGeometry(proxy: geometry))
+                              in: ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec))
                     .ignoresSafeArea()
             }
         }
