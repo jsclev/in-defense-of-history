@@ -38,7 +38,9 @@ public enum HudPlacementSolver {
 
     private static func originX(width: CGFloat, corner: HudCorner,
                                 margin: CGFloat, in g: ScreenGeometry) -> CGFloat {
-        let inset = g.chromeInset(corner.horizontal, margin: margin)
+//        let inset = g.chromeInset(corner.horizontal, margin: margin)
+        let inset = g.safe.minX
+
         switch corner.horizontal {
         case .leading:
             let limit = g.physical.minX + inset
@@ -56,7 +58,9 @@ public enum HudPlacementSolver {
                                 margin: CGFloat, in g: ScreenGeometry) -> CGFloat {
         switch corner.vertical {
         case .top:
-            let limit = g.physical.minY + g.chromeInset(.top, margin: margin)
+            let limit = g.physical.minY + g.safe.minY
+//            let limit = g.physical.minY + g.chromeInset(.top, margin: margin)
+
             return max(min(g.playable.minY + margin, limit), g.safe.minY)
         case .bottom:
             return max(g.playable.maxY, g.safe.maxY) - margin - height

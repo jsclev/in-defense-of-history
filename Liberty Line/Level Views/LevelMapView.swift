@@ -180,7 +180,7 @@ struct LevelMapView: View {
 
             // Last, so the guides draw over every HUD element.
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(screen: screen, canvasSpec: canvasSpec)
+                DebugLayoutGuidesView(canvasSpec: canvasSpec)
             }
         }
         .ignoresSafeArea()
