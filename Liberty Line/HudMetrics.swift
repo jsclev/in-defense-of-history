@@ -7,6 +7,10 @@ struct HudMetrics {
         scale = HudScale(viewSize: viewSize, canvasSpec: canvasSpec).value
     }
 
+    init(screen: ScreenGeometry) {
+        scale = HudScale(playableHeight: screen.playable.height).value
+    }
+
     init(scale: CGFloat) {
         self.scale = scale
     }

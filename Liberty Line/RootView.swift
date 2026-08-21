@@ -6,8 +6,11 @@ struct RootView: View {
     @State private var playingDifficulty: Difficulty?
     @State private var menuScreen: MenuScreen?
 
-    var store = Store()
+    let store: Store
 
+    /// The window's geometry, measured once by ScreenGeometryGate before
+    /// this view ever exists.
+    let screen: ScreenGeometry
 
     var body: some View {
         if let selectedNode {
@@ -20,16 +23,17 @@ struct RootView: View {
                     self.selectedNode = nil
                 }
             } else {
-                LevelBriefingView(db: store.db, canvasSpec: store.canvasSpec, node: selectedNode) { difficulty in
+                LevelBriefingView(db: store.db, canvasSpec: store.canvasSpec,
+                                  screen: screen, node: selectedNode) { difficulty in
                     self.playingDifficulty = difficulty
                 }
             }
         } else if menuScreen == .heroes {
-            HeroesView(db: store.db, canvasSpec: store.canvasSpec) {
+            HeroesView(db: store.db, screen: screen) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .encyclopedia {
-            EncyclopediaView(canvasSpec: store.canvasSpec) {
+            EncyclopediaView(screen: screen) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .settings {

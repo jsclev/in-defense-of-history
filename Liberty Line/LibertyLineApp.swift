@@ -5,11 +5,17 @@ import UIKit
 struct LibertyLineApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
+    // The composition root: SwiftUI makes exactly one App instance per
+    // process, so this is the game's single Db/CanvasSpec.
+    private let store = Store()
+
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .statusBarHidden(true)
-                .persistentSystemOverlays(.hidden)
+            ScreenGeometryGate(canvasSpec: store.canvasSpec) { screen in
+                RootView(store: store, screen: screen)
+            }
+            .statusBarHidden(true)
+            .persistentSystemOverlays(.hidden)
         }
     }
 }

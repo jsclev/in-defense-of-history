@@ -2,7 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct EncyclopediaView: View {
-    let canvasSpec: CanvasSpec
+    let screen: ScreenGeometry
     let onExit: () -> Void
 
     enum Category {
@@ -17,45 +17,38 @@ struct EncyclopediaView: View {
     private static let enemiesFrame = CGRect(x: 2027, y: 620, width: 1138, height: 1420)
 
     var body: some View {
+        let scale = screen.playable.width / Self.layoutSize.width
+        let origin = screen.playable.origin
         ZStack(alignment: .topLeading) {
-            GeometryReader { geometry in
-                let playable = canvasSpec.playableRect(in: geometry.size)
-                let scale = playable.width / Self.layoutSize.width
-                let origin = playable.origin
+            ZStack {
+                Image("hero_screen_background")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: screen.physical.width, height: screen.physical.height)
+                    .clipped()
 
-                ZStack {
-                    Image("hero_screen_background")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipped()
+                element("encyclopedia_title_plaque", frame: Self.titleFrame,
+                        scale: scale, origin: origin)
 
-                    element("encyclopedia_title_plaque", frame: Self.titleFrame,
-                            scale: scale, origin: origin)
-
-                    categoryButton(.towers,
-                                   asset: "encyclopedia_towers_category",
-                                   frame: Self.towersFrame,
-                                   scale: scale, origin: origin)
-                    categoryButton(.enemies,
-                                   asset: "encyclopedia_enemies_category",
-                                   frame: Self.enemiesFrame,
-                                   scale: scale, origin: origin)
-                }
+                categoryButton(.towers,
+                               asset: "encyclopedia_towers_category",
+                               frame: Self.towersFrame,
+                               scale: scale, origin: origin)
+                categoryButton(.enemies,
+                               asset: "encyclopedia_enemies_category",
+                               frame: Self.enemiesFrame,
+                               scale: scale, origin: origin)
             }
-            .ignoresSafeArea()
+            .frame(width: screen.physical.width, height: screen.physical.height)
 
-            GeometryReader { safeGeometry in
-                let screen = ScreenGeometry(proxy: safeGeometry, canvasSpec: canvasSpec)
-                DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(
-                        screen: screen,
-                        aspect: DoneButton.aspect,
-                        scaleOverride: screen.playable.height / HudScale.referencePlayableHeight).frame,
-                              in: screen)
-                    .ignoresSafeArea()
-            }
+            DoneButton(action: onExit)
+                .hudFrame(DoneButtonLayout(
+                    screen: screen,
+                    aspect: DoneButton.aspect,
+                    scaleOverride: screen.playable.height / HudScale.referencePlayableHeight).frame,
+                          in: screen)
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
     }
 

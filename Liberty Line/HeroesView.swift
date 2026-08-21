@@ -3,7 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct HeroesView: View {
     let db: Db
-    let canvasSpec: CanvasSpec
+    let screen: ScreenGeometry
     let onExit: () -> Void
 
     @State private var heroes: [Hero] = []
@@ -14,7 +14,7 @@ struct HeroesView: View {
 
     var body: some View {
         if let selectedHero {
-            HeroDetailsView(db: db, canvasSpec: canvasSpec, hero: selectedHero) {
+            HeroDetailsView(db: db, screen: screen, hero: selectedHero) {
                 self.selectedHero = nil
             }
         } else {
@@ -23,60 +23,54 @@ struct HeroesView: View {
     }
 
     private var heroGrid: some View {
-        ZStack(alignment: .topLeading) {
-            GeometryReader { geometry in
-                let playable = canvasSpec.playableRect(in: geometry.size)
-                let rectHeight = playable.height
-                let rectWidth = playable.width
-                let margin = rectHeight * 0.028
-                let gap = rectHeight * 0.02
-                let cellWidth = (rectWidth - 2 * margin - CGFloat(Self.columns - 1) * gap)
-                    / CGFloat(Self.columns)
-                let cellHeight = (rectHeight - 2 * margin - CGFloat(Self.rows - 1) * gap)
-                    / CGFloat(Self.rows)
-                ZStack {
-                    Image("hero_screen_background")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width, height: geometry.size.height)
-                        .clipped()
+        let rectHeight = screen.playable.height
+        let rectWidth = screen.playable.width
+        let margin = rectHeight * 0.028
+        let gap = rectHeight * 0.02
+        let cellWidth = (rectWidth - 2 * margin - CGFloat(Self.columns - 1) * gap)
+            / CGFloat(Self.columns)
+        let cellHeight = (rectHeight - 2 * margin - CGFloat(Self.rows - 1) * gap)
+            / CGFloat(Self.rows)
+        return ZStack(alignment: .topLeading) {
+            ZStack {
+                Image("hero_screen_background")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: screen.physical.width, height: screen.physical.height)
+                    .clipped()
 
-                    VStack(spacing: gap) {
-                        ForEach(0..<Self.rows, id: \.self) { row in
-                            HStack(spacing: gap) {
-                                ForEach(0..<Self.columns, id: \.self) { column in
-                                    let index = row * Self.columns + column
-                                    HeroSlot(
-                                        hero: index < heroes.count ? heroes[index] : nil,
-                                        width: cellWidth,
-                                        height: cellHeight,
-                                        unlockFontSize: Self.unlockFontSize(
-                                            heroes: heroes,
-                                            cellWidth: cellWidth,
-                                            cellHeight: cellHeight
-                                        )
-                                    ) { hero in
-                                        selectedHero = hero
-                                    }
+                VStack(spacing: gap) {
+                    ForEach(0..<Self.rows, id: \.self) { row in
+                        HStack(spacing: gap) {
+                            ForEach(0..<Self.columns, id: \.self) { column in
+                                let index = row * Self.columns + column
+                                HeroSlot(
+                                    hero: index < heroes.count ? heroes[index] : nil,
+                                    width: cellWidth,
+                                    height: cellHeight,
+                                    unlockFontSize: Self.unlockFontSize(
+                                        heroes: heroes,
+                                        cellWidth: cellWidth,
+                                        cellHeight: cellHeight
+                                    )
+                                ) { hero in
+                                    selectedHero = hero
                                 }
                             }
                         }
                     }
-                    .frame(width: rectWidth, height: rectHeight)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
                 }
+                .frame(width: rectWidth, height: rectHeight)
+                .position(x: screen.physical.width / 2, y: screen.physical.height / 2)
             }
-            .ignoresSafeArea()
+            .frame(width: screen.physical.width, height: screen.physical.height)
 
-            GeometryReader { safeGeometry in
-                let screen = ScreenGeometry(proxy: safeGeometry, canvasSpec: canvasSpec)
-                DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: screen,
-                                               aspect: DoneButton.aspect).frame,
-                              in: screen)
-                    .ignoresSafeArea()
-            }
+            DoneButton(action: onExit)
+                .hudFrame(DoneButtonLayout(screen: screen,
+                                           aspect: DoneButton.aspect).frame,
+                          in: screen)
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear(perform: loadHeroes)
     }
@@ -402,7 +396,7 @@ private struct HeroCardButtonStyle: ButtonStyle {
 @available(iOS 26.0, *)
 struct HeroDetailsView: View {
     let db: Db
-    let canvasSpec: CanvasSpec
+    let screen: ScreenGeometry
     let hero: Hero
     let onExit: () -> Void
 
@@ -414,15 +408,14 @@ struct HeroDetailsView: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
-            ZStack(alignment: .topLeading) {
+        let metrics = HudMetrics(screen: screen)
+        ZStack(alignment: .topLeading) {
+            ZStack {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .frame(width: screen.physical.width, height: screen.physical.height)
                     .clipped()
-                    .ignoresSafeArea()
 
                 LinearGradient(
                     stops: [
@@ -432,7 +425,6 @@ struct HeroDetailsView: View {
                     startPoint: .leading,
                     endPoint: .trailing
                 )
-                .ignoresSafeArea()
 
                 HStack(spacing: 36 * metrics.scale) {
                     Image(UIImage(named: hero.detailsImageName) != nil
@@ -486,14 +478,15 @@ struct HeroDetailsView: View {
                     .shadow(color: .black.opacity(0.8), radius: 1.5, y: 1)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec),
-                                               aspect: DoneButton.aspect).frame,
-                              in: ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec))
-                    .ignoresSafeArea()
             }
+            .frame(width: screen.physical.width, height: screen.physical.height)
+
+            DoneButton(action: onExit)
+                .hudFrame(DoneButtonLayout(screen: screen,
+                                           aspect: DoneButton.aspect).frame,
+                          in: screen)
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
     }
 }

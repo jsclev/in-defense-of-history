@@ -4,6 +4,7 @@ import SwiftUI
 struct LevelBriefingView: View {
     let db: Db
     let canvasSpec: CanvasSpec
+    let screen: ScreenGeometry
     let node: CampaignNode
     let onStart: (Difficulty) -> Void
 
@@ -14,59 +15,49 @@ struct LevelBriefingView: View {
     private static let brass = Color(red: 0.87, green: 0.72, blue: 0.35)
 
     var body: some View {
-        // Two readers, the HeroesView pattern: a full-bleed one so the
-        // content centres on the physical screen (a safe-area reader would
-        // shove the union trailing), and a safe-respecting one so the Done
-        // button still honors the real insets.
+        let metrics = HudMetrics(viewSize: screen.physical.size, canvasSpec: canvasSpec)
         ZStack(alignment: .topLeading) {
-            GeometryReader { geometry in
-                let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
-                ZStack {
+            ZStack {
                 Image("level_briefing_background")
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: geometry.size.width,
-                               height: geometry.size.height)
-                        .clipped()
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: screen.physical.width,
+                           height: screen.physical.height)
+                    .clipped()
 
-                    Color.black.opacity(0.55)
+                Color.black.opacity(0.55)
 
-                    HStack(spacing: 32 * metrics.scale) {
-                        VStack(spacing: 14 * metrics.scale) {
-                            Text(node.title)
-                                .font(.custom("Baskerville-Bold",
-                                              size: Typography.size(44 * metrics.scale)))
-                                .foregroundStyle(.white)
-                                .shadow(color: .black.opacity(0.8), radius: 3 * metrics.scale)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.5)
+                HStack(spacing: 32 * metrics.scale) {
+                    VStack(spacing: 14 * metrics.scale) {
+                        Text(node.title)
+                            .font(.custom("Baskerville-Bold",
+                                          size: Typography.size(44 * metrics.scale)))
+                            .foregroundStyle(.white)
+                            .shadow(color: .black.opacity(0.8), radius: 3 * metrics.scale)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
 
-                            levelPortrait(metrics: metrics)
-                        }
-
-                        difficultyGrid(metrics: metrics)
+                        levelPortrait(metrics: metrics)
                     }
-                    .padding(24 * metrics.scale)
-                }
-                .frame(width: geometry.size.width, height: geometry.size.height)
-            }
-            .ignoresSafeArea()
 
-            GeometryReader { safeGeometry in
-                let screen = ScreenGeometry(proxy: safeGeometry, canvasSpec: canvasSpec)
-                DoneButton {
-                    if let selected {
-                        onStart(selected)
-                    }
+                    difficultyGrid(metrics: metrics)
                 }
-                .disabled(selected == nil)
-                .hudFrame(DoneButtonLayout(screen: screen,
-                                           aspect: DoneButton.aspect,
-                                           magnification: 1.15).frame,
-                          in: screen)
-                .ignoresSafeArea()
+                .padding(24 * metrics.scale)
             }
+            .frame(width: screen.physical.width, height: screen.physical.height)
+
+            DoneButton {
+                if let selected {
+                    onStart(selected)
+                }
+            }
+            .disabled(selected == nil)
+            .hudFrame(DoneButtonLayout(screen: screen,
+                                       aspect: DoneButton.aspect,
+                                       magnification: 1.15).frame,
+                      in: screen)
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear(perform: loadDifficulties)
     }
