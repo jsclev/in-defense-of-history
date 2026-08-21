@@ -132,14 +132,17 @@ struct LevelMapView: View {
     
     private var db: Db
     private var canvasSpec: CanvasSpec
+    private var screen: ScreenGeometry
 
     init(db: Db,
          canvasSpec: CanvasSpec,
+         screen: ScreenGeometry,
          towerMenuLayout: TowerMenuLayout,
          node: CampaignNode,
          difficulty: Difficulty, onExit: @escaping () -> Void) {
         self.db = db
         self.canvasSpec = canvasSpec
+        self.screen = screen
         self.towerMenuLayout = towerMenuLayout
         self.node = node
         self.difficulty = difficulty
@@ -154,44 +157,33 @@ struct LevelMapView: View {
     }
 
     var body: some View {
-        GeometryReader { geometry in
-            let screen = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
-            let fullSize = screen.physical.size
-            let metrics = HudMetrics(viewSize: fullSize, canvasSpec: canvasSpec)
-            ZStack(alignment: .topLeading) {
-                GeometryReader { gameGeometry in
-                    content(in: gameGeometry.size, screen: screen)
-                }
-                .ignoresSafeArea()
+        let fullSize = screen.physical.size
+        let metrics = HudMetrics(screen: screen)
+        ZStack(alignment: .topLeading) {
+            content(in: fullSize, screen: screen)
+                .frame(width: fullSize.width, height: fullSize.height)
 
-                if runner.isDefeated {
-                    failBanner(metrics: metrics)
-                        .ignoresSafeArea()
-                }
+            if runner.isDefeated {
+                failBanner(metrics: metrics)
+            }
 
-                topBar(metrics: metrics,
-                       isPortrait: geometry.size.height > geometry.size.width,
-                       screen: screen)
-                    .ignoresSafeArea()
+            topBar(metrics: metrics,
+                   isPortrait: fullSize.height > fullSize.width,
+                   screen: screen)
 
-                heroBar(metrics: metrics, screen: screen)
-                    .ignoresSafeArea()
+            heroBar(metrics: metrics, screen: screen)
 
-                miscBar(metrics: metrics, screen: screen)
-                    .ignoresSafeArea()
+            miscBar(metrics: metrics, screen: screen)
 
-                GeometryReader { gameGeometry in
-                    towerMenuLayer(in: gameGeometry.size, screen: screen)
-                }
-                .ignoresSafeArea()
+            towerMenuLayer(in: fullSize, screen: screen)
+                .frame(width: fullSize.width, height: fullSize.height)
 
-                // Last, so the guides draw over every HUD element.
-                if showDebugLayoutGuides {
-                    DebugLayoutGuidesView(screen: screen, canvasSpec: canvasSpec)
-                        .ignoresSafeArea()
-                }
+            // Last, so the guides draw over every HUD element.
+            if showDebugLayoutGuides {
+                DebugLayoutGuidesView(screen: screen, canvasSpec: canvasSpec)
             }
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear { runner.start() }
         .onDisappear { runner.stop() }
@@ -268,7 +260,7 @@ struct LevelMapView: View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
         let safe = screen.safe
         let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen.playable)
-        let metrics = HudMetrics(viewSize: viewSize, canvasSpec: canvasSpec)
+        let metrics = HudMetrics(screen: screen)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
         let art = runner.mapArt
@@ -539,7 +531,7 @@ struct LevelMapView: View {
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                             playAreaScalingFactor: playAreaScalingFactor)
                 if let rally = runner.rallyPoint(forSlot: upgradeSlot) {
-                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(viewSize: viewSize, canvasSpec: canvasSpec).scale) * 0.6)
+                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(screen: screen).scale) * 0.6)
                         .position(projection.viewPoint(rally))
                         .allowsHitTesting(false)
                 }

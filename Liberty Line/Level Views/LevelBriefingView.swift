@@ -15,7 +15,7 @@ struct LevelBriefingView: View {
     private static let brass = Color(red: 0.87, green: 0.72, blue: 0.35)
 
     var body: some View {
-        let metrics = HudMetrics(viewSize: screen.physical.size, canvasSpec: canvasSpec)
+        let metrics = HudMetrics(screen: screen)
         ZStack(alignment: .topLeading) {
             ZStack {
                 Image("level_briefing_background")

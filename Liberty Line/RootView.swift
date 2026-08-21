@@ -7,9 +7,6 @@ struct RootView: View {
     @State private var menuScreen: MenuScreen?
 
     let store: Store
-
-    /// The window's geometry, measured once by ScreenGeometryGate before
-    /// this view ever exists.
     let screen: ScreenGeometry
 
     var body: some View {
@@ -17,6 +14,7 @@ struct RootView: View {
             if let playingDifficulty {
                 LevelMapView(db: store.db,
                              canvasSpec: store.canvasSpec,
+                             screen: screen,
                              towerMenuLayout: store.towerMenuLayout,
                              node: selectedNode, difficulty: playingDifficulty) {
                     self.playingDifficulty = nil
@@ -41,7 +39,7 @@ struct RootView: View {
                 self.menuScreen = nil
             }
         } else if let menuScreen {
-            MenuPlaceholderView(screen: menuScreen, canvasSpec: store.canvasSpec) {
+            MenuPlaceholderView(menuScreen: menuScreen, screen: screen) {
                 self.menuScreen = nil
             }
         } else {

@@ -3,13 +3,14 @@ import SwiftUI
 public struct DebugLayoutGuidesView: View {
     private let lineWidth: CGFloat = 2
 
-    /// Keeps a nested guide visible where its true edge coincides with the
-    /// guide outside it: the outer line owns the edge, the inner one sits
-    /// this far inside. Priority, outermost first: physical, safe, playable.
-    private let clearance: CGFloat = 8
+    /// Every guide draws at its TRUE position. Where edges coincide the
+    /// lines share pixels, so each rect gets its own dash pattern: solid
+    /// physical underneath, long-dash safe, short-dash playable on top —
+    /// all three colors stay readable on a shared edge.
+    private let safeDash: [CGFloat] = [12, 8]
+    private let playableDash: [CGFloat] = [4, 10]
 
-    /// Inset labels stay fully on-screen and clear of the line band even
-    /// when their inset is zero.
+    /// Inset labels stay fully on-screen even when their inset is zero.
     private let labelFloor: CGFloat = 30
 
     private let physicalColor = Color(red: 1.0, green: 0.16, blue: 0.16)
@@ -35,12 +36,10 @@ public struct DebugLayoutGuidesView: View {
     }
 
     public var body: some View {
-        let safeDrawn = nested(safeRect, inside: screen.physical)
-        let playableDrawn = nested(screen.playable, inside: safeDrawn)
         ZStack(alignment: .topLeading) {
             border(screen.physical, physicalColor, lineWidth)
-            border(safeDrawn, safeInsetsColor, lineWidth)
-            playAreaGuide(fitting: playableDrawn)
+            border(safeRect, safeInsetsColor, lineWidth, dash: safeDash)
+            playAreaGuide
 
             inset("L \(fmt(insets.leading))",
                   at: CGPoint(x: max(insets.leading / 2, labelFloor), y: safeRect.midY))
@@ -52,39 +51,52 @@ public struct DebugLayoutGuidesView: View {
             inset("B \(fmt(insets.bottom))",
                   at: CGPoint(x: safeRect.midX, y: min(fullSize.height - insets.bottom / 2,
                                                        fullSize.height - labelFloor)))
+
+            readout
+                .position(x: fullSize.width / 2, y: fullSize.height * 0.62)
         }
         .frame(width: fullSize.width, height: fullSize.height, alignment: .topLeading)
         .allowsHitTesting(false)
     }
 
     private func border(_ rect: CGRect, _ color: Color, _ width: CGFloat,
-                        dashed: Bool = false) -> some View {
+                        dash: [CGFloat] = []) -> some View {
         Rectangle()
-            .strokeBorder(color, style: StrokeStyle(lineWidth: width,
-                                                    dash: dashed ? [16, 10] : []))
+            .strokeBorder(color, style: StrokeStyle(lineWidth: width, dash: dash))
             .frame(width: rect.width, height: rect.height)
             .offset(x: rect.minX, y: rect.minY)
     }
 
-    @ViewBuilder private func playAreaGuide(fitting fitRect: CGRect) -> some View {
-        let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: fitRect)
+    @ViewBuilder private var playAreaGuide: some View {
+        let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen.playable)
         SwiftUI.Path(canvasSpec.playAreaShape)
             .applying(projection.viewTransform)
             .stroke(playAreaColor,
                     style: StrokeStyle(lineWidth: lineWidth,
-                                       dash: [16, 10]))
-    }
-
-    private func nested(_ rect: CGRect, inside outer: CGRect) -> CGRect {
-        let minX = max(rect.minX, outer.minX + clearance)
-        let minY = max(rect.minY, outer.minY + clearance)
-        let maxX = min(rect.maxX, outer.maxX - clearance)
-        let maxY = min(rect.maxY, outer.maxY - clearance)
-        return CGRect(x: minX, y: minY,
-                      width: max(0, maxX - minX), height: max(0, maxY - minY))
+                                       dash: playableDash))
     }
 
     private func fmt(_ v: CGFloat) -> String { String(format: "%.0f", v) }
+
+    private func fmt(_ r: CGRect) -> String {
+        "(\(fmt(r.minX)), \(fmt(r.minY)))  \(fmt(r.width)) × \(fmt(r.height))"
+    }
+
+    /// The measured values themselves, so "is the math right" can be read
+    /// straight off the device.
+    private var readout: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            Text("physical  \(fmt(screen.physical))").foregroundStyle(physicalColor)
+            Text("safe      \(fmt(safeRect))").foregroundStyle(safeInsetsColor)
+            Text("insets    L \(fmt(insets.leading))  R \(fmt(insets.trailing))  T \(fmt(insets.top))  B \(fmt(insets.bottom))")
+                .foregroundStyle(safeInsetsColor)
+            Text("playable  \(fmt(screen.playable))").foregroundStyle(playAreaColor)
+        }
+        .font(.system(size: Typography.size(13), weight: .bold, design: .monospaced))
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.black.opacity(0.72), in: RoundedRectangle(cornerRadius: 6))
+    }
 
     private func inset(_ text: String, at point: CGPoint) -> some View {
         Text(text)

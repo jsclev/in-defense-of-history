@@ -118,19 +118,19 @@ private struct FloatingMenuButtonStyle: ButtonStyle {
 }
 
 struct MenuPlaceholderView: View {
-    let screen: MenuScreen
-    let canvasSpec: CanvasSpec
+    let menuScreen: MenuScreen
+    let screen: ScreenGeometry
     let onExit: () -> Void
 
     var body: some View {
-        GeometryReader { geometry in
-            let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
-            ZStack(alignment: .topLeading) {
-                Color(red: 0.14, green: 0.11, blue: 0.08).ignoresSafeArea()
+        let metrics = HudMetrics(screen: screen)
+        ZStack(alignment: .topLeading) {
+            ZStack {
+                Color(red: 0.14, green: 0.11, blue: 0.08)
 
                 VStack(spacing: 20 * metrics.scale) {
-                    if UIImage(named: screen.iconAssetName) != nil {
-                        Image(screen.iconAssetName)
+                    if UIImage(named: menuScreen.iconAssetName) != nil {
+                        Image(menuScreen.iconAssetName)
                             .resizable()
                             .scaledToFit()
                             .frame(
@@ -138,27 +138,26 @@ struct MenuPlaceholderView: View {
                                 height: 150 * metrics.scale
                             )
                     } else {
-                        Image(systemName: screen.placeholderSymbol)
+                        Image(systemName: menuScreen.placeholderSymbol)
                             .font(.system(size: Typography.size(64 * metrics.scale), weight: .bold))
                             .foregroundStyle(Color(red: 0.85, green: 0.7, blue: 0.3))
                     }
-                    Text(screen.title)
+                    Text(menuScreen.title)
                         .font(.custom("Baskerville-Bold", size: 48 * metrics.scale))
                         .foregroundStyle(.white)
-                    Text(screen.accessibilityHint)
+                    Text(menuScreen.accessibilityHint)
                         .font(.custom("Baskerville", size: 18 * metrics.scale))
                         .foregroundStyle(.white.opacity(0.55))
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-                let sg = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
-                DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: sg,
-                                               aspect: DoneButton.aspect).frame,
-                              in: sg)
-                    .ignoresSafeArea()
             }
+            .frame(width: screen.physical.width, height: screen.physical.height)
+
+            DoneButton(action: onExit)
+                .hudFrame(DoneButtonLayout(screen: screen,
+                                           aspect: DoneButton.aspect).frame,
+                          in: screen)
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
     }
 }
