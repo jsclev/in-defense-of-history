@@ -21,6 +21,22 @@ enum EditorSelection: Equatable {
 @MainActor
 @Observable
 final class EditorState {
+    let content: EditorContent
+    let virtualCanvas: VirtualCanvas
+    let geometry: MapGeometry
+    let towerMenuLayout: TowerMenuLayout
+    let blueprints: Blueprints
+    let towerSlotImage: TowerSlotImage
+
+    init(content: EditorContent, virtualCanvas: VirtualCanvas) {
+        self.content = content
+        self.virtualCanvas = virtualCanvas
+        geometry = MapGeometry(virtualCanvas: virtualCanvas)
+        towerMenuLayout = TowerMenuLayout(virtualCanvas: virtualCanvas)
+        blueprints = Blueprints(virtualCanvas: virtualCanvas)
+        towerSlotImage = TowerSlotImage(virtualCanvas: virtualCanvas)
+    }
+
     var mode: EditorMode = .edit
     var tool: EditorTool = .select
     var selection: EditorSelection = .none
@@ -121,8 +137,8 @@ final class EditorState {
     func setZoom(_ z: Double) { zoom = min(max(z, 0.05), 8) }
 
     var backgroundSizeError: String? {
-        guard let px = backgroundPixelSize, px != VirtualCanvas.size else { return nil }
-        return "Reference image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))"
+        guard let px = backgroundPixelSize, px != virtualCanvas.size else { return nil }
+        return "Reference image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(virtualCanvas.size.width))×\(Int(virtualCanvas.size.height))"
     }
 
     /// The folder holding the open document, set by the view. Image paths
@@ -212,8 +228,17 @@ struct EditorView: View {
     /// Where the document lives, so image paths stored by another device
     /// can be resolved to the copy sitting beside this document.
     var documentURL: URL?
-    @State private var state = EditorState()
+    @State private var state: EditorState
     @State private var session: SimSession?
+
+    init(document: MapDocument, documentURL: URL?,
+         content: EditorContent, virtualCanvas: VirtualCanvas) {
+        _document = ObservedObject(wrappedValue: document)
+        self.documentURL = documentURL
+        _state = State(initialValue: EditorState(content: content,
+                                                 virtualCanvas: virtualCanvas))
+    }
+
     enum ImageImportTarget {
         case background, overlay, guide
     }
@@ -229,7 +254,7 @@ struct EditorView: View {
     var body: some View {
         Group {
             if state.mode == .playtest, let session {
-                PlaytestView(session: session) { recorded in
+                PlaytestView(session: session, slotArt: state.towerSlotImage) { recorded in
                     document.edit(undoManager) { $0.intendedSolution = recorded }
                     state.flash("Adopted \(recorded.count) steps as the intended solution")
                 }
@@ -249,14 +274,14 @@ struct EditorView: View {
                 case .background:
                     state.loadBackground(from: url)
                     document.edit(undoManager) { $0.backgroundImagePath = url.path }
-                    if let px = state.backgroundPixelSize, px != VirtualCanvas.size {
-                        state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))")
+                    if let px = state.backgroundPixelSize, px != state.virtualCanvas.size {
+                        state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
                     }
                 case .overlay:
                     state.loadOverlay(from: url)
                     document.edit(undoManager) { $0.overlayImagePath = url.path }
-                    if let px = state.overlayPixelSize, px != VirtualCanvas.size {
-                        state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))")
+                    if let px = state.overlayPixelSize, px != state.virtualCanvas.size {
+                        state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
                     }
                 case .guide:
                     state.loadGuide(from: url)
@@ -267,7 +292,8 @@ struct EditorView: View {
         .fileExporter(isPresented: $exportingGeoJSON,
                       document: geoJSONFile,
                       contentType: .geoJSON,
-                      defaultFilename: GeoJSONExport.filename(for: document.draft)) { result in
+                      defaultFilename: GeoJSONExport(virtualCanvas: state.virtualCanvas)
+                          .filename(for: document.draft)) { result in
             switch result {
             case let .success(url):
                 state.flash("Saved \(url.lastPathComponent)")
@@ -276,6 +302,7 @@ struct EditorView: View {
             }
         }
         .onAppear {
+            document.draft.normalize(geometry: state.geometry)
             state.documentFolder = documentURL?.deletingLastPathComponent()
             state.loadBackground(from: document.draft.backgroundImagePath)
             state.loadOverlay(from: document.draft.overlayImagePath)
@@ -311,7 +338,7 @@ struct EditorView: View {
             }
         } detail: {
             VStack(spacing: 0) {
-                EditorCanvas(document: document, state: state)
+                EditorCanvas(document: document, content: state.content, state: state)
                 statusBar
             }
         }
@@ -319,7 +346,8 @@ struct EditorView: View {
 
     private func exportGeoJSON() {
         do {
-            geoJSONFile = GeoJSONFile(data: try GeoJSONExport.data(for: document.draft))
+            geoJSONFile = GeoJSONFile(data: try GeoJSONExport(virtualCanvas: state.virtualCanvas)
+                .data(for: document.draft))
             exportingGeoJSON = true
         } catch {
             state.flash("Could not build geojson: \(error.localizedDescription)")
@@ -408,7 +436,7 @@ struct EditorView: View {
                     .help("Show the generated outer-edge waypoints of each road")
 
                 Toggle(isOn: $s.showPlayArea) { Image(systemName: "rectangle.dashed") }
-                    .help("Highlight the \(Int(VirtualCanvas.playArea.width))×\(Int(VirtualCanvas.playArea.height)) play area and dim the bleed")
+                    .help("Highlight the \(Int(state.virtualCanvas.playAreaRect.width))×\(Int(state.virtualCanvas.playAreaRect.height)) play area and dim the bleed")
                 Toggle(isOn: $s.showGrid) { Image(systemName: "grid") }
                     .help("Show grid (15 px minor, 120 px major)")
                 Toggle(isOn: $s.snapToGrid) { Image(systemName: "dot.squareshape.split.2x2") }
@@ -419,7 +447,7 @@ struct EditorView: View {
                 Menu {
                     Button("Blank Map") { applyTemplate(nil) }
                     Divider()
-                    ForEach(Blueprints.all, id: \.name) { bp in
+                    ForEach(state.blueprints.all, id: \.name) { bp in
                         Button(bp.name) { applyTemplate(bp) }
                     }
                 } label: {
@@ -449,7 +477,7 @@ struct EditorView: View {
                 state.flash("Add a road (2+ points) and a wave before playtesting")
                 return
             }
-            session = SimSession(blueprint: document.draft.makeBlueprint())
+            session = SimSession(blueprint: document.draft.makeBlueprint(virtualCanvas: state.virtualCanvas))
         } else {
             session = nil
         }
@@ -468,12 +496,13 @@ struct EditorView: View {
     }
 
     private var statusBar: some View {
-        let warnings = MapGeometry.warnings(for: document.draft, maxTowerRange: EditorContent.shared.maxTowerRange)
+        let warnings = state.geometry.warnings(for: document.draft,
+                                               maxTowerRange: state.content.maxTowerRange)
         return HStack(spacing: 14) {
             Text(cursorText)
                 .monospacedDigit()
                 .frame(width: 150, alignment: .leading)
-            Text("canvas \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))")
+            Text("canvas \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
                 .foregroundStyle(.tertiary)
             Text("\(document.draft.roads.count) roads · \(document.draft.slots.count) slots · \(document.draft.waves.count) waves")
                 .foregroundStyle(.secondary)
@@ -506,7 +535,7 @@ struct EditorView: View {
 
     private var cursorText: String {
         guard let c = state.cursor else { return "—" }
-        let inPlayable = VirtualCanvas.playArea.contains(CGPoint(x: c.x, y: c.y))
+        let inPlayable = state.virtualCanvas.playAreaRect.contains(CGPoint(x: c.x, y: c.y))
         return "\(Int(c.x.rounded())), \(Int(c.y.rounded())) px\(inPlayable ? "" : " · bleed")"
     }
 

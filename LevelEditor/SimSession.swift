@@ -6,6 +6,8 @@ import Observation
 final class SimSession {
     private(set) var blueprint: LevelBlueprint
     private(set) var level: LevelInfo
+    private(set) var virtualCanvas: VirtualCanvas
+    let arsenal: DesignArsenal
     let catalog: ContentCatalog
     private(set) var sim: Simulation
 
@@ -35,9 +37,12 @@ final class SimSession {
 
     init(blueprint: LevelBlueprint) {
         let level = blueprint.makeLevel()
-        let catalog = DesignArsenal.catalog()
+        let arsenal = DesignArsenal()
+        let catalog = arsenal.catalog(roster: DesignRoster())
         self.blueprint = blueprint
         self.level = level
+        self.virtualCanvas = blueprint.virtualCanvas
+        self.arsenal = arsenal
         self.catalog = catalog
         self.sim = Self.freshSim(level: level, catalog: catalog, blueprint: blueprint,
                                  seed: 1776, autopilot: false)
@@ -70,6 +75,7 @@ final class SimSession {
     func select(blueprint bp: LevelBlueprint) {
         blueprint = bp
         level = bp.makeLevel()
+        virtualCanvas = bp.virtualCanvas
         restart()
     }
 
@@ -128,8 +134,8 @@ final class SimSession {
     }
 
     func runQuickBatch() {
-        let report = try? Batch.run(
-            level: level, catalog: catalog, baseSeed: seed, count: 100
+        let report = try? Batch(baseSeed: seed, count: 100).run(
+            level: level, catalog: catalog
         ) { _ -> any CommanderPolicy in
             blueprint.scriptedSolution()
         }

@@ -16,8 +16,8 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
             self.points = points
         }
 
-        var outerEdge: [Point] {
-            BrushGeometry.outerEdge(points: points)
+        func outerEdge(halfWidth: Double) -> [Point] {
+            BrushGeometry.outerEdge(points: points, halfWidth: halfWidth)
         }
     }
 
@@ -42,18 +42,6 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     }
 
     static let canvasSpace = "canonical2868x2064"
-
-    private static func upgrade(from space: String) -> (Point) -> Point {
-        if space == "design1600x900" {
-            let legacyDesignWidth = 1600.0
-            let s = VirtualCanvas.playArea.width / legacyDesignWidth
-            return { p in
-                Point(p.x * s + VirtualCanvas.playArea.minX,
-                      VirtualCanvas.flipY(p.y * s + VirtualCanvas.playArea.minY))
-            }
-        }
-        return { Point($0.x, VirtualCanvas.flipY($0.y)) }
-    }
 
     var name: String
     var startingGold: Int
@@ -102,13 +90,13 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     /// Merges an eraser stroke straight into the waypoints. Covered waypoints go
     /// away, a road cut through the middle becomes two roads, and painted area
     /// under the eraser is cut the same way. The stroke itself is not kept.
-    mutating func applyErase(_ eraser: PaintStroke) {
+    mutating func applyErase(_ eraser: PaintStroke, geometry: MapGeometry) {
         var taken = Set(roads.map(\.name))
         var cut: [Road] = []
         var firstPiece: [Int: Int] = [:]
         for (old, road) in roads.enumerated() {
             let pieces = BrushGeometry.erase(polyline: road.points,
-                                             halfWidth: MapGeometry.roadHalfWidth,
+                                             halfWidth: geometry.roadHalfWidth,
                                              with: eraser)
                 .filter { $0.count >= 2 }
             for (i, points) in pieces.enumerated() {
@@ -138,13 +126,13 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     /// A draft authored before the eraser merged down stored its eraser strokes
     /// as a layer. Replay them in author order and drop them, so no draft in
     /// memory ever carries one.
-    mutating func bakeStoredErasures() {
+    mutating func bakeStoredErasures(geometry: MapGeometry) {
         guard roadPaint.contains(where: \.erases) else { return }
         let strokes = roadPaint
         roadPaint = []
         for stroke in strokes {
             if stroke.erases {
-                applyErase(stroke)
+                applyErase(stroke, geometry: geometry)
             } else {
                 roadPaint.append(stroke)
             }
@@ -179,8 +167,26 @@ extension MapDraft {
         guideOpacity = try c.decodeIfPresent(Double.self, forKey: .guideOpacity) ?? 0.5
         coordinateSpace = try c.decodeIfPresent(String.self, forKey: .coordinateSpace) ?? "design1600x900"
         roadPaint = try c.decodeIfPresent([PaintStroke].self, forKey: .roadPaint) ?? []
+    }
+
+    /// Brings a freshly opened draft into the canonical space: legacy
+    /// coordinate spaces are converted and stored eraser strokes baked. Both
+    /// need the canvas, which a Decodable init cannot receive, so this runs
+    /// right after open instead of inside decoding.
+    mutating func normalize(geometry: MapGeometry) {
         if coordinateSpace != Self.canvasSpace {
-            let upgrade = Self.upgrade(from: coordinateSpace)
+            let vc = geometry.virtualCanvas
+            let upgrade: (Point) -> Point
+            if coordinateSpace == "design1600x900" {
+                let legacyDesignWidth = 1600.0
+                let s = vc.playAreaRect.width / legacyDesignWidth
+                upgrade = { p in
+                    Point(p.x * s + vc.playAreaRect.minX,
+                          vc.flipY(p.y * s + vc.playAreaRect.minY))
+                }
+            } else {
+                upgrade = { Point($0.x, vc.flipY($0.y)) }
+            }
             for r in roads.indices {
                 roads[r].points = roads[r].points.map(upgrade)
             }
@@ -189,7 +195,7 @@ extension MapDraft {
             exits = exits.map(upgrade)
             coordinateSpace = Self.canvasSpace
         }
-        bakeStoredErasures()
+        bakeStoredErasures(geometry: geometry)
     }
 
     init(blueprint bp: LevelBlueprint) {
@@ -221,9 +227,10 @@ extension MapDraft {
         )
     }
 
-    func makeBlueprint() -> LevelBlueprint {
+    func makeBlueprint(virtualCanvas: VirtualCanvas) -> LevelBlueprint {
         let routes = roads.filter { $0.points.count >= 2 }
         return LevelBlueprint(
+            virtualCanvas: virtualCanvas,
             name: name,
             startingGold: startingGold,
             lives: lives,
@@ -392,7 +399,7 @@ final class MapDocument: ReferenceFileDocument {
     /// A road that lies entirely inside the lower lane is deleted; roads that
     /// merely cross are left alone.
     @MainActor
-    func mergeRoadDown(_ upper: Int, _ undoManager: UndoManager?) -> String {
+    func mergeRoadDown(_ upper: Int, geometry: MapGeometry, _ undoManager: UndoManager?) -> String {
         let lower = upper + 1
         guard draft.roads.indices.contains(upper),
               draft.roads.indices.contains(lower) else {
@@ -405,7 +412,7 @@ final class MapDocument: ReferenceFileDocument {
             return "Both roads need at least two waypoints"
         }
 
-        let tolerance = MapGeometry.roadHalfWidth
+        let tolerance = geometry.roadHalfWidth
         let inside = a.map { $0.distance(toPolyline: b) <= tolerance }
 
         if inside.allSatisfy({ $0 }) {
@@ -427,15 +434,15 @@ final class MapDocument: ReferenceFileDocument {
             return "The roads only cross - nothing to merge"
         }
 
-        let arcs = MapGeometry.arcPositions(b)
+        let arcs = geometry.arcPositions(b)
         // Skip trunk waypoints within this arc distance of the junction so
         // the splice does not produce a kink against the projected point.
         let junctionGap = 12.0
         var merged: [Point]
 
         if suffixLength >= prefixLength {
-            guard let join = MapGeometry.project(a[suffixStart], onto: b),
-                  let reference = MapGeometry.project(a[a.count - 1], onto: b) else {
+            guard let join = geometry.project(a[suffixStart], onto: b),
+                  let reference = geometry.project(a[a.count - 1], onto: b) else {
                 return "Could not project the junction onto \(lowerName)"
             }
             var tail: [Point] = [join.point]
@@ -450,8 +457,8 @@ final class MapDocument: ReferenceFileDocument {
             }
             merged = Array(a[0..<suffixStart]) + tail
         } else {
-            guard let join = MapGeometry.project(a[prefixEnd], onto: b),
-                  let reference = MapGeometry.project(a[0], onto: b) else {
+            guard let join = geometry.project(a[prefixEnd], onto: b),
+                  let reference = geometry.project(a[0], onto: b) else {
                 return "Could not project the junction onto \(lowerName)"
             }
             var head: [Point] = []
@@ -484,13 +491,15 @@ final class MapDocument: ReferenceFileDocument {
     }
 }
 
-enum MapGeometry {
-    static var roadHalfWidth: Double { VirtualCanvas.pathWidth / 2 }
+struct MapGeometry {
+    let virtualCanvas: VirtualCanvas
+
+    var roadHalfWidth: Double { virtualCanvas.pathWidth / 2 }
 
     /// Vertical semi-axis of the slot footprint in virtual_canvas. Roads run
     /// mostly horizontally, so this is the reach of the pad toward a road for
     /// the overlap warning; the drawn pad uses the full footprint ellipse.
-    static var slotRadius: Double { VirtualCanvas.slotSize.height / 2 }
+    var slotRadius: Double { virtualCanvas.towerSlotSize.height / 2 }
 
     struct PolylineHit {
         let point: Point
@@ -498,7 +507,7 @@ enum MapGeometry {
     }
 
     /// Nearest point on the polyline, with its arc-length position along it.
-    static func project(_ p: Point, onto pts: [Point]) -> PolylineHit? {
+    func project(_ p: Point, onto pts: [Point]) -> PolylineHit? {
         guard pts.count >= 2 else { return nil }
         var best: (d: Double, hit: PolylineHit)?
         var arc = 0.0
@@ -514,7 +523,7 @@ enum MapGeometry {
         return best?.hit
     }
 
-    static func arcPositions(_ pts: [Point]) -> [Double] {
+    func arcPositions(_ pts: [Point]) -> [Double] {
         var out = [0.0]
         for i in 0..<(pts.count - 1) {
             out.append(out[out.count - 1] + pts[i].distance(to: pts[i + 1]))
@@ -525,11 +534,11 @@ enum MapGeometry {
 
 
 
-    static func distance(_ p: Point, segment a: Point, _ b: Point) -> Double {
+    func distance(_ p: Point, segment a: Point, _ b: Point) -> Double {
         p.distance(toSegment: a, b)
     }
 
-    static func distance(_ p: Point, polyline pts: [Point]) -> Double {
+    func distance(_ p: Point, polyline pts: [Point]) -> Double {
         p.distance(toPolyline: pts)
     }
 
@@ -557,12 +566,12 @@ enum MapGeometry {
     /// Passing nil skips the range check instead of comparing against an
     /// invented constant. `others` are the remaining slots, tested with the
     /// pad IMAGE's footprint (VirtualCanvas), so spacing is set by the art.
-    static func slotIssue(_ slot: Point, roads: [MapDraft.Road], others: [Point] = [],
+    func slotIssue(_ slot: Point, roads: [MapDraft.Road], others: [Point] = [],
                           maxTowerRange: Double?) -> SlotIssue? {
         let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }
         if let d = ds.min(), d < roadHalfWidth + slotRadius { return .overlapsPath }
         let p = CGPoint(x: slot.x, y: slot.y)
-        if others.contains(where: { VirtualCanvas.slotFootprintsOverlap(p, CGPoint(x: $0.x, y: $0.y)) }) {
+        if others.contains(where: { virtualCanvas.slotFootprintsOverlap(p, CGPoint(x: $0.x, y: $0.y)) }) {
             return .overlapsSlot
         }
         if let d = ds.min(), let maxTowerRange, d - roadHalfWidth > maxTowerRange {
@@ -571,7 +580,7 @@ enum MapGeometry {
         return nil
     }
 
-    static func warnings(for draft: MapDraft, maxTowerRange: Double?) -> [Int: SlotIssue] {
+    func warnings(for draft: MapDraft, maxTowerRange: Double?) -> [Int: SlotIssue] {
         var out: [Int: SlotIssue] = [:]
         for (i, s) in draft.slots.enumerated() {
             var others = draft.slots

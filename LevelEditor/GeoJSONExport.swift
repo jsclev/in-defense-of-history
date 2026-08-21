@@ -6,14 +6,16 @@ extension UTType {
     static let geoJSON = UTType(exportedAs: "com.zippyzen.td.geojson")
 }
 
-enum GeoJSONExport {
-    static func data(for draft: MapDraft) throws -> Data {
+struct GeoJSONExport {
+    let virtualCanvas: VirtualCanvas
+
+    func data(for draft: MapDraft) throws -> Data {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
         return try encoder.encode(document(for: draft))
     }
 
-    static func filename(for draft: MapDraft) -> String {
+    func filename(for draft: MapDraft) -> String {
         let base = draft.name
             .components(separatedBy: CharacterSet.alphanumerics.inverted)
             .filter { !$0.isEmpty }
@@ -22,7 +24,7 @@ enum GeoJSONExport {
         return (base.isEmpty ? "untitled_map" : base) + ".geojson"
     }
 
-    static func document(for draft: MapDraft) -> FeatureCollection {
+    func document(for draft: MapDraft) -> FeatureCollection {
         var features: [Feature] = []
         let roads = draft.roads.filter { $0.points.count >= 2 }
 
@@ -36,12 +38,12 @@ enum GeoJSONExport {
                 layer: 40,
                 geometry: .lineString(road.points),
                 extra: [
-                    "widthPx": .number(VirtualCanvas.pathWidth),
+                    "widthPx": .number(virtualCanvas.pathWidth),
                     "pathIndex": .number(Double(ri)),
                 ]
             ))
 
-            let edge = road.outerEdge
+            let edge = road.outerEdge(halfWidth: virtualCanvas.pathWidth / 2)
             if edge.count >= 4 {
                 features.append(Feature(
                     id: isPrimary ? "gameplay.road_edge" : "gameplay.road_edge.\(ri)",
@@ -152,9 +154,20 @@ enum GeoJSONExport {
             ))
         }
 
+        for i in features.indices {
+            let pts: [Point] = switch features[i].geometry {
+            case let .point(p): [p]
+            case let .lineString(ps): ps
+            case let .polygon(ps): ps
+            }
+            features[i].insidePlayArea = pts.allSatisfy {
+                virtualCanvas.playAreaRect.contains(CGPoint(x: $0.x, y: $0.y))
+            }
+        }
+
         return FeatureCollection(
             name: SwiftExport.identifier(from: draft.name),
-            crs: CRS(),
+            crs: CRS(virtualCanvas: virtualCanvas),
             features: features,
             waves: draft.waves.map { w in
                 Wave(breather: w.breather, lines: w.lines.map { l in
@@ -205,11 +218,17 @@ enum GeoJSONExport {
         var type = "local-cartesian"
         var note = "NOT WGS84. [x, y] in canonical game units, origin LOWER-LEFT, +y UP. "
             + "The same space the LevelEditor, Simulator and game all use; nothing rescales."
-        var canvas = Size(width: VirtualCanvas.width, height: VirtualCanvas.height)
-        var playArea = Rect(x: VirtualCanvas.playArea.minX,
-                                y: VirtualCanvas.playArea.minY,
-                                width: VirtualCanvas.playArea.width,
-                                height: VirtualCanvas.playArea.height)
+        var canvas: Size
+        var playArea: Rect
+
+        init(virtualCanvas: VirtualCanvas) {
+            canvas = Size(width: virtualCanvas.size.width,
+                          height: virtualCanvas.size.height)
+            playArea = Rect(x: virtualCanvas.playAreaRect.minX,
+                            y: virtualCanvas.playAreaRect.minY,
+                            width: virtualCanvas.playAreaRect.width,
+                            height: virtualCanvas.playAreaRect.height)
+        }
     }
 
     enum Geometry {
@@ -291,16 +310,9 @@ enum GeoJSONExport {
             }
         }
 
-        private var insidePlayArea: Bool {
-            let pts: [Point] = switch geometry {
-            case let .point(p): [p]
-            case let .lineString(ps): ps
-            case let .polygon(ps): ps
-            }
-            return pts.allSatisfy {
-                VirtualCanvas.playArea.contains(CGPoint(x: $0.x, y: $0.y))
-            }
-        }
+        /// Filled by the exporter before encoding — a nested Encodable has
+        /// no route to the canvas.
+        var insidePlayArea = false
 
         private func coords(_ p: Point) -> [Double] {
             [round(p.x * 100) / 100, round(p.y * 100) / 100]

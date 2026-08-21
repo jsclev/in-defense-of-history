@@ -136,8 +136,8 @@ struct InspectorView: View {
                 }
             }
             if document.draft.overlayImagePath != nil {
-                if let px = state.overlayPixelSize, px != VirtualCanvas.size {
-                    Label("\(Int(px.width))×\(Int(px.height)) — must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))",
+                if let px = state.overlayPixelSize, px != state.virtualCanvas.size {
+                    Label("\(Int(px.width))×\(Int(px.height)) — must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))",
                           systemImage: "xmark.octagon.fill")
                         .font(.caption.bold())
                         .foregroundStyle(.red)
@@ -188,14 +188,14 @@ struct InspectorView: View {
             }
             if document.draft.backgroundImagePath != nil {
                 if let px = state.backgroundPixelSize {
-                    if px != VirtualCanvas.size {
+                    if px != state.virtualCanvas.size {
                         HStack(alignment: .top, spacing: 8) {
                             Image(systemName: "xmark.octagon.fill")
                                 .font(.title3)
                             VStack(alignment: .leading, spacing: 3) {
                                 Text("WRONG IMAGE SIZE")
                                     .font(.callout.weight(.heavy))
-                                Text("This image is \(Int(px.width))×\(Int(px.height)) px. All map artwork must be exactly \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height)) px. The art needs to be fixed.")
+                                Text("This image is \(Int(px.width))×\(Int(px.height)) px. All map artwork must be exactly \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height)) px. The art needs to be fixed.")
                                     .font(.caption.bold())
                             }
                         }
@@ -281,7 +281,7 @@ struct InspectorView: View {
             .help("Reverse direction (spawn becomes exit)")
             if ri < document.draft.roads.count - 1 {
                 Button {
-                    let message = document.mergeRoadDown(ri, undoManager)
+                    let message = document.mergeRoadDown(ri, geometry: state.geometry, undoManager)
                     state.selection = document.draft.roads.indices.contains(ri)
                         ? .road(ri) : .none
                     state.flash(message)
@@ -309,7 +309,7 @@ struct InspectorView: View {
     }
 
     private var slotsBox: some View {
-        let warnings = MapGeometry.warnings(for: document.draft, maxTowerRange: EditorContent.shared.maxTowerRange)
+        let warnings = state.geometry.warnings(for: document.draft, maxTowerRange: state.content.maxTowerRange)
         return GroupBox("Tower Slots") {
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(document.draft.slots.indices, id: \.self) { i in
@@ -358,7 +358,7 @@ struct InspectorView: View {
                 }
                 Button {
                     state.selection = .slot(document.addSlot(
-                        at: Point(VirtualCanvas.playArea.midX, VirtualCanvas.playArea.midY),
+                        at: Point(state.virtualCanvas.playAreaRect.midX, state.virtualCanvas.playAreaRect.midY),
                         undoManager))
                 } label: {
                     Label("Add Slot", systemImage: "plus")
@@ -420,7 +420,7 @@ struct InspectorView: View {
                     .onTapGesture { state.selection = select(i) }
                 }
                 Button {
-                    add(Point(VirtualCanvas.playArea.midX, VirtualCanvas.playArea.midY))
+                    add(Point(state.virtualCanvas.playAreaRect.midX, state.virtualCanvas.playAreaRect.midY))
                     state.selection = select(points.count)
                 } label: {
                     Label(addLabel, systemImage: "plus")

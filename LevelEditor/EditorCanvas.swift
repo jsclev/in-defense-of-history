@@ -3,8 +3,10 @@ import SwiftUI
 @MainActor
 struct EditorCanvas: View {
     @ObservedObject var document: MapDocument
-    @ObservedObject private var content = EditorContent.shared
+    @ObservedObject var content: EditorContent
     var state: EditorState
+
+    private var virtualCanvas: VirtualCanvas { state.virtualCanvas }
     @Environment(\.undoManager) private var undoManager
     @FocusState private var focused: Bool
 
@@ -22,10 +24,10 @@ struct EditorCanvas: View {
 
     var body: some View {
         GeometryReader { geo in
-            let fit = Double(min(geo.size.width / VirtualCanvas.width,
-                                 geo.size.height / VirtualCanvas.height))
+            let fit = Double(min(geo.size.width / virtualCanvas.size.width,
+                                 geo.size.height / virtualCanvas.size.height))
             let s = CGFloat(state.zoom ?? fit)
-            let t = DesignTransform(scale: s, space: VirtualCanvas.size)
+            let t = DesignTransform(scale: s, space: virtualCanvas.size)
             Group {
                 if state.zoom == nil {
                     canvasContent(t)
@@ -48,7 +50,7 @@ struct EditorCanvas: View {
         Canvas { ctx, _ in
             draw(&ctx, t)
         }
-        .frame(width: VirtualCanvas.width * t.scale, height: VirtualCanvas.height * t.scale)
+        .frame(width: virtualCanvas.size.width * t.scale, height: virtualCanvas.size.height * t.scale)
         .background(Palette.mapBackground)
         .focusable()
         .focusEffectDisabled()
@@ -153,7 +155,7 @@ struct EditorCanvas: View {
         let stroke = MapDraft.PaintStroke(points: points, width: state.paintWidth,
                                           erases: state.tool == .eraser)
         if stroke.erases {
-            document.edit(undoManager) { $0.applyErase(stroke) }
+            document.edit(undoManager) { $0.applyErase(stroke, geometry: state.geometry) }
             // A split renumbers the roads, and selection is held by index.
             state.selection = .none
         } else {
@@ -182,7 +184,7 @@ struct EditorCanvas: View {
     }
 
     private func clampToCanvas(_ p: Point) -> Point {
-        Point(min(max(p.x, 0), VirtualCanvas.width), min(max(p.y, 0), VirtualCanvas.height))
+        Point(min(max(p.x, 0), virtualCanvas.size.width), min(max(p.y, 0), virtualCanvas.size.height))
     }
 
     private func dragGesture(_ t: DesignTransform) -> some Gesture {
@@ -368,8 +370,8 @@ struct EditorCanvas: View {
         if state.snapToGrid {
             out = Point((p.x / 6).rounded() * 6, (p.y / 6).rounded() * 6)
         }
-        out.x = min(max(out.x, 0), VirtualCanvas.width)
-        out.y = min(max(out.y, 0), VirtualCanvas.height)
+        out.x = min(max(out.x, 0), virtualCanvas.size.width)
+        out.y = min(max(out.y, 0), virtualCanvas.size.height)
         return out
     }
 
@@ -401,7 +403,7 @@ struct EditorCanvas: View {
         var best: (DragTarget, Double)?
         for (i, slot) in document.draft.slots.enumerated() {
             let center = CGPoint(x: slot.x, y: slot.y)
-            guard VirtualCanvas.slotFootprintContains(point, slot: center) else { continue }
+            guard virtualCanvas.slotFootprintContains(point, slot: center) else { continue }
             let d = hypot(dp.x - slot.x, dp.y - slot.y)
             if best == nil || d < best!.1 { best = (.slot(i), d) }
         }
@@ -432,8 +434,8 @@ struct EditorCanvas: View {
     private func hitRoad(at p: Point, tolerance: Double) -> (Int, Double)? {
         var best: (Int, Double)?
         for (ri, road) in document.draft.roads.enumerated() where road.points.count >= 2 {
-            let d = MapGeometry.distance(p, polyline: road.points)
-            if d <= tolerance + MapGeometry.roadHalfWidth, best == nil || d < best!.1 {
+            let d = state.geometry.distance(p, polyline: road.points)
+            if d <= tolerance + state.geometry.roadHalfWidth, best == nil || d < best!.1 {
                 best = (ri, d)
             }
         }
@@ -460,7 +462,7 @@ struct EditorCanvas: View {
             layer.clip(to: SwiftUI.Path(frame))
             let rect = guideMatchesCanvasAspect
                 ? canvasRect(for: state.guidePixelSize)
-                : VirtualCanvas.playArea
+                : virtualCanvas.playAreaRect
             layer.draw(Image(platformImage: guide), in: t.view(rect))
         }
         if state.showGrid { drawGrid(&ctx, t, frame) }
@@ -529,7 +531,7 @@ struct EditorCanvas: View {
     private func drawLiveStroke(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let points = state.stroke.points
         guard points.count >= 2 else { return }
-        PathArtist.draw(&ctx, points: BrushGeometry.smooth(points, passes: 1), t, wet: true)
+        PathArtist.draw(&ctx, points: BrushGeometry.smooth(points, passes: 1), t, halfWidth: state.geometry.roadHalfWidth, wet: true)
     }
 
     private func drawPaintCursor(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
@@ -547,7 +549,7 @@ struct EditorCanvas: View {
                                _ t: DesignTransform,
                                road: MapDraft.Road,
                                highlighted: Bool) {
-        let ring = road.outerEdge
+        let ring = road.outerEdge(halfWidth: state.geometry.roadHalfWidth)
         guard ring.count >= 4 else { return }
         var p = SwiftUI.Path()
         p.move(to: t.view(ring[0]))
@@ -575,37 +577,35 @@ struct EditorCanvas: View {
     /// within half a percent, absorbing integer pixel rounding).
     private var guideMatchesCanvasAspect: Bool {
         guard let px = state.guidePixelSize, px.width > 0, px.height > 0 else { return false }
-        let canvas = VirtualCanvas.width / VirtualCanvas.height
+        let canvas = virtualCanvas.size.width / virtualCanvas.size.height
         return abs(px.width / px.height - canvas) / canvas < 0.005
     }
 
     /// An image's rect on the canvas: centred, at its own pixel size, so a
     /// correctly sized image covers the canvas exactly.
     private func canvasRect(for pixelSize: CGSize?) -> CGRect {
-        let px = pixelSize ?? VirtualCanvas.size
+        let px = pixelSize ?? virtualCanvas.size
         return CGRect(
-            x: (VirtualCanvas.width - px.width) / 2,
-            y: (VirtualCanvas.height - px.height) / 2,
+            x: (virtualCanvas.size.width - px.width) / 2,
+            y: (virtualCanvas.size.height - px.height) / 2,
             width: px.width,
             height: px.height
         )
     }
 
     private func drawPlayAreaOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let play = VirtualCanvas.playArea
-        let notched = SwiftUI.Path(VirtualCanvas.playAreaShape).applying(t.viewTransform)
+        let play = virtualCanvas.playAreaRect
+        let notched = SwiftUI.Path(virtualCanvas.playAreaShape).applying(t.viewTransform)
         var dim = SwiftUI.Path(t.frame)
         dim.addPath(notched)
         ctx.fill(dim, with: .color(.black.opacity(0.38)), style: FillStyle(eoFill: true))
-        let lineColor = Color(red: VirtualCanvas.playAreaLineRGB.red,
-                              green: VirtualCanvas.playAreaLineRGB.green,
-                              blue: VirtualCanvas.playAreaLineRGB.blue)
+        let lineColor = Color(red: 0.75, green: 0.15, blue: 1.0)
         ctx.stroke(notched, with: .color(lineColor),
                    style: StrokeStyle(lineWidth: 1.5, dash: [8, 5]))
 
         let toView = CGAffineTransform(a: t.scale, b: 0, c: 0, d: t.scale,
                                        tx: t.offset.x, ty: t.offset.y)
-        let slotShape = SwiftUI.Path(TowerMenuLayout.slotMenuSafeShape).applying(toView)
+        let slotShape = SwiftUI.Path(state.towerMenuLayout.slotMenuSafeShape).applying(toView)
         ctx.stroke(slotShape, with: .color(.blue.opacity(0.85)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
 
@@ -616,7 +616,7 @@ struct EditorCanvas: View {
                 .font(font).foregroundStyle(lineColor),
             at: CGPoint(x: playTopView.x, y: playTopView.y - 10)
         )
-        let topInset = TowerMenuLayout.slotSafeInset(.top)
+        let topInset = state.towerMenuLayout.slotSafeInset(.top)
         let topY = play.maxY - topInset
         let topView = t.view(Point(play.midX, topY))
         ctx.draw(
@@ -624,7 +624,7 @@ struct EditorCanvas: View {
                 .font(font).foregroundStyle(.blue.opacity(0.9)),
             at: CGPoint(x: topView.x, y: topView.y - 10)
         )
-        let bottomInset = TowerMenuLayout.slotSafeInset(.bottom)
+        let bottomInset = state.towerMenuLayout.slotSafeInset(.bottom)
         let bottomY = play.minY + bottomInset
         let bottomView = t.view(Point(play.midX, bottomY))
         ctx.draw(
@@ -632,7 +632,7 @@ struct EditorCanvas: View {
                 .font(font).foregroundStyle(.blue.opacity(0.9)),
             at: CGPoint(x: bottomView.x, y: bottomView.y + 12)
         )
-        let leftInset = TowerMenuLayout.slotSafeInset(.left)
+        let leftInset = state.towerMenuLayout.slotSafeInset(.left)
         let leftX = play.minX + leftInset
         let leftView = t.view(Point(leftX, play.midY))
         ctx.draw(
@@ -648,7 +648,7 @@ struct EditorCanvas: View {
               document.draft.slots.indices.contains(i) else { return }
         let slot = document.draft.slots[i]
         let c = t.view(slot)
-        let size = TowerMenuLayout.getBgSize(playAreaScalingFactor: 1)
+        let size = state.towerMenuLayout.getBgSize(playAreaScalingFactor: 1)
         let rect = CGRect(x: c.x - size.width * t.scale / 2,
                           y: c.y - size.height * t.scale / 2,
                           width: size.width * t.scale,
@@ -669,7 +669,7 @@ struct EditorCanvas: View {
         var minor = SwiftUI.Path()
         var major = SwiftUI.Path()
         var x = 0.0
-        while x <= VirtualCanvas.width {
+        while x <= virtualCanvas.size.width {
             let vx = t.view(Point(x, 0)).x
             var p = SwiftUI.Path()
             p.move(to: CGPoint(x: vx, y: frame.minY))
@@ -678,7 +678,7 @@ struct EditorCanvas: View {
             x += 15
         }
         var y = 0.0
-        while y <= VirtualCanvas.height {
+        while y <= virtualCanvas.size.height {
             let vy = t.view(Point(0, y)).y
             var p = SwiftUI.Path()
             p.move(to: CGPoint(x: frame.minX, y: vy))
@@ -693,7 +693,7 @@ struct EditorCanvas: View {
     private func drawRoads(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
-        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint))
+        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint, roadHalfWidth: state.geometry.roadHalfWidth))
             .applying(t.viewTransform)
         PathArtist.drawArea(&ctx, area, t)
         if !state.paintStroke.isEmpty {
@@ -713,7 +713,7 @@ struct EditorCanvas: View {
 
             if pts.count >= 2 {
                 if isSelected {
-                    let body = PathArtist.bodyPath(points: road.points, t)
+                    let body = PathArtist.bodyPath(points: road.points, t, halfWidth: state.geometry.roadHalfWidth)
                     ctx.stroke(body, with: .color(.cyan.opacity(0.5)), lineWidth: 6 * s)
                 }
 
@@ -797,7 +797,7 @@ struct EditorCanvas: View {
     private func drawSlots(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
-        let warnings = MapGeometry.warnings(for: draft, maxTowerRange: EditorContent.shared.maxTowerRange)
+        let warnings = state.geometry.warnings(for: draft, maxTowerRange: content.maxTowerRange)
         var planned: [Int: Emplacement] = [:]
         for step in draft.intendedSolution where step.kind == "place" {
             if planned[step.slot] == nil, let e = step.emplacement.flatMap(Emplacement.init(rawValue:)) {
@@ -808,11 +808,11 @@ struct EditorCanvas: View {
         for (i, slot) in draft.slots.enumerated() {
             let c = t.view(slot)
             let selected = state.selection == .slot(i)
-            let w = VirtualCanvas.slotSize.width * s
-            let h = VirtualCanvas.slotSize.height * s
+            let w = virtualCanvas.towerSlotSize.width * s
+            let h = virtualCanvas.towerSlotSize.height * s
             let rect = CGRect(x: c.x - w / 2, y: c.y - h / 2, width: w, height: h)
 
-            TowerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: selected)
+            state.towerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: selected)
 
             if selected, state.showRanges {
                 // Ranges come from the tower table. They were hardcoded here as

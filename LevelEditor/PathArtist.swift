@@ -95,10 +95,11 @@ enum PathArtist {
     }
 
     /// The path's full-width outline, for selection highlights and hit areas.
-    static func bodyPath(points: [Point], _ t: DesignTransform) -> SwiftUI.Path {
+    static func bodyPath(points: [Point], _ t: DesignTransform,
+                         halfWidth: Double) -> SwiftUI.Path {
         guard points.count >= 2 else { return SwiftUI.Path() }
         let stroked = spine(points, t).cgPath.copy(
-            strokingWithWidth: 2 * MapGeometry.roadHalfWidth * t.scale,
+            strokingWithWidth: 2 * halfWidth * t.scale,
             lineCap: .butt,
             lineJoin: .round,
             miterLimit: 2)
@@ -108,12 +109,13 @@ enum PathArtist {
     static func draw(_ ctx: inout GraphicsContext,
                      points: [Point],
                      _ t: DesignTransform,
+                     halfWidth: Double,
                      wet: Bool = false) {
         guard points.count >= 2 else { return }
 
         // The whole road: the light band, outlined by one thin dark line
         // that runs along its edge. Nothing else.
-        let body = bodyPath(points: points, t)
+        let body = bodyPath(points: points, t, halfWidth: halfWidth)
         ctx.fill(body, with: .color(fillColor))
         ctx.stroke(body, with: .color(borderColor),
                    style: StrokeStyle(lineWidth: max(1.5, (palette?.borderUnits ?? 3) * t.scale),

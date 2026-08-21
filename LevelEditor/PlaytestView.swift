@@ -3,6 +3,7 @@ import SwiftUI
 @MainActor
 struct PlaytestView: View {
     let session: SimSession
+    let slotArt: TowerSlotImage
     var onAdopt: ([MapDraft.BuildStep]) -> Void
 
     var body: some View {
@@ -10,7 +11,7 @@ struct PlaytestView: View {
             VStack(spacing: 0) {
                 topBar
                 ZStack {
-                    PlaytestCanvas(session: session)
+                    PlaytestCanvas(session: session, slotArt: slotArt)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     if let banner = session.banner {
                         Text(banner)
@@ -159,7 +160,7 @@ struct PlaytestView: View {
                 HStack(spacing: 8) {
                     Text("Slot \(slot)").font(.callout.weight(.semibold))
                     ForEach(Emplacement.allCases, id: \.self) { e in
-                        let cost = DesignArsenal.type(e).levels[0].cost
+                        let cost = session.arsenal.type(e).levels[0].cost
                         Button {
                             session.build(e, at: slot)
                         } label: {

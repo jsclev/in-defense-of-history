@@ -77,20 +77,20 @@ enum BrushGeometry {
         }
     }
 
-    static func offsetEdge(points: [Point], side: Double) -> [Point] {
+    static func offsetEdge(points: [Point], side: Double, halfWidth: Double) -> [Point] {
         guard !points.isEmpty else { return [] }
         let ns = normals(points)
-        let hw = MapGeometry.roadHalfWidth
+        let hw = halfWidth
         return points.indices.map { i in
             Point(points[i].x + ns[i].x * hw * side,
                   points[i].y + ns[i].y * hw * side)
         }
     }
 
-    static func outerEdge(points: [Point]) -> [Point] {
+    static func outerEdge(points: [Point], halfWidth: Double) -> [Point] {
         guard points.count >= 2 else { return [] }
-        let left = offsetEdge(points: points, side: 1)
-        let right = offsetEdge(points: points, side: -1)
+        let left = offsetEdge(points: points, side: 1, halfWidth: halfWidth)
+        let right = offsetEdge(points: points, side: -1, halfWidth: halfWidth)
         return left + right.reversed()
     }
 
@@ -210,10 +210,11 @@ enum BrushGeometry {
         Array(trimmingFront(pts.reversed(), by: distance).reversed())
     }
 
-    static func roadArea(roads: [MapDraft.Road], paint: [MapDraft.PaintStroke]) -> CGPath {
+    static func roadArea(roads: [MapDraft.Road], paint: [MapDraft.PaintStroke],
+                         roadHalfWidth: Double) -> CGPath {
         var area = CGMutablePath() as CGPath
         for road in roads where road.points.count >= 2 {
-            area = area.union(strokeArea(points: road.points, width: MapGeometry.roadHalfWidth * 2))
+            area = area.union(strokeArea(points: road.points, width: roadHalfWidth * 2))
         }
         for stroke in paint where !stroke.points.isEmpty {
             area = area.union(strokeArea(points: stroke.points, width: stroke.width))

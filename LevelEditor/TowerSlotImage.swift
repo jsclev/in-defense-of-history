@@ -1,17 +1,21 @@
 import SwiftUI
 
-enum TowerSlotImage {
-    static let towerSlotImage: PlatformImage? = {
-        guard let url = EditorResources.url("Images/tower_slot_field.png") else { return nil }
-        return PlatformImageLoader.load(path: url.path)?.image
-    }()
+struct TowerSlotImage {
+    let virtualCanvas: VirtualCanvas
+    let image: PlatformImage?
 
-    static func draw(_ ctx: inout GraphicsContext, at center: CGPoint,
-                     index: Int, scale s: CGFloat, selected: Bool) {
-        let w = VirtualCanvas.slotSize.width * s
-        let h = VirtualCanvas.slotSize.height * s
+    init(virtualCanvas: VirtualCanvas) {
+        self.virtualCanvas = virtualCanvas
+        image = EditorResources.url("Images/tower_slot_field.png")
+            .flatMap { PlatformImageLoader.load(path: $0.path)?.image }
+    }
+
+    func draw(_ ctx: inout GraphicsContext, at center: CGPoint,
+              index: Int, scale s: CGFloat, selected: Bool) {
+        let w = virtualCanvas.towerSlotSize.width * s
+        let h = virtualCanvas.towerSlotSize.height * s
         let rect = CGRect(x: center.x - w / 2, y: center.y - h / 2, width: w, height: h)
-        if let pad = towerSlotImage {
+        if let pad = image {
             ctx.draw(Image(platformImage: pad), in: rect)
         } else {
             ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.5)),

@@ -3,11 +3,12 @@ import SwiftUI
 @MainActor
 struct PlaytestCanvas: View {
     let session: SimSession
+    let slotArt: TowerSlotImage
 
     var body: some View {
         GeometryReader { geo in
             let t = DesignTransform(fitting: geo.size, space: CGSize(
-                width: VirtualCanvas.width, height: VirtualCanvas.height))
+                width: session.virtualCanvas.size.width, height: session.virtualCanvas.size.height))
             Canvas { ctx, _ in
                 draw(in: &ctx, transform: t)
             }
@@ -16,7 +17,7 @@ struct PlaytestCanvas: View {
                 handleTap(at: location, transform: t)
             }
         }
-        .aspectRatio(VirtualCanvas.width / VirtualCanvas.height, contentMode: .fit)
+        .aspectRatio(session.virtualCanvas.size.width / session.virtualCanvas.size.height, contentMode: .fit)
     }
 
     private func handleTap(at p: CGPoint, transform t: DesignTransform) {
@@ -124,7 +125,7 @@ struct PlaytestCanvas: View {
                     at: c
                 )
             } else {
-                TowerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: session.selectedSlot == i)
+                slotArt.draw(&ctx, at: c, index: i, scale: s, selected: session.selectedSlot == i)
             }
         }
     }
@@ -132,7 +133,7 @@ struct PlaytestCanvas: View {
     private func drawFlashes(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         for f in session.flashes {
             let color = Palette.towerColors[
-                Emplacement.allCases.first { DesignArsenal.type($0).id == session.catalog.towerTypes[f.towerTypeIndex].id } ?? .minutemanPost
+                Emplacement.allCases.first { session.arsenal.type($0).id == session.catalog.towerTypes[f.towerTypeIndex].id } ?? .minutemanPost
             ] ?? .white
             var p = SwiftUI.Path()
             p.move(to: t.view(f.from))

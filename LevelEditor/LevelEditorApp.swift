@@ -34,30 +34,39 @@ struct LevelEditorApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     #endif
 
+    // The composition root: one EditorContent (database + tower stats) and
+    // one VirtualCanvas per process, injected into every document window.
+    private let content: EditorContent
+    private let virtualCanvas: VirtualCanvas
+
     init() {
         // The editor cannot draw a canvas without the coordinate system in
-        // virtual_canvas. EditorContent opens the database and loads it; if the
-        // file is missing there is nothing sane to fall back to.
-        _ = EditorContent.shared
-        guard VirtualCanvas.isLoaded else {
+        // virtual_canvas; if the database is missing there is nothing sane
+        // to fall back to.
+        let content = EditorContent()
+        guard let virtualCanvas = content.virtualCanvas else {
             fatalError("LevelEditor could not load the virtual_canvas table. "
                 + "On the Mac, run Db/create_db.sh to refresh "
                 + "~/Documents/in_defense_of_history.sqlite; on iPad, "
                 + "reinstall so the bundled database is current.")
         }
+        self.content = content
+        self.virtualCanvas = virtualCanvas
     }
 
     var body: some Scene {
         #if os(macOS)
         DocumentGroup(newDocument: { MapDocument() }) { config in
-            EditorView(document: config.document, documentURL: config.fileURL)
+            EditorView(document: config.document, documentURL: config.fileURL,
+                       content: content, virtualCanvas: virtualCanvas)
         }
         .defaultSize(width: 1380, height: 900)
         .defaultLaunchBehavior(.suppressed)
         .commands { ZoomCommands() }
         #else
         DocumentGroup(newDocument: { MapDocument() }) { config in
-            EditorView(document: config.document, documentURL: config.fileURL)
+            EditorView(document: config.document, documentURL: config.fileURL,
+                       content: content, virtualCanvas: virtualCanvas)
         }
         .commands { ZoomCommands() }
         #endif
