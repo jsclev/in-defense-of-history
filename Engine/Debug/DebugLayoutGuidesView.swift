@@ -5,17 +5,11 @@ public struct DebugLayoutGuidesView: View {
     @State private var screen: ScreenGeometry?
     private let canvasSpec: CanvasSpec
 
-    /// The hosting UIWindow, captured once the view joins the hierarchy:
-    /// the authority for physical bounds and live safe-area insets.
     @State private var window: UIWindow?
-
-    /// The measured chain SwiftUI's .global space cannot see:
-    /// this subtree → window → screen.
     @State private var chain: WindowGeometryReport?
-
     @State private var hardwareInsets: UIEdgeInsets = .zero
     
-    private let safeInsetsDash: [CGFloat] = [1, 6]
+    private let safeInsetsDash: [CGFloat] = [16, 9]
     private let playableDash: [CGFloat] = [4, 10]
 
     private let labelFloor: CGFloat = 30
@@ -47,6 +41,7 @@ public struct DebugLayoutGuidesView: View {
                                             y: frame.minY,
                                             width: frame.width - safeInsets.right - safeInsets.left,
                                             height: frame.height - safeInsets.bottom)
+                let playAreaRatio = safeInsetsRect.width / canvasSpec.playAreaRect.width
 
                 ZStack(alignment: .topLeading) {
                     createRectView(rect: physicalRect,
@@ -69,7 +64,8 @@ public struct DebugLayoutGuidesView: View {
                                 borderThickness: Int,
                                 borderDash: [CGFloat] = []) -> some View {
         return Rectangle()
-            .strokeBorder(borderColor, lineWidth: CGFloat(borderThickness))
+            .strokeBorder(borderColor,
+                          style: StrokeStyle(lineWidth: CGFloat(borderThickness), dash: borderDash))
             .frame(width: rect.width, height: rect.height)
             .position(
                 x: rect.midX,
