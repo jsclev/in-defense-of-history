@@ -121,8 +121,8 @@ final class EditorState {
     func setZoom(_ z: Double) { zoom = min(max(z, 0.05), 8) }
 
     var backgroundSizeError: String? {
-        guard let px = backgroundPixelSize, px != CanvasSpec.size else { return nil }
-        return "Reference image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))"
+        guard let px = backgroundPixelSize, px != VirtualCanvas.size else { return nil }
+        return "Reference image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))"
     }
 
     /// The folder holding the open document, set by the view. Image paths
@@ -249,14 +249,14 @@ struct EditorView: View {
                 case .background:
                     state.loadBackground(from: url)
                     document.edit(undoManager) { $0.backgroundImagePath = url.path }
-                    if let px = state.backgroundPixelSize, px != CanvasSpec.size {
-                        state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
+                    if let px = state.backgroundPixelSize, px != VirtualCanvas.size {
+                        state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))")
                     }
                 case .overlay:
                     state.loadOverlay(from: url)
                     document.edit(undoManager) { $0.overlayImagePath = url.path }
-                    if let px = state.overlayPixelSize, px != CanvasSpec.size {
-                        state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
+                    if let px = state.overlayPixelSize, px != VirtualCanvas.size {
+                        state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))")
                     }
                 case .guide:
                     state.loadGuide(from: url)
@@ -376,7 +376,7 @@ struct EditorView: View {
                     Image(systemName: "cursorarrow").tag(EditorTool.select)
                         .help("Select and move")
                     Image(systemName: "scribble").tag(EditorTool.brush)
-                        .help("Path tool: draw an enemy path freehand; width is fixed by canvas_spec")
+                        .help("Path tool: draw an enemy path freehand; width is fixed by virtual_canvas")
                     Image(systemName: "paintbrush.pointed").tag(EditorTool.paint)
                         .help("Path painter: paint road area freehand at any width, added to the path layer")
                     Image(systemName: "eraser").tag(EditorTool.eraser)
@@ -408,7 +408,7 @@ struct EditorView: View {
                     .help("Show the generated outer-edge waypoints of each road")
 
                 Toggle(isOn: $s.showPlayArea) { Image(systemName: "rectangle.dashed") }
-                    .help("Highlight the \(Int(CanvasSpec.playArea.width))×\(Int(CanvasSpec.playArea.height)) play area and dim the bleed")
+                    .help("Highlight the \(Int(VirtualCanvas.playArea.width))×\(Int(VirtualCanvas.playArea.height)) play area and dim the bleed")
                 Toggle(isOn: $s.showGrid) { Image(systemName: "grid") }
                     .help("Show grid (15 px minor, 120 px major)")
                 Toggle(isOn: $s.snapToGrid) { Image(systemName: "dot.squareshape.split.2x2") }
@@ -473,7 +473,7 @@ struct EditorView: View {
             Text(cursorText)
                 .monospacedDigit()
                 .frame(width: 150, alignment: .leading)
-            Text("canvas \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))")
+            Text("canvas \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))")
                 .foregroundStyle(.tertiary)
             Text("\(document.draft.roads.count) roads · \(document.draft.slots.count) slots · \(document.draft.waves.count) waves")
                 .foregroundStyle(.secondary)
@@ -506,7 +506,7 @@ struct EditorView: View {
 
     private var cursorText: String {
         guard let c = state.cursor else { return "—" }
-        let inPlayable = CanvasSpec.playArea.contains(CGPoint(x: c.x, y: c.y))
+        let inPlayable = VirtualCanvas.playArea.contains(CGPoint(x: c.x, y: c.y))
         return "\(Int(c.x.rounded())), \(Int(c.y.rounded())) px\(inPlayable ? "" : " · bleed")"
     }
 

@@ -1,11 +1,8 @@
 import Foundation
 
-/// The simulator's one set of shared objects, built once in main.swift and
-/// handed to everything that needs them — the CLI counterpart of the game's
-/// Store. Nothing else opens the content database or loads the canvas spec.
 final class SimulatorStore {
     let db: Db
-    let canvasSpec: CanvasSpec
+    let virtualCanvas: VirtualCanvas
     let roster: DesignRoster
     let arsenal: DesignArsenal
     let blueprints: Blueprints
@@ -17,10 +14,10 @@ final class SimulatorStore {
     init() throws {
         db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
                 fullRefresh: false)
-        canvasSpec = try db.canvasSpecDao.get()
+        virtualCanvas = try db.virtualCanvasDao.get()
         roster = DesignRoster()
         arsenal = DesignArsenal()
-        blueprints = Blueprints(canvasSpec: canvasSpec)
+        blueprints = Blueprints(virtualCanvas: virtualCanvas)
         runs = try? SimulatorRunDAO()
     }
 }

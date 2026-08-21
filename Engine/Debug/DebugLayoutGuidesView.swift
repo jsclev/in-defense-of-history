@@ -3,7 +3,7 @@ import UIKit
 
 public struct DebugLayoutGuidesView: View {
     @State private var screen: ScreenGeometry?
-    private let canvasSpec: CanvasSpec
+    private let virtualCanvas: VirtualCanvas
 
     @State private var window: UIWindow?
     @State private var chain: WindowGeometryReport?
@@ -27,8 +27,8 @@ public struct DebugLayoutGuidesView: View {
 
     @State private var safeInsetsRect: CGRect?
     
-    public init(canvasSpec: CanvasSpec) {
-        self.canvasSpec = canvasSpec
+    public init(virtualCanvas: VirtualCanvas) {
+        self.virtualCanvas = virtualCanvas
     }
 
     public var body: some View {
@@ -41,7 +41,7 @@ public struct DebugLayoutGuidesView: View {
                                             y: frame.minY,
                                             width: frame.width - safeInsets.right - safeInsets.left,
                                             height: frame.height - safeInsets.bottom)
-                let playAreaRatio = safeInsetsRect.width / canvasSpec.playAreaRect.width
+                let playAreaRatio = safeInsetsRect.width / virtualCanvas.playAreaRect.width
 
                 ZStack(alignment: .topLeading) {
                     createRectView(rect: physicalRect,
@@ -74,8 +74,8 @@ public struct DebugLayoutGuidesView: View {
     }
 
     private func createPlayAreaView() -> some View {
-        let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen!.playable)
-        return SwiftUI.Path(canvasSpec.playAreaShape)
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen!.playable)
+        return SwiftUI.Path(virtualCanvas.playAreaShape)
             .applying(projection.viewTransform)
             .stroke(playAreaGuideColor,
                     style: StrokeStyle(lineWidth: CGFloat(playAreaLineThickness),

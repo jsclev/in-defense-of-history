@@ -2,12 +2,12 @@ import Foundation
 import CoreGraphics
 import SQLite3
 
-public class CanvasSpecDAO: BaseDAO {
+public class VirtualCanvasDAO: BaseDAO {
     init(conn: OpaquePointer?) {
-        super.init(conn: conn, table: "canvas_spec", loggerName: CanvasSpecDAO.self)
+        super.init(conn: conn, table: "virtual_canvas", loggerName: VirtualCanvasDAO.self)
     }
 
-    public func get() throws -> CanvasSpec {
+    public func get() throws -> VirtualCanvas {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""
             SELECT
@@ -59,7 +59,7 @@ public class CanvasSpecDAO: BaseDAO {
         let lowerRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 15),
                                                        height: getDouble(stmt: stmt, colIndex: 16))
         
-        let canvasSpec = CanvasSpec(size: canvasSize,
+        let virtualCanvas = VirtualCanvas(size: canvasSize,
                                     playAreaRect: playAreaRect,
                                     pathWidth: pathWidth,
                                     towerSlotSize: towerSlotSize,
@@ -75,6 +75,6 @@ public class CanvasSpecDAO: BaseDAO {
             throw DbError.Db(message: "canvas_spec has more than one row")
         }
 
-        return canvasSpec
+        return virtualCanvas
     }
 }

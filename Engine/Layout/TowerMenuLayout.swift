@@ -3,7 +3,7 @@ import CoreGraphics
 import SwiftUI
 
 public struct TowerMenuLayout {
-    private let canvasSpec: CanvasSpec
+    private let virtualCanvas: VirtualCanvas
     
     private let bgScalingFactor: CGFloat = 0.41
     private let towerButtonScalingFactor: CGFloat = 0.145
@@ -16,17 +16,17 @@ public struct TowerMenuLayout {
         TowerKind.areaOfEffect: 320
     ]
     
-    public init(canvasSpec: CanvasSpec) {
-        self.canvasSpec = canvasSpec
+    public init(virtualCanvas: VirtualCanvas) {
+        self.virtualCanvas = virtualCanvas
     }
 
     public func getBgSize(playAreaScalingFactor: CGFloat) -> CGSize {
-        let side = canvasSpec.playAreaRect.height * playAreaScalingFactor * bgScalingFactor
+        let side = virtualCanvas.playAreaRect.height * playAreaScalingFactor * bgScalingFactor
         return CGSize(width: side, height: side)
     }
 
     public func getTowerButtonSize(playAreaScalingFactor: CGFloat) -> CGSize {
-        let side = canvasSpec.playAreaRect.height * playAreaScalingFactor * towerButtonScalingFactor
+        let side = virtualCanvas.playAreaRect.height * playAreaScalingFactor * towerButtonScalingFactor
         return CGSize(width: side, height: side)
     }
     
@@ -74,7 +74,7 @@ public struct TowerMenuLayout {
     private static let towerIconFraction: CGFloat = 0.625
 
     public var menuAnchorLift: CGFloat {
-        canvasSpec.towerSlotSize.height / 2
+        virtualCanvas.towerSlotSize.height / 2
     }
 
     public var menuMapExtent: (x: CGFloat, y: CGFloat) {
@@ -103,19 +103,19 @@ public struct TowerMenuLayout {
     public func slotSafeInset(_ edge: VerticalEdge) -> CGFloat {
         switch edge {
         case .top, .bottom:
-            menuMapExtent.y - canvasSpec.towerSlotSize.height / 2
+            menuMapExtent.y - virtualCanvas.towerSlotSize.height / 2
         }
     }
 
     public func slotSafeInset(_ edge: HorizontalEdge) -> CGFloat {
         switch edge {
         case .left, .right:
-            menuMapExtent.x - canvasSpec.towerSlotSize.width / 2
+            menuMapExtent.x - virtualCanvas.towerSlotSize.width / 2
         }
     }
 
     public var slotMenuSafeShape: CGPath {
-        let play = canvasSpec.playAreaRect
+        let play = virtualCanvas.playAreaRect
         let left = play.minX + slotSafeInset(.left)
         let right = play.maxX - slotSafeInset(.right)
         let bottom = play.minY + slotSafeInset(.bottom)
@@ -124,7 +124,7 @@ public struct TowerMenuLayout {
         shape.addRect(CGRect(x: left, y: bottom,
                              width: right - left, height: top - bottom))
         let standoff = CGMutablePath()
-        for corner in canvasSpec.cornerOcclusionAreas {
+        for corner in virtualCanvas.cornerOcclusionAreas {
             standoff.addRect(CGRect(
                 x: corner.minX - slotSafeInset(.left),
                 y: corner.minY - slotSafeInset(.top),

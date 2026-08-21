@@ -36,11 +36,11 @@ struct LevelEditorApp: App {
 
     init() {
         // The editor cannot draw a canvas without the coordinate system in
-        // canvas_spec. EditorContent opens the database and loads it; if the
+        // virtual_canvas. EditorContent opens the database and loads it; if the
         // file is missing there is nothing sane to fall back to.
         _ = EditorContent.shared
-        guard CanvasSpec.isLoaded else {
-            fatalError("LevelEditor could not load the canvas_spec table. "
+        guard VirtualCanvas.isLoaded else {
+            fatalError("LevelEditor could not load the virtual_canvas table. "
                 + "On the Mac, run Db/create_db.sh to refresh "
                 + "~/Documents/in_defense_of_history.sqlite; on iPad, "
                 + "reinstall so the bundled database is current.")

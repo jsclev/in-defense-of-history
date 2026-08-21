@@ -9,7 +9,7 @@ struct CampaignMapView: View {
 
     @State private var nodes: [CampaignNode] = []
     
-    public var canvasSpec: CanvasSpec
+    public var virtualCanvas: VirtualCanvas
     public let db: Db
     public let screen: ScreenGeometry
 
@@ -95,7 +95,7 @@ struct CampaignMapView: View {
 
             // Last, so the guides draw over every HUD element.
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(canvasSpec: canvasSpec)
+                DebugLayoutGuidesView(virtualCanvas: virtualCanvas)
             }
         }
         .ignoresSafeArea()

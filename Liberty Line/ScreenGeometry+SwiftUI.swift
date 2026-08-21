@@ -1,14 +1,14 @@
 import SwiftUI
 
 //extension ScreenGeometry {
-//    init(proxy: GeometryProxy, canvasSpec: CanvasSpec) {
+//    init(proxy: GeometryProxy, virtualCanvas: VirtualCanvas) {
 //        let insets = proxy.safeAreaInsets
 //        self.init(
 //            fullSize: CGSize(width: proxy.size.width + insets.leading + insets.trailing,
 //                             height: proxy.size.height + insets.top + insets.bottom),
 //            leading: insets.leading, top: insets.top,
 //            trailing: insets.trailing, bottom: insets.bottom,
-//            canvasSpec: canvasSpec)
+//            virtualCanvas: virtualCanvas)
 //    }
 //}
 
@@ -57,7 +57,7 @@ extension View {
 /// is irreducible — this view confines it.
 //@available(iOS 26.0, *)
 //struct ScreenGeometryGate<Content: View>: View {
-//    let canvasSpec: CanvasSpec
+//    let virtualCanvas: VirtualCanvas
 //    @ViewBuilder let content: (ScreenGeometry) -> Content
 //
 //    @State private var screen: ScreenGeometry?
@@ -112,7 +112,7 @@ extension View {
 //                
 //                screen = ScreenGeometry(physicalRect: physicalScreen,
 //                                                    safeInsetsRect: safeInsetsRect,
-//                                                    canvasSpec: canvasSpec)
+//                                                    virtualCanvas: virtualCanvas)
 //                
 //                // Debug check to verify your numbers are back
 //                print("Authoritative Top Hardware Inset: \(hardwareInsets.top)")

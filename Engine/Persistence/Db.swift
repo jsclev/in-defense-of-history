@@ -9,7 +9,7 @@ public class Db {
     private var conn: OpaquePointer?
     public let fullRefresh: Bool
     
-    public let canvasSpecDao: CanvasSpecDAO
+    public let virtualCanvasDao: VirtualCanvasDAO
     public let campaignDao: CampaignDAO
     public let levelInfoDao: LevelInfoDAO
     public let towerSlotDao: TowerSlotDAO
@@ -113,7 +113,7 @@ public class Db {
         
         self.fullRefresh = fullRefresh
         
-        canvasSpecDao = CanvasSpecDAO(conn: conn)
+        virtualCanvasDao = VirtualCanvasDAO(conn: conn)
         campaignDao = CampaignDAO(conn: conn)
         towerSlotDao = TowerSlotDAO(conn: conn)
         pathDao = PathDAO(conn: conn)

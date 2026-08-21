@@ -136,8 +136,8 @@ struct InspectorView: View {
                 }
             }
             if document.draft.overlayImagePath != nil {
-                if let px = state.overlayPixelSize, px != CanvasSpec.size {
-                    Label("\(Int(px.width))×\(Int(px.height)) — must be \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height))",
+                if let px = state.overlayPixelSize, px != VirtualCanvas.size {
+                    Label("\(Int(px.width))×\(Int(px.height)) — must be \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height))",
                           systemImage: "xmark.octagon.fill")
                         .font(.caption.bold())
                         .foregroundStyle(.red)
@@ -188,14 +188,14 @@ struct InspectorView: View {
             }
             if document.draft.backgroundImagePath != nil {
                 if let px = state.backgroundPixelSize {
-                    if px != CanvasSpec.size {
+                    if px != VirtualCanvas.size {
                         HStack(alignment: .top, spacing: 8) {
                             Image(systemName: "xmark.octagon.fill")
                                 .font(.title3)
                             VStack(alignment: .leading, spacing: 3) {
                                 Text("WRONG IMAGE SIZE")
                                     .font(.callout.weight(.heavy))
-                                Text("This image is \(Int(px.width))×\(Int(px.height)) px. All map artwork must be exactly \(Int(CanvasSpec.width))×\(Int(CanvasSpec.height)) px. The art needs to be fixed.")
+                                Text("This image is \(Int(px.width))×\(Int(px.height)) px. All map artwork must be exactly \(Int(VirtualCanvas.width))×\(Int(VirtualCanvas.height)) px. The art needs to be fixed.")
                                     .font(.caption.bold())
                             }
                         }
@@ -358,7 +358,7 @@ struct InspectorView: View {
                 }
                 Button {
                     state.selection = .slot(document.addSlot(
-                        at: Point(CanvasSpec.playArea.midX, CanvasSpec.playArea.midY),
+                        at: Point(VirtualCanvas.playArea.midX, VirtualCanvas.playArea.midY),
                         undoManager))
                 } label: {
                     Label("Add Slot", systemImage: "plus")
@@ -420,7 +420,7 @@ struct InspectorView: View {
                     .onTapGesture { state.selection = select(i) }
                 }
                 Button {
-                    add(Point(CanvasSpec.playArea.midX, CanvasSpec.playArea.midY))
+                    add(Point(VirtualCanvas.playArea.midX, VirtualCanvas.playArea.midY))
                     state.selection = select(points.count)
                 } label: {
                     Label(addLabel, systemImage: "plus")

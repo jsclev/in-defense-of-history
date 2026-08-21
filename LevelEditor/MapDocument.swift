@@ -46,13 +46,13 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     private static func upgrade(from space: String) -> (Point) -> Point {
         if space == "design1600x900" {
             let legacyDesignWidth = 1600.0
-            let s = CanvasSpec.playArea.width / legacyDesignWidth
+            let s = VirtualCanvas.playArea.width / legacyDesignWidth
             return { p in
-                Point(p.x * s + CanvasSpec.playArea.minX,
-                      CanvasSpec.flipY(p.y * s + CanvasSpec.playArea.minY))
+                Point(p.x * s + VirtualCanvas.playArea.minX,
+                      VirtualCanvas.flipY(p.y * s + VirtualCanvas.playArea.minY))
             }
         }
-        return { Point($0.x, CanvasSpec.flipY($0.y)) }
+        return { Point($0.x, VirtualCanvas.flipY($0.y)) }
     }
 
     var name: String
@@ -485,15 +485,12 @@ final class MapDocument: ReferenceFileDocument {
 }
 
 enum MapGeometry {
-    /// Half of canvas_spec.path_width — the real lane, edge to edge, is one
-    /// database value shared with the game's lane coverage. The editor drew
-    /// 36-wide roads for a 102-wide lane before this read the spec.
-    static var roadHalfWidth: Double { CanvasSpec.pathWidth / 2 }
+    static var roadHalfWidth: Double { VirtualCanvas.pathWidth / 2 }
 
-    /// Vertical semi-axis of the slot footprint in canvas_spec. Roads run
+    /// Vertical semi-axis of the slot footprint in virtual_canvas. Roads run
     /// mostly horizontally, so this is the reach of the pad toward a road for
     /// the overlap warning; the drawn pad uses the full footprint ellipse.
-    static var slotRadius: Double { CanvasSpec.slotSize.height / 2 }
+    static var slotRadius: Double { VirtualCanvas.slotSize.height / 2 }
 
     struct PolylineHit {
         let point: Point
@@ -559,13 +556,13 @@ enum MapGeometry {
     /// caller rather than read from a singleton so this stays pure geometry.
     /// Passing nil skips the range check instead of comparing against an
     /// invented constant. `others` are the remaining slots, tested with the
-    /// pad IMAGE's footprint (CanvasSpec), so spacing is set by the art.
+    /// pad IMAGE's footprint (VirtualCanvas), so spacing is set by the art.
     static func slotIssue(_ slot: Point, roads: [MapDraft.Road], others: [Point] = [],
                           maxTowerRange: Double?) -> SlotIssue? {
         let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }
         if let d = ds.min(), d < roadHalfWidth + slotRadius { return .overlapsPath }
         let p = CGPoint(x: slot.x, y: slot.y)
-        if others.contains(where: { CanvasSpec.slotFootprintsOverlap(p, CGPoint(x: $0.x, y: $0.y)) }) {
+        if others.contains(where: { VirtualCanvas.slotFootprintsOverlap(p, CGPoint(x: $0.x, y: $0.y)) }) {
             return .overlapsSlot
         }
         if let d = ds.min(), let maxTowerRange, d - roadHalfWidth > maxTowerRange {

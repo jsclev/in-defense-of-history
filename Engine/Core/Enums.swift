@@ -406,36 +406,6 @@ public enum IrrigationStatus: CustomStringConvertible {
     }
 }
 
-public enum Layer {
-    public static let terrain = 100.0
-    public static let terrainTransitions = 110.0
-    public static let terrainFeatures = 125.0
-    public static let irrigation = 140.0
-    public static let rivers = 150.0
-    public static let roads = 190.0
-    public static let fortresses = 195.0
-    public static let cities = 200.0
-    public static let cityLabels = 451.0
-    public static let cityWorkedTilesStatuses = 452.0
-    public static let cityNames = 250.0
-    public static let goodieHuts = 280.0
-    public static let unitMovementIndicators = 290.0
-    public static let unitSelection = 299.0
-    public static let units = 300.0
-    public static let specialResources = 325.0
-    public static let unitPath = 400.0
-    public static let frontier = 425.0
-    public static let tileAnalysis = 435.0
-    public static let fogOfWar = 450.0
-    public static let hud = 500.0
-    public static let contextMenu = 600.0
-    public static let contextMenuItem = 601.0
-    public static let techTree = 700.0
-    public static let loadingScreen = 1000.0
-    public static let tileCoordinates = 2000.0
-    public static let tileStats = 3500.0
-}
-
 public enum LogCategory: CustomStringConvertible {
     case AI
     case Core

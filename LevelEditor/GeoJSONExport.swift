@@ -36,7 +36,7 @@ enum GeoJSONExport {
                 layer: 40,
                 geometry: .lineString(road.points),
                 extra: [
-                    "widthPx": .number(CanvasSpec.pathWidth),
+                    "widthPx": .number(VirtualCanvas.pathWidth),
                     "pathIndex": .number(Double(ri)),
                 ]
             ))
@@ -205,11 +205,11 @@ enum GeoJSONExport {
         var type = "local-cartesian"
         var note = "NOT WGS84. [x, y] in canonical game units, origin LOWER-LEFT, +y UP. "
             + "The same space the LevelEditor, Simulator and game all use; nothing rescales."
-        var canvas = Size(width: CanvasSpec.width, height: CanvasSpec.height)
-        var playArea = Rect(x: CanvasSpec.playArea.minX,
-                                y: CanvasSpec.playArea.minY,
-                                width: CanvasSpec.playArea.width,
-                                height: CanvasSpec.playArea.height)
+        var canvas = Size(width: VirtualCanvas.width, height: VirtualCanvas.height)
+        var playArea = Rect(x: VirtualCanvas.playArea.minX,
+                                y: VirtualCanvas.playArea.minY,
+                                width: VirtualCanvas.playArea.width,
+                                height: VirtualCanvas.playArea.height)
     }
 
     enum Geometry {
@@ -298,7 +298,7 @@ enum GeoJSONExport {
             case let .polygon(ps): ps
             }
             return pts.allSatisfy {
-                CanvasSpec.playArea.contains(CGPoint(x: $0.x, y: $0.y))
+                VirtualCanvas.playArea.contains(CGPoint(x: $0.x, y: $0.y))
             }
         }
 

@@ -27,8 +27,8 @@ final class LevelRunner: NSObject, ObservableObject {
     /// Box the map renderer fits the slot sprite into, in canonical units.
     /// Tower art drawn on the slot's own canvas is placed in this same box so
     /// it sits on the slot pad. One size for every slot in the game, from the
-    /// canvas_spec table.
-    var slotSize: CGSize { canvasSpec.towerSlotSize }
+    /// virtual_canvas table.
+    var slotSize: CGSize { virtualCanvas.towerSlotSize }
     private(set) var startingMoney = 0
 
     @Published private(set) var money = 0
@@ -145,8 +145,8 @@ final class LevelRunner: NSObject, ObservableObject {
     // MARK: - Path area in range
 
     /// Half-width of the enemy lane, in canonical units, from
-    /// canvas_spec.path_width.
-    private var pathHalfWidthInImagePixels: CGFloat { canvasSpec.pathWidth / 2 }
+    /// virtual_canvas.path_width.
+    private var pathHalfWidthInImagePixels: CGFloat { virtualCanvas.pathWidth / 2 }
 
     /// Lane coverage per slot, in map pixels squared, computed once at load.
     ///
@@ -168,8 +168,8 @@ final class LevelRunner: NSObject, ObservableObject {
     private func precomputeLaneCoverage() {
         let cell = Self.laneCell
         let w = pathHalfWidthInImagePixels
-        let cols = Int((canvasSpec.size.width / cell).rounded(.up)) + 1
-        let rows = Int((canvasSpec.size.height / cell).rounded(.up)) + 1
+        let cols = Int((virtualCanvas.size.width / cell).rounded(.up)) + 1
+        let rows = Int((virtualCanvas.size.height / cell).rounded(.up)) + 1
         var lane = [Bool](repeating: false, count: cols * rows)
 
         // Rasterise the lane by walking each segment's neighbourhood, rather
@@ -359,7 +359,7 @@ final class LevelRunner: NSObject, ObservableObject {
         guard paths.indices.contains(pathIndex), let mouth = paths[pathIndex].points.first else {
             return nil
         }
-        let sameMouth = canvasSpec.pathWidth * 2
+        let sameMouth = virtualCanvas.pathWidth * 2
         guard let atMouth = entrancePoints
             .map({ ($0.position, $0.position.distance(to: mouth)) })
             .filter({ $0.1 <= sameMouth })
@@ -389,18 +389,18 @@ final class LevelRunner: NSObject, ObservableObject {
     private let enemyHPMultiplier: Double
     
     private let db: Db
-    private let canvasSpec: CanvasSpec
+    private let virtualCanvas: VirtualCanvas
 
     init(db: Db,
-         canvasSpec: CanvasSpec,
+         virtualCanvas: VirtualCanvas,
          levelInfoID: UUID?,
          mapImageName: String,
          enemyHPMultiplier: Double = 1.0) {
         self.db = db
-        self.canvasSpec = canvasSpec
+        self.virtualCanvas = virtualCanvas
         self.mapImageName = mapImageName
         self.mapArt = LevelMapArt(mapImageName: mapImageName)
-        self.playArea = canvasSpec.playAreaRect
+        self.playArea = virtualCanvas.playAreaRect
         self.enemyHPMultiplier = enemyHPMultiplier
         super.init()
         load(levelInfoID: levelInfoID)

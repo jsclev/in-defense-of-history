@@ -13,7 +13,7 @@ struct RootView: View {
         if let selectedNode {
             if let playingDifficulty {
                 LevelMapView(db: store.db,
-                             canvasSpec: store.canvasSpec,
+                             virtualCanvas: store.virtualCanvas,
                              screen: screen,
                              towerMenuLayout: store.towerMenuLayout,
                              node: selectedNode, difficulty: playingDifficulty) {
@@ -21,7 +21,7 @@ struct RootView: View {
                     self.selectedNode = nil
                 }
             } else {
-                LevelBriefingView(db: store.db, canvasSpec: store.canvasSpec,
+                LevelBriefingView(db: store.db, virtualCanvas: store.virtualCanvas,
                                   screen: screen, node: selectedNode) { difficulty in
                     self.playingDifficulty = difficulty
                 }
@@ -46,7 +46,7 @@ struct RootView: View {
             CampaignMapView(
                 onSelectNode: { selectedNode = $0 },
                 onSelectMenu: { menuScreen = $0 },
-                canvasSpec: store.canvasSpec, db: store.db, screen: screen
+                virtualCanvas: store.virtualCanvas, db: store.db, screen: screen
             )
         }
     }

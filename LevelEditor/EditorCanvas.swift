@@ -22,10 +22,10 @@ struct EditorCanvas: View {
 
     var body: some View {
         GeometryReader { geo in
-            let fit = Double(min(geo.size.width / CanvasSpec.width,
-                                 geo.size.height / CanvasSpec.height))
+            let fit = Double(min(geo.size.width / VirtualCanvas.width,
+                                 geo.size.height / VirtualCanvas.height))
             let s = CGFloat(state.zoom ?? fit)
-            let t = DesignTransform(scale: s, space: CanvasSpec.size)
+            let t = DesignTransform(scale: s, space: VirtualCanvas.size)
             Group {
                 if state.zoom == nil {
                     canvasContent(t)
@@ -48,7 +48,7 @@ struct EditorCanvas: View {
         Canvas { ctx, _ in
             draw(&ctx, t)
         }
-        .frame(width: CanvasSpec.width * t.scale, height: CanvasSpec.height * t.scale)
+        .frame(width: VirtualCanvas.width * t.scale, height: VirtualCanvas.height * t.scale)
         .background(Palette.mapBackground)
         .focusable()
         .focusEffectDisabled()
@@ -182,7 +182,7 @@ struct EditorCanvas: View {
     }
 
     private func clampToCanvas(_ p: Point) -> Point {
-        Point(min(max(p.x, 0), CanvasSpec.width), min(max(p.y, 0), CanvasSpec.height))
+        Point(min(max(p.x, 0), VirtualCanvas.width), min(max(p.y, 0), VirtualCanvas.height))
     }
 
     private func dragGesture(_ t: DesignTransform) -> some Gesture {
@@ -368,8 +368,8 @@ struct EditorCanvas: View {
         if state.snapToGrid {
             out = Point((p.x / 6).rounded() * 6, (p.y / 6).rounded() * 6)
         }
-        out.x = min(max(out.x, 0), CanvasSpec.width)
-        out.y = min(max(out.y, 0), CanvasSpec.height)
+        out.x = min(max(out.x, 0), VirtualCanvas.width)
+        out.y = min(max(out.y, 0), VirtualCanvas.height)
         return out
     }
 
@@ -394,12 +394,6 @@ struct EditorCanvas: View {
         return slotTarget(at: p, t)
     }
 
-    /// The ONE hit test for slot pads, used by the select tool and the slot
-    /// tool alike. The pad IMAGE decides — CanvasSpec's slot-footprint
-    /// ellipse, tested in canvas units — not a circle and not the game's
-    /// touch target: a circle of the pad's width-radius reached past the pad
-    /// above and below, so taps on open ground next to a pad hit it and
-    /// refused to place a new one. Ties go to the nearest centre.
     private func slotTarget(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
         guard state.isVisible(.slots) else { return nil }
         let dp = t.design(p)
@@ -407,7 +401,7 @@ struct EditorCanvas: View {
         var best: (DragTarget, Double)?
         for (i, slot) in document.draft.slots.enumerated() {
             let center = CGPoint(x: slot.x, y: slot.y)
-            guard CanvasSpec.slotFootprintContains(point, slot: center) else { continue }
+            guard VirtualCanvas.slotFootprintContains(point, slot: center) else { continue }
             let d = hypot(dp.x - slot.x, dp.y - slot.y)
             if best == nil || d < best!.1 { best = (.slot(i), d) }
         }
@@ -466,7 +460,7 @@ struct EditorCanvas: View {
             layer.clip(to: SwiftUI.Path(frame))
             let rect = guideMatchesCanvasAspect
                 ? canvasRect(for: state.guidePixelSize)
-                : CanvasSpec.playArea
+                : VirtualCanvas.playArea
             layer.draw(Image(platformImage: guide), in: t.view(rect))
         }
         if state.showGrid { drawGrid(&ctx, t, frame) }
@@ -581,31 +575,31 @@ struct EditorCanvas: View {
     /// within half a percent, absorbing integer pixel rounding).
     private var guideMatchesCanvasAspect: Bool {
         guard let px = state.guidePixelSize, px.width > 0, px.height > 0 else { return false }
-        let canvas = CanvasSpec.width / CanvasSpec.height
+        let canvas = VirtualCanvas.width / VirtualCanvas.height
         return abs(px.width / px.height - canvas) / canvas < 0.005
     }
 
     /// An image's rect on the canvas: centred, at its own pixel size, so a
     /// correctly sized image covers the canvas exactly.
     private func canvasRect(for pixelSize: CGSize?) -> CGRect {
-        let px = pixelSize ?? CanvasSpec.size
+        let px = pixelSize ?? VirtualCanvas.size
         return CGRect(
-            x: (CanvasSpec.width - px.width) / 2,
-            y: (CanvasSpec.height - px.height) / 2,
+            x: (VirtualCanvas.width - px.width) / 2,
+            y: (VirtualCanvas.height - px.height) / 2,
             width: px.width,
             height: px.height
         )
     }
 
     private func drawPlayAreaOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let play = CanvasSpec.playArea
-        let notched = SwiftUI.Path(CanvasSpec.playAreaShape).applying(t.viewTransform)
+        let play = VirtualCanvas.playArea
+        let notched = SwiftUI.Path(VirtualCanvas.playAreaShape).applying(t.viewTransform)
         var dim = SwiftUI.Path(t.frame)
         dim.addPath(notched)
         ctx.fill(dim, with: .color(.black.opacity(0.38)), style: FillStyle(eoFill: true))
-        let lineColor = Color(red: CanvasSpec.playAreaLineRGB.red,
-                              green: CanvasSpec.playAreaLineRGB.green,
-                              blue: CanvasSpec.playAreaLineRGB.blue)
+        let lineColor = Color(red: VirtualCanvas.playAreaLineRGB.red,
+                              green: VirtualCanvas.playAreaLineRGB.green,
+                              blue: VirtualCanvas.playAreaLineRGB.blue)
         ctx.stroke(notched, with: .color(lineColor),
                    style: StrokeStyle(lineWidth: 1.5, dash: [8, 5]))
 
@@ -675,7 +669,7 @@ struct EditorCanvas: View {
         var minor = SwiftUI.Path()
         var major = SwiftUI.Path()
         var x = 0.0
-        while x <= CanvasSpec.width {
+        while x <= VirtualCanvas.width {
             let vx = t.view(Point(x, 0)).x
             var p = SwiftUI.Path()
             p.move(to: CGPoint(x: vx, y: frame.minY))
@@ -684,7 +678,7 @@ struct EditorCanvas: View {
             x += 15
         }
         var y = 0.0
-        while y <= CanvasSpec.height {
+        while y <= VirtualCanvas.height {
             let vy = t.view(Point(0, y)).y
             var p = SwiftUI.Path()
             p.move(to: CGPoint(x: frame.minX, y: vy))
@@ -814,8 +808,8 @@ struct EditorCanvas: View {
         for (i, slot) in draft.slots.enumerated() {
             let c = t.view(slot)
             let selected = state.selection == .slot(i)
-            let w = CanvasSpec.slotSize.width * s
-            let h = CanvasSpec.slotSize.height * s
+            let w = VirtualCanvas.slotSize.width * s
+            let h = VirtualCanvas.slotSize.height * s
             let rect = CGRect(x: c.x - w / 2, y: c.y - h / 2, width: w, height: h)
 
             TowerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: selected)

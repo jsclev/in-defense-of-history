@@ -118,7 +118,7 @@ public class LevelInfoDAO: BaseDAO {
             INNER JOIN
                 campaign c ON c.id = l.campaign_id
             CROSS JOIN
-                canvas_spec d
+                virtual_canvas d
             WHERE
                 l.id = ?
         """)

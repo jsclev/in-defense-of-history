@@ -6,13 +6,13 @@ struct LibertyLineApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     // The composition root: SwiftUI makes exactly one App instance per
-    // process, so this is the game's single Db/CanvasSpec.
+    // process, so this is the game's single Db/VirtualCanvas.
     private let store = Store()
 
     var body: some Scene {
         WindowGroup {
-            DebugLayoutGuidesView(canvasSpec: store.canvasSpec)
-//            ScreenGeometryGate(canvasSpec: store.canvasSpec) { screen in
+            DebugLayoutGuidesView(virtualCanvas: store.virtualCanvas)
+//            ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { screen in
 //                RootView(store: store, screen: screen)
 //            }
             .statusBarHidden(true)

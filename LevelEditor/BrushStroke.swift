@@ -2,7 +2,7 @@ import Foundation
 import CoreGraphics
 
 /// A pencil stroke in progress: just the points. Path width is fixed by
-/// canvas_spec.path_width and is not an authoring choice, so the stroke
+/// virtual_canvas.path_width and is not an authoring choice, so the stroke
 /// carries no per-sample width.
 struct BrushStroke: Equatable {
     var points: [Point] = []

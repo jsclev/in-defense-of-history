@@ -68,7 +68,7 @@ struct SweepFixedInputs {
     /// This used to rescale positions into a separate 1600x900 design space while
     /// leaving tower ranges in database units, which silently gave simulated
     /// towers 2.4x the reach they have in the game. Everything is now in the one
-    /// canonical space - the play area comes from the canvas_spec table
+    /// canonical space - the play area comes from the virtual_canvas table
     /// through LevelInfoDAO - so geometry passes through untouched.
     func designLevel(db: Db) throws -> LevelInfo {
         let level = try db.levelInfoDao.getBy(id: levelID)

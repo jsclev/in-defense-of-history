@@ -91,7 +91,7 @@ CREATE TABLE player_unlocked_hero (
     hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id)
 );
 
-CREATE TABLE canvas_spec (
+CREATE TABLE virtual_canvas (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     canvas_width REAL NOT NULL CHECK (canvas_width > 0.0),
     canvas_height REAL NOT NULL CHECK (canvas_height > 0.0),

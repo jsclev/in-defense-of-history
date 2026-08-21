@@ -1,4 +1,4 @@
-INSERT INTO canvas_spec (
+INSERT INTO virtual_canvas (
     id, canvas_width, canvas_height,
     play_area_x, play_area_y, play_area_width, play_area_height,
     slot_width, slot_height, path_width,

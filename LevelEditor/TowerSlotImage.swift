@@ -8,8 +8,8 @@ enum TowerSlotImage {
 
     static func draw(_ ctx: inout GraphicsContext, at center: CGPoint,
                      index: Int, scale s: CGFloat, selected: Bool) {
-        let w = CanvasSpec.slotSize.width * s
-        let h = CanvasSpec.slotSize.height * s
+        let w = VirtualCanvas.slotSize.width * s
+        let h = VirtualCanvas.slotSize.height * s
         let rect = CGRect(x: center.x - w / 2, y: center.y - h / 2, width: w, height: h)
         if let pad = towerSlotImage {
             ctx.draw(Image(platformImage: pad), in: rect)

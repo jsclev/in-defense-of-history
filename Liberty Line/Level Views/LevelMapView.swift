@@ -1,12 +1,12 @@
 import SwiftUI
 
 struct LevelMapProjection {
-    /// The virtual canvas, from canvas_spec. Map artwork is required to be
+    /// The virtual canvas, from virtual_canvas. Map artwork is required to be
     /// exactly this size, so the projection never asks the image.
-    var canvasSize: CGSize { canvasSpec.size }
+    var canvasSize: CGSize { virtualCanvas.size }
     let playArea: CGRect
     let fitRect: CGRect
-    let canvasSpec: CanvasSpec
+    let virtualCanvas: VirtualCanvas
 
     var scale: CGFloat {
         min(fitRect.width / playArea.width, fitRect.height / playArea.height)
@@ -131,17 +131,17 @@ struct LevelMapView: View {
     private static let slotTowerLift: CGFloat = 0.11
     
     private var db: Db
-    private var canvasSpec: CanvasSpec
+    private var virtualCanvas: VirtualCanvas
     private var screen: ScreenGeometry
 
     init(db: Db,
-         canvasSpec: CanvasSpec,
+         virtualCanvas: VirtualCanvas,
          screen: ScreenGeometry,
          towerMenuLayout: TowerMenuLayout,
          node: CampaignNode,
          difficulty: Difficulty, onExit: @escaping () -> Void) {
         self.db = db
-        self.canvasSpec = canvasSpec
+        self.virtualCanvas = virtualCanvas
         self.screen = screen
         self.towerMenuLayout = towerMenuLayout
         self.node = node
@@ -149,7 +149,7 @@ struct LevelMapView: View {
         self.onExit = onExit
         _runner = StateObject(wrappedValue: LevelRunner(
             db: db,
-            canvasSpec: canvasSpec,
+            virtualCanvas: virtualCanvas,
             levelInfoID: node.levelInfoID,
             mapImageName: node.mapImageName,
             enemyHPMultiplier: difficulty.enemyHPMultiplier
@@ -180,7 +180,7 @@ struct LevelMapView: View {
 
             // Last, so the guides draw over every HUD element.
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(canvasSpec: canvasSpec)
+                DebugLayoutGuidesView(virtualCanvas: virtualCanvas)
             }
         }
         .ignoresSafeArea()
@@ -259,7 +259,7 @@ struct LevelMapView: View {
     private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
         let safe = screen.safe
-        let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen.playable)
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playable)
         let metrics = HudMetrics(screen: screen)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
@@ -498,8 +498,8 @@ struct LevelMapView: View {
     }
 
     private func towerMenuLayer(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
-        let projection = LevelMapArt.projection(canvasSpec: canvasSpec, fitting: screen.playable)
-        let playAreaScalingFactor = PlayAreaLayout.scalingFactor(canvasSpec: canvasSpec, runtimePlayArea: screen.playable)
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playable)
+        let playAreaScalingFactor = PlayAreaLayout.scalingFactor(virtualCanvas: virtualCanvas, runtimePlayArea: screen.playable)
         return ZStack(alignment: .topLeading) {
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {

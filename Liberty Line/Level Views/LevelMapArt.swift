@@ -51,8 +51,8 @@ struct LevelMapArt {
     /// The projection every surface builds to composite this art: the
     /// canonical play area fitted into `fitRect`. One constructor, so the
     /// level screen and the briefing portrait fit the map identically.
-    static func projection(canvasSpec: CanvasSpec, fitting fitRect: CGRect) -> LevelMapProjection {
-        LevelMapProjection(playArea: canvasSpec.playAreaRect, fitRect: fitRect, canvasSpec: canvasSpec)
+    static func projection(virtualCanvas: VirtualCanvas, fitting fitRect: CGRect) -> LevelMapProjection {
+        LevelMapProjection(playArea: virtualCanvas.playAreaRect, fitRect: fitRect, virtualCanvas: virtualCanvas)
     }
 
     // MARK: - Tiers, in draw order

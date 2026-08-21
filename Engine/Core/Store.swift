@@ -1,5 +1,5 @@
 public final class Store {
-    public let canvasSpec: CanvasSpec
+    public let virtualCanvas: VirtualCanvas
     public let db: Db
     public let towerMenuLayout: TowerMenuLayout
 
@@ -9,8 +9,8 @@ public final class Store {
                 dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: true),
                 fullRefresh: true
             )
-            canvasSpec = try db.canvasSpecDao.get()
-            towerMenuLayout = TowerMenuLayout(canvasSpec: canvasSpec)
+            virtualCanvas = try db.virtualCanvasDao.get()
+            towerMenuLayout = TowerMenuLayout(virtualCanvas: virtualCanvas)
         }
         catch {
             fatalError("\(error)")

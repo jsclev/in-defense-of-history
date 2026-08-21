@@ -8,7 +8,7 @@ import Foundation
 /// source ended up describing a map that had already moved on.
 ///
 /// Coordinates are used verbatim: the file is already in the canonical space
-/// (`CanvasSpec`), which is the space the editor, the simulator and the game all
+/// (`VirtualCanvas`), which is the space the editor, the simulator and the game all
 /// work in, so there is nothing to convert.
 enum GeoJSONImport {
     struct Feature: Decodable {

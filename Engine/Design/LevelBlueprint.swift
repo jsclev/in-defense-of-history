@@ -55,7 +55,7 @@ public struct LevelBlueprint: Sendable {
         }
     }
 
-    public var canvasSpec: CanvasSpec
+    public var virtualCanvas: VirtualCanvas
     public var name: String
     public var startingGold: Int
     public var lives: Int
@@ -65,7 +65,7 @@ public struct LevelBlueprint: Sendable {
     public var intendedSolution: [BuildStep]
 
     public init(
-        canvasSpec: CanvasSpec,
+        virtualCanvas: VirtualCanvas,
         name: String,
         startingGold: Int,
         lives: Int,
@@ -74,7 +74,7 @@ public struct LevelBlueprint: Sendable {
         waves: [WaveSketch],
         intendedSolution: [BuildStep] = []
     ) {
-        self.canvasSpec = canvasSpec
+        self.virtualCanvas = virtualCanvas
         self.name = name
         self.startingGold = startingGold
         self.lives = lives
@@ -124,7 +124,7 @@ public struct LevelBlueprint: Sendable {
             startingMoney: startingGold,
             numStartingLives: lives,
             numWaves: waves.count,
-            playArea: canvasSpec.playAreaRect,
+            playArea: virtualCanvas.playAreaRect,
             paths: roads.map { Path(points: $0.waypoints) },
             towerSlots: slots.enumerated().map { i, p in
                 TowerSlot(id: UUID(uuidString: String(format: "b0000000-0000-4000-8000-%012d", i))!, position: p)

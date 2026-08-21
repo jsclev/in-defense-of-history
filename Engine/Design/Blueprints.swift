@@ -1,13 +1,11 @@
 import Foundation
 
-/// The design lab's blueprint levels, built in the coordinate system of the
-/// injected canvas spec.
 public struct Blueprints: Sendable {
     public let all: [LevelBlueprint]
 
-    public init(canvasSpec: CanvasSpec) {
+    public init(virtualCanvas: VirtualCanvas) {
         let singleRoad = LevelBlueprint(
-            canvasSpec: canvasSpec,
+            virtualCanvas: virtualCanvas,
             name: "Single Road",
             startingGold: 220,
             lives: 20,
@@ -64,7 +62,7 @@ public struct Blueprints: Sendable {
         )
 
         let convergingRoads = LevelBlueprint(
-            canvasSpec: canvasSpec,
+            virtualCanvas: virtualCanvas,
             name: "Converging Roads",
             startingGold: 500,
             lives: 20,

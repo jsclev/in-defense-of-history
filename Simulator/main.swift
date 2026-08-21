@@ -243,8 +243,6 @@ func parseOptions() throws -> Options? {
     return opts
 }
 
-// The composition root: the one database connection, canvas spec and design
-// lab are built here and handed to every mode below. Nothing else opens a Db.
 let store: SimulatorStore
 do {
     store = try SimulatorStore()

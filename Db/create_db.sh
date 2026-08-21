@@ -17,7 +17,7 @@ sqlite3 in_defense_of_history.sqlite ""
 sqlite3 in_defense_of_history.sqlite < DDL/create_tables.sql
 
 # Add all the data
-sqlite3 in_defense_of_history.sqlite < DML/canvas_spec.sql
+sqlite3 in_defense_of_history.sqlite < DML/virtual_canvas.sql
 sqlite3 in_defense_of_history.sqlite < DML/campaigns.sql
 sqlite3 in_defense_of_history.sqlite < DML/Levels/level_01_battle_road.sql
 sqlite3 in_defense_of_history.sqlite < DML/Levels/level_02_bunker_hill.sql

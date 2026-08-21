@@ -1,8 +1,7 @@
 import Foundation
 import CoreGraphics
 
-public struct CanvasSpec {
-    
+public struct VirtualCanvas {
     public init(size: CGSize,
                 playAreaRect: CGRect,
                 pathWidth: Double,

@@ -34,8 +34,8 @@ public struct HudScale: Equatable {
         value = Swift.min(Swift.max(raw, Self.minimum), Self.maximum)
     }
 
-    public init(viewSize: CGSize, canvasSpec: CanvasSpec) {
-        self.init(playableHeight: canvasSpec.playableRect(in: viewSize).height)
+    public init(viewSize: CGSize, virtualCanvas: VirtualCanvas) {
+        self.init(playableHeight: virtualCanvas.playableRect(in: viewSize).height)
     }
 }
 

@@ -3,7 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct LevelBriefingView: View {
     let db: Db
-    let canvasSpec: CanvasSpec
+    let virtualCanvas: VirtualCanvas
     let screen: ScreenGeometry
     let node: CampaignNode
     let onStart: (Difficulty) -> Void
@@ -92,7 +92,7 @@ struct LevelBriefingView: View {
 
     private func levelPortrait(metrics: HudMetrics) -> some View {
         let height = 260 * metrics.scale
-        let aspect = canvasSpec.playAreaRect.width / canvasSpec.playAreaRect.height
+        let aspect = virtualCanvas.playAreaRect.width / virtualCanvas.playAreaRect.height
         let frame = CGSize(width: height * aspect, height: height)
         let art = LevelMapArt(mapImageName: node.mapImageName)
         return ZStack {
@@ -101,7 +101,7 @@ struct LevelBriefingView: View {
                 // compositor, same tiers, same projection rule — fitted to
                 // this smaller frame instead of the screen.
                 art.complete(in: LevelMapArt.projection(
-                    canvasSpec: canvasSpec,
+                    virtualCanvas: virtualCanvas,
                     fitting: CGRect(origin: .zero, size: frame)))
             } else {
                 Rectangle().fill(Self.ink.opacity(0.55))

@@ -33,7 +33,7 @@ final class EditorContent: ObservableObject {
         // baked into the app at build time. On iPad the sandbox copy has no
         // maintainer, so refresh it from the bundle every launch the way the
         // game does; keeping a stale copy is how an old schema crashed the
-        // canvas_spec load at startup.
+        // virtual_canvas load at startup.
         #if os(iOS)
         let refreshFromBundle = true
         #else
