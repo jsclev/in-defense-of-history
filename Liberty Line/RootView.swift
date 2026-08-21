@@ -10,6 +10,11 @@ struct RootView: View {
 
 
     var body: some View {
+        GeometryReader { proxy in
+            let abc = proxy.safeAreaInsets
+            let xyz = 1
+        }
+        
         if let selectedNode {
             if let playingDifficulty {
                 LevelMapView(db: store.db,

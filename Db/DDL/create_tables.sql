@@ -99,8 +99,8 @@ CREATE TABLE canvas_spec (
     play_area_y REAL NOT NULL CHECK (play_area_y >= 0.0),
     play_area_width REAL NOT NULL CHECK (play_area_width > 0.0),
     play_area_height REAL NOT NULL CHECK (play_area_height > 0.0),
-    slot_width REAL NOT NULL CHECK (slot_width > 0.0),
-    slot_height REAL NOT NULL CHECK (slot_height > 0.0),
+    tower_slot_width REAL NOT NULL CHECK (tower_slot_width > 0.0),
+    tower_slot_height REAL NOT NULL CHECK (tower_slot_height > 0.0),
     path_width REAL NOT NULL CHECK (path_width > 0.0),
     upper_left_occlusion_corner_width_fraction REAL NOT NULL
         CHECK (upper_left_occlusion_corner_width_fraction > 0.0 AND upper_left_occlusion_corner_width_fraction <= 1.0),
