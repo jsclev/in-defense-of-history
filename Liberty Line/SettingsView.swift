@@ -2,7 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct SettingsView: View {
-    let canvasSpec: CanvasSpec
+    let screen: ScreenGeometry
     let onExit: () -> Void
 
     @AppStorage("debugMode") private var debugMode = true
@@ -10,53 +10,53 @@ struct SettingsView: View {
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     var body: some View {
-        GeometryReader { geometry in
-            let metrics = HudMetrics(viewSize: geometry.size, canvasSpec: canvasSpec)
-            ZStack(alignment: .topLeading) {
+        let metrics = HudMetrics(screen: screen)
+        ZStack(alignment: .topLeading) {
+            ZStack {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .frame(width: screen.physical.width, height: screen.physical.height)
                     .clipped()
-                    .ignoresSafeArea()
 
-                Color.black.opacity(0.45).ignoresSafeArea()
-
-                VStack(alignment: .leading, spacing: 18 * metrics.scale) {
-                    Text("Settings")
-                        .font(.custom("Baskerville-Bold", size: 40 * metrics.scale))
-                        .foregroundStyle(.white)
-
-                    toggle("Debug mode",
-                           detail: "Firing range ring under each tower you place, "
-                                 + "coloured and labelled by range.",
-                           isOn: $debugMode, metrics: metrics)
-
-                    toggle("Layout guides",
-                           detail: "Physical screen edge in green, safe area in red, play area in orange.",
-                           isOn: $showDebugLayoutGuides, metrics: metrics)
-
-                    toggle("Simulation readout",
-                           detail: "Wave and spawn state, top-left of the level map.",
-                           isOn: $showDebugInfo, metrics: metrics)
-
-                    Spacer()
-
-                    Text("Version \(GameIdentity.version)")
-                        .font(.system(size: Typography.size(12 * metrics.scale)))
-                        .foregroundStyle(.white.opacity(0.5))
-                }
-                .padding(28 * metrics.scale)
-                .frame(maxWidth: 620 * metrics.scale, alignment: .leading)
-
-                let screen = ScreenGeometry(proxy: geometry, canvasSpec: canvasSpec)
-                DoneButton(action: onExit)
-                    .hudFrame(DoneButtonLayout(screen: screen,
-                                               aspect: DoneButton.aspect).frame,
-                              in: screen)
-                    .ignoresSafeArea()
+                Color.black.opacity(0.45)
             }
+            .frame(width: screen.physical.width, height: screen.physical.height)
+
+            VStack(alignment: .leading, spacing: 18 * metrics.scale) {
+                Text("Settings")
+                    .font(.custom("Baskerville-Bold", size: 40 * metrics.scale))
+                    .foregroundStyle(.white)
+
+                toggle("Debug mode",
+                       detail: "Firing range ring under each tower you place, "
+                             + "coloured and labelled by range.",
+                       isOn: $debugMode, metrics: metrics)
+
+                toggle("Layout guides",
+                       detail: "Physical screen edge in green, safe area in red, play area in orange.",
+                       isOn: $showDebugLayoutGuides, metrics: metrics)
+
+                toggle("Simulation readout",
+                       detail: "Wave and spawn state, top-left of the level map.",
+                       isOn: $showDebugInfo, metrics: metrics)
+
+                Spacer()
+
+                Text("Version \(GameIdentity.version)")
+                    .font(.system(size: Typography.size(12 * metrics.scale)))
+                    .foregroundStyle(.white.opacity(0.5))
+            }
+            .padding(28 * metrics.scale)
+            .frame(maxWidth: 620 * metrics.scale, alignment: .leading)
+            .hudFrame(screen.safe, in: screen, alignment: .topLeading)
+
+            DoneButton(action: onExit)
+                .hudFrame(DoneButtonLayout(screen: screen,
+                                           aspect: DoneButton.aspect).frame,
+                          in: screen)
         }
+        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
     }
 

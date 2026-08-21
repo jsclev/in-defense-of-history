@@ -37,7 +37,7 @@ struct RootView: View {
                 self.menuScreen = nil
             }
         } else if menuScreen == .settings {
-            SettingsView(canvasSpec: store.canvasSpec) {
+            SettingsView(screen: screen) {
                 self.menuScreen = nil
             }
         } else if let menuScreen {
@@ -47,7 +47,8 @@ struct RootView: View {
         } else {
             CampaignMapView(
                 onSelectNode: { selectedNode = $0 },
-                onSelectMenu: { menuScreen = $0 }, canvasSpec: store.canvasSpec, db: store.db
+                onSelectMenu: { menuScreen = $0 },
+                canvasSpec: store.canvasSpec, db: store.db, screen: screen
             )
         }
     }
