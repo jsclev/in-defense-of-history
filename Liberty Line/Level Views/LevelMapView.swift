@@ -66,7 +66,6 @@ struct LevelMapView: View {
     @State private var hiddenRangeSlots: Set<Int> = []
 
     @AppStorage(Constants.debugModeKey) private var debugMode = false
-    @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     private static let debugRangeBands: [(upperBound: CGFloat, tint: Color)] = [
@@ -167,11 +166,8 @@ struct LevelMapView: View {
                 failBanner(metrics: metrics)
             }
 
-            topBar(metrics: metrics,
-                   isPortrait: fullSize.height > fullSize.width,
-                   screen: screen)
-
-            HudView(db: db, screen: screen)
+            HudView(db: db, screen: screen, runner: runner,
+                    onSpeedUp: { runner.speedUp() }, onExit: onExit)
                 .frame(width: screen.safeInsetsRect.width, height: screen.safeInsetsRect.height)
                 .position(x: screen.safeInsetsRect.midX, y: screen.safeInsetsRect.midY)
                 .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
@@ -189,48 +185,6 @@ struct LevelMapView: View {
         .onAppear { runner.start() }
         .onDisappear { runner.stop() }
         .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
-    }
-
-    /// The single top-of-screen HUD entity. Everything that sits along the
-    /// top — counters, wave readout, speed/pause buttons — renders inside
-    /// this one container, vertically positioned by one TopBarLayout, whose
-    /// margin is the one number in HudSizing.topBarMargin.
-    private func topBar(metrics: HudMetrics, isPortrait: Bool,
-                        screen: ScreenGeometry) -> some View {
-        let bar = TopBarLayout(screen: screen)
-        return ZStack(alignment: .topLeading) {
-            hud(metrics: metrics, isPortrait: isPortrait,
-                screen: screen, topBar: bar)
-            cornerButtons(screen: screen, topBar: bar)
-        }
-    }
-
-    private func cornerButtons(screen: ScreenGeometry,
-                               topBar: TopBarLayout) -> some View {
-        let layout = CornerButtonsLayout(screen: screen, topBar: topBar)
-        return ZStack(alignment: .topLeading) {
-            cornerButton(asset: "speed_up_icon", frame: layout.speed,
-                         in: screen) { runner.speedUp() }
-            cornerButton(asset: "pause_icon", frame: layout.pause,
-                         in: screen, action: onExit)
-        }
-    }
-
-    private func cornerButton(asset: String, frame: CGRect,
-                              in screen: ScreenGeometry,
-                              action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            // The composed square tower-style controls: glyph baked into the
-            // same ashwood frame the tower menu's choices sit on. The explicit
-            // frame pins the tap rect to the layout box, not the fitted image.
-            Image(asset)
-                .resizable()
-                .interpolation(.high)
-                .scaledToFit()
-                .frame(width: frame.width, height: frame.height)
-                .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
     }
 
     private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
@@ -770,53 +724,6 @@ struct LevelMapView: View {
             .allowsHitTesting(false)
     }
 
-    private func hud(metrics: HudMetrics, isPortrait: Bool,
-                     screen: ScreenGeometry, topBar: TopBarLayout) -> some View {
-        let panel = StatsPanelLayout(
-            screen: screen, topBar: topBar, isPortrait: isPortrait,
-            livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
-            moneyIconAspect: HudIcon.aspect(of: "money_icon_12"),
-            moneyText: goldText)
-        return ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
-                .fill(.black.opacity(HudSizing.statPlateOpacity))
-            RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
-                .fill(.black.opacity(HudSizing.statPlateOpacity))
-
-            Image("lives_icon_05").resizable().scaledToFit()
-            counterText("\(runner.lives)", fontSize: panel.lives.fontSize)
-
-            Image("money_icon_12").resizable().scaledToFit()
-            counterText(goldText, fontSize: panel.money.fontSize)
-
-            counterText("Wave \(runner.currentWaveNumber) of \(runner.waveCount)",
-                        fontSize: panel.waveFontSize)
-                .padding(.horizontal, metrics.statPlatePadding * 1.4)
-                .padding(.vertical, metrics.statPlatePadding * 0.6)
-                .background(.black.opacity(HudSizing.statPlateOpacity),
-                            in: RoundedRectangle(cornerRadius: metrics.statPlateCorner,
-                                                 style: .continuous))
-
-            if showDebugInfo {
-                Text(runner.status)
-                    .font(.footnote.monospaced())
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 8))
-            }
-        }
-    }
-
-    private func counterText(_ value: String, fontSize: CGFloat) -> some View {
-        Text(value)
-            .font(.system(size: Typography.size(fontSize), weight: .black, design: .rounded)
-                .monospacedDigit())
-            .lineLimit(1)
-            .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.85), radius: 2, x: 0, y: 1)
-    }
-
     private func failBanner(metrics: HudMetrics) -> some View {
         ZStack {
             Color.black.opacity(0.45)
@@ -828,13 +735,6 @@ struct LevelMapView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .allowsHitTesting(false)
-    }
-
-    private var goldText: String {
-        let money = runner.money
-        return money >= 1000
-            ? "\(money / 1000),\(String(format: "%03d", money % 1000))"
-            : "\(money)"
     }
 
 }

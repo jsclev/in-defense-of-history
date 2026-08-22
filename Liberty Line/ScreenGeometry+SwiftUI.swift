@@ -11,7 +11,6 @@ struct ScreenGeometryGate<Content: View>: View {
     var body: some View {
         if let screen {
             content(screen)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .ignoresSafeArea()
         } else {
             GeometryReader { geometry in

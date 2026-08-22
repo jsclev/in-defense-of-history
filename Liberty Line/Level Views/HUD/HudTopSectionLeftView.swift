@@ -2,13 +2,76 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct HudTopSectionLeftView: View {
+    @AppStorage("showDebugInfo") private var showDebugInfo = false
+    @ObservedObject private var runner: LevelRunner
     private let screen: ScreenGeometry
-    
-    public init(screen: ScreenGeometry) {
+    private let metrics: HudMetrics
+    private let isPortrait: Bool
+
+    public init(screen: ScreenGeometry, runner: LevelRunner) {
         self.screen = screen
+        self.runner = runner
+        metrics = HudMetrics(screen: screen)
+        isPortrait = screen.physicalRect.height > screen.physicalRect.width
     }
 
     var body: some View {
+        let panel = StatsPanelLayout(
+            screen: screen, topBar: TopBarLayout(screen: screen), isPortrait: isPortrait,
+            livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
+            moneyIconAspect: HudIcon.aspect(of: "money_icon_12"),
+            moneyText: goldText)
+        VStack(alignment: .leading, spacing: metrics.statPlatePadding) {
+            HStack(spacing: metrics.statPlatePadding) {
+                counter(icon: "lives_icon_05", value: "\(runner.lives)", row: panel.lives)
+                counter(icon: "money_icon_12", value: goldText, row: panel.money)
+            }
+            counterText("Wave \(runner.currentWaveNumber) of \(runner.waveCount)",
+                        fontSize: panel.waveFontSize)
+                .padding(.horizontal, metrics.statPlatePadding * 1.4)
+                .padding(.vertical, metrics.statPlatePadding * 0.6)
+                .background(.black.opacity(HudSizing.statPlateOpacity), in: plate)
+            if showDebugInfo {
+                Text(runner.status)
+                    .font(.footnote.monospaced())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 8))
+            }
+        }
+    }
 
+    private var plate: RoundedRectangle {
+        RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
+    }
+
+    private var goldText: String {
+        let money = runner.money
+        return money >= 1000
+            ? "\(money / 1000),\(String(format: "%03d", money % 1000))"
+            : "\(money)"
+    }
+
+    private func counter(icon: String, value: String,
+                         row: StatsPanelLayout.CounterRow) -> some View {
+        HStack(spacing: row.valueBox.minX - row.icon.maxX) {
+            Image(icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: row.icon.width, height: row.icon.height)
+            counterText(value, fontSize: row.fontSize)
+        }
+        .padding(metrics.statPlatePadding)
+        .background(.black.opacity(HudSizing.statPlateOpacity), in: plate)
+    }
+
+    private func counterText(_ value: String, fontSize: CGFloat) -> some View {
+        Text(value)
+            .font(.system(size: Typography.size(fontSize), weight: .black, design: .rounded)
+                .monospacedDigit())
+            .lineLimit(1)
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.85), radius: 2, x: 0, y: 1)
     }
 }

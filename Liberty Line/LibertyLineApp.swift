@@ -18,7 +18,7 @@ struct LibertyLineApp: App {
             .ignoresSafeArea()
             .statusBarHidden(true)
             .persistentSystemOverlays(.hidden)
-            .border(debugMode ? Color.red : Color.clear, width: debugMode ? 2 : 0)
+//            .border(debugMode ? Color.red : Color.clear, width: debugMode ? 2 : 0)
         }
     }
 }
