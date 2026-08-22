@@ -73,7 +73,6 @@ struct CampaignMapView: View {
                     )
                 }
             }
-            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             Image("game_title")
                 .resizable()

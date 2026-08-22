@@ -13,16 +13,16 @@ struct HudHeroesBarView: View {
         self.db = db
         
         do {
-            var abc = try db.heroDao.getAll()
+            let allHeroes = try db.heroDao.getAll()
             self.heroes = [
-                abc[0],
-                abc[1],
-                abc[2],
-                abc[3]
+                allHeroes[0],
+                allHeroes[1],
+                allHeroes[2],
+                allHeroes[3]
             ]
-            self.buttonSize = buttonSize
             
-            spacing = buttonSize.width / 4.0
+            self.buttonSize = buttonSize
+            spacing = buttonSize.width / 5.0
         }
         catch {
             fatalError()

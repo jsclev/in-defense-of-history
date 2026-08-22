@@ -160,7 +160,6 @@ struct LevelMapView: View {
         let metrics = HudMetrics(screen: screen)
         ZStack(alignment: .topLeading) {
             content(in: fullSize, screen: screen)
-                .frame(width: fullSize.width, height: fullSize.height)
 
             if runner.isDefeated {
                 failBanner(metrics: metrics)
@@ -173,9 +172,7 @@ struct LevelMapView: View {
                 .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
 
             towerMenuLayer(in: fullSize, screen: screen)
-                .frame(width: fullSize.width, height: fullSize.height)
 
-            // Last, so the guides draw over every HUD element.
             if showDebugLayoutGuides {
                 DebugLayoutGuidesView(screen: screen)
             }
