@@ -10,17 +10,16 @@ public struct DebugLayoutGuidesView: View {
     @State private var hardwareInsets: UIEdgeInsets = .zero
     
     private let safeInsetsDash: [CGFloat] = [16, 9]
-    private let playableDash: [CGFloat] = [4, 10]
+    private let playAreaRectDash: [CGFloat] = [4, 10]
+    private let playAreaDash: [CGFloat] = [4, 10]
 
     private let labelFloor: CGFloat = 30
-    
-    private let physicalLineThickness: Int = 1
-    private let safeInsetsLineThickness: Int = 1
-    private let playAreaLineThickness: Int = 1
+    private let lineThickness: Int = 1
 
     private let physicalGuideColor = Color(red: 1.0, green: 0.16, blue: 0.16)
-    private let playAreaGuideColor = Color(red: 1.0, green: 0.58, blue: 0.0)
     private let safeInsetsGuideColor = Color(red: 0.18, green: 1.0, blue: 0.33)
+    private let playAreaRectGuideColor = Color(red: 1.0, green: 0.58, blue: 0.0)
+    private let playAreaGuideColor = Color(red: 1.0, green: 0.58, blue: 0.0)
     
     @State private var physicalRectWidth: CGFloat?
     @State private var physicalRectHeight: CGFloat?
@@ -48,15 +47,16 @@ public struct DebugLayoutGuidesView: View {
                 ZStack(alignment: .topLeading) {
                     createRectView(rect: physicalRect,
                                    borderColor: physicalGuideColor,
-                                   borderThickness: physicalLineThickness)
+                                   borderThickness: lineThickness)
                     createRectView(rect: safeInsetsRect,
                                    borderColor: safeInsetsGuideColor,
-                                   borderThickness: safeInsetsLineThickness,
+                                   borderThickness: lineThickness,
                                    borderDash: safeInsetsDash)
                     createRectView(rect: screenGeometry.playAreaRect,
-                                   borderColor: playAreaGuideColor,
-                                   borderThickness: playAreaLineThickness,
-                                   borderDash: playableDash)
+                                   borderColor: playAreaRectGuideColor,
+                                   borderThickness: lineThickness,
+                                   borderDash: playAreaRectDash)
+                    createPlayAreaView(screenGeometry: screenGeometry)
                 }
             }
         }
@@ -79,13 +79,11 @@ public struct DebugLayoutGuidesView: View {
             )
     }
 
-    private func createPlayAreaView() -> some View {
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen!.playAreaRect)
-        return SwiftUI.Path(virtualCanvas.playAreaShape)
-            .applying(projection.viewTransform)
+    private func createPlayAreaView(screenGeometry: ScreenGeometry) -> some View {
+        SwiftUI.Path(screenGeometry.playArea)
             .stroke(playAreaGuideColor,
-                    style: StrokeStyle(lineWidth: CGFloat(playAreaLineThickness),
-                                       dash: playableDash))
+                    style: StrokeStyle(lineWidth: CGFloat(lineThickness),
+                                       dash: playAreaDash))
     }
 
     private func fmt(_ v: CGFloat) -> String { String(format: "%.0f", v) }
