@@ -6,6 +6,7 @@ public struct DebugLayoutGuidesView: View {
 
     @State private var chain: WindowGeometryReport?
 
+    private let physicalRectDash: [CGFloat] = [16, 9]
     private let safeInsetsDash: [CGFloat] = [16, 9]
     private let playAreaRectDash: [CGFloat] = [6, 10]
     private let playAreaDash: [CGFloat] = [6, 10]
@@ -28,7 +29,8 @@ public struct DebugLayoutGuidesView: View {
                 ZStack(alignment: .topLeading) {
                     createRectView(rect: screen.physicalRect,
                                    borderColor: physicalGuideColor,
-                                   borderThickness: lineThickness)
+                                   borderThickness: lineThickness,
+                                   borderDash: physicalRectDash)
                     createRectView(rect: screen.safeInsetsRect,
                                    borderColor: safeInsetsGuideColor,
                                    borderThickness: lineThickness,

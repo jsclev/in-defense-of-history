@@ -31,6 +31,7 @@ public struct Constants {
     public static let minZoom = log2(Constants.minScale)
     public static let maxZoom = log2(Constants.maxScale)
     
+    public static let debugModeKey = "debugMode"
     public static let showDebugLayoutGuidesKey = "showSafeAreaOverlay"
 
     #if canImport(UIKit)

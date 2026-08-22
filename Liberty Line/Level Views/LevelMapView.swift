@@ -65,7 +65,7 @@ struct LevelMapView: View {
     /// persisted — a fresh level starts with every ring showing.
     @State private var hiddenRangeSlots: Set<Int> = []
 
-    @AppStorage("debugMode") private var debugMode = true
+    @AppStorage(Constants.debugModeKey) private var debugMode = false
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 

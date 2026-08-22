@@ -4,6 +4,7 @@ import UIKit
 @main
 struct LibertyLineApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    @AppStorage(Constants.debugModeKey) private var debugMode = false
 
     // The composition root: SwiftUI makes exactly one App instance per
     // process, so this is the game's single Db/VirtualCanvas.
@@ -17,7 +18,7 @@ struct LibertyLineApp: App {
             .ignoresSafeArea()
             .statusBarHidden(true)
             .persistentSystemOverlays(.hidden)
-            .border(Color.red, width: 2)
+            .border(debugMode ? Color.red : Color.clear, width: debugMode ? 2 : 0)
         }
     }
 }

@@ -6,7 +6,7 @@ struct HudViewTopSection: View {
 
     var body: some View {
         HStack {
-            //levelStats(metrics: metrics, screen: screen).border(Color.blue, width: 8.0)
+            //levelStats(metrics: metrics, screen: screen)
             Spacer()
             //buttons(metrics: metrics, screen: screen)
         }
