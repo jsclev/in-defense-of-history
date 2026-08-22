@@ -157,7 +157,7 @@ struct LevelMapView: View {
     }
 
     var body: some View {
-        let fullSize = screen.physical.size
+        let fullSize = screen.physicalRect.size
         let metrics = HudMetrics(screen: screen)
         ZStack(alignment: .topLeading) {
             content(in: fullSize, screen: screen)
@@ -258,8 +258,8 @@ struct LevelMapView: View {
 
     private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
-        let safe = screen.safe
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playable)
+        let safe = screen.safeInsetsRect
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playAreaRect)
         let metrics = HudMetrics(screen: screen)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
@@ -498,8 +498,8 @@ struct LevelMapView: View {
     }
 
     private func towerMenuLayer(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playable)
-        let playAreaScalingFactor = PlayAreaLayout.scalingFactor(virtualCanvas: virtualCanvas, runtimePlayArea: screen.playable)
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playAreaRect)
+        let playAreaScalingFactor = screen.scaleFactor
         return ZStack(alignment: .topLeading) {
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {

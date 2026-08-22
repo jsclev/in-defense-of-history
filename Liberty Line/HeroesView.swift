@@ -23,8 +23,8 @@ struct HeroesView: View {
     }
 
     private var heroGrid: some View {
-        let rectHeight = screen.playable.height
-        let rectWidth = screen.playable.width
+        let rectHeight = screen.playAreaRect.height
+        let rectWidth = screen.playAreaRect.width
         let margin = rectHeight * 0.028
         let gap = rectHeight * 0.02
         let cellWidth = (rectWidth - 2 * margin - CGFloat(Self.columns - 1) * gap)
@@ -36,7 +36,7 @@ struct HeroesView: View {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physical.width, height: screen.physical.height)
+                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
                     .clipped()
 
                 VStack(spacing: gap) {
@@ -61,9 +61,9 @@ struct HeroesView: View {
                     }
                 }
                 .frame(width: rectWidth, height: rectHeight)
-                .position(x: screen.physical.width / 2, y: screen.physical.height / 2)
+                .position(x: screen.physicalRect.width / 2, y: screen.physicalRect.height / 2)
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
                 .hudFrame(DoneButtonLayout(screen: screen,
@@ -414,7 +414,7 @@ struct HeroDetailsView: View {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physical.width, height: screen.physical.height)
+                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
                     .clipped()
 
                 LinearGradient(
@@ -479,7 +479,7 @@ struct HeroDetailsView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
                 .hudFrame(DoneButtonLayout(screen: screen,

@@ -21,8 +21,8 @@ struct LevelBriefingView: View {
                 Image("level_briefing_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physical.width,
-                           height: screen.physical.height)
+                    .frame(width: screen.physicalRect.width,
+                           height: screen.physicalRect.height)
                     .clipped()
 
                 Color.black.opacity(0.55)
@@ -44,7 +44,7 @@ struct LevelBriefingView: View {
                 }
                 .padding(24 * metrics.scale)
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton {
                 if let selected {

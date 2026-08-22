@@ -19,7 +19,7 @@ public struct DebugLayoutGuidesView: View {
     private let playAreaLineThickness: Int = 1
 
     private let physicalGuideColor = Color(red: 1.0, green: 0.16, blue: 0.16)
-    private let playAreaGuideColor = Color(red: 0.75, green: 0.15, blue: 1.0)
+    private let playAreaGuideColor = Color(red: 1.0, green: 0.58, blue: 0.0)
     private let safeInsetsGuideColor = Color(red: 0.18, green: 1.0, blue: 0.33)
     
     @State private var physicalRectWidth: CGFloat?
@@ -41,7 +41,9 @@ public struct DebugLayoutGuidesView: View {
                                             y: frame.minY,
                                             width: frame.width - safeInsets.right - safeInsets.left,
                                             height: frame.height - safeInsets.bottom)
-                let playAreaRatio = safeInsetsRect.width / virtualCanvas.playAreaRect.width
+                let screenGeometry = ScreenGeometry(physicalRect: physicalRect,
+                                                    safeInsetsRect: safeInsetsRect,
+                                                    virtualCanvas: virtualCanvas)
 
                 ZStack(alignment: .topLeading) {
                     createRectView(rect: physicalRect,
@@ -50,7 +52,11 @@ public struct DebugLayoutGuidesView: View {
                     createRectView(rect: safeInsetsRect,
                                    borderColor: safeInsetsGuideColor,
                                    borderThickness: safeInsetsLineThickness,
-                    borderDash: safeInsetsDash)
+                                   borderDash: safeInsetsDash)
+                    createRectView(rect: screenGeometry.playAreaRect,
+                                   borderColor: playAreaGuideColor,
+                                   borderThickness: playAreaLineThickness,
+                                   borderDash: playableDash)
                 }
             }
         }
@@ -74,7 +80,7 @@ public struct DebugLayoutGuidesView: View {
     }
 
     private func createPlayAreaView() -> some View {
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen!.playable)
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen!.playAreaRect)
         return SwiftUI.Path(virtualCanvas.playAreaShape)
             .applying(projection.viewTransform)
             .stroke(playAreaGuideColor,

@@ -17,14 +17,14 @@ struct EncyclopediaView: View {
     private static let enemiesFrame = CGRect(x: 2027, y: 620, width: 1138, height: 1420)
 
     var body: some View {
-        let scale = screen.playable.width / Self.layoutSize.width
-        let origin = screen.playable.origin
+        let scale = screen.playAreaRect.width / Self.layoutSize.width
+        let origin = screen.playAreaRect.origin
         ZStack(alignment: .topLeading) {
             ZStack {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physical.width, height: screen.physical.height)
+                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
                     .clipped()
 
                 element("encyclopedia_title_plaque", frame: Self.titleFrame,
@@ -39,13 +39,13 @@ struct EncyclopediaView: View {
                                frame: Self.enemiesFrame,
                                scale: scale, origin: origin)
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
                 .hudFrame(DoneButtonLayout(
                     screen: screen,
                     aspect: DoneButton.aspect,
-                    scaleOverride: screen.playable.height / HudScale.referencePlayableHeight).frame,
+                    scaleOverride: screen.playAreaRect.height / HudScale.referencePlayableHeight).frame,
                           in: screen)
         }
         .ignoresSafeArea()

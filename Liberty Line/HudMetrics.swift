@@ -8,7 +8,7 @@ struct HudMetrics {
     }
 
     init(screen: ScreenGeometry) {
-        scale = HudScale(playableHeight: screen.playable.height).value
+        scale = HudScale(playableHeight: screen.playAreaRect.height).value
     }
 
     init(scale: CGFloat) {

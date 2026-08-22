@@ -39,15 +39,15 @@ public enum HudPlacementSolver {
     private static func originX(width: CGFloat, corner: HudCorner,
                                 margin: CGFloat, in g: ScreenGeometry) -> CGFloat {
 //        let inset = g.chromeInset(corner.horizontal, margin: margin)
-        let inset = g.safe.minX
+        let inset = g.safeInsetsRect.minX
 
         switch corner.horizontal {
         case .leading:
-            let limit = g.physical.minX + inset
-            return max(min(g.playable.minX + margin, limit), g.safe.minX)
+            let limit = g.physicalRect.minX + inset
+            return max(min(g.playAreaRect.minX + margin, limit), g.safeInsetsRect.minX)
         case .trailing:
-            let limit = g.physical.maxX - inset
-            let right = min(max(g.playable.maxX - margin, limit), g.safe.maxX)
+            let limit = g.physicalRect.maxX - inset
+            let right = min(max(g.playAreaRect.maxX - margin, limit), g.safeInsetsRect.maxX)
             return right - width
         case .top, .bottom:
             return 0
@@ -58,12 +58,12 @@ public enum HudPlacementSolver {
                                 margin: CGFloat, in g: ScreenGeometry) -> CGFloat {
         switch corner.vertical {
         case .top:
-            let limit = g.physical.minY + g.safe.minY
+            let limit = g.physicalRect.minY + g.safeInsetsRect.minY
 //            let limit = g.physical.minY + g.chromeInset(.top, margin: margin)
 
-            return max(min(g.playable.minY + margin, limit), g.safe.minY)
+            return max(min(g.playAreaRect.minY + margin, limit), g.safeInsetsRect.minY)
         case .bottom:
-            return max(g.playable.maxY, g.safe.maxY) - margin - height
+            return max(g.playAreaRect.maxY, g.safeInsetsRect.maxY) - margin - height
         case .leading, .trailing:
             return 0
         }

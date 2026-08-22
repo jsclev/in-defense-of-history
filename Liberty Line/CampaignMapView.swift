@@ -14,7 +14,7 @@ struct CampaignMapView: View {
     public let screen: ScreenGeometry
 
     var body: some View {
-        let mapSize = screen.physical.size
+        let mapSize = screen.physicalRect.size
         let metrics = HudMetrics(screen: screen)
         let menu = MenuBarLayout(screen: screen,
                                  itemCount: MenuScreen.allCases.count)
@@ -27,8 +27,8 @@ struct CampaignMapView: View {
         )
         let menuBox = CGRect(
             x: menu.bar.minX, y: menu.bar.minY,
-            width: screen.physical.maxX - menu.bar.minX,
-            height: screen.physical.maxY - menu.bar.minY)
+            width: screen.physicalRect.maxX - menu.bar.minX,
+            height: screen.physicalRect.maxY - menu.bar.minY)
         let decor = CampaignDecor.placements(
             viewSize: mapSize,
             callouts: placements,
@@ -73,7 +73,7 @@ struct CampaignMapView: View {
                     )
                 }
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             Image("game_title")
                 .resizable()

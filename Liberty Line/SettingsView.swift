@@ -16,12 +16,12 @@ struct SettingsView: View {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physical.width, height: screen.physical.height)
+                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
                     .clipped()
 
                 Color.black.opacity(0.45)
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             VStack(alignment: .leading, spacing: 18 * metrics.scale) {
                 Text("Settings")
@@ -49,7 +49,7 @@ struct SettingsView: View {
             }
             .padding(28 * metrics.scale)
             .frame(maxWidth: 620 * metrics.scale, alignment: .leading)
-            .hudFrame(screen.safe, in: screen, alignment: .topLeading)
+            .hudFrame(screen.safeInsetsRect, in: screen, alignment: .topLeading)
 
             DoneButton(action: onExit)
                 .hudFrame(DoneButtonLayout(screen: screen,

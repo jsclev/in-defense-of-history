@@ -150,7 +150,7 @@ struct MenuPlaceholderView: View {
                         .foregroundStyle(.white.opacity(0.55))
                 }
             }
-            .frame(width: screen.physical.width, height: screen.physical.height)
+            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
                 .hudFrame(DoneButtonLayout(screen: screen,
