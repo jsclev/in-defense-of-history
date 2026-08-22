@@ -10,9 +10,9 @@ public struct ScreenGeometry: Equatable {
     public let playAreaRect: CGRect
     public let scaleFactor: CGFloat
 
-    public init(physicalRect: CGRect,
-                safeInsetsRect: CGRect,
-                virtualCanvas: VirtualCanvas) {
+    public init(virtualCanvas: VirtualCanvas,
+                physicalRect: CGRect,
+                safeInsetsRect: CGRect) {
         self.physicalRect = physicalRect
         self.safeInsetsRect = safeInsetsRect
 

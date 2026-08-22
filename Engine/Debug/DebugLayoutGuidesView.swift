@@ -41,9 +41,9 @@ public struct DebugLayoutGuidesView: View {
                                             y: frame.minY,
                                             width: frame.width - safeInsets.right - safeInsets.left,
                                             height: frame.height - safeInsets.bottom)
-                let screenGeometry = ScreenGeometry(physicalRect: physicalRect,
-                                                    safeInsetsRect: safeInsetsRect,
-                                                    virtualCanvas: virtualCanvas)
+                let screenGeometry = ScreenGeometry(virtualCanvas: virtualCanvas,
+                                                    physicalRect: physicalRect,
+                                                    safeInsetsRect: safeInsetsRect)
 
                 ZStack(alignment: .topLeading) {
                     createRectView(rect: physicalRect,
