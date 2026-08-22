@@ -3,14 +3,15 @@ import SwiftUI
 struct HudHeroesBarView: View {
     private let db: Db
     let heroes: [Hero]
-    let buttonSize: CGSize
+    let buttonSize: CGFloat
     let spacing: CGFloat
 
     static let slotCount = 5
     static let centerIconName = "hero_ability_icon_old_put"
     
-    public init(db: Db, buttonSize: CGSize) {
+    public init(db: Db, buttonSize: CGFloat) {
         self.db = db
+        self.buttonSize = buttonSize
         
         do {
             let allHeroes = try db.heroDao.getAll()
@@ -21,8 +22,7 @@ struct HudHeroesBarView: View {
                 allHeroes[3]
             ]
             
-            self.buttonSize = buttonSize
-            spacing = buttonSize.width / 5.0
+            spacing = buttonSize / 4.5
         }
         catch {
             fatalError()

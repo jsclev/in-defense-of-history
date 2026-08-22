@@ -4,6 +4,7 @@ import SwiftUI
 struct HudTopSectionView: View {
     let screen: ScreenGeometry
     let runner: LevelRunner
+    let buttonSize: CGFloat
     let onSpeedUp: () -> Void
     let onExit: () -> Void
 
@@ -11,7 +12,10 @@ struct HudTopSectionView: View {
         HStack {
             HudTopSectionLeftView(screen: screen, runner: runner)
             Spacer()
-            HudTopSectionRightView(screen: screen, onSpeedUp: onSpeedUp, onExit: onExit)
+            HudTopSectionRightView(screen: screen,
+                                   buttonSize: buttonSize,
+                                   onSpeedUp: onSpeedUp,
+                                   onExit: onExit)
         }
     }
 }

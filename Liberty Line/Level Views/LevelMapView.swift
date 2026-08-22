@@ -166,6 +166,7 @@ struct LevelMapView: View {
             }
 
             HudView(db: db, screen: screen, runner: runner,
+                    towerMenuLayout: towerMenuLayout,
                     onSpeedUp: { runner.speedUp() }, onExit: onExit)
                 .frame(width: screen.safeInsetsRect.width, height: screen.safeInsetsRect.height)
                 .position(x: screen.safeInsetsRect.midX, y: screen.safeInsetsRect.midY)
