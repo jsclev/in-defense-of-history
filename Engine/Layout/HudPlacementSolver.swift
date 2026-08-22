@@ -36,6 +36,17 @@ public enum HudPlacementSolver {
         frame(size: size, corner: corner, margin: margin, in: geometry).origin
     }
 
+    public static func bottomLineFrame(size: CGSize,
+                                       corner: HudCorner,
+                                       margin: CGFloat,
+                                       in geometry: ScreenGeometry) -> CGRect {
+        let x = originX(width: size.width, corner: corner, margin: margin, in: geometry)
+        return CGRect(x: x,
+                      y: geometry.maxY - size.height,
+                      width: size.width,
+                      height: size.height)
+    }
+
     private static func originX(width: CGFloat, corner: HudCorner,
                                 margin: CGFloat, in g: ScreenGeometry) -> CGFloat {
 //        let inset = g.chromeInset(corner.horizontal, margin: margin)

@@ -14,8 +14,10 @@ struct LibertyLineApp: App {
             ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { screen in
                 RootView(store: store, screen: screen)
             }
+            .ignoresSafeArea()
             .statusBarHidden(true)
             .persistentSystemOverlays(.hidden)
+            .border(Color.red, width: 2)
         }
     }
 }

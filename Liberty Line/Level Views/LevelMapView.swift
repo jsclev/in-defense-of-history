@@ -171,9 +171,10 @@ struct LevelMapView: View {
                    isPortrait: fullSize.height > fullSize.width,
                    screen: screen)
 
-            heroBar(metrics: metrics, screen: screen)
-
-            miscBar(metrics: metrics, screen: screen)
+            HudView(screen: screen)
+                .frame(width: screen.safeInsetsRect.width, height: screen.safeInsetsRect.height)
+                .position(x: screen.safeInsetsRect.midX, y: screen.safeInsetsRect.midY)
+                .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
 
             towerMenuLayer(in: fullSize, screen: screen)
                 .frame(width: fullSize.width, height: fullSize.height)
@@ -187,6 +188,7 @@ struct LevelMapView: View {
         .persistentSystemOverlays(.hidden)
         .onAppear { runner.start() }
         .onDisappear { runner.stop() }
+        .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
     }
 
     /// The single top-of-screen HUD entity. Everything that sits along the
@@ -203,27 +205,13 @@ struct LevelMapView: View {
         }
     }
 
-    private func heroBar(metrics: HudMetrics, screen: ScreenGeometry) -> some View {
-        let side = HudSizing.cornerButton.resolved(at: metrics.scale) * 1.05
-        let button = CGSize(width: side, height: side)
-        let spacing = HudSizing.cornerButtonSpacing.resolved(at: metrics.scale) * 0.3696
-        let count = LevelHeroBarView.slotCount
-        let row = StackLayout.row(Array(repeating: button, count: count), spacing: spacing)
-        let frame = HudPlacementSolver.frame(
-            size: row.size, corner: .bottomLeading,
-            margin: HudSizing.topBarMargin.resolved(at: metrics.scale), in: screen)
-        return LevelHeroBarView(towerMenuLayout: towerMenuLayout, heroes: runner.selectedHeroes,
-                                buttonSize: button, spacing: spacing)
-            .hudFrame(frame, in: screen, alignment: .leading)
-    }
-
     private func miscBar(metrics: HudMetrics, screen: ScreenGeometry) -> some View {
         let side = HudSizing.cornerButton.resolved(at: metrics.scale) * 1.05
         let button = CGSize(width: side, height: side)
-        let frame = HudPlacementSolver.frame(
+        let frame = HudPlacementSolver.bottomLineFrame(
             size: button, corner: .bottomTrailing,
             margin: HudSizing.topBarMargin.resolved(at: metrics.scale), in: screen)
-        return LevelMiscView(towerMenuLayout: towerMenuLayout, buttonSize: button)
+        return LevelMiscView(buttonSize: button)
             .hudFrame(frame, in: screen)
     }
 

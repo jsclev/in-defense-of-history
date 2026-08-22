@@ -9,7 +9,6 @@ extension View {
         let frame = HudPlacementSolver.frame(size: size, corner: corner,
                                              margin: margin, in: geometry)
         return self
-            .offset(x: frame.minX, y: frame.minY)
             .frame(width: geometry.physicalRect.width, height: geometry.physicalRect.height,
                    alignment: .topLeading)
     }
@@ -19,7 +18,6 @@ extension View {
     func hudFrame(_ rect: CGRect, in geometry: ScreenGeometry,
                   alignment: Alignment = .center) -> some View {
         self.frame(width: rect.width, height: rect.height, alignment: alignment)
-            .offset(x: rect.minX, y: rect.minY)
             .frame(width: geometry.physicalRect.width, height: geometry.physicalRect.height,
                    alignment: .topLeading)
     }
@@ -35,6 +33,8 @@ struct ScreenGeometryGate<Content: View>: View {
     var body: some View {
         if let screen {
             content(screen)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
         } else {
             GeometryReader { geometry in
                 if let window {

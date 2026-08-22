@@ -9,8 +9,11 @@ public struct ScreenGeometry {
     public let physicalRect: CGRect
     public let safeInsetsRect: CGRect
     public let playAreaRect: CGRect
-    public let playArea: CGPath
+    public let runtimePlayArea: CGPath
     public let scaleFactor: CGFloat
+    public let maxY: CGFloat
+    public let marginScaleFactor = 0.05
+    
 
     public init(virtualCanvas: VirtualCanvas,
                 physicalRect: CGRect,
@@ -26,8 +29,9 @@ public struct ScreenGeometry {
         let width = virtualPlayArea.width * scaleFactor
         let height = virtualPlayArea.height * scaleFactor
         playAreaRect = CGRect(x: safeInsetsRect.midX - width / 2,
-                          y: safeInsetsRect.midY - height / 2,
-                          width: width, height: height)
+                              y: safeInsetsRect.midY - height / 2,
+                              width: width,
+                              height: height)
         
         var transform = CGAffineTransform(
             a: scaleFactor,
@@ -37,7 +41,17 @@ public struct ScreenGeometry {
             tx: playAreaRect.minX - virtualPlayArea.minX * scaleFactor,
             ty: playAreaRect.minY + virtualPlayArea.maxY * scaleFactor)
         
-        playArea = virtualCanvas.playAreaShape.copy(using: &transform)
+        runtimePlayArea = virtualCanvas.playAreaShape.copy(using: &transform)
             ?? virtualCanvas.playAreaShape
+        
+        var safeMargin = playAreaRect.height * marginScaleFactor
+        
+        if physicalRect.height - safeInsetsRect.height >= safeMargin {
+            safeMargin = 0.0
+        }
+        
+        maxY = safeInsetsRect.maxY - safeMargin
+        let abc = maxY
+        print("Abc")
     }
 }

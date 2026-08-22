@@ -205,7 +205,6 @@ private struct HeroSlot: View {
                         Image(hero.primaryImageName)
                             .resizable()
                             .frame(width: width, height: width * 15 / 16)
-                            .offset(y: height * 0.045)
                     } else {
                         lockedPanel
                             .frame(width: width, height: height)
@@ -225,7 +224,6 @@ private struct HeroSlot: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: min(width, height) * 0.27)
-                        .offset(y: height * 0.03)
                 }
 
                 if isLocked {

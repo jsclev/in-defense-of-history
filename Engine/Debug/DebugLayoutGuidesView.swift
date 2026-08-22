@@ -39,8 +39,6 @@ public struct DebugLayoutGuidesView: View {
                                    borderDash: playAreaRectDash)
                     createPlayAreaView()
                 }
-                .offset(x: -chain.viewInWindow.minX,
-                        y: -chain.viewInWindow.minY)
             }
         }
         .ignoresSafeArea()
@@ -64,7 +62,7 @@ public struct DebugLayoutGuidesView: View {
     }
 
     private func createPlayAreaView() -> some View {
-        SwiftUI.Path(screen.playArea)
+        SwiftUI.Path(screen.runtimePlayArea)
             .stroke(playAreaGuideColor,
                     style: StrokeStyle(lineWidth: CGFloat(lineThickness),
                                        dash: playAreaDash))
