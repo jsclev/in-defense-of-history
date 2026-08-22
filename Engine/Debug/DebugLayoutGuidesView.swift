@@ -4,8 +4,6 @@ import UIKit
 public struct DebugLayoutGuidesView: View {
     private let screen: ScreenGeometry
 
-    @State private var chain: WindowGeometryReport?
-
     private let physicalRectDash: [CGFloat] = [16, 9]
     private let safeInsetsDash: [CGFloat] = [16, 9]
     private let playAreaRectDash: [CGFloat] = [6, 10]
@@ -25,28 +23,22 @@ public struct DebugLayoutGuidesView: View {
 
     public var body: some View {
         ZStack(alignment: .topLeading) {
-            if let chain {
-                ZStack(alignment: .topLeading) {
-                    createRectView(rect: screen.physicalRect,
-                                   borderColor: physicalGuideColor,
-                                   borderThickness: lineThickness,
-                                   borderDash: physicalRectDash)
-                    createRectView(rect: screen.safeInsetsRect,
-                                   borderColor: safeInsetsGuideColor,
-                                   borderThickness: lineThickness,
-                                   borderDash: safeInsetsDash)
-                    createRectView(rect: screen.playAreaRect,
-                                   borderColor: playAreaRectGuideColor,
-                                   borderThickness: lineThickness,
-                                   borderDash: playAreaRectDash)
-                    createPlayAreaView()
-                }
-            }
+            createRectView(rect: screen.physicalRect,
+                           borderColor: physicalGuideColor,
+                           borderThickness: lineThickness,
+                           borderDash: physicalRectDash)
+            createRectView(rect: screen.safeInsetsRect,
+                           borderColor: safeInsetsGuideColor,
+                           borderThickness: lineThickness,
+                           borderDash: safeInsetsDash)
+            createRectView(rect: screen.playAreaRect,
+                           borderColor: playAreaRectGuideColor,
+                           borderThickness: lineThickness,
+                           borderDash: playAreaRectDash)
+            createPlayAreaView()
         }
         .ignoresSafeArea()
         .allowsHitTesting(false)
-        .background(WindowReader(onWindow: { _ in },
-                                 onReport: { chain = $0 }))
     }
 
     private func createRectView(rect: CGRect,
@@ -107,54 +99,54 @@ public struct WindowGeometryReport: Equatable {
 /// code. UIView.window is nil until the view joins a hierarchy, and frames
 /// settle during layout, so capture happens in didMoveToWindow and again in
 /// layoutSubviews.
-struct WindowReader: UIViewRepresentable {
-    let onWindow: (UIWindow) -> Void
-    let onReport: (WindowGeometryReport) -> Void
-
-    func makeUIView(context: Context) -> WindowSpyView {
-        WindowSpyView(onWindow: onWindow, onReport: onReport)
-    }
-    func updateUIView(_ uiView: WindowSpyView, context: Context) {}
-}
-
-final class WindowSpyView: UIView {
-    let onWindow: (UIWindow) -> Void
-    let onReport: (WindowGeometryReport) -> Void
-    private var lastReport: WindowGeometryReport?
-
-    init(onWindow: @escaping (UIWindow) -> Void,
-         onReport: @escaping (WindowGeometryReport) -> Void) {
-        self.onWindow = onWindow
-        self.onReport = onReport
-        super.init(frame: .zero)
-        isUserInteractionEnabled = false
-    }
-
-    required init?(coder: NSCoder) { fatalError("unused") }
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        if let window {
-            onWindow(window)
-            report(in: window)
-        }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        if let window { report(in: window) }
-    }
-
-    private func report(in window: UIWindow) {
-        let next = WindowGeometryReport(
-            viewInWindow: convert(bounds, to: window),
-            windowFrame: window.frame,
-            screenBounds: window.screen.bounds
-        )
-        guard next != lastReport else { return }
-        lastReport = next
-        // UIKit layout is outside SwiftUI's render pass, but the async hop
-        // keeps the state write safe if a pass is in flight.
-        DispatchQueue.main.async { [onReport] in onReport(next) }
-    }
-}
+//struct WindowReader: UIViewRepresentable {
+//    let onWindow: (UIWindow) -> Void
+//    let onReport: (WindowGeometryReport) -> Void
+//
+//    func makeUIView(context: Context) -> WindowSpyView {
+//        WindowSpyView(onWindow: onWindow, onReport: onReport)
+//    }
+//    func updateUIView(_ uiView: WindowSpyView, context: Context) {}
+//}
+//
+//final class WindowSpyView: UIView {
+//    let onWindow: (UIWindow) -> Void
+//    let onReport: (WindowGeometryReport) -> Void
+//    private var lastReport: WindowGeometryReport?
+//
+//    init(onWindow: @escaping (UIWindow) -> Void,
+//         onReport: @escaping (WindowGeometryReport) -> Void) {
+//        self.onWindow = onWindow
+//        self.onReport = onReport
+//        super.init(frame: .zero)
+//        isUserInteractionEnabled = false
+//    }
+//
+//    required init?(coder: NSCoder) { fatalError("unused") }
+//
+//    override func didMoveToWindow() {
+//        super.didMoveToWindow()
+//        if let window {
+//            onWindow(window)
+//            report(in: window)
+//        }
+//    }
+//
+//    override func layoutSubviews() {
+//        super.layoutSubviews()
+//        if let window { report(in: window) }
+//    }
+//
+//    private func report(in window: UIWindow) {
+//        let next = WindowGeometryReport(
+//            viewInWindow: convert(bounds, to: window),
+//            windowFrame: window.frame,
+//            screenBounds: window.screen.bounds
+//        )
+//        guard next != lastReport else { return }
+//        lastReport = next
+//        // UIKit layout is outside SwiftUI's render pass, but the async hop
+//        // keeps the state write safe if a pass is in flight.
+//        DispatchQueue.main.async { [onReport] in onReport(next) }
+//    }
+//}

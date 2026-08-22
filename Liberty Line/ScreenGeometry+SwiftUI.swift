@@ -5,7 +5,6 @@ struct ScreenGeometryGate<Content: View>: View {
     let virtualCanvas: VirtualCanvas
     @ViewBuilder let content: (ScreenGeometry) -> Content
 
-    @State private var window: UIWindow?
     @State private var screen: ScreenGeometry?
 
     var body: some View {
@@ -14,24 +13,20 @@ struct ScreenGeometryGate<Content: View>: View {
                 .ignoresSafeArea()
         } else {
             GeometryReader { geometry in
-                if let window {
-                    let frame = geometry.frame(in: .global)
-                    let safeInsets = window.safeAreaInsets
-                    let safeInsetsRect = CGRect(x: safeInsets.left,
-                                                y: frame.minY,
-                                                width: frame.width - safeInsets.right - safeInsets.left,
-                                                height: frame.height - safeInsets.bottom)
-                    Color.clear
-                        .onAppear {
-                            screen = ScreenGeometry(virtualCanvas: virtualCanvas,
-                                                    physicalRect: window.bounds,
-                                                    safeInsetsRect: safeInsetsRect)
-                        }
-                }
+                let insets = geometry.safeAreaInsets
+                let physicalRect = CGRect(origin: .zero, size: geometry.size)
+                let safeInsetsRect = CGRect(x: insets.leading,
+                                            y: insets.top,
+                                            width: physicalRect.width - insets.leading - insets.trailing,
+                                            height: physicalRect.height - insets.top - insets.bottom)
+                Color.clear
+                    .onAppear {
+                        screen = ScreenGeometry(virtualCanvas: virtualCanvas,
+                                                physicalRect: physicalRect,
+                                                safeInsetsRect: safeInsetsRect)
+                    }
             }
             .ignoresSafeArea()
-            .background(WindowReader(onWindow: { window = $0 },
-                                     onReport: { _ in }))
         }
     }
 }

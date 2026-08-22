@@ -201,7 +201,6 @@ struct InspectorView: View {
                         }
                         .foregroundStyle(.red)
                         .padding(8)
-                        .frame(maxWidth: .infinity, alignment: .leading)
                         .background(.red.opacity(0.12), in: RoundedRectangle(cornerRadius: 6))
                         .overlay(RoundedRectangle(cornerRadius: 6).stroke(.red.opacity(0.6)))
                     }

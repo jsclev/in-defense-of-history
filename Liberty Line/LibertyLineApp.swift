@@ -9,17 +9,38 @@ struct LibertyLineApp: App {
     // The composition root: SwiftUI makes exactly one App instance per
     // process, so this is the game's single Db/VirtualCanvas.
     private let store = Store()
+    @State private var screenGeometry: ScreenGeometry?
 
     var body: some Scene {
         WindowGroup {
-            ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { screen in
-                RootView(store: store, screen: screen)
+            ZStack {
+                if let screenGeometry {
+                    RootView(store: store, screen: screenGeometry)
+                }
             }
             .ignoresSafeArea()
             .statusBarHidden(true)
             .persistentSystemOverlays(.hidden)
-//            .border(debugMode ? Color.red : Color.clear, width: debugMode ? 2 : 0)
+            .onAppear {
+                screenGeometry = measureScreenGeometry()
+            }
         }
+    }
+
+    private func measureScreenGeometry() -> ScreenGeometry? {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.keyWindow ?? windowScene.windows.first else {
+            return nil
+        }
+        let physicalRect = CGRect(origin: .zero, size: window.bounds.size)
+        let insets = window.safeAreaInsets
+        let safeInsetsRect = CGRect(x: insets.left,
+                                    y: insets.top,
+                                    width: physicalRect.width - insets.left - insets.right,
+                                    height: physicalRect.height - insets.top - insets.bottom)
+        return ScreenGeometry(virtualCanvas: store.virtualCanvas,
+                              physicalRect: physicalRect,
+                              safeInsetsRect: safeInsetsRect)
     }
 }
 

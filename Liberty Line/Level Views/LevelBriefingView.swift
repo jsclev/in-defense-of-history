@@ -146,7 +146,6 @@ private struct DifficultyCard: View {
                     .foregroundStyle(Self.ink.opacity(0.75))
                     .multilineTextAlignment(.center)
                     .lineLimit(3)
-                    .frame(maxHeight: .infinity, alignment: .top)
 
                 Text("Enemy HP \(Self.percentText(difficulty.enemyHPMultiplier))")
                     .font(.system(size: Typography.size(12 * metrics.scale), weight: .bold))

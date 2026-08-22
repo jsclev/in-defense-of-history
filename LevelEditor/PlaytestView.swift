@@ -12,7 +12,6 @@ struct PlaytestView: View {
                 topBar
                 ZStack {
                     PlaytestCanvas(session: session, slotArt: slotArt)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     if let banner = session.banner {
                         Text(banner)
                             .font(.title2.weight(.bold))
@@ -22,14 +21,12 @@ struct PlaytestView: View {
                             .foregroundStyle(.white)
                             .transition(.opacity)
                             .allowsHitTesting(false)
-                            .frame(maxHeight: .infinity, alignment: .top)
                             .padding(.top, 14)
                     }
                     if session.sim.outcome != nil {
                         reportCard
                     }
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(red: 0.07, green: 0.09, blue: 0.07))
                 bottomBar
             }

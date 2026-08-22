@@ -306,7 +306,6 @@ private struct HeroSlot: View {
             .lineLimit(1)
             .minimumScaleFactor(0.55)
             .padding(.horizontal, width * 0.04)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.bottom, height * 0.038)
             .frame(height: height * 0.196)
             .background(Self.plateColor)
@@ -472,9 +471,7 @@ struct HeroDetailsView: View {
                     .frame(maxWidth: 430 * metrics.scale, alignment: .leading)
                     .shadow(color: .black.opacity(0.8), radius: 1.5, y: 1)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
         }

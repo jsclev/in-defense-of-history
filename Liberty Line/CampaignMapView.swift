@@ -78,8 +78,10 @@ struct CampaignMapView: View {
             Image("game_title")
                 .resizable()
                 .scaledToFit()
+                .frame(width: title.frame.width, height: title.frame.height)
                 .shadow(color: .black.opacity(0.45),
                         radius: 6 * metrics.scale, y: 3 * metrics.scale)
+                .position(x: title.frame.midX, y: title.frame.midY)
                 .allowsHitTesting(false)
 
             ZStack(alignment: .topLeading) {
@@ -88,6 +90,8 @@ struct CampaignMapView: View {
                                size: menu.itemFrames[index].height) {
                         onSelectMenu(item)
                     }
+                    .position(x: menu.itemFrames[index].midX,
+                              y: menu.itemFrames[index].midY)
                 }
             }
 

@@ -31,7 +31,6 @@ struct EditorCanvas: View {
             Group {
                 if state.zoom == nil {
                     canvasContent(t)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ScrollView([.horizontal, .vertical]) {
                         canvasContent(t)

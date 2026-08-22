@@ -733,7 +733,6 @@ struct LevelMapView: View {
                 .shadow(color: .black.opacity(0.85), radius: 7 * metrics.scale,
                         y: 3 * metrics.scale)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .allowsHitTesting(false)
     }
 
