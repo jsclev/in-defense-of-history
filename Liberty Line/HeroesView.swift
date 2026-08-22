@@ -66,9 +66,6 @@ struct HeroesView: View {
             .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
-                .hudFrame(DoneButtonLayout(screen: screen,
-                                           aspect: DoneButton.aspect).frame,
-                          in: screen)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
@@ -480,9 +477,6 @@ struct HeroDetailsView: View {
             .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
-                .hudFrame(DoneButtonLayout(screen: screen,
-                                           aspect: DoneButton.aspect).frame,
-                          in: screen)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

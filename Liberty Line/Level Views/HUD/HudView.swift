@@ -2,13 +2,19 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct HudView: View {
-    let screen: ScreenGeometry
+    private let db: Db
+    private let screen: ScreenGeometry
+    
+    public init(db: Db, screen: ScreenGeometry) {
+        self.db = db
+        self.screen = screen
+    }
 
     var body: some View {
         VStack {
-            HudViewTopSection(screen: screen)
+            HudTopSectionView(screen: screen)
             Spacer()
-            HudViewBottomSection(screen: screen)
+            HudBottomSectionView(db: db, screen: screen)
         }
     }
 }

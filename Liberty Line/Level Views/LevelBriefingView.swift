@@ -52,10 +52,6 @@ struct LevelBriefingView: View {
                 }
             }
             .disabled(selected == nil)
-            .hudFrame(DoneButtonLayout(screen: screen,
-                                       aspect: DoneButton.aspect,
-                                       magnification: 1.15).frame,
-                      in: screen)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

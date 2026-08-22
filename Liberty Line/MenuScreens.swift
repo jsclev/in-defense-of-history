@@ -153,9 +153,6 @@ struct MenuPlaceholderView: View {
             .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
-                .hudFrame(DoneButtonLayout(screen: screen,
-                                           aspect: DoneButton.aspect).frame,
-                          in: screen)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

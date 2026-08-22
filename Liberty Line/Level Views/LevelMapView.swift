@@ -171,7 +171,7 @@ struct LevelMapView: View {
                    isPortrait: fullSize.height > fullSize.width,
                    screen: screen)
 
-            HudView(screen: screen)
+            HudView(db: db, screen: screen)
                 .frame(width: screen.safeInsetsRect.width, height: screen.safeInsetsRect.height)
                 .position(x: screen.safeInsetsRect.midX, y: screen.safeInsetsRect.midY)
                 .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
@@ -205,16 +205,6 @@ struct LevelMapView: View {
         }
     }
 
-    private func miscBar(metrics: HudMetrics, screen: ScreenGeometry) -> some View {
-        let side = HudSizing.cornerButton.resolved(at: metrics.scale) * 1.05
-        let button = CGSize(width: side, height: side)
-        let frame = HudPlacementSolver.bottomLineFrame(
-            size: button, corner: .bottomTrailing,
-            margin: HudSizing.topBarMargin.resolved(at: metrics.scale), in: screen)
-        return LevelMiscView(buttonSize: button)
-            .hudFrame(frame, in: screen)
-    }
-
     private func cornerButtons(screen: ScreenGeometry,
                                topBar: TopBarLayout) -> some View {
         let layout = CornerButtonsLayout(screen: screen, topBar: topBar)
@@ -241,7 +231,6 @@ struct LevelMapView: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .hudFrame(frame, in: screen)
     }
 
     private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
@@ -791,20 +780,14 @@ struct LevelMapView: View {
         return ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
                 .fill(.black.opacity(HudSizing.statPlateOpacity))
-                .hudFrame(panel.livesPlate, in: screen)
             RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
                 .fill(.black.opacity(HudSizing.statPlateOpacity))
-                .hudFrame(panel.moneyPlate, in: screen)
 
             Image("lives_icon_05").resizable().scaledToFit()
-                .hudFrame(panel.lives.icon, in: screen)
             counterText("\(runner.lives)", fontSize: panel.lives.fontSize)
-                .hudFrame(panel.lives.valueBox, in: screen, alignment: .topLeading)
 
             Image("money_icon_12").resizable().scaledToFit()
-                .hudFrame(panel.money.icon, in: screen)
             counterText(goldText, fontSize: panel.money.fontSize)
-                .hudFrame(panel.money.valueBox, in: screen, alignment: .topLeading)
 
             counterText("Wave \(runner.currentWaveNumber) of \(runner.waveCount)",
                         fontSize: panel.waveFontSize)
@@ -813,8 +796,6 @@ struct LevelMapView: View {
                 .background(.black.opacity(HudSizing.statPlateOpacity),
                             in: RoundedRectangle(cornerRadius: metrics.statPlateCorner,
                                                  style: .continuous))
-                .hudFrame(panel.waveBox.insetBy(dx: 0, dy: -metrics.statPlatePadding),
-                          in: screen, alignment: .top)
 
             if showDebugInfo {
                 Text(runner.status)
@@ -823,10 +804,6 @@ struct LevelMapView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 8))
-                    .hudFrame(CGRect(x: panel.bounds.minX,
-                                     y: panel.bounds.maxY + 12 * metrics.scale,
-                                     width: 600, height: 60),
-                              in: screen, alignment: .topLeading)
             }
         }
     }

@@ -42,11 +42,6 @@ struct EncyclopediaView: View {
             .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
             DoneButton(action: onExit)
-                .hudFrame(DoneButtonLayout(
-                    screen: screen,
-                    aspect: DoneButton.aspect,
-                    scaleOverride: screen.playAreaRect.height / HudScale.referencePlayableHeight).frame,
-                          in: screen)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

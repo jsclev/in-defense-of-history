@@ -1,28 +1,6 @@
 import SwiftUI
 import UIKit
 
-extension View {
-    func hudAnchored(_ corner: HudCorner,
-                     margin: CGFloat,
-                     size: CGSize = .zero,
-                     in geometry: ScreenGeometry) -> some View {
-        let frame = HudPlacementSolver.frame(size: size, corner: corner,
-                                             margin: margin, in: geometry)
-        return self
-            .frame(width: geometry.physicalRect.width, height: geometry.physicalRect.height,
-                   alignment: .topLeading)
-    }
-}
-
-extension View {
-    func hudFrame(_ rect: CGRect, in geometry: ScreenGeometry,
-                  alignment: Alignment = .center) -> some View {
-        self.frame(width: rect.width, height: rect.height, alignment: alignment)
-            .frame(width: geometry.physicalRect.width, height: geometry.physicalRect.height,
-                   alignment: .topLeading)
-    }
-}
-
 struct ScreenGeometryGate<Content: View>: View {
     let virtualCanvas: VirtualCanvas
     @ViewBuilder let content: (ScreenGeometry) -> Content

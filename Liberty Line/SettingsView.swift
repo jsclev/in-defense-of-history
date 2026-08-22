@@ -49,12 +49,8 @@ struct SettingsView: View {
             }
             .padding(28 * metrics.scale)
             .frame(maxWidth: 620 * metrics.scale, alignment: .leading)
-            .hudFrame(screen.safeInsetsRect, in: screen, alignment: .topLeading)
 
             DoneButton(action: onExit)
-                .hudFrame(DoneButtonLayout(screen: screen,
-                                           aspect: DoneButton.aspect).frame,
-                          in: screen)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

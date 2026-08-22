@@ -81,7 +81,6 @@ struct CampaignMapView: View {
                 .shadow(color: .black.opacity(0.45),
                         radius: 6 * metrics.scale, y: 3 * metrics.scale)
                 .allowsHitTesting(false)
-                .hudFrame(title.frame, in: screen)
 
             ZStack(alignment: .topLeading) {
                 ForEach(Array(MenuScreen.allCases.enumerated()), id: \.element.id) { index, item in
@@ -89,7 +88,6 @@ struct CampaignMapView: View {
                                size: menu.itemFrames[index].height) {
                         onSelectMenu(item)
                     }
-                    .hudFrame(menu.itemFrames[index], in: screen)
                 }
             }
 
