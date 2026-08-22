@@ -11,10 +11,9 @@ struct LibertyLineApp: App {
 
     var body: some Scene {
         WindowGroup {
-            DebugLayoutGuidesView(virtualCanvas: store.virtualCanvas)
-//            ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { screen in
-//                RootView(store: store, screen: screen)
-//            }
+            ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { screen in
+                RootView(store: store, screen: screen)
+            }
             .statusBarHidden(true)
             .persistentSystemOverlays(.hidden)
         }

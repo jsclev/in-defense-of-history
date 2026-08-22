@@ -95,7 +95,7 @@ struct CampaignMapView: View {
 
             // Last, so the guides draw over every HUD element.
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(virtualCanvas: virtualCanvas)
+                DebugLayoutGuidesView(screen: screen)
             }
         }
         .ignoresSafeArea()

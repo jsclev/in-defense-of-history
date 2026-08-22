@@ -2,66 +2,50 @@ import SwiftUI
 import UIKit
 
 public struct DebugLayoutGuidesView: View {
-    @State private var screen: ScreenGeometry?
-    private let virtualCanvas: VirtualCanvas
+    private let screen: ScreenGeometry
 
-    @State private var window: UIWindow?
     @State private var chain: WindowGeometryReport?
-    @State private var hardwareInsets: UIEdgeInsets = .zero
-    
+
     private let safeInsetsDash: [CGFloat] = [16, 9]
-    private let playAreaRectDash: [CGFloat] = [4, 10]
-    private let playAreaDash: [CGFloat] = [4, 10]
+    private let playAreaRectDash: [CGFloat] = [6, 10]
+    private let playAreaDash: [CGFloat] = [6, 10]
 
     private let labelFloor: CGFloat = 30
-    private let lineThickness: Int = 1
+    private let lineThickness: Int = 2
 
     private let physicalGuideColor = Color(red: 1.0, green: 0.16, blue: 0.16)
     private let safeInsetsGuideColor = Color(red: 0.18, green: 1.0, blue: 0.33)
-    private let playAreaRectGuideColor = Color(red: 1.0, green: 0.58, blue: 0.0)
-    private let playAreaGuideColor = Color(red: 1.0, green: 0.58, blue: 0.0)
-    
-    @State private var physicalRectWidth: CGFloat?
-    @State private var physicalRectHeight: CGFloat?
+    private let playAreaRectGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
+    private let playAreaGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
 
-    @State private var safeInsetsRect: CGRect?
-    
-    public init(virtualCanvas: VirtualCanvas) {
-        self.virtualCanvas = virtualCanvas
+    public init(screen: ScreenGeometry) {
+        self.screen = screen
     }
 
     public var body: some View {
-        GeometryReader { geometry in
-            if let window {
-                let frame = geometry.frame(in: .global)
-                let physicalRect = window.bounds
-                let safeInsets = window.safeAreaInsets
-                let safeInsetsRect = CGRect(x: safeInsets.left,
-                                            y: frame.minY,
-                                            width: frame.width - safeInsets.right - safeInsets.left,
-                                            height: frame.height - safeInsets.bottom)
-                let screenGeometry = ScreenGeometry(virtualCanvas: virtualCanvas,
-                                                    physicalRect: physicalRect,
-                                                    safeInsetsRect: safeInsetsRect)
-
+        ZStack(alignment: .topLeading) {
+            if let chain {
                 ZStack(alignment: .topLeading) {
-                    createRectView(rect: physicalRect,
+                    createRectView(rect: screen.physicalRect,
                                    borderColor: physicalGuideColor,
                                    borderThickness: lineThickness)
-                    createRectView(rect: safeInsetsRect,
+                    createRectView(rect: screen.safeInsetsRect,
                                    borderColor: safeInsetsGuideColor,
                                    borderThickness: lineThickness,
                                    borderDash: safeInsetsDash)
-                    createRectView(rect: screenGeometry.playAreaRect,
+                    createRectView(rect: screen.playAreaRect,
                                    borderColor: playAreaRectGuideColor,
                                    borderThickness: lineThickness,
                                    borderDash: playAreaRectDash)
-                    createPlayAreaView(screenGeometry: screenGeometry)
+                    createPlayAreaView()
                 }
+                .offset(x: -chain.viewInWindow.minX,
+                        y: -chain.viewInWindow.minY)
             }
         }
         .ignoresSafeArea()
-        .background(WindowReader(onWindow: { window = $0 },
+        .allowsHitTesting(false)
+        .background(WindowReader(onWindow: { _ in },
                                  onReport: { chain = $0 }))
     }
 
@@ -79,8 +63,8 @@ public struct DebugLayoutGuidesView: View {
             )
     }
 
-    private func createPlayAreaView(screenGeometry: ScreenGeometry) -> some View {
-        SwiftUI.Path(screenGeometry.playArea)
+    private func createPlayAreaView() -> some View {
+        SwiftUI.Path(screen.playArea)
             .stroke(playAreaGuideColor,
                     style: StrokeStyle(lineWidth: CGFloat(lineThickness),
                                        dash: playAreaDash))
@@ -123,7 +107,7 @@ public struct WindowGeometryReport: Equatable {
 /// code. UIView.window is nil until the view joins a hierarchy, and frames
 /// settle during layout, so capture happens in didMoveToWindow and again in
 /// layoutSubviews.
-private struct WindowReader: UIViewRepresentable {
+struct WindowReader: UIViewRepresentable {
     let onWindow: (UIWindow) -> Void
     let onReport: (WindowGeometryReport) -> Void
 
@@ -133,7 +117,7 @@ private struct WindowReader: UIViewRepresentable {
     func updateUIView(_ uiView: WindowSpyView, context: Context) {}
 }
 
-private final class WindowSpyView: UIView {
+final class WindowSpyView: UIView {
     let onWindow: (UIWindow) -> Void
     let onReport: (WindowGeometryReport) -> Void
     private var lastReport: WindowGeometryReport?
