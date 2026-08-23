@@ -7,14 +7,14 @@ struct RootView: View {
     @State private var menuScreen: MenuScreen?
 
     let store: Store
-    let screen: ScreenGeometry
+    let screenGeometry: ScreenGeometry
 
     var body: some View {
         if let selectedNode {
             if let playingDifficulty {
                 LevelMapView(db: store.db,
                              virtualCanvas: store.virtualCanvas,
-                             screen: screen,
+                             screenGeometry: screenGeometry,
                              towerMenuLayout: store.towerMenuLayout,
                              node: selectedNode, difficulty: playingDifficulty) {
                     self.playingDifficulty = nil
@@ -22,31 +22,31 @@ struct RootView: View {
                 }
             } else {
                 LevelBriefingView(db: store.db, virtualCanvas: store.virtualCanvas,
-                                  screen: screen, node: selectedNode) { difficulty in
+                                  screen: screenGeometry, node: selectedNode) { difficulty in
                     self.playingDifficulty = difficulty
                 }
             }
         } else if menuScreen == .heroes {
-            HeroesView(db: store.db, screen: screen) {
+            HeroesView(db: store.db, screen: screenGeometry) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .encyclopedia {
-            EncyclopediaView(screen: screen) {
+            EncyclopediaView(screen: screenGeometry) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .settings {
-            SettingsView(screen: screen) {
+            SettingsView(screen: screenGeometry) {
                 self.menuScreen = nil
             }
         } else if let menuScreen {
-            MenuPlaceholderView(menuScreen: menuScreen, screen: screen) {
+            MenuPlaceholderView(menuScreen: menuScreen, screen: screenGeometry) {
                 self.menuScreen = nil
             }
         } else {
             CampaignMapView(
                 onSelectNode: { selectedNode = $0 },
                 onSelectMenu: { menuScreen = $0 },
-                virtualCanvas: store.virtualCanvas, db: store.db, screen: screen
+                virtualCanvas: store.virtualCanvas, db: store.db, screen: screenGeometry
             )
         }
     }

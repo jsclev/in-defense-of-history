@@ -15,7 +15,7 @@ struct LibertyLineApp: App {
         WindowGroup {
             ZStack {
                 if let screenGeometry {
-                    RootView(store: store, screen: screenGeometry)
+                    RootView(store: store, screenGeometry: screenGeometry)
                 }
             }
             .ignoresSafeArea()

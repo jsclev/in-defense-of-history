@@ -131,17 +131,17 @@ struct LevelMapView: View {
     
     private var db: Db
     private var virtualCanvas: VirtualCanvas
-    private var screen: ScreenGeometry
+    private var screenGeometry: ScreenGeometry
 
     init(db: Db,
          virtualCanvas: VirtualCanvas,
-         screen: ScreenGeometry,
+         screenGeometry: ScreenGeometry,
          towerMenuLayout: TowerMenuLayout,
          node: CampaignNode,
          difficulty: Difficulty, onExit: @escaping () -> Void) {
         self.db = db
         self.virtualCanvas = virtualCanvas
-        self.screen = screen
+        self.screenGeometry = screenGeometry
         self.towerMenuLayout = towerMenuLayout
         self.node = node
         self.difficulty = difficulty
@@ -156,26 +156,25 @@ struct LevelMapView: View {
     }
 
     var body: some View {
-        let fullSize = screen.physicalRect.size
-        let metrics = HudMetrics(screen: screen)
+        let fullSize = screenGeometry.physicalRect.size
+        let metrics = HudMetrics(screen: screenGeometry)
         ZStack(alignment: .topLeading) {
-            content(in: fullSize, screen: screen)
+            content(in: fullSize, screen: screenGeometry)
 
             if runner.isDefeated {
                 failBanner(metrics: metrics)
             }
 
-            HudView(db: db, screen: screen, runner: runner,
-                    towerMenuLayout: towerMenuLayout,
-                    onSpeedUp: { runner.speedUp() }, onExit: onExit)
-                .frame(width: screen.safeInsetsRect.width, height: screen.safeInsetsRect.height)
-                .position(x: screen.safeInsetsRect.midX, y: screen.safeInsetsRect.midY)
+            HudView(screenGeometry: screenGeometry, db: db, runner: runner,
+                    towerMenuLayout: towerMenuLayout)
+                .frame(width: screenGeometry.safeInsetsRect.width, height: screenGeometry.safeInsetsRect.height)
+                .position(x: screenGeometry.safeInsetsRect.midX, y: screenGeometry.safeInsetsRect.midY)
                 .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
 
-            towerMenuLayer(in: fullSize, screen: screen)
+            towerMenuLayer(in: fullSize, screen: screenGeometry)
 
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(screen: screen)
+                DebugLayoutGuidesView(screen: screenGeometry)
             }
         }
         .ignoresSafeArea()

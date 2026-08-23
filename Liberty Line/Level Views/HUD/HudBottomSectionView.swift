@@ -2,22 +2,21 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct HudBottomSectionView: View {
-    @AppStorage(Constants.debugModeKey) private var debugMode = false
+    private let screenGeometry: ScreenGeometry
     private let db: Db
-    private let screen: ScreenGeometry
-    private let buttonSize: CGFloat
+
+    @AppStorage(Constants.debugModeKey) private var debugMode = false
     
-    public init(db: Db, screen: ScreenGeometry, buttonSize: CGFloat) {
+    public init(screenGeometry: ScreenGeometry, db: Db) {
+        self.screenGeometry = screenGeometry
         self.db = db
-        self.screen = screen
-        self.buttonSize = buttonSize
     }
 
     var body: some View {
         HStack {
-            HudHeroesBarView(db: db, buttonSize: buttonSize)
+            HudHeroesBarView(screenGeometry: screenGeometry, db: db)
             Spacer()
-            HudMiscView(buttonSize: buttonSize)
+            HudMiscView(screenGeometry: screenGeometry)
         }
         .border(debugMode ? Color.purple : Color.clear, width: debugMode ? 1 : 0)
     }
