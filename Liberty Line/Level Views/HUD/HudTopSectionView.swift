@@ -4,11 +4,9 @@ import SwiftUI
 struct HudTopSectionView: View {
     let screenGeometry: ScreenGeometry
     let runner: LevelRunner
-//    let onSpeedUp: () -> Void
-//    let onExit: () -> Void
 
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             HudTopSectionLeftView(screen: screenGeometry, runner: runner)
             Spacer()
             HudTopSectionRightView(screenGeometry: screenGeometry)

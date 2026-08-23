@@ -3,7 +3,7 @@ import SwiftUI
 struct HudButtonView: View {
     private let screenGeometry: ScreenGeometry
     private let iconName: String
-    private let frameScaleFactor = 0.17
+    private let frameScaleFactor = 0.16
     private let frameSize: CGFloat
     
     public init(screenGeometry: ScreenGeometry, iconName: String) {

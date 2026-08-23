@@ -18,10 +18,9 @@ struct HudView: View {
 
     var body: some View {
         VStack {
-            HudTopSectionView(screenGeometry: screenGeometry,
-                              runner: runner)
-            Spacer()
-            HudBottomSectionView(screenGeometry: screenGeometry, db: db)
+            HudTopSectionView(screenGeometry: screenGeometry, runner: runner).border(Color.black)
+            Spacer().border(Color.pink)
+            HudBottomSectionView(screenGeometry: screenGeometry, db: db).border(Color.yellow)
         }
     }
 }

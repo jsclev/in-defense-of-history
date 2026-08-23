@@ -11,32 +11,32 @@ public class VirtualCanvasDAO: BaseDAO {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""
             SELECT
-                d.canvas_width,
-                d.canvas_height,
-                d.play_area_x,
-                d.play_area_y,
-                d.play_area_width,
-                d.play_area_height,
-                d.slot_width,
-                d.slot_height,
-                d.path_width,
-                d.upper_left_occlusion_corner_width_fraction,
-                d.upper_left_occlusion_corner_height_fraction,
-                d.upper_right_occlusion_corner_width_fraction,
-                d.upper_right_occlusion_corner_height_fraction,
-                d.lower_left_occlusion_corner_width_fraction,
-                d.lower_left_occlusion_corner_height_fraction,
-                d.lower_right_occlusion_corner_width_fraction,
-                d.lower_right_occlusion_corner_height_fraction
+                canvas_width,
+                canvas_height,
+                play_area_x,
+                play_area_y,
+                play_area_width,
+                play_area_height,
+                slot_width,
+                slot_height,
+                path_width,
+                upper_left_occlusion_corner_width_fraction,
+                upper_left_occlusion_corner_height_fraction,
+                upper_right_occlusion_corner_width_fraction,
+                upper_right_occlusion_corner_height_fraction,
+                lower_left_occlusion_corner_width_fraction,
+                lower_left_occlusion_corner_height_fraction,
+                lower_right_occlusion_corner_width_fraction,
+                lower_right_occlusion_corner_height_fraction
             FROM
-                canvas_spec d
+                virtual_canvas
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
 
         guard sqlite3_step(stmt) == SQLITE_ROW else {
             sqlite3_finalize(stmt)
-            throw DbError.Db(message:"canvas_spec table cannot be empty")
+            throw DbError.Db(message:"virtual_canvas table cannot be empty")
         }
         
         let canvasSize = CGSize(width: getDouble(stmt: stmt, colIndex: 0),
@@ -72,7 +72,7 @@ public class VirtualCanvasDAO: BaseDAO {
         sqlite3_finalize(stmt)
 
         guard !extraRow else {
-            throw DbError.Db(message: "canvas_spec has more than one row")
+            throw DbError.Db(message: "virtual_canvas has more than one row")
         }
 
         return virtualCanvas

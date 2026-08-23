@@ -3,7 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct HudTopSectionRightView: View {
     private let screenGeometry: ScreenGeometry
-    private let spacingScaleFactor = 0.005
+    private let spacingScaleFactor = 0.0045
 
     public init(screenGeometry: ScreenGeometry) {
         self.screenGeometry = screenGeometry

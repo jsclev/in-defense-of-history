@@ -51,7 +51,5 @@ public struct ScreenGeometry {
         }
         
         maxY = safeInsetsRect.maxY - safeMargin
-        let abc = maxY
-        print("Abc")
     }
 }

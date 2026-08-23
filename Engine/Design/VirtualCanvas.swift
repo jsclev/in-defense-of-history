@@ -43,9 +43,6 @@ public struct VirtualCanvas: Equatable {
         return dx * dx + dy * dy <= 1
     }
 
-    /// Whether two slot pad footprints overlap: the pads' ellipses touch or
-    /// cross. Same axes as `slotFootprintContains`, doubled, so pads placed
-    /// by this test never draw over one another.
     public func slotFootprintsOverlap(_ p: CGPoint, _ q: CGPoint) -> Bool {
         let a = towerSlotSize.width, b = towerSlotSize.height
         guard a > 0, b > 0 else { return false }
@@ -53,10 +50,6 @@ public struct VirtualCanvas: Equatable {
         return dx * dx + dy * dy < 1
     }
 
-    /// The four corner occlusion areas of the play area, one per corner,
-    /// sized as canvas_spec's fractions of the play area (20% of its width,
-    /// 5% of its height). Occlusion art covers these bands so entrances and
-    /// exits near a corner can swallow enemies cleanly.
     public var cornerOcclusionAreas: [CGRect] {
         let area = playAreaRect
         func size(_ f: CGSize) -> CGSize { CGSize(width: area.width * f.width, height: area.height * f.height) }
@@ -72,14 +65,8 @@ public struct VirtualCanvas: Equatable {
         ]
     }
 
-    /// Convert a y measured from the top of the canvas into this space, or back
-    /// again - the transform is its own inverse. Only rendering layers that draw
-    /// into a y-down surface should need this.
     public func flipY(_ y: Double) -> Double { size.height - y }
 
-    /// The rect the play area occupies on a screen of `fullSize`: the play
-    /// area's own aspect, fitted and centred. The one place the on-screen
-    /// playable rectangle is computed.
     public func playableRect(in fullSize: CGSize) -> CGRect {
         guard playAreaRect.width > 0, playAreaRect.height > 0 else {
             return CGRect(origin: .zero, size: fullSize)
@@ -91,7 +78,6 @@ public struct VirtualCanvas: Equatable {
                       y: (fullSize.height - height) / 2,
                       width: width, height: height)
     }
-
 
     public var playAreaShape: CGPath {
         let play = playAreaRect

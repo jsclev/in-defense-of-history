@@ -3,7 +3,7 @@ import SwiftUI
 struct HudHeroesBarView: View {
     private let screenGeometry: ScreenGeometry
     private let db: Db
-    private let spacingScaleFactor = 0.005
+    private let spacingScaleFactor = 0.0045
     let heroes: [Hero]
 
     static let slotCount = 5
