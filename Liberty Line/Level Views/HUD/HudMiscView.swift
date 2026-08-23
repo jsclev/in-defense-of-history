@@ -2,13 +2,15 @@ import SwiftUI
 
 struct HudMiscView: View {
     private let iconName = "hero_ability_icon_daniel_morgan"
-    private let screenGeometry: ScreenGeometry
+    private let buttonSize: CGFloat
     
     public init(screenGeometry: ScreenGeometry) {
-        self.screenGeometry = screenGeometry
+        let width = screenGeometry.bottomRightHudRect.width
+        let height = screenGeometry.bottomRightHudRect.height
+        self.buttonSize = min(width, height)
     }
 
     var body: some View {
-        HudButtonView(iconName: iconName, buttonSize: 50.0)
+        HudButtonView(iconName: iconName, buttonSize: buttonSize)
     }
 }

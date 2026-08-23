@@ -6,10 +6,10 @@ struct HudHeroesBarView: View {
     private let buttonSpacing: CGFloat
     
     public init(screenGeometry: ScreenGeometry, db: Db) {
-        let availableWidth = screenGeometry
-
-        self.buttonSize = (screenGeometry.hudRect.width / 5.0) * 0.90
-        self.buttonSpacing = (screenGeometry.hudRect.width / 5.0) * 0.10
+        buttonSize = screenGeometry.bottomLeftHudRect.size.width / (5.0 + 4.0 * 0.1)
+        buttonSpacing = buttonSize * 0.1
+//        self.buttonSize = (screenGeometry.bottomLeftHudRect.width / 5.0) * 0.90
+//        self.buttonSpacing = (screenGeometry.bottomLeftHudRect.width  / 5.0) * 0.10
 
         do {
             let allHeroes = try db.heroDao.getAll()
@@ -42,5 +42,6 @@ struct HudHeroesBarView: View {
                 }
             }
         }
+        .clipped()
     }
 }

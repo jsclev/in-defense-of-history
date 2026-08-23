@@ -13,8 +13,15 @@ public struct ScreenGeometry {
     public let runtimePlayArea: CGPath
     public let scaleFactor: CGFloat
     public let maxY: CGFloat
-    public let marginScaleFactor = 0.05
-    private let hudMarginFactor = 0.05
+    public let marginScaleFactor = 0.02
+    public let hudTopMargin: CGFloat
+    public let hudHorizontalMargin: CGFloat
+    public let hudBottomMargin: CGFloat
+    public let topRightHudRect: CGRect
+    public let bottomLeftHudRect: CGRect
+    public let bottomRightHudRect: CGRect
+//    private let hudMarginFactor = 0.04
+//    public let hudLowerLeftRect: CGRect
 
     public init(virtualCanvas: VirtualCanvas,
                 physicalRect: CGRect,
@@ -54,15 +61,77 @@ public struct ScreenGeometry {
         maxY = safeInsetsRect.maxY - safeMargin
         
         let horizontalMargin = playAreaRect.width * marginScaleFactor
+
+        var hudMinX = min(safeInsetsRect.minX, playAreaRect.minX)
+        if hudMinX < horizontalMargin {
+            hudMinX = horizontalMargin
+        }
+        
+        var hudMaxX = max(safeInsetsRect.maxX, playAreaRect.maxX)
+        if physicalRect.maxX - safeInsetsRect.maxX < horizontalMargin {
+            hudMaxX -= horizontalMargin
+        }
+        
+        var verticalPhysicalMargin = physicalRect.height - safeInsetsRect.height
+        var hudMaxY = playAreaRect.maxY
+        
+        if verticalPhysicalMargin > playAreaRect.height * marginScaleFactor {
+            hudMaxY = safeInsetsRect.maxY
+        }
         let verticalMargin = playAreaRect.height * marginScaleFactor
 //        let horizontalMargin = playAreaRect.width * marginScaleFactor
 //        let verticalMargin = playAreaRect.height * marginScaleFactor
         
+        let hudMinY = min(safeInsetsRect.minY, playAreaRect.minY) + verticalMargin
+        
         hudRect = CGRect(
-            x: min(safeInsetsRect.minX, playAreaRect.minX) + horizontalMargin,
-            y: min(safeInsetsRect.minY, playAreaRect.minY) - verticalMargin,
-            width: max(safeInsetsRect.width, playAreaRect.width) - 2.0 * horizontalMargin,
-            height: max(safeInsetsRect.height, playAreaRect.height) - 2.0 * verticalMargin
+            x: hudMinX,
+            y: hudMinY,
+            width: hudMaxX - hudMinX,
+            height: hudMaxY - hudMinY
+        )
+        
+        hudHorizontalMargin = hudRect.minX
+        hudTopMargin = hudRect.minY
+        hudBottomMargin = physicalRect.maxY - hudRect.maxY
+        
+        var bottomLeftHudWidth = virtualCanvas.lowerLeftOcclusionCornerFraction.width * playAreaRect.width
+        bottomLeftHudWidth += (safeInsetsRect.width - playAreaRect.width) / 2.0
+
+        var bottomLeftHudHeight = virtualCanvas.lowerLeftOcclusionCornerFraction.height * playAreaRect.height
+        bottomLeftHudHeight += (safeInsetsRect.height - playAreaRect.height) / 2.0
+        
+        bottomLeftHudRect = CGRect(
+            x: hudRect.minX,
+            y: hudRect.maxY - bottomLeftHudHeight,
+            width: bottomLeftHudWidth,
+            height: bottomLeftHudHeight
+        )
+        
+        var topRightHudWidth = virtualCanvas.upperRightOcclusionCornerFraction.width * playAreaRect.width
+        topRightHudWidth += (safeInsetsRect.width - playAreaRect.width) / 2.0
+
+        var topRightHudHeight = virtualCanvas.upperRightOcclusionCornerFraction.height * playAreaRect.height
+        topRightHudHeight += (safeInsetsRect.height - playAreaRect.height) / 2.0
+        
+        topRightHudRect = CGRect(
+            x: hudRect.maxX - topRightHudWidth,
+            y: hudRect.minY,
+            width: topRightHudWidth,
+            height: topRightHudHeight
+        )
+        
+        var bottomRightHudWidth = virtualCanvas.lowerRightOcclusionCornerFraction.width * playAreaRect.width
+        bottomRightHudWidth += (safeInsetsRect.width - playAreaRect.width) / 2.0
+
+        var bottomRightHudHeight = virtualCanvas.lowerRightOcclusionCornerFraction.height * playAreaRect.height
+        bottomRightHudHeight += (safeInsetsRect.height - playAreaRect.height) / 2.0
+        
+        bottomRightHudRect = CGRect(
+            x: hudRect.maxX - bottomRightHudWidth,
+            y: hudRect.maxY - bottomRightHudHeight,
+            width: bottomRightHudWidth,
+            height: bottomRightHudHeight
         )
     }
     

@@ -13,7 +13,7 @@ struct HudBottomSectionView: View {
     }
 
     var body: some View {
-        HStack {
+        HStack(alignment: .bottom) {
             HudHeroesBarView(screenGeometry: screenGeometry, db: db)
             Spacer()
             HudMiscView(screenGeometry: screenGeometry)

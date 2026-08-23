@@ -19,7 +19,7 @@ struct HudButtonView: View {
             Image(iconName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: buttonSize * 0.75, height: buttonSize * 0.75)
+                .frame(width: buttonSize * 0.80, height: buttonSize * 0.80)
         }
     }
 }

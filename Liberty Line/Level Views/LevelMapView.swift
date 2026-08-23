@@ -169,17 +169,14 @@ struct LevelMapView: View {
                     db: db,
                     runner: runner,
                     towerMenuLayout: towerMenuLayout)
-                .frame(width: screenGeometry.hudRect.width, height: screenGeometry.hudRect.height)
-                .position(x: screenGeometry.hudRect.midX, y: screenGeometry.hudRect.midY)
-                .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
+                .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)
 
             towerMenuLayer(in: fullSize, screen: screenGeometry)
-
+            
             if showDebugLayoutGuides {
                 DebugLayoutGuidesView(screen: screenGeometry)
             }
         }
-        .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear { runner.start() }
         .onDisappear { runner.stop() }
