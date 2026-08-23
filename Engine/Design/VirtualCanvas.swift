@@ -2,6 +2,16 @@ import Foundation
 import CoreGraphics
 
 public struct VirtualCanvas: Equatable {
+    public let size: CGSize
+    public let pathWidth: Double
+
+    public let playAreaRect: CGRect
+    public let towerSlotSize: CGSize
+    public let upperLeftOcclusionCornerFraction: CGSize
+    public let upperRightOcclusionCornerFraction: CGSize
+    public let lowerLeftOcclusionCornerFraction: CGSize
+    public let lowerRightOcclusionCornerFraction: CGSize
+    
     public init(size: CGSize,
                 playAreaRect: CGRect,
                 pathWidth: Double,
@@ -20,22 +30,6 @@ public struct VirtualCanvas: Equatable {
         self.lowerRightOcclusionCornerFraction = lowerRightOcclusionCornerFraction
     }
     
-    public let size: CGSize
-    public let pathWidth: Double
-
-    public let playAreaRect: CGRect
-    public let towerSlotSize: CGSize
-    public let upperLeftOcclusionCornerFraction: CGSize
-    public let upperRightOcclusionCornerFraction: CGSize
-    public let lowerLeftOcclusionCornerFraction: CGSize
-    public let lowerRightOcclusionCornerFraction: CGSize
-
-    /// THE slot pad footprint test: whether `point` lies inside the pad
-    /// IMAGE's ellipse (slot_width × slot_height) centred at `slot`, all in
-    /// canvas units. The pad art is a wide ellipse, so a circle of its
-    /// width-radius overreaches it above and below — every surface that
-    /// asks "is this on the pad" (the editor's hit test and its slot-spacing
-    /// check) uses this and not a circle or the touch target.
     public func slotFootprintContains(_ point: CGPoint, slot: CGPoint) -> Bool {
         let a = towerSlotSize.width / 2, b = towerSlotSize.height / 2
         guard a > 0, b > 0 else { return false }

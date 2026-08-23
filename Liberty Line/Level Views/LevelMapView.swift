@@ -165,10 +165,12 @@ struct LevelMapView: View {
                 failBanner(metrics: metrics)
             }
 
-            HudView(screenGeometry: screenGeometry, db: db, runner: runner,
+            HudView(screenGeometry: screenGeometry,
+                    db: db,
+                    runner: runner,
                     towerMenuLayout: towerMenuLayout)
-                .frame(width: screenGeometry.safeInsetsRect.width, height: screenGeometry.safeInsetsRect.height)
-                .position(x: screenGeometry.safeInsetsRect.midX, y: screenGeometry.safeInsetsRect.midY)
+                .frame(width: screenGeometry.hudRect.width, height: screenGeometry.hudRect.height)
+                .position(x: screenGeometry.hudRect.midX, y: screenGeometry.hudRect.midY)
                 .border(debugMode ? Color.yellow : Color.clear, width: debugMode ? 4 : 0)
 
             towerMenuLayer(in: fullSize, screen: screenGeometry)

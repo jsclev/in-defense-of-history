@@ -1,16 +1,12 @@
 import SwiftUI
 
 struct HudButtonView: View {
-    private let screenGeometry: ScreenGeometry
     private let iconName: String
-    private let frameScaleFactor = 0.16
-    private let frameSize: CGFloat
+    private let buttonSize: CGFloat
     
-    public init(screenGeometry: ScreenGeometry, iconName: String) {
-        self.screenGeometry = screenGeometry
+    public init(iconName: String, buttonSize: CGFloat) {
         self.iconName = iconName
-        
-        self.frameSize = screenGeometry.safeInsetsRect.height * frameScaleFactor
+        self.buttonSize = buttonSize
     }
 
     var body: some View {
@@ -19,11 +15,11 @@ struct HudButtonView: View {
                 .resizable()
                 .interpolation(.high)
                 .scaledToFit()
-                .frame(width: frameSize, height: frameSize)
+                .frame(width: buttonSize, height: buttonSize)
             Image(iconName)
                 .resizable()
                 .scaledToFit()
-                .frame(width: frameSize * 0.7, height: frameSize * 0.7)
+                .frame(width: buttonSize * 0.75, height: buttonSize * 0.75)
         }
     }
 }

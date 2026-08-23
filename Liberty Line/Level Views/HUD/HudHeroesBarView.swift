@@ -1,18 +1,16 @@
 import SwiftUI
 
 struct HudHeroesBarView: View {
-    private let screenGeometry: ScreenGeometry
-    private let db: Db
-    private let spacingScaleFactor = 0.0045
-    let heroes: [Hero]
-
-    static let slotCount = 5
-    static let centerIconName = "hero_ability_icon_old_put"
+    private let heroes: [Hero]
+    private let buttonSize: CGFloat
+    private let buttonSpacing: CGFloat
     
     public init(screenGeometry: ScreenGeometry, db: Db) {
-        self.screenGeometry = screenGeometry
-        self.db = db
-        
+        let availableWidth = screenGeometry
+
+        self.buttonSize = (screenGeometry.hudRect.width / 5.0) * 0.90
+        self.buttonSpacing = (screenGeometry.hudRect.width / 5.0) * 0.10
+
         do {
             let allHeroes = try db.heroDao.getAll()
             self.heroes = [
@@ -29,18 +27,20 @@ struct HudHeroesBarView: View {
     }
 
     var body: some View {
-        HStack(spacing: screenGeometry.playAreaRect.width * spacingScaleFactor) {
-            ForEach(0..<Self.slotCount, id: \.self) { index in
-                button(iconName: iconName(index: index))
+        HStack(spacing: buttonSpacing) {
+            ForEach(0..<heroes.count, id: \.self) { index in
+                ZStack {
+                    Image("tower_menu_square_frame")
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: buttonSize, height: buttonSize)
+                    Image(heroes[index].iconImageName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: buttonSize * 0.75, height: buttonSize * 0.75)
+                }
             }
         }
-    }
-
-    private func iconName(index: Int) -> String {
-        return heroes[index].iconImageName
-    }
-
-    private func button(iconName: String) -> some View {
-        HudButtonView(screenGeometry: screenGeometry, iconName: iconName)
     }
 }

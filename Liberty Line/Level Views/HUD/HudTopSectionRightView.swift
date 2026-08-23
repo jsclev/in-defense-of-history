@@ -11,10 +11,8 @@ struct HudTopSectionRightView: View {
 
     var body: some View {
         HStack(spacing: screenGeometry.playAreaRect.width * spacingScaleFactor) {
-            HudButtonView(screenGeometry: screenGeometry,
-                          iconName: "speed_up_icon_glyph")
-            HudButtonView(screenGeometry: screenGeometry,
-                          iconName: "pause_icon_glyph")
+            HudButtonView(iconName: "speed_up_icon_glyph", buttonSize: 10.0)
+            HudButtonView(iconName: "pause_icon_glyph", buttonSize: 10.0)
         }
     }
 }

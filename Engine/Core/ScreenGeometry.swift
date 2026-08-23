@@ -6,6 +6,7 @@ public enum ScreenEdge {
 
 public struct ScreenGeometry {
     public let virtualCanvas: VirtualCanvas
+    public let hudRect: CGRect
     public let physicalRect: CGRect
     public let safeInsetsRect: CGRect
     public let playAreaRect: CGRect
@@ -13,7 +14,7 @@ public struct ScreenGeometry {
     public let scaleFactor: CGFloat
     public let maxY: CGFloat
     public let marginScaleFactor = 0.05
-    
+    private let hudMarginFactor = 0.05
 
     public init(virtualCanvas: VirtualCanvas,
                 physicalRect: CGRect,
@@ -51,5 +52,24 @@ public struct ScreenGeometry {
         }
         
         maxY = safeInsetsRect.maxY - safeMargin
+        
+        let horizontalMargin = playAreaRect.width * marginScaleFactor
+        let verticalMargin = playAreaRect.height * marginScaleFactor
+//        let horizontalMargin = playAreaRect.width * marginScaleFactor
+//        let verticalMargin = playAreaRect.height * marginScaleFactor
+        
+        hudRect = CGRect(
+            x: min(safeInsetsRect.minX, playAreaRect.minX) + horizontalMargin,
+            y: min(safeInsetsRect.minY, playAreaRect.minY) - verticalMargin,
+            width: max(safeInsetsRect.width, playAreaRect.width) - 2.0 * horizontalMargin,
+            height: max(safeInsetsRect.height, playAreaRect.height) - 2.0 * verticalMargin
+        )
     }
+    
+//    public var lowerLeftHudWidth: CGFloat {
+//        let extraWidth = (safeInsetsRect.width - playAreaRect.width) / 2.0
+////        let occlusionWidth = virtualCanvas.lowerLeftOcclusionCornerFraction.width * playAreaRect.width
+//        
+//        return virtualCanvas.lowerLeftOcclusionCornerFraction.width * playAreaRect.width + extraWidth
+//    }
 }
