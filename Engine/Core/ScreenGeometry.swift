@@ -11,6 +11,7 @@ public struct ScreenGeometry {
     public let safeInsetsRect: CGRect
     public let playAreaRect: CGRect
     public let runtimePlayArea: CGPath
+    public let towerSlotValidArea: CGPath
     public let scaleFactor: CGFloat
     public let maxY: CGFloat
     public let marginScaleFactor = 0.02
@@ -51,6 +52,19 @@ public struct ScreenGeometry {
         
         runtimePlayArea = virtualCanvas.playAreaShape.copy(using: &transform)
             ?? virtualCanvas.playAreaShape
+
+        let menuHalfWidth = virtualCanvas.towerMenuTotalSize.width / 2
+        let menuHalfHeight = virtualCanvas.towerMenuTotalSize.height / 2
+        let validCenters = CGMutablePath()
+        validCenters.addRect(virtualCanvas.playAreaRect.insetBy(dx: menuHalfWidth,
+                                                                dy: menuHalfHeight))
+        let menuBlockedAreas = CGMutablePath()
+        for corner in virtualCanvas.cornerOcclusionAreas {
+            menuBlockedAreas.addRect(corner.insetBy(dx: -menuHalfWidth,
+                                                    dy: -menuHalfHeight))
+        }
+        let validShape = validCenters.subtracting(menuBlockedAreas, using: .winding)
+        towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
         
         var safeMargin = playAreaRect.height * marginScaleFactor
         

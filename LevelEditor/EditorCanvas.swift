@@ -274,7 +274,12 @@ struct EditorCanvas: View {
         switch state.tool {
         case .select:
             if let handle = hitHandle(at: p, t) {
-                state.selection = selection(for: handle)
+                let target = selection(for: handle)
+                if case .slot = target, state.selection == target {
+                    state.selection = .none
+                } else {
+                    state.selection = target
+                }
             } else if state.isVisible(.path), let (ri, _) = hitRoad(at: t.design(p), tolerance: 18) {
                 state.selection = .road(ri)
             } else {
@@ -285,7 +290,8 @@ struct EditorCanvas: View {
             // Tapping an existing slot selects it (dragging moves it); only
             // a tap on open ground adds a new one.
             if let existing = slotTarget(at: p, t) {
-                state.selection = selection(for: existing)
+                let target = selection(for: existing)
+                state.selection = state.selection == target ? .none : target
             } else {
                 state.selection = .slot(document.addSlot(at: dp, undoManager))
             }
@@ -600,28 +606,59 @@ struct EditorCanvas: View {
         ctx.stroke(SwiftUI.Path(screenGeometry.runtimePlayArea),
                    with: .color(Color(red: 1.0, green: 0.0, blue: 1.0)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [6, 10]))
+        ctx.stroke(SwiftUI.Path(screenGeometry.towerSlotValidArea),
+                   with: .color(.blue.opacity(0.85)),
+                   style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
     }
 
     private func drawMenuPreview(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        guard let i = state.menuPreviewSlot,
-              document.draft.slots.indices.contains(i) else { return }
+        var slotIndex: Int? = state.menuPreviewSlot
+        if case .slot(let i) = state.selection { slotIndex = i }
+        guard let i = slotIndex, document.draft.slots.indices.contains(i) else { return }
         let slot = document.draft.slots[i]
         let c = t.view(slot)
-        let size = state.towerMenuLayout.getBgSize(playAreaScalingFactor: 1)
-        let rect = CGRect(x: c.x - size.width * t.scale / 2,
-                          y: c.y - size.height * t.scale / 2,
-                          width: size.width * t.scale,
-                          height: size.height * t.scale)
-        let artPath = "../in-defense-of-history-data/LibertyLineAssets.xcassets/"
-            + "tower_menu_bg.imageset/tower_menu_bg.png"
-        if let url = EditorResources.url(artPath),
-           let art = PlatformImageLoader.load(path: url.path) {
-            ctx.draw(Image(platformImage: art.image), in: rect)
+        let bgSize = state.towerMenuLayout.getBgSize(playAreaScalingFactor: t.scale)
+        let bgRect = CGRect(x: c.x - bgSize.width / 2,
+                            y: c.y - bgSize.height / 2,
+                            width: bgSize.width, height: bgSize.height)
+        if let art = menuArt("tower_menu_bg") {
+            ctx.draw(Image(platformImage: art), in: bgRect)
         } else {
-            ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.15)))
-            ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.85)),
+            ctx.fill(SwiftUI.Path(ellipseIn: bgRect), with: .color(.white.opacity(0.15)))
+            ctx.stroke(SwiftUI.Path(ellipseIn: bgRect), with: .color(.white.opacity(0.85)),
                        lineWidth: max(1, 2 * t.scale))
         }
+        let buttonSide = state.towerMenuLayout
+            .getTowerButtonSize(playAreaScalingFactor: t.scale).width
+        let iconSide = state.towerMenuLayout.getTowerIconSize(towerButtonSize: buttonSide)
+        for kind in TowerKind.allCases {
+            let buttonCenter = state.towerMenuLayout.getTowerButtonCenterPoint(
+                towerKind: kind, menuCenterPoint: c,
+                playAreaScalingFactor: t.scale, towerButtonSize: buttonSide)
+            let frameRect = CGRect(x: buttonCenter.x - buttonSide / 2,
+                                   y: buttonCenter.y - buttonSide / 2,
+                                   width: buttonSide, height: buttonSide)
+            if let frame = menuArt("tower_menu_square_frame") {
+                ctx.draw(Image(platformImage: frame), in: frameRect)
+            } else {
+                ctx.stroke(SwiftUI.Path(frameRect), with: .color(.white.opacity(0.85)),
+                           lineWidth: max(1, 1.5 * t.scale))
+            }
+            let iconRect = CGRect(x: buttonCenter.x - iconSide / 2,
+                                  y: buttonCenter.y - iconSide / 2,
+                                  width: iconSide, height: iconSide)
+            if let icon = menuArt(kind.menuIconName) {
+                ctx.draw(Image(platformImage: icon), in: iconRect)
+            }
+        }
+    }
+
+    private func menuArt(_ name: String) -> PlatformImage? {
+        let path = "../in-defense-of-history-data/LibertyLineAssets.xcassets/"
+            + "\(name).imageset/\(name).png"
+        guard let url = EditorResources.url(path),
+              let art = PlatformImageLoader.load(path: url.path) else { return nil }
+        return art.image
     }
 
     private func drawGrid(_ ctx: inout GraphicsContext, _ t: DesignTransform, _ frame: CGRect) {

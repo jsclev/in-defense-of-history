@@ -7,6 +7,7 @@ public struct VirtualCanvas: Equatable {
 
     public let playAreaRect: CGRect
     public let towerSlotSize: CGSize
+    public let towerMenuTotalSize: CGSize
     public let upperLeftOcclusionCornerFraction: CGSize
     public let upperRightOcclusionCornerFraction: CGSize
     public let lowerLeftOcclusionCornerFraction: CGSize
@@ -16,6 +17,7 @@ public struct VirtualCanvas: Equatable {
                 playAreaRect: CGRect,
                 pathWidth: Double,
                 towerSlotSize: CGSize,
+                towerMenuTotalSize: CGSize,
                 upperLeftOcclusionCornerFraction: CGSize,
                 upperRightOcclusionCornerFraction: CGSize,
                 lowerLeftOcclusionCornerFraction: CGSize,
@@ -24,6 +26,7 @@ public struct VirtualCanvas: Equatable {
         self.playAreaRect = playAreaRect
         self.pathWidth = pathWidth
         self.towerSlotSize = towerSlotSize
+        self.towerMenuTotalSize = towerMenuTotalSize
         self.upperLeftOcclusionCornerFraction = upperLeftOcclusionCornerFraction
         self.upperRightOcclusionCornerFraction = upperRightOcclusionCornerFraction
         self.lowerLeftOcclusionCornerFraction = lowerLeftOcclusionCornerFraction

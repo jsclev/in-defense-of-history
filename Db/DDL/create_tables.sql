@@ -102,6 +102,8 @@ CREATE TABLE virtual_canvas (
     slot_width REAL NOT NULL CHECK (slot_width > 0.0),
     slot_height REAL NOT NULL CHECK (slot_height > 0.0),
     path_width REAL NOT NULL CHECK (path_width > 0.0),
+    tower_menu_total_width REAL NOT NULL CHECK (tower_menu_total_width > 0.0),
+    tower_menu_total_height REAL NOT NULL CHECK (tower_menu_total_height > 0.0),
     upper_left_occlusion_corner_width_fraction REAL NOT NULL
         CHECK (upper_left_occlusion_corner_width_fraction > 0.0 AND upper_left_occlusion_corner_width_fraction <= 1.0),
     upper_left_occlusion_corner_height_fraction REAL NOT NULL
@@ -119,7 +121,9 @@ CREATE TABLE virtual_canvas (
     lower_right_occlusion_corner_height_fraction REAL NOT NULL
         CHECK (lower_right_occlusion_corner_height_fraction > 0.0 AND lower_right_occlusion_corner_height_fraction <= 1.0),
     CHECK (play_area_x + play_area_width <= canvas_width),
-    CHECK (play_area_y + play_area_height <= canvas_height)
+    CHECK (play_area_y + play_area_height <= canvas_height),
+    CHECK (tower_menu_total_width <= play_area_width),
+    CHECK (tower_menu_total_height <= play_area_height)
 );
 
 CREATE TABLE level_info (

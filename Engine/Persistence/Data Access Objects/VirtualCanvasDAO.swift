@@ -20,6 +20,8 @@ public class VirtualCanvasDAO: BaseDAO {
                 slot_width,
                 slot_height,
                 path_width,
+                tower_menu_total_width,
+                tower_menu_total_height,
                 upper_left_occlusion_corner_width_fraction,
                 upper_left_occlusion_corner_height_fraction,
                 upper_right_occlusion_corner_width_fraction,
@@ -50,19 +52,22 @@ public class VirtualCanvasDAO: BaseDAO {
         let towerSlotSize = CGSize(width: getDouble(stmt: stmt, colIndex: 6),
                                    height: getDouble(stmt: stmt, colIndex: 7))
         let pathWidth = getDouble(stmt: stmt, colIndex: 8)
-        let upperLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 9),
-                                                      height: getDouble(stmt: stmt, colIndex: 10))
-        let upperRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 11),
-                                                       height: getDouble(stmt: stmt, colIndex: 12))
-        let lowerLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
-                                                      height: getDouble(stmt: stmt, colIndex: 14))
-        let lowerRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 15),
-                                                       height: getDouble(stmt: stmt, colIndex: 16))
+        let towerMenuTotalSize = CGSize(width: getDouble(stmt: stmt, colIndex: 9),
+                                        height: getDouble(stmt: stmt, colIndex: 10))
+        let upperLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 11),
+                                                      height: getDouble(stmt: stmt, colIndex: 12))
+        let upperRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
+                                                       height: getDouble(stmt: stmt, colIndex: 14))
+        let lowerLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 15),
+                                                      height: getDouble(stmt: stmt, colIndex: 16))
+        let lowerRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 17),
+                                                       height: getDouble(stmt: stmt, colIndex: 18))
         
         let virtualCanvas = VirtualCanvas(size: canvasSize,
                                     playAreaRect: playAreaRect,
                                     pathWidth: pathWidth,
                                     towerSlotSize: towerSlotSize,
+                                    towerMenuTotalSize: towerMenuTotalSize,
                                     upperLeftOcclusionCornerFraction: upperLeftOcclusionCornerFraction,
                                     upperRightOcclusionCornerFraction: upperRightOcclusionCornerFraction,
                                     lowerLeftOcclusionCornerFraction: lowerLeftOcclusionCornerFraction,
