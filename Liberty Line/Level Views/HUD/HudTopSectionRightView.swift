@@ -4,8 +4,14 @@ import SwiftUI
 struct HudTopSectionRightView: View {
     private let buttonSize: CGFloat
     private let buttonSpacing: CGFloat
+    private let onSpeedUp: () -> Void
+    private let onExit: () -> Void
 
-    public init(screenGeometry: ScreenGeometry) {
+    public init(screenGeometry: ScreenGeometry,
+                onSpeedUp: @escaping () -> Void,
+                onExit: @escaping () -> Void) {
+        self.onSpeedUp = onSpeedUp
+        self.onExit = onExit
         let width = screenGeometry.topRightHudRect.width
         let height = screenGeometry.topRightHudRect.height
         let minDimension = max(width, height)
@@ -16,8 +22,10 @@ struct HudTopSectionRightView: View {
 
     var body: some View {
         HStack(spacing: buttonSpacing) {
-            HudButtonView(iconName: "speed_up_icon_glyph", buttonSize: buttonSize)
-            HudButtonView(iconName: "pause_icon_glyph", buttonSize: buttonSize)
+            HudButtonView(iconName: "speed_up_icon_glyph", buttonSize: buttonSize,
+                          action: onSpeedUp)
+            HudButtonView(iconName: "pause_icon_glyph", buttonSize: buttonSize,
+                          action: onExit)
         }
     }
 }

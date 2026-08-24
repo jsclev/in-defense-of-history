@@ -168,7 +168,9 @@ struct LevelMapView: View {
             HudView(screenGeometry: screenGeometry,
                     db: db,
                     runner: runner,
-                    towerMenuLayout: towerMenuLayout)
+                    towerMenuLayout: towerMenuLayout,
+                    onSpeedUp: { runner.speedUp() },
+                    onExit: onExit)
                 .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)
 
             towerMenuLayer(in: fullSize, screen: screenGeometry)
@@ -436,7 +438,7 @@ struct LevelMapView: View {
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
                         range: radius, projection: projection)
                 }
-                dismissCatcher(viewSize: viewSize)
+                dismissCatcher()
                 towerMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
                           playAreaScalingFactor: playAreaScalingFactor)
             }
@@ -451,9 +453,9 @@ struct LevelMapView: View {
                         range: radius, projection: projection)
                 }
                 if runner.isPlacingRallyPoint {
-                    rallyPlacementCatcher(viewSize: viewSize, projection: projection)
+                    rallyPlacementCatcher(projection: projection)
                 } else {
-                    dismissCatcher(viewSize: viewSize)
+                    dismissCatcher()
                 }
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                             playAreaScalingFactor: playAreaScalingFactor)
@@ -630,18 +632,15 @@ struct LevelMapView: View {
             .allowsHitTesting(false)
     }
 
-    private func rallyPlacementCatcher(viewSize: CGSize,
-                                       projection: LevelMapProjection) -> some View {
+    private func rallyPlacementCatcher(projection: LevelMapProjection) -> some View {
         Color.black.opacity(0.001)
-            .frame(width: viewSize.width, height: viewSize.height)
             .gesture(SpatialTapGesture().onEnded { value in
                 runner.placeRallyPoint(at: projection.mapPoint(value.location))
             })
     }
 
-    private func dismissCatcher(viewSize: CGSize) -> some View {
+    private func dismissCatcher() -> some View {
         Color.black.opacity(0.001)
-            .frame(width: viewSize.width, height: viewSize.height)
             .onTapGesture { runner.dismissMenu() }
     }
 

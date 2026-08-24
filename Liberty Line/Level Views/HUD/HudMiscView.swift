@@ -11,6 +11,6 @@ struct HudMiscView: View {
     }
 
     var body: some View {
-        HudButtonView(iconName: iconName, buttonSize: buttonSize)
+        HudButtonView(iconName: iconName, buttonSize: buttonSize) {}
     }
 }

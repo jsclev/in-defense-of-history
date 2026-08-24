@@ -46,12 +46,23 @@ struct LevelBriefingView: View {
             }
             .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
 
-            DoneButton {
-                if let selected {
-                    onStart(selected)
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    DoneButton {
+                        if let selected {
+                            onStart(selected)
+                        }
+                    }
+                    .disabled(selected == nil)
+                    .frame(height: HudSizing.doneButton.resolved(at: metrics.scale))
                 }
             }
-            .disabled(selected == nil)
+            .padding(.trailing, screen.physicalRect.maxX - screen.safeInsetsRect.maxX
+                                + metrics.hudMargin)
+            .padding(.bottom, screen.physicalRect.maxY - screen.safeInsetsRect.maxY
+                              + metrics.hudMargin)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
