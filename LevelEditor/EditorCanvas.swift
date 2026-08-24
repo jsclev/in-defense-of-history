@@ -593,53 +593,13 @@ struct EditorCanvas: View {
     }
 
     private func drawPlayAreaOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let play = virtualCanvas.playAreaRect
-        let notched = SwiftUI.Path(virtualCanvas.playAreaShape).applying(t.viewTransform)
-        var dim = SwiftUI.Path(t.frame)
-        dim.addPath(notched)
-        ctx.fill(dim, with: .color(.black.opacity(0.38)), style: FillStyle(eoFill: true))
-        let lineColor = Color(red: 0.75, green: 0.15, blue: 1.0)
-        ctx.stroke(notched, with: .color(lineColor),
-                   style: StrokeStyle(lineWidth: 1.5, dash: [8, 5]))
-
-        let toView = CGAffineTransform(a: t.scale, b: 0, c: 0, d: t.scale,
-                                       tx: t.offset.x, ty: t.offset.y)
-        let slotShape = SwiftUI.Path(state.towerMenuLayout.slotMenuSafeShape).applying(toView)
-        ctx.stroke(slotShape, with: .color(.blue.opacity(0.85)),
-                   style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
-
-        let font = Font.system(size: max(10, 11 * t.scale), weight: .semibold)
-        let playTopView = t.view(Point(play.midX, play.maxY))
-        ctx.draw(
-            Text("play top y \(Int(play.maxY.rounded()))")
-                .font(font).foregroundStyle(lineColor),
-            at: CGPoint(x: playTopView.x, y: playTopView.y - 10)
-        )
-        let topInset = state.towerMenuLayout.slotSafeInset(.top)
-        let topY = play.maxY - topInset
-        let topView = t.view(Point(play.midX, topY))
-        ctx.draw(
-            Text("slot top y \(Int(topY.rounded())) = \(Int(play.maxY)) − \(Int(topInset.rounded()))")
-                .font(font).foregroundStyle(.blue.opacity(0.9)),
-            at: CGPoint(x: topView.x, y: topView.y - 10)
-        )
-        let bottomInset = state.towerMenuLayout.slotSafeInset(.bottom)
-        let bottomY = play.minY + bottomInset
-        let bottomView = t.view(Point(play.midX, bottomY))
-        ctx.draw(
-            Text("slot bottom y \(Int(bottomY.rounded())) = \(Int(play.minY)) + \(Int(bottomInset.rounded()))")
-                .font(font).foregroundStyle(.blue.opacity(0.9)),
-            at: CGPoint(x: bottomView.x, y: bottomView.y + 12)
-        )
-        let leftInset = state.towerMenuLayout.slotSafeInset(.left)
-        let leftX = play.minX + leftInset
-        let leftView = t.view(Point(leftX, play.midY))
-        ctx.draw(
-            Text("slot left x \(Int(leftX.rounded())) = \(Int(play.minX)) + \(Int(leftInset.rounded()))")
-                .font(font).foregroundStyle(.blue.opacity(0.9)),
-            at: CGPoint(x: leftView.x + 8, y: leftView.y),
-            anchor: .leading
-        )
+        let screenGeometry = ScreenGeometry(
+            virtualCanvas: virtualCanvas,
+            physicalRect: t.frame,
+            safeInsetsRect: t.view(virtualCanvas.playAreaRect))
+        ctx.stroke(SwiftUI.Path(screenGeometry.runtimePlayArea),
+                   with: .color(Color(red: 1.0, green: 0.0, blue: 1.0)),
+                   style: StrokeStyle(lineWidth: 1.5, dash: [6, 10]))
     }
 
     private func drawMenuPreview(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
