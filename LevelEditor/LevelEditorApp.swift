@@ -12,6 +12,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    func applicationWillFinishLaunching(_ notification: Notification) {
+        UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
             self.openUntitledIfNoWindows()

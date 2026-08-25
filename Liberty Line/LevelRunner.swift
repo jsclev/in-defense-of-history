@@ -342,10 +342,14 @@ final class LevelRunner: NSObject, ObservableObject {
 
     private var entrancePoints: [EntrancePoint] = []
 
-    var entrancePositions: [CGPoint] {
+    var entranceWavePaths: [[CGPoint]] {
         guard waves.indices.contains(waveIndex) else { return [] }
         let active = Set(waves[waveIndex].spawns.map(\.pathIndex))
-        return active.sorted().compactMap { entrancePosition(forPath: $0) }
+        return active.sorted().compactMap { index in
+            guard paths.indices.contains(index),
+                  entrancePosition(forPath: index) != nil else { return nil }
+            return paths[index].points.map { CGPoint(x: $0.x, y: $0.y) }
+        }
     }
 
     /// The geojson spawn point tagged to the path; else the spawn point at

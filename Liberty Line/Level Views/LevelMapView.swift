@@ -96,24 +96,22 @@ struct LevelMapView: View {
         return min(tap.width, tap.height)
     }
 
-    /// A path mouth can sit in the canvas bleed outside the play area — past
-    /// the screen edge on some devices — so the icon stays centred on its
-    /// entrance whenever that fits and otherwise pulls the minimum distance
-    /// needed to sit whole inside the safe rect.
-    /// One icon position per held-wave entrance, clamped into the safe
-    /// rect. Mouths that land within an icon of one another collapse to a
+    /// One icon per held-wave path, sitting on the road centreline: the
+    /// first point along the path that fits whole inside the safe rect,
+    /// nudged off the physical screen edges and clear of every tower slot.
+    /// Paths whose icons land within an icon of one another collapse to a
     /// single icon: double-tapping any icon starts the whole wave, so
-    /// near-coincident mouths never need a stack of pulsing bubbles.
+    /// paths sharing a mouth never need a stack of pulsing bubbles.
     private func entranceIconPositions(iconSize: CGFloat,
-                                       projection: LevelMapProjection) -> [CGPoint] {
-        var placed: [CGPoint] = []
-        for entrance in runner.entrancePositions {
-            let p = projection.viewPoint(entrance)
-            if placed.allSatisfy({ hypot($0.x - p.x, $0.y - p.y) >= iconSize }) {
-                placed.append(p)
-            }
-        }
-        return placed
+                                       projection: LevelMapProjection,
+                                       screen: ScreenGeometry) -> [CGPoint] {
+        EntranceWaveButtonPlacement(
+            entrancePaths: runner.entranceWavePaths.map { $0.map(projection.viewPoint) },
+            slotCenters: runner.slotPositions.map(projection.viewPoint),
+            slotSize: CGSize(width: projection.viewLength(runner.slotSize.width),
+                             height: projection.viewLength(runner.slotSize.height)),
+            buttonSize: iconSize,
+            geometry: screen).positions
     }
 
     private static func debugRangeTint(for range: CGFloat) -> Color {
@@ -380,7 +378,8 @@ struct LevelMapView: View {
             if runner.awaitingWaveStart {
                 let iconSize = entranceIconSize(projection: projection)
                 ForEach(Array(entranceIconPositions(iconSize: iconSize,
-                                                    projection: projection).enumerated()),
+                                                    projection: projection,
+                                                    screen: screen).enumerated()),
                         id: \.offset) { _, position in
                     EntranceWaveButton(size: iconSize) {
                         runner.startNextWave()
@@ -434,9 +433,9 @@ struct LevelMapView: View {
                runner.slotPositions.indices.contains(buildSlot) {
                 if let armed = runner.armedBuildKind,
                    let radius = runner.buildPreviewRadius(for: armed) {
-                    rangeOverlay(
+                    TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
-                        range: radius, projection: projection)
+                        range: radius, pointsPerMapUnit: projection.scale)
                 }
                 dismissCatcher()
                 towerMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
@@ -448,9 +447,9 @@ struct LevelMapView: View {
                 let previewRadius = runner.armedUpgradeBranch
                     .flatMap { runner.upgradePreviewRadius(branch: $0) }
                 if let radius = previewRadius ?? runner.rangeOverlayRadius(for: tower) {
-                    rangeOverlay(
+                    TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[upgradeSlot]),
-                        range: radius, projection: projection)
+                        range: radius, pointsPerMapUnit: projection.scale)
                 }
                 if runner.isPlacingRallyPoint {
                     rallyPlacementCatcher(projection: projection)
@@ -499,7 +498,7 @@ struct LevelMapView: View {
                                    projection: LevelMapProjection,
                                    safe: CGRect,
                                    metrics: HudMetrics) -> DebugRingGeometry {
-        let size = MapRangeShape.size(range: range, pointsPerMapUnit: projection.scale)
+        let size = TowerRangeOverlay.size(range: range, pointsPerMapUnit: projection.scale)
         let center = projection.viewPoint(tower.position)
         let gap = 6 * metrics.scale
 
@@ -609,27 +608,6 @@ struct LevelMapView: View {
             .fill(.black.opacity(0.72)))
         .overlay(RoundedRectangle(cornerRadius: 5 * metrics.scale)
             .stroke(tint.opacity(0.8), lineWidth: 1))
-    }
-
-    /// Light-green range ring under a radial menu: shown while a build choice
-    /// is armed awaiting its confirming second tap, and while a placed
-    /// tower's upgrade menu is open. Attack range for shooting towers, rally
-    /// radius for melee. Never hit-tested, so it cannot swallow the
-    /// confirming or cancelling tap.
-    private func rangeOverlay(center: CGPoint, range: CGFloat,
-                              projection: LevelMapProjection) -> some View {
-        let size = MapRangeShape.size(range: range, pointsPerMapUnit: projection.scale)
-        return Ellipse()
-            .fill(Color.green.opacity(0.16))
-            .overlay(
-                ZStack {
-                    Ellipse().stroke(.black.opacity(0.35), lineWidth: 4)
-                    Ellipse().stroke(Color.green.opacity(0.8), lineWidth: 2)
-                }
-            )
-            .frame(width: size.width, height: size.height)
-            .position(center)
-            .allowsHitTesting(false)
     }
 
     private func rallyPlacementCatcher(projection: LevelMapProjection) -> some View {

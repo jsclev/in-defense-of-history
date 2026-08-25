@@ -1,14 +1,10 @@
 import Foundation
 import CoreGraphics
 
-public enum MapRangeShape {
-    public static let isometricTiltDegrees: CGFloat = 30
-
-    /// A ground-plane circle seen at the map's tilt: full width, height
-    /// foreshortened by sin(tilt).
-    public static var verticalFraction: CGFloat {
-        sin(isometricTiltDegrees * .pi / 180)
-    }
+public enum TowerRangeOverlay {
+    /// A ground-plane circle foreshortened to Kingdom Rush's range-ring
+    /// proportions: 7 units tall for every 10 wide.
+    public static let verticalFraction: CGFloat = 0.7
 
     public static func size(range: CGFloat, pointsPerMapUnit: CGFloat) -> CGSize {
         let width = range * pointsPerMapUnit * 2

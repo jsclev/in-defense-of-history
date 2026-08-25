@@ -86,7 +86,7 @@ public struct ScreenGeometry {
             hudMaxX -= horizontalMargin
         }
         
-        var verticalPhysicalMargin = physicalRect.height - safeInsetsRect.height
+        let verticalPhysicalMargin = physicalRect.height - safeInsetsRect.height
         var hudMaxY = playAreaRect.maxY
         
         if verticalPhysicalMargin > playAreaRect.height * marginScaleFactor {
