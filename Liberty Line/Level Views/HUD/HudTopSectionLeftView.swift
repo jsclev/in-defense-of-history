@@ -4,20 +4,20 @@ import SwiftUI
 struct HudTopSectionLeftView: View {
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @ObservedObject private var runner: LevelRunner
-    private let screen: ScreenGeometry
+    private let runtimeCanvas: RuntimeCanvas
     private let metrics: HudMetrics
     private let isPortrait: Bool
 
-    public init(screen: ScreenGeometry, runner: LevelRunner) {
-        self.screen = screen
+    public init(runtimeCanvas: RuntimeCanvas, runner: LevelRunner) {
+        self.runtimeCanvas = runtimeCanvas
         self.runner = runner
-        metrics = HudMetrics(screen: screen)
-        isPortrait = screen.physicalRect.height > screen.physicalRect.width
+        metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
+        isPortrait = runtimeCanvas.physicalRect.height > runtimeCanvas.physicalRect.width
     }
 
     var body: some View {
         let panel = StatsPanelLayout(
-            screen: screen, topBar: TopBarLayout(screen: screen), isPortrait: isPortrait,
+            runtimeCanvas: runtimeCanvas, topBar: TopBarLayout(runtimeCanvas: runtimeCanvas), isPortrait: isPortrait,
             livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
             moneyIconAspect: HudIcon.aspect(of: "money_icon_12"),
             moneyText: Self.goldTemplate)

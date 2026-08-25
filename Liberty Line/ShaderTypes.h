@@ -42,9 +42,9 @@ typedef struct
 /// The sub-rectangle of the source texture to sample, in normalized
 /// (0...1) texture coordinates: (u0, v0, u1, v1).
 ///
-/// This lets the vertex shader crop the full-screen quad's texture
+/// This lets the vertex shader crop the full-runtimeCanvas quad's texture
 /// coordinates to whatever region of the source image should fill the
-/// current device's screen.
+/// current device's runtimeCanvas.
 typedef struct
 {
     vector_float4 sourceUVRect;

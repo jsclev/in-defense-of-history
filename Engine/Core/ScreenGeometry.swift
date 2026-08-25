@@ -4,7 +4,7 @@ public enum ScreenEdge {
     case leading, trailing, top, bottom
 }
 
-public struct ScreenGeometry {
+public struct RuntimeCanvas {
     public let virtualCanvas: VirtualCanvas
     public let hudRect: CGRect
     public let physicalRect: CGRect

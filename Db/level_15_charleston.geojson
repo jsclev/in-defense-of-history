@@ -43,7 +43,7 @@
    "pathCount": 6,
    "slotCount": 17,
    "slotPlacement": "6 slots meet every strict clearance (>=139.3 to road centerline, pad clear of road). 7 'verge' slots hug the roadside with the virtual footprint overlapping the road edge by up to 30px (Kingdom Rush convention; shipped Charleston uses d 80-176, median 136, with overlaps to 59px). 4 slots encroach the HUD-corner menu-outset bands by design necessity - 17 slots plus 40% coverage cannot fit inside the strict menu-safe area (packing ceiling is ~13); shipped Charleston makes the same trade on slots 7/10/17. Every slot pad keeps >=8px clearance from the HUD occlusion rects themselves, stays inside the menu-safe rect proper, and no two pads overlap. roadInRangeAtL1 and emphasis are computed at the DB's ranged L1 tower range of 180 (towers.sql); emphasis weights road length by how many of the six lanes share it.",
-   "portMarkers": "Entrance/exit markers sit 64 units inside the play edge ON the path centerline; path polylines run ~150 units past the play edge into the bleed so enemies walk on/off screen (Charleston convention). Marker-to-mouth distances are ~214, inside the sync tool's pathWidth*2 matching radius."
+   "portMarkers": "Entrance/exit markers sit 64 units inside the play edge ON the path centerline; path polylines run ~150 units past the play edge into the bleed so enemies walk on/off runtimeCanvas (Charleston convention). Marker-to-mouth distances are ~214, inside the sync tool's pathWidth*2 matching radius."
   },
   "sources": [
    "https://kingdomrushtd.fandom.com/wiki/Lost_Jungle",

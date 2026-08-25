@@ -3,13 +3,13 @@ import UIKit
 
 struct ScreenGeometryGate<Content: View>: View {
     let virtualCanvas: VirtualCanvas
-    @ViewBuilder let content: (ScreenGeometry) -> Content
+    @ViewBuilder let content: (RuntimeCanvas) -> Content
 
-    @State private var screen: ScreenGeometry?
+    @State private var runtimeCanvas: RuntimeCanvas?
 
     var body: some View {
-        if let screen {
-            content(screen)
+        if let runtimeCanvas {
+            content(runtimeCanvas)
                 .ignoresSafeArea()
         } else {
             GeometryReader { geometry in
@@ -21,7 +21,7 @@ struct ScreenGeometryGate<Content: View>: View {
                                             height: physicalRect.height - insets.top - insets.bottom)
                 Color.clear
                     .onAppear {
-                        screen = ScreenGeometry(virtualCanvas: virtualCanvas,
+                        runtimeCanvas = RuntimeCanvas(virtualCanvas: virtualCanvas,
                                                 physicalRect: physicalRect,
                                                 safeInsetsRect: safeInsetsRect)
                     }

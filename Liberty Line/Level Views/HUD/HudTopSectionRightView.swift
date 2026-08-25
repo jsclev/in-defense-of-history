@@ -7,13 +7,13 @@ struct HudTopSectionRightView: View {
     private let onSpeedUp: () -> Void
     private let onExit: () -> Void
 
-    public init(screenGeometry: ScreenGeometry,
+    public init(runtimeCanvas: RuntimeCanvas,
                 onSpeedUp: @escaping () -> Void,
                 onExit: @escaping () -> Void) {
         self.onSpeedUp = onSpeedUp
         self.onExit = onExit
-        let width = screenGeometry.topRightHudRect.width
-        let height = screenGeometry.topRightHudRect.height
+        let width = runtimeCanvas.topRightHudRect.width
+        let height = runtimeCanvas.topRightHudRect.height
         let minDimension = max(width, height)
         
         self.buttonSize = (minDimension / 2.0) * 0.90

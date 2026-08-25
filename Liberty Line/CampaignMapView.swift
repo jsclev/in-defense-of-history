@@ -11,14 +11,14 @@ struct CampaignMapView: View {
     
     public var virtualCanvas: VirtualCanvas
     public let db: Db
-    public let screen: ScreenGeometry
+    public let runtimeCanvas: RuntimeCanvas
 
     var body: some View {
-        let mapSize = screen.physicalRect.size
-        let metrics = HudMetrics(screen: screen)
-        let menu = MenuBarLayout(screen: screen,
+        let mapSize = runtimeCanvas.physicalRect.size
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
+        let menu = MenuBarLayout(runtimeCanvas: runtimeCanvas,
                                  itemCount: MenuScreen.allCases.count)
-        let title = TitleLayout(screen: screen,
+        let title = TitleLayout(runtimeCanvas: runtimeCanvas,
                                 aspect: 1 / max(HudIcon.aspect(of: "game_title"), 0.01))
         let scale = CampaignMarkers.scale(for: mapSize)
         let placements = CampaignMarkers.placements(
@@ -27,8 +27,8 @@ struct CampaignMapView: View {
         )
         let menuBox = CGRect(
             x: menu.bar.minX, y: menu.bar.minY,
-            width: screen.physicalRect.maxX - menu.bar.minX,
-            height: screen.physicalRect.maxY - menu.bar.minY)
+            width: runtimeCanvas.physicalRect.maxX - menu.bar.minX,
+            height: runtimeCanvas.physicalRect.maxY - menu.bar.minY)
         let decor = CampaignDecor.placements(
             viewSize: mapSize,
             callouts: placements,
@@ -85,7 +85,7 @@ struct CampaignMapView: View {
 
             ZStack(alignment: .topLeading) {
                 ForEach(Array(MenuScreen.allCases.enumerated()), id: \.element.id) { index, item in
-                    MenuButton(screen: item,
+                    MenuButton(runtimeCanvas: item,
                                size: menu.itemFrames[index].height) {
                         onSelectMenu(item)
                     }
@@ -96,7 +96,7 @@ struct CampaignMapView: View {
 
             // Last, so the guides draw over every HUD element.
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(screen: screen)
+                DebugLayoutGuidesView(runtimeCanvas: runtimeCanvas)
             }
         }
         .ignoresSafeArea()

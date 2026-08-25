@@ -4,7 +4,7 @@ import SwiftUI
 struct LevelBriefingView: View {
     let db: Db
     let virtualCanvas: VirtualCanvas
-    let screen: ScreenGeometry
+    let runtimeCanvas: RuntimeCanvas
     let node: CampaignNode
     let onStart: (Difficulty) -> Void
 
@@ -15,14 +15,14 @@ struct LevelBriefingView: View {
     private static let brass = Color(red: 0.87, green: 0.72, blue: 0.35)
 
     var body: some View {
-        let metrics = HudMetrics(screen: screen)
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         ZStack(alignment: .topLeading) {
             ZStack {
                 Image("level_briefing_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physicalRect.width,
-                           height: screen.physicalRect.height)
+                    .frame(width: runtimeCanvas.physicalRect.width,
+                           height: runtimeCanvas.physicalRect.height)
                     .clipped()
 
                 Color.black.opacity(0.55)
@@ -44,7 +44,7 @@ struct LevelBriefingView: View {
                 }
                 .padding(24 * metrics.scale)
             }
-            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+            .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
             VStack {
                 Spacer()
@@ -59,9 +59,9 @@ struct LevelBriefingView: View {
                     .frame(height: HudSizing.doneButton.resolved(at: metrics.scale))
                 }
             }
-            .padding(.trailing, screen.physicalRect.maxX - screen.safeInsetsRect.maxX
+            .padding(.trailing, runtimeCanvas.physicalRect.maxX - runtimeCanvas.safeInsetsRect.maxX
                                 + metrics.hudMargin)
-            .padding(.bottom, screen.physicalRect.maxY - screen.safeInsetsRect.maxY
+            .padding(.bottom, runtimeCanvas.physicalRect.maxY - runtimeCanvas.safeInsetsRect.maxY
                               + metrics.hudMargin)
         }
         .ignoresSafeArea()
@@ -104,9 +104,9 @@ struct LevelBriefingView: View {
         let art = LevelMapArt(mapImageName: node.mapImageName)
         return ZStack {
             if art.hasArt {
-                // The map exactly as the level screen composites it — same
+                // The map exactly as the level runtimeCanvas composites it — same
                 // compositor, same tiers, same projection rule — fitted to
-                // this smaller frame instead of the screen.
+                // this smaller frame instead of the runtimeCanvas.
                 art.complete(in: LevelMapArt.projection(
                     virtualCanvas: virtualCanvas,
                     fitting: CGRect(origin: .zero, size: frame)))

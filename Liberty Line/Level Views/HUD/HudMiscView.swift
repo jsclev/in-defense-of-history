@@ -4,9 +4,9 @@ struct HudMiscView: View {
     private let iconName = "hero_ability_icon_daniel_morgan"
     private let buttonSize: CGFloat
     
-    public init(screenGeometry: ScreenGeometry) {
-        let width = screenGeometry.bottomRightHudRect.width
-        let height = screenGeometry.bottomRightHudRect.height
+    public init(runtimeCanvas: RuntimeCanvas) {
+        let width = runtimeCanvas.bottomRightHudRect.width
+        let height = runtimeCanvas.bottomRightHudRect.height
         self.buttonSize = min(width, height)
     }
 

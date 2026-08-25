@@ -39,15 +39,15 @@ enum MenuScreen: String, CaseIterable, Identifiable {
 }
 
 struct MenuButton: View {
-    let screen: MenuScreen
+    let runtimeCanvas: MenuScreen
     let size: CGFloat
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Group {
-                if UIImage(named: screen.iconAssetName) != nil {
-                    Image(screen.iconAssetName)
+                if UIImage(named: runtimeCanvas.iconAssetName) != nil {
+                    Image(runtimeCanvas.iconAssetName)
                         .resizable()
                         .scaledToFit()
                 } else {
@@ -57,7 +57,7 @@ struct MenuButton: View {
                             Color(red: 0.85, green: 0.7, blue: 0.3),
                             lineWidth: 3
                         )
-                        Image(systemName: screen.placeholderSymbol)
+                        Image(systemName: runtimeCanvas.placeholderSymbol)
                             .font(.system(size: Typography.size(size * 0.42), weight: .bold))
                             .foregroundStyle(.white)
                     }
@@ -68,8 +68,8 @@ struct MenuButton: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(FloatingMenuButtonStyle())
-        .accessibilityLabel(screen.title)
-        .accessibilityHint(screen.accessibilityHint)
+        .accessibilityLabel(runtimeCanvas.title)
+        .accessibilityHint(runtimeCanvas.accessibilityHint)
     }
 }
 
@@ -119,11 +119,11 @@ private struct FloatingMenuButtonStyle: ButtonStyle {
 
 struct MenuPlaceholderView: View {
     let menuScreen: MenuScreen
-    let screen: ScreenGeometry
+    let runtimeCanvas: RuntimeCanvas
     let onExit: () -> Void
 
     var body: some View {
-        let metrics = HudMetrics(screen: screen)
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         ZStack(alignment: .topLeading) {
             ZStack {
                 Color(red: 0.14, green: 0.11, blue: 0.08)
@@ -150,7 +150,7 @@ struct MenuPlaceholderView: View {
                         .foregroundStyle(.white.opacity(0.55))
                 }
             }
-            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+            .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
             DoneButton(action: onExit)
         }

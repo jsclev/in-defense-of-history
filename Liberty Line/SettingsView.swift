@@ -6,20 +6,20 @@ struct SettingsView: View {
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
-    private let screen: ScreenGeometry
+    private let runtimeCanvas: RuntimeCanvas
     private let onExit: () -> Void
     private let metrics: HudMetrics
     private let contentInsets: EdgeInsets
     private let doneButtonHeight: CGFloat
 
-    init(screen: ScreenGeometry, onExit: @escaping () -> Void) {
-        self.screen = screen
+    init(runtimeCanvas: RuntimeCanvas, onExit: @escaping () -> Void) {
+        self.runtimeCanvas = runtimeCanvas
         self.onExit = onExit
-        let metrics = HudMetrics(screen: screen)
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         self.metrics = metrics
         let padding = 28 * metrics.scale
-        let safe = screen.safeInsetsRect
-        let physical = screen.physicalRect
+        let safe = runtimeCanvas.safeInsetsRect
+        let physical = runtimeCanvas.physicalRect
         contentInsets = EdgeInsets(top: safe.minY - physical.minY + padding,
                                    leading: safe.minX - physical.minX + padding,
                                    bottom: physical.maxY - safe.maxY + padding,
@@ -39,7 +39,7 @@ struct SettingsView: View {
                    isOn: $debugMode)
 
             toggle("Layout guides",
-                   detail: "Physical screen edge in green, safe area in red, play area in orange.",
+                   detail: "Physical runtimeCanvas edge in green, safe area in red, play area in orange.",
                    isOn: $showDebugLayoutGuides)
 
             toggle("Simulation readout",

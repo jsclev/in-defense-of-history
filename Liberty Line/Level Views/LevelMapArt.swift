@@ -9,13 +9,13 @@ import SwiftUI
 /// name — no code or schema change — and a level without one simply has
 /// none.
 ///
-/// The asset library is probed once, at construction; the level screen
+/// The asset library is probed once, at construction; the level runtimeCanvas
 /// keeps one of these on its runner so the per-frame render never
 /// re-answers which layers exist.
 ///
 /// This is THE map compositor. It owns both which layers exist and how each
 /// is placed: every layer is a full-canvas image projected onto the play
-/// area through one LevelMapProjection. The level screen (full size, its
+/// area through one LevelMapProjection. The level runtimeCanvas (full size, its
 /// walkers slotted between the tiers) and the briefing portrait (small, at
 /// rest) both draw through the tiers below and nothing else, so the two can
 /// never disagree about what a level looks like.
@@ -50,7 +50,7 @@ struct LevelMapArt {
 
     /// The projection every surface builds to composite this art: the
     /// canonical play area fitted into `fitRect`. One constructor, so the
-    /// level screen and the briefing portrait fit the map identically.
+    /// level runtimeCanvas and the briefing portrait fit the map identically.
     static func projection(virtualCanvas: VirtualCanvas, fitting fitRect: CGRect) -> LevelMapProjection {
         LevelMapProjection(playArea: virtualCanvas.playAreaRect, fitRect: fitRect, virtualCanvas: virtualCanvas)
     }

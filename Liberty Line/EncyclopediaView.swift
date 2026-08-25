@@ -2,7 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct EncyclopediaView: View {
-    let screen: ScreenGeometry
+    let runtimeCanvas: RuntimeCanvas
     let onExit: () -> Void
 
     enum Category {
@@ -17,14 +17,14 @@ struct EncyclopediaView: View {
     private static let enemiesFrame = CGRect(x: 2027, y: 620, width: 1138, height: 1420)
 
     var body: some View {
-        let scale = screen.playAreaRect.width / Self.layoutSize.width
-        let origin = screen.playAreaRect.origin
+        let scale = runtimeCanvas.playAreaRect.width / Self.layoutSize.width
+        let origin = runtimeCanvas.playAreaRect.origin
         ZStack(alignment: .topLeading) {
             ZStack {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+                    .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
                     .clipped()
 
                 element("encyclopedia_title_plaque", frame: Self.titleFrame,
@@ -39,7 +39,7 @@ struct EncyclopediaView: View {
                                frame: Self.enemiesFrame,
                                scale: scale, origin: origin)
             }
-            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+            .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
             DoneButton(action: onExit)
         }

@@ -1,4 +1,4 @@
-// The game's user-facing DISPLAY name: the home-screen label
+// The game's user-facing DISPLAY name: the home-runtimeCanvas label
 // (CFBundleDisplayName) and the Info.plist GameName key that
 // Engine/Core/GameIdentity.swift reads at runtime. Change it here and both
 // follow — no Swift edit needed.

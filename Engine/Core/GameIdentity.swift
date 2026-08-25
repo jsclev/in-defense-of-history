@@ -4,7 +4,7 @@ import Foundation
 ///
 /// GameName.xcconfig authors the display name. At build time
 /// GAME_DISPLAY_NAME lands in the app's Info.plist twice: as
-/// CFBundleDisplayName, which the home screen shows, and as the custom
+/// CFBundleDisplayName, which the home runtimeCanvas shows, and as the custom
 /// GameName key this reads. No Swift file carries the name. (The Xcode
 /// target/folder/scheme also say "Liberty Line" — a deliberate choice for
 /// identifiability; see the note in GameName.xcconfig.)

@@ -597,14 +597,14 @@ struct EditorCanvas: View {
     }
 
     private func drawPlayAreaOverlay(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
-        let screenGeometry = ScreenGeometry(
+        let runtimeCanvas = RuntimeCanvas(
             virtualCanvas: virtualCanvas,
             physicalRect: t.frame,
             safeInsetsRect: t.view(virtualCanvas.playAreaRect))
-        ctx.stroke(SwiftUI.Path(screenGeometry.runtimePlayArea),
+        ctx.stroke(SwiftUI.Path(runtimeCanvas.runtimePlayArea),
                    with: .color(Color(red: 1.0, green: 0.0, blue: 1.0)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [6, 10]))
-        ctx.stroke(SwiftUI.Path(screenGeometry.towerSlotValidArea),
+        ctx.stroke(SwiftUI.Path(runtimeCanvas.towerSlotValidArea),
                    with: .color(.blue.opacity(0.85)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
     }

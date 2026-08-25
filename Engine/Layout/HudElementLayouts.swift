@@ -1,6 +1,6 @@
 import CoreGraphics
 
-/// The one Y every top-of-screen HUD element aligns to. Both the counters
+/// The one Y every top-of-runtimeCanvas HUD element aligns to. Both the counters
 /// panel and the corner buttons take their vertical position from `top`, so
 /// `HudSizing.topBarMargin` is the single number that moves the whole bar.
 /// `top` is the visible edge: button frames and counter plates sit exactly
@@ -8,11 +8,11 @@ import CoreGraphics
 public struct TopBarLayout: Equatable {
     public let top: CGFloat
 
-    public init(screen: ScreenGeometry) {
-        let scale = HudScale(playableHeight: screen.playAreaRect.height).value
+    public init(runtimeCanvas: RuntimeCanvas) {
+        let scale = HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value
         top = HudPlacementSolver.origin(
             corner: .topLeading,
-            margin: HudSizing.topBarMargin.resolved(at: scale), in: screen).y
+            margin: HudSizing.topBarMargin.resolved(at: scale), in: runtimeCanvas).y
     }
 }
 
@@ -21,8 +21,8 @@ public struct CornerButtonsLayout: Equatable {
     public let pause: CGRect
     public let block: CGRect
 
-    public init(screen: ScreenGeometry, topBar: TopBarLayout) {
-        let scale = HudScale(playableHeight: screen.playAreaRect.height).value
+    public init(runtimeCanvas: RuntimeCanvas, topBar: TopBarLayout) {
+        let scale = HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value
         let side = HudSizing.cornerButton.resolved(at: scale)
         let item = CGSize(width: side, height: side)
         let row = StackLayout.row([item, item],
@@ -30,7 +30,7 @@ public struct CornerButtonsLayout: Equatable {
         // The solver still supplies the trailing X; the top bar owns the Y.
         let anchored = HudPlacementSolver.frame(
             size: row.size, corner: .topTrailing,
-            margin: HudSizing.hudMargin.resolved(at: scale), in: screen)
+            margin: HudSizing.hudMargin.resolved(at: scale), in: runtimeCanvas)
         let origin = CGPoint(x: anchored.origin.x, y: topBar.top)
         let frames = row.placed(at: origin)
         speed = frames[0]
@@ -56,10 +56,10 @@ public struct StatsPanelLayout: Equatable {
 
     static let lineHeightFactor: CGFloat = 1.25
 
-    public init(screen: ScreenGeometry, topBar: TopBarLayout, isPortrait: Bool,
+    public init(runtimeCanvas: RuntimeCanvas, topBar: TopBarLayout, isPortrait: Bool,
                 livesIconAspect: CGFloat, moneyIconAspect: CGFloat,
                 moneyText: String) {
-        let scale = HudScale(playableHeight: screen.playAreaRect.height).value
+        let scale = HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value
 
         func counterSizes(icon: ScaledDimension, valueWidth: CGFloat,
                           aspect: CGFloat, spacing: ScaledDimension) -> StackLayout {
@@ -96,7 +96,7 @@ public struct StatsPanelLayout: Equatable {
         let platePadding = HudSizing.statPlatePadding.resolved(at: scale)
         let solved = HudPlacementSolver.origin(
             corner: .topLeading,
-            margin: HudSizing.statPanelMargin.resolved(at: scale), in: screen)
+            margin: HudSizing.statPanelMargin.resolved(at: scale), in: runtimeCanvas)
         let origin = CGPoint(x: solved.x, y: topBar.top + platePadding)
 
         let livesOrigin = CGPoint(x: origin.x + groups.frames[0].minX,
@@ -132,15 +132,15 @@ public struct MenuBarLayout: Equatable {
     public let itemFrames: [CGRect]
     public let bar: CGRect
 
-    public init(screen: ScreenGeometry, itemCount: Int) {
-        let scale = HudScale(playableHeight: screen.playAreaRect.height).value
+    public init(runtimeCanvas: RuntimeCanvas, itemCount: Int) {
+        let scale = HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value
         let side = HudSizing.menuButton.resolved(at: scale)
         let item = CGSize(width: side, height: side)
         let row = StackLayout.row(Array(repeating: item, count: max(itemCount, 0)),
                                   spacing: HudSizing.menuButtonSpacing.resolved(at: scale))
         let anchored = HudPlacementSolver.frame(
             size: row.size, corner: .bottomTrailing,
-            margin: HudSizing.hudMargin.resolved(at: scale), in: screen)
+            margin: HudSizing.hudMargin.resolved(at: scale), in: runtimeCanvas)
         itemFrames = row.placed(at: anchored.origin)
         bar = anchored
     }
@@ -150,29 +150,29 @@ public struct DoneButtonLayout: Equatable {
     public let frame: CGRect
 
     /// `magnification` multiplies the resolved height AFTER the dimension's
-    /// clamps, so a screen asking for a bigger button gets the full factor
+    /// clamps, so a runtimeCanvas asking for a bigger button gets the full factor
     /// even where the ceiling has already cut the base size.
-    public init(screen: ScreenGeometry, aspect: CGFloat, scaleOverride: CGFloat? = nil,
+    public init(runtimeCanvas: RuntimeCanvas, aspect: CGFloat, scaleOverride: CGFloat? = nil,
                 magnification: CGFloat = 1) {
-        let scale = scaleOverride ?? HudScale(playableHeight: screen.playAreaRect.height).value
+        let scale = scaleOverride ?? HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value
         let height = HudSizing.doneButton.resolved(at: scale) * magnification
         frame = HudPlacementSolver.frame(
             size: CGSize(width: height * aspect, height: height),
             corner: .bottomTrailing,
-            margin: HudSizing.hudPadding.resolved(at: scale), in: screen)
+            margin: HudSizing.hudPadding.resolved(at: scale), in: runtimeCanvas)
     }
 }
 
 public struct TitleLayout: Equatable {
     public let frame: CGRect
 
-    public init(screen: ScreenGeometry, aspect: CGFloat) {
-        let scale = HudScale(playableHeight: screen.playAreaRect.height).value
-        let width = min(screen.physicalRect.width * HudSizing.titleWidthFraction,
+    public init(runtimeCanvas: RuntimeCanvas, aspect: CGFloat) {
+        let scale = HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value
+        let width = min(runtimeCanvas.physicalRect.width * HudSizing.titleWidthFraction,
                         HudSizing.titleMaxWidth)
         frame = HudPlacementSolver.frame(
             size: CGSize(width: width, height: width * aspect),
             corner: .topLeading,
-            margin: HudSizing.titleMargin.resolved(at: scale), in: screen)
+            margin: HudSizing.titleMargin.resolved(at: scale), in: runtimeCanvas)
     }
 }

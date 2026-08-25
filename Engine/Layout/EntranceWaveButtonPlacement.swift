@@ -7,11 +7,11 @@ public final class EntranceWaveButtonPlacement {
                 slotCenters: [CGPoint],
                 slotSize: CGSize,
                 buttonSize: CGFloat,
-                geometry: ScreenGeometry) {
-        let safe = geometry.safeInsetsRect
-        let physical = geometry.physicalRect
-        let horizontalMargin = geometry.playAreaRect.width * geometry.marginScaleFactor
-        let verticalMargin = geometry.playAreaRect.height * geometry.marginScaleFactor
+                runtimeCanvas: RuntimeCanvas) {
+        let safe = runtimeCanvas.safeInsetsRect
+        let physical = runtimeCanvas.physicalRect
+        let horizontalMargin = runtimeCanvas.playAreaRect.width * runtimeCanvas.marginScaleFactor
+        let verticalMargin = runtimeCanvas.playAreaRect.height * runtimeCanvas.marginScaleFactor
 
         let leadingNudge = max(0, horizontalMargin - (safe.minX - physical.minX))
         let trailingNudge = max(0, horizontalMargin - (physical.maxX - safe.maxX))

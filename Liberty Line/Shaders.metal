@@ -13,7 +13,7 @@ vertex ImageVertexOutput imageVertexShader(
 ) {
     // Two triangles forming one rectangle that always fills the full
     // clip-space viewport; which part of the source image ends up on
-    // screen is controlled entirely by the cropped texture coordinates.
+    // runtimeCanvas is controlled entirely by the cropped texture coordinates.
     constexpr float2 positions[6] = {
         float2(-1.0,  1.0),  // Top-left
         float2(-1.0, -1.0),  // Bottom-left

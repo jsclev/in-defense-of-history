@@ -83,35 +83,23 @@ struct LevelMapView: View {
                            pointsPerMapUnit: projection.scale)
     }
 
-    /// The per-slot tap-size readout is parked, not resolved: John wants to
-    /// come back to the tap-target question, so the display is switched off
-    /// here while everything that computes it stays live. Flip to true to see
-    /// the capsules under each slot again in debug mode.
     private static let showSlotTapInfo = false
 
-    /// The entrance icon's box: the slot tap target's smaller side, so the
-    /// icon scales with the map yet never drops below Apple's 44pt minimum.
     private func entranceIconSize(projection: LevelMapProjection) -> CGFloat {
         let tap = slotTapSize(projection: projection)
         return min(tap.width, tap.height)
     }
 
-    /// One icon per held-wave path, sitting on the road centreline: the
-    /// first point along the path that fits whole inside the safe rect,
-    /// nudged off the physical screen edges and clear of every tower slot.
-    /// Paths whose icons land within an icon of one another collapse to a
-    /// single icon: double-tapping any icon starts the whole wave, so
-    /// paths sharing a mouth never need a stack of pulsing bubbles.
     private func entranceIconPositions(iconSize: CGFloat,
                                        projection: LevelMapProjection,
-                                       screen: ScreenGeometry) -> [CGPoint] {
+                                       runtimeCanvas: RuntimeCanvas) -> [CGPoint] {
         EntranceWaveButtonPlacement(
             entrancePaths: runner.entranceWavePaths.map { $0.map(projection.viewPoint) },
             slotCenters: runner.slotPositions.map(projection.viewPoint),
             slotSize: CGSize(width: projection.viewLength(runner.slotSize.width),
                              height: projection.viewLength(runner.slotSize.height)),
             buttonSize: iconSize,
-            geometry: screen).positions
+            runtimeCanvas: runtimeCanvas).positions
     }
 
     private static func debugRangeTint(for range: CGFloat) -> Color {
@@ -119,27 +107,22 @@ struct LevelMapView: View {
             ?? debugRangeBands[debugRangeBands.count - 1].tint
     }
 
-    /// Display tuning for slot-canvas tower art, judged on device. Scale is
-    /// relative to the slot box the art would otherwise fit exactly; lift is
-    /// a fraction of the drawn tower height, moving it up the screen. Render
-    /// tuning for the art pipeline, like `usesSlotCanvasArt` — not level
-    /// content, which is why it lives here and not in the database.
     private static let slotTowerScale: CGFloat = 1.270
     private static let slotTowerLift: CGFloat = 0.11
     
     private var db: Db
     private var virtualCanvas: VirtualCanvas
-    private var screenGeometry: ScreenGeometry
+    private var runtimeCanvas: RuntimeCanvas
 
     init(db: Db,
          virtualCanvas: VirtualCanvas,
-         screenGeometry: ScreenGeometry,
+         runtimeCanvas: RuntimeCanvas,
          towerMenuLayout: TowerMenuLayout,
          node: CampaignNode,
          difficulty: Difficulty, onExit: @escaping () -> Void) {
         self.db = db
         self.virtualCanvas = virtualCanvas
-        self.screenGeometry = screenGeometry
+        self.runtimeCanvas = runtimeCanvas
         self.towerMenuLayout = towerMenuLayout
         self.node = node
         self.difficulty = difficulty
@@ -154,16 +137,16 @@ struct LevelMapView: View {
     }
 
     var body: some View {
-        let fullSize = screenGeometry.physicalRect.size
-        let metrics = HudMetrics(screen: screenGeometry)
+        let fullSize = runtimeCanvas.physicalRect.size
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         ZStack(alignment: .topLeading) {
-            content(in: fullSize, screen: screenGeometry)
+            content(in: fullSize, runtimeCanvas: runtimeCanvas)
 
             if runner.isDefeated {
                 failBanner(metrics: metrics)
             }
 
-            HudView(screenGeometry: screenGeometry,
+            HudView(runtimeCanvas: runtimeCanvas,
                     db: db,
                     runner: runner,
                     towerMenuLayout: towerMenuLayout,
@@ -171,10 +154,10 @@ struct LevelMapView: View {
                     onExit: onExit)
                 .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)
 
-            towerMenuLayer(in: fullSize, screen: screenGeometry)
+            towerMenuLayer(in: fullSize, runtimeCanvas: runtimeCanvas)
             
             if showDebugLayoutGuides {
-                DebugLayoutGuidesView(screen: screenGeometry)
+                DebugLayoutGuidesView(runtimeCanvas: runtimeCanvas)
             }
         }
         .persistentSystemOverlays(.hidden)
@@ -183,11 +166,11 @@ struct LevelMapView: View {
         .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
     }
 
-    private func content(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
+    private func content(in viewSize: CGSize, runtimeCanvas: RuntimeCanvas) -> some View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
-        let safe = screen.safeInsetsRect
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playAreaRect)
-        let metrics = HudMetrics(screen: screen)
+        let safe = runtimeCanvas.safeInsetsRect
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         let sprites = MapSpriteScale(playArea: runner.playArea,
                                      viewSize: viewSize)
         let art = runner.mapArt
@@ -236,7 +219,7 @@ struct LevelMapView: View {
                         let slotBox = runner.slotSize
                         // Drawn on tower_slot.png's canvas, so it starts from
                         // the slot's own box, scaled by the same projection
-                        // that fits the play area to the screen —
+                        // that fits the play area to the runtimeCanvas —
                         // scaledToFit matches the renderer's `fit: "inside"`.
                         // On device that exact fit read too small and too
                         // sunken, so the art draws scaled up and lifted; both
@@ -379,7 +362,7 @@ struct LevelMapView: View {
                 let iconSize = entranceIconSize(projection: projection)
                 ForEach(Array(entranceIconPositions(iconSize: iconSize,
                                                     projection: projection,
-                                                    screen: screen).enumerated()),
+                                                    runtimeCanvas: runtimeCanvas).enumerated()),
                         id: \.offset) { _, position in
                     EntranceWaveButton(size: iconSize) {
                         runner.startNextWave()
@@ -425,9 +408,9 @@ struct LevelMapView: View {
         }
     }
 
-    private func towerMenuLayer(in viewSize: CGSize, screen: ScreenGeometry) -> some View {
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: screen.playAreaRect)
-        let playAreaScalingFactor = screen.scaleFactor
+    private func towerMenuLayer(in viewSize: CGSize, runtimeCanvas: RuntimeCanvas) -> some View {
+        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
+        let playAreaScalingFactor = runtimeCanvas.scaleFactor
         return ZStack(alignment: .topLeading) {
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {
@@ -459,7 +442,7 @@ struct LevelMapView: View {
                 upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                             playAreaScalingFactor: playAreaScalingFactor)
                 if let rally = runner.rallyPoint(forSlot: upgradeSlot) {
-                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(screen: screen).scale) * 0.6)
+                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(runtimeCanvas: runtimeCanvas).scale) * 0.6)
                         .position(projection.viewPoint(rally))
                         .allowsHitTesting(false)
                 }
@@ -474,7 +457,7 @@ struct LevelMapView: View {
     /// What `debugRangeLegend` will stand, before SwiftUI lays it out — needed
     /// to choose a side, which has to be decided while building the view. The
     /// line-height factor deliberately runs high: overestimating flips the
-    /// legend below a touch early, underestimating clips it off screen.
+    /// legend below a touch early, underestimating clips it off runtimeCanvas.
     private func debugLegendHeight(metrics: HudMetrics) -> CGFloat {
         let rows = Self.debugLegendRowCount
         return rows * metrics.rangeLegendTextSize * 1.35
@@ -503,7 +486,7 @@ struct LevelMapView: View {
         let gap = 6 * metrics.scale
 
         // The legend sits above the ring by default. A tower high on the map
-        // puts that off the top of the screen, so when it will not clear the
+        // puts that off the top of the runtimeCanvas, so when it will not clear the
         // safe area it flips to the far side of the circle instead.
         let above = center.y - size.height / 2 - gap
             - debugLegendHeight(metrics: metrics) >= safe.minY

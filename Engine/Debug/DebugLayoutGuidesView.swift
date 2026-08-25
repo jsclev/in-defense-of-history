@@ -2,7 +2,7 @@ import SwiftUI
 import UIKit
 
 public struct DebugLayoutGuidesView: View {
-    private let screen: ScreenGeometry
+    private let runtimeCanvas: RuntimeCanvas
     private let lineThickness: Int = 3
 
     private let physicalRectDash: [CGFloat] = [16, 9]
@@ -17,25 +17,25 @@ public struct DebugLayoutGuidesView: View {
     private let playAreaRectGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
     private let playAreaGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
 
-    public init(screen: ScreenGeometry) {
-        self.screen = screen
+    public init(runtimeCanvas: RuntimeCanvas) {
+        self.runtimeCanvas = runtimeCanvas
     }
 
     public var body: some View {
         ZStack(alignment: .topLeading) {
-            createRectView(rect: screen.physicalRect,
+            createRectView(rect: runtimeCanvas.physicalRect,
                            borderColor: physicalRectGuideColor,
                            borderThickness: lineThickness,
                            borderDash: physicalRectDash)
-            createRectView(rect: screen.safeInsetsRect,
+            createRectView(rect: runtimeCanvas.safeInsetsRect,
                            borderColor: safeInsetsRectGuideColor,
                            borderThickness: lineThickness,
                            borderDash: safeInsetsRectDash)
-            createRectView(rect: screen.hudRect,
+            createRectView(rect: runtimeCanvas.hudRect,
                            borderColor: hudRectGuideColor,
                            borderThickness: lineThickness,
                            borderDash: hudRectDash)
-            createRectView(rect: screen.playAreaRect,
+            createRectView(rect: runtimeCanvas.playAreaRect,
                            borderColor: playAreaRectGuideColor,
                            borderThickness: lineThickness,
                            borderDash: playAreaRectDash)
@@ -61,7 +61,7 @@ public struct DebugLayoutGuidesView: View {
     private func createPlayAreaView() -> some View {
         let lineStyle = StrokeStyle(lineWidth: CGFloat(lineThickness), dash: playAreaDash)
         
-        return SwiftUI.Path(screen.runtimePlayArea)
+        return SwiftUI.Path(runtimeCanvas.runtimePlayArea)
             .stroke(playAreaGuideColor, style: lineStyle)
     }
 }

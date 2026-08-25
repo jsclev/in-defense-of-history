@@ -20,7 +20,7 @@ public enum Typography {
 }
 
 public struct HudScale: Equatable {
-    /// Playable height on the 1210-pt reference screen the HUD was tuned
+    /// Playable height on the 1210-pt reference runtimeCanvas the HUD was tuned
     /// against. A frozen tuning anchor, not live play-area geometry.
     public static let referencePlayableHeight: CGFloat = 680.625
 
@@ -80,7 +80,7 @@ public enum HudSizing {
     public static let hudMargin = ScaledDimension(12)
 
     /// The SINGLE top margin for the in-level top bar. Every element along
-    /// the top of the screen — counter plates, wave readout, speed/pause
+    /// the top of the runtimeCanvas — counter plates, wave readout, speed/pause
     /// buttons — takes its vertical position from TopBarLayout, which reads
     /// only this. To move the whole bar, change this one number.
     public static let topBarMargin = ScaledDimension(16)

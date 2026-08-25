@@ -3,7 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct HeroesView: View {
     let db: Db
-    let screen: ScreenGeometry
+    let runtimeCanvas: RuntimeCanvas
     let onExit: () -> Void
 
     @State private var heroes: [Hero] = []
@@ -14,7 +14,7 @@ struct HeroesView: View {
 
     var body: some View {
         if let selectedHero {
-            HeroDetailsView(db: db, screen: screen, hero: selectedHero) {
+            HeroDetailsView(db: db, runtimeCanvas: runtimeCanvas, hero: selectedHero) {
                 self.selectedHero = nil
             }
         } else {
@@ -23,8 +23,8 @@ struct HeroesView: View {
     }
 
     private var heroGrid: some View {
-        let rectHeight = screen.playAreaRect.height
-        let rectWidth = screen.playAreaRect.width
+        let rectHeight = runtimeCanvas.playAreaRect.height
+        let rectWidth = runtimeCanvas.playAreaRect.width
         let margin = rectHeight * 0.028
         let gap = rectHeight * 0.02
         let cellWidth = (rectWidth - 2 * margin - CGFloat(Self.columns - 1) * gap)
@@ -36,7 +36,7 @@ struct HeroesView: View {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+                    .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
                     .clipped()
 
                 VStack(spacing: gap) {
@@ -61,9 +61,9 @@ struct HeroesView: View {
                     }
                 }
                 .frame(width: rectWidth, height: rectHeight)
-                .position(x: screen.physicalRect.width / 2, y: screen.physicalRect.height / 2)
+                .position(x: runtimeCanvas.physicalRect.width / 2, y: runtimeCanvas.physicalRect.height / 2)
             }
-            .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+            .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
             DoneButton(action: onExit)
         }
@@ -390,7 +390,7 @@ private struct HeroCardButtonStyle: ButtonStyle {
 @available(iOS 26.0, *)
 struct HeroDetailsView: View {
     let db: Db
-    let screen: ScreenGeometry
+    let runtimeCanvas: RuntimeCanvas
     let hero: Hero
     let onExit: () -> Void
 
@@ -402,13 +402,13 @@ struct HeroDetailsView: View {
     }
 
     var body: some View {
-        let metrics = HudMetrics(screen: screen)
+        let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         ZStack(alignment: .topLeading) {
             ZStack {
                 Image("hero_screen_background")
                     .resizable()
                     .scaledToFill()
-                    .frame(width: screen.physicalRect.width, height: screen.physicalRect.height)
+                    .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
                     .clipped()
 
                 LinearGradient(
