@@ -55,6 +55,8 @@ public struct RuntimeCanvas {
 
         let menuHalfWidth = virtualCanvas.towerMenuTotalSize.width / 2
         let menuHalfHeight = virtualCanvas.towerMenuTotalSize.height / 2
+        let slotHalfWidth = virtualCanvas.towerSlotSize.width / 2
+        let slotHalfHeight = virtualCanvas.towerSlotSize.height / 2
         let validCenters = CGMutablePath()
         validCenters.addRect(virtualCanvas.playAreaRect.insetBy(dx: menuHalfWidth,
                                                                 dy: menuHalfHeight))
@@ -65,7 +67,8 @@ public struct RuntimeCanvas {
             menuBlockedAreas.addRect(corner.insetBy(dx: -menuHalfWidth,
                                                     dy: -menuHalfHeight))
         }
-        menuBlockedAreas.addRect(virtualCanvas.upperLeftOcclusionArea)
+        menuBlockedAreas.addRect(virtualCanvas.upperLeftOcclusionArea.insetBy(dx: -slotHalfWidth,
+                                                                              dy: -slotHalfHeight))
         let validShape = validCenters.subtracting(menuBlockedAreas, using: .winding)
         towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
         
