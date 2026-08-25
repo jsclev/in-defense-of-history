@@ -4,12 +4,6 @@ public enum TouchTarget {
     public static let minimum: CGFloat = 44
 }
 
-/// Global floor for rendered text.
-///
-/// Every SwiftUI `Text` in the game must pass its point size through
-/// `Typography.size(_:)` — or use a `ScaledDimension.text(_:)` dimension, which
-/// applies the same floor. Nothing renders smaller than this, at any HUD scale
-/// or on any device; below it the smallest phones become unreadable.
 public enum Typography {
     public static let minimumFontSize: CGFloat = 12.87
 
@@ -20,8 +14,6 @@ public enum Typography {
 }
 
 public struct HudScale: Equatable {
-    /// Playable height on the 1210-pt reference runtimeCanvas the HUD was tuned
-    /// against. A frozen tuning anchor, not live play-area geometry.
     public static let referencePlayableHeight: CGFloat = 680.625
 
     public static let minimum: CGFloat = 0.66

@@ -1,23 +1,12 @@
 import Foundation
 
-/// Reads a level's geographic data out of its GeoJSON.
-///
-/// The GeoJSON is the single source of truth for level geometry. The editor
-/// reads roads and tower slots from it directly rather than from a second file
-/// carrying its own copy of the same coordinates — a copy is how a render
-/// source ended up describing a map that had already moved on.
-///
-/// Coordinates are used verbatim: the file is already in the canonical space
-/// (`VirtualCanvas`), which is the space the editor, the simulator and the game all
-/// work in, so there is nothing to convert.
 enum GeoJSONImport {
     struct Feature: Decodable {
         struct Geometry: Decodable {
             let type: String
             let coordinates: Coordinates
         }
-        /// Point is `[x, y]`, LineString is `[[x, y], …]`. Only those two shapes
-        /// carry gameplay geometry, so anything else decodes to `.other`.
+        
         enum Coordinates: Decodable {
             case point([Double])
             case line([[Double]])
@@ -121,10 +110,7 @@ enum GeoJSONImport {
         draft.slots = slots
         draft.entrances = entrances
         draft.exits = exits
-        // A GeoJSON's enemy_path features ARE the routes, already cut. Eraser
-        // strokes in one come from a build that stored them as a layer, so
-        // replaying them here would cut the same roads a second time; only the
-        // additive paint is still geometry the roads cannot describe.
+
         draft.roadPaint = collection.features.compactMap { f in
             guard f.properties.kind == "road_paint", f.properties.erases != true,
                   case let .line(coords) = f.geometry.coordinates,

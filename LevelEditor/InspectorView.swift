@@ -280,7 +280,7 @@ struct InspectorView: View {
             .help("Reverse direction (spawn becomes exit)")
             if ri < document.draft.roads.count - 1 {
                 Button {
-                    let message = document.mergeRoadDown(ri, geometry: state.geometry, undoManager)
+                    let message = document.mergeRoadDown(ri, mapGeometry: state.mapGeometry, undoManager)
                     state.selection = document.draft.roads.indices.contains(ri)
                         ? .road(ri) : .none
                     state.flash(message)
@@ -308,7 +308,7 @@ struct InspectorView: View {
     }
 
     private var slotsBox: some View {
-        let warnings = state.geometry.warnings(for: document.draft, maxTowerRange: state.content.maxTowerRange)
+        let warnings = state.mapGeometry.warnings(for: document.draft, maxTowerRange: state.content.maxTowerRange)
         return GroupBox("Tower Slots") {
             VStack(alignment: .leading, spacing: 4) {
                 ForEach(document.draft.slots.indices, id: \.self) { i in

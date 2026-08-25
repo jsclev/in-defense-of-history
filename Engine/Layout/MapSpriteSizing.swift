@@ -53,15 +53,6 @@ public struct SpriteHeight: Equatable {
     }
 }
 
-/// Sizes the tappable area over a tower slot.
-///
-/// The ellipse tracks the slot art the map bakes in — `slotSize` map units,
-/// drawn at the projection's points-per-map-unit — and extends `margin` past
-/// it so a fingertip has room to be sloppy. Each axis floors at
-/// `TouchTarget.minimum` (Apple's recommended 44pt) so the target stays
-/// comfortable on small phones, where the drawn slot shrinks well below a
-/// fingertip. Levels whose database rows carry no slot geometry fall back to
-/// the fixed circle the game used before slots knew their size.
 public enum SlotTapTarget {
     public static let margin: CGFloat = 1.15
 

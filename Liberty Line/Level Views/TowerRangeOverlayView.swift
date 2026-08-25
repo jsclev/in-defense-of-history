@@ -1,11 +1,5 @@
 import SwiftUI
 
-/// Light-green range ring under a radial menu: shown while a build choice
-/// is armed awaiting its confirming second tap, and while a placed
-/// tower's upgrade menu is open. Attack range for shooting towers, rally
-/// radius for melee. Never hit-tested, so it cannot swallow the
-/// confirming or cancelling tap. The ellipse geometry comes from
-/// MapRangeShape; this view only paints it.
 struct TowerRangeOverlayView: View {
     let center: CGPoint
     let size: CGSize

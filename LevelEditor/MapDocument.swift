@@ -90,13 +90,13 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     /// Merges an eraser stroke straight into the waypoints. Covered waypoints go
     /// away, a road cut through the middle becomes two roads, and painted area
     /// under the eraser is cut the same way. The stroke itself is not kept.
-    mutating func applyErase(_ eraser: PaintStroke, geometry: MapGeometry) {
+    mutating func applyErase(_ eraser: PaintStroke, mapGeometry: MapGeometry) {
         var taken = Set(roads.map(\.name))
         var cut: [Road] = []
         var firstPiece: [Int: Int] = [:]
         for (old, road) in roads.enumerated() {
             let pieces = BrushGeometry.erase(polyline: road.points,
-                                             halfWidth: geometry.roadHalfWidth,
+                                             halfWidth: mapGeometry.roadHalfWidth,
                                              with: eraser)
                 .filter { $0.count >= 2 }
             for (i, points) in pieces.enumerated() {
@@ -126,13 +126,13 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     /// A draft authored before the eraser merged down stored its eraser strokes
     /// as a layer. Replay them in author order and drop them, so no draft in
     /// memory ever carries one.
-    mutating func bakeStoredErasures(geometry: MapGeometry) {
+    mutating func bakeStoredErasures(mapGeometry: MapGeometry) {
         guard roadPaint.contains(where: \.erases) else { return }
         let strokes = roadPaint
         roadPaint = []
         for stroke in strokes {
             if stroke.erases {
-                applyErase(stroke, geometry: geometry)
+                applyErase(stroke, mapGeometry: mapGeometry)
             } else {
                 roadPaint.append(stroke)
             }
@@ -173,9 +173,9 @@ extension MapDraft {
     /// coordinate spaces are converted and stored eraser strokes baked. Both
     /// need the canvas, which a Decodable init cannot receive, so this runs
     /// right after open instead of inside decoding.
-    mutating func normalize(geometry: MapGeometry) {
+    mutating func normalize(mapGeometry: MapGeometry) {
         if coordinateSpace != Self.canvasSpace {
-            let vc = geometry.virtualCanvas
+            let vc = mapGeometry.virtualCanvas
             let upgrade: (Point) -> Point
             if coordinateSpace == "design1600x900" {
                 let legacyDesignWidth = 1600.0
@@ -195,7 +195,7 @@ extension MapDraft {
             exits = exits.map(upgrade)
             coordinateSpace = Self.canvasSpace
         }
-        bakeStoredErasures(geometry: geometry)
+        bakeStoredErasures(mapGeometry: mapGeometry)
     }
 
     init(blueprint bp: LevelBlueprint) {
@@ -399,7 +399,7 @@ final class MapDocument: ReferenceFileDocument {
     /// A road that lies entirely inside the lower lane is deleted; roads that
     /// merely cross are left alone.
     @MainActor
-    func mergeRoadDown(_ upper: Int, geometry: MapGeometry, _ undoManager: UndoManager?) -> String {
+    func mergeRoadDown(_ upper: Int, mapGeometry: MapGeometry, _ undoManager: UndoManager?) -> String {
         let lower = upper + 1
         guard draft.roads.indices.contains(upper),
               draft.roads.indices.contains(lower) else {
@@ -412,7 +412,7 @@ final class MapDocument: ReferenceFileDocument {
             return "Both roads need at least two waypoints"
         }
 
-        let tolerance = geometry.roadHalfWidth
+        let tolerance = mapGeometry.roadHalfWidth
         let inside = a.map { $0.distance(toPolyline: b) <= tolerance }
 
         if inside.allSatisfy({ $0 }) {
@@ -434,15 +434,15 @@ final class MapDocument: ReferenceFileDocument {
             return "The roads only cross - nothing to merge"
         }
 
-        let arcs = geometry.arcPositions(b)
+        let arcs = mapGeometry.arcPositions(b)
         // Skip trunk waypoints within this arc distance of the junction so
         // the splice does not produce a kink against the projected point.
         let junctionGap = 12.0
         var merged: [Point]
 
         if suffixLength >= prefixLength {
-            guard let join = geometry.project(a[suffixStart], onto: b),
-                  let reference = geometry.project(a[a.count - 1], onto: b) else {
+            guard let join = mapGeometry.project(a[suffixStart], onto: b),
+                  let reference = mapGeometry.project(a[a.count - 1], onto: b) else {
                 return "Could not project the junction onto \(lowerName)"
             }
             var tail: [Point] = [join.point]
@@ -457,8 +457,8 @@ final class MapDocument: ReferenceFileDocument {
             }
             merged = Array(a[0..<suffixStart]) + tail
         } else {
-            guard let join = geometry.project(a[prefixEnd], onto: b),
-                  let reference = geometry.project(a[0], onto: b) else {
+            guard let join = mapGeometry.project(a[prefixEnd], onto: b),
+                  let reference = mapGeometry.project(a[0], onto: b) else {
                 return "Could not project the junction onto \(lowerName)"
             }
             var head: [Point] = []
@@ -561,11 +561,6 @@ struct MapGeometry {
         }
     }
 
-    /// `maxTowerRange` is the longest range in the tower table, supplied by the
-    /// caller rather than read from a singleton so this stays pure geometry.
-    /// Passing nil skips the range check instead of comparing against an
-    /// invented constant. `others` are the remaining slots, tested with the
-    /// pad IMAGE's footprint (VirtualCanvas), so spacing is set by the art.
     func slotIssue(_ slot: Point, roads: [MapDraft.Road], others: [Point] = [],
                           maxTowerRange: Double?) -> SlotIssue? {
         let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }

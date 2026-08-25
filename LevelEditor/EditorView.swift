@@ -23,7 +23,7 @@ enum EditorSelection: Equatable {
 final class EditorState {
     let content: EditorContent
     let virtualCanvas: VirtualCanvas
-    let geometry: MapGeometry
+    let mapGeometry: MapGeometry
     let towerMenuLayout: TowerMenuLayout
     let blueprints: Blueprints
     let towerSlotImage: TowerSlotImage
@@ -31,7 +31,7 @@ final class EditorState {
     init(content: EditorContent, virtualCanvas: VirtualCanvas) {
         self.content = content
         self.virtualCanvas = virtualCanvas
-        geometry = MapGeometry(virtualCanvas: virtualCanvas)
+        mapGeometry = MapGeometry(virtualCanvas: virtualCanvas)
         towerMenuLayout = TowerMenuLayout(virtualCanvas: virtualCanvas)
         blueprints = Blueprints(virtualCanvas: virtualCanvas)
         towerSlotImage = TowerSlotImage(virtualCanvas: virtualCanvas)
@@ -256,7 +256,7 @@ struct EditorView: View {
             if state.mode == .playtest, let session {
                 PlaytestView(session: session, slotArt: state.towerSlotImage) { recorded in
                     document.edit(undoManager) { $0.intendedSolution = recorded }
-                    state.flash("Adopted \(recorded.count) steps as the intended solution")
+                    state.flash("Adopted steps as the intended solution")
                 }
             } else {
                 editorBody
@@ -302,7 +302,7 @@ struct EditorView: View {
             }
         }
         .onAppear {
-            document.draft.normalize(geometry: state.geometry)
+            document.draft.normalize(mapGeometry: state.mapGeometry)
             state.documentFolder = documentURL?.deletingLastPathComponent()
             state.loadBackground(from: document.draft.backgroundImagePath)
             state.loadOverlay(from: document.draft.overlayImagePath)
@@ -496,7 +496,7 @@ struct EditorView: View {
     }
 
     private var statusBar: some View {
-        let warnings = state.geometry.warnings(for: document.draft,
+        let warnings = state.mapGeometry.warnings(for: document.draft,
                                                maxTowerRange: state.content.maxTowerRange)
         return HStack(spacing: 14) {
             Text(cursorText)

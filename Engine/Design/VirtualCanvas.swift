@@ -1,7 +1,7 @@
 import Foundation
 import CoreGraphics
 
-public struct VirtualCanvas: Equatable {
+public struct VirtualCanvas: Equatable, Sendable {
     public let size: CGSize
     public let pathWidth: Double
 

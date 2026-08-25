@@ -154,7 +154,7 @@ struct EditorCanvas: View {
         let stroke = MapDraft.PaintStroke(points: points, width: state.paintWidth,
                                           erases: state.tool == .eraser)
         if stroke.erases {
-            document.edit(undoManager) { $0.applyErase(stroke, geometry: state.geometry) }
+            document.edit(undoManager) { $0.applyErase(stroke, mapGeometry: state.mapGeometry) }
             // A split renumbers the roads, and selection is held by index.
             state.selection = .none
         } else {
@@ -437,8 +437,8 @@ struct EditorCanvas: View {
     private func hitRoad(at p: Point, tolerance: Double) -> (Int, Double)? {
         var best: (Int, Double)?
         for (ri, road) in document.draft.roads.enumerated() where road.points.count >= 2 {
-            let d = state.geometry.distance(p, polyline: road.points)
-            if d <= tolerance + state.geometry.roadHalfWidth, best == nil || d < best!.1 {
+            let d = state.mapGeometry.distance(p, polyline: road.points)
+            if d <= tolerance + state.mapGeometry.roadHalfWidth, best == nil || d < best!.1 {
                 best = (ri, d)
             }
         }
@@ -454,11 +454,7 @@ struct EditorCanvas: View {
             bg.clip(to: SwiftUI.Path(frame))
             bg.draw(Image(platformImage: img), in: t.view(backgroundCanvasRect(draft)))
         }
-        // The map guide - typically a Kingdom Rush screenshot traced by hand.
-        // A guide cut to the canvas's own aspect ratio IS canvas-space art,
-        // so it lands 1:1 on the canvas like the background does, unscaled;
-        // any other shape is fitted to the play area, the space the traced
-        // geometry must land in.
+
         if state.isVisible(.mapGuide), let guide = state.guide {
             var layer = ctx
             layer.opacity = draft.guideOpacity
@@ -534,7 +530,7 @@ struct EditorCanvas: View {
     private func drawLiveStroke(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let points = state.stroke.points
         guard points.count >= 2 else { return }
-        PathArtist.draw(&ctx, points: BrushGeometry.smooth(points, passes: 1), t, halfWidth: state.geometry.roadHalfWidth, wet: true)
+        PathArtist.draw(&ctx, points: BrushGeometry.smooth(points, passes: 1), t, halfWidth: state.mapGeometry.roadHalfWidth, wet: true)
     }
 
     private func drawPaintCursor(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
@@ -552,7 +548,7 @@ struct EditorCanvas: View {
                                _ t: DesignTransform,
                                road: MapDraft.Road,
                                highlighted: Bool) {
-        let ring = road.outerEdge(halfWidth: state.geometry.roadHalfWidth)
+        let ring = road.outerEdge(halfWidth: state.mapGeometry.roadHalfWidth)
         guard ring.count >= 4 else { return }
         var p = SwiftUI.Path()
         p.move(to: t.view(ring[0]))
@@ -687,7 +683,7 @@ struct EditorCanvas: View {
     private func drawRoads(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
-        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint, roadHalfWidth: state.geometry.roadHalfWidth))
+        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint, roadHalfWidth: state.mapGeometry.roadHalfWidth))
             .applying(t.viewTransform)
         PathArtist.drawArea(&ctx, area, t)
         if !state.paintStroke.isEmpty {
@@ -707,7 +703,7 @@ struct EditorCanvas: View {
 
             if pts.count >= 2 {
                 if isSelected {
-                    let body = PathArtist.bodyPath(points: road.points, t, halfWidth: state.geometry.roadHalfWidth)
+                    let body = PathArtist.bodyPath(points: road.points, t, halfWidth: state.mapGeometry.roadHalfWidth)
                     ctx.stroke(body, with: .color(.cyan.opacity(0.5)), lineWidth: 6 * s)
                 }
 
@@ -791,7 +787,7 @@ struct EditorCanvas: View {
     private func drawSlots(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
-        let warnings = state.geometry.warnings(for: draft, maxTowerRange: content.maxTowerRange)
+        let warnings = state.mapGeometry.warnings(for: draft, maxTowerRange: content.maxTowerRange)
         var planned: [Int: Emplacement] = [:]
         for step in draft.intendedSolution where step.kind == "place" {
             if planned[step.slot] == nil, let e = step.emplacement.flatMap(Emplacement.init(rawValue:)) {
