@@ -218,14 +218,12 @@ struct EditorCanvas: View {
                     case .exitPoint: markerTarget(at: v.startLocation, t, entrances: false)
                     default: nil
                     }
-                    if let target = dragTarget {
-                        state.selection = selection(for: target)
-                    }
                 }
                 if hypot(v.translation.width, v.translation.height) > 3 {
                     dragMoved = true
                 }
                 guard dragMoved, let target = dragTarget else { return }
+                state.selection = selection(for: target)
                 let p = snap(t.design(v.location))
                 switch target {
                 case let .slot(i):
@@ -373,7 +371,7 @@ struct EditorCanvas: View {
     private func snap(_ p: Point) -> Point {
         var out = p
         if state.snapToGrid {
-            out = Point((p.x / 6).rounded() * 6, (p.y / 6).rounded() * 6)
+            out = Point((p.x / 3).rounded() * 3, (p.y / 3).rounded() * 3)
         }
         out.x = min(max(out.x, 0), virtualCanvas.size.width)
         out.y = min(max(out.y, 0), virtualCanvas.size.height)
@@ -816,7 +814,7 @@ struct EditorCanvas: View {
                 // already drifted from the real values.
                 for ring in content.ringsByName {
                     let label = "\(ring.name) \(Int(ring.range))"
-                    let rangeRect = MapRangeShape.rect(center: c, range: ring.range,
+                    let rangeRect = TowerRangeOverlay.rect(center: c, range: ring.range,
                                                        pointsPerMapUnit: s)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
                                with: .color(.cyan.opacity(0.4)),

@@ -59,10 +59,13 @@ public struct ScreenGeometry {
         validCenters.addRect(virtualCanvas.playAreaRect.insetBy(dx: menuHalfWidth,
                                                                 dy: menuHalfHeight))
         let menuBlockedAreas = CGMutablePath()
-        for corner in virtualCanvas.cornerOcclusionAreas {
+        for corner in [virtualCanvas.lowerLeftOcclusionArea,
+                       virtualCanvas.lowerRightOcclusionArea,
+                       virtualCanvas.upperRightOcclusionArea] {
             menuBlockedAreas.addRect(corner.insetBy(dx: -menuHalfWidth,
                                                     dy: -menuHalfHeight))
         }
+        menuBlockedAreas.addRect(virtualCanvas.upperLeftOcclusionArea)
         let validShape = validCenters.subtracting(menuBlockedAreas, using: .winding)
         towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
         

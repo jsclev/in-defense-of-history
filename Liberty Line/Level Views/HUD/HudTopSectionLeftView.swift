@@ -20,17 +20,24 @@ struct HudTopSectionLeftView: View {
             screen: screen, topBar: TopBarLayout(screen: screen), isPortrait: isPortrait,
             livesIconAspect: HudIcon.aspect(of: "lives_icon_05"),
             moneyIconAspect: HudIcon.aspect(of: "money_icon_12"),
-            moneyText: goldText)
+            moneyText: Self.goldTemplate)
         VStack(alignment: .leading, spacing: metrics.statPlatePadding) {
-            HStack(spacing: metrics.statPlatePadding) {
-                counter(icon: "lives_icon_05", value: "\(runner.lives)", row: panel.lives)
-                counter(icon: "money_icon_12", value: goldText, row: panel.money)
+            VStack(spacing: metrics.statPlatePadding) {
+                HStack(spacing: metrics.statPlatePadding) {
+                    counter(icon: "lives_icon_05", value: "\(runner.lives)",
+                            template: "\(runner.lives)", row: panel.lives)
+                    counter(icon: "money_icon_12", value: goldText,
+                            template: Self.goldTemplate, row: panel.money)
+                }
+                counterText("Wave \(runner.waveCount) of \(runner.waveCount)",
+                            fontSize: panel.waveFontSize)
+                    .hidden()
+                    .overlay(counterText("Wave \(runner.currentWaveNumber) of \(runner.waveCount)",
+                                         fontSize: panel.waveFontSize))
+                    .padding(.horizontal, metrics.statPlatePadding * 1.4)
+                    .padding(.vertical, metrics.statPlatePadding * 0.6)
+                    .background(.black.opacity(HudSizing.statPlateOpacity), in: plate)
             }
-            counterText("Wave \(runner.currentWaveNumber) of \(runner.waveCount)",
-                        fontSize: panel.waveFontSize)
-                .padding(.horizontal, metrics.statPlatePadding * 1.4)
-                .padding(.vertical, metrics.statPlatePadding * 0.6)
-                .background(.black.opacity(HudSizing.statPlateOpacity), in: plate)
             if showDebugInfo {
                 Text(runner.status)
                     .font(.footnote.monospaced())
@@ -46,6 +53,8 @@ struct HudTopSectionLeftView: View {
         RoundedRectangle(cornerRadius: metrics.statPlateCorner, style: .continuous)
     }
 
+    private static let goldTemplate = "9,999"
+
     private var goldText: String {
         let money = runner.money
         return money >= 1000
@@ -53,14 +62,18 @@ struct HudTopSectionLeftView: View {
             : "\(money)"
     }
 
-    private func counter(icon: String, value: String,
+    private func counter(icon: String, value: String, template: String,
                          row: StatsPanelLayout.CounterRow) -> some View {
         HStack(spacing: row.valueBox.minX - row.icon.maxX) {
             Image(icon)
                 .resizable()
                 .scaledToFit()
                 .frame(width: row.icon.width, height: row.icon.height)
-            counterText(value, fontSize: row.fontSize)
+            counterText(template, fontSize: row.fontSize)
+                .hidden()
+                .overlay(alignment: .leading) {
+                    counterText(value, fontSize: row.fontSize)
+                }
         }
         .padding(metrics.statPlatePadding)
         .background(.black.opacity(HudSizing.statPlateOpacity), in: plate)

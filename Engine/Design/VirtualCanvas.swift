@@ -12,7 +12,11 @@ public struct VirtualCanvas: Equatable {
     public let upperRightOcclusionCornerFraction: CGSize
     public let lowerLeftOcclusionCornerFraction: CGSize
     public let lowerRightOcclusionCornerFraction: CGSize
-    
+    public let upperLeftOcclusionArea: CGRect
+    public let upperRightOcclusionArea: CGRect
+    public let lowerLeftOcclusionArea: CGRect
+    public let lowerRightOcclusionArea: CGRect
+
     public init(size: CGSize,
                 playAreaRect: CGRect,
                 pathWidth: Double,
@@ -31,6 +35,27 @@ public struct VirtualCanvas: Equatable {
         self.upperRightOcclusionCornerFraction = upperRightOcclusionCornerFraction
         self.lowerLeftOcclusionCornerFraction = lowerLeftOcclusionCornerFraction
         self.lowerRightOcclusionCornerFraction = lowerRightOcclusionCornerFraction
+
+        let cornerSize = { (f: CGSize) in
+            CGSize(width: playAreaRect.width * f.width,
+                   height: playAreaRect.height * f.height)
+        }
+        let ul = cornerSize(upperLeftOcclusionCornerFraction)
+        let ur = cornerSize(upperRightOcclusionCornerFraction)
+        let ll = cornerSize(lowerLeftOcclusionCornerFraction)
+        let lr = cornerSize(lowerRightOcclusionCornerFraction)
+        upperLeftOcclusionArea = CGRect(x: playAreaRect.minX,
+                                        y: playAreaRect.maxY - ul.height,
+                                        width: ul.width, height: ul.height)
+        upperRightOcclusionArea = CGRect(x: playAreaRect.maxX - ur.width,
+                                         y: playAreaRect.maxY - ur.height,
+                                         width: ur.width, height: ur.height)
+        lowerLeftOcclusionArea = CGRect(x: playAreaRect.minX,
+                                        y: playAreaRect.minY,
+                                        width: ll.width, height: ll.height)
+        lowerRightOcclusionArea = CGRect(x: playAreaRect.maxX - lr.width,
+                                         y: playAreaRect.minY,
+                                         width: lr.width, height: lr.height)
     }
     
     public func slotFootprintContains(_ point: CGPoint, slot: CGPoint) -> Bool {
@@ -48,18 +73,8 @@ public struct VirtualCanvas: Equatable {
     }
 
     public var cornerOcclusionAreas: [CGRect] {
-        let area = playAreaRect
-        func size(_ f: CGSize) -> CGSize { CGSize(width: area.width * f.width, height: area.height * f.height) }
-        let ul = size(upperLeftOcclusionCornerFraction)
-        let ur = size(upperRightOcclusionCornerFraction)
-        let ll = size(lowerLeftOcclusionCornerFraction)
-        let lr = size(lowerRightOcclusionCornerFraction)
-        return [
-            CGRect(x: area.minX, y: area.minY, width: ll.width, height: ll.height),
-            CGRect(x: area.maxX - lr.width, y: area.minY, width: lr.width, height: lr.height),
-            CGRect(x: area.minX, y: area.maxY - ul.height, width: ul.width, height: ul.height),
-            CGRect(x: area.maxX - ur.width, y: area.maxY - ur.height, width: ur.width, height: ur.height),
-        ]
+        [lowerLeftOcclusionArea, lowerRightOcclusionArea,
+         upperLeftOcclusionArea, upperRightOcclusionArea]
     }
 
     public func flipY(_ y: Double) -> Double { size.height - y }
