@@ -414,8 +414,8 @@ struct LevelMapView: View {
         return ZStack(alignment: .topLeading) {
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {
-                if let armed = runner.armedBuildKind,
-                   let radius = runner.buildPreviewRadius(for: armed) {
+                if let radius = runner.armedBuildKind.flatMap({ runner.buildPreviewRadius(for: $0) })
+                    ?? runner.defaultBuildPreviewRadius() {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
                         range: radius, pointsPerMapUnit: projection.scale)

@@ -47,7 +47,7 @@ INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES (
     6, 130.0
 );
 
--- Bunker Hill: 7 waves
+-- Bunker Hill legacy baseline: replaced by level_02_bunker_hill_waves.sql.
 INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES
 (
     '9732d295-062a-402a-80cc-160a196f0d65',

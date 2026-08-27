@@ -539,6 +539,13 @@ final class LevelRunner: NSObject, ObservableObject {
         towerLevels[kind]?[1]?[1].flatMap(Self.overlayRadius)
     }
 
+    /// Radius previewed the moment an empty slot is selected, before any
+    /// build choice is armed: the first available kind's level-1 reach.
+    func defaultBuildPreviewRadius() -> CGFloat? {
+        TowerKind.allCases.first { maxLevel(for: $0) >= 1 }
+            .flatMap { buildPreviewRadius(for: $0) }
+    }
+
     /// Radius shown while a placed tower's upgrade menu is open, at the
     /// tower's current level and branch.
     func rangeOverlayRadius(for tower: PlacedTower) -> CGFloat? {

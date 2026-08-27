@@ -1,0 +1,1976 @@
+{
+  "type": "FeatureCollection",
+  "name": "level_002_bunker_hill",
+  "coordinateReferenceSystem": {
+    "type": "local-cartesian",
+    "note": "NOT WGS84. Canonical game units, lower-left origin, +y up.",
+    "canvas": {
+      "width": 2868.0,
+      "height": 2064.0
+    },
+    "playArea": {
+      "x": 474.0,
+      "y": 492.0,
+      "width": 1920.0,
+      "height": 1080.0
+    }
+  },
+  "metadata": {
+    "level": 2,
+    "levelId": "9d692af7-345d-419a-bc04-16112c3f0b74",
+    "levelName": "Bunker Hill",
+    "status": "production",
+    "historicalTitle": "The assaults on Breed's Hill, 17 June 1775",
+    "historicalAccuracyNote": "Although remembered as Bunker Hill, the redoubt and heaviest fighting were on Breed's Hill. This is a gameplay-scaled interpretation.",
+    "topology": "two entrances merging into one shared trunk and one exit",
+    "enemyPathCount": 2,
+    "uniqueEntranceCount": 2,
+    "uniqueExitCount": 1,
+    "pathCoverageFraction": 0.132309,
+    "towerSlotCount": 9,
+    "sources": [
+      "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm",
+      "https://www.nps.gov/articles/bunker-hill-battlefield.htm",
+      "https://www.army.mil/article/3382/defiant_stand_at_breeds_hill",
+      "https://www.loc.gov/item/gm71000613/"
+    ]
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "boundary.canvas",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              0,
+              0
+            ],
+            [
+              2868,
+              0
+            ],
+            [
+              2868,
+              2064
+            ],
+            [
+              0,
+              2064
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "boundary.canvas",
+        "name": "Virtual canvas",
+        "category": "boundary",
+        "kind": "canvas",
+        "layer": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "boundary.play_area",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              474.0,
+              492.0
+            ],
+            [
+              2394.0,
+              492.0
+            ],
+            [
+              2394.0,
+              1572.0
+            ],
+            [
+              474.0,
+              1572.0
+            ],
+            [
+              474.0,
+              492.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "boundary.play_area",
+        "name": "Valid play area",
+        "category": "boundary",
+        "kind": "play_area",
+        "layer": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "boundary.occlusion.upper_left",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              474.0,
+              1366.8000000000002
+            ],
+            [
+              1050.0,
+              1366.8000000000002
+            ],
+            [
+              1050.0,
+              1572.0000000000002
+            ],
+            [
+              474.0,
+              1572.0000000000002
+            ],
+            [
+              474.0,
+              1366.8000000000002
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "boundary.occlusion.upper_left",
+        "name": "Upper Left occlusion",
+        "category": "boundary",
+        "kind": "occlusion",
+        "layer": 2,
+        "playable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "boundary.occlusion.upper_right",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              2106.0,
+              1388.4
+            ],
+            [
+              2394.0,
+              1388.4
+            ],
+            [
+              2394.0,
+              1572.0
+            ],
+            [
+              2106.0,
+              1572.0
+            ],
+            [
+              2106.0,
+              1388.4
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "boundary.occlusion.upper_right",
+        "name": "Upper Right occlusion",
+        "category": "boundary",
+        "kind": "occlusion",
+        "layer": 2,
+        "playable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "boundary.occlusion.lower_left",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              474.0,
+              492.0
+            ],
+            [
+              1299.6,
+              492.0
+            ],
+            [
+              1299.6,
+              675.6
+            ],
+            [
+              474.0,
+              675.6
+            ],
+            [
+              474.0,
+              492.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "boundary.occlusion.lower_left",
+        "name": "Lower Left occlusion",
+        "category": "boundary",
+        "kind": "occlusion",
+        "layer": 2,
+        "playable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "boundary.occlusion.lower_right",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              2221.2,
+              492.0
+            ],
+            [
+              2394.0,
+              492.0
+            ],
+            [
+              2394.0,
+              675.6
+            ],
+            [
+              2221.2,
+              675.6
+            ],
+            [
+              2221.2,
+              492.0
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "id": "boundary.occlusion.lower_right",
+        "name": "Lower Right occlusion",
+        "category": "boundary",
+        "kind": "occlusion",
+        "layer": 2,
+        "playable": false
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.road.0",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2320.0,
+            820.0
+          ],
+          [
+            2312.15,
+            818.52
+          ],
+          [
+            2304.35,
+            816.82
+          ],
+          [
+            2296.56,
+            815.05
+          ],
+          [
+            2288.78,
+            813.26
+          ],
+          [
+            2280.99,
+            811.5
+          ],
+          [
+            2273.19,
+            809.79
+          ],
+          [
+            2265.37,
+            808.15
+          ],
+          [
+            2257.54,
+            806.6
+          ],
+          [
+            2249.69,
+            805.14
+          ],
+          [
+            2241.81,
+            803.81
+          ],
+          [
+            2233.92,
+            802.62
+          ],
+          [
+            2226.0,
+            801.6
+          ],
+          [
+            2218.06,
+            800.77
+          ],
+          [
+            2210.09,
+            800.17
+          ],
+          [
+            2202.11,
+            799.86
+          ],
+          [
+            2194.13,
+            799.88
+          ],
+          [
+            2186.16,
+            800.27
+          ],
+          [
+            2178.2,
+            800.96
+          ],
+          [
+            2170.27,
+            801.89
+          ],
+          [
+            2162.36,
+            803.02
+          ],
+          [
+            2154.49,
+            804.33
+          ],
+          [
+            2146.64,
+            805.82
+          ],
+          [
+            2138.83,
+            807.47
+          ],
+          [
+            2131.05,
+            809.26
+          ],
+          [
+            2123.3,
+            811.18
+          ],
+          [
+            2115.58,
+            813.23
+          ],
+          [
+            2107.89,
+            815.39
+          ],
+          [
+            2100.23,
+            817.65
+          ],
+          [
+            2092.6,
+            820.02
+          ],
+          [
+            2085.0,
+            822.47
+          ],
+          [
+            2077.43,
+            825.02
+          ],
+          [
+            2069.89,
+            827.65
+          ],
+          [
+            2062.38,
+            830.36
+          ],
+          [
+            2054.9,
+            833.14
+          ],
+          [
+            2047.44,
+            836.0
+          ],
+          [
+            2040.02,
+            838.96
+          ],
+          [
+            2032.65,
+            842.03
+          ],
+          [
+            2025.32,
+            845.2
+          ],
+          [
+            2018.04,
+            848.48
+          ],
+          [
+            2010.81,
+            851.88
+          ],
+          [
+            2003.64,
+            855.38
+          ],
+          [
+            1996.52,
+            859.0
+          ],
+          [
+            1989.46,
+            862.73
+          ],
+          [
+            1982.45,
+            866.57
+          ],
+          [
+            1975.51,
+            870.51
+          ],
+          [
+            1968.63,
+            874.56
+          ],
+          [
+            1961.81,
+            878.72
+          ],
+          [
+            1955.06,
+            882.99
+          ],
+          [
+            1948.37,
+            887.35
+          ],
+          [
+            1941.74,
+            891.8
+          ],
+          [
+            1935.17,
+            896.34
+          ],
+          [
+            1928.67,
+            900.98
+          ],
+          [
+            1922.24,
+            905.71
+          ],
+          [
+            1915.89,
+            910.56
+          ],
+          [
+            1909.62,
+            915.5
+          ],
+          [
+            1903.42,
+            920.54
+          ],
+          [
+            1897.3,
+            925.66
+          ],
+          [
+            1891.24,
+            930.87
+          ],
+          [
+            1885.24,
+            936.14
+          ],
+          [
+            1879.3,
+            941.48
+          ],
+          [
+            1873.41,
+            946.88
+          ],
+          [
+            1867.58,
+            952.33
+          ],
+          [
+            1861.8,
+            957.84
+          ],
+          [
+            1856.06,
+            963.4
+          ],
+          [
+            1850.37,
+            968.99
+          ],
+          [
+            1844.71,
+            974.63
+          ],
+          [
+            1839.09,
+            980.3
+          ],
+          [
+            1833.5,
+            986.01
+          ],
+          [
+            1827.94,
+            991.74
+          ],
+          [
+            1822.4,
+            997.49
+          ],
+          [
+            1816.91,
+            1003.29
+          ],
+          [
+            1811.49,
+            1009.16
+          ],
+          [
+            1806.15,
+            1015.09
+          ],
+          [
+            1800.86,
+            1021.08
+          ],
+          [
+            1795.63,
+            1027.11
+          ],
+          [
+            1790.45,
+            1033.19
+          ],
+          [
+            1785.3,
+            1039.29
+          ],
+          [
+            1780.18,
+            1045.42
+          ],
+          [
+            1775.09,
+            1051.58
+          ],
+          [
+            1770.03,
+            1057.76
+          ],
+          [
+            1764.99,
+            1063.95
+          ],
+          [
+            1759.97,
+            1070.16
+          ],
+          [
+            1754.97,
+            1076.38
+          ],
+          [
+            1749.97,
+            1082.62
+          ],
+          [
+            1744.99,
+            1088.86
+          ],
+          [
+            1740.01,
+            1095.1
+          ],
+          [
+            1735.04,
+            1101.35
+          ],
+          [
+            1730.06,
+            1107.59
+          ],
+          [
+            1725.05,
+            1113.82
+          ],
+          [
+            1720.0,
+            1120.0
+          ],
+          [
+            1712.27,
+            1117.92
+          ],
+          [
+            1704.58,
+            1115.73
+          ],
+          [
+            1696.9,
+            1113.49
+          ],
+          [
+            1689.22,
+            1111.24
+          ],
+          [
+            1681.54,
+            1109.0
+          ],
+          [
+            1673.86,
+            1106.78
+          ],
+          [
+            1666.17,
+            1104.58
+          ],
+          [
+            1658.47,
+            1102.42
+          ],
+          [
+            1650.75,
+            1100.31
+          ],
+          [
+            1643.02,
+            1098.25
+          ],
+          [
+            1635.28,
+            1096.25
+          ],
+          [
+            1627.51,
+            1094.31
+          ],
+          [
+            1619.73,
+            1092.46
+          ],
+          [
+            1611.93,
+            1090.7
+          ],
+          [
+            1604.1,
+            1089.05
+          ],
+          [
+            1596.25,
+            1087.53
+          ],
+          [
+            1588.36,
+            1086.19
+          ],
+          [
+            1580.44,
+            1085.06
+          ],
+          [
+            1572.49,
+            1084.14
+          ],
+          [
+            1564.53,
+            1083.39
+          ],
+          [
+            1556.55,
+            1082.79
+          ],
+          [
+            1548.57,
+            1082.35
+          ],
+          [
+            1540.57,
+            1082.03
+          ],
+          [
+            1532.57,
+            1081.84
+          ],
+          [
+            1524.58,
+            1081.77
+          ],
+          [
+            1516.58,
+            1081.79
+          ],
+          [
+            1508.58,
+            1081.91
+          ],
+          [
+            1500.58,
+            1082.1
+          ],
+          [
+            1492.58,
+            1082.36
+          ],
+          [
+            1484.59,
+            1082.68
+          ],
+          [
+            1476.6,
+            1083.05
+          ],
+          [
+            1468.61,
+            1083.45
+          ],
+          [
+            1460.62,
+            1083.87
+          ],
+          [
+            1452.63,
+            1084.31
+          ],
+          [
+            1444.65,
+            1084.75
+          ],
+          [
+            1436.66,
+            1085.19
+          ],
+          [
+            1428.68,
+            1085.69
+          ],
+          [
+            1420.7,
+            1086.25
+          ],
+          [
+            1412.72,
+            1086.88
+          ],
+          [
+            1404.75,
+            1087.57
+          ],
+          [
+            1396.79,
+            1088.3
+          ],
+          [
+            1388.82,
+            1089.09
+          ],
+          [
+            1380.87,
+            1089.92
+          ],
+          [
+            1372.92,
+            1090.78
+          ],
+          [
+            1364.97,
+            1091.69
+          ],
+          [
+            1357.02,
+            1092.63
+          ],
+          [
+            1349.08,
+            1093.59
+          ],
+          [
+            1341.14,
+            1094.59
+          ],
+          [
+            1333.21,
+            1095.6
+          ],
+          [
+            1325.28,
+            1096.63
+          ],
+          [
+            1317.34,
+            1097.68
+          ],
+          [
+            1309.42,
+            1098.74
+          ],
+          [
+            1301.49,
+            1099.8
+          ],
+          [
+            1293.56,
+            1100.89
+          ],
+          [
+            1285.64,
+            1102.03
+          ],
+          [
+            1277.73,
+            1103.22
+          ],
+          [
+            1269.83,
+            1104.46
+          ],
+          [
+            1261.93,
+            1105.74
+          ],
+          [
+            1254.04,
+            1107.05
+          ],
+          [
+            1246.15,
+            1108.38
+          ],
+          [
+            1238.27,
+            1109.74
+          ],
+          [
+            1230.39,
+            1111.12
+          ],
+          [
+            1222.51,
+            1112.52
+          ],
+          [
+            1214.64,
+            1113.92
+          ],
+          [
+            1206.76,
+            1115.33
+          ],
+          [
+            1198.89,
+            1116.73
+          ],
+          [
+            1191.01,
+            1118.12
+          ],
+          [
+            1183.13,
+            1119.47
+          ],
+          [
+            1175.24,
+            1120.79
+          ],
+          [
+            1167.34,
+            1122.11
+          ],
+          [
+            1159.45,
+            1123.42
+          ],
+          [
+            1151.56,
+            1124.74
+          ],
+          [
+            1143.67,
+            1126.05
+          ],
+          [
+            1135.78,
+            1127.37
+          ],
+          [
+            1127.89,
+            1128.68
+          ],
+          [
+            1120.0,
+            1130.0
+          ]
+        ]
+      },
+      "properties": {
+        "id": "gameplay.road.0",
+        "name": "Eastern landing approach to the Breed's Hill redoubt",
+        "category": "gameplay",
+        "kind": "enemy_path",
+        "layer": 40,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndex": 0,
+        "widthPx": 140.0,
+        "lengthDesignUnits": 1326.7,
+        "historicalBasis": "British regulars advancing uphill from the eastern landing plain before joining the main assault road."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.entry.0",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2320.0,
+          820.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.entry.0",
+        "name": "Route 1 entrance",
+        "category": "gameplay",
+        "kind": "spawn_point",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndex": 0
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.road.1",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            2030.0,
+            1490.0
+          ],
+          [
+            2022.25,
+            1488.47
+          ],
+          [
+            2014.45,
+            1487.23
+          ],
+          [
+            2006.63,
+            1486.05
+          ],
+          [
+            1998.83,
+            1484.85
+          ],
+          [
+            1991.03,
+            1483.57
+          ],
+          [
+            1983.25,
+            1482.16
+          ],
+          [
+            1975.51,
+            1480.61
+          ],
+          [
+            1967.8,
+            1478.86
+          ],
+          [
+            1960.15,
+            1476.9
+          ],
+          [
+            1952.57,
+            1474.66
+          ],
+          [
+            1945.12,
+            1472.03
+          ],
+          [
+            1937.84,
+            1468.99
+          ],
+          [
+            1930.79,
+            1465.42
+          ],
+          [
+            1924.04,
+            1461.31
+          ],
+          [
+            1917.53,
+            1456.84
+          ],
+          [
+            1911.21,
+            1452.09
+          ],
+          [
+            1905.12,
+            1447.07
+          ],
+          [
+            1899.23,
+            1441.81
+          ],
+          [
+            1893.5,
+            1436.36
+          ],
+          [
+            1887.94,
+            1430.75
+          ],
+          [
+            1882.55,
+            1424.97
+          ],
+          [
+            1877.29,
+            1419.08
+          ],
+          [
+            1872.15,
+            1413.08
+          ],
+          [
+            1867.11,
+            1406.99
+          ],
+          [
+            1862.17,
+            1400.83
+          ],
+          [
+            1857.31,
+            1394.6
+          ],
+          [
+            1852.51,
+            1388.32
+          ],
+          [
+            1847.78,
+            1381.99
+          ],
+          [
+            1843.16,
+            1375.58
+          ],
+          [
+            1838.66,
+            1369.09
+          ],
+          [
+            1834.26,
+            1362.53
+          ],
+          [
+            1829.96,
+            1355.9
+          ],
+          [
+            1825.76,
+            1349.21
+          ],
+          [
+            1821.63,
+            1342.47
+          ],
+          [
+            1817.59,
+            1335.68
+          ],
+          [
+            1813.63,
+            1328.84
+          ],
+          [
+            1809.73,
+            1321.97
+          ],
+          [
+            1805.89,
+            1315.07
+          ],
+          [
+            1802.11,
+            1308.13
+          ],
+          [
+            1798.39,
+            1301.16
+          ],
+          [
+            1794.72,
+            1294.16
+          ],
+          [
+            1791.09,
+            1287.14
+          ],
+          [
+            1787.51,
+            1280.1
+          ],
+          [
+            1783.97,
+            1273.03
+          ],
+          [
+            1780.47,
+            1265.95
+          ],
+          [
+            1777.04,
+            1258.83
+          ],
+          [
+            1773.71,
+            1251.67
+          ],
+          [
+            1770.46,
+            1244.47
+          ],
+          [
+            1767.26,
+            1237.24
+          ],
+          [
+            1764.13,
+            1229.99
+          ],
+          [
+            1761.03,
+            1222.72
+          ],
+          [
+            1757.99,
+            1215.43
+          ],
+          [
+            1754.97,
+            1208.13
+          ],
+          [
+            1751.99,
+            1200.81
+          ],
+          [
+            1749.02,
+            1193.49
+          ],
+          [
+            1746.09,
+            1186.15
+          ],
+          [
+            1743.17,
+            1178.81
+          ],
+          [
+            1740.27,
+            1171.46
+          ],
+          [
+            1737.38,
+            1164.11
+          ],
+          [
+            1734.49,
+            1156.75
+          ],
+          [
+            1731.62,
+            1149.39
+          ],
+          [
+            1728.75,
+            1142.03
+          ],
+          [
+            1725.86,
+            1134.67
+          ],
+          [
+            1722.96,
+            1127.33
+          ],
+          [
+            1720.0,
+            1120.0
+          ],
+          [
+            1712.27,
+            1117.92
+          ],
+          [
+            1704.58,
+            1115.73
+          ],
+          [
+            1696.9,
+            1113.49
+          ],
+          [
+            1689.22,
+            1111.24
+          ],
+          [
+            1681.54,
+            1109.0
+          ],
+          [
+            1673.86,
+            1106.78
+          ],
+          [
+            1666.17,
+            1104.58
+          ],
+          [
+            1658.47,
+            1102.42
+          ],
+          [
+            1650.75,
+            1100.31
+          ],
+          [
+            1643.02,
+            1098.25
+          ],
+          [
+            1635.28,
+            1096.25
+          ],
+          [
+            1627.51,
+            1094.31
+          ],
+          [
+            1619.73,
+            1092.46
+          ],
+          [
+            1611.93,
+            1090.7
+          ],
+          [
+            1604.1,
+            1089.05
+          ],
+          [
+            1596.25,
+            1087.53
+          ],
+          [
+            1588.36,
+            1086.19
+          ],
+          [
+            1580.44,
+            1085.06
+          ],
+          [
+            1572.49,
+            1084.14
+          ],
+          [
+            1564.53,
+            1083.39
+          ],
+          [
+            1556.55,
+            1082.79
+          ],
+          [
+            1548.57,
+            1082.35
+          ],
+          [
+            1540.57,
+            1082.03
+          ],
+          [
+            1532.57,
+            1081.84
+          ],
+          [
+            1524.58,
+            1081.77
+          ],
+          [
+            1516.58,
+            1081.79
+          ],
+          [
+            1508.58,
+            1081.91
+          ],
+          [
+            1500.58,
+            1082.1
+          ],
+          [
+            1492.58,
+            1082.36
+          ],
+          [
+            1484.59,
+            1082.68
+          ],
+          [
+            1476.6,
+            1083.05
+          ],
+          [
+            1468.61,
+            1083.45
+          ],
+          [
+            1460.62,
+            1083.87
+          ],
+          [
+            1452.63,
+            1084.31
+          ],
+          [
+            1444.65,
+            1084.75
+          ],
+          [
+            1436.66,
+            1085.19
+          ],
+          [
+            1428.68,
+            1085.69
+          ],
+          [
+            1420.7,
+            1086.25
+          ],
+          [
+            1412.72,
+            1086.88
+          ],
+          [
+            1404.75,
+            1087.57
+          ],
+          [
+            1396.79,
+            1088.3
+          ],
+          [
+            1388.82,
+            1089.09
+          ],
+          [
+            1380.87,
+            1089.92
+          ],
+          [
+            1372.92,
+            1090.78
+          ],
+          [
+            1364.97,
+            1091.69
+          ],
+          [
+            1357.02,
+            1092.63
+          ],
+          [
+            1349.08,
+            1093.59
+          ],
+          [
+            1341.14,
+            1094.59
+          ],
+          [
+            1333.21,
+            1095.6
+          ],
+          [
+            1325.28,
+            1096.63
+          ],
+          [
+            1317.34,
+            1097.68
+          ],
+          [
+            1309.42,
+            1098.74
+          ],
+          [
+            1301.49,
+            1099.8
+          ],
+          [
+            1293.56,
+            1100.89
+          ],
+          [
+            1285.64,
+            1102.03
+          ],
+          [
+            1277.73,
+            1103.22
+          ],
+          [
+            1269.83,
+            1104.46
+          ],
+          [
+            1261.93,
+            1105.74
+          ],
+          [
+            1254.04,
+            1107.05
+          ],
+          [
+            1246.15,
+            1108.38
+          ],
+          [
+            1238.27,
+            1109.74
+          ],
+          [
+            1230.39,
+            1111.12
+          ],
+          [
+            1222.51,
+            1112.52
+          ],
+          [
+            1214.64,
+            1113.92
+          ],
+          [
+            1206.76,
+            1115.33
+          ],
+          [
+            1198.89,
+            1116.73
+          ],
+          [
+            1191.01,
+            1118.12
+          ],
+          [
+            1183.13,
+            1119.47
+          ],
+          [
+            1175.24,
+            1120.79
+          ],
+          [
+            1167.34,
+            1122.11
+          ],
+          [
+            1159.45,
+            1123.42
+          ],
+          [
+            1151.56,
+            1124.74
+          ],
+          [
+            1143.67,
+            1126.05
+          ],
+          [
+            1135.78,
+            1127.37
+          ],
+          [
+            1127.89,
+            1128.68
+          ],
+          [
+            1120.0,
+            1130.0
+          ]
+        ]
+      },
+      "properties": {
+        "id": "gameplay.road.1",
+        "name": "Mystic flank joining the main assault",
+        "category": "gameplay",
+        "kind": "enemy_path",
+        "layer": 40,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndex": 1,
+        "widthPx": 140.0,
+        "lengthDesignUnits": 1121.5,
+        "historicalBasis": "The Mystic-side column turning inland and joining the final advance against the Provincial position."
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.entry.1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2030.0,
+          1490.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.entry.1",
+        "name": "Route 2 entrance",
+        "category": "gameplay",
+        "kind": "spawn_point",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndex": 1
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.exit.0",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1120.0,
+          1130.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.exit.0",
+        "name": "Breed's Hill redoubt exit",
+        "category": "gameplay",
+        "kind": "goal_point",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndexes": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2160.0,
+          1050.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.1",
+        "name": "Landing-field overlook",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 0,
+        "slotNumber": 1,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1980.0,
+          1170.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.2",
+        "name": "Between the approaches",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 1,
+        "slotNumber": 2,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.3",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1620.0,
+          1320.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.3",
+        "name": "Junction overlook",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 2,
+        "slotNumber": 3,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.4",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1400.0,
+          1290.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.4",
+        "name": "Breed's Hill slope",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 3,
+        "slotNumber": 4,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.5",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1200.0,
+          1300.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.5",
+        "name": "Redoubt north field",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 4,
+        "slotNumber": 5,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.6",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1190.0,
+          900.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.6",
+        "name": "Redoubt south field",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 5,
+        "slotNumber": 6,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1450.0,
+          880.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.7",
+        "name": "Shared-road bend",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 6,
+        "slotNumber": 7,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.8",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1700.0,
+          720.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.8",
+        "name": "Eastern pasture",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 7,
+        "slotNumber": 8,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.tower_slot.9",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1940.0,
+          700.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.tower_slot.9",
+        "name": "Landing approach",
+        "category": "gameplay",
+        "kind": "tower_slot",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "slotIndex": 8,
+        "slotNumber": 9,
+        "footprint": {
+          "shape": "ellipse",
+          "widthPx": 179.64,
+          "heightPx": 138.51
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "history.breeds_hill_redoubt",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1120,
+          1130
+        ]
+      },
+      "properties": {
+        "id": "history.breeds_hill_redoubt",
+        "name": "Breed's Hill redoubt",
+        "category": "history",
+        "kind": "fortification",
+        "layer": 30,
+        "historicalDate": "1775-06-17",
+        "historical": "Provincial troops built the earthen redoubt overnight on Breed's Hill, where the battle's heaviest fighting occurred.",
+        "source": {
+          "url": "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "history.rail_fence",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1160,
+          1490
+        ]
+      },
+      "properties": {
+        "id": "history.rail_fence",
+        "name": "Stark-Knowlton rail fence",
+        "category": "history",
+        "kind": "defense",
+        "layer": 30,
+        "historicalDate": "1775-06-17",
+        "historical": "New Hampshire and Connecticut troops reinforced a stone and double-rail fence running north toward the Mystic shore.",
+        "source": {
+          "url": "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "history.main_landing",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2320,
+          820
+        ]
+      },
+      "properties": {
+        "id": "history.main_landing",
+        "name": "British landing plain",
+        "category": "history",
+        "kind": "landing",
+        "layer": 30,
+        "historicalDate": "1775-06-17",
+        "historical": "British regulars crossed from Boston, formed on the eastern landing ground, and advanced uphill across fenced pasture.",
+        "source": {
+          "url": "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "history.mystic_flank",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2030,
+          1490
+        ]
+      },
+      "properties": {
+        "id": "history.mystic_flank",
+        "name": "Mystic-side flank",
+        "category": "history",
+        "kind": "landing",
+        "layer": 30,
+        "historicalDate": "1775-06-17",
+        "historical": "A British column attempted to turn the Provincial position along the Mystic beach but was stopped at the barricaded fence line.",
+        "source": {
+          "url": "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm"
+        }
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "history.charlestown",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          700,
+          650
+        ]
+      },
+      "properties": {
+        "id": "history.charlestown",
+        "name": "Charlestown",
+        "category": "history",
+        "kind": "settlement",
+        "layer": 30,
+        "historicalDate": "1775-06-17",
+        "historical": "Charlestown's timber buildings burned during the battle as British fire covered the assaults on Breed's Hill.",
+        "source": {
+          "url": "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm"
+        }
+      }
+    }
+  ]
+}
