@@ -69,6 +69,7 @@ sqlite3 in_defense_of_history.sqlite < DML/towers.sql
 sqlite3 in_defense_of_history.sqlite < DML/melee_units.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_wave_enemy_spawns.sql
+sqlite3 in_defense_of_history.sqlite < DML/level_13_new_haven_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_15_charleston_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/01_Israel_Putnam.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/02_Henry_Knox.sql
@@ -93,11 +94,6 @@ sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_enemy_types.sql
 sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_enemy_type_bounty.sql
 sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_melee_units.sql
 sqlite3 in_defense_of_history.sqlite < DML/Simulator/sim_tower_ranges.sql
-
-# Level GeoJSONs ship in the bundle beside the sqlite (Db/ is a synchronized
-# resource group), named by the level's map_image_name; LevelGeoJSONDAO reads
-# them at runtime. The iCloud file is the source; this is packaging only.
-cp -f "$HOME/Library/Mobile Documents/com~apple~CloudDocs/Level Editor/level15.geojson" level_15_charleston.geojson
 
 # cp in_defense_of_history.sqlite "../Tests App/Resources/Db/test_in_defense_of_history.sqlite"
 
