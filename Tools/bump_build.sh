@@ -1,6 +1,14 @@
 #!/bin/sh
 set -e
 MODE="$1"
+
+if [ "$MODE" = plist ]; then
+    case "$ACTION" in
+    archive | install) ;;
+    *) exit 0 ;;
+    esac
+fi
+
 COUNTER_DIR="$SRCROOT/Versioning"
 COUNTER="$COUNTER_DIR/$TARGET_NAME.buildnum"
 mkdir -p "$COUNTER_DIR"
