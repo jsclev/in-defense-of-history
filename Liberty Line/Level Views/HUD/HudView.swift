@@ -27,13 +27,11 @@ struct HudView: View {
 
     var body: some View {
         VStack {
-            HudTopSectionView(runtimeCanvas: runtimeCanvas,
-                              runner: runner,
-                              onSpeedUp: onSpeedUp,
-                              onExit: onExit)
+            HudTopSectionView(db: db, runtimeCanvas: runtimeCanvas,
+                              runner: runner)
                 .border(debugMode ? Color.black : Color.clear, width: debugMode ? 5 : 0)
             Spacer()
-            HudBottomSectionView(runtimeCanvas: runtimeCanvas, db: db)
+            HudBottomSectionView(runtimeCanvas: runtimeCanvas, db: db, onSpeedUp: onSpeedUp, onExit: onExit)
                 .clipped()
         }
         .padding(.top, runtimeCanvas.hudTopMargin)

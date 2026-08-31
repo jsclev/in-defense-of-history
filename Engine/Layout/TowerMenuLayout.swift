@@ -20,9 +20,17 @@ public struct TowerMenuLayout {
         self.virtualCanvas = virtualCanvas
     }
 
+    private let bgArtWidthScalingFactor: CGFloat = 0.29334
+    private let bgArtHeightScalingFactor: CGFloat = 0.29414
+
     public func getBgSize(playAreaScalingFactor: CGFloat) -> CGSize {
-        let side = virtualCanvas.playAreaRect.height * playAreaScalingFactor * bgScalingFactor
-        return CGSize(width: side, height: side)
+        let playAreaHeight = virtualCanvas.playAreaRect.height * playAreaScalingFactor
+        return CGSize(width: playAreaHeight * bgArtWidthScalingFactor,
+                      height: playAreaHeight * bgArtHeightScalingFactor)
+    }
+
+    public func getButtonRingRadius(playAreaScalingFactor: CGFloat) -> CGFloat {
+        virtualCanvas.playAreaRect.height * playAreaScalingFactor * bgScalingFactor / 2
     }
 
     public func getTowerButtonSize(playAreaScalingFactor: CGFloat) -> CGSize {
@@ -64,7 +72,7 @@ public struct TowerMenuLayout {
                                              menuCenterPoint: CGPoint,
                                              playAreaScalingFactor: CGFloat,
                                              towerButtonSize: CGFloat) -> CGPoint {
-        let menuRadius = getBgSize(playAreaScalingFactor: playAreaScalingFactor).width / 2
+        let menuRadius = getButtonRingRadius(playAreaScalingFactor: playAreaScalingFactor)
         let distanceFromCenter = menuRadius - (towerButtonSize / towerButtonOffsetFactor)
         let radians = degrees * .pi / 180
         return CGPoint(x: menuCenterPoint.x + distanceFromCenter * cos(radians),

@@ -77,6 +77,33 @@ public struct VirtualCanvas: Equatable, Sendable {
          upperLeftOcclusionArea, upperRightOcclusionArea]
     }
 
+    /// Where a slot's CENTRE may sit. Test placements against this.
+    public var towerSlotValidCentres: CGPath { slotValidShape(measuringFootprintEdge: false) }
+
+    /// Where the outer edge of a slot's pad may reach. Draw this.
+    public var towerSlotValidFootprint: CGPath { slotValidShape(measuringFootprintEdge: true) }
+
+    private func slotValidShape(measuringFootprintEdge: Bool) -> CGPath {
+        let menuHalfWidth = towerMenuTotalSize.width / 2
+        let menuHalfHeight = towerMenuTotalSize.height / 2
+        let slotHalfWidth = towerSlotSize.width / 2
+        let slotHalfHeight = towerSlotSize.height / 2
+        let insetWidth = measuringFootprintEdge ? menuHalfWidth - slotHalfWidth : menuHalfWidth
+        let insetHeight = measuringFootprintEdge ? menuHalfHeight - slotHalfHeight : menuHalfHeight
+        let upperLeftStandoffWidth = measuringFootprintEdge ? 0 : slotHalfWidth
+        let upperLeftStandoffHeight = measuringFootprintEdge ? 0 : slotHalfHeight
+
+        let valid = CGMutablePath()
+        valid.addRect(playAreaRect.insetBy(dx: insetWidth, dy: insetHeight))
+        let blocked = CGMutablePath()
+        for corner in [lowerLeftOcclusionArea, lowerRightOcclusionArea, upperRightOcclusionArea] {
+            blocked.addRect(corner.insetBy(dx: -insetWidth, dy: -insetHeight))
+        }
+        blocked.addRect(upperLeftOcclusionArea.insetBy(dx: -upperLeftStandoffWidth,
+                                                       dy: -upperLeftStandoffHeight))
+        return valid.subtracting(blocked, using: .winding)
+    }
+
     public func flipY(_ y: Double) -> Double { size.height - y }
 
     public func playableRect(in fullSize: CGSize) -> CGRect {

@@ -1,7 +1,7 @@
 import SwiftUI
 
 @available(iOS 26.0, *)
-struct HudTopSectionLeftView: View {
+struct HudStatsView: View {
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @ObservedObject private var runner: LevelRunner
     private let runtimeCanvas: RuntimeCanvas

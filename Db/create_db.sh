@@ -70,6 +70,7 @@ sqlite3 in_defense_of_history.sqlite < DML/melee_units.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_wave_enemy_spawns.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_02_bunker_hill_waves.sql
+sqlite3 in_defense_of_history.sqlite < DML/level_12_kettle_creek_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_13_new_haven_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/level_15_charleston_waves.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/01_Israel_Putnam.sql

@@ -496,10 +496,68 @@ struct MapGeometry {
 
     var roadHalfWidth: Double { virtualCanvas.pathWidth / 2 }
 
-    /// Vertical semi-axis of the slot footprint in virtual_canvas. Roads run
-    /// mostly horizontally, so this is the reach of the pad toward a road for
-    /// the overlap warning; the drawn pad uses the full footprint ellipse.
-    var slotRadius: Double { virtualCanvas.towerSlotSize.height / 2 }
+    private var slotSemiAxes: (a: Double, b: Double) {
+        (virtualCanvas.towerSlotSize.width / 2, virtualCanvas.towerSlotSize.height / 2)
+    }
+
+    func padClearance(from slot: Point, to pts: [Point]) -> Double {
+        guard pts.count >= 2 else { return .infinity }
+        let (a, b) = slotSemiAxes
+        let ignoreBeyond = roadHalfWidth + Swift.max(a, b)
+        var best = Double.infinity
+        for i in 0..<(pts.count - 1) {
+            let start = pts[i], end = pts[i + 1]
+            guard slot.distance(toSegment: start, end) <= ignoreBeyond else { continue }
+            best = Swift.min(best, padClearance(from: slot, along: start, end))
+            if best == 0 { return 0 }
+        }
+        return best
+    }
+
+    private func padClearance(from slot: Point, along start: Point, _ end: Point) -> Double {
+        var low = 0.0, high = 1.0
+        for _ in 0..<30 {
+            let third = (high - low) / 3
+            let near = low + third, far = high - third
+            if padDistance(from: slot, to: along(start, end, near))
+                <= padDistance(from: slot, to: along(start, end, far)) {
+                high = far
+            } else {
+                low = near
+            }
+        }
+        return padDistance(from: slot, to: along(start, end, (low + high) / 2))
+    }
+
+    private func along(_ start: Point, _ end: Point, _ t: Double) -> Point {
+        Point(start.x + (end.x - start.x) * t, start.y + (end.y - start.y) * t)
+    }
+
+    private func padDistance(from slot: Point, to p: Point) -> Double {
+        let (a, b) = slotSemiAxes
+        guard a > 0, b > 0 else { return slot.distance(to: p) }
+        let dx = p.x - slot.x, dy = p.y - slot.y
+        if (dx * dx) / (a * a) + (dy * dy) / (b * b) <= 1 { return 0 }
+        let px = abs(dx), py = abs(dy)
+        var tx = 0.7071067811865476, ty = 0.7071067811865476
+        for _ in 0..<4 {
+            let ex = (a * a - b * b) * tx * tx * tx / a
+            let ey = (b * b - a * a) * ty * ty * ty / b
+            let rx = a * tx - ex, ry = b * ty - ey
+            let qx = px - ex, qy = py - ey
+            let r = (rx * rx + ry * ry).squareRoot()
+            let q = (qx * qx + qy * qy).squareRoot()
+            guard q > 0 else { break }
+            tx = Swift.min(1, Swift.max(0, (qx * r / q + ex) / a))
+            ty = Swift.min(1, Swift.max(0, (qy * r / q + ey) / b))
+            let norm = (tx * tx + ty * ty).squareRoot()
+            guard norm > 0 else { break }
+            tx /= norm
+            ty /= norm
+        }
+        let cx = a * tx - px, cy = b * ty - py
+        return (cx * cx + cy * cy).squareRoot()
+    }
 
     struct PolylineHit {
         let point: Point
@@ -543,6 +601,9 @@ struct MapGeometry {
     }
 
     enum SlotIssue {
+        /// The pad would sit under a HUD corner, or its radial menu would run
+        /// off the play area - a hard error, the slot is unusable there.
+        case outsideValidArea
         /// The slot footprint reaches inside a path's lane - a hard error,
         /// nothing may ever sit in the path.
         case overlapsPath
@@ -552,8 +613,18 @@ struct MapGeometry {
         /// No tower placed here could reach any path - a warning.
         case outOfRange
 
+        /// Whether the slot may not be placed here at all, as opposed to
+        /// being placeable but useless.
+        var blocksPlacement: Bool {
+            switch self {
+            case .outsideValidArea, .overlapsPath, .overlapsSlot: true
+            case .outOfRange: false
+            }
+        }
+
         var message: String {
             switch self {
+            case .outsideValidArea: "outside the placeable area"
             case .overlapsPath: "intersects a path"
             case .overlapsSlot: "overlaps another slot"
             case .outOfRange: "out of range of every path"
@@ -563,8 +634,15 @@ struct MapGeometry {
 
     func slotIssue(_ slot: Point, roads: [MapDraft.Road], others: [Point] = [],
                           maxTowerRange: Double?) -> SlotIssue? {
-        let ds = roads.filter { !$0.points.isEmpty }.map { distance(slot, polyline: $0.points) }
-        if let d = ds.min(), d < roadHalfWidth + slotRadius { return .overlapsPath }
+        if !virtualCanvas.towerSlotValidCentres.contains(CGPoint(x: slot.x, y: slot.y),
+                                                         using: .winding) {
+            return .outsideValidArea
+        }
+        let lanes = roads.filter { $0.points.count >= 2 }
+        let ds = lanes.map { distance(slot, polyline: $0.points) }
+        for lane in lanes where padClearance(from: slot, to: lane.points) < roadHalfWidth {
+            return .overlapsPath
+        }
         let p = CGPoint(x: slot.x, y: slot.y)
         if others.contains(where: { virtualCanvas.slotFootprintsOverlap(p, CGPoint(x: $0.x, y: $0.y)) }) {
             return .overlapsSlot

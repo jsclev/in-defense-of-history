@@ -3,7 +3,7 @@ import CoreGraphics
 import UniformTypeIdentifiers
 
 extension UTType {
-    static let geoJSON = UTType(exportedAs: "com.zippyzen.td.geojson")
+    static let geoJSON = UTType("public.geojson") ?? UTType(exportedAs: "com.zippyzen.td.geojson")
 }
 
 struct GeoJSONExport {

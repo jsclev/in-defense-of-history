@@ -6,7 +6,8 @@ struct TowerSlotImage {
 
     init(virtualCanvas: VirtualCanvas) {
         self.virtualCanvas = virtualCanvas
-        image = EditorResources.url("Images/tower_slot_field.png")
+        image = EditorResources.url("../in-defense-of-history-data/LibertyLineAssets.xcassets/"
+            + "tower_slot_field.imageset/tower_slot_field.png")
             .flatMap { PlatformImageLoader.load(path: $0.path)?.image }
     }
 

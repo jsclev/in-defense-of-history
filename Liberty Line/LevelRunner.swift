@@ -15,7 +15,7 @@ struct PlacedTower: Identifiable {
 }
 
 @MainActor
-final class LevelRunner: NSObject, ObservableObject {
+public final class LevelRunner: NSObject, ObservableObject {
     private static let normalTickDuration: Duration = .seconds(1) / SimClock.ticksPerSecond
     private(set) var mapImageName: String
 

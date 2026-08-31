@@ -53,23 +53,7 @@ public struct RuntimeCanvas {
         runtimePlayArea = virtualCanvas.playAreaShape.copy(using: &transform)
             ?? virtualCanvas.playAreaShape
 
-        let menuHalfWidth = virtualCanvas.towerMenuTotalSize.width / 2
-        let menuHalfHeight = virtualCanvas.towerMenuTotalSize.height / 2
-        let slotHalfWidth = virtualCanvas.towerSlotSize.width / 2
-        let slotHalfHeight = virtualCanvas.towerSlotSize.height / 2
-        let validCenters = CGMutablePath()
-        validCenters.addRect(virtualCanvas.playAreaRect.insetBy(dx: menuHalfWidth,
-                                                                dy: menuHalfHeight))
-        let menuBlockedAreas = CGMutablePath()
-        for corner in [virtualCanvas.lowerLeftOcclusionArea,
-                       virtualCanvas.lowerRightOcclusionArea,
-                       virtualCanvas.upperRightOcclusionArea] {
-            menuBlockedAreas.addRect(corner.insetBy(dx: -menuHalfWidth,
-                                                    dy: -menuHalfHeight))
-        }
-        menuBlockedAreas.addRect(virtualCanvas.upperLeftOcclusionArea.insetBy(dx: -slotHalfWidth,
-                                                                              dy: -slotHalfHeight))
-        let validShape = validCenters.subtracting(menuBlockedAreas, using: .winding)
+        let validShape = virtualCanvas.towerSlotValidFootprint
         towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
         
         var safeMargin = playAreaRect.height * marginScaleFactor

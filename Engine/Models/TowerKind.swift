@@ -54,9 +54,9 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
     public var spriteHeight: SpriteHeight {
         switch self {
         case .ranged: return MapSpriteSizing.tower(mapPixels: 80)
-        case .melee: return MapSpriteSizing.tower(mapPixels: 88)
-        case .areaOfEffect: return MapSpriteSizing.tower(mapPixels: 52)
-        case .special: return MapSpriteSizing.tower(mapPixels: 76)
+        case .melee: return MapSpriteSizing.tower(mapPixels: 70.81)
+        case .areaOfEffect: return MapSpriteSizing.tower(mapPixels: 37.04)
+        case .special: return MapSpriteSizing.tower(mapPixels: 70.76)
         }
     }
 

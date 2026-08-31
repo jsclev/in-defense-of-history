@@ -1,19 +1,28 @@
 import SwiftUI
 
 @available(iOS 26.0, *)
-struct HudTopSectionView: View {
+public struct HudTopSectionView: View {
+    private let db: Db
+
     let runtimeCanvas: RuntimeCanvas
     let runner: LevelRunner
-    let onSpeedUp: () -> Void
-    let onExit: () -> Void
+//    let onSpeedUp: () -> Void
+//    let onExit: () -> Void
+    
+    public init(db: Db, runtimeCanvas: RuntimeCanvas, runner: LevelRunner) {
+        self.db = db
+        self.runtimeCanvas = runtimeCanvas
+        self.runner = runner
+    }
 
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .top) {
-            HudTopSectionLeftView(runtimeCanvas: runtimeCanvas, runner: runner)
+            HudMiscView(runtimeCanvas: runtimeCanvas)
             Spacer()
-            HudTopSectionRightView(runtimeCanvas: runtimeCanvas,
-                                   onSpeedUp: onSpeedUp,
-                                   onExit: onExit)
+            HudStatsView(runtimeCanvas: runtimeCanvas, runner: runner)
+            Spacer()
+            HudHeroesBarView(runtimeCanvas: runtimeCanvas, db: db)
+
         }
     }
 }

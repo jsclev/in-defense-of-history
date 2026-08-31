@@ -2,7 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum EditorTool: Hashable {
-    case select, slot, brush, paint, eraser, entrance, exitPoint
+    case select, slot, brush, paint, eraser, entrance, exitPoint, zoomIn, zoomOut
 }
 
 enum EditorMode: Hashable {
@@ -417,6 +417,10 @@ struct EditorView: View {
                         .help("Place entrance points where enemies spawn")
                     Image(systemName: "flag.checkered").tag(EditorTool.exitPoint)
                         .help("Place exit points the enemies march for")
+                    Image(systemName: "plus.magnifyingglass").tag(EditorTool.zoomIn)
+                        .help("Zoom in centered on wherever you click the map")
+                    Image(systemName: "minus.magnifyingglass").tag(EditorTool.zoomOut)
+                        .help("Zoom out centered on wherever you click the map")
                 }
                 .pickerStyle(.segmented)
 

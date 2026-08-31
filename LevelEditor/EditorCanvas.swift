@@ -14,6 +14,9 @@ struct EditorCanvas: View {
     @State private var dragTarget: DragTarget?
     @State private var dragMoved = false
     @State private var pinchBase: Double?
+    @State private var scrollPosition = ScrollPosition()
+    @State private var viewportSize: CGSize = .zero
+    @State private var zoomFocusPoint: Point?
 
     private enum DragTarget: Equatable {
         case slot(Int)
@@ -36,11 +39,16 @@ struct EditorCanvas: View {
                         canvasContent(t)
                     }
                     .defaultScrollAnchor(.center)
+                    .scrollPosition($scrollPosition)
                     .scrollDisabled(state.tool == .brush || state.tool == .paint || state.tool == .eraser)
                 }
             }
             .onChange(of: geo.size, initial: true) { _, _ in
                 state.fitScale = fit
+                viewportSize = geo.size
+            }
+            .onChange(of: state.zoom) { _, _ in
+                scrollToZoomFocus()
             }
         }
     }
@@ -66,9 +74,16 @@ struct EditorCanvas: View {
         )
         .onContinuousHover { phase in
             switch phase {
-            case let .active(p): state.cursor = t.design(p)
-            case .ended: state.cursor = nil
+            case let .active(p):
+                state.cursor = t.design(p)
+                applyToolCursor()
+            case .ended:
+                state.cursor = nil
+                restoreArrowCursor()
             }
+        }
+        .onChange(of: state.tool) { _, _ in
+            if state.cursor != nil { applyToolCursor() }
         }
         .platformEditingCommands(
             onDelete: { deleteSelection() },
@@ -180,6 +195,29 @@ struct EditorCanvas: View {
         document.addPaintedRoad(points: points, undoManager)
         state.selection = .road(document.draft.roads.count - 1)
         state.flash("Painted road: \(points.count) waypoints")
+    }
+
+    private func applyToolCursor() {
+        #if os(macOS)
+        state.tool.nsCursor.set()
+        #endif
+    }
+
+    private func restoreArrowCursor() {
+        #if os(macOS)
+        NSCursor.arrow.set()
+        #endif
+    }
+
+    private func scrollToZoomFocus() {
+        guard let focusPoint = zoomFocusPoint else { return }
+        zoomFocusPoint = nil
+        guard state.zoom != nil else { return }
+        let scale = state.currentScale
+        let contentPoint = CGPoint(x: focusPoint.x * scale,
+                                   y: (virtualCanvas.size.height - focusPoint.y) * scale)
+        scrollPosition.scrollTo(point: CGPoint(x: contentPoint.x - viewportSize.width / 2,
+                                               y: contentPoint.y - viewportSize.height / 2))
     }
 
     private func clampToCanvas(_ p: Point) -> Point {
@@ -309,6 +347,14 @@ struct EditorCanvas: View {
                 document.edit(undoManager) { $0.exits.append(dp) }
                 state.selection = .exitPoint(document.draft.exits.count - 1)
             }
+
+        case .zoomIn:
+            zoomFocusPoint = t.design(p)
+            state.zoomIn()
+
+        case .zoomOut:
+            zoomFocusPoint = t.design(p)
+            state.zoomOut()
 
         case .brush, .paint, .eraser:
             break
@@ -483,6 +529,7 @@ struct EditorCanvas: View {
         }
         drawLiveStroke(&ctx, t)
         drawPaintCursor(&ctx, t)
+        drawSlotPlacementGuide(&ctx, t)
         // The occlusion art sits above every playable layer, exactly as the
         // game will draw it, so entrance and exit cover can be judged here.
         if state.isVisible(.occlusion), let overlay = state.overlay {
@@ -542,6 +589,33 @@ struct EditorCanvas: View {
         ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(tint.opacity(0.15)))
         ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(tint.opacity(0.9)),
                    style: StrokeStyle(lineWidth: 1.5, dash: [4, 3]))
+    }
+
+    private func drawSlotPlacementGuide(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        guard state.tool == .slot, state.isVisible(.slots), let cursor = state.cursor else { return }
+        let target = snap(cursor)
+        if slotTarget(at: t.view(cursor), t) != nil { return }
+        let issue = state.mapGeometry.slotIssue(target,
+                                                roads: document.draft.roads,
+                                                others: document.draft.slots,
+                                                maxTowerRange: content.maxTowerRange)
+        if issue?.blocksPlacement == true { return }
+
+        let c = t.view(target)
+        let w = virtualCanvas.towerSlotSize.width * t.scale
+        let h = virtualCanvas.towerSlotSize.height * t.scale
+        let pad = CGRect(x: c.x - w / 2, y: c.y - h / 2, width: w, height: h)
+        let tint: Color = issue == nil ? .green : .orange
+        ctx.fill(SwiftUI.Path(ellipseIn: pad), with: .color(tint.opacity(0.18)))
+        ctx.stroke(SwiftUI.Path(ellipseIn: pad), with: .color(tint.opacity(0.95)),
+                   style: StrokeStyle(lineWidth: max(1.5, 2 * t.scale), dash: [6 * t.scale, 4 * t.scale]))
+
+        let menu = state.towerMenuLayout.getBgSize(playAreaScalingFactor: t.scale)
+        ctx.stroke(
+            SwiftUI.Path(ellipseIn: CGRect(x: c.x - menu.width / 2, y: c.y - menu.height / 2,
+                                           width: menu.width, height: menu.height)),
+            with: .color(tint.opacity(0.35)),
+            style: StrokeStyle(lineWidth: max(1, 1.5 * t.scale), dash: [3 * t.scale, 5 * t.scale]))
     }
 
     private func drawOuterEdge(_ ctx: inout GraphicsContext,
@@ -825,7 +899,7 @@ struct EditorCanvas: View {
             }
 
             let ringColor: Color? = switch warnings[i] {
-            case .overlapsPath, .overlapsSlot: .red
+            case .outsideValidArea, .overlapsPath, .overlapsSlot: .red
             case .outOfRange: .orange
             case nil: selected ? .yellow : nil
             }

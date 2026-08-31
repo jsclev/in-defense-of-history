@@ -19,8237 +19,920 @@ INSERT INTO level_info (
 INSERT INTO tower_slot (
     id, level_info_id, map_position_x, map_position_y
 ) VALUES
-('ba54fc73-56c2-5efc-9e37-20b0f7c7b667', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 915.5, 1069.0),
-('27545c27-92d8-5517-ae16-37875e2d7679', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1043.0, 1050.0),
-('26aea483-ee72-5add-bfa6-32152b3d9e5a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1408.0, 1021.0),
-('f9e5c21f-9eb0-5470-9a94-7c79d91a8b44', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1558.0, 1062.0),
-('35d7f753-549e-545e-8f5a-6918289b512a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 2009.5, 1268.5),
-('47ef7a71-cbaf-5460-89e9-eb5fd0393a56', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 2044.0, 1160.5),
-('a35fe12a-e828-5699-ae70-8cf4d13f884b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 2026.5, 1045.0),
-('ba8fa728-4ba7-5335-8edf-6b5f01092d54', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1754.5, 869.5),
-('6fea0476-cefc-5104-994c-7d4a2f6151e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1926.5, 778.0),
-('b3a06ab5-4f0e-5e8d-9262-68f372917b12', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 2202.0, 762.5);
+('a5062019-a153-5be2-9bc2-3e2084d3aa45', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1590.00, 1360.00),
+('dda94fa7-be2f-5a98-a0d6-49d4f4562aee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 915.00, 1315.00),
+('c8e0595f-3e49-5d61-963e-f0873a938f03', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1990.00, 1160.00),
+('b54ed3f5-dc07-5759-b422-9c0a9bbe9b46', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1195.00, 1150.00),
+('7d7363f0-ffb3-5661-a9f7-0820ccce64ef', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1805.00, 1120.00),
+('41565b21-6295-5e55-8656-ceb8ff4b2887', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 695.00, 1065.00),
+('eb8f3d0b-06b5-5b60-bed4-200a64b1d357', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 875.00, 1045.00),
+('e75e8287-d5ee-5f65-bc28-98af56562538', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 775.00, 965.00),
+('5e5d8ba9-2d2b-5122-b619-dabf2ee129f1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 975.00, 965.00),
+('786b1a8a-54c5-5ac4-b205-cf451fcad6f6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1325.00, 905.00),
+('be55757b-9fef-5847-a49e-80b6643f3807', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2040.00, 875.00),
+('f92ff299-9ac3-5f47-8a32-9d19d4397e6c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1625.00, 690.00);
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,
     map_position_x, map_position_y
 ) VALUES
-('84ad634b-aaee-5b22-bccd-92d3948d4a53', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 0, 781.0, 843.5),
-('2720313e-ca68-5d36-8235-631605ef032d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1, 782.0, 844.7),
-('1a2d2ad5-5c86-5ef5-aef7-67777970e723', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 2, 782.9, 845.8),
-('83183a1c-d57f-55be-beef-ed4b4e657d8b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 3, 783.8, 847.0),
-('9ebfeaf2-7f1e-58b1-9eaf-45d6222d34d3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 4, 784.8, 848.2),
-('6ca8ddd2-991d-55d1-bbd7-4556015e5e94', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 5, 785.7, 849.3),
-('bc398fc6-81ac-53f9-99e1-5bc3c58e771a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 6, 786.6, 850.5),
-('cf918cae-f477-5746-bf02-ae6c67baf6f9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 7, 787.6, 851.7),
-('090cf1e6-9e7e-57a3-ab33-00d01ade4619', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 8, 788.5, 852.8),
-('a0c24599-bf3f-5227-aff4-bc4c368982a3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 9, 789.5, 854.0),
-('6b198ade-0b37-5fb4-940e-9ecfec697db4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 10, 790.5, 855.2),
-('491a9409-c74d-5322-ba3e-4b942f64e0c5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 11, 791.4, 856.3),
-('70178647-6e02-5e57-8313-82837a54fd2d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 12, 792.4, 857.5),
-('e36cf02c-6381-5b8e-8e3d-e2d3635b1433', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 13, 793.3, 858.7),
-('d95f45e3-69c0-5a70-bb97-3fa3bfddad34', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 14, 794.2, 859.8),
-('a1fd7134-e38f-5bb0-a7cd-596d473d7d6b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 15, 795.2, 861.0),
-('67ee45ed-1573-5493-9924-54f2f44c2709', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 16, 796.1, 862.2),
-('b26fbdfd-cabb-51f0-b59c-d4036d679e7b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 17, 797.0, 863.3),
-('443c9723-4631-5f1c-ba81-e8afd3b10de4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 18, 798.0, 864.5),
-('12b273fd-f136-57d2-b14e-fe12ef9841a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 19, 798.9, 865.7),
-('baa7f3ed-ff20-5ac9-a7d4-be1defe3d5dc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 20, 799.9, 866.8),
-('336d21b9-8451-564b-8f1b-035ee974b411', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 21, 800.8, 868.0),
-('b0acb898-8b8b-599f-a9b4-7b0cb7eaafe7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 22, 801.7, 869.2),
-('8c0c9c96-6b8e-51c0-9572-ca07ed7e9a11', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 23, 802.6, 870.4),
-('a663a818-03e7-5c08-a28e-76ad6849bd76', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 24, 803.5, 871.6),
-('83314522-10dd-5e02-b20b-f96629661127', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 25, 804.5, 872.8),
-('f4f733d0-eae0-56cb-8718-1f599dbb0bf1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 26, 805.4, 874.0),
-('e28dacb1-3b76-5da7-b861-f0eb542e0e1f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 27, 806.2, 875.2),
-('eb0a186f-6659-5bd4-b3b4-e806dc9d9ca4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 28, 807.1, 876.3),
-('eb6b8648-17cb-54dc-8a7f-b3cb28b59104', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 29, 808.0, 877.5),
-('f7ef304f-d2fb-57f3-8f62-3a4b20a63866', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 30, 809.0, 878.8),
-('50175196-599c-544d-9731-1272077a7ef7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 31, 809.8, 880.0),
-('c66e86ca-28f3-5cf6-ab7e-d21c592db2a0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 32, 810.7, 881.2),
-('52c959df-d1f0-5bb0-9705-2f1edaa84c87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 33, 811.6, 882.4),
-('279918fb-8d7b-5234-8160-9e272d92a8a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 34, 812.5, 883.7),
-('cb08fcdb-3be0-5f50-abb0-16b36d2d076e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 35, 813.3, 884.8),
-('0f05167d-cd0e-5edb-9199-6b7ef4465c5e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 36, 814.1, 886.2),
-('a7f89a4f-378c-50f8-b0f7-6303d92943e6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 37, 815.0, 887.4),
-('2711fd2b-1360-587e-93db-7baf0a02bd2a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 38, 815.8, 888.7),
-('87fdb26e-3b89-5ea8-b631-4873cf9d5e5f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 39, 816.5, 890.0),
-('8033de29-ef7b-567b-8cab-37f18b6aac33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 40, 817.3, 891.2),
-('b32d5604-a07c-5631-9ea8-d2b7c122d7d6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 41, 818.0, 892.5),
-('ec62d30f-9586-526a-8ad8-a896c4578589', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 42, 818.8, 893.8),
-('e7cdee0b-1fd2-5ca9-9cf7-6ad71952d9d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 43, 819.5, 895.2),
-('e162f3b2-d347-5673-b78a-290f039ccdcc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 44, 820.2, 896.5),
-('0607d7bc-7a7f-597e-9c63-07912ae57d0f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 45, 821.0, 897.8),
-('69fdb00e-7fc8-5f84-b914-c527a3381ce1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 46, 821.7, 899.0),
-('b0316bd6-942a-5cc1-a462-d3d62f3e872b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 47, 822.4, 900.4),
-('5e820b80-e23d-5463-8269-25ca1b06ec71', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 48, 823.1, 901.7),
-('1c74dad5-c699-5246-9c6b-4828bcfdaeeb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 49, 823.9, 903.0),
-('6c3ed31d-77a4-529d-9621-6b71a34c5995', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 50, 824.5, 904.3),
-('22d7d23c-4532-5f9c-8ece-50d18c1c9bb9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 51, 825.3, 905.7),
-('8a95abe1-7bda-578b-a7bf-6b59ca9bd472', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 52, 826.0, 907.0),
-('8a30fa69-1450-5a3c-89ac-36a745619f96', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 53, 826.7, 908.3),
-('02669e91-6b80-5d04-8e73-e5b0ed0a2cd1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 54, 827.5, 909.6),
-('159731e8-2a8d-5f9a-8f55-2270919dd918', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 55, 828.1, 910.9),
-('243ac584-95cd-55d9-951e-11dfddcaeb0d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 56, 828.9, 912.2),
-('636c1c3b-6469-5f34-81f1-9b3ec2c6354e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 57, 829.6, 913.5),
-('c81c93f8-838c-5401-924d-c9486a42e437', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 58, 830.4, 914.8),
-('43d17cce-1d37-560c-b899-ec4d270c36d3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 59, 831.1, 916.2),
-('bffe3111-02f5-5e7a-b37a-224c8ed7a16a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 60, 831.9, 917.5),
-('a736ff94-fd3a-5786-8338-bb0034a39f38', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 61, 832.6, 918.7),
-('0f09a9cb-b52a-5a7f-bb0e-a5d740036f42', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 62, 833.4, 920.0),
-('e6c123cc-4df2-5abd-b19a-979ef2c0d0e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 63, 834.2, 921.3),
-('c750ce05-6883-5e43-95ea-5ed8ebda6df3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 64, 835.0, 922.5),
-('be8b8638-074a-5fe7-a6d4-ef8ecdcfac15', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 65, 835.8, 923.8),
-('28f86213-6778-5a57-ab8c-5637c8f5cea8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 66, 836.6, 925.1),
-('63f2b54b-2d35-5de3-9bf3-580e3f41ae2a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 67, 837.5, 926.3),
-('0136c1c4-99f3-5310-8f5d-bc34233cc256', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 68, 838.3, 927.6),
-('297ba3da-576b-5e28-97d0-a0010260e922', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 69, 839.1, 928.8),
-('a61d2f9f-4425-5e6b-8fc6-2446395dfeff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 70, 840.0, 930.0),
-('e2f6e1d6-9da8-5220-a44f-fded6e6d61d8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 71, 840.9, 931.2),
-('2930fc2b-d435-53f2-a1d4-0b7248a517a2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 72, 841.8, 932.5),
-('ca16dc37-2c7f-56f0-abf5-327688039497', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 73, 842.7, 933.7),
-('2ba139f3-5296-5f6a-9e90-d55f82503694', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 74, 843.6, 934.8),
-('31fb1c15-fcd0-59f2-9205-955db9ff968b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 75, 844.5, 936.0),
-('83e09e64-e237-55c1-9cd5-f2054b068803', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 76, 845.5, 937.2),
-('a8205cf8-04ed-5a94-9d28-394152788b87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 77, 846.5, 938.3),
-('5b7818b5-ff07-5b28-bcea-6f4e14af31a7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 78, 847.5, 939.5),
-('c5d2da1b-0cb5-5033-9f60-79551c5d024d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 79, 848.5, 940.5),
-('5cf0984b-b38f-5aa4-9ca4-a6722b655405', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 80, 849.5, 941.7),
-('b853b1e8-412b-502b-8de1-e0dde679f6d0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 81, 850.5, 942.7),
-('e7a022f8-4b1e-51e8-b1b0-df451c8a93fd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 82, 851.6, 943.8),
-('eda88a1f-f9fa-5a8f-8a2c-e49053080865', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 83, 852.6, 944.8),
-('70880ce8-53db-54d5-914b-05c5d23c8991', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 84, 853.8, 945.8),
-('acd76e45-0712-5339-b2dd-dab1fe255a10', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 85, 854.9, 946.8),
-('e7756fc0-1c12-5c39-b71f-2eebc76d93e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 86, 856.0, 947.8),
-('7bf420f1-15fe-5df0-a60f-5a9c5e2e9631', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 87, 857.1, 948.8),
-('fbd10a66-9630-5e66-9079-752739bcc869', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 88, 858.2, 949.8),
-('085e00b7-66f6-549b-b5ee-d088db95a353', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 89, 859.4, 950.8),
-('3ef621b2-85a3-5ada-b256-12e2c0c37c79', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 90, 860.5, 951.8),
-('bd082dbe-6e61-57be-a39e-8335a63d58ba', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 91, 861.7, 952.7),
-('68de35d1-2951-502b-ad6c-edcb6032d089', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 92, 862.9, 953.7),
-('c50368c3-74fa-5bfa-a325-149865fe0b39', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 93, 864.0, 954.6),
-('e9af52c0-5fbe-5be0-95ed-b18cd5e5cb56', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 94, 865.2, 955.5),
-('a38d03ee-2f70-54c1-b4ff-403a4aaa55dd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 95, 866.4, 956.5),
-('097af615-e85d-582f-ae8b-d34821c58b61', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 96, 867.6, 957.3),
-('a6ba8673-9c49-5f2e-a270-a997a622f579', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 97, 868.8, 958.2),
-('3cf46d2f-b89d-581f-9902-6bcc11d91a9c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 98, 870.0, 959.2),
-('9d9926d4-e181-5df2-a50f-a23e616a1215', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 99, 871.2, 960.0),
-('3bd39422-abd7-5749-ae5a-d3d5ef7e6d32', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 100, 872.4, 960.9),
-('28875ef4-59ec-54d7-b329-5a9e077a28bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 101, 873.6, 961.8),
-('f724ba25-f206-55c6-9e7a-44e81e50e0c4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 102, 874.9, 962.7),
-('e9600f9c-85bf-5476-9fa3-5a46b583d352', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 103, 876.1, 963.5),
-('304603de-44a2-58ef-867c-07da2df7c5c3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 104, 877.3, 964.4),
-('a1985306-9be9-5acd-8d5a-1699d3316dd4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 105, 878.5, 965.2),
-('9f2fc01c-ea33-5d0a-a7cc-094798cda2dc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 106, 879.8, 966.1),
-('a620b139-1ffd-5212-ac89-df0c0b0f8985', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 107, 881.0, 967.0),
-('98eb447a-7fae-5e4a-9e60-017ccdbb857c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 108, 882.3, 967.8),
-('deaf86df-4642-58ef-b02a-fb684f72b5d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 109, 883.5, 968.6),
-('08ad647e-9d84-5b60-b452-4980e6a1c9b5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 110, 884.8, 969.4),
-('8fb8d4b6-88c7-5fd3-83a5-d73fb5fc5490', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 111, 886.0, 970.2),
-('f5e695aa-e8ad-56ca-9729-5e9177e2c296', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 112, 887.3, 971.0),
-('0b6824ec-0457-5309-b9c3-eed7098d6c71', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 113, 888.6, 971.8),
-('9c858274-8d76-52f5-a737-b91760b7bf2c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 114, 889.9, 972.7),
-('f26e4c01-ec1e-542f-a868-95d7de4569d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 115, 891.1, 973.4),
-('4492207f-b2ab-503b-972a-1a7731c9b7b5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 116, 892.4, 974.2),
-('3a2171c3-1202-5d77-9272-5bcc739fad34', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 117, 893.7, 975.0),
-('4c3d11f8-3319-5c70-8c90-2b6d8e43ab5f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 118, 895.0, 975.8),
-('9070cd66-a8e5-5d3b-b80d-b125caa24b6e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 119, 896.2, 976.5),
-('41f3a795-4d92-5459-af34-7516fd4f5269', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 120, 897.5, 977.2),
-('d8eb7312-8725-5943-a06e-1962ec6ef67c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 121, 898.9, 978.0),
-('0b92d613-40fb-5725-a7cf-965a4190fb91', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 122, 900.1, 978.8),
-('46428170-2c99-5074-8f9f-4aef84074871', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 123, 901.5, 979.5),
-('58fd2ca3-b77b-5546-b581-29e53982331e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 124, 902.8, 980.2),
-('4ca30d50-d638-5acf-93bd-063a2387f15f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 125, 904.1, 981.0),
-('5e90c0fe-9116-575f-8b83-39dc4f2d9abd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 126, 905.4, 981.7),
-('1616afd9-ac25-58ba-a644-1bf7c292c8fc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 127, 906.7, 982.4),
-('b2aa4f62-b23c-5abd-9aef-057cee72fa88', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 128, 908.0, 983.2),
-('0da37226-1768-546e-bec7-f1e8ff8c43f2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 129, 909.4, 983.8),
-('c4f1852c-e1d7-56b8-99b9-764cfe12eca6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 130, 910.7, 984.5),
-('04faf435-f614-53da-9a0e-4ae2c1286dd3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 131, 912.0, 985.2),
-('e95fd962-fd2a-572d-9832-b6b0f10f947f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 132, 913.4, 985.9),
-('2cccf1e4-aaee-5ca9-a8e3-223e0285dec3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 133, 914.7, 986.6),
-('012b8d02-bede-51cb-972c-a3ee4d0d5310', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 134, 916.0, 987.2),
-('4cd81508-ee3d-57dd-b44b-639ad18b2cac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 135, 917.4, 988.0),
-('405c7788-e348-5bea-bab6-2edf857df09d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 136, 918.7, 988.6),
-('eb7048c6-baad-5867-b7c5-7fee33efa2bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 137, 920.0, 989.2),
-('3fedf45e-f423-538b-a236-bd9051896a54', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 138, 921.4, 989.9),
-('4e2db04c-7a0d-5763-acad-09d43f51b9c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 139, 922.8, 990.5),
-('45564240-3182-5b5e-b1d8-4e2c91aa0e49', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 140, 924.1, 991.2),
-('c2743343-7a42-5caf-b1a6-33c7f3a5dd6e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 141, 925.5, 991.8),
-('b4bedd54-63bd-5451-98a0-39b1484a4dc1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 142, 926.9, 992.4),
-('87bd9177-9482-5ec9-b222-18ae77cc6662', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 143, 928.2, 993.0),
-('5ea0e2b9-1a6e-5639-bb7e-c467ac12e2e3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 144, 929.6, 993.7),
-('0be17c84-f4b7-591f-9a2e-90d0e66d6514', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 145, 931.0, 994.2),
-('84d4fc76-3ce7-5190-a25f-3feed5bb103f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 146, 932.4, 994.8),
-('0453e5c8-a3ab-5040-b694-57dd76fc86ce', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 147, 933.8, 995.4),
-('61dcda15-1a57-5249-b4c0-5bf862416136', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 148, 935.1, 996.0),
-('a381ae5c-b739-5e9c-8958-4218022fd7c5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 149, 936.5, 996.5),
-('4b7b8885-a7eb-57df-bc15-dbef228f5ef8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 150, 937.9, 997.1),
-('97eda045-9b3e-5dda-9442-df1ae03d6328', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 151, 939.3, 997.7),
-('ae415089-7d6a-5e1c-89b9-f99443936d41', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 152, 940.7, 998.2),
-('ae480027-8f4b-5e3f-93fb-9aad0d24871a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 153, 942.1, 998.7),
-('c88ee776-7ae8-5bb1-ae58-0af948bb4939', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 154, 943.5, 999.2),
-('40352490-8911-5a70-b0bd-868206577530', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 155, 945.0, 999.8),
-('ead1830b-dcfe-5468-bca4-a351f0321769', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 156, 946.4, 1000.2),
-('ff9f705e-b30a-5b9e-8580-6d2befad41b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 157, 947.8, 1000.7),
-('0c5d0573-652b-5883-a37c-8c3a70ab2dee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 158, 949.2, 1001.2),
-('eecbb286-e0d5-5834-a4ba-7e41b68f4f3e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 159, 950.6, 1001.6),
-('5e6290e9-25f9-5c6e-99db-30ba4871c1a3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 160, 952.1, 1002.0),
-('3bca18f5-c1e2-5d33-8350-8d880010de2a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 161, 953.5, 1002.5),
-('d64e7c6d-74bd-5620-ac91-746b8a15ed70', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 162, 955.0, 1002.8),
-('f2b13d54-75aa-520a-8f19-439a7747aae3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 163, 956.4, 1003.2),
-('7dcbf672-6c09-5a1e-8c1c-9042fa98fa51', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 164, 957.9, 1003.6),
-('28e6ba68-9c5e-5a2e-8ed0-0f3c4117f2b0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 165, 959.3, 1004.0),
-('8b39670b-e8ff-58d5-b7dc-3188b8775f49', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 166, 960.8, 1004.3),
-('c5502684-59b4-500c-87c3-18a86f8ba3aa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 167, 962.2, 1004.7),
-('012d36c5-efed-545a-b3df-710d2b9afde8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 168, 963.7, 1005.0),
-('44e8f4a9-50c2-5483-b832-7dfa3cbb4a1f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 169, 965.1, 1005.3),
-('340f1d96-923f-5d56-aa45-0909e1a38cca', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 170, 966.6, 1005.6),
-('50ed7749-2dca-5f8d-b46e-3eede56b8d8a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 171, 968.1, 1005.9),
-('03d03ebe-02fa-5639-ad57-ed66361e114c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 172, 969.6, 1006.2),
-('3c69ff5a-09a7-5c50-b73e-0ae7f5c40389', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 173, 971.0, 1006.5),
-('342b3e85-d11d-5728-a4e4-1bcef1029539', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 174, 972.5, 1006.8),
-('a8b2d04a-95a6-5af3-9cc0-46ab589298b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 175, 974.0, 1007.0),
-('32d92dc8-3fe4-5699-9dfb-a0dea81c8c2d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 176, 975.5, 1007.2),
-('023af66e-c5bb-50d2-a7c9-c0b2ec3b2036', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 177, 977.0, 1007.5),
-('b211b83b-2a64-58c7-89cb-3bf7472c8711', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 178, 978.5, 1007.8),
-('a0ceb756-e1fa-5d05-adaa-a2557b01323a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 179, 979.9, 1008.0),
-('4b7144ca-503e-515b-ae2d-44b25aba7dc2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 180, 981.4, 1008.2),
-('4d14e438-445e-5eb8-8fd3-20ef1d129d65', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 181, 982.9, 1008.5),
-('e39d9790-b0f5-5f3e-bd20-bb6a2181e801', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 182, 984.4, 1008.7),
-('50ba4478-6bff-5b4f-9db1-d3440026060c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 183, 985.9, 1009.0),
-('73db915a-e0c1-5c59-9170-1f2028772516', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 184, 987.4, 1009.2),
-('010d93e0-3a1b-5e6f-92f5-1b0225ca5cb1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 185, 988.8, 1009.3),
-('eb05112f-7bef-533d-9abc-621c1b1c4aa9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 186, 990.3, 1009.6),
-('63b0f27f-1c2b-5314-9392-7a9416b8f475', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 187, 991.8, 1009.8),
-('afa411bd-c1f5-5db8-bb8f-9cb41d2ebac4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 188, 993.2, 1010.0),
-('eae792de-b7a2-50bc-97d7-ead466beff87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 189, 994.8, 1010.2),
-('1c2a7454-bd77-5d33-89ac-dc8eacc3b90f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 190, 996.2, 1010.4),
-('3683afcf-2dd0-51cf-8206-8a9269274aae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 191, 997.8, 1010.6),
-('056fabd3-ff8d-5438-83c0-8c5c8db2b7df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 192, 999.2, 1010.8),
-('ba56b08e-34d4-5ae5-8c77-94a19608c628', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 193, 1000.7, 1011.0),
-('6def3ecb-61c8-543c-8c39-67454d9d0730', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 194, 1002.2, 1011.2),
-('4951dcac-5d73-5870-a978-b668debfbc61', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 195, 1003.6, 1011.5),
-('ee9bdfa5-3881-5536-acd0-813fc4629194', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 196, 1005.1, 1011.7),
-('5aab144e-2f70-5792-b481-66c8ff6e8ce7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 197, 1006.6, 1011.8),
-('2c497c84-a3d1-59a6-a272-525abb541f36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 198, 1008.1, 1012.1),
-('e2c7dc8d-b373-56ee-a42d-ff6701f37b82', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 199, 1009.6, 1012.3),
-('b85705aa-cd13-52dd-8c7d-e2b1382c2958', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 200, 1011.1, 1012.5),
-('51d547a6-2b47-5e10-adef-92c32e867f0f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 201, 1012.6, 1012.8),
-('c5c9d01a-3827-5024-83f4-c68aa569a624', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 202, 1014.0, 1013.0),
-('f1fedcfb-21a0-579f-a106-2a3c15cf4acc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 203, 1015.5, 1013.2),
-('911ea77d-8ed5-5235-b694-29edcff392ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 204, 1017.0, 1013.4),
-('d44b4f52-0232-5549-bf7d-0b62c93a59f1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 205, 1018.5, 1013.7),
-('aa8400d3-b6d0-5209-8414-2ffe21f96656', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 206, 1020.0, 1013.9),
-('7287f760-e7d5-597c-a197-a24c4dfb516e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 207, 1021.5, 1014.2),
-('b4c19376-eaa1-5318-96ce-124d72194d39', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 208, 1023.0, 1014.4),
-('119121fb-0409-5344-979e-8a1ed7593212', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 209, 1024.4, 1014.7),
-('ca327d43-3456-5a32-bcf0-15303d5795d3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 210, 1025.9, 1014.9),
-('4048aa0e-7a6a-54dd-b5c2-9e03295b5050', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 211, 1027.4, 1015.2),
-('8714c166-9321-56c0-8dc9-10323fc4d87a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 212, 1028.8, 1015.5),
-('f94b8afd-8f51-5d51-b2de-4f76a3ffb942', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 213, 1030.3, 1015.8),
-('4c14dda3-baa0-585d-8d0f-0205052c5eff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 214, 1031.8, 1016.0),
-('2f69e0ee-37a2-5197-88c2-179c30fdea55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 215, 1033.2, 1016.3),
-('324364f8-42ce-5d5e-98cc-813ef92a8105', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 216, 1034.8, 1016.7),
-('3f6507af-83c7-5834-9510-90e2e3615e5e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 217, 1036.2, 1017.0),
-('62dbcddd-8f62-5eb9-9735-a21f86db3900', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 218, 1037.7, 1017.3),
-('3451a460-72b1-5c31-a27c-c70542c53d08', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 219, 1039.1, 1017.7),
-('0b49eb8d-1368-5102-920b-788e58a54411', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 220, 1040.6, 1018.0),
-('786d4559-4ea5-5e89-b572-b6f21fe28537', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 221, 1042.0, 1018.3),
-('898966af-3339-547c-a708-a661648a8c0c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 222, 1043.5, 1018.8),
-('97c67d23-c1d8-5ac6-be42-a8f386a69e9b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 223, 1045.0, 1019.1),
-('2f632c77-dd8a-5ffb-a98c-aad1e36adf61', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 224, 1046.4, 1019.5),
-('eb76441d-d5ab-547f-8ad1-91948e9fbb86', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 225, 1047.8, 1019.9),
-('54c80817-ea60-53ab-aa30-e87daa9f6482', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 226, 1049.3, 1020.3),
-('43307d0c-489b-502a-86ad-db954320a15b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 227, 1050.7, 1020.7),
-('90e08518-8804-5b96-8382-375b70f02952', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 228, 1052.2, 1021.2),
-('a9e206f0-c11a-567e-85bb-5b991cb24192', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 229, 1053.6, 1021.5),
-('d09db9fb-a8e4-594c-a5f6-221e9a7a86f1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 230, 1055.0, 1022.0),
-('fd394264-fbe8-524a-b055-2e9e0d5ed06d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 231, 1056.5, 1022.4),
-('a7649f77-a00b-5def-96d2-438c7c198cea', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 232, 1057.9, 1022.8),
-('0805d4b6-c721-51a2-ab69-fa58c9c28ca7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 233, 1059.3, 1023.2),
-('d2a4764b-e06c-57ff-bc24-5e843fb981c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 234, 1060.8, 1023.7),
-('22cc2770-9946-5cde-9467-1172ee9d2644', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 235, 1062.2, 1024.2),
-('3cb15665-872b-5797-9ecf-0bbc5b996ffc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 236, 1063.7, 1024.6),
-('04c38a65-410e-5f6f-9402-917f2bcd314b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 237, 1065.1, 1025.0),
-('147cdcbc-5011-5ba8-b47b-92b59d5bc579', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 238, 1066.5, 1025.5),
-('f8d3a551-0b6a-5d77-93f5-5f2d3f1fb35f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 239, 1068.0, 1026.0),
-('f075fcea-4aec-5de5-8d90-e43b18f3518f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 240, 1069.3, 1026.4),
-('ae48a3e9-afde-577c-96bc-38fc0e0a6b1b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 241, 1070.8, 1026.8),
-('43ab5b55-140f-5853-a033-0b1d50fc59db', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 242, 1072.2, 1027.3),
-('db552747-f1fb-5bf0-8df9-95acf480d2c0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 243, 1073.7, 1027.8),
-('5b965201-545f-5f0d-bf28-88311c338951', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 244, 1075.0, 1028.3),
-('12037dbd-c4fb-558f-953b-e8e06c4abe7f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 245, 1076.5, 1028.8),
-('5521653b-8e07-5770-a17c-b1a7d30ab0d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 246, 1077.9, 1029.2),
-('23ebc659-1be5-5822-8329-e7bba59dc759', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 247, 1079.3, 1029.7),
-('ea36939f-d02d-5340-8585-eeb4f4992ef3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 248, 1080.8, 1030.2),
-('494cb495-8543-5d3f-ae64-5d61c1bdbf1c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 249, 1082.2, 1030.7),
-('ada17756-370d-538f-a913-32ed6312dcd6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 250, 1083.6, 1031.2),
-('03cb9211-8db1-5af1-bd55-53a439fe0f8e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 251, 1085.0, 1031.7),
-('f952c999-b01f-5de9-9c77-98e9c2854d8d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 252, 1086.5, 1032.2),
-('159d8b63-e534-5265-bc1d-e1aeedb7b7ba', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 253, 1087.8, 1032.7),
-('969907da-e27b-58ac-a084-19af07e93f02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 254, 1089.2, 1033.2),
-('19ba8f46-c700-5c49-ae77-8dffc4c13df9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 255, 1090.7, 1033.7),
-('5c723efd-4360-5fa4-b0fb-c80ab01b89be', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 256, 1092.1, 1034.2),
-('36613583-df2e-5f77-bba3-bf3b327dd5e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 257, 1093.5, 1034.7),
-('2201f04e-a55f-503c-870b-41088878a82e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 258, 1094.9, 1035.2),
-('5b1c9246-19e1-5f8e-bb55-c9c8b59898cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 259, 1096.3, 1035.7),
-('c600a3b6-e0f7-5ff0-b784-90616c5bc734', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 260, 1097.8, 1036.2),
-('e3d730ac-b1cf-5479-b69b-e2f076d58019', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 261, 1099.2, 1036.7),
-('ad72260f-2e35-52e8-973d-c27835a1e38b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 262, 1100.5, 1037.2),
-('61fd899d-94d2-58b9-8701-2a14894a9bcf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 263, 1102.0, 1037.7),
-('eaedabc9-8636-58a9-b8e0-8b25fc8b6e83', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 264, 1103.4, 1038.2),
-('f0235ce7-324e-5072-91f6-3e617ea04036', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 265, 1104.8, 1038.7),
-('eafb3881-82e8-5646-876b-3c9df3018276', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 266, 1106.2, 1039.2),
-('61bffacd-305e-55c4-8b0a-bb61fc0da941', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 267, 1107.7, 1039.7),
-('d46f01fd-0226-502d-b0cc-b2d15f50c5fe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 268, 1109.0, 1040.2),
-('702ff69d-3392-51f6-b164-28c81cb6fd85', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 269, 1110.5, 1040.7),
-('f9bb2651-b8a6-5789-b580-0bdf9967c2ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 270, 1111.9, 1041.2),
-('2b31f127-0d57-5540-baae-7bb5fa490887', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 271, 1113.3, 1041.7),
-('d785fe47-5c15-50bd-9069-19ececdbebdb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 272, 1114.7, 1042.2),
-('8863f59e-b56e-5216-ae41-41283f59abe7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 273, 1116.1, 1042.7),
-('0975eb62-badf-5aef-9a43-43d0b0e675e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 274, 1117.5, 1043.2),
-('19a0c78b-0787-5d77-9c8a-b7508e8a5043', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 275, 1119.0, 1043.7),
-('6882deb1-eb01-5d6e-adc1-20effa870103', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 276, 1120.3, 1044.2),
-('63a309c8-e746-5222-bd78-bd9b9bd47181', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 277, 1121.8, 1044.7),
-('a1be07b0-79d5-5144-b852-7ec72e72570a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 278, 1123.2, 1045.2),
-('b72b4391-1f28-5377-9614-7a673d10abe7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 279, 1124.6, 1045.7),
-('5effe5e5-9590-52a4-b0d8-d67229851e14', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 280, 1126.0, 1046.2),
-('fa9e4a62-f2a5-5073-84b3-d89835f53af2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 281, 1127.5, 1046.7),
-('1b1e5168-0bde-5d61-a4c7-a839a6c6fd25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 282, 1128.8, 1047.2),
-('4ed72b82-2b3b-5860-9b5f-6f7fc827184f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 283, 1130.3, 1047.7),
-('73f3a907-d6d8-5e76-9e29-6a21c4b045ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 284, 1131.7, 1048.1),
-('92661b16-e2b0-5860-a38f-7b63a08286bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 285, 1133.1, 1048.6),
-('c6f89585-2dfd-55a7-bdbf-4a0a05dbba24', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 286, 1134.5, 1049.1),
-('8cb09530-c7ba-5a8a-965a-936f47a37192', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 287, 1136.0, 1049.5),
-('b538a16b-80b4-5cab-9070-46fd180ea861', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 288, 1137.4, 1050.0),
-('666d57e3-6a21-5976-ae22-09facaa7b54f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 289, 1138.8, 1050.5),
-('117637a0-8f3c-5d3c-8441-3eb0986f8d2d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 290, 1140.2, 1051.0),
-('07a2b09b-bb7b-5b2f-8773-1b975f6113fe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 291, 1141.7, 1051.5),
-('f6ea46cc-4fb8-53bb-baad-a9a689bbd186', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 292, 1143.1, 1051.9),
-('1297f10e-e11c-54db-ae1c-0d3895e5eb40', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 293, 1144.5, 1052.4),
-('a3873e6b-65b0-54fe-9caf-26dc4e640539', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 294, 1146.0, 1052.8),
-('d82571f1-2179-5a7f-8015-249ace063dcb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 295, 1147.3, 1053.3),
-('66cfcb59-43ba-53ef-8d1b-166657d97b0c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 296, 1148.8, 1053.8),
-('59435e01-2080-5273-9dc8-5a0d7a29dc8d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 297, 1150.2, 1054.2),
-('9101e703-40ea-5ab6-817c-141cbfa7d216', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 298, 1151.7, 1054.7),
-('d30af7af-b432-5150-95d8-ecda07126315', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 299, 1153.0, 1055.2),
-('38f854c9-d22a-5d2d-98a3-b5cca282547e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 300, 1154.5, 1055.7),
-('6ba08c63-24d0-5c42-b3e9-e036d5083af7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 301, 1155.9, 1056.1),
-('76ef5aee-ef08-5cf6-bcee-2722535ea6e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 302, 1157.3, 1056.6),
-('c00cedc4-2fb6-5092-bb99-24c7da0c8d22', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 303, 1158.8, 1057.1),
-('9e2143eb-1a1b-548f-835b-5a853f5e03c5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 304, 1160.2, 1057.6),
-('53044d56-d8b5-5337-8239-de126a094da1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 305, 1161.6, 1058.1),
-('d175b97a-4f24-506e-989a-6a867666ccb0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 306, 1163.0, 1058.6),
-('a6f43e79-22e9-5a54-83c9-63853e1d8d90', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 307, 1164.4, 1059.1),
-('5967f24f-99a9-5e8b-b7dd-73cd2dda30e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 308, 1165.8, 1059.6),
-('df04a051-c9c1-530e-b8cd-c67e1ac824ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 309, 1167.2, 1060.1),
-('1311000a-1532-5315-824f-73dcc21ae045', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 310, 1168.7, 1060.7),
-('4e18ac05-5cbb-5269-9813-425602a3d896', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 311, 1170.0, 1061.2),
-('43d0d992-a39a-506b-b2bf-ff089e173542', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 312, 1171.5, 1061.7),
-('aede5a7b-6a66-516b-9038-be900ed8dd41', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 313, 1172.8, 1062.2),
-('3f6691b5-27f9-517e-ac54-6f840894ad9a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 314, 1174.2, 1062.7),
-('a8e08857-9156-568a-ae0d-1a9092c2be44', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 315, 1175.7, 1063.2),
-('770773ba-2f26-5922-94ee-f6c71901c143', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 316, 1177.0, 1063.8),
-('bc57bde2-5b64-551e-a12f-c0be2313f511', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 317, 1178.5, 1064.3),
-('c1f40494-3f53-5f00-8df5-0e7c3eb93fa7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 318, 1179.9, 1064.8),
-('96cbc337-940e-5d04-9219-a620cd9d730b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 319, 1181.3, 1065.3),
-('6771fde7-9ddf-55e3-adb0-de261e1836a3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 320, 1182.7, 1065.8),
-('31b98062-466f-5f77-804f-76daafebca22', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 321, 1184.1, 1066.4),
-('6a0766e0-9aef-5e58-9c02-5fa429b72231', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 322, 1185.5, 1066.9),
-('7ec7837d-260f-5563-9cad-d4e7ff778e55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 323, 1186.9, 1067.5),
-('cf7ea319-9de3-52f2-a834-3d7ca0aea81b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 324, 1188.3, 1068.0),
-('4a21eec6-b9fd-5b94-913c-091ee6d68fd6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 325, 1189.7, 1068.5),
-('be6c06b0-e602-59ea-944a-66801418b6e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 326, 1191.2, 1069.0),
-('083be560-a7b6-5edf-8d95-a8b72b154c91', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 327, 1192.5, 1069.5),
-('a5873d53-651d-57c3-86ca-8dad563cb7da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 328, 1194.0, 1070.0),
-('347301f2-f2d9-5714-bdc4-48e7127cc0a4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 329, 1195.3, 1070.5),
-('ddd20b6e-0a82-5722-84ff-20315d943656', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 330, 1196.8, 1071.0),
-('c17e9f5c-5beb-5b02-8a5c-7f76eb9d4f81', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 331, 1198.2, 1071.5),
-('86194b64-5c38-5c0a-80e9-38a3f4f4caf5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 332, 1199.6, 1072.0),
-('ed4e7ce2-668e-5823-80a1-ef89a23fb9bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 333, 1201.0, 1072.5),
-('31621d17-15e1-50af-9b8e-59210ade890a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 334, 1202.5, 1073.0),
-('3a14d93f-9630-5a89-973c-b2ea3d8ddf86', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 335, 1203.8, 1073.5),
-('39920251-9be8-53cc-8ad2-ed1f75347e25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 336, 1205.3, 1074.0),
-('063a7756-d300-5af7-9ec0-1c3219b56862', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 337, 1206.7, 1074.4),
-('a7b889fa-c8cc-5158-aa66-dd0ce2d91184', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 338, 1208.2, 1074.8),
-('4c2c045e-2136-5ca8-8217-2930a28caf68', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 339, 1209.5, 1075.3),
-('0b7cc2f9-e523-5d61-8086-d2791d2c920d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 340, 1211.0, 1075.8),
-('12af32a7-ef0f-544c-9cb3-9eeb9cd0620b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 341, 1212.5, 1076.2),
-('ad04f6ab-27eb-5632-8f4f-bdaf1341a459', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 342, 1213.8, 1076.7),
-('e20f6eb7-1f6e-5f6e-a5b8-c28d28663b10', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 343, 1215.3, 1077.1),
-('96bb73fe-b32f-5175-849d-754fbc8be0ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 344, 1216.8, 1077.5),
-('e1901670-d184-5c80-829a-a3147766a80d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 345, 1218.2, 1077.9),
-('289ea1d3-a0cb-5768-99e3-8c6809b2f87d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 346, 1219.7, 1078.3),
-('5127acf0-f1b3-5f73-b305-b9fafc379d35', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 347, 1221.1, 1078.7),
-('8f18191e-93da-5aa1-90e8-f5006ccab847', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 348, 1222.5, 1079.1),
-('cd249ffe-1b88-57ea-b321-d3d24be009ec', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 349, 1224.0, 1079.5),
-('c1209825-51e7-5a70-a73a-46c121695300', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 350, 1225.5, 1079.8),
-('e35364a6-5cc7-565d-a752-71854a459863', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 351, 1226.9, 1080.2),
-('29a9cfc0-225a-5ff4-9709-05047cd1bf87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 352, 1228.3, 1080.5),
-('f9a982a0-1ed2-56ff-a039-755e40f82333', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 353, 1229.8, 1080.9),
-('8faa39b8-5718-5b00-8c43-e8410ea512a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 354, 1231.2, 1081.2),
-('dc2d08e1-f6f0-5434-a0b4-eae236e50a16', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 355, 1232.8, 1081.5),
-('98a838af-6706-556c-ba09-faa65e2eac1e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 356, 1234.2, 1081.8),
-('a0089d2e-2c11-5ba6-a540-c2eb6ffa631c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 357, 1235.7, 1082.2),
-('27ad2d63-4875-5198-b609-1aebffb90612', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 358, 1237.2, 1082.4),
-('cd16e542-255c-5485-8e1c-07ae237b95af', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 359, 1238.7, 1082.7),
-('0f765f19-b4b8-56ed-aee9-c8c3e43e90a1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 360, 1240.1, 1083.0),
-('32097c93-ff70-5ab6-8da7-e4418466aef4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 361, 1241.6, 1083.2),
-('413bbaf5-caf9-5a80-b00d-2511a6eecfc1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 362, 1243.0, 1083.4),
-('8d469b3d-a9f9-5afd-9d6e-8233649bd19a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 363, 1244.5, 1083.7),
-('c705eb64-a156-588a-85ec-de6f890cc752', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 364, 1246.0, 1083.8),
-('df851f3f-bfb3-5443-be5b-c1996a95a21a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 365, 1247.5, 1084.0),
-('d689ddf4-90e1-5079-9ce5-521112bd49fd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 366, 1249.0, 1084.2),
-('942a1fdc-65e4-54ae-8b1c-c09d7d1a3612', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 367, 1250.5, 1084.4),
-('99f4769d-a662-5647-bd63-f2435fe22680', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 368, 1252.0, 1084.5),
-('ca561e58-ac66-5286-a258-308938d24a5d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 369, 1253.5, 1084.7),
-('64801216-c909-558e-87b3-e12249be0356', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 370, 1255.0, 1084.8),
-('39bdae39-6616-52dc-a5fc-a396b18cde3e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 371, 1256.5, 1085.0),
-('7724d3f8-9039-5c25-985f-5766ff1a9f84', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 372, 1258.0, 1085.1),
-('caf5f410-3b08-570d-bc6d-656fc3808f83', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 373, 1259.5, 1085.2),
-('e362d67e-c942-5e2a-9825-481608824256', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 374, 1261.0, 1085.3),
-('687b6020-852e-5858-a17c-8882203f7890', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 375, 1262.5, 1085.4),
-('c3bdba0a-6483-5e32-966f-fcd4fa8164d1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 376, 1264.0, 1085.5),
-('d64bf1b8-ded8-5b5d-86d9-c962e700dc2b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 377, 1265.5, 1085.6),
-('4b82cb2e-0301-5099-81ee-0e2a18542c80', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 378, 1267.0, 1085.7),
-('259a4a9c-dcd8-55b7-b115-334a82b9995b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 379, 1268.5, 1085.8),
-('c7ca2fcd-c12f-5da7-9395-18b48a5dba28', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 380, 1270.0, 1085.8),
-('3a95e3b5-d681-56e0-aa66-bb49cc077a81', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 381, 1271.5, 1085.9),
-('6e36d477-d682-558e-a7b0-704433244c51', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 382, 1273.0, 1086.0),
-('531714ae-cff8-53e7-9814-0b80108c3869', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 383, 1274.5, 1086.0),
-('cdace464-49fc-5808-9a54-d11a519a9a15', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 384, 1276.0, 1086.0),
-('f52a7f20-035a-5826-8978-3c9adbb208c1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 385, 1277.5, 1086.1),
-('50c9ea1d-adc2-54f5-8207-ea4c5c4eebe5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 386, 1279.0, 1086.2),
-('75bba482-c14d-56b9-a104-f13afb60379b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 387, 1280.5, 1086.2),
-('2903b7d0-0868-545b-aa7d-2ac82b6a6ac9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 388, 1282.0, 1086.2),
-('6382dc9e-c492-5c48-9be8-30bbbe25b271', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 389, 1283.5, 1086.2),
-('b33244d5-e883-56c3-8d84-41c52a1504c0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 390, 1285.0, 1086.2),
-('a9b4d91b-2c50-52dc-9d8b-063b8364f23b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 391, 1286.5, 1086.2),
-('719783df-a2a5-5e33-a886-f759d0f35f02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 392, 1288.0, 1086.2),
-('016e011d-3144-59ca-a2dd-a99c679fa95b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 393, 1289.5, 1086.2),
-('cb445c81-51e7-51a0-be54-a19efbd35e74', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 394, 1291.0, 1086.2),
-('36956ea0-346b-5b1d-b0d8-f7110779d38b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 395, 1292.5, 1086.2),
-('a6d8bcc4-e0fb-5ccd-8aa6-9a7c0bee1c1c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 396, 1294.0, 1086.1),
-('a2a7a875-14aa-5f58-8aa1-21ecf8e6ec0b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 397, 1295.5, 1086.1),
-('4b2d9666-8bac-5908-a585-4901d6f94160', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 398, 1297.0, 1086.0),
-('642676f9-e8b7-5d45-a6ea-e1d3d25bf8ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 399, 1298.5, 1086.0),
-('c906cb93-bb82-5de3-a513-bb02f51db6e8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 400, 1300.0, 1086.0),
-('4ddf173b-3e4f-5dc7-b9e0-378fca6989be', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 401, 1301.5, 1085.8),
-('73f2d1a5-dce5-5335-95e8-46617fa6e084', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 402, 1303.0, 1085.8),
-('e328b5c8-8865-50d3-85ba-45707704686a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 403, 1304.5, 1085.8),
-('af6d3f53-42dc-58ce-994a-03922008a8a8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 404, 1306.0, 1085.7),
-('db25e814-4fe7-5b87-a3e8-1f0f4c4da661', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 405, 1307.5, 1085.5),
-('f511fd06-8812-5968-a369-02ccba5f10e8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 406, 1308.9, 1085.5),
-('57cd4cff-ba19-5db8-b682-d5669412a8bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 407, 1310.4, 1085.4),
-('200a6b14-e71e-53c2-a351-a0417ee2e8c9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 408, 1311.9, 1085.3),
-('dbb27875-4eb3-5049-81e0-b883aab6c56b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 409, 1313.4, 1085.2),
-('cc01ed68-26ee-5e63-9dbb-e9aee5e23005', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 410, 1314.9, 1085.0),
-('238cbbaa-783a-5a03-96cc-5aab13f110ac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 411, 1316.4, 1085.0),
-('f31be18f-d446-5bb3-adad-82990162a612', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 412, 1317.9, 1084.8),
-('c3049af7-519a-5c1f-991a-05a33851dd0d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 413, 1319.4, 1084.7),
-('5994d298-272c-51bc-b2c1-6e978e9edec7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 414, 1320.9, 1084.5),
-('31dc2c7f-cdee-52a5-8b16-4724caf4ef98', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 415, 1322.4, 1084.4),
-('ef17e982-44f6-555e-b039-5463b9a38fd2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 416, 1323.8, 1084.2),
-('49df9509-7921-5405-acaf-e5c6ac643f50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 417, 1325.3, 1084.1),
-('d1cc5fd6-340a-5b39-9b49-f6a5b4547986', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 418, 1326.8, 1083.9),
-('7079ea0c-da6c-5e35-a529-8fd4e759cdd7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 419, 1328.3, 1083.8),
-('d7166c99-66f2-544f-8ca0-88d8e0216272', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 420, 1329.8, 1083.5),
-('73994252-513b-5ff9-9bc5-2860c28f9f54', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 421, 1331.3, 1083.4),
-('21432cd3-cd0b-540b-8131-90a3caf25f20', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 422, 1332.8, 1083.2),
-('4e92363a-a76e-50cf-82d1-7018d7a1b19f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 423, 1334.3, 1083.0),
-('f7b09347-0626-590e-9ab1-828d4b07bcaf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 424, 1335.8, 1082.8),
-('6daf6d5e-784d-5d79-9680-4c74b29b1c39', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 425, 1337.2, 1082.6),
-('ced91323-8522-5942-b6ba-d80973739ec5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 426, 1338.8, 1082.4),
-('3b9a4c25-4f37-50f0-b681-9d64cb0b58cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 427, 1340.2, 1082.2),
-('b635a299-7b4e-568b-a883-60e733e51285', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 428, 1341.7, 1082.0),
-('eab4f7f9-0e4a-5c47-949b-b845c1940c83', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 429, 1343.2, 1081.7),
-('ff711adf-ac09-5d39-b282-b61a6aa177d5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 430, 1344.7, 1081.5),
-('8362c140-1872-5e27-8fe1-b07f77c8af37', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 431, 1346.2, 1081.2),
-('51a20188-15ea-50fe-8d09-50fffad67a22', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 432, 1347.7, 1081.0),
-('c455f2a4-3905-5b6c-a8f7-d2fcaedb42cf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 433, 1349.1, 1080.8),
-('2900740a-bd6e-5798-b1c6-96c53385c8d6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 434, 1350.6, 1080.5),
-('99d097ce-ac92-5521-8e5d-cc8c2b4e89a8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 435, 1352.1, 1080.2),
-('a2db5b23-778f-5734-af07-37ad3dd925b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 436, 1353.5, 1080.0),
-('9ea9f00e-5dd5-5726-b7e8-8ec53ce20e92', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 437, 1355.0, 1079.7),
-('2e42328e-e151-56e4-b2ea-c434d5e63353', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 438, 1356.5, 1079.3),
-('fafc2788-4b75-5973-88c9-1d62cc5b19ff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 439, 1358.0, 1079.1),
-('be79f0cc-0b4c-5e2d-8b35-8a7ebfd60021', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 440, 1359.5, 1078.8),
-('acb0dac9-4a54-5365-b2ca-5e6239798a7e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 441, 1360.9, 1078.5),
-('8584670b-1a33-5009-a5d9-250091e3754c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 442, 1362.4, 1078.2),
-('1445525e-0f6b-5d7b-b10d-3753981e429f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 443, 1363.8, 1077.8),
-('c9c1d7d4-5f2b-540f-bc27-deff16374ee2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 444, 1365.3, 1077.5),
-('30e03839-8500-53a4-a286-05242b2dbed5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 445, 1366.8, 1077.2),
-('f2372ebd-81df-5ee1-8674-63092772266c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 446, 1368.2, 1076.9),
-('e6daae97-d049-51ac-8fa1-b3d5e9075ea8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 447, 1369.7, 1076.5),
-('b18dc090-6fc7-56d4-9e81-40041a93edb0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 448, 1371.2, 1076.2),
-('d93e5dde-38a8-547c-8120-403a5b0548e8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 449, 1372.6, 1075.8),
-('a125e0c2-806f-5f20-a43d-a3cf7c69cc80', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 450, 1374.0, 1075.5),
-('346011c2-9d10-5fc1-9f2d-5597453907ac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 451, 1375.5, 1075.1),
-('e370efa0-c345-5e97-8097-fdc4287f7105', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 452, 1377.0, 1074.8),
-('b4805bb2-a1a8-5ea5-83eb-87245a286744', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 453, 1378.5, 1074.3),
-('cdba75f0-aaf4-50d8-bfc4-c087bc73de69', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 454, 1379.8, 1074.0),
-('78f5ddb6-dd09-5890-afbc-3abb5df71ebb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 455, 1381.3, 1073.5),
-('0fb09d03-10ab-5198-bc06-1ea8d23f6c70', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 456, 1382.8, 1073.1),
-('7d3511f9-22ec-5fa7-80aa-b598d60ee22c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 457, 1384.2, 1072.7),
-('6744ae22-ed12-5a95-a712-3080f53b9bf1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 458, 1385.7, 1072.2),
-('c9a5305e-5d8e-50f1-919f-8ab9f764381e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 459, 1387.0, 1071.8),
-('dfbd6256-7d5f-5063-b036-729e752dfb97', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 460, 1388.5, 1071.3),
-('29cabe73-9ca5-5cad-97ab-c86d9ef24838', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 461, 1389.9, 1070.9),
-('8c339064-d2a6-5c1e-bb0e-f700fa1972ce', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 462, 1391.3, 1070.5),
-('69072a90-b87a-5402-8cf6-3552207e7fc9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 463, 1392.8, 1070.0),
-('9a44e4a8-ba26-5ee7-b9c7-f2d7ff513c2c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 464, 1394.2, 1069.5),
-('bb6bf678-bd02-5ec8-b4bf-d2e41558ef30', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 465, 1395.6, 1069.0),
-('027168ed-25e8-55b2-9f51-d7d163ebde35', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 466, 1397.0, 1068.5),
-('32f76bbb-f4d9-5648-ab26-26f933b52666', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 467, 1398.5, 1068.0),
-('51755636-14f0-5db8-b45b-a9edddb5523a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 468, 1399.8, 1067.5),
-('45fcec85-0f84-56f4-91bd-adbf917f7b30', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 469, 1401.2, 1067.0),
-('10bc8efc-be4f-535d-a269-48a74d18fa54', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 470, 1402.7, 1066.5),
-('2b1117b5-4781-578d-88dd-8b699509f4f2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 471, 1404.1, 1066.0),
-('98debc8e-31dc-5190-9d00-e37af7b52636', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 472, 1405.5, 1065.5),
-('1ea1d215-456c-5645-a567-a7c9f3b394ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 473, 1406.9, 1065.0),
-('7e615d2d-e56d-5f36-b1ff-0cd3f5a524d5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 474, 1408.3, 1064.4),
-('c724edd6-1311-5d92-9791-b5420ebe9b2c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 475, 1409.7, 1063.8),
-('25613856-302e-54e6-b388-7582224ef71a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 476, 1411.1, 1063.3),
-('1034a8a9-6b99-5d6e-b271-ba72e766b645', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 477, 1412.5, 1062.8),
-('ed0db242-9cd4-5bf9-841d-4c913b20c6a8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 478, 1413.9, 1062.2),
-('2f6308b9-114c-5228-ab9f-c1e1160490ea', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 479, 1415.3, 1061.7),
-('d5c983bf-8ec2-56bb-a714-8d9d04a76dad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 480, 1416.7, 1061.1),
-('42ef6dce-2808-5632-a976-b700e16cbeed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 481, 1418.0, 1060.5),
-('50b0d1f2-e833-552e-ab92-cdea52f06707', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 482, 1419.5, 1060.0),
-('f293588b-eb23-5071-b1e5-9074f88fd213', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 483, 1420.8, 1059.4),
-('1d972e89-1520-50a1-a197-8113fd0202b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 484, 1422.2, 1058.8),
-('b71f2c10-6241-5421-8b5f-34eb8818b604', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 485, 1423.6, 1058.2),
-('33b4beec-9d01-5677-8e96-fe2c4e5a255e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 486, 1425.0, 1057.7),
-('c9a07a4c-0c07-50fb-bdaf-f3fde9338b07', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 487, 1426.4, 1057.1),
-('b51bf371-760c-57c0-80fc-ca6b52d69a52', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 488, 1427.8, 1056.5),
-('c6897f9e-38c6-5995-9480-202408279a46', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 489, 1429.2, 1055.9),
-('43ca5bc3-73c1-5a23-8f4f-0b41bb0a79dc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 490, 1430.5, 1055.3),
-('2e0e9750-0af9-5708-97cf-769c143fe35e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 491, 1431.9, 1054.7),
-('f12907dc-a028-5ba1-a48f-9df111756c59', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 492, 1433.2, 1054.2),
-('c209890d-421d-55d4-bb00-9cac807d7457', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 493, 1434.7, 1053.5),
-('b5de1606-89d1-5838-acdc-45e219362181', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 494, 1436.0, 1053.0),
-('76fe48c9-318c-52e0-8a92-f08844e19b18', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 495, 1437.4, 1052.3),
-('d913c66a-bfed-5ec2-927d-5c031442f873', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 496, 1438.8, 1051.7),
-('f21321d0-5f36-5bfb-b151-18857b733887', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 497, 1440.2, 1051.1),
-('4a0b8347-545f-5cd4-9205-e449356f4962', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 498, 1441.5, 1050.5),
-('1511a3cc-331d-58b7-a678-0778195418f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 499, 1442.9, 1049.9),
-('c4d21042-6f25-562c-b407-9ad8de695b2e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 500, 1444.2, 1049.3),
-('57745efc-8044-5d14-8698-4b84821804b3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 501, 1445.6, 1048.7),
-('456719ca-792a-5417-9ddd-ea9b48a7f44e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 502, 1447.0, 1048.1),
-('1c43fc9c-66f6-5ca1-a41c-6134889acb4c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 503, 1448.3, 1047.5),
-('cc8c5dc3-1b9c-586a-a238-c5d689a4a8a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 504, 1449.8, 1046.8),
-('8d6f2b06-3b0e-5508-aa27-f19e7b200c95', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 505, 1451.1, 1046.2),
-('e0690fb8-9fe8-52f0-8da7-d708e126135d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 506, 1452.5, 1045.6),
-('53c1556c-da77-528f-ab5f-008367e96e38', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 507, 1453.8, 1045.0),
-('656045d5-ec87-5613-b40b-ec244d108aaf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 508, 1455.2, 1044.4),
-('1b5abeb8-e2df-54b6-ab62-c1d82e0240f1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 509, 1456.5, 1043.8),
-('2e4e5321-490c-5471-96d4-4f22ba7f1df8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 510, 1458.0, 1043.2),
-('8152b910-ae5e-50b7-92bf-975c76cb9397', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 511, 1459.3, 1042.5),
-('73ae60bd-ddad-51f8-a97b-54788bf83ca1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 512, 1460.7, 1042.0),
-('a6292765-31b5-50e4-8d7c-77ecef45b66e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 513, 1462.0, 1041.3),
-('1d1692cd-300b-5384-a1e9-125a52f6b1af', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 514, 1463.4, 1040.7),
-('da82c761-c47c-520f-abab-31c73337c2a7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 515, 1464.8, 1040.1),
-('6a9122d9-807a-5747-9bbc-e53fa533bcaa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 516, 1466.2, 1039.5),
-('85693055-2abc-53c6-a99b-8bb38d930f88', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 517, 1467.5, 1038.8),
-('e9d20042-72b6-58de-99d5-0b082d9a9aff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 518, 1468.9, 1038.2),
-('40a7efba-b611-5053-ae47-b275267c0ab7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 519, 1470.2, 1037.7),
-('d8b3dde5-ae0e-5ebb-9102-1bc4747e2bb9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 520, 1471.7, 1037.0),
-('a84427b3-7919-577e-9220-69243e266c1a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 521, 1473.0, 1036.4),
-('db0aeb53-9b75-57ee-9d02-ee6a2d5de198', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 522, 1474.3, 1035.8),
-('35d608af-a173-5624-8dca-36e07f6ea748', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 523, 1475.8, 1035.2),
-('694ec12c-e6a6-547d-b63e-6f21ad416d87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 524, 1477.1, 1034.6),
-('4521a4ef-16d9-56ca-8c01-8b33b044c8b4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 525, 1478.5, 1034.0),
-('e0f82b16-6413-5144-860c-e70775ed2d23', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 526, 1479.8, 1033.4),
-('7a3f3f44-4d7f-5504-8b1e-4dd598403569', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 527, 1481.2, 1032.8),
-('83e5d1ff-1ce3-583c-9518-d300ba129bdd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 528, 1482.6, 1032.2),
-('f4197e55-bbb4-56e3-b467-529b856eed25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 529, 1484.0, 1031.6),
-('3f73c260-a71e-5b34-a614-2507b79ed577', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 530, 1485.3, 1031.0),
-('78604b8d-3b48-53ef-8d8a-6bcff434ebde', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 531, 1486.8, 1030.4),
-('4ddba698-1b5a-5345-9805-038d3642912b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 532, 1488.2, 1029.8),
-('860c8602-d5c1-5da8-8eb1-871f930bd49d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 533, 1489.5, 1029.2),
-('7105eeaf-c4ac-5ca2-a3b7-14527a95dcdc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 534, 1490.9, 1028.7),
-('bd428b4e-9a53-508d-bc99-41e365a3abe9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 535, 1492.3, 1028.1),
-('37cffd8b-4099-5517-8e1f-2bac047ae2f3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 536, 1493.7, 1027.5),
-('f7dda1f2-2f8d-5edb-aabf-6eb34ed02acb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 537, 1495.0, 1027.0),
-('527b77c0-32a4-50ad-8f0b-16ada097a67d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 538, 1496.5, 1026.3),
-('f48da5d4-a9fd-5d5a-908f-2db64e20aafe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 539, 1497.8, 1025.8),
-('9fdf8c74-1bf7-5246-acd8-7c3294c4b1bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 540, 1499.2, 1025.2),
-('103f8e8f-4bbc-5337-95e3-523c7d4f3687', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 541, 1500.6, 1024.7),
-('3a73ae54-2a80-56f4-a361-cfbf89d67b74', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 542, 1502.0, 1024.1),
-('65bdc9c3-086b-588d-b00c-e0db0cf85834', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 543, 1503.4, 1023.5),
-('ccc90102-9a32-5f16-96d7-cfcd0f72bc63', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 544, 1504.8, 1023.0),
-('c0dd4b33-4732-5d92-8251-41f7fd7ba002', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 545, 1506.2, 1022.4),
-('b92cfc50-e25e-5008-8635-cce332dffc2e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 546, 1507.5, 1021.8),
-('7c7a866a-9e18-5855-8d51-3bccb89bdba9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 547, 1509.0, 1021.2),
-('db91fc7e-9d94-5ac2-a76f-62f1394f829e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 548, 1510.3, 1020.7),
-('6f8fbeef-be9f-5976-925d-1f6d58409a59', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 549, 1511.7, 1020.2),
-('27652615-e987-5270-8990-827e3042f318', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 550, 1513.1, 1019.5),
-('747a8219-4b5d-54a9-b401-f726032f07ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 551, 1514.5, 1019.0),
-('d931b5c4-d8b1-5a01-bbcf-576de57a16e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 552, 1515.8, 1018.4),
-('a42aa53f-c944-506b-8e58-80af3a41675f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 553, 1517.2, 1017.8),
-('2a083892-8ed7-5439-ab83-f00e8d83be27', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 554, 1518.7, 1017.2),
-('e868a636-9ed7-5b73-a15f-fb44563a3f50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 555, 1520.0, 1016.7),
-('0331ca19-ac46-51b1-95fc-b8339ade7f27', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 556, 1521.4, 1016.0),
-('24d068bd-5ff9-5bf7-bd77-1008eb0f16c7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 557, 1522.8, 1015.5),
-('ed9c87a9-7403-512c-928f-f142d78fa1ec', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 558, 1524.2, 1014.9),
-('83d36224-b5cb-56c4-bdca-b21022a9f50e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 559, 1525.5, 1014.3),
-('408b7e68-b23b-53b4-b2bd-4122656b7125', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 560, 1526.9, 1013.7),
-('69ecbc0a-f0b3-5e07-a6f4-8597a6ca5514', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 561, 1528.3, 1013.1),
-('fe78f115-4154-58f0-b917-907baeda1694', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 562, 1529.7, 1012.5),
-('78b9ff83-59f8-5780-84b9-0c2105b7371f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 563, 1531.0, 1011.9),
-('1422360d-c1c2-5bd6-8084-b6fdcc9bc3cb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 564, 1532.4, 1011.3),
-('f327ea10-b766-5d0a-bcb2-232dd41ce99f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 565, 1533.8, 1010.7),
-('9b208dde-83e1-5369-98cc-3512fe040c69', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 566, 1535.2, 1010.2),
-('07bc741a-73a3-5dbb-9a48-181bfc083057', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 567, 1536.5, 1009.5),
-('68683c2b-604e-5b77-8b19-92b891ab544d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 568, 1537.9, 1009.0),
-('384311f9-7f1c-5471-86e1-583824e6c373', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 569, 1539.3, 1008.3),
-('16e37217-0bdc-5d4d-9fb9-3a0fd0d19122', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 570, 1540.7, 1007.8),
-('556bfec1-aea8-5338-b57b-edc1414b0923', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 571, 1542.0, 1007.2),
-('06c16f40-06ed-58a6-b864-89b85c3ffe7e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 572, 1543.4, 1006.5),
-('99f6dce9-61af-5647-a238-1d54239ced4d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 573, 1544.8, 1006.0),
-('c893903f-588c-5a82-8a1e-f49b7e673653', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 574, 1546.2, 1005.3),
-('13c97479-e899-553c-b476-d12c27fcd09e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 575, 1547.5, 1004.8),
-('3e78854f-0e6a-5002-8a0b-03078405e4f8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 576, 1548.9, 1004.2),
-('e3295958-c388-532d-bc1c-631eed76719b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 577, 1550.3, 1003.5),
-('10e1d101-4679-595d-8083-ba9a35727ac1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 578, 1551.7, 1003.0),
-('d67d0a14-0402-572e-a9ed-140be5e6cbce', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 579, 1553.0, 1002.3),
-('a9faf528-bbb3-57d1-9d11-32b09cbdfe89', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 580, 1554.5, 1001.8),
-('64660b46-bfad-5e10-bfdb-b857c824630c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 581, 1555.8, 1001.2),
-('b4b1a240-5451-55ac-ad10-032bd87eaf33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 582, 1557.2, 1000.5),
-('5fab7947-8899-5a1d-97bc-8faa904f0ae5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 583, 1558.5, 1000.0),
-('1f72c14e-2658-5ab7-8363-f0965f9ca82b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 584, 1560.0, 999.3),
-('79fb746f-07a9-534a-aee8-8a93c4fce3e7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 585, 1561.3, 998.8),
-('62cd3c4c-58a4-51fb-9379-30662ccb8dd0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 586, 1562.7, 998.2),
-('8f27081f-bc0b-5de9-ba88-b02dce261e12', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 587, 1564.0, 997.6),
-('ae10c4e2-9b21-5fcf-9487-2e28967f498c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 588, 1565.5, 997.0),
-('00b84f75-7bf5-56db-91c3-92cc2f6e72dc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 589, 1566.8, 996.4),
-('34ec1e0a-a3a7-513f-bea5-052f414f57bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 590, 1568.2, 995.8),
-('9f3852f1-feba-5004-9e18-64a42a64232a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 591, 1569.6, 995.2),
-('b6c7d6ab-1db4-565d-8bde-5dae12004a11', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 592, 1571.0, 994.7),
-('9de4bd3e-6f83-57b3-8142-bf10b2e6a2fb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 593, 1572.3, 994.1),
-('ef076603-7f6a-5cb4-9e73-3237c6d0854a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 594, 1573.8, 993.5),
-('60495fbb-73d7-58b8-95f8-ef57c0aa56a5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 595, 1575.1, 992.9),
-('4bb0a022-9366-592f-b025-da04e28df562', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 596, 1576.5, 992.3),
-('1d629b54-924e-577e-9a55-3d5daa2ff49f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 597, 1577.9, 991.8),
-('209a10ff-bffa-5ede-a77f-362e25cc7e21', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 598, 1579.2, 991.2),
-('0f27195b-d80d-554b-a2dc-db8c16549769', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 599, 1580.7, 990.6),
-('fd086985-4907-5af7-8fef-0394b7c8fb60', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 600, 1582.0, 990.0),
-('04388b5d-1895-5b21-88e8-bc53a5b79c76', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 601, 1583.5, 989.5),
-('748ad73c-be1e-5aec-92ec-d962fcefbeab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 602, 1584.8, 988.9),
-('cf4e57ab-b913-55b8-9a6e-f9a37ed5d761', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 603, 1586.2, 988.3),
-('f6875fe7-e0a3-5d3d-80bf-3b481dbe0b81', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 604, 1587.6, 987.8),
-('ef3dd0d8-940e-5118-a5b9-9da054a11f05', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 605, 1589.0, 987.2),
-('40f6eef8-e792-5b10-92d1-3c506d86c71a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 606, 1590.4, 986.7),
-('69832b12-044b-5010-84b9-554499fb7011', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 607, 1591.8, 986.2),
-('491ac21f-a226-5c0b-be8b-d920e7ae0339', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 608, 1593.2, 985.6),
-('80e2ac2a-1bee-55d3-982a-575b429649f6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 609, 1594.6, 985.0),
-('39dc94a3-01e4-5042-b4f6-2fa7d31f50b7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 610, 1596.0, 984.5),
-('3fa94565-44fe-5878-8e8d-90d381311830', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 611, 1597.4, 984.0),
-('80d15be6-359b-5980-967e-1a6f9c3e6a3d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 612, 1598.8, 983.4),
-('6a86d0cd-5b2e-58af-a13c-5510dbda81cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 613, 1600.2, 982.9),
-('0e4f683b-4d98-54c6-b341-3b7b847e4ef3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 614, 1601.6, 982.3),
-('cfb8114e-3d05-503e-8985-87632eccdaf2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 615, 1603.0, 981.8),
-('ca18c157-f5c6-5f1d-b661-ad4a640cbb0e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 616, 1604.4, 981.3),
-('82286f47-997d-54f8-baec-9dcfce75b872', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 617, 1605.8, 980.8),
-('b74277b4-2b5f-523b-9f22-adf7c97d468d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 618, 1607.2, 980.2),
-('4bf1ecec-1e2b-5a7e-8449-b5f288b47ddc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 619, 1608.6, 979.8),
-('71ef26cb-12f3-598e-b8f1-9b68832eed5e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 620, 1610.0, 979.2),
-('7354b8cc-b6fd-52dc-bc53-fe7c68c804bc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 621, 1611.5, 978.8),
-('ee96fa24-871a-5254-a4e3-3db5f65a6bbf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 622, 1612.8, 978.2),
-('e4ebc988-7183-5ec6-8ac8-a63dfdd9100a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 623, 1614.3, 977.8),
-('a2a1956a-5c85-58f7-88a2-54b17df70cdf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 624, 1615.7, 977.2),
-('83e4d4a3-94a6-535f-8e60-142b9c8cbf26', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 625, 1617.1, 976.8),
-('a9595d1c-4821-5319-b20b-9230586107bc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 626, 1618.5, 976.3),
-('2a2d441d-1d6f-5d83-a13a-5a8fc5212a2e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 627, 1620.0, 975.8),
-('24bd2963-de2d-5420-b1e7-41a8260435a0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 628, 1621.4, 975.3),
-('afc27be2-2564-550a-b7f7-21ee42549d3a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 629, 1622.8, 974.9),
-('d8b5d814-de61-538f-ab19-f080b710a316', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 630, 1624.2, 974.5),
-('56a94be8-62c0-5ea4-9a65-b6ab5a9bdba8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 631, 1625.7, 974.0),
-('802655f0-5b56-50ad-baf5-885b9d055861', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 632, 1627.1, 973.5),
-('07f99593-0e20-5f76-a614-b8ca5f60a8fc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 633, 1628.5, 973.1),
-('17a40d15-e553-58dc-8584-013aad28a437', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 634, 1630.0, 972.7),
-('cf471728-a77e-521d-9a62-41c631da5422', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 635, 1631.4, 972.2),
-('31c6b510-b425-5c5a-9ff3-81ab898f21a3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 636, 1632.8, 971.8),
-('c2a10391-1b06-535a-acc8-d5714dd1d5da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 637, 1634.3, 971.4),
-('64079f9e-9636-5697-b068-dc4bb567e950', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 638, 1635.8, 971.0),
-('a93de7e1-1994-51d6-bbf2-035399dfc43f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 639, 1637.2, 970.7),
-('12cf761c-1741-5cc2-b4f3-e94ecf86cd72', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 640, 1638.7, 970.2),
-('a70b78e7-e02a-570b-8716-b55490c68feb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 641, 1640.1, 969.9),
-('7c01e2e4-c7b3-53ca-a322-90b0e92f50b2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 642, 1641.5, 969.5),
-('d1020e23-170b-5608-bd18-2199cbbee196', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 643, 1643.0, 969.2),
-('3b4ebcec-4be0-5311-a50a-7818fbb52127', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 644, 1644.5, 968.8),
-('3a44a3ce-6873-59f1-8606-e523cc7458d2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 645, 1646.0, 968.5),
-('7c3953ba-b953-5b62-852b-d6f7c39da4c1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 646, 1647.4, 968.2),
-('76eed937-d0ac-581b-838b-6df7be62afd2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 647, 1648.8, 967.8),
-('ea20a958-8f7d-56f6-a0bd-a3b61e5bbc20', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 648, 1650.3, 967.5),
-('b24c6125-a6b5-54df-b2ee-7039b45c7afe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 649, 1651.8, 967.2),
-('14b2961a-a303-58d3-8cbb-824da1f6e2a1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 650, 1653.2, 967.0),
-('6972bcef-d67b-53d0-a35a-aecf5de97500', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 651, 1654.8, 966.7),
-('4cde3489-fe67-5903-9eb5-603c8a2accdd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 652, 1656.2, 966.4),
-('76045193-1841-5db9-9953-8a2c391fa9ed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 653, 1657.7, 966.1),
-('90eb2fcf-d8fe-5774-98de-e0126c41d304', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 654, 1659.2, 965.8),
-('dfd32907-f80a-54af-82d7-62cfd1746488', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 655, 1660.7, 965.6),
-('30881b39-54f5-5173-bebe-e439a9796731', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 656, 1662.2, 965.3),
-('8b1efa90-213d-5407-882c-7fe4d2547760', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 657, 1663.6, 965.1),
-('927f29ec-ebdb-5eb1-ba88-53240e1562b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 658, 1665.1, 964.8),
-('5f5bc79e-bfed-57eb-98ae-f15ad49e0780', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 659, 1666.5, 964.6),
-('ab461139-eb72-5ac4-bf03-3cca5fca1021', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 660, 1668.0, 964.3),
-('0597589d-6e86-5661-9d74-c33f4910632d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 661, 1669.5, 964.2),
-('b20bff52-7d56-5524-9e1b-b6d6037a3627', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 662, 1671.0, 963.9),
-('a166a7f3-997f-5493-925c-276c2e1d16f4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 663, 1672.5, 963.7),
-('3ef9d53c-5293-5be1-92c2-569c055cd072', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 664, 1674.0, 963.5),
-('a558c0c8-0824-5021-965d-f1c67f6c41cf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 665, 1675.5, 963.2),
-('8b9ec3b6-40c0-5313-90a3-2cd8391520b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 666, 1677.0, 963.0),
-('ba1df500-0762-5fce-a4c7-6eb53f926e98', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 667, 1678.5, 962.8),
-('1a4bdb28-7b1d-5b5d-ae8a-7c56a7ec0392', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 668, 1679.9, 962.6),
-('21fd0e5c-504e-52f4-90b7-f6f2d7de5687', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 669, 1681.4, 962.4),
-('51315e39-4596-5282-860e-c4c17c2b2642', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 670, 1682.9, 962.2),
-('037a1d7f-13b1-54ee-ada2-8b0664d4e8ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 671, 1684.3, 962.0),
-('b0d01d3e-fa28-5c17-a553-d8301b892978', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 672, 1685.8, 961.8),
-('d027fab7-870e-5741-a428-c8aea3afdb98', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 673, 1687.3, 961.6),
-('f7a9fd17-2759-51d1-a492-8d36ac392b9f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 674, 1688.8, 961.4),
-('dd63a3bb-770c-5353-ab2e-ed09c58cca50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 675, 1690.3, 961.2),
-('ee3bc8d4-88a9-5691-8cc6-726387231d12', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 676, 1691.8, 961.0),
-('2d75c138-f1ce-54fa-9cd0-72c62d4a0abe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 677, 1693.3, 960.8),
-('a52ba65f-e8b6-5d8e-94e5-07137e804041', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 678, 1694.8, 960.6),
-('02d6cde2-0ed4-5862-a8db-ecdd9c26a516', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 679, 1696.2, 960.4),
-('9f9211a4-27ab-51c0-bec9-7f9603692ad8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 680, 1697.8, 960.2),
-('b362bbcf-fa52-55bd-b82b-92059742d3dd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 681, 1699.2, 960.0),
-('ff6d9e2b-197b-53b8-b26b-7ba0bbc0f458', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 682, 1700.8, 959.8),
-('891eab6b-73f6-5827-9f11-dd88f77fa21f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 683, 1702.2, 959.6),
-('f4d92c58-b9f3-5f6f-8180-2b7d1bc33f8b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 684, 1703.7, 959.4),
-('3d6584d5-bb00-528e-bde0-7af2365a6192', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 685, 1705.2, 959.2),
-('fea491f4-f0c8-5626-be65-a19ec7de236c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 686, 1706.7, 959.0),
-('f1fd6822-42e3-5353-a11d-b50d9fe03e57', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 687, 1708.2, 958.8),
-('a915a9c7-135f-5f51-9f79-da828cd6ad2d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 688, 1709.7, 958.5),
-('67e471ef-6779-544d-8024-c993e290c81d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 689, 1711.1, 958.3),
-('c95404d6-5136-5911-9705-5df64b0dca21', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 690, 1712.6, 958.1),
-('682bd822-f04a-584e-a843-3790bb013444', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 691, 1714.1, 957.9),
-('a3a1805f-387f-5d86-bbbd-11abbfa9e82a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 692, 1715.5, 957.7),
-('c1b56606-bb58-5040-9ed2-912436d33507', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 693, 1717.0, 957.4),
-('cf63464c-bdd7-5948-9ff3-2b74e5e07813', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 694, 1718.5, 957.2),
-('ce410a57-af03-5a2a-9715-69b426926c85', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 695, 1720.0, 957.0),
-('3f847e7c-8918-5e64-b8e5-cbfb62690bf3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 696, 1721.5, 956.7),
-('a8e9dd35-86ef-5f36-a696-84a50bd86787', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 697, 1723.0, 956.5),
-('efa41543-7d27-5d94-98fc-744f30e3545c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 698, 1724.5, 956.2),
-('525f4380-a09c-5204-971d-901b1f3fe977', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 699, 1726.0, 955.9),
-('b3da3dcc-07dc-5abe-8a07-2a937cf8f10b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 700, 1727.4, 955.7),
-('0ac0a2d9-3a04-52ff-b6c3-e05e770dbe7d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 701, 1728.9, 955.3),
-('ae5a065d-b286-5339-99eb-3ef37648bdc9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 702, 1730.3, 955.0),
-('5e9ee3f6-7614-573c-bd10-94891895030d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 703, 1731.8, 954.8),
-('e5fc3918-7363-5dec-8b1d-2654ef87f20e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 704, 1733.3, 954.5),
-('ef3a68ec-47ef-539d-ada8-1fef02042b18', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 705, 1734.8, 954.2),
-('d3caf0c0-bde0-5d87-a81d-f62ed7dfa021', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 706, 1736.2, 953.8),
-('01a090b4-f775-5715-bd27-c567702de7e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 707, 1737.7, 953.5),
-('98b8a361-8539-5ab1-970e-311d87bdb552', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 708, 1739.2, 953.2),
-('5a1db0c5-d94c-5860-b96d-a03efc154af9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 709, 1740.6, 952.8),
-('be8e438b-0e5e-59a8-839c-a79344182437', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 710, 1742.0, 952.5),
-('27af116e-0f76-51c1-bb30-6282dd85e1e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 711, 1743.5, 952.0),
-('8ddc3dc9-c194-5e99-95f9-898091369325', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 712, 1745.0, 951.7),
-('d19187ef-e745-5fb7-b0e9-f8f7bb262def', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 713, 1746.4, 951.3),
-('401a67e8-b741-533b-9922-11b077e83c0f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 714, 1747.8, 950.8),
-('a6988dd8-db90-57ce-8e89-1623aef98d8f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 715, 1749.3, 950.5),
-('12ffd354-a943-5c01-8701-4e53c221d4f6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 716, 1750.7, 950.0),
-('232fa333-442f-51b7-bcd0-63db5a524a61', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 717, 1752.2, 949.5),
-('027e60c6-e868-5530-9a90-01f00b02371f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 718, 1753.6, 949.1),
-('10785f50-facf-5415-b2cc-7191fea23f54', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 719, 1755.0, 948.7),
-('f0fa3d13-437c-5949-9879-3ef18a92f284', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 720, 1756.4, 948.1),
-('eae2ae5e-c358-5c78-a617-7de1f72b9755', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 721, 1757.8, 947.6),
-('6c5da6a5-a14a-5a9e-807d-5d8030169af1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 722, 1759.2, 947.1),
-('06816fcf-cb9b-5658-a62b-13c0deb668bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 723, 1760.7, 946.5),
-('edfed90e-1c3d-5df9-bcb0-a0ecd441e1da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 724, 1762.0, 946.0),
-('d9d257d0-4be3-561d-9668-4e77f9b9c907', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 725, 1763.4, 945.4),
-('3a1329ac-8db6-54d6-8543-5179c19f7ac1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 726, 1764.8, 944.8),
-('242b6bfc-973d-56f8-b14a-8af2e3669a32', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 727, 1766.2, 944.2),
-('32bf0ded-f5ab-5ff8-bb0b-d450c6fd90d1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 728, 1767.5, 943.6),
-('fb5680c9-e466-5474-91a3-b10e4006f662', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 729, 1768.9, 943.0),
-('ffd2b908-1563-524a-9a61-4efcb4a85e70', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 730, 1770.2, 942.3),
-('29dd0441-585e-571f-b2ad-0bdd1fde4372', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 731, 1771.6, 941.7),
-('5529269c-2969-51b5-90aa-c26ac623474a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 732, 1773.0, 941.0),
-('c0752381-5bd6-55c7-ba8e-b0a146d816d1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 733, 1774.3, 940.3),
-('54effbf2-e2ed-5b8d-a128-c56c4d4a3296', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 734, 1775.6, 939.7),
-('7c9f69a8-12aa-52bf-936d-955851b851b4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 735, 1777.0, 939.0),
-('724a58f1-8bed-5c05-b5c9-12a696d513eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 736, 1778.2, 938.2),
-('563ea4c2-7a33-55df-9ee8-13138e019d85', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 737, 1779.5, 937.5),
-('f9c37cde-df50-5115-91df-9d168d0f277f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 738, 1780.9, 936.8),
-('fbb70544-9885-566f-ab48-6e21d3ddd767', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 739, 1782.2, 936.0),
-('ee5d67e2-738e-5f81-b01e-e75b0519c792', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 740, 1783.5, 935.2),
-('a9ef9d4a-9ecb-5d14-acb3-2bf6d593789f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 741, 1784.8, 934.5),
-('d9bb8bb2-b598-5e43-bef8-d5f33a8c2a10', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 742, 1786.0, 933.7),
-('b36fe0fb-92df-566f-9a21-4f60772a16a1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 743, 1787.3, 932.9),
-('1a51e884-f6fe-587b-b1df-37df42c78d67', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 744, 1788.5, 932.1),
-('fc69a4b0-2436-589c-8fa9-d7a80f4c841a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 745, 1789.8, 931.3),
-('7fca3302-e404-5a75-9406-44c10e52b19d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 746, 1791.1, 930.5),
-('7e878b68-877e-523f-a74e-55557983b87a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 747, 1792.3, 929.7),
-('262b9d05-dff7-5358-8bb1-ba40ecedfe55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 748, 1793.6, 928.8),
-('cb2d4220-0e81-5671-a1e8-92ae77570e21', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 749, 1794.8, 928.0),
-('b0f72c88-6fb2-51e9-8ca9-c4a3fe8d8361', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 750, 1796.0, 927.2),
-('01e7e49b-e6bc-5864-806d-5c831519ff4d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 751, 1797.3, 926.3),
-('310bdba3-35ed-5088-aff3-a57889f8ebb1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 752, 1798.5, 925.4),
-('19277956-e092-51b3-a249-f9e0ae32fe6d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 753, 1799.8, 924.5),
-('ecef1b33-335f-5e1a-a0a7-969f2792f763', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 754, 1801.0, 923.7),
-('eb84290c-8900-5528-947b-e88490feab60', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 755, 1802.2, 922.8),
-('616731b0-5774-5f7f-a8a3-5a6da14416e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 756, 1803.4, 922.0),
-('a6da930e-39ad-578b-8554-44f51f8e54cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 757, 1804.6, 921.0),
-('7b72db5c-ac6d-5525-83b0-41e4487c5812', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 758, 1805.8, 920.2),
-('2312e3fe-05cd-5cc8-aa3d-5937bd2e6429', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 759, 1807.0, 919.2),
-('99d711ac-5f3c-5b4b-abf9-372bf02c7b7f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 760, 1808.2, 918.4),
-('2f1a6b95-d6bd-5732-87c9-de23b34b82e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 761, 1809.5, 917.5),
-('9b38d7b8-d0c6-5d9f-bca4-e127357ed137', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 762, 1810.7, 916.6),
-('37650804-ec04-520a-9da1-a4507874b117', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 763, 1811.8, 915.7),
-('73a0d405-92f1-51ed-b877-2e471f1cfb97', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 764, 1813.0, 914.8),
-('3acd4726-6719-5de8-817f-4faa9b2db92d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 765, 1814.2, 913.9),
-('21ee389d-7950-5a0b-920f-6ca7f1dfe2dc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 766, 1815.5, 913.0),
-('31432c57-442d-5f30-87fc-25ff45d43d24', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 767, 1816.7, 912.1),
-('b1f6722b-65d8-53a0-892c-09c7df8e069f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 768, 1817.8, 911.2),
-('0dddeb9c-1d8e-5b0e-9526-cc59d9f8007d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 769, 1819.0, 910.3),
-('1b52bcf2-69ef-58c0-8022-d583a033767c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 770, 1820.2, 909.4),
-('5d8b7304-890b-55de-b052-e5d7d6d2ad6b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 771, 1821.5, 908.5),
-('56780678-ff09-5762-9175-5ec392208edd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 772, 1822.7, 907.6),
-('fab81121-e601-5ae0-a248-2c800e41b0f8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 773, 1823.8, 906.7),
-('888d9be9-e81c-5f05-a5af-c0c5ad6dbeb7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 774, 1825.0, 905.8),
-('f74c213a-a7f0-5ef1-9c24-b2ef16f9dee1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 775, 1826.3, 905.0),
-('5f4338fb-f259-5e4b-bf0a-5162b214a8e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 776, 1827.5, 904.0),
-('41530626-d2d6-5ddc-a708-5e4da5d2ce8e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 777, 1828.7, 903.2),
-('30719b5b-27e3-508a-9942-7e845d2d00e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 778, 1830.0, 902.3),
-('692afae7-b427-5718-ba9c-0f6b0c3ac0d8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 779, 1831.2, 901.4),
-('66688e6c-ad61-5906-b146-02558487c393', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 780, 1832.4, 900.5),
-('7a7eb053-e83a-5dfb-a9a6-719de69111c1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 781, 1833.6, 899.7),
-('ab712efd-ea7e-5a77-a8e8-bd096953a107', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 782, 1834.8, 898.8),
-('f812d330-02e9-5c6d-897c-fadcc594600d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 783, 1836.0, 898.0),
-('9768ce13-2b2c-55d9-90f9-0dd9819eed33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 784, 1837.3, 897.2),
-('e38878d9-2718-5880-98dd-2950ee5daa9c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 785, 1838.5, 896.3),
-('e241ec65-5aa7-57b4-88ec-1151f6565ef5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 786, 1839.8, 895.5),
-('23b44663-9add-505f-9108-bd163faedbad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 787, 1841.0, 894.7),
-('3957ca19-02bb-573c-8eeb-2228fbfa380f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 788, 1842.3, 893.8),
-('3ec624c2-9488-51c3-9320-b780d7c964e2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 789, 1843.6, 893.0),
-('d4ff20f1-d458-574e-bee1-80e28d63eaf1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 790, 1844.8, 892.2),
-('8436e407-45c3-5395-8ab7-d28b688cc7e6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 791, 1846.1, 891.5),
-('6ea1fcd5-ee33-523a-b365-32e0a7271a55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 792, 1847.4, 890.7),
-('d346e028-2eeb-5187-b40a-767aad3c9584', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 793, 1848.7, 889.9),
-('efc3f279-c423-5df8-ad7c-1861a0b3daf2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 794, 1850.0, 889.1),
-('6a39fb00-d332-5f13-8aa9-1ae202fa75cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 795, 1851.2, 888.3),
-('83b1bf52-edf5-5d77-b963-1451fb2c3410', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 796, 1852.5, 887.6),
-('b16d25ff-ff4b-527a-8047-2c48fad87e5f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 797, 1853.8, 886.8),
-('501e6210-d9a3-5ec9-8b9d-5979220c1fd2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 798, 1855.2, 886.2),
-('d1e7bd77-afc1-5698-8113-3d63f07e2dca', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 799, 1856.5, 885.4),
-('c27b1921-dbc0-5112-9aec-8788bbd1c293', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 800, 1857.8, 884.7),
-('504c1edb-c775-5d02-94c9-51593fbcdfc4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 801, 1859.1, 884.0),
-('54cd1847-9bc4-5426-b378-6bfb2817b57a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 802, 1860.5, 883.2),
-('79681f37-1af9-57f6-ac74-aced744e1ef7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 803, 1861.8, 882.5),
-('a563a071-d4ef-56ad-bdf4-a62184eaafb5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 804, 1863.1, 881.8),
-('f3d3ad90-816c-5791-bc03-a732ec5731bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 805, 1864.4, 881.1),
-('d4e18a4a-c608-5c67-8292-0a46d765e0ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 806, 1865.8, 880.4),
-('8e49ee0d-875d-5d11-a058-8df11bb33d1c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 807, 1867.0, 879.7),
-('719ecf4a-c587-5df3-881f-7e48c675d4d2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 808, 1868.4, 879.0),
-('b66a5d1b-c163-5f6e-8d33-4c1ec1ec6908', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 809, 1869.7, 878.3),
-('39ac92ec-b2d7-59b4-8c12-659a30b97c9d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 810, 1871.0, 877.7),
-('7bec936a-e8bb-51de-9d0a-b9452b001edb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 811, 1872.4, 877.0),
-('7dedb18f-615f-5146-87dd-bce0de39071e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 812, 1873.7, 876.2),
-('c5f4eeae-1d3b-557f-81ac-ed88165aa395', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 813, 1875.0, 875.6),
-('56844443-c0ec-54fb-8f9f-50418ac9fe07', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 814, 1876.4, 874.9),
-('252d2f2b-3420-52b9-b55f-a392f742fc50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 815, 1877.8, 874.2),
-('c2a02973-677a-5ecc-8113-fd3ca569a787', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 816, 1879.0, 873.5),
-('8c36b389-5cb2-5992-9948-7fccab374157', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 817, 1880.4, 872.9),
-('c83729dc-a9b3-5197-8c6a-44c2af34029c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 818, 1881.8, 872.2),
-('6dba1dce-8e17-50de-a037-92d61a909570', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 819, 1883.1, 871.5),
-('bff0c204-6010-5ac7-bd33-107b07d8913d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 820, 1884.5, 870.9),
-('c4c860dd-04d7-54c3-8d7a-b7cd3dca121a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 821, 1885.8, 870.2),
-('1869e073-6d41-5dec-949b-1bbe5df04cda', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 822, 1887.2, 869.5),
-('d624849b-d42a-5946-9ef9-6e9040dc9e1b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 823, 1888.5, 868.9),
-('e4b757f9-204c-53f5-a40a-482a8f1d0542', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 824, 1889.8, 868.2),
-('43819037-5e95-580f-9722-5a7b486d0128', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 825, 1891.2, 867.6),
-('0df50aef-2c7a-5a50-a973-0b24b3f74056', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 826, 1892.5, 867.0),
-('dd4051a6-7e74-543a-a534-a9767e9decd7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 827, 1893.9, 866.3),
-('790f018e-98fe-5e80-aabe-abf2bffcff93', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 828, 1895.2, 865.6),
-('a8c10b36-8dc7-51fe-b54f-10e21c8cf5be', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 829, 1896.6, 865.0),
-('ca0b2da4-5a73-5fc1-8bf4-a03f79364103', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 830, 1898.0, 864.3),
-('9cad8640-4607-5e16-9dc9-5393be9f11dd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 831, 1899.3, 863.7),
-('03b53a85-7287-5e88-8903-e18055ca5a4f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 832, 1900.7, 863.0),
-('32c45c55-0aef-5df7-9c4d-2463e8f111d1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 833, 1902.0, 862.3),
-('66c42a45-1d71-58e7-a433-294cb0e4cb9f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 834, 1903.3, 861.8),
-('9f2e1581-0095-5389-95a8-3da6bd397f76', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 835, 1904.7, 861.1),
-('ec19874d-5206-56e4-96c8-dac3760b14d2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 836, 1906.0, 860.5),
-('ccb719b7-17be-51a0-9538-7b4b7b8a30ab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 837, 1907.4, 859.8),
-('ad037c94-f2d8-57ff-aa96-a36b40914009', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 838, 1908.8, 859.2),
-('991c38a3-50d3-5f6d-862f-10fe8076f643', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 839, 1910.1, 858.5),
-('fa27a562-838c-5323-b51e-ccb1c8fc8c3f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 840, 1911.5, 857.8),
-('d705ac4c-a2d2-5910-bfb0-c974934ef8bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 841, 1912.8, 857.2),
-('af890d45-548a-5c94-8923-79993c8727e3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 842, 1914.2, 856.5),
-('2911fd75-0977-52bb-8ab3-66dc04c24ee4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 843, 1915.5, 856.0),
-('f21e2045-2c18-5698-ac0e-d91195af5f44', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 844, 1916.9, 855.3),
-('47cb4854-cc24-543e-acf8-ad3bf0018f94', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 845, 1918.2, 854.7),
-('78c8df14-fc84-5047-94af-dd246e50c1e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 846, 1919.6, 854.0),
-('a5ebc954-d665-5d00-8ae8-f415fc42a016', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 847, 1921.0, 853.3),
-('fa9c3c08-79c0-5b9c-82be-dfef7e560744', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 848, 1922.3, 852.7),
-('0b58a003-b2c6-560a-97c7-cf294ead0a2c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 849, 1923.7, 852.0),
-('70eaf777-b8a3-543a-bec5-4682e06197f6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 850, 1925.0, 851.4),
-('8b16c471-2e62-5438-8613-ee6d403bb600', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 851, 1926.3, 850.8),
-('1347495b-e333-556b-a1f5-f60913ac71d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 852, 1927.7, 850.2),
-('d633b940-1550-5bef-8a3f-d044e49358bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 853, 1929.1, 849.5),
-('5cd836b2-db5b-5c4e-9bee-a09310a9c7b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 854, 1930.5, 848.8),
-('3b921d0b-ce29-510e-a911-2451bbf019d0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 855, 1931.8, 848.2),
-('d01124ba-92cf-5aca-911c-b39a1562c431', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 856, 1933.2, 847.5),
-('663ae33f-4848-567e-82b2-06b36a8b9e6a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 857, 1934.5, 846.9),
-('7705c87d-d391-58f1-b069-133cdc8a748a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 858, 1935.8, 846.2),
-('7242bd77-a83d-590e-ae6f-b79a431e91be', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 859, 1937.2, 845.6),
-('7c68f018-c8a7-53e4-9e30-1421b9ed4664', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 860, 1938.5, 845.0),
-('a66c62f7-e2ee-5ec5-a046-2574474eb8d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 861, 1939.9, 844.2),
-('8bd89510-4aed-5bae-9229-312054144c73', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 862, 1941.2, 843.6),
-('9d2b5019-b7e9-557d-987e-27db3c37822a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 863, 1942.6, 843.0),
-('dea5cc7f-a096-5cf9-9b9d-345c47c1399e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 864, 1944.0, 842.3),
-('a4bd4df3-e43b-5383-b626-8c5ea1cedb43', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 865, 1945.3, 841.7),
-('ad1c31cd-7a40-5f78-8050-7ee12aa0c911', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 866, 1946.7, 841.0),
-('50eb1b39-fe96-58e7-996d-e1990922f6fe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 867, 1948.0, 840.3),
-('0bc4e755-19fd-58df-bf89-e601f8a28cfd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 868, 1949.3, 839.7),
-('64bd3f5c-029c-5037-8458-3b67809d1290', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 869, 1950.7, 839.0),
-('99b44d8d-af68-5bde-85a3-ef712c3b1b8e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 870, 1952.0, 838.3),
-('c2d842e6-0ec8-530d-aeb4-0804afa3f65a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 871, 1953.3, 837.7),
-('1dbb32e5-8f02-55f2-82db-10b39c242a18', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 872, 1954.7, 837.0),
-('1e690c67-d838-5cef-90cc-f76807d0d839', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 873, 1956.0, 836.3),
-('7b29d4e1-d2d3-5147-a216-f75506b2cb79', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 874, 1957.3, 835.7),
-('e0584784-d662-5c92-906b-695b0b2261d8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 875, 1958.7, 835.0),
-('3401678f-4c9f-5a9d-a6f0-884c895776a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 876, 1960.0, 834.2),
-('1cd2bfb5-fa0a-5909-88a5-9a7b7d41539b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 877, 1961.4, 833.6),
-('cba38550-266b-54ed-8d07-8073421d19d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 878, 1962.7, 832.9),
-('28af511a-cc30-5f6a-acdb-20a4e75554eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 879, 1964.0, 832.2),
-('1827fc37-7a7e-52c7-bb96-d39c38809bb6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 880, 1965.4, 831.5),
-('cd7ce437-971e-5ac3-a3b0-edb973defcd3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 881, 1966.7, 830.8),
-('ca07015a-4141-582d-a045-aecf45721661', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 882, 1968.0, 830.2),
-('864037f8-aa6a-5618-9360-3d7f507900df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 883, 1969.4, 829.5),
-('a845763e-84cb-53aa-9d03-37cfb82b7049', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 884, 1970.7, 828.8),
-('ec7bd438-fa01-505d-87eb-453e9b9350c8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 885, 1972.0, 828.0),
-('0721e301-f19a-5426-b4f0-f9d615b14cd0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 886, 1973.3, 827.3),
-('a2759b3e-e9d6-5569-8148-e2684bddc6eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 887, 1974.7, 826.7),
-('540b4a8e-3162-5540-81a1-5e11dfcd4fd2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 888, 1976.0, 826.0),
-('c1e9709a-2039-550a-bca3-5a41f442f4f2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 889, 1977.3, 825.2),
-('3f5d2e72-9150-54cd-bf0c-c58759a7f668', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 890, 1978.7, 824.5),
-('08a7043b-818f-52d0-8c04-00acb4b104e7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 891, 1980.0, 823.8),
-('4b56a6bb-4f8b-54b0-8c9e-32853b3bbf91', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 892, 1981.3, 823.1),
-('3e3dc9a8-0471-5954-8a7e-40c950178094', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 893, 1982.6, 822.4),
-('2c986c3d-0c8e-5bf7-b21f-17f39deb5f1d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 894, 1984.0, 821.7),
-('276222f9-adc3-55d6-87c5-babc6e5da367', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 895, 1985.2, 821.0),
-('a2108638-466d-58e7-a9e5-61155f4b7f02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 896, 1986.5, 820.2),
-('58b41aed-8f49-59ba-a07b-fde517d1d518', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 897, 1987.9, 819.5),
-('7815f964-b554-574d-9131-b3be0ccf2d23', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 898, 1989.2, 818.8),
-('23cb2fc4-a9a8-5465-98b1-2715aa1a6119', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 899, 1990.5, 818.1),
-('145e7ed9-b956-5c7b-9036-8cc7af303051', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 900, 1991.8, 817.3),
-('07f6b430-a928-5d0f-969f-094b0481fe6b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 901, 1993.2, 816.7),
-('dd836d80-7e85-5530-9d0e-dc43d0e49685', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 902, 1994.5, 815.9),
-('ce606d07-9166-5817-a213-72df960945e6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 903, 1995.8, 815.2),
-('1d8b3b51-57f3-5030-9e9a-a8922bbe5ebd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 904, 1997.0, 814.5),
-('5514454e-61fc-5a56-8f86-a8cbe117ce0b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 905, 1998.4, 813.7),
-('65a20d8d-dedd-5ff4-9cd7-8a389f4c6a36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 906, 1999.7, 813.0),
-('69d2fb3d-56da-5380-9c3c-82381c232a24', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 907, 2001.0, 812.2),
-('06cf25dc-2255-5958-92d6-cc8ac0c4116c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 908, 2002.3, 811.5),
-('4236636c-7861-5a8f-9b82-047a84a809f8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 909, 2003.6, 810.8),
-('7b9dcb2d-7614-5f2d-8727-077545289e49', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 910, 2004.9, 810.0),
-('7da16be7-e97c-576f-b39f-cbd924c256e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 911, 2006.2, 809.3),
-('e6b8ecb1-3076-5993-9596-185ef0bd7905', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 912, 2007.5, 808.5),
-('a4678a13-def4-5edf-8770-ad4c7e69f51c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 913, 2008.8, 807.8),
-('b099c9bd-e891-5d54-8fab-1b5ab9655a8a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 914, 2010.2, 807.1),
-('1feea604-dc33-5b64-ba37-fbd648b047d3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 915, 2011.5, 806.3),
-('35dd75b3-5668-57f2-9021-0a89019922fc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 916, 2012.8, 805.6),
-('033f278c-ba67-5b40-a6e1-a85e548a1095', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 917, 2014.0, 804.8),
-('f1a3ef47-7372-555b-b1ce-2e477cfd5b65', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 918, 2015.3, 804.1),
-('1cb335b1-e7d5-556e-b808-baa4a64b49e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 919, 2016.7, 803.4),
-('4d384c05-bf76-54a6-a527-6b696a559fec', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 920, 2018.0, 802.7),
-('40a03975-9244-5afa-87a5-de1d99d4eda6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 921, 2019.2, 801.9),
-('fa59e17c-c53b-536f-b52e-322ebcbb6ce5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 922, 2020.5, 801.2),
-('6bb6d7d4-753f-5096-9df3-285ee115fc51', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 923, 2021.8, 800.4),
-('0c845542-2760-5091-818b-4240fc8fa358', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 924, 2023.2, 799.7),
-('03269a7f-8640-50b6-82d2-6afcf225e474', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 925, 2024.5, 798.9),
-('c5e95c75-8cef-518b-8f42-a10520cbce91', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 926, 2025.8, 798.2),
-('3cabb1ba-0c97-5d2a-9b8e-5a5d1b4cf912', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 927, 2027.0, 797.4),
-('1e940262-095a-599a-a25c-b569e33e35b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 928, 2028.3, 796.7),
-('4458cd3f-dceb-5a2c-98bf-dacc9e6d7f33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 929, 2029.7, 795.9),
-('70e3afe6-be30-59f4-b08c-351e708ba8f7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 930, 2031.0, 795.2),
-('58e4d69e-9afa-5cf1-871d-75fc87cc2d9a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 931, 2032.2, 794.4),
-('67921537-d17f-5bbe-9b6b-482cbfc1648a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 932, 2033.5, 793.7),
-('43ea7da4-9381-5159-ae4d-4e4fab81db23', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 933, 2034.8, 792.9),
-('186480d7-cd84-5992-aa5f-7d7d14822d3b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 934, 2036.2, 792.2),
-('6232b746-76bd-533d-9622-6fa9295c230f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 935, 2037.5, 791.4),
-('57a598a8-09a8-5914-91d8-4a1b167f7b74', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 936, 2038.8, 790.7),
-('b5941fd3-c60e-59ab-a3a7-14ef692fca67', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 937, 2040.0, 789.9),
-('7a6c2cf8-3e27-5992-b8d0-3687389a1a02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 938, 2041.3, 789.2),
-('e0fbb02d-25cf-5285-ad94-2d57f8273aa0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 939, 2042.7, 788.4),
-('555a06eb-8401-5867-aa58-459c8d217a12', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 940, 2043.9, 787.7),
-('4e410cce-61f8-5bfd-852c-e41e9cffb556', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 941, 2045.2, 786.9),
-('07b28594-27a1-523c-951e-ec106bd900bc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 942, 2046.6, 786.2),
-('6d0714b8-6103-56a3-82e2-54e06904cda8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 943, 2047.8, 785.4),
-('4350116a-264d-5334-8d68-98c5687bfb55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 944, 2049.2, 784.7),
-('281cb87b-f06e-5e08-8528-2931fbcc292e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 945, 2050.4, 783.9),
-('4edb7ae8-f195-568c-8576-a7e8e2992255', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 946, 2051.8, 783.2),
-('9b92106e-aa20-598e-a9ab-ea037cb2191f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 947, 2053.1, 782.5),
-('5473d94e-1868-52f3-92cb-46fbe3938d69', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 948, 2054.3, 781.7),
-('8a3e328d-ba1f-542e-81e6-b1ee759df896', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 949, 2055.7, 781.0),
-('881a2408-d78e-5a23-af09-9a84fcc4bd02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 950, 2056.9, 780.2),
-('618ac189-2fac-580e-9179-58dd8043fc4c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 951, 2058.2, 779.5),
-('4a0d66d2-90f9-5dbb-8c32-469128d9e2bc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 952, 2059.6, 778.7),
-('9e5cd229-dab9-5095-aeac-03bc4e803922', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 953, 2060.8, 778.0),
-('c6deed90-99d2-5fcd-9740-3667454e8920', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 954, 2062.2, 777.2),
-('2d52f6ae-39d6-522b-add9-3de414c4f98c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 955, 2063.4, 776.5),
-('7f475aa8-2755-501c-af4d-2bd5bca28917', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 956, 2064.8, 775.7),
-('0fd80b8c-7df8-5981-ba08-8d82219c909a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 957, 2066.1, 775.0),
-('09e619ca-88fe-50af-bdc8-979ea25a0d05', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 958, 2067.3, 774.2),
-('79fd8c5c-5187-5e6d-a33d-d6b78a49b5df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 959, 2068.7, 773.5),
-('b7a1c542-8a49-574f-9bb3-d2767dde8b44', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 960, 2069.9, 772.7),
-('7db27277-64ec-5840-9fbd-49813eafedfb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 961, 2071.2, 772.0),
-('77841369-49eb-5952-88ed-c8cc9932c70c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 962, 2072.6, 771.2),
-('849942e9-d440-50bf-bd90-b2be8ae59a92', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 963, 2073.9, 770.5),
-('b81d7ab6-8fcb-58f4-98f7-3f37e8450037', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 964, 2075.2, 769.8),
-('f0e54137-6a22-5897-8bc1-6aaaf84802e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 965, 2076.5, 769.0),
-('e6756b4a-fe34-503f-bac3-13f0de8a0cbc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 966, 2077.8, 768.3),
-('08e36157-314b-5e4f-9b52-f3bb238dbfda', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 967, 2079.1, 767.5),
-('4e35444d-a0b9-552b-a2a1-4a023e69af11', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 968, 2080.4, 766.8),
-('8a85eef2-a9e3-5952-9a32-eec74e68b7da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 969, 2081.7, 766.0),
-('765c26fa-a5c7-5263-9729-6e346bcc0605', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 970, 2083.0, 765.3),
-('a6153ae9-607c-53c2-8311-74d59d014d9e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 971, 2084.3, 764.6),
-('75d5fa50-ec59-56d0-aea2-751c9fcef2ff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 972, 2085.7, 763.8),
-('9164865c-7d55-5e35-bb4f-981731c00835', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 973, 2086.9, 763.1),
-('bc541139-1fe5-5b25-b25b-ac37a50748b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 974, 2088.2, 762.4),
-('8a085755-e6a3-5ca3-bf3e-bbe9b727dfa7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 975, 2089.6, 761.7),
-('cd6f5c6a-3d62-5f33-a1b0-a73f43fc1ae6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 976, 2090.8, 760.9),
-('93778e89-8921-5838-990a-c557f3d3b67b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 977, 2092.2, 760.2),
-('5919d07c-6467-5153-a20d-2c3449552d6b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 978, 2093.5, 759.5),
-('7ca175b5-3c08-5fd7-8e2c-4a4102f90106', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 979, 2094.8, 758.8),
-('5e41caf3-1d5f-51cb-9ab1-100fc502a0ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 980, 2096.1, 758.0),
-('31d02e47-2639-5ca2-905f-9428559532dd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 981, 2097.4, 757.2),
-('f7a1d1de-26d0-5c5b-ba49-305c34cbec5f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 982, 2098.8, 756.5),
-('9a38debd-2a83-5d05-a656-b901d204bad3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 983, 2100.1, 755.8),
-('4a639d85-4b12-5530-81e1-c9997e2b5b41', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 984, 2101.3, 755.1),
-('e28b35bd-3b25-5a45-8c85-8dffe1ab41bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 985, 2102.7, 754.3),
-('801dd65a-7e3e-52e9-ac29-fc964702f4a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 986, 2104.0, 753.7),
-('fb7503f7-43f2-5301-89bd-80aaebf048bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 987, 2105.3, 753.0),
-('acfacdf3-6815-57e6-baa3-32dbea7e17bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 988, 2106.6, 752.2),
-('3e1782c3-f320-50de-8516-2b53ef056808', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 989, 2107.9, 751.5),
-('ab846fe6-b629-5ffb-99a4-04902f9c119e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 990, 2109.2, 750.8),
-('fac2d9a4-3337-5a4f-bc4b-9b34c9f426c2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 991, 2110.6, 750.0),
-('b4d99a3b-c32a-52c4-8f92-280336d1040c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 992, 2111.9, 749.3),
-('5d6c92b2-7d08-5819-ae11-8186e254ee20', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 993, 2113.2, 748.6),
-('eac6c299-27e7-5ebd-b489-a42677d8ae10', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 994, 2114.5, 747.9),
-('b1b15441-7e9e-5d56-a0c4-cc9fca17f776', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 995, 2115.8, 747.2),
-('58b5cf10-8001-5c30-bfec-83bc02577be6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 996, 2117.2, 746.5),
-('d6104a35-c8a9-52e8-9ce5-faf350d0e2cf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 997, 2118.5, 745.8),
-('3e8163a6-d2f5-5c02-8449-b030394e22d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 998, 2119.8, 745.0),
-('ece6d6d3-c92f-5473-a5e5-d6908c30f79b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 999, 2121.2, 744.3),
-('b4b488a4-6aac-584d-81bb-9a8cbdf88746', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1000, 2122.4, 743.7),
-('cda8f266-a470-5723-be5e-37bd9a154400', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1001, 2123.8, 743.0),
-('84ee8e30-1adc-586b-aaed-992601d1416c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1002, 2125.1, 742.2),
-('cc9d71de-8275-5bf7-88e7-c2f6aa5f439c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1003, 2126.4, 741.5),
-('1779490c-5192-5b99-9ec2-5aeaf3e4e9d2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1004, 2127.8, 740.8),
-('ba23d726-08de-5e6f-8bf2-4679ef6d11e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1005, 2129.1, 740.1),
-('11ed6b11-14ec-512d-9780-36e89dbc6637', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1006, 2130.4, 739.4),
-('542a400f-0c6b-5310-9de5-bea0d79f8ee0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1007, 2131.7, 738.7),
-('ad95fd92-efe8-5666-a4cf-93f286f9cd6a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1008, 2133.1, 738.0),
-('8ac060d5-adef-5537-bfae-0d1059f8e6f7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1009, 2134.3, 737.2),
-('2aeab92c-66f4-53e1-922e-018bc7c442ab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1010, 2135.7, 736.5),
-('96d38e71-7631-5925-911c-b2abba69a2c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1011, 2137.0, 735.8),
-('0ab75c16-325e-5956-a36a-9d5aa2a66462', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1012, 2138.3, 735.2),
-('6fc6881f-bcbf-5097-a02f-298b0e590e39', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1013, 2139.7, 734.5),
-('4b33a201-cb82-5719-b393-6249c39c7d20', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1014, 2140.9, 733.8),
-('95c5f5b9-1453-550d-861e-723bb5d61f55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1015, 2142.3, 733.0),
-('c17cf673-4cd2-53ed-9610-04972ec16c3a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1016, 2143.6, 732.3),
-('f5314244-88c2-5ed9-b6bc-a0a70ee8029a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1017, 2144.9, 731.7),
-('8b8fa616-87be-57a3-9fab-ffb19eb9e0b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1018, 2146.2, 731.0),
-('3fe596d2-b6fd-54b9-af3b-2a18767b02ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1019, 2147.6, 730.2),
-('ba13bad1-f753-54da-8399-fa653cf32e17', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1020, 2148.9, 729.5),
-('45c4e864-dd72-5f75-b138-a7db29c7b11a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1021, 2150.2, 728.8),
-('37041200-396b-5885-aa5b-aeaad4d02544', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1022, 2151.6, 728.2),
-('d5e0b127-3306-5b41-885b-b91d7e35fbd5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1023, 2152.9, 727.5),
-('f3ea35f9-7ee0-5477-a989-9bb3acc352ab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1024, 2154.2, 726.8),
-('734058a9-2012-5c53-a6b7-3c2531aaa6cf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1025, 2155.6, 726.0),
-('f7d71f1d-0360-5554-b200-b8427e810133', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1026, 2156.9, 725.3),
-('9c3c53db-effc-57e8-a831-de5022ec6fb1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1027, 2158.2, 724.7),
-('a0c6bfd2-3bd0-5a33-afd6-7e038394a6a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1028, 2159.6, 724.0),
-('3f0d20c4-a6a1-5de3-9319-de8d0b320f4d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1029, 2160.8, 723.2),
-('34261da0-c745-5b99-816b-fd21f05dca5d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1030, 2162.2, 722.5),
-('1ec2351a-2c38-53ec-87b7-8b39c83b20f2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1031, 2163.5, 721.8),
-('28360a9a-21e0-5a6c-82b7-f6a998bbae7d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1032, 2164.8, 721.2),
-('cf64a34d-fb47-501d-8fde-20ef4935adc2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1033, 2166.2, 720.5),
-('0c56a93f-431f-5714-8049-cccd8dc8dfcd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1034, 2167.5, 719.8),
-('1b140859-451f-5217-bc9d-9c5ef697dbda', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1035, 2168.8, 719.0),
-('abe3f2e8-ff65-5dc0-b119-1209cfbf3b60', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1036, 2170.2, 718.3),
-('b7efeb92-6ab6-5b70-bae1-130702372135', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1037, 2171.5, 717.7),
-('834487e1-b410-5c3d-a8cd-e070087be80c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1038, 2172.8, 717.0),
-('5ab8c96d-c716-5674-8dfa-e5d0f89276c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1039, 2174.2, 716.2),
-('e4822187-a86c-535f-80ae-b23af92b0a66', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1040, 2175.4, 715.5),
-('a7b9d05e-21c7-5740-a23a-b373b3a84de4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1041, 2176.8, 714.8),
-('e5e4eafa-8f7d-5fcd-8ddc-851ea3e876c3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1042, 2178.2, 714.2),
-('72c3699b-7eed-51ef-a209-20596a01917b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1043, 2179.4, 713.5),
-('ef0d007b-d8da-5e72-b0d0-ebdb0a5f7c71', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1044, 2180.8, 712.8),
-('8fd52330-cb56-536a-bd70-e4d6682d8f52', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1045, 2182.1, 712.0),
-('ee5f70c5-2084-5c9a-9411-aad874d5968d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1046, 2183.4, 711.3),
-('1ee62ef7-9924-5b84-b768-d6d4b1adec56', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1047, 2184.8, 710.7),
-('791ebe79-b92b-52d7-935f-0f8eb7ac97b1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1048, 2186.1, 710.0),
-('f06a1342-5211-5bc4-9a2c-d7e1ff91ffaf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1049, 2187.4, 709.3),
-('1d0b87fd-a0c6-5c0f-afac-ee78527cc365', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1050, 2188.8, 708.6),
-('3c1a5261-8e1b-5669-9654-31b9363318de', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1051, 2190.1, 707.9),
-('1573ab56-957a-549a-97b4-323ad106efa7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1052, 2191.4, 707.2),
-('1cfc16ae-1722-52a9-853b-1c609691f8d3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1053, 2192.8, 706.5),
-('a9bf26de-2637-5809-9610-022b7e0e5c29', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1054, 2194.1, 705.8),
-('a92acae7-f3bd-56ff-8f30-1a02747713f5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1055, 2195.4, 705.1),
-('4140dc7d-1021-51ee-a221-534495286f3a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1056, 2196.8, 704.4),
-('444118d2-8c3e-53fc-8b8c-f313af7a9e89', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1057, 2198.1, 703.8),
-('c7d47293-8187-566b-a575-07b87d6d0130', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1058, 2199.4, 703.0),
-('e15fdbae-f0e1-5e91-9fa7-d042539ba8c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1059, 2200.7, 702.3),
-('7232b814-59e2-526f-afae-32a7915a65b0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1060, 2202.1, 701.7),
-('de6d9590-01ad-5a43-8685-3801011ca447', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1061, 2203.4, 701.0),
-('2712900c-75c8-5b06-8eb3-1b3d44eb5d42', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1062, 2204.7, 700.2),
-('19fe1f7a-2078-51c3-a6c7-25ce3fac9607', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1063, 2206.1, 699.5),
-('d24da6a6-df3a-518b-a18a-054e53831dce', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1064, 2207.3, 698.8),
-('9d9f4bd4-fe24-58f3-af71-fe13cc2bfce4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1065, 2208.7, 698.2),
-('dae517fa-82e8-5356-9f19-4e483891cb95', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1066, 2210.1, 697.5),
-('b70e6c1b-ecee-5153-ae22-6f9e753db1d8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1067, 2211.3, 696.8),
-('fdcc7789-2584-5d14-8166-38a4e3bfdeaa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1068, 2212.7, 696.1),
-('f5dfac88-6752-5cfd-87e7-6624bd658cfc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1069, 2214.0, 695.4),
-('743b38ad-042a-54c5-9ca7-12b861e4f5ee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1070, 2215.3, 694.7),
-('57a33058-9439-54bc-8d69-fab873e2d21d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1071, 2216.7, 694.0),
-('8c54e62a-d537-5d3d-b28a-abe812d1745e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1072, 2218.0, 693.3),
-('59f8f937-8316-5342-a706-a211760847ac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1073, 2219.3, 692.7),
-('ba21a38e-7703-5859-ba3a-441557474413', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1074, 2220.7, 692.0),
-('8c6cbf2e-c2c3-5058-a4c4-52dae0b33d25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1075, 2222.0, 691.2),
-('b32de5c9-a2c4-5f9d-848d-dfa50c09eb7a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1076, 2223.3, 690.5),
-('0064f044-bec4-520b-9265-b893cc8c58a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1077, 2224.7, 689.8),
-('d65c8957-ca51-5f84-838c-ebf8ed756131', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1078, 2226.0, 689.2),
-('64b16d58-258a-5b8c-a9a3-2384dbf40d1e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1079, 2227.3, 688.5),
-('055f0d58-92c8-538c-8102-11f328c8b026', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1080, 2228.7, 687.8),
-('7eed4919-4303-59ea-bf72-02a726c4f125', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1081, 2230.0, 687.1),
-('4a320b96-1e5e-508b-a329-e39b0c5f4385', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1082, 2231.3, 686.4),
-('e3e50eed-2b89-5050-8cdc-969c1bb39091', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1083, 2232.7, 685.7),
-('c08339cf-6ed7-587a-8e15-e31c3cf27dc4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1084, 2234.0, 685.0),
-('1bc5765a-581f-5dd2-8096-27ac65d98b0c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1085, 2235.3, 684.3),
-('88bb3096-2c9c-54fa-9d14-92cf6c4bdac2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1086, 2236.7, 683.7),
-('4be7aee4-4d28-516b-84a0-f67bad0b2b9b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1087, 2237.9, 683.0),
-('e32c10b9-28a3-53b8-8a2d-365e5c718c85', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1088, 2239.3, 682.2),
-('8f6c2c0e-3cb4-57b9-9b6b-756ee1a57071', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1089, 2240.7, 681.5),
-('46bdd131-5fd7-5042-8a9f-db09ba750e25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1090, 2241.9, 680.8),
-('8385c57a-d682-5f40-a34a-b542edccc018', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1091, 2243.3, 680.2),
-('0d817c00-c966-5cdd-96f6-4169b2b6267e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1092, 2244.7, 679.5),
-('d88089a3-3709-586d-a1b0-c0210108c2aa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1093, 2245.9, 678.8),
-('c949f0d0-4d3d-52b8-b919-64f6c7c8d00e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1094, 2247.3, 678.1),
-('5e3ae33b-890f-5a14-a1bb-ac5a6e005d50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1095, 2248.6, 677.4),
-('92674f76-070b-5a4f-9d4e-ab934077d6c4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1096, 2249.9, 676.7),
-('7b8ef8c7-e4ce-5183-8731-1620e1674671', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1097, 2251.3, 676.0),
-('637580cc-28b5-54cf-af7f-d612cd3cf512', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1098, 2252.6, 675.3),
-('d6e12145-1497-590f-82cc-a26d5f5c0f2b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1099, 2253.9, 674.7),
-('4e72d23f-7c56-5051-9abe-70a1f0af48cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1100, 2255.2, 674.0),
-('f07b2d4f-257e-5da7-9469-a5d72d970457', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1101, 2256.6, 673.2),
-('1f51102d-acc0-5d97-8a8c-0c7bfe680ab9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1102, 2257.9, 672.5),
-('d945df98-068c-53d2-b072-e2cbc3807e95', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1103, 2259.2, 671.8),
-('0ec8e8cd-0383-5289-80a6-bebe51308934', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1104, 2260.6, 671.2),
-('30b8d284-faeb-59e5-8506-9bebb8432274', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1105, 2261.9, 670.5),
-('9fb0fd6f-1ffd-52ad-9c46-80e79998d880', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1106, 2263.2, 669.8),
-('8b091081-bc4d-5003-9d3d-605b278fa31b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1107, 2264.6, 669.1),
-('91a0f65a-7815-5ac0-a02c-8dad0021622b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1108, 2265.9, 668.4),
-('da385a41-09be-56f6-aeb8-00540dcc5f8c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1109, 2267.2, 667.7),
-('14cea1d5-a095-5638-84db-a02c3fd03ee0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1110, 2268.6, 667.0),
-('e829a107-0317-528b-b971-fe49e9551c83', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1111, 2269.9, 666.3),
-('e439df64-9c70-5953-b0f4-dc6dbcff580c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1112, 2271.2, 665.7),
-('8cfc471a-e7f8-5a9a-8c83-8aaea568450f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1113, 2272.6, 665.0),
-('ffcfdddf-3e3a-5a67-9b8b-582e68758968', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1114, 2273.9, 664.2),
-('4a1987db-87c6-5419-9b79-2bfac6046aba', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1115, 2275.2, 663.5),
-('2cb17529-7880-566e-aa6f-3b30245b254f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1116, 2276.6, 662.8),
-('2b8f95b1-0931-51a5-9567-53f8686c259b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1117, 2277.9, 662.2),
-('d5ee6360-d827-5bb1-9721-0e9d611741ba', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1118, 2279.2, 661.5),
-('700e2d97-9a86-5601-b876-6a1ec26e3965', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1119, 2280.6, 660.8),
-('b2b25ce8-f169-51d6-9391-481644f4cded', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1120, 2281.9, 660.1),
-('3311fd18-4007-53f9-95ee-036c12cb2858', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 0, 1121, 2283.0, 659.5);
-
-INSERT INTO level_path_point (
-    id, level_info_id, path_index, point_index,
-    map_position_x, map_position_y
-) VALUES
-('63151140-adc5-5329-be91-1781ac42a7f7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 0, 2197.0, 1513.0),
-('5260478a-9878-5093-a738-995bee1a1b23', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 1, 2196.3, 1511.7),
-('526a7a8e-5202-5ae3-a4b4-ecbc698495b7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 2, 2195.7, 1510.3),
-('278c232f-cfef-5f53-8952-60ec1ded8b3b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 3, 2195.0, 1509.0),
-('fa22a9d2-79cc-5e15-b605-19cf77678c93', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 4, 2194.3, 1507.6),
-('38bba96e-e5a3-5fd6-9ea4-1f6a7a6fc16c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 5, 2193.8, 1506.2),
-('8b23dd84-e056-5c50-a57b-3c627cba3594', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 6, 2193.1, 1504.9),
-('aaffb7d2-d950-540c-a7a1-36bfcb508117', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 7, 2192.4, 1503.5),
-('e345763f-85d7-5156-b3ff-88a950317330', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 8, 2191.8, 1502.2),
-('d7f9507d-a02a-546e-86a4-6fa7b04053ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 9, 2191.2, 1500.8),
-('58e101cd-50b7-55df-b8f4-802320ecf56c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 10, 2190.6, 1499.5),
-('2c8d0fde-1306-56e9-add9-0cab7d2d2584', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 11, 2189.9, 1498.1),
-('14d831fb-7926-5e2b-aca6-dec14f8a0684', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 12, 2189.3, 1496.8),
-('e41cf7ca-838d-5d18-a46d-d43bb0bab9b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 13, 2188.7, 1495.4),
-('28130b7d-6533-50e0-bbda-4dd2df55484c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 14, 2188.0, 1494.0),
-('771ecf63-74f5-5e6b-9725-752b6ab0da59', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 15, 2187.3, 1492.7),
-('04b7c626-0bfc-5904-9a3f-ff447ff29394', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 16, 2186.7, 1491.3),
-('ad92d57a-617a-553f-a92b-6db850da222c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 17, 2186.1, 1490.0),
-('772cacdf-b5d8-5612-896a-d20d0af9c0df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 18, 2185.4, 1488.6),
-('f2d4a6d7-511a-53bb-b10f-b09f8e52fc8b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 19, 2184.8, 1487.2),
-('c304b69b-1153-5cd4-aa88-1a4b1e0e368e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 20, 2184.1, 1485.9),
-('44e5c9f2-fc1c-5acf-913f-5114a61fb60e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 21, 2183.4, 1484.6),
-('64b5ad9b-5395-532a-b28b-f300aa49991e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 22, 2182.8, 1483.2),
-('e582ec5c-42bc-5622-a28f-5b1bfcf0b6a3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 23, 2182.1, 1481.9),
-('084a7a1d-37d0-5b50-b8c9-0dc9cb73fa67', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 24, 2181.4, 1480.5),
-('eb21c66f-5539-55db-9555-edac2a474a4d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 25, 2180.8, 1479.2),
-('55214242-f4d1-50a6-a166-f09b8702994f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 26, 2180.1, 1477.8),
-('7a325e23-c789-58ae-99ef-9d87acc8215e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 27, 2179.3, 1476.5),
-('19f87624-f892-5916-ae16-8d20a5aa699e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 28, 2178.7, 1475.2),
-('bcb427eb-bf06-5fa1-89b3-6118530e6e16', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 29, 2178.0, 1473.9),
-('48ba3681-38ae-565b-9200-c98612079cfd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 30, 2177.3, 1472.5),
-('dda74535-f5da-5ee6-836e-34d19294d270', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 31, 2176.6, 1471.2),
-('e0c09db0-0cbf-549a-9a5f-e850c3b198fa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 32, 2175.8, 1469.9),
-('8b9c0721-f34b-5dda-89a9-057aacc2e75a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 33, 2175.2, 1468.6),
-('97b0a5f2-a050-58c8-98a5-cfe88464af8e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 34, 2174.4, 1467.3),
-('3bc415d4-3cce-5d41-87e9-39f13813ebfd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 35, 2173.7, 1466.0),
-('2c2606fd-bf63-5eae-93ac-c0bac69aaff7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 36, 2172.9, 1464.7),
-('dd105894-3b4b-5f6e-b69d-8cdd0cd59660', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 37, 2172.2, 1463.4),
-('96ae00f1-11b7-56c0-bd55-275c6c7a3530', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 38, 2171.4, 1462.1),
-('249869d4-1c25-531d-9852-2fc03eeba629', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 39, 2170.7, 1460.8),
-('07061e28-f066-518d-b8e0-5a0c54fd7713', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 40, 2169.8, 1459.5),
-('7cd43e7d-58dd-5ae3-a5b4-0fba0d8ad7fc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 41, 2169.1, 1458.2),
-('63f3d8f4-2240-5f3a-9b9e-fe897e374316', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 42, 2168.3, 1457.0),
-('1e3b63a6-fd48-562f-8f71-7b2cf719d14a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 43, 2167.5, 1455.7),
-('2cdaff17-03a7-5f53-b146-4bc240c0ef5a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 44, 2166.7, 1454.5),
-('02e2c381-4802-5e8d-99fa-12eac26ce8ab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 45, 2165.8, 1453.2),
-('5775b65c-f51e-5601-bf0d-85f83f75c5ff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 46, 2165.0, 1452.0),
-('e3ba2081-f634-5dd7-8638-58207ec9f7dd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 47, 2164.1, 1450.8),
-('caa57275-ef11-5963-864d-bef386526e84', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 48, 2163.2, 1449.5),
-('b10a76ae-dadb-5416-a0a8-6713ffc43905', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 49, 2162.4, 1448.3),
-('f1327b24-54e9-52e3-9a8d-5e59792af742', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 50, 2161.5, 1447.1),
-('3f363356-f9f7-5f84-80fb-73012210158d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 51, 2160.6, 1445.8),
-('ad9a9f63-17b3-5915-80ab-a7f6106c4f36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 52, 2159.7, 1444.7),
-('a7601f74-7f9e-52ad-a016-333c71ef04cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 53, 2158.8, 1443.5),
-('dcc56fa6-a18f-5aec-b520-8bb61167fa5e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 54, 2157.9, 1442.3),
-('e7db53bc-8f5e-59ff-a813-9f6fbc1a06bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 55, 2156.9, 1441.1),
-('3b4ce598-b129-58b2-9744-0abc2acab8bb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 56, 2156.1, 1439.9),
-('94f8cf59-e394-5f8a-8f7e-79d6507af86d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 57, 2155.1, 1438.8),
-('fa503e0e-8784-5992-bda3-bf99730ccdca', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 58, 2154.2, 1437.5),
-('315f30ea-6efb-5894-896f-2992238d9af2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 59, 2153.2, 1436.4),
-('6f8de612-edea-5118-baf2-a8469b5d8c40', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 60, 2152.3, 1435.2),
-('35565e14-7c8a-51c3-a5d7-54aa378e94b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 61, 2151.4, 1434.0),
-('9e945e5f-7173-506f-a214-122ddec09a89', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 62, 2150.4, 1432.9),
-('edf984a8-7c9c-5979-abfd-dbc49a1a6620', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 63, 2149.5, 1431.7),
-('7b943942-0e71-57af-8ab5-185f056b22c5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 64, 2148.6, 1430.5),
-('612e4db5-af48-59a1-ad05-c3ed89e3fc11', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 65, 2147.6, 1429.4),
-('47938baa-7c49-512f-9ea5-be66f1bb1d50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 66, 2146.7, 1428.2),
-('c14bfd1d-5b68-50b6-a256-07f2bf2a2d38', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 67, 2145.7, 1427.0),
-('bac97067-6cae-56d5-a114-eb80a157e2fa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 68, 2144.8, 1425.9),
-('3da50a2f-23bc-5ab3-85f4-f679944874c2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 69, 2143.8, 1424.7),
-('791c1083-8429-5057-996f-c3897acb22da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 70, 2142.9, 1423.5),
-('a4b69ca2-7e80-511a-9f76-07d06e7ffc8c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 71, 2141.9, 1422.4),
-('af28d4e7-280c-55b9-a43e-a733d6bf8004', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 72, 2141.0, 1421.2),
-('e2ebe963-dbcd-5590-ba09-77c9a71798af', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 73, 2140.1, 1420.0),
-('8c98a157-a14f-594c-b271-cc0ef86c92e1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 74, 2139.2, 1418.9),
-('78dce91e-b977-58e0-8cb9-a10680c58bec', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 75, 2138.2, 1417.7),
-('5d5ded87-42e3-515a-bda8-6494b1040e1e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 76, 2137.2, 1416.5),
-('ce134a8c-55ad-5f17-ac04-0fd0c66a858e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 77, 2136.3, 1415.3),
-('36af82e7-f144-53c9-a424-fb7eca45d820', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 78, 2135.4, 1414.2),
-('a3d08771-aa6b-508f-a942-d71166fc5cfd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 79, 2134.5, 1413.0),
-('aee42d88-586b-5008-ac91-cc0ed46f4df6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 80, 2133.6, 1411.8),
-('ae640274-4f8f-561d-b767-4985422f370d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 81, 2132.7, 1410.6),
-('b5ceaa36-33e7-50f4-a2ee-6998903e3109', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 82, 2131.8, 1409.4),
-('87436374-bbe2-5842-a3ff-16a33062b9c7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 83, 2130.8, 1408.2),
-('bc66ddaf-f272-527e-b9bc-4f3bffa1e377', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 84, 2130.0, 1407.0),
-('a0dc18c9-713f-5bb5-9ee6-8201e7f053b0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 85, 2129.1, 1405.8),
-('60c66585-5d9f-5607-a124-8bba5471343a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 86, 2128.2, 1404.5),
-('2661f75d-e1f9-59b8-b29f-021b7a4b2aac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 87, 2127.3, 1403.3),
-('df2f2c01-643c-54f2-9da7-d5af6b413c97', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 88, 2126.5, 1402.1),
-('3e2571aa-3f25-54f1-95bd-7d3451531aff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 89, 2125.7, 1400.8),
-('676c44ea-0412-58a6-943c-65658aed1c2f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 90, 2124.8, 1399.6),
-('b131f1a3-cf58-567c-baf7-bcb619cad877', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 91, 2124.0, 1398.3),
-('d5f3348e-a028-59c9-8424-be0dff93a978', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 92, 2123.2, 1397.1),
-('0dd3847f-2180-5ed8-93f8-a9b85ca315e3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 93, 2122.3, 1395.8),
-('d03ad6fd-d40f-53fa-9043-233e560b7554', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 94, 2121.6, 1394.6),
-('d079664e-781f-5787-95db-a89665b96550', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 95, 2120.8, 1393.3),
-('cc39371a-3b59-5816-82b0-5f93b83cc616', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 96, 2120.0, 1392.0),
-('2b8ac81b-a554-5c18-9509-edcc09ebd5ed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 97, 2119.2, 1390.8),
-('4b526bee-be26-5bf3-8b39-a4c6a300fca3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 98, 2118.4, 1389.5),
-('6c6ad721-1a26-5b10-8d0c-3dc84eebcc25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 99, 2117.7, 1388.2),
-('95d4b951-be74-5403-88ae-0ef809d90c70', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 100, 2116.8, 1386.9),
-('5ff5ca94-98aa-5d1f-8188-738e4480a6e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 101, 2116.1, 1385.6),
-('24f467c0-3018-546c-ba65-1e8cff977fa7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 102, 2115.3, 1384.3),
-('32f72f36-c32d-5e06-ab1a-0ba10fe0061a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 103, 2114.6, 1383.0),
-('71e1cd57-d007-544b-b96f-84ad839ca2d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 104, 2113.8, 1381.8),
-('6d716320-2e7c-5e1a-85cc-444aab92467c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 105, 2113.0, 1380.5),
-('049bd0fb-c361-5ac5-bcb5-18c4d8dd1404', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 106, 2112.2, 1379.2),
-('f0fdf44b-c912-5459-806e-4b28c9fca3c8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 107, 2111.5, 1377.8),
-('e48adb7a-c366-5800-970b-ecc70f46bdc2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 108, 2110.8, 1376.5),
-('ced37772-b771-5c74-96c8-55b165498d46', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 109, 2110.0, 1375.2),
-('d61bdde8-a793-547f-b62c-852bfe1e3483', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 110, 2109.2, 1374.0),
-('72eb5ce7-f52e-5bc5-bf51-2e0aa9d814b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 111, 2108.6, 1372.7),
-('243182df-f451-5d58-b463-e484b3570b67', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 112, 2107.8, 1371.3),
-('8cdaf2c0-1308-5e0d-8787-10da4434bd03', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 113, 2107.1, 1370.0),
-('e47fe941-a81a-5e50-9150-802970a6a43a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 114, 2106.3, 1368.8),
-('cc3971a5-3d8e-5e0e-9818-df52ca94d55c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 115, 2105.6, 1367.4),
-('c4e1c74c-05cb-5dfc-9f35-8e5f2c1edf87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 116, 2104.9, 1366.1),
-('fcff4d31-5213-5330-b3fa-9a992c0a33ac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 117, 2104.2, 1364.8),
-('ebac9b28-22f0-5f37-8a46-a169dbc784cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 118, 2103.5, 1363.5),
-('9f016c6c-6e63-5275-9d88-a8e09bdb16b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 119, 2102.8, 1362.1),
-('49f9b175-b590-5480-869f-170d5e14b7f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 120, 2102.1, 1360.8),
-('5945172b-719c-5c1e-aeac-aae85a937c31', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 121, 2101.4, 1359.5),
-('0d918154-9970-5ff1-845a-0791168b1120', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 122, 2100.7, 1358.2),
-('28ff9007-f920-53a5-bbb3-96d00b0a4d72', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 123, 2100.1, 1356.8),
-('c4bd2519-77a0-5e75-8a94-f5445463cbb7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 124, 2099.4, 1355.5),
-('f2957256-50ed-5dde-adcb-aeebffb81a6d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 125, 2098.7, 1354.1),
-('1104e2c3-f121-5109-bd6c-acff85ab9c89', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 126, 2098.1, 1352.8),
-('45630036-882e-53c1-b100-16d476fec9fa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 127, 2097.4, 1351.4),
-('1282144e-bb32-57e2-bff6-15d68cc0d38f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 128, 2096.8, 1350.0),
-('692340b2-efb2-5e58-b56c-5cf0f452405f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 129, 2096.2, 1348.7),
-('47bdc24f-0f76-5cc2-81bc-6ff21bc16f47', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 130, 2095.5, 1347.3),
-('4c37b2f5-db04-51bf-b2b7-76a95cc8b559', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 131, 2094.9, 1346.0),
-('f9e64b99-70e7-524a-96ab-92e10e72ec56', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 132, 2094.3, 1344.6),
-('bc3cede4-a5f9-5154-87e7-af4cf33abec0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 133, 2093.7, 1343.2),
-('e2920015-d8eb-591c-a309-c7e1c109b509', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 134, 2093.1, 1341.8),
-('451416f3-28df-5f36-88b2-3d6f0035eef7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 135, 2092.5, 1340.5),
-('13c54f8c-f30d-5579-aa2b-18efe8e7e2a3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 136, 2091.9, 1339.0),
-('315a5198-228b-592b-996c-41a2a9a71a7b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 137, 2091.3, 1337.7),
-('8c2cc0bc-2182-5558-85b2-2ebc23a2eabb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 138, 2090.8, 1336.2),
-('ae7c641d-8378-5f0e-a811-0f445d8ce725', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 139, 2090.3, 1334.9),
-('acb8a546-5e70-543c-a9d0-0a654a2c2c91', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 140, 2089.8, 1333.5),
-('9207e71c-add7-582f-8f2c-e715991f3418', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 141, 2089.2, 1332.0),
-('928e5833-e0ff-5d7b-8c4e-27d8e42bb0c8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 142, 2088.8, 1330.7),
-('6bf8bd60-43f0-5bcd-9dee-78ac775e11e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 143, 2088.2, 1329.2),
-('d729001a-b152-571c-a47c-2413ed89e9d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 144, 2087.8, 1327.8),
-('03d9fd3c-e5a0-5939-9998-6bbf4947b65a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 145, 2087.3, 1326.4),
-('d1eea565-3874-5d4f-9787-9388dc529f07', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 146, 2086.8, 1325.0),
-('a42183df-bc89-5494-bc41-09f665cac89c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 147, 2086.4, 1323.5),
-('42417120-6ad0-518e-947b-84850a7d8d0f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 148, 2086.0, 1322.0),
-('9097efac-b35e-58ee-acdf-9b19cafe1883', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 149, 2085.7, 1320.6),
-('03d9004a-0115-5071-adb4-d90edc83a200', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 150, 2085.3, 1319.2),
-('f125e531-4661-569e-8390-0b0b7548be4d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 151, 2085.0, 1317.7),
-('487269fb-71c5-5305-b151-2575350969ee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 152, 2084.7, 1316.2),
-('325635de-cdc3-55cc-aea1-97e169588932', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 153, 2084.4, 1314.8),
-('ef35dac6-9d56-52d8-a1e6-c9c3bbdafe72', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 154, 2084.2, 1313.2),
-('865549ec-4510-55f8-84e8-546c29c8bff4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 155, 2084.0, 1311.8),
-('c34dd6f1-5d2f-5092-ba59-eadbe6727aa5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 156, 2083.8, 1310.3),
-('26b0a91f-7605-545a-a85a-f3a6ef3d174c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 157, 2083.6, 1308.8),
-('6e92c7e6-575d-5eb3-aab4-c31aeac6d2ee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 158, 2083.4, 1307.3),
-('313ddfe8-29f5-5d87-8821-d88d59568ba0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 159, 2083.3, 1305.8),
-('40ec4d85-b0d8-5046-99cd-7f30fd833b89', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 160, 2083.2, 1304.3),
-('d36d44c1-e926-5ad3-aad7-19e46e86a6d3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 161, 2083.1, 1302.8),
-('ec34c216-869c-5b21-aa5f-f009a5392fab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 162, 2082.9, 1301.3),
-('018a9a91-fd6c-5137-9a1d-3152e4295cac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 163, 2082.8, 1299.8),
-('8de82d54-a620-5138-ae62-eee9660513eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 164, 2082.8, 1298.3),
-('8dc9bc35-daca-51e0-8012-e18242fe7e57', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 165, 2082.7, 1296.8),
-('a4e5a3a1-4c97-5c44-a3f5-cef865001d81', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 166, 2082.7, 1295.3),
-('c24b1967-dc7a-518e-a507-a7b5b6e997c9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 167, 2082.6, 1293.8),
-('1a7d2a22-495d-5f76-96a1-792f533c861c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 168, 2082.5, 1292.3),
-('73082ffd-ffe9-5ade-b4d8-060c875916a5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 169, 2082.4, 1290.8),
-('de0cfb6e-ebbb-5604-91a8-5a7af7745a28', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 170, 2082.4, 1289.3),
-('e8edcf49-434b-5538-9e3e-b54159521b25', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 171, 2082.3, 1287.8),
-('61c67ed6-0169-5ac5-9f18-a0317b767dd5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 172, 2082.3, 1286.3),
-('991fa1a8-e470-5923-b63c-de109bad06e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 173, 2082.2, 1284.8),
-('d54c43bc-7c36-55b6-9f49-38181978e667', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 174, 2082.2, 1283.3),
-('19e774ed-38cc-51a7-b5e9-ba265c420fcf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 175, 2082.1, 1281.8),
-('05c38374-ea3e-58fb-b0c8-e8c556b3eb75', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 176, 2081.9, 1280.3),
-('66136dff-fd9d-512d-9c13-ae4b13c85431', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 177, 2081.8, 1278.8),
-('06f117ec-2f4a-5fa2-a7d7-5974ea7e842c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 178, 2081.8, 1277.3),
-('257199ba-94ac-5605-81f7-a6ab0f78ca12', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 179, 2081.6, 1275.8),
-('b503b6b9-9301-51de-9a92-5fe28e179f6e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 180, 2081.4, 1274.4),
-('830c0d45-3637-582b-90ae-848bf5c351e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 181, 2081.3, 1272.9),
-('bb5af389-c110-5d29-b23e-bce2ca087057', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 182, 2081.2, 1271.4),
-('f1874d49-9dc3-56d3-93f4-a1d6b9834ff9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 183, 2080.9, 1269.9),
-('b7df0760-cbcf-5a80-b840-4311b6c83fd5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 184, 2080.7, 1268.4),
-('f4056aef-f915-5cf4-a9df-4da75269050b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 185, 2080.4, 1267.0),
-('83a8e5b7-9ac3-53d1-b51c-bc21d5426378', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 186, 2080.2, 1265.5),
-('2e4d0b25-ef16-586b-be5a-1f43a9c80be9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 187, 2079.9, 1264.0),
-('42043197-ea7c-5857-a5e4-f89a4acb4c98', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 188, 2079.6, 1262.5),
-('955aaef0-d507-5e62-9f0f-ac5c4004c4ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 189, 2079.2, 1261.0),
-('a7e81ae2-61d1-54de-ba06-916e722603bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 190, 2078.9, 1259.6),
-('0815433a-577a-5073-a020-99a301471a55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 191, 2078.5, 1258.2),
-('cca9bf9f-ecaa-5329-a282-3cc0864ea753', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 192, 2078.1, 1256.8),
-('c162c362-1159-59a4-8198-76bb00d8ff33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 193, 2077.6, 1255.3),
-('ed081367-5286-5064-a997-abb75de5cd01', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 194, 2077.2, 1253.9),
-('c46ca092-6632-52b0-ab32-277d4493de16', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 195, 2076.7, 1252.5),
-('052b92fe-777b-50d6-a020-751d24830bd8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 196, 2076.2, 1251.0),
-('0db26ed7-3cab-5e02-b02d-c81c01a4ed6f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 197, 2075.6, 1249.7),
-('c9a2138a-c236-5473-b48c-ac14c9ad5249', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 198, 2075.1, 1248.2),
-('b081866a-b178-5946-90be-7b5696111fd2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 199, 2074.5, 1246.8),
-('bdd2421e-1bbd-50b2-a7ad-8c34c866b59a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 200, 2073.9, 1245.5),
-('4dbb2272-6d81-51c4-ac52-09aac8f8479c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 201, 2073.3, 1244.1),
-('78c19ed5-9787-571c-b813-c3771bac193e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 202, 2072.8, 1242.7),
-('5340d207-6c74-5c31-ab4f-30f0e39a043b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 203, 2072.2, 1241.3),
-('317dfdec-e622-53dc-81f4-ba39c9cced5e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 204, 2071.6, 1240.0),
-('772beeca-9d0c-50b4-bfac-d137638fb977', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 205, 2070.9, 1238.6),
-('36dd272a-86e8-59cc-8568-c959b20ed0cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 206, 2070.3, 1237.2),
-('400453b4-8980-56ad-9a9f-443d94237f2e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 207, 2069.7, 1235.9),
-('1131a419-42a3-5280-bcff-c5763ff51f33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 208, 2069.0, 1234.5),
-('e5a0dc6e-c408-5499-8224-11499d10e04c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 209, 2068.3, 1233.2),
-('ac1edf30-8845-52b0-bf22-e944cfab005c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 210, 2067.7, 1231.8),
-('c26f3615-a418-56ce-9af2-e49fa95ee5fb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 211, 2066.9, 1230.5),
-('ab0c82b0-7938-5687-bad5-17d2df4445cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 212, 2066.2, 1229.2),
-('f2d7c869-f523-58b4-ad7d-daa63e6f56b2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 213, 2065.6, 1227.8),
-('363d30b0-587d-5dd4-81d0-572ca89bd983', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 214, 2064.9, 1226.5),
-('d64b7782-24c7-514c-a3b9-e057a91c9dc7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 215, 2064.2, 1225.2),
-('b6a66db8-eacf-5dbc-9b52-a47e6af05828', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 216, 2063.4, 1223.9),
-('faedf850-1411-5fc6-9315-3efeada44a85', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 217, 2062.8, 1222.5),
-('03f70282-7a9b-5ff7-abee-fbd63db1e53e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 218, 2062.1, 1221.2),
-('7a9a6d02-80d8-5ea1-ad56-f9d742851a26', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 219, 2061.3, 1220.0),
-('4d1ff4a9-2d54-5c2d-9c5d-39bc1681018a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 220, 2060.6, 1218.6),
-('ca89fa6f-5023-54bb-bb9a-a95d6c73a92e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 221, 2059.9, 1217.3),
-('01bf333e-56cf-5875-a321-69ff8473d45f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 222, 2059.2, 1216.0),
-('bc176e6a-6cd4-5e49-b094-2257ebcd00b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 223, 2058.4, 1214.7),
-('fd8e9492-faa2-51b6-88cd-b4eedbce38bc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 224, 2057.7, 1213.3),
-('c26ce645-91a7-58b1-a1c7-7934057098de', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 225, 2056.9, 1212.0),
-('940ebd63-3dd1-57ff-adc0-4930004286f1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 226, 2056.2, 1210.8),
-('1780a317-405f-544a-92c6-ac54f509261c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 227, 2055.5, 1209.5),
-('541d27e4-185b-5b21-b449-733aff370683', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 228, 2054.8, 1208.2),
-('f56be2ae-4418-59f4-8130-70755651d353', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 229, 2054.1, 1206.8),
-('16f65d1a-fd20-54fa-9fb2-2b87476b6c95', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 230, 2053.3, 1205.5),
-('1a977420-b166-5b4b-b30a-540ecb42e190', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 231, 2052.6, 1204.2),
-('0ce7c40f-5f60-508e-8369-ef9f0cd46aff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 232, 2051.8, 1202.9),
-('608ad045-e17b-52e9-9866-b6188166f04a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 233, 2051.2, 1201.5),
-('c4672cda-f28a-54ff-901f-ea4ca9edd458', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 234, 2050.4, 1200.2),
-('f7aa34eb-e276-554a-bf2c-411c319461c0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 235, 2049.7, 1199.0),
-('b33a04ca-93c5-57ff-9043-e1080aba96a7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 236, 2049.0, 1197.6),
-('1b32b7fc-f346-5f4f-a04f-59373833ee8d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 237, 2048.3, 1196.3),
-('435cfdc0-3418-53ee-afad-f4c6e806f278', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 238, 2047.6, 1195.0),
-('68d11238-593a-569e-b93e-1ad2c128729d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 239, 2046.9, 1193.7),
-('d7ae6bb1-6c35-5399-b6f4-c4febc5d6945', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 240, 2046.2, 1192.3),
-('b1881496-5186-5cc1-8a1a-aef8eabd4f19', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 241, 2045.5, 1191.0),
-('90e1cc02-81c3-5e43-9efd-eb72bcb6ef9b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 242, 2044.8, 1189.7),
-('51631280-67bb-5479-ab29-eaaf23f9f450', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 243, 2044.2, 1188.3),
-('f9097d45-2140-5f7e-aa8a-dd0136dad091', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 244, 2043.4, 1187.0),
-('af9e52f1-5a05-5d88-9c53-071bf64c604e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 245, 2042.8, 1185.6),
-('f187931a-9915-573c-901e-70626e2ba5b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 246, 2042.1, 1184.3),
-('c2659d78-2c77-52b4-86a9-2ac70144a40b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 247, 2041.5, 1183.0),
-('9ae059a6-4a0d-5ad1-8714-f45122d093d1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 248, 2040.8, 1181.6),
-('9e26d92a-c465-560a-b55e-0d1641d78028', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 249, 2040.0, 1180.3),
-('8144861d-c942-5d87-bc8d-ec9adce52b7b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 250, 2039.3, 1179.0),
-('f61c0e32-fa0b-578a-9564-d9c02744f394', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 251, 2038.7, 1177.7),
-('52e302b0-df39-52d1-b90b-7b5dbfce4ca5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 252, 2037.9, 1176.3),
-('b458bd42-d243-5c62-b977-d3e26d54d148', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 253, 2037.2, 1175.0),
-('f0c39941-4109-5998-b2a8-a42edaf25bcf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 254, 2036.5, 1173.7),
-('97fea8ce-f8e0-580d-adc3-b17a5400be5d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 255, 2035.8, 1172.3),
-('850ccfd7-e421-50d3-bd1e-b3a1916c90ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 256, 2035.0, 1171.0),
-('3137f2fc-0e70-5d80-b18c-41864b16c49a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 257, 2034.3, 1169.8),
-('e93139a8-b978-59ae-a35f-389cf6022fae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 258, 2033.6, 1168.4),
-('6788a293-0208-5adc-bc68-8814e68a24f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 259, 2032.9, 1167.1),
-('9dc8194d-76ef-5750-96d6-98a4dc3fde7e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 260, 2032.2, 1165.8),
-('84d18844-77d4-55dd-8b76-f670fbe8d57f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 261, 2031.5, 1164.5),
-('37dd2fa9-c2f6-5b37-bc1e-d4444ceeff36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 262, 2030.8, 1163.2),
-('edbdb9e7-464a-511a-8c32-f39de1e1942b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 263, 2030.0, 1161.8),
-('707ad374-d68c-5893-b2c6-f7cacaccd3cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 264, 2029.3, 1160.5),
-('779e5d81-87ba-5425-aea9-a2f88c08ed2a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 265, 2028.5, 1159.2),
-('58cc275c-ddff-58b6-a3fc-41ab680cbf2e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 266, 2027.8, 1157.9),
-('e384b6cd-cdb6-5d48-9221-86ba900bf98f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 267, 2027.2, 1156.6),
-('8c52e531-a4d7-5b70-9121-a71085025b44', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 268, 2026.4, 1155.2),
-('31beadec-013b-5d88-9bee-0f5850f2ab18', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 269, 2025.7, 1154.0),
-('14f20993-20d0-5702-8bb6-1e8dde52d254', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 270, 2025.0, 1152.6),
-('890c4318-4168-569d-bd99-0823502a40bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 271, 2024.3, 1151.3),
-('6b727ebe-18bf-5e58-ad5b-ba1bc011cfab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 272, 2023.5, 1150.0),
-('d65f2ed6-ef86-5c10-850f-a0a68f118303', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 273, 2022.8, 1148.7),
-('bf9ba848-8605-515f-b6b5-35cd0375093f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 274, 2022.2, 1147.3),
-('71a79f95-86c5-5c34-be03-a0ff2ef0786f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 275, 2021.5, 1146.0),
-('32231373-9a60-54bf-aa93-e0a27e6e5ed0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 276, 2020.8, 1144.7),
-('2a22237b-1479-502a-9eb9-d64e8c2fafe8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 277, 2020.1, 1143.3),
-('97caca16-2f75-5f19-8978-d0f66bded477', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 278, 2019.5, 1142.0),
-('d0aa7f93-b7fb-5e0f-8322-631b99a487d1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 279, 2018.8, 1140.7),
-('540320f6-ae70-5a0d-b2cd-7780f0513f82', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 280, 2018.1, 1139.3),
-('5a34d31f-1aba-5208-85af-b1f52cc46419', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 281, 2017.5, 1138.0),
-('d36cad9f-ff65-5d31-a552-811277212b22', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 282, 2016.8, 1136.6),
-('4690dfbd-1896-5be7-b067-712ce3388713', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 283, 2016.2, 1135.2),
-('1dd1946f-8810-520f-b595-1d53388a06ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 284, 2015.5, 1133.9),
-('2a27a481-da03-5739-891b-b5f313fcb81f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 285, 2014.9, 1132.5),
-('6796d946-4578-5723-bba6-14c7cf2c4d40', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 286, 2014.3, 1131.2),
-('8dc8ec11-b9bc-5a67-9a8d-2386abd63a6a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 287, 2013.7, 1129.8),
-('e4101ed5-beac-5a4f-8526-8b48f8f9d7e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 288, 2013.1, 1128.4),
-('6bf3499a-7acd-5737-bf18-32860e7ee1d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 289, 2012.5, 1127.0),
-('c9c5315d-4611-5d52-b726-6f01c701d132', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 290, 2012.0, 1125.6),
-('fac1a449-b172-5272-88c7-757f2736e444', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 291, 2011.4, 1124.2),
-('1b4bb14c-814d-54f9-88d9-3c6a38219151', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 292, 2010.8, 1122.8),
-('5b0b69ac-a8e2-53ad-888e-4bb4a88ffde0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 293, 2010.3, 1121.4),
-('7d3f386e-96b5-5557-968f-e614a17c3910', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 294, 2009.8, 1120.0),
-('7d748fa7-8bfc-5309-bffa-2da65e44e5db', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 295, 2009.3, 1118.6),
-('4814c69f-4f01-5259-9ec4-f29bef244745', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 296, 2009.0, 1117.2),
-('d40f8b8e-59c2-5653-bf7a-7f7c4add753d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 297, 2008.5, 1115.7),
-('e7619646-d74f-51c5-8cf3-795f020a23d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 298, 2008.2, 1114.2),
-('5fd3e95d-c64e-5f24-8769-f0c796be3e2d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 299, 2007.8, 1112.8),
-('3b1b9699-da8c-5f10-81ee-2c6852577aa8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 300, 2007.5, 1111.3),
-('e13143d0-bdac-5d29-a100-a0001e07a72a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 301, 2007.3, 1109.8),
-('7da1ba4d-1efb-5785-85af-603409da686b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 302, 2007.1, 1108.3),
-('4fece78e-3939-5c46-917e-ebd6ada6df63', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 303, 2007.0, 1106.8),
-('da2e0dbe-2be4-5328-a8cc-89a55bd972da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 304, 2006.8, 1105.3),
-('44da360f-261f-58cd-a7da-7ebd41c862bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 305, 2006.7, 1103.8),
-('ea4e8a4a-4719-5aa3-9d50-435fdbbd5bdc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 306, 2006.6, 1102.3),
-('1296d71f-ad93-50f9-b238-958365d528f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 307, 2006.5, 1100.8),
-('5e1995dc-1b02-5d64-8123-dfaa9b66f3f6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 308, 2006.5, 1099.3),
-('f78d7087-a664-5f72-9d63-c7ecbd401ac0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 309, 2006.5, 1097.8),
-('e6736d6c-f1af-5a57-9ac3-4b6e057f81df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 310, 2006.5, 1096.3),
-('5a43977b-1783-54af-82e2-a207f6f347a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 311, 2006.5, 1094.8),
-('dc051e73-a8fb-55b3-984a-14b539807221', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 312, 2006.5, 1093.3),
-('882df383-b024-5da4-9f24-bc79292be961', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 313, 2006.5, 1091.8),
-('3d6e409a-da66-5824-83a2-f7965d1da7ad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 314, 2006.5, 1090.3),
-('3805025b-e7b6-5d17-a6ae-6f1a8a73cc41', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 315, 2006.6, 1088.8),
-('e0ddcdc4-83a7-5f33-bce1-4477f5a4eb36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 316, 2006.6, 1087.3),
-('46285104-16b0-5c8b-8942-fc4f48993275', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 317, 2006.6, 1085.8),
-('83389abf-e860-53dc-a213-0f3c46111b7e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 318, 2006.6, 1084.3),
-('1e2e3fc1-46d8-51d4-a216-a91032988950', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 319, 2006.6, 1082.8),
-('3bef7c62-3d73-5289-91f1-96b6aeacac20', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 320, 2006.5, 1081.3),
-('6755080a-ba0c-5b68-ba6b-27de323e86cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 321, 2006.5, 1079.8),
-('d7f4ca6a-b4f1-5828-b224-6f551af8e70d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 322, 2006.4, 1078.3),
-('472edd6f-5fa6-59c6-8c92-179d8cb3b47f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 323, 2006.2, 1076.8),
-('45bbdb4c-e9a4-5b37-ae90-1aa7ae27b608', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 324, 2006.1, 1075.4),
-('4e071268-278d-513b-8fce-205035da6812', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 325, 2005.9, 1073.9),
-('b28cad77-f394-56e9-8a8c-dd6f23f129f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 326, 2005.7, 1072.4),
-('a7151f29-f231-570d-a286-4cc5f8711555', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 327, 2005.4, 1071.0),
-('52d2e853-12ac-57ee-9a3b-a74f2b4d241a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 328, 2005.0, 1069.5),
-('c1eed5f9-c423-539e-bd47-6323363d01d4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 329, 2004.7, 1068.0),
-('b4a95432-2421-5f72-8b7c-97fc63fdbcb1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 330, 2004.2, 1066.6),
-('485c703a-2afc-5c58-b045-3ef28ea78285', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 331, 2003.8, 1065.2),
-('9e78be80-ae0d-5e94-af81-1de725e3957e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 332, 2003.2, 1063.8),
-('564caa06-6918-50cf-8e0d-f23113119cb4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 333, 2002.6, 1062.4),
-('5807c3c3-d426-555a-a15a-152fe65b6cfc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 334, 2002.0, 1061.0),
-('4b878767-4ebd-50a9-b649-9e5e5344220f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 335, 2001.2, 1059.8),
-('9865ab79-6e38-56fa-83eb-2f298b7996f8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 336, 2000.5, 1058.5),
-('ebb0f817-0ac9-528f-8c8d-89704f4fbba3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 337, 1999.7, 1057.2),
-('35a6e209-3490-56b3-96ac-fa16b9aaf335', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 338, 1998.8, 1056.0),
-('05705578-0c67-5bf0-b82b-bd773c75bfaf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 339, 1998.0, 1054.7),
-('32a0d471-0f89-553b-9c52-c2003d9352e2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 340, 1997.0, 1053.5),
-('1a993b32-6ad3-5cc1-ba1a-6ff539b68047', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 341, 1996.2, 1052.3),
-('9536a332-83fe-53b9-9d56-be846023016e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 342, 1995.2, 1051.2),
-('3fd78e70-13b1-5b46-912e-5e8a8e01356a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 343, 1994.2, 1050.0),
-('072c7c02-faa2-50fd-adba-5fee86ee7271', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 344, 1993.2, 1048.8),
-('02a05906-f480-5c0d-b1bb-2c6b9b2035fd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 345, 1992.2, 1047.8),
-('ea09e9e0-da6c-551a-82bc-f26a126ae081', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 346, 1991.2, 1046.7),
-('27eb4ffa-1d56-5b22-b93f-d05fb554a196', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 347, 1990.2, 1045.5),
-('79d8e27e-4555-5ecc-898d-a0f016839da7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 348, 1989.2, 1044.5),
-('f54ed157-2efa-554d-86ce-2548e1736580', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 349, 1988.1, 1043.4),
-('d0dcc73e-a8e6-5ea1-bfdb-c6c019a9ae84', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 350, 1987.0, 1042.3),
-('2ea3a11f-8cd1-5467-9a7a-1260a9e46f9e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 351, 1986.0, 1041.3),
-('bacfbecd-154c-5a26-b23d-62519f88b2f4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 352, 1984.8, 1040.3),
-('e20cc050-b04c-54d1-9503-7b5e0801d6e1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 353, 1983.8, 1039.2),
-('076919c2-4286-5993-90f7-360287b99c11', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 354, 1982.7, 1038.2),
-('5afebfce-a95b-5785-85ec-ea17fe5bb18e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 355, 1981.5, 1037.2),
-('7c2104f9-107c-5091-8a4a-97f3435b089b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 356, 1980.4, 1036.2),
-('aa491cca-8229-568b-9d54-d682d1e14cbc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 357, 1979.2, 1035.3),
-('d7b517cb-8366-5292-a285-cb60cfae757b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 358, 1978.2, 1034.3),
-('401ba109-aa7d-5d04-8033-9b742b07ea0e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 359, 1977.0, 1033.3),
-('468aef8d-74aa-5185-990a-199b928f4739', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 360, 1975.8, 1032.4),
-('6c029e15-aadb-50d2-97f8-1e5c35fdffe8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 361, 1974.7, 1031.5),
-('5b3856b8-ec14-5519-8550-ae69cfb38be8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 362, 1973.5, 1030.5),
-('f7fe2eef-631f-5ae9-8ca9-d8eadd885349', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 363, 1972.3, 1029.6),
-('f5c63315-17e3-5a1a-8ccc-3d65137389ec', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 364, 1971.2, 1028.7),
-('9ad2eafd-2aee-5ff4-8dd1-9841b65c694c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 365, 1970.0, 1027.8),
-('cff083c9-c175-56df-88ac-bb4f6260eea7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 366, 1968.8, 1026.8),
-('91009259-2779-5f47-9841-9c2f1f19f950', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 367, 1967.5, 1025.9),
-('6640a39a-bc39-5d80-ac45-277eea02da8b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 368, 1966.3, 1025.0),
-('494c539b-66cf-5ebb-9db0-98ce8e0d13c5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 369, 1965.2, 1024.2),
-('ae045ed7-7888-51ea-ac2c-fced8b14e4b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 370, 1964.0, 1023.2),
-('bfa52d2c-0ac3-5edd-86a1-c0de12782c3f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 371, 1962.8, 1022.3),
-('3629ba91-94e1-5477-82f0-41722734ce5d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 372, 1961.5, 1021.5),
-('67dc5972-9f41-5e3f-9d5e-5f7588606d65', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 373, 1960.3, 1020.6),
-('d0693305-c409-5f97-a26c-a0aebd158329', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 374, 1959.1, 1019.7),
-('24b8de27-e914-5e38-8330-76a513804a9f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 375, 1957.8, 1018.8),
-('08cc2f0c-00a8-5e97-ab0b-24664ec7b901', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 376, 1956.7, 1018.0),
-('7f05575f-6bc6-5f0e-9b31-a87024b46627', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 377, 1955.4, 1017.2),
-('8b4d4e10-9a8d-5462-b2dd-e2e8de87df31', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 378, 1954.2, 1016.2),
-('be9885fd-00b4-57a7-b0c2-55496870945c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 379, 1953.0, 1015.4),
-('30f38b4f-6f86-5d16-b27d-089f49d3aa04', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 380, 1951.7, 1014.5),
-('98c62d8b-8eca-5aee-a630-c64fee3202ee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 381, 1950.5, 1013.7),
-('c9ac143f-5f01-5481-8126-e0aa44ab74c2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 382, 1949.2, 1012.8),
-('51db04d9-49eb-5987-afae-7250970ecdb0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 383, 1948.0, 1012.0),
-('79a826a5-dddb-52a8-af27-55bcd21841f5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 384, 1946.8, 1011.2),
-('32fab3ca-be72-57b8-b11f-630ab5afd2de', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 385, 1945.5, 1010.3),
-('35e6484f-fc5a-5d1a-93dc-94a34bc7e171', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 386, 1944.2, 1009.5),
-('ce6cf5f2-9cb2-55ba-a2da-105357f19dc5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 387, 1943.0, 1008.7),
-('10650adb-c3eb-57c5-95e2-711c05c54719', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 388, 1941.8, 1007.8),
-('04c8bed3-52ac-5644-83ff-7c95c04d28d9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 389, 1940.5, 1007.0),
-('51dd7914-3ec4-5249-98b3-7e10807f69fe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 390, 1939.2, 1006.2),
-('520dee47-5181-5a5b-826b-bfec5c28c2df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 391, 1938.0, 1005.3),
-('5ef30cb8-1f13-5bda-8161-4ba461fb154d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 392, 1936.8, 1004.5),
-('57831e55-fe38-5147-b05a-592db4ec7268', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 393, 1935.5, 1003.8),
-('f9bc5e93-3491-598d-8202-390cd6080018', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 394, 1934.2, 1003.0),
-('43c1bc0b-4ac6-597f-b764-e0417bcb7af1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 395, 1933.0, 1002.2),
-('a004f544-a8d7-5360-87d0-b22d52249d36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 396, 1931.7, 1001.3),
-('334c3672-2282-5971-a189-013adba21944', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 397, 1930.4, 1000.6),
-('fb21b4c4-efec-537b-9084-5a96b82fc824', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 398, 1929.1, 999.8),
-('ef1a003b-799d-5f18-8834-a20ffe6d3582', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 399, 1927.8, 999.0),
-('3025495a-d7d9-5f73-bbb8-9e5ab56e9362', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 400, 1926.5, 998.2),
-('8d6924d3-fd65-599c-a867-9763fddda838', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 401, 1925.2, 997.5),
-('c941d3e7-e539-5163-9970-daf3df3c2c3e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 402, 1924.0, 996.8),
-('2f6ca24f-c6e2-509d-9df3-e79eba1b6370', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 403, 1922.7, 996.0),
-('2dde0b19-15d5-5783-8892-fd66f87c01a0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 404, 1921.3, 995.3),
-('8e062118-3030-55c3-9ec4-03d88ca4d271', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 405, 1920.0, 994.6),
-('f7e1e3f6-c115-52bd-9483-6f479d8e04ba', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 406, 1918.7, 993.8),
-('bd821a5c-f28e-539c-b006-93c0491cf7be', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 407, 1917.3, 993.2),
-('7a0307eb-c337-520c-b373-78d1667f2fba', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 408, 1916.0, 992.5),
-('eee62948-7819-5684-9a8c-9c79b63de0d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 409, 1914.7, 991.8),
-('38aa946a-87b6-5f09-8858-8c4d40b9d0a4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 410, 1913.4, 991.0),
-('1265214a-3bd7-5697-b72f-94919efa82c4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 411, 1912.0, 990.3),
-('18bcf79c-73df-58cd-a868-a65ce0df7b33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 412, 1910.7, 989.7),
-('3defbf0b-8acf-5384-b45b-101b3a54fe16', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 413, 1909.4, 989.0),
-('b89f5b2b-55e5-57ff-95ad-702ec3f9129d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 414, 1908.0, 988.3),
-('3c68d791-2ca9-53f0-a158-5db513a4d10e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 415, 1906.7, 987.7),
-('b3551b78-6670-5d65-a4fd-ee5bfeb7fb52', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 416, 1905.3, 987.0),
-('cc7bbf28-7357-5f5a-ba9c-3ccdf68fe4de', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 417, 1904.0, 986.3),
-('020efb5e-51b0-5b6e-b992-7155a1ede5e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 418, 1902.7, 985.7),
-('b6b7b84e-793e-547d-a11c-8fcc9c0399f1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 419, 1901.3, 985.1),
-('f5759273-1ab0-5e4b-85ed-d5c71ee7f49d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 420, 1899.9, 984.5),
-('02490716-7a2c-5a3c-a7a9-cc160329a5c8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 421, 1898.5, 983.8),
-('3969c5b2-bb24-591c-b062-bad38ce3acdf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 422, 1897.2, 983.2),
-('c7d746ca-30af-58ce-acd4-a68a2eb89721', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 423, 1895.8, 982.6),
-('932e90af-928d-500c-895f-20c228374ea1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 424, 1894.5, 982.0),
-('aaa35608-53ac-54eb-b911-45d3c30e174d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 425, 1893.1, 981.3),
-('389c57b2-246b-5c52-86ae-13fcb8f9212b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 426, 1891.7, 980.8),
-('7e8962f4-8dcb-5884-ba7b-411b415c432a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 427, 1890.3, 980.2),
-('b42c4f1a-a442-50dc-abe1-448ea59ac84e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 428, 1889.0, 979.6),
-('f165fade-5684-5d18-9e9a-729daf6a9aa9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 429, 1887.5, 979.0),
-('7610fded-c93d-5398-abed-bf2262bf2e11', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 430, 1886.2, 978.4),
-('5a60cc8b-120a-5ee4-be7d-c1d78b808ae1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 431, 1884.8, 977.8),
-('4c1b5aff-9a87-5a27-ae59-5af1d4544677', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 432, 1883.4, 977.2),
-('02051ca0-519a-55b5-a3ce-503dba4312f8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 433, 1882.0, 976.7),
-('de36f088-e4f1-56e6-acb0-3a23dc70def7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 434, 1880.7, 976.1),
-('90d448d2-05cd-5b66-8a71-9dcaa7d5eb82', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 435, 1879.2, 975.5),
-('62e16e21-f33b-5016-ad6e-5f6b963552d5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 436, 1877.8, 975.0),
-('6aba020d-64e6-59e5-ac01-90bada1b73cf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 437, 1876.5, 974.5),
-('da9b3e51-b13e-513b-b034-ccd23a304ee9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 438, 1875.0, 973.9),
-('d4fd77e2-14b4-5e1b-8977-4e2544b92b33', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 439, 1873.7, 973.3),
-('97118f4e-ceed-53e9-becb-45c2e2d82f01', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 440, 1872.3, 972.8),
-('7273907f-a363-5b6d-a25a-933dedb8b93a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 441, 1870.9, 972.2),
-('05b21c09-9326-571c-99ca-8683f0e62c50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 442, 1869.5, 971.8),
-('fd707de5-d6f9-54d6-9f65-b6c04aadd9a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 443, 1868.0, 971.2),
-('6fa043f7-0eec-5cb1-8c37-39713e1fa2c0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 444, 1866.7, 970.7),
-('ef18127f-8f8f-5799-a2f3-d461b3014419', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 445, 1865.2, 970.2),
-('929b4bdc-c449-5351-a185-92d73e6c5dcd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 446, 1863.8, 969.7),
-('1657edc6-a14d-50d0-abcf-e43fb5fb66e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 447, 1862.5, 969.2),
-('9e75813c-db89-5d5d-a688-d3ecc49dced3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 448, 1861.0, 968.7),
-('08cd395b-adc6-57a3-a78d-a1f591672add', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 449, 1859.6, 968.2),
-('f5727e00-1697-53ac-a4f1-b17cf9c91afb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 450, 1858.2, 967.7),
-('971aa3a5-68b4-5c43-9a7f-eca474ac50f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 451, 1856.8, 967.2),
-('fb921a99-6a3b-5b6f-8c70-4819f492978b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 452, 1855.3, 966.7),
-('e8c307d6-0eee-5798-b8cc-88f632f1327e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 453, 1853.9, 966.2),
-('77978af7-3b3e-50bb-a58c-04ae8c7e9acb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 454, 1852.5, 965.8),
-('ee890646-35e0-5175-b6b9-19bffb491793', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 455, 1851.0, 965.3),
-('aca86f42-14e7-529f-91e5-29e279366c12', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 456, 1849.7, 964.8),
-('b2a881f4-9fc0-5370-a8c8-0eddd271c9c9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 457, 1848.2, 964.4),
-('047dc522-54fe-572d-9b6f-38accc0495e5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 458, 1846.8, 964.0),
-('c84b1908-f09d-5e3c-8a44-a93da4ce0c1b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 459, 1845.3, 963.5),
-('12c64ea1-e1ad-506f-8115-6744fc2f5b85', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 460, 1843.9, 963.0),
-('b401a23d-5f2f-5033-9822-2487a4d4594e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 461, 1842.5, 962.6),
-('9ad7dc22-bcf1-5b8e-87a5-bcbf27fb43eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 462, 1841.0, 962.2),
-('ad004422-7076-5ba3-b09b-e7e094b5c4ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 463, 1839.6, 961.7),
-('8e5b84ee-03e7-5366-9a65-283127993959', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 464, 1838.2, 961.2),
-('e55ebd59-51e6-58f1-b104-f1fd5f992b8a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 465, 1836.8, 960.8),
-('ce4a91a2-dabf-54fa-a0f7-53095a8b87e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 466, 1835.3, 960.4),
-('13e21a9c-b280-5a0d-b155-303fcbca16e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 467, 1833.9, 960.0),
-('f9580ed3-9758-588f-836f-a64e83da6392', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 468, 1832.5, 959.5),
-('b363d3b0-b8ae-52c4-96c3-3e18e6b203d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 469, 1831.0, 959.1),
-('5dc636ef-e59e-5890-9aa4-a591d75b262d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 470, 1829.5, 958.7),
-('0d7d72aa-bb0b-5f1e-89ca-00c6a2b676eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 471, 1828.1, 958.2),
-('17508aff-9b6a-5c8b-b839-8b0db7b208a9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 472, 1826.7, 957.8),
-('27abcfbb-7f47-5cda-9cc6-ac043f92ba51', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 473, 1825.2, 957.5),
-('0575abbe-0d80-5899-bfd0-bcec393168cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 474, 1823.8, 957.0),
-('17b529bc-f9b6-5d50-af22-413ce50de1f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 475, 1822.3, 956.6),
-('ec6a8e87-aec7-5d21-98e7-bc0cbd9a0403', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 476, 1820.9, 956.2),
-('a25bf428-4257-5473-b154-a018b143b4c2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 477, 1819.5, 955.8),
-('ad7243de-eaf4-5a57-b3c2-3f9cec1ccf4d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 478, 1818.0, 955.4),
-('1917b980-5bfc-5515-a0e2-4be788fbb776', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 479, 1816.6, 955.0),
-('e861fb1c-32f0-5dd1-bf30-f43bcb295121', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 480, 1815.2, 954.6),
-('20140d2c-4d56-59cd-9dab-e7ac7217cf6f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 481, 1813.7, 954.2),
-('eefb1092-d9f4-5107-9fdb-01d8bab1477e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 482, 1812.2, 953.8),
-('21d3884e-8968-545e-9448-354978a39fde', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 483, 1810.8, 953.4),
-('4225d5d7-201e-59f0-a4dd-4e0c29a41746', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 484, 1809.3, 953.0),
-('2a63f056-bc7c-582a-8531-b018212a4682', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 485, 1807.9, 952.6),
-('e68c363c-64e6-536d-8716-38a29fe07881', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 486, 1806.5, 952.2),
-('e514aa50-da96-5594-9ec2-c6c5077bacf8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 487, 1805.0, 951.8),
-('63920795-c62f-5c9a-bf4c-7e95672a3cad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 488, 1803.5, 951.5),
-('19beab8e-43b6-51cc-a0e1-7e361ba0021d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 489, 1802.1, 951.1),
-('f8e870d9-9e12-588e-8f0b-6aadf88891aa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 490, 1800.7, 950.7),
-('c0a4a6dd-c595-5791-8111-85f41181c0d8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 491, 1799.2, 950.3),
-('bd93482a-f996-5ee0-bc2e-04d2712607ed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 492, 1797.8, 950.0),
-('866ebe3c-a202-5a4b-9b5a-e88d5eab9627', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 493, 1796.3, 949.6),
-('7c06e487-7206-55d1-86e3-fb5a843ac227', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 494, 1794.8, 949.2),
-('19025e31-ae1b-5923-bdb1-42011ac35bd3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 495, 1793.3, 948.9),
-('a217b5c9-eca5-5db7-b73f-f4ca728831b8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 496, 1791.9, 948.5),
-('fc238603-ede4-55ac-b2d5-1e371b3a3a95', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 497, 1790.5, 948.2),
-('2ddaf304-aabc-5ab7-ad9d-b4b61d8b2823', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 498, 1789.0, 947.8),
-('3362fbb1-184f-5227-8beb-58c2abf80135', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 499, 1787.5, 947.5),
-('3477d073-e649-5bad-8331-31388f28000e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 500, 1786.1, 947.2),
-('3c8c8b60-997c-5664-b918-50c097efb156', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 501, 1784.6, 946.8),
-('5c23170c-2243-5ed7-ad66-91a5e005c9ab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 502, 1783.2, 946.5),
-('1311d744-0cc9-5782-be8c-47d072d0e4a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 503, 1781.7, 946.4),
-('4af2b25d-bf98-5f30-bf19-561569698206', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 504, 1780.2, 946.2),
-('53c8df82-c2a4-50d9-bd91-586cfe5d6053', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 505, 1778.7, 946.2),
-('59560af1-7268-50e2-8b25-25476f5c1ee3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 506, 1777.2, 946.2),
-('0fd5c9cd-c44b-5c00-a734-b99bc88295fa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 507, 1775.7, 946.2),
-('1840c56e-0cab-588e-9950-b4336b3cb7cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 508, 1774.2, 946.3),
-('7b1f533a-96e3-52b4-a998-8e496efde959', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 509, 1772.7, 946.5),
-('519ba267-1a26-50c4-b14e-e33d566d3661', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 510, 1771.2, 946.8),
-('e6546c5f-da36-5926-8db6-5273196ad8b0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 511, 1769.7, 947.0),
-('595069e0-6be2-5ea2-b6b5-e495e87d8803', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 512, 1768.2, 947.3),
-('eab015cb-fb2e-56ed-9ecc-cd6adc6c6e01', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 513, 1766.8, 947.6),
-('0a920391-f995-5c42-88af-c2bf3f75ba07', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 514, 1765.3, 948.0),
-('48dd51bd-42bb-5f9b-a28a-8a996b682a8e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 515, 1763.8, 948.4),
-('5ac57462-0f29-5b19-b328-e4ac0d0280af', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 516, 1762.5, 948.8),
-('9956ab49-8e27-5f94-b421-757eeb5969c2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 517, 1761.0, 949.2),
-('36327cf8-1881-5418-8e13-f41e0ceecd41', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 518, 1759.5, 949.7),
-('ca1b1cb5-4dbb-5690-91df-d16531a77456', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 519, 1758.2, 950.2),
-('9c12de94-1a9f-56e9-8814-4b0721f12c8e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 520, 1756.7, 950.6),
-('a7ed833d-7c61-5675-9e43-2e5881872548', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 521, 1756.3, 950.0),
-('8af48f62-b4af-528e-ba34-698645bf2484', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 522, 1757.4, 948.8),
-('9aa44876-d237-57b3-b599-109b9ffd1da9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 523, 1758.5, 947.8),
-('ef6929c3-70fb-52f3-9bd3-2aeb4344b2cf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 524, 1759.7, 946.8),
-('b66e72f2-66e6-56f6-836b-52a1414a993b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 525, 1760.8, 945.9),
-('f82e0dd5-d609-5d38-8a54-403d59bc9271', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 526, 1762.0, 945.0),
-('49826f04-c41a-559a-af67-0679f47ffecd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 527, 1763.2, 944.0),
-('b4287478-a352-55f6-896a-511c7dbf1eca', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 528, 1764.3, 943.2),
-('1cece29e-9c0e-5f6b-acb7-d656128fc9fc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 529, 1765.5, 942.2),
-('b0639363-a598-5780-83ce-811173e1fd28', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 530, 1766.8, 941.3),
-('39d56a53-819d-53ef-8f7a-14a598f7a1a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 531, 1768.0, 940.5),
-('b9bd1b36-f101-54f3-8a34-433991777026', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 532, 1769.2, 939.6),
-('c011281e-c5cc-56e8-bb42-1f128afaed2a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 533, 1770.4, 938.7),
-('529360fd-e306-5cc2-9edb-9f7b653e42a1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 534, 1771.7, 937.8),
-('d3621665-7120-599d-b453-d358615caf60', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 535, 1772.9, 937.0),
-('cdd28cec-240c-5e71-a639-c46f87f73f4a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 536, 1774.1, 936.2),
-('9fc5379e-335c-5f5b-b5d3-46c4cee83cc2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 537, 1775.3, 935.3),
-('33f74438-8c71-582d-a43f-32aac22f327c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 538, 1776.6, 934.5),
-('551c2345-df31-56f2-96ad-a3fba30f9fda', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 539, 1777.8, 933.6),
-('9876f395-f022-5d14-80f3-108174377eea', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 540, 1779.0, 932.8),
-('8139881f-7cd5-5524-bb53-db2d072389c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 541, 1780.3, 932.0),
-('185e15d4-43ee-54da-b9f5-4766c5e698da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 542, 1781.5, 931.1),
-('377f8663-e5e8-5fca-b727-08a28a5ffa5e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 543, 1782.8, 930.2),
-('d32ccfbb-93ed-558c-bef5-9a6911de958c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 544, 1784.0, 929.5),
-('875a7299-03ff-598a-9f56-94f863a2a98a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 545, 1785.3, 928.6),
-('9fcb95a0-eba2-5e48-bfe3-c688fc8d49c1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 546, 1786.5, 927.8),
-('39b84f84-e2c2-5598-a323-bb189c6f0b4e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 547, 1787.8, 927.0),
-('48a540f0-b112-5647-82b8-49db1c2f572f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 548, 1789.1, 926.2),
-('1fa1e591-2d5c-56cf-9a49-e1065fb49f3f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 549, 1790.3, 925.3),
-('09969ff8-2294-5806-8a01-be51e582df28', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 550, 1791.6, 924.5),
-('45386e99-b007-590f-bf2a-aca820a8b6dd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 551, 1792.8, 923.7),
-('4b974af9-6424-5029-bd77-722f8779db89', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 552, 1794.1, 922.9),
-('ab174512-623f-5ded-96c9-c353b46b0c4e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 553, 1795.4, 922.1),
-('b06b35fc-7b4d-580c-b264-b69f804bbf02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 554, 1796.7, 921.2),
-('afc3f59f-01b5-55ef-9960-3d501da28189', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 555, 1797.9, 920.5),
-('e04bd27b-c684-5926-aa4a-f1c7229cf3ab', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 556, 1799.2, 919.7),
-('6af4b93f-c72f-58a3-ac98-28c0fbb470de', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 557, 1800.5, 918.8),
-('f35b294b-e75d-5e15-9bb5-e282b4411299', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 558, 1801.7, 918.0),
-('feb4d4c7-c759-5fa3-9108-a3547fbf8d06', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 559, 1803.0, 917.2),
-('5e0d632a-beae-5c75-8541-4919b3abf8bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 560, 1804.2, 916.5),
-('ba822b62-ae85-5275-b39f-31681b1d69e7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 561, 1805.5, 915.7),
-('237ac79f-24fd-5cdb-b32c-dea0085be798', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 562, 1806.8, 914.8),
-('bbec1e43-2432-578f-a198-15c2ddac5476', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 563, 1808.0, 914.0),
-('10d60730-ff16-5989-ae8b-e0f46bf37133', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 564, 1809.3, 913.3),
-('7babe73b-ae11-5c81-8287-d33bbd76b42c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 565, 1810.6, 912.5),
-('06c55411-2441-5b25-b88e-ee83ef667157', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 566, 1811.9, 911.7),
-('c527436e-1dbe-5911-8c3c-7f3d0b05490c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 567, 1813.2, 910.9),
-('d35f88bf-be55-50c6-886e-865a1dd1bd27', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 568, 1814.5, 910.1),
-('125ec783-afdf-5380-95bf-428ee0b39cd7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 569, 1815.7, 909.3),
-('070dbc7d-1299-5685-86a9-91017d2f4a0a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 570, 1817.0, 908.5),
-('5ce97e63-e920-5c72-bcb1-86f5775fedf9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 571, 1818.2, 907.8),
-('cb65b673-5d3f-5ea6-8ffc-e8f769c65a47', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 572, 1819.5, 907.0),
-('f3f27afb-d8ce-59b1-8dc0-2084a02de4e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 573, 1820.8, 906.2),
-('dcd02c20-f796-5dcc-a6d7-b31129a8cf81', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 574, 1822.1, 905.5),
-('c214ebe6-f07d-5b7f-a706-5ca9d4e94d98', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 575, 1823.4, 904.7),
-('c3b9ff99-2a51-5a3c-95a5-e28a7fecba47', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 576, 1824.7, 903.9),
-('149922b7-e94b-51c6-b3ed-927037cfc18e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 577, 1826.0, 903.1),
-('17e68fdb-f0a1-5769-b808-763a6b88aa96', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 578, 1827.2, 902.3),
-('539a643a-0625-5c3d-a696-12d23add5f69', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 579, 1828.5, 901.5),
-('357b86ad-d94c-53b4-bb50-f6d0d2bfb5f4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 580, 1829.8, 900.8),
-('8d389c4b-9f22-5013-b31a-3df044362da4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 581, 1831.1, 900.0),
-('4472a078-0640-5514-b6d1-d17ab6c1c93b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 582, 1832.4, 899.2),
-('a274ec46-5eff-5b42-b612-0e4127369252', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 583, 1833.7, 898.5),
-('d68af63e-04dd-52b8-b383-7550e7caa34b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 584, 1835.0, 897.8),
-('a6e4bb6a-e8f1-55d6-b528-a1dd0e3a5a9f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 585, 1836.3, 897.0),
-('67ce2cf3-129b-5e5e-86d6-f141290e8091', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 586, 1837.6, 896.2),
-('2a461c07-e427-5599-8de5-19791d6a95b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 587, 1838.8, 895.5),
-('87f8a4f7-5ab4-5b4b-8dd1-efb023c1fe76', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 588, 1840.2, 894.7),
-('0b32ddfe-29b1-5a95-bc6e-0e452b975686', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 589, 1841.5, 894.0),
-('ed6e9fe2-f16d-5543-bb18-ccfcb5de5aa2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 590, 1842.8, 893.2),
-('4a59d46d-5c10-5ec3-a3f0-ef176f68d06b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 591, 1844.0, 892.5),
-('5699de5d-aeed-5cc5-8967-eb6d97a128d5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 592, 1845.3, 891.7),
-('f35e84a6-b255-565b-92db-db0a57a4ac3d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 593, 1846.7, 891.0),
-('b4cf35a7-1db4-5c2b-9555-2cc48b4ba2eb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 594, 1848.0, 890.2),
-('134c5000-12dd-55ce-a7b4-1d91b60876b3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 595, 1849.2, 889.5),
-('4ef239b6-4109-5a46-a47a-7291392f58d5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 596, 1850.5, 888.7),
-('e8afa9cc-5ede-5b4b-889e-4abca05c8618', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 597, 1851.9, 888.0),
-('2daba38e-df6c-599d-88bc-ae052966ff50', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 598, 1853.2, 887.2),
-('b551072a-b070-5920-94ad-b5a3c05b4103', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 599, 1854.5, 886.5),
-('768f99d7-55ec-5400-bd50-680424e26542', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 600, 1855.8, 885.8),
-('14fc80ea-2f8c-514a-8c41-11cfa6bff737', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 601, 1857.1, 885.0),
-('56483e5d-e00b-523e-8ad0-be445c4c0fd8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 602, 1858.5, 884.3),
-('92df2152-8a78-5f0c-b643-c22d77c46f9c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 603, 1859.8, 883.6),
-('964913fa-cf3a-5f08-9621-6d08cd51f35f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 604, 1861.0, 882.9),
-('1536dbe7-5ddf-5b2f-a6a4-30b056a52de0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 605, 1862.4, 882.2),
-('29cdf079-63ec-59ac-82ff-3c9ec05f77b7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 606, 1863.7, 881.5),
-('533495fc-dfe6-5835-9a96-7e93b11e9fcf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 607, 1865.0, 880.8),
-('10b71854-9beb-5ef6-bba6-7f008c5606f0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 608, 1866.3, 880.1),
-('d75b4900-8013-5d44-947d-9a09f4d8588e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 609, 1867.7, 879.4),
-('891be652-d72c-5fe8-87de-a1e91d2605a7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 610, 1869.0, 878.7),
-('112f41d9-48c2-5852-b1c1-498e984f910b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 611, 1870.3, 878.0),
-('166180dc-721e-5006-aed6-725fe96a3e67', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 612, 1871.7, 877.3),
-('69617a95-f9d2-52cc-a185-a242b264fae6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 613, 1873.0, 876.6),
-('68fb5ffc-3809-57bd-800a-048d08bcec35', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 614, 1874.3, 876.0),
-('d8a537f0-81a9-5845-adab-f4fb4654a9e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 615, 1875.7, 875.2),
-('9c5e83ab-0020-5540-8dfc-ac06180862ed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 616, 1877.0, 874.6),
-('6a3ae021-58f4-5b54-ad2d-96f81ab0145a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 617, 1878.3, 873.9),
-('750b47c7-83a3-570b-a6fe-d213ba058d49', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 618, 1879.7, 873.2),
-('3261e3a6-7fde-5200-9266-b83c54ee7ffe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 619, 1881.0, 872.5),
-('7495ec17-36df-5a30-b54a-ff1e751e7839', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 620, 1882.4, 871.9),
-('25513beb-1e6a-5b2e-8f61-16436b7e2d0f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 621, 1883.8, 871.2),
-('0747dc58-63f0-5703-bb5f-cbbfc31cb078', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 622, 1885.1, 870.5),
-('209c7e91-cb68-5497-8173-d84c9e816c3c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 623, 1886.5, 869.9),
-('b1250add-2d82-52a2-b618-72378ede9add', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 624, 1887.8, 869.2),
-('506a54df-9032-529b-9514-b33f4e1db2c0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 625, 1889.1, 868.6),
-('b570286d-7f79-5142-bd65-8e16e9f4691f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 626, 1890.5, 868.0),
-('92fb8d00-b2d6-59e6-92f8-0da70239f293', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 627, 1891.8, 867.2),
-('ac25ed88-207a-506a-8320-ef0c991f316b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 628, 1893.2, 866.6),
-('c9f49689-d842-5959-b462-5257a1d12717', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 629, 1894.5, 866.0),
-('3699478c-3aae-52e5-a641-fe469ec9c82e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 630, 1895.8, 865.3),
-('1bdeee0a-21ac-573b-9444-5a8c9c0fb555', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 631, 1897.2, 864.7),
-('aac5ee10-f856-5ac1-8808-5428a75785ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 632, 1898.5, 864.0),
-('0cb066ec-7577-58d5-85c0-a97bbd1c5965', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 633, 1900.0, 863.3),
-('35967497-256b-537e-8e13-ba631c12814d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 634, 1901.3, 862.7),
-('7e3c7dcd-066d-5120-ac59-68fda3c0878c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 635, 1902.7, 862.0),
-('0967d142-ebd5-59fd-a9a0-5ef1e0c1e386', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 636, 1904.0, 861.4),
-('6081eb55-0435-5be5-a1aa-9585a14a3177', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 637, 1905.3, 860.8),
-('589f977b-5340-5ec6-acf1-3b663ce37660', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 638, 1906.7, 860.2),
-('221b8797-639b-54b3-86ea-e0325be95be9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 639, 1908.0, 859.5),
-('83173011-4b98-5b58-9fb3-ff7a7b946c2b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 640, 1909.4, 858.8),
-('b2477821-629e-520e-8029-39562382cf5d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 641, 1910.8, 858.2),
-('57a742d4-a942-5bb0-b186-7921368e5c3a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 642, 1912.1, 857.5),
-('d85270b0-b503-5684-9fd0-853df9832cd1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 643, 1913.5, 856.9),
-('bac798d9-d380-5eaf-9861-c19ccb9116ff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 644, 1914.8, 856.2),
-('8a1ac7d6-cee6-5d57-a760-424bd7d669c6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 645, 1916.2, 855.6),
-('4ef440ff-9d9e-5031-9d50-c06be45e26cd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 646, 1917.5, 855.0),
-('43595c8b-5f20-5949-9488-55cb245e3481', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 647, 1918.9, 854.3),
-('0da9cda3-d136-57b9-8eab-060cfe4cb318', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 648, 1920.2, 853.7),
-('982caf76-4792-52ba-a739-e34d30482aef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 649, 1921.6, 853.0),
-('98db5126-ec7b-5296-9a36-87e219822923', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 650, 1923.0, 852.4),
-('7c61392c-8eec-51e0-b419-d9d00c52fae0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 651, 1924.3, 851.8),
-('075feecf-3b88-59e1-81d0-1deea76c4960', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 652, 1925.7, 851.1),
-('e59fa210-c19e-5001-8269-007d825b5ed5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 653, 1927.0, 850.5),
-('7ad97620-763c-5cb8-b02f-9ef9ea635428', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 654, 1928.3, 849.8),
-('e4d9b01e-a816-5b22-bc9a-689ce7ce6c10', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 655, 1929.7, 849.2),
-('974cb28f-f895-51f6-8a09-1f710553b6da', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 656, 1931.0, 848.5),
-('a3e8a6b1-fe4a-53a5-a171-62b269700fcc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 657, 1932.4, 847.9),
-('ea31edb4-c003-54af-abb5-44f3e004b945', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 658, 1933.8, 847.2),
-('e74eec66-9479-5a15-9bae-d9dbfa8a8339', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 659, 1935.2, 846.5),
-('151ca111-590b-53d3-bda7-4bd7bba122c0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 660, 1936.5, 845.9),
-('62c1be6f-0033-504b-8a50-5df720112f24', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 661, 1937.8, 845.2),
-('b3abe402-ba6a-539b-8788-d19742fdd06a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 662, 1939.2, 844.6),
-('20eb9c0d-d9c5-5152-822f-11510517ff3b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 663, 1940.5, 844.0),
-('c0b79058-71c2-5b63-9995-d0d638520426', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 664, 1941.9, 843.3),
-('1a721146-0079-5ae1-9033-561a7ec45439', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 665, 1943.2, 842.7),
-('bb979e37-6587-58c9-933b-4c6287807908', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 666, 1944.5, 842.0),
-('694fc6fa-ad41-502a-a83b-67f0794ffcb5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 667, 1945.9, 841.3),
-('33ac28d5-2dc5-5d4a-8799-7c7518f9bb9e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 668, 1947.2, 840.7),
-('f100da34-8494-5150-8b71-863ce8d39287', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 669, 1948.6, 840.0),
-('79101a43-5c92-515c-b67d-44a69b6bf176', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 670, 1950.0, 839.3),
-('fc36cece-3d26-5485-8c63-01d377d37760', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 671, 1951.3, 838.7),
-('752f0011-cd12-5815-ac27-a7930004e337', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 672, 1952.7, 838.0),
-('6d316cbe-4397-5e71-ba92-f98618a9ea7a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 673, 1954.0, 837.3),
-('7cdc303c-f5e9-5129-8772-120dbf6e1317', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 674, 1955.3, 836.7),
-('05736790-1079-53fc-b71c-0d75bd3a3eb2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 675, 1956.7, 836.0),
-('b4320cbc-51e6-593b-b637-6b22059c0e64', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 676, 1958.0, 835.3),
-('e4a0a7bb-51cd-5bda-9d0a-c02dda3b1e7a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 677, 1959.3, 834.7),
-('b632f8a5-e3d1-5c9a-b165-25e622a3b479', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 678, 1960.7, 834.0),
-('826ae06f-418f-56ef-aa39-736c535eacce', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 679, 1962.0, 833.2),
-('1ba24bc6-2156-5616-802e-36f2de24f82b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 680, 1963.3, 832.6),
-('392f30f9-29fb-5f56-9a10-6636c70ec3a8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 681, 1964.7, 831.9),
-('1f756de3-c9b1-5263-8d6d-5355472b1d8d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 682, 1966.0, 831.2),
-('88038b24-be16-5591-9aac-e45a22dcf55b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 683, 1967.3, 830.5),
-('1af0cb10-7876-541c-ba5c-dfe4ad4365e7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 684, 1968.7, 829.8),
-('68d1caea-1a4b-58c9-90cf-45f186abd59e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 685, 1970.0, 829.2),
-('ce07042e-4e9c-5ccd-af9e-d763e1ecccf8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 686, 1971.3, 828.5),
-('ae278fb1-12d3-50c8-90f2-b552c0f2c504', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 687, 1972.7, 827.8),
-('41e60a07-0776-501c-94f4-441908b83de0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 688, 1974.0, 827.0),
-('704d23d9-a964-5caa-a654-762cbe693c6c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 689, 1975.3, 826.3),
-('cfa0f897-3035-57b0-977c-016cd8d60a55', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 690, 1976.7, 825.6),
-('7936ac9b-a414-5e07-9946-5ed5160e5ad5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 691, 1978.0, 824.9),
-('5046353a-474f-585c-b2ec-642a41f6dfcc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 692, 1979.3, 824.2),
-('ced45049-a8ef-5d1d-ae9a-198d93f54a87', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 693, 1980.6, 823.5),
-('05b7773a-1be2-5519-9fde-06d6e06c9534', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 694, 1981.9, 822.8),
-('5dd00fe6-2676-56dd-8fe3-f943dd45a7a7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 695, 1983.2, 822.0),
-('f615a2da-f64d-5092-8adf-d9c595b4e9bc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 696, 1984.5, 821.3),
-('2e76b22f-c9b8-58c5-86e6-43e75061112b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 697, 1985.8, 820.7),
-('672798a4-9f0c-5a79-9f12-0f571b2b37e3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 698, 1987.2, 819.9),
-('f3c4bdae-9803-5766-be1d-9821711bbfcc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 699, 1988.5, 819.2),
-('8e6b0fcc-8abb-5e23-bde9-85ba84c751df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 700, 1989.8, 818.5),
-('560d05bd-ea12-56c9-a631-b9d226cfc90d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 701, 1991.2, 817.8),
-('97cb8ce0-5b20-5f72-a40d-5d470f2adcb8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 702, 1992.5, 817.0),
-('63f73052-4883-5554-a216-85458bd0b4cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 703, 1993.8, 816.3),
-('f9e1d513-e439-541e-b312-88425a29330c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 704, 1995.0, 815.5),
-('7062cd66-ed48-58a1-b852-9e4638cd53f7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 705, 1996.4, 814.8),
-('9f00c9e4-5935-58c1-ac86-78449b52353d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 706, 1997.7, 814.1),
-('34a59bc4-4b54-5f68-a44a-f515d1db5dad', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 707, 1999.0, 813.3),
-('084b26a6-4285-5983-a512-1c4291050660', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 708, 2000.3, 812.7),
-('d23bfb04-ac81-5e41-bb75-2a57407d3bd5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 709, 2001.6, 811.9),
-('cc594cc6-5bdf-5ea3-8aee-042d96ac0f6c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 710, 2002.9, 811.2),
-('84bb65b0-ce08-567d-880c-e1c092bdaf07', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 711, 2004.2, 810.5),
-('588b61d8-f5cc-5835-82eb-1868e5316a58', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 712, 2005.5, 809.7),
-('ba5b76a5-9069-52af-baa6-ad2b14ff979a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 713, 2006.8, 809.0),
-('3156e5a0-b261-57e6-aed6-c623ea697fd0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 714, 2008.2, 808.2),
-('de546fad-6b85-540b-88e9-3921b6353841', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 715, 2009.5, 807.5),
-('364cb1db-6b5b-5c61-b2c9-dd5c25d28f5f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 716, 2010.8, 806.8),
-('ae93f8e9-cf72-5997-acfc-cb2ecff9c9ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 717, 2012.0, 806.0),
-('06baa4bd-3260-5abe-9919-a3434927d3a8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 718, 2013.3, 805.2),
-('c101de96-d3df-537b-a9ea-94eedf0cc944', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 719, 2014.7, 804.5),
-('9fdc463e-775a-5074-aa96-8801164b4472', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 720, 2016.0, 803.8),
-('b789282b-8f3f-51be-baa6-cff5e6f889f8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 721, 2017.2, 803.0),
-('98bfe6bc-3591-57f1-99d7-7afdbc762e06', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 722, 2018.6, 802.3),
-('d390d5e5-899a-5708-818a-f786a95e2f34', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 723, 2019.9, 801.5),
-('a1236806-fcf1-53ae-829d-2faeeebd9165', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 724, 2021.2, 800.8),
-('7f67cedc-5d18-5c7d-9c13-055ef8d28c2d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 725, 2022.5, 800.0),
-('c65e0407-f3c8-5c5f-a235-f12a3b7f3449', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 726, 2023.8, 799.3),
-('17213500-eeeb-59e3-a420-520a31218dfc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 727, 2025.1, 798.5),
-('067d4706-c39d-50f8-b79b-3e5df362c1b6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 728, 2026.4, 797.8),
-('c44970c8-dcb2-54e6-bacf-376315cc4bf1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 729, 2027.7, 797.0),
-('057913f9-35ab-5e86-a3e9-5ae77d71293d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 730, 2029.0, 796.3),
-('5dd3fdd5-b836-52c1-8890-f13072d440d7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 731, 2030.3, 795.5),
-('3fb0927d-3a3e-5004-88c5-ce80f09afe40', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 732, 2031.6, 794.8),
-('47635286-8f9c-5101-9ff9-556c6ca4089a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 733, 2032.9, 794.0),
-('f0401a8e-b7cc-599c-a2f8-15fb602d00fb', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 734, 2034.2, 793.3),
-('8dd39f3e-db0b-5ffd-a956-92647650e4c7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 735, 2035.5, 792.5),
-('112db772-2578-54a1-b4a6-1f6b05e60aed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 736, 2036.8, 791.8),
-('7f6d5726-d8fc-5914-9d29-e2d2822c9a7d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 737, 2038.1, 791.0),
-('05246ac4-2d8c-5387-a8ed-676f91cb0d32', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 738, 2039.4, 790.3),
-('744d8c92-f159-563a-9fac-5f37f6b8c23a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 739, 2040.7, 789.5),
-('7a6bd20a-d3ef-5d5a-98ce-3b92d00b8cfd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 740, 2042.0, 788.8),
-('2077537f-6b96-58f3-8cf6-861928f811f4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 741, 2043.3, 788.0),
-('9d57b516-627e-5a41-9641-b2c71b578852', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 742, 2044.6, 787.3),
-('4a920172-90d8-51a0-ab3e-15afe4ff89b7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 743, 2045.9, 786.5),
-('e831c183-4e41-5d40-96d1-c068f4929e94', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 744, 2047.2, 785.8),
-('a06414d6-a552-59fb-afa4-5190fe4f83ed', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 745, 2048.4, 785.0),
-('c1273d7b-e266-57df-8b7a-b66e320af2bf', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 746, 2049.8, 784.3),
-('9cc2e7be-c290-5c82-94a7-8f625ab04842', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 747, 2051.1, 783.5),
-('ec80d1f2-ab2b-5090-a8a5-dd1e805ccf51', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 748, 2052.3, 782.8),
-('a0185046-0675-5f66-9bdf-22952b25e125', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 749, 2053.7, 782.0),
-('c112fc73-410b-5898-b342-88e3544c167d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 750, 2054.9, 781.3),
-('4e1b6cdd-631d-50e7-a316-9cd7f88b3bd7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 751, 2056.2, 780.5),
-('f76f9633-dfa8-5ffe-afc9-9a0aca16acf2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 752, 2057.6, 779.8),
-('5b0c096c-0f0d-5b9a-9a83-639a0e990cae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 753, 2058.8, 779.1),
-('ae20f6fd-a560-5ecc-9c19-f300ce20c3d6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 754, 2060.2, 778.3),
-('4c134654-161f-5aac-b5a7-405db3885695', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 755, 2061.5, 777.6),
-('33e0a73d-e729-592a-b600-bdb72df7373a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 756, 2062.8, 776.8),
-('a70facdc-e440-5c50-922c-04485c47c8ea', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 757, 2064.1, 776.1),
-('26526638-1368-5c89-b66c-f695eba9f4c9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 758, 2065.4, 775.3),
-('71e1b452-b224-5ba8-9beb-ae1f5d7ef65c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 759, 2066.7, 774.6),
-('5ea798d7-86f7-5f79-8e0d-3e52c47d1953', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 760, 2068.0, 773.8),
-('a2ace09e-a835-599e-bba3-40bf74a21434', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 761, 2069.3, 773.1),
-('5432284f-3844-570c-a102-62ae86cf8a22', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 762, 2070.6, 772.3),
-('d96a2d86-f235-5aaf-966d-cd7cceb24529', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 763, 2071.9, 771.7),
-('c74e0d9a-7139-5087-8cb2-aaae64450a05', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 764, 2073.2, 770.9),
-('9d45aaa7-acdc-5554-9415-f8ac108f694f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 765, 2074.5, 770.2),
-('98befc13-161a-5a59-a762-a4502b84b4e7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 766, 2075.8, 769.4),
-('0bf586e4-369b-532c-91d6-942c372eeab0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 767, 2077.1, 768.7),
-('75f3a2ed-45e6-574e-a007-5cbb6fae96d5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 768, 2078.4, 767.9),
-('94819757-f3ed-5d1a-b444-f30430e4088e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 769, 2079.7, 767.2),
-('2f870e9b-778a-5f76-b8ec-72942c528fa0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 770, 2081.1, 766.5),
-('6f694317-305b-59e1-847d-9a8c6d326c7c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 771, 2082.3, 765.7),
-('f4f956c0-d79a-591c-b2e2-87fd1f9f71e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 772, 2083.7, 765.0),
-('ea7bd9e0-f29a-5a9a-aab5-d54697a7cf36', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 773, 2084.9, 764.2),
-('ba5f91fd-d67e-594c-a1a3-084f14ec7db6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 774, 2086.2, 763.5),
-('76a594e2-7a9a-53fc-b0c4-f21fbb2cbaf6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 775, 2087.6, 762.8),
-('60193db7-5dbf-52dc-ae3d-eebeafd55b82', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 776, 2088.8, 762.0),
-('b407f131-ab30-56c7-b421-5ac5b5f5bc1f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 777, 2090.2, 761.3),
-('e061b675-e0c1-5707-88a2-c852414e4e31', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 778, 2091.5, 760.5),
-('91aff268-369e-568b-b6e1-084be95906a4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 779, 2092.8, 759.8),
-('005c57c9-8d33-5dfd-8b6a-aec2ecbf00b9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 780, 2094.1, 759.1),
-('2d2fc07e-4570-5d7d-b92c-0e460d1b389d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 781, 2095.4, 758.4),
-('3d4f97ec-ec0e-5be4-b29c-e35b6eb376a1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 782, 2096.8, 757.7),
-('bdfddcff-c3bc-538c-a8b7-eb99619ec6d0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 783, 2098.1, 757.0),
-('41e0927d-d338-569e-909e-c69b531d2970', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 784, 2099.3, 756.2),
-('6281df7a-07cf-5c52-a386-3722ab45dadc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 785, 2100.7, 755.5),
-('31e51e3f-c9e3-5bbb-9f0f-54bdb9999d2b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 786, 2102.0, 754.8),
-('cbe48fc9-2ee1-5915-b4f0-b220c7d92577', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 787, 2103.3, 754.0),
-('3a264902-4a94-5da0-a25b-9b1f13894d0d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 788, 2104.6, 753.3),
-('c4504fe7-025f-5c67-8205-786dc5828737', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 789, 2105.9, 752.6),
-('4945ee60-120c-5811-9f5d-298bbc5a22ca', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 790, 2107.2, 751.8),
-('28ba36ee-607d-5df9-a13d-3b70f425b7d2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 791, 2108.6, 751.2),
-('48d96a5d-492f-5051-96d2-edb4e7e80680', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 792, 2109.9, 750.5),
-('ff57d612-4e23-56ce-b0f7-524616785681', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 793, 2111.2, 749.7),
-('6203c760-77ff-5696-ba33-fd1ec1d8d652', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 794, 2112.5, 749.0),
-('b291d53c-e769-5a7c-9a2f-07a1148ac822', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 795, 2113.8, 748.3),
-('88d0ff06-3e10-53f0-81b4-8dc6dcd69179', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 796, 2115.2, 747.5),
-('25b454a8-85b5-573e-aa56-b0203db6a130', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 797, 2116.4, 746.8),
-('b8ee0ba9-5017-5d1c-9fc0-7b86a2690cff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 798, 2117.8, 746.2),
-('8d91f321-d08d-54d6-bb39-8f8a4cb1c76b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 799, 2119.1, 745.5),
-('c68878d0-6786-56c0-ba93-742b12fc7c03', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 800, 2120.4, 744.7),
-('b8d18db8-ef48-5e1f-a006-7c4d2c98f7a6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 801, 2121.8, 744.0),
-('a6e1a974-6d2a-58a7-92be-0d3dc4766973', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 802, 2123.1, 743.3),
-('bdf7b2de-84ad-53f1-8aa6-3e5152067bb9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 803, 2124.4, 742.6),
-('39267fa4-d76c-53db-95f6-b8829ac5e24e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 804, 2125.7, 741.9),
-('4df97b46-8aca-5bdb-b08c-2fd6f8dfa7e9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 805, 2127.1, 741.2),
-('7bed504c-f6ef-58c1-a1be-4e514cef46a7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 806, 2128.3, 740.5),
-('1181a525-5431-5bcb-a17d-c81d21ea4596', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 807, 2129.7, 739.8),
-('3ca51f47-eeb4-54eb-9905-1044a113c7b3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 808, 2131.0, 739.0),
-('eeab9495-a714-596f-af7b-99622df64df2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 809, 2132.3, 738.3),
-('d1d12cce-c541-518d-af55-4647b1ba7088', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 810, 2133.7, 737.7),
-('ec7b8456-39e3-501c-be86-bb7fd9f6c032', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 811, 2135.0, 737.0),
-('e872416e-2885-5352-a5be-1e001d9e546b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 812, 2136.3, 736.2),
-('f76222d4-e52a-565d-abb7-e5deaa7437e2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 813, 2137.7, 735.5),
-('d6adf0bd-950a-5e56-8004-33fd53d26126', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 814, 2138.9, 734.8),
-('c372c2ac-984f-50c1-b594-249785c87d4e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 815, 2140.3, 734.1),
-('abbb323c-a63a-5b71-ad55-295ff0269c6a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 816, 2141.6, 733.4),
-('1b8fd3db-8a84-534b-bccd-63781321febd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 817, 2142.9, 732.7),
-('0c60eab9-b7c0-5bed-9f56-0f1020d607cc', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 818, 2144.2, 732.0),
-('e7a208cf-aecf-5b5b-a989-824ed3e5edea', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 819, 2145.6, 731.3),
-('ebf2cff0-3e31-5995-9f0b-0ede3d3ac7ff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 820, 2146.9, 730.6),
-('93fe72ad-35c6-51dc-a217-a79f86d0963e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 821, 2148.2, 729.9),
-('dac28851-72e8-56e7-9cc7-f9f8ab234aae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 822, 2149.6, 729.2),
-('6b594ae7-e1a4-5d0d-b252-a740d140b0ae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 823, 2150.9, 728.5),
-('2d7ee468-5a3c-57f2-b4ac-a07ebfe8c9bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 824, 2152.2, 727.8),
-('8b5a9a24-29c6-5ce1-ac07-dc0f067237df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 825, 2153.6, 727.1),
-('71a92505-4cb6-5f99-9629-403ca5913e9e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 826, 2154.8, 726.4),
-('7c429cb7-7bdf-5964-bf29-773d4a8ff2d8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 827, 2156.2, 725.7),
-('9d62afe3-a241-50b7-a692-2b01568c63e1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 828, 2157.5, 725.0),
-('11892555-4f5d-56bb-8681-c905c384f747', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 829, 2158.8, 724.3),
-('04874676-243d-5418-89db-7b6bea785307', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 830, 2160.2, 723.6),
-('6551d5d7-aa48-5331-b4e7-0a2945e0ef46', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 831, 2161.5, 722.9),
-('9cf2aab1-fdde-587d-b5cd-31c783b2c90b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 832, 2162.8, 722.2),
-('f791ddce-ab9f-553d-aa9e-18373e1cbda5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 833, 2164.2, 721.5),
-('0fe11143-e325-5710-9994-9f3af4acf6ec', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 834, 2165.5, 720.8),
-('c1ef019d-2ec8-53b6-a428-4656ba0547e2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 835, 2166.8, 720.1),
-('96c49700-ae75-5cde-af21-3667cc004099', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 836, 2168.2, 719.4),
-('8826ba04-a730-5b2d-b514-ce8fb0cfa876', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 837, 2169.4, 718.7),
-('2e51f984-b6ab-5e32-8b36-e9124d935253', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 838, 2170.8, 718.0),
-('9656081c-5ffb-5223-9c5f-466e1536081f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 839, 2172.1, 717.3),
-('49d26781-10e8-5c5d-9ba0-be719a2168e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 840, 2173.4, 716.6),
-('5adffd7a-92b9-5c2b-a455-fa727d00f3ef', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 841, 2174.8, 715.9),
-('562db99e-86d8-5f08-becc-13788daa7491', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 842, 2176.1, 715.2),
-('623e324c-cc1b-5597-8642-4ca009fd4a37', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 843, 2177.4, 714.5),
-('98eafe13-6b7c-5f88-93d9-f4cffb1fdf1a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 844, 2178.8, 713.8),
-('0710784d-d26c-52b5-9d5b-886ffec4959d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 845, 2180.1, 713.2),
-('8c14b66b-3da1-5877-9a5b-5e58f5bbb645', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 846, 2181.4, 712.5),
-('268c1015-a034-501e-bb07-c0dd1361871d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 847, 2182.8, 711.8),
-('e689e61d-7cf4-55a8-9e8d-63f1b223cd17', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 848, 2184.1, 711.0),
-('0aba9c0f-4e7e-522d-95fd-94ddbf1b7367', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 849, 2185.4, 710.3),
-('c597b5b2-8a89-5f4d-9a88-f5e96948ab46', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 850, 2186.8, 709.7),
-('43167bf0-179e-51a5-8173-e949dd35b242', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 851, 2188.1, 709.0),
-('4b26e36e-430e-5cea-92db-d70b0b4edb59', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 852, 2189.4, 708.2),
-('d6a82a38-f6ce-5cc0-a0c0-0d6044d201f5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 853, 2190.7, 707.5),
-('d927929b-8b65-588e-b8f6-3679c81a6aee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 854, 2192.1, 706.8),
-('73308c00-b71e-5cf3-83e4-bdfdcf2314ce', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 855, 2193.3, 706.2),
-('19ab9e10-0b7f-57cd-bbcc-7c35978d6fb2', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 856, 2194.7, 705.5),
-('e18440c2-80f1-5cd7-bd00-98798b8082e4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 857, 2196.1, 704.8),
-('d9ce46e5-baef-5350-8413-f9e9514214bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 858, 2197.3, 704.1),
-('04c39bcb-4156-5468-b4b2-4550727c40af', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 859, 2198.7, 703.4),
-('a306e18f-ffe9-58fa-995f-c3772b24559e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 860, 2200.0, 702.7),
-('54a13b68-ac14-5a46-a302-9cd867b07fb9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 861, 2201.3, 702.0),
-('7ce64c8f-641d-520b-adf3-3b42ee3222a0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 862, 2202.7, 701.3),
-('ffb8fa33-30f8-5c89-afd2-fa5fa6631718', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 863, 2204.0, 700.6),
-('a88af065-09aa-5bc4-9193-102ba5073bff', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 864, 2205.3, 700.0),
-('9fddf123-180d-5e9d-9446-766cd48b3b0f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 865, 2206.7, 699.2),
-('140a17a4-0a75-5b1e-b667-648c8dee0f68', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 866, 2208.0, 698.5),
-('cc5be69c-407f-5613-bcb3-7b1427e61ea5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 867, 2209.3, 697.8),
-('5140ce33-beb4-591e-9127-cd3aae0238bd', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 868, 2210.7, 697.2),
-('61a36a50-9977-56a5-b2e4-778d74040827', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 869, 2212.0, 696.5),
-('909b8a63-a6d6-5bdb-921d-818ffb8fa38b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 870, 2213.3, 695.8),
-('7df0e473-bc5c-5b07-b795-1fbe6dab0164', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 871, 2214.7, 695.1),
-('05353700-667b-52dd-8d7d-1a293253a323', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 872, 2216.0, 694.4),
-('7657433e-2639-5868-b181-bbd3e9a4844f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 873, 2217.3, 693.7),
-('c0894697-e182-51d0-b957-1e15aeaa4c46', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 874, 2218.7, 693.0),
-('519bc382-ca23-5269-8bbf-8f84bc5ff1ee', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 875, 2219.9, 692.3),
-('f32dcdaa-2174-5dd9-8019-18f93214fad6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 876, 2221.3, 691.6),
-('30dfa188-d8e2-5215-b7ca-34a458335910', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 877, 2222.7, 690.9),
-('a7e21c6b-86a9-5577-98fa-f57512c73cf7', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 878, 2223.9, 690.2),
-('fcda40e1-4ca9-5c59-b157-d887b4cb639f', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 879, 2225.3, 689.5),
-('1c939790-e5c0-593e-a551-6e098eab1b02', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 880, 2226.7, 688.8),
-('b0c4b052-0f78-5a49-abb1-bb5f172c6ca3', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 881, 2227.9, 688.2),
-('8d6e8194-8ed8-5aaa-af53-2f6d97aaee22', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 882, 2229.3, 687.5),
-('457e34eb-a900-5b72-bb4b-e694a9d5305e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 883, 2230.6, 686.8),
-('22650e25-3010-53c2-b0d7-c66bc4795d88', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 884, 2231.9, 686.0),
-('0ac2d63e-c934-5adf-bb23-0c2cfa9e312a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 885, 2233.3, 685.4),
-('e5757474-063b-5349-80d0-2a233cae3302', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 886, 2234.6, 684.7),
-('60dfbfa0-b520-5953-b1aa-40f3f2dac80a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 887, 2235.9, 684.0),
-('ad2bb382-a250-512a-b69a-c5a8dadb2776', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 888, 2237.2, 683.3),
-('9ec87a43-e54e-5269-994f-c1ccdef43cbe', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 889, 2238.6, 682.6),
-('ff07d77a-8df1-5850-abcc-b0a9ade31c49', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 890, 2239.9, 681.9),
-('c573bb85-5191-5776-81b7-ef20c9765113', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 891, 2241.2, 681.2),
-('fc033d5b-ee02-5c62-8131-2f9929fcba5c', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 892, 2242.6, 680.5),
-('1196995f-95ad-56a6-af12-d437d77a23b4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 893, 2243.9, 679.8),
-('1a3ae92d-9022-5999-8161-f92795c9a819', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 894, 2245.2, 679.2),
-('9581ce3b-91b7-5e01-b8ad-7f313822a72d', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 895, 2246.6, 678.5),
-('0c5d6c5c-f1cb-5e50-8423-4f1da51c6688', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 896, 2247.9, 677.8),
-('f8b6b5f4-295c-5b49-af7d-37ac0e464232', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 897, 2249.2, 677.1),
-('7adceae1-3478-5049-b8d4-a1f1e2dcf1d0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 898, 2250.6, 676.4),
-('ca291bac-f6c4-548d-af6b-ade57cd47519', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 899, 2251.9, 675.7),
-('aa87ccca-1c65-59f0-a5e2-adca88300c7a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 900, 2253.2, 675.0),
-('3c32d8fe-9673-563e-807e-401a16baf72a', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 901, 2254.6, 674.3),
-('b720a891-e0f1-5c46-a176-8093fd6740de', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 902, 2255.9, 673.6),
-('e76b106d-b591-5060-b53c-b0df7e47f7f9', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 903, 2257.2, 673.0),
-('55941ad9-cbb9-51ba-9b68-1ae6dd2f7d6b', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 904, 2258.6, 672.2),
-('4b8ba415-36d6-5d46-8457-57c5d1011aa5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 905, 2259.9, 671.5),
-('4bb2593a-3f49-5b60-9c64-2fc51a5c8d67', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 906, 2261.2, 670.8),
-('6ff7a03c-6d64-5ea5-bd95-377c5384a525', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 907, 2262.6, 670.2),
-('a9d9718d-5858-5a4b-b3bb-f71ed00599d6', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 908, 2263.9, 669.5),
-('4790c412-2a61-5e1f-bb57-2e330e62e7ac', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 909, 2265.2, 668.8),
-('789ed5b9-c6a5-51ef-9115-d67a9eed7a04', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 910, 2266.6, 668.1),
-('0bf804c8-57be-51ce-b980-8297478eab00', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 911, 2267.9, 667.4),
-('0d2fef17-de82-5249-b039-be416cd210df', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 912, 2269.2, 666.7),
-('80e1de2e-d528-5c8f-ba02-26deecff43aa', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 913, 2270.6, 666.0),
-('58b52659-680d-5881-94ff-0bfd09e2f976', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 914, 2271.8, 665.3),
-('05b0b16b-6eba-568f-9645-418957cd71e1', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 915, 2273.2, 664.6),
-('85ab01a3-a7e0-5443-bd24-50556c942ff5', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 916, 2274.6, 664.0),
-('8dce6d9d-a304-51fb-aa8a-a1e4019e7a9e', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 917, 2275.8, 663.2),
-('bae717dd-4db4-513c-866f-1642654de073', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 918, 2277.2, 662.5),
-('8a5c9ccf-3970-5609-b43c-ba9775f7ff20', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 919, 2278.5, 661.8),
-('b7b9c5c3-4f65-5c5e-b1ea-01033f7ff5e0', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 920, 2279.8, 661.2),
-('e869bf33-e4e9-54a0-adf5-63d502a76de8', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 921, 2281.2, 660.5),
-('7ef5a824-9c35-5ae7-90cb-9ea9395cfcae', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 922, 2282.5, 659.8),
-('03d9561a-9407-5bb0-bf0f-c1fb990613b4', (
-    SELECT id FROM level_info
-    WHERE level_name = 'Kettle Creek'
-), 1, 923, 2283.0, 659.5);
+('5dcab1b3-8d83-53fc-8f35-4572b299f949', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 0, 1500.00, 1502.00),
+('f41bbbe7-4c21-593b-aecd-8e7749da09cd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 1, 1507.88, 1500.69),
+('118c1b2f-092d-589b-9d29-3761ba021ff8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 2, 1515.73, 1499.24),
+('27797242-6aa0-5b44-8706-af0f877f289f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 3, 1523.58, 1497.73),
+('b56a990e-c3f1-5a50-9e2d-4c1f11b6f988', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 4, 1531.42, 1496.20),
+('4c0b0398-210d-5cdd-89f2-de9948220f01', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 5, 1539.26, 1494.69),
+('33bf7d9f-e9e7-5e0b-9959-120f3cea5191', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 6, 1547.11, 1493.19),
+('91092de1-9132-5224-81d1-be07f7affe10', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 7, 1554.96, 1491.74),
+('33c82f9a-0b40-5f65-8141-17dec252213f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 8, 1562.82, 1490.32),
+('bac8c484-4d40-5fcd-9c84-551cd84a5255', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 9, 1570.69, 1488.96),
+('f10de08d-a0b3-5ca5-8b73-4505920cfa7b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 10, 1578.57, 1487.66),
+('b9729802-8979-556a-9b19-deb5b991f8b1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 11, 1586.46, 1486.43),
+('263d6806-c49b-550f-8a67-0ee701e9377d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 12, 1594.37, 1485.27),
+('574c833a-25fc-5b85-988d-f4c7adfb7a41', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 13, 1602.28, 1484.19),
+('a1e67cbc-27ba-5834-8f17-502a7bb893c3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 14, 1610.21, 1483.19),
+('c1a115ca-df5f-516c-8d2a-48c5a44ba57d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 15, 1618.14, 1482.31),
+('affc955e-291c-5679-af0c-df46bfedd753', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 16, 1626.09, 1481.55),
+('5def4d25-0e35-586a-b8a4-6d9a0c1d7722', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 17, 1634.06, 1480.90),
+('7cc5c611-8eb9-5154-9559-10b0d146e08c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 18, 1642.03, 1480.38),
+('29cdc038-e710-5113-96d3-dd9a5c7cd204', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 19, 1650.00, 1480.00),
+('fc5bccf5-8cdd-5d00-990b-e684a13449f0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 20, 1657.99, 1479.87),
+('58957fa4-0845-5bc0-b4ac-f14bf95b0837', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 21, 1665.98, 1479.92),
+('2e542a64-dbcc-57c7-9351-91daa76b7f79', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 22, 1673.96, 1480.12),
+('c75e803a-a13e-5629-9e53-a3c551e9c1f1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 23, 1681.94, 1480.43),
+('31b9c5f6-b832-5d5c-9533-d0cc6c4a255a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 24, 1689.92, 1480.89),
+('b999999a-872d-5474-a7ca-093de6b2b554', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 25, 1697.89, 1481.42),
+('32939d27-af47-5829-98ea-c5bb192400b3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 26, 1705.85, 1482.01),
+('5099a0b0-d2fc-59da-ae51-71bbe47e8a7d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 27, 1713.81, 1482.67),
+('c4af22b6-1ff7-510c-9fb6-e8ab8997cd05', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 28, 1721.77, 1483.37),
+('6a50421a-be06-5982-8c82-4db5b8b3e8b1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 29, 1729.72, 1484.10),
+('f592f436-0c4e-57e0-b32a-009766318652', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 30, 1737.68, 1484.84),
+('e6104182-1439-54d6-b164-12047efb3d9f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 31, 1745.63, 1485.59),
+('234ba8ba-8771-5990-8ca7-b4238039c69f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 32, 1753.58, 1486.34),
+('8989d18b-5e05-51b2-9464-1ebb717e544e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 33, 1761.53, 1487.08),
+('af0f2062-83c2-5cd0-b756-59863321d625', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 34, 1769.49, 1487.78),
+('de5cb076-2135-5845-892e-2ce166b68b7d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 35, 1777.45, 1488.46),
+('b73030d7-75e7-5727-a362-c2dbeda0fa56', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 36, 1785.41, 1489.09),
+('f65a9eca-57ba-5e33-a072-a775742f3617', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 37, 1793.38, 1489.64),
+('c5284412-507f-51db-ac4d-e887e1f3cc72', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 38, 1801.35, 1490.12),
+('67b5df15-8e0a-5b28-8d48-7bade452d59e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 39, 1809.33, 1490.52),
+('67eae9bd-1a36-5ec1-9a60-e7775da50016', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 40, 1817.31, 1490.77),
+('f12d4bf6-415d-52a4-8885-cb502db4b656', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 41, 1825.30, 1490.88),
+('70e4e8ae-0684-5703-849a-436b352e3fce', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 42, 1833.29, 1490.83),
+('36e6b286-0519-5c24-948a-2c0993cde5bf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 43, 1841.27, 1490.59),
+('fa3c316b-b722-5198-9307-8fada38835f6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 44, 1849.24, 1490.05),
+('2c346919-6fe9-50f1-9f61-591e0e5fe5dd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 45, 1857.19, 1489.27),
+('b5d4a42b-414f-5c22-9a99-d491ddf9b83f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 46, 1865.12, 1488.34),
+('e3f558c8-579d-5874-80ea-f76a32ea5e8a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 47, 1873.03, 1487.26),
+('c9bfd753-206a-5180-a818-e82347c3c6ed', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 48, 1880.93, 1486.04),
+('a84f64a2-80f0-55bd-bb05-3f9fd39f9d3f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 49, 1888.79, 1484.66),
+('4a7d376d-bc80-54ec-ac19-def699c3f480', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 50, 1896.63, 1483.12),
+('cbdcf0ae-2809-5ed8-993f-84f9e71230ee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 51, 1904.43, 1481.42),
+('0213ebf2-3d67-51bd-b90e-be948cec12e5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 52, 1912.20, 1479.54),
+('0b3c68d7-3c17-5ac3-b47d-cc8c0698d83e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 53, 1919.91, 1477.47),
+('e563ddfc-c280-559e-ad6e-5983a035d593', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 54, 1927.57, 1475.20),
+('2ccbbece-47d1-5b44-934a-1bc0735381bf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 55, 1935.16, 1472.72),
+('207d2110-0882-5758-b58e-c240afd76181', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 56, 1942.67, 1469.99),
+('e605de6e-1e43-5a58-98e9-ac9191fa4af9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 57, 1950.07, 1467.00),
+('79540aee-2a89-5503-99c9-aeacbbc6441e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 58, 1957.35, 1463.72),
+('6cd28d92-240f-5190-9ffc-bb04241b089f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 59, 1964.47, 1460.10),
+('d77a334a-e7c8-5b60-9995-e5e11cec0c99', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 60, 1971.37, 1456.08),
+('3761015c-f187-53e4-9775-de339888cfa9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 61, 1977.94, 1451.54),
+('49a0c5be-647e-51ba-80e5-2570e1ade5cb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 62, 1984.04, 1446.39),
+('198630a7-1d75-56d1-8d54-2e9e845a67a9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 63, 1989.20, 1440.31),
+('4a10c862-d262-5f6e-907c-c2e971dab1d9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 64, 1993.38, 1433.52),
+('c003df42-367f-525f-b5e3-826a552cfcc1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 65, 1996.56, 1426.20),
+('1fbf97f8-00a1-5529-a038-ad211d03383e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 66, 1998.74, 1418.52),
+('8b8ba30c-52da-5d41-8cf5-91a3a73466c1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 67, 2000.15, 1410.66),
+('7bbee87d-17f6-5212-866f-43471de3f28b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 68, 2000.90, 1402.71),
+('5fdd559b-d247-581c-96c3-6048ea70f77c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 69, 2001.12, 1394.73),
+('f45274eb-267f-5f76-b559-582288e4a079', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 70, 2000.98, 1386.75),
+('433cd286-514a-5d1c-9d79-da7c0008f795', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 71, 2000.58, 1378.77),
+('62c7e7ac-77fc-524f-bc29-3ff37b51c36f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 72, 2000.05, 1370.80),
+('8ce37344-e582-5bbf-9bf2-17ee8db465a2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 73, 1999.45, 1362.83),
+('c654bba4-50d7-52db-a9fd-b428fa71163f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 74, 1998.61, 1354.89),
+('8b023be1-a240-5794-a02a-39013b12c978', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 75, 1997.37, 1347.00),
+('8eb86050-4698-5575-8fe9-b38a90913d0b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 76, 1995.61, 1339.22),
+('936e5228-65e2-5335-a54e-f2cb971f2f70', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 77, 1993.17, 1331.61),
+('b9f76cc6-766f-5928-9928-b6ab610cc8fb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 78, 1989.99, 1324.30),
+('ca7d68a1-172b-561a-b0d8-8aa51671635a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 79, 1986.01, 1317.37),
+('97027740-8dc9-5404-9542-2750da9ae6a9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 80, 1981.25, 1310.97),
+('f108b9e6-9e47-5380-98d1-a9473b36ef0c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 81, 1975.79, 1305.14),
+('2f442ce4-e05d-52a7-b78c-21180aaf7b0a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 82, 1969.81, 1299.85),
+('f7cc751e-b02b-568d-820a-56ba366035a2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 83, 1963.41, 1295.07),
+('a10b325c-e6a8-567e-8800-4239812e92da', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 84, 1956.80, 1290.60),
+('de2e14c0-941d-5688-b95e-b10f0dcb9de0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 85, 1949.98, 1286.43),
+('fa833d1e-ec54-537e-9bc3-6447a4cc930c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 86, 1943.01, 1282.54),
+('b56af932-8ae2-5c1c-bbaa-e213568ef45c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 87, 1935.91, 1278.89),
+('8741933e-9ada-5c77-b7a2-568e33430b21', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 88, 1928.70, 1275.45),
+('025f5c7f-28f7-5b34-bf75-d1c088738e72', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 89, 1921.40, 1272.21),
+('43a64aab-0acd-564a-a948-cbf76db3074f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 90, 1914.01, 1269.17),
+('89f8bede-d8a6-556f-875e-ded50a4359ea', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 91, 1906.55, 1266.31),
+('fa030723-e9a6-51e2-8011-b2423fd53c1e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 92, 1899.03, 1263.63),
+('91e052cb-8a48-506e-992d-24aee7dea1d6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 93, 1891.45, 1261.10),
+('c2aebf5c-0007-55a4-a932-a10b77aa3e42', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 94, 1883.83, 1258.73),
+('fad4ee19-ad63-512f-99d1-f223d4ecc679', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 95, 1876.15, 1256.51),
+('4454f47f-76c0-5117-b461-7ce8769eb4fc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 96, 1868.44, 1254.43),
+('a70d21df-4519-5290-8e10-2832c59c23cc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 97, 1860.70, 1252.48),
+('835f04f5-8d95-596b-8c14-3cc5ae27d257', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 98, 1852.92, 1250.67),
+('7741bfd2-4a91-5395-8f15-ecaec3560047', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 99, 1845.11, 1248.97),
+('4d2113ac-80db-57f6-b806-c28698ca09bb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 100, 1837.29, 1247.37),
+('dac4417d-dd88-5b65-8393-f362e5923af2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 101, 1829.45, 1245.85),
+('40c9804d-30e4-5b91-961e-f99759cb6370', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 102, 1821.59, 1244.41),
+('82dab8d8-1155-53ba-b0e6-ec97e9ce0046', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 103, 1813.72, 1243.06),
+('f2e0694b-2a4b-59b5-9214-327ad9bc9360', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 104, 1805.83, 1241.77),
+('d6f7103b-796a-5a42-8188-8ecefb353cba', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 105, 1797.94, 1240.54),
+('adfd7f10-ee3a-590f-88ad-d6f9593db08a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 106, 1790.04, 1239.37),
+('6b0f1c39-e5d5-54ae-8b13-a0e3e3d4fd38', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 107, 1782.13, 1238.29),
+('3c906386-f04e-531f-a464-5deae298eecc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 108, 1774.21, 1237.26),
+('1467f5ba-6bbd-5dfa-a7f9-2de510b2f653', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 109, 1766.28, 1236.27),
+('e022911c-4b23-5510-a7a3-b2d8600ab44e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 110, 1758.34, 1235.38),
+('a78f3fdc-061c-5b42-8168-6cc5ee313293', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 111, 1750.40, 1234.53),
+('5575a84d-d440-5a84-9bab-a83ff4df105a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 112, 1742.45, 1233.74),
+('5cc8bfb6-3ae6-5d02-b069-38d69dc77964', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 113, 1734.50, 1233.03),
+('df43293a-a41a-53b8-9425-3bd828cbfabf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 114, 1726.54, 1232.38),
+('76a64d4a-8858-5db9-aad9-7503176edece', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 115, 1718.57, 1231.78),
+('a99a79c9-ee2e-5a9d-a6c4-5318d46387e9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 116, 1710.60, 1231.28),
+('5fcb8c22-b4c6-54dd-bd48-2b22ed613196', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 117, 1702.62, 1230.84),
+('74df85ca-03a5-544a-bd3d-a802229f95e9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 118, 1694.65, 1230.46),
+('134286a9-32f6-5ea2-bf2b-6fce00767397', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 119, 1686.66, 1230.18),
+('6c1b4ec6-8529-5de9-9e25-6939c82a727f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 120, 1678.68, 1229.98),
+('e2891460-b77f-539c-af30-dd3056ba0003', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 121, 1670.69, 1229.86),
+('38cff949-c1b7-5d32-a29f-3c0b098e9724', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 122, 1662.70, 1229.83),
+('b75ec167-46fe-5d5a-b405-a2fdf5394cff', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 123, 1654.72, 1229.93),
+('188cde9d-60e5-5baf-83e1-8eec67fde659', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 124, 1646.73, 1230.13),
+('75e0a07c-937a-5b9e-a246-d6bf65fd8afa', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 125, 1638.75, 1230.45),
+('52deb788-cb77-56fc-acb2-c475ff49b8a7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 126, 1630.78, 1230.99),
+('ac5250f7-40dd-5be8-ad71-333bdcf7cb1e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 127, 1622.82, 1231.65),
+('afececf2-6f11-56cf-ac90-e2b5b5373c85', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 128, 1614.87, 1232.43),
+('aea78fb1-30a0-5dca-bb37-7e1b70447ae2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 129, 1606.94, 1233.34),
+('456da528-102c-587c-8378-8cb28b6c8d60', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 130, 1599.02, 1234.38),
+('d5304767-2b33-56a8-98e6-cb01df3b9047', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 131, 1591.11, 1235.49),
+('f1dafe7e-8579-531f-a084-f0f08cb331ed', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 132, 1583.21, 1236.69),
+('072e2723-d189-5793-97b1-62d723ac53c6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 133, 1575.33, 1237.99),
+('96ab42fe-6f50-5205-bb65-359b223a2c79', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 134, 1567.46, 1239.34),
+('82b240fc-79dd-5bb4-bee1-3229a0db0981', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 135, 1559.60, 1240.73),
+('b06d5663-4ef0-5300-8028-049558f3865e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 136, 1551.74, 1242.18),
+('8ef54dc8-3d66-504c-bf64-d209b1aa3c0c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 137, 1543.89, 1243.66),
+('5746caf8-de0a-5f6d-ad0f-afd3bcbb768f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 138, 1536.04, 1245.16),
+('46a68929-cbe0-5345-bbba-5fb2165d7f49', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 139, 1528.20, 1246.67),
+('b81aad6b-e5fc-563b-b0de-b86d46958042', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 140, 1520.36, 1248.18),
+('9bc2a083-b0d2-51bd-81ec-c4ddf1653504', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 141, 1512.51, 1249.68),
+('68ce23d9-5109-5084-8837-4fb87dbe5e80', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 142, 1504.66, 1251.16),
+('ab4c16b6-6427-5a3c-ae68-0856897bdb92', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 143, 1496.81, 1252.61),
+('6507f61f-98ab-5809-847a-e8629e3246c0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 144, 1488.95, 1254.01),
+('7eb66105-4e29-5142-9eb4-072c14523504', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 145, 1481.08, 1255.37),
+('9a79e21d-b767-563c-acc0-bee210b04fd4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 146, 1473.19, 1256.67),
+('fd25dc01-ab6d-5a8c-a7b6-d7593a449ff7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 147, 1465.30, 1257.88),
+('95e35b2c-2174-5740-95f3-fc9a23197773', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 148, 1457.39, 1259.01),
+('1b41207c-85fc-523b-859f-2936ff6d122c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 149, 1449.47, 1260.06),
+('07f97d88-8b60-52db-b5d2-a6c662b53ce0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 150, 1441.55, 1261.04),
+('9fa4b4be-06b1-5fbf-b261-cf3dde8e1b7b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 151, 1433.62, 1262.01),
+('58ce3777-6dd2-5267-a3ba-b963cba43618', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 152, 1425.69, 1262.97),
+('5497a0dc-105b-59b6-94a7-d4165f0268b4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 153, 1417.76, 1263.90),
+('df785c79-dc75-5d6b-8f2b-36a0e2eb3736', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 154, 1409.82, 1264.83),
+('4f97ea1a-5a5f-53f0-94da-94705883b25a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 155, 1401.89, 1265.74),
+('4f5b8dc2-5b77-5edf-ae80-24ee28b3cae9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 156, 1393.95, 1266.64),
+('cc232da0-2970-56ae-ad05-dd7afd2ee22b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 157, 1386.01, 1267.52),
+('a2767c1c-0544-5445-a9e7-6b7c51d3b734', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 158, 1378.07, 1268.40),
+('6160517c-bd01-5bd9-a139-4bee7f30256c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 159, 1370.13, 1269.25),
+('01d3dda6-84f1-52e1-86df-9c359154da10', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 160, 1362.19, 1270.10),
+('fade7127-7cb5-562c-870f-562837f436b7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 161, 1354.24, 1270.93),
+('28b69f52-4117-5e40-a21c-fed85a178889', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 162, 1346.30, 1271.74),
+('1c42fa02-97b9-5544-82a8-c10d74b3231e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 163, 1338.35, 1272.54),
+('889a167c-445f-5dfd-b1bc-3741414f9227', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 164, 1330.40, 1273.32),
+('d680e5a6-a8c3-5621-9459-8d797ed49139', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 165, 1322.45, 1274.09),
+('d405c9a9-1222-5d24-891d-366cd1cc4dee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 166, 1314.50, 1274.83),
+('894f44f9-0d25-5cad-ac55-62ad75e6dd4a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 167, 1306.54, 1275.56),
+('3d53b997-0fcd-540f-a94a-dc49c63fa1b4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 168, 1298.59, 1276.27),
+('3b61ac07-a2ab-5e69-97e1-5241e3a38dd4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 169, 1290.63, 1276.96),
+('82e8901c-f6ad-573d-ba75-e8435e4b564c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 170, 1282.67, 1277.62),
+('462af918-020f-5241-b43b-c48b0ea0b5f4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 171, 1274.71, 1278.25),
+('b2766836-c07f-515a-b8d1-2de4ea9f3eda', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 172, 1266.74, 1278.85),
+('611debb6-c3e2-5f18-a7f2-83695f8cdb7e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 173, 1258.78, 1279.42),
+('86ce3a95-ff3f-57ac-877d-dcfd08f5a495', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 174, 1250.81, 1279.95),
+('260c238d-7078-5573-9a1b-0871c740e206', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 175, 1242.84, 1280.47),
+('fe6a83bf-46d6-5c3f-b871-27523757c11d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 176, 1234.87, 1281.02),
+('5412138e-aade-5e72-a6bf-e8d120036019', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 177, 1226.90, 1281.59),
+('672bb322-6fb0-58f1-80ea-7976ea340d43', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 178, 1218.93, 1282.18),
+('030f195a-86ad-5fd8-86ab-dc06adb1ed1c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 179, 1210.97, 1282.75),
+('e5f5d48b-a186-5148-ae1d-2d18ba08a302', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 180, 1203.00, 1283.31),
+('775efddb-d692-5150-81a2-57f11509699b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 181, 1195.03, 1283.80),
+('fa8d30cb-7f53-5513-a1ec-3a6c6f4bc183', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 182, 1187.05, 1284.19),
+('d44aa41b-e503-5103-884a-2e6e39e0067a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 183, 1179.07, 1284.46),
+('3ac3bb78-024a-555e-bfb5-1006041b3d51', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 184, 1171.08, 1284.55),
+('7f2d6d70-e984-5c28-b2f1-322e0f96c90f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 185, 1163.10, 1284.40),
+('7f83a5f0-fd74-5f76-b4d0-39b7a6203979', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 186, 1155.12, 1283.95),
+('9fdacdb4-d021-5e98-a773-116a615d72d6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 187, 1147.17, 1283.17),
+('0560e78d-cc67-52a0-80d9-76baeac62b9a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 188, 1139.28, 1281.96),
+('66a94a60-4c97-5b0f-a403-2ef6c829b240', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 189, 1131.46, 1280.33),
+('60d634e6-0eb1-5eda-b99e-1fde9fd15aaa', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 190, 1123.75, 1278.26),
+('93e30027-090c-5fb8-82e3-28f90aa86bd2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 191, 1116.18, 1275.70),
+('f3382996-c0bb-543b-b857-ed0d0c7adfc9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 192, 1108.77, 1272.74),
+('56ac3d11-c176-5661-97ed-5f42e38bcc67', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 193, 1101.56, 1269.31),
+('717639ce-668d-5935-bdb7-a23f3e9c076e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 194, 1094.52, 1265.53),
+('5570fc65-d260-586a-b088-9aefed265bbb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 195, 1087.72, 1261.35),
+('bdc1cf2e-fcb5-569e-99a3-9160b88580da', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 196, 1081.10, 1256.87),
+('bd35f2c9-a8f6-55f4-9401-de9835fa4389', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 197, 1074.71, 1252.09),
+('8105ea90-d534-5e47-9aac-fdc66bb66fdb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 198, 1068.49, 1247.08),
+('75b30b41-25bd-5d22-be58-70e578cf2fb6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 199, 1062.46, 1241.83),
+('6dd9eda9-a857-58dc-b03b-1e75a3e9a487', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 200, 1056.59, 1236.42),
+('3ba98e85-3fca-549f-9343-35a2bba96981', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 201, 1050.86, 1230.85),
+('343fa270-43f4-5d60-be8a-ce264e8cba30', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 202, 1045.42, 1225.01),
+('b2b85483-8c35-5d7a-b625-974851c9d442', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 203, 1040.39, 1218.81),
+('ff87ee3f-5505-507f-b1ac-e626e5ad34c4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 204, 1035.68, 1212.36),
+('3e88559d-d35c-5095-ad7f-335ef5746650', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 205, 1031.26, 1205.71),
+('8bfc1652-6868-581f-ba75-754aec745cc9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 206, 1027.02, 1198.94),
+('86693e14-89b3-5b9a-92d6-0f49f6a99670', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 207, 1022.95, 1192.07),
+('cddac7b6-399d-55ea-8e64-633f579e898a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 208, 1019.02, 1185.11),
+('ab46e91a-8faf-529e-83a1-a858e7b6935b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 209, 1015.19, 1178.10),
+('85aa5042-3469-53a3-bee8-c536e726c33e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 210, 1011.43, 1171.06),
+('9bfd5b5c-c2e4-5a8f-a0d7-62849b1e1e9a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 211, 1007.71, 1163.99),
+('90a2012c-a931-566a-a3f0-39712e579be9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 212, 1003.95, 1156.94),
+('fe58b4d1-51eb-5c13-959d-71e2b2ab0117', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 213, 1000.00, 1150.00),
+('2815d0e7-b766-5fa8-9f2f-f6f22da818e4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 214, 992.59, 1152.68),
+('b5784c5a-f62c-58a2-8221-ce7e7a87fc31', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 215, 985.23, 1155.53),
+('1c990a2f-3c3d-55e4-a6a9-614cfa793973', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 216, 977.91, 1158.44),
+('cfec53e4-4dd9-5070-8e9d-07a6c6d8266b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 217, 970.59, 1161.38),
+('177a02a3-69f3-56f1-8e4d-82eca29c4921', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 218, 963.27, 1164.32),
+('8a8900fd-fae9-5a4a-9dba-875d8593b9a4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 219, 955.95, 1167.24),
+('348f780d-fc60-5de4-af94-1c6adc96ca6d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 220, 948.62, 1170.13),
+('d55ef868-6db5-5e81-bdbc-914e172d854e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 221, 941.27, 1172.99),
+('6e002dd4-7515-5687-b4b7-317030c148ed', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 222, 933.90, 1175.80),
+('c4b43bdc-2b3c-57f7-98b6-abf3824b7164', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 223, 926.51, 1178.55),
+('626b59ee-d730-5267-8b4c-a50b46ed3442', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 224, 919.10, 1181.23),
+('bb94830b-08d9-5791-8c03-9a05a2e75b64', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 225, 911.66, 1183.84),
+('ce0f6298-0a00-56ee-a79b-97e86fca6d4d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 226, 904.19, 1186.37),
+('7d4d625e-5f16-5444-9bf9-2aeedbdfb0b7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 227, 896.69, 1188.79),
+('6b1f8e0b-dcb8-5d45-a168-05ac40c51ae6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 228, 889.14, 1191.08),
+('6b6e0c8c-7ce0-58fa-95e5-7cfbfb78cade', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 229, 881.56, 1193.24),
+('0dcf3f42-cc41-5411-b9d2-da0cd639c4e8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 230, 873.94, 1195.24),
+('1ee1ce36-8f0d-502a-b9c5-debebe7fde6c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 231, 866.26, 1197.06),
+('f4de808f-8154-50f0-aec6-8151c2263ae7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 232, 858.54, 1198.64),
+('693cd847-10b2-5665-bc66-4fa069865bd1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 233, 850.75, 1199.88),
+('e8c7785b-174e-590a-b180-05ada6e09b64', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 234, 842.92, 1200.77),
+('89b1fcc1-544a-5353-8000-c2e480a311d0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 235, 835.06, 1201.33),
+('58950b2a-9d30-559b-af3b-057c701957a2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 236, 827.18, 1201.61),
+('c10d17d0-3290-51ea-9afd-164c23cafffc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 237, 819.30, 1201.65),
+('66cff6f5-48cc-563d-991b-4d64836be027', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 238, 811.42, 1201.48),
+('aafaf755-5c6b-5ce4-9765-1c7fa347005f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 239, 803.54, 1201.12),
+('1e156ee7-495e-58f5-949f-8b81d08d45cf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 240, 795.67, 1200.60),
+('3a5f7086-f359-5cce-92c9-6dddf92d1c6a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 241, 787.82, 1199.95),
+('8030ebbf-d7bc-5229-ad31-cfb4ed5e7812', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 242, 779.97, 1199.17),
+('6e5f6453-8658-5ed4-b6e9-cdd01d5ae5a7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 243, 772.13, 1198.29),
+('a6973bec-8e9e-5966-96d6-9c264bdd01c7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 244, 764.31, 1197.35),
+('92ff9f59-bd67-5755-80c0-f470c9f0edac', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 245, 756.49, 1196.35),
+('de81fe9d-e63a-5278-aca1-71f229aafd97', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 246, 748.67, 1195.33),
+('b47e148f-382e-5481-ac08-2a58b455fd34', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 247, 740.85, 1194.29),
+('e6f1a707-b79a-5d00-b162-fb248c532a63', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 248, 733.03, 1193.27),
+('7ea16e3d-c473-5a6f-b48a-6e619a3a8e65', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 249, 725.21, 1192.29),
+('ad446a9e-fbbc-5896-b535-8d271ef64f84', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 250, 717.38, 1191.40),
+('fa55ebb2-1d78-5f6b-807c-5d2e4576aa8e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 251, 709.53, 1190.65),
+('46c24dc0-4d73-5892-9428-ef3d40baed40', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 252, 701.67, 1190.10),
+('37d626ee-67b9-5886-89f9-a8b654a51dd0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 253, 693.79, 1189.75),
+('b1ff1c58-206f-5661-8fc9-276111e5afc6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 254, 685.91, 1189.51),
+('93272950-b5ef-5915-b5f4-7239cc78993c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 255, 678.03, 1189.34),
+('6ad40447-d3d9-59d5-8986-9ab827946d31', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 256, 670.14, 1189.27),
+('a0262051-0921-54a4-a824-2cde3e766c4f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 257, 662.26, 1189.29),
+('908012d5-f9ce-5fa1-ae96-29413f76acdc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 258, 654.37, 1189.39),
+('8cd7358b-581e-50bc-9826-75101b13a18f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 259, 646.49, 1189.56),
+('e7fb33c0-29a1-53ca-b228-c69d555f8606', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 260, 638.61, 1189.75),
+('77c33378-286f-5816-a0b8-e98a25478b42', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 261, 630.73, 1189.91),
+('a75a5d0e-b6a2-564e-b12c-529a45753df6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 262, 622.84, 1189.99),
+('af78fd28-1dca-50df-bc4d-fdc7f6d05c6c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 263, 614.96, 1190.00),
+('058568e1-7c00-5490-bcab-2449f75b36ce', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 264, 607.07, 1190.00),
+('e21fbd83-d9b7-5a84-9407-be6f59c210ee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 265, 599.19, 1190.00),
+('4ba60d44-b502-57f8-b547-8aceb1c78ac2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 266, 591.31, 1190.00),
+('795ab6a4-cf76-5d48-ae93-d2b504985d4c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 267, 583.42, 1190.00),
+('68702c47-b792-5c2e-ae6d-c76b51b0e5e3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 268, 575.54, 1190.00),
+('0afde812-75e3-55da-b5fe-1ad5be64080a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 269, 567.65, 1190.00),
+('d6cd91c7-e1bc-5576-af5b-3b26402351a1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 270, 559.77, 1190.00),
+('9a633373-537b-5a21-80fc-c89c9d73eef1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 271, 551.88, 1190.00),
+('70ba4ac8-3c0d-57ef-9279-b38d1cc8f45f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 0, 272, 544.00, 1190.00),
+('c5ebf77f-66bf-55ad-becf-60bab5acbb26', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 0, 2324.00, 1290.00),
+('e6847bc9-c080-56c7-abee-eb40717de76d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 1, 2321.23, 1282.52),
+('940cb230-0b38-5f08-8627-3be8ade82bde', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 2, 2318.63, 1274.98),
+('7154fb75-1b4d-5679-94bb-079ec60e4aa7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 3, 2316.07, 1267.42),
+('1dd8c8d6-db53-553a-b113-b9673921b0c4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 4, 2313.50, 1259.87),
+('b881a53a-fe50-5d17-bdf2-0c875c686baf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 5, 2310.90, 1252.32),
+('cfc2d222-8f47-50ed-893d-c60359621b27', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 6, 2308.26, 1244.80),
+('c98b1c57-dd1b-5fd1-aba6-cd116a50936f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 7, 2305.55, 1237.29),
+('590e9d83-f0d2-532d-8cd2-c0d6fac16542', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 8, 2302.77, 1229.82),
+('0ad89863-8a86-5617-8f2d-3151f8670bf7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 9, 2299.89, 1222.38),
+('5df9e6d3-d951-5aa2-9336-6d90c6aaf534', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 10, 2296.91, 1214.98),
+('5795ec0f-69cc-5f3c-a742-07dd83f401f5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 11, 2293.79, 1207.63),
+('c5573ff2-f416-525b-b382-4a71e06a03d7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 12, 2290.53, 1200.35),
+('6bfb81e7-ade4-56b7-8f50-0c26bf0d582f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 13, 2287.08, 1193.16),
+('92c2cc02-6913-59aa-8e61-422a4b87f4f0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 14, 2283.42, 1186.07),
+('51d6d173-8f2e-5964-ab47-72c185a66939', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 15, 2279.49, 1179.13),
+('90529c69-fe6c-5db3-a7c6-55308c57abaa', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 16, 2275.43, 1172.26),
+('d7c0379e-6994-5009-8da0-472e789af748', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 17, 2271.35, 1165.40),
+('44fee952-72b2-5577-a5fe-862310fc849b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 18, 2267.23, 1158.57),
+('7267fc7c-115b-59be-855f-a7d0cdaf42dd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 19, 2263.04, 1151.79),
+('f4107135-7d0d-54a1-a64a-9f29da3053e8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 20, 2258.75, 1145.06),
+('6d4338b3-e6b5-5129-b487-baf7ec0304e8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 21, 2254.34, 1138.41),
+('cd0daedb-c92a-5dc2-b644-fbc7fbdd35c0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 22, 2249.78, 1131.87),
+('b0c7fb97-55ac-504e-bca4-d47ea35396e8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 23, 2245.06, 1125.43),
+('e4b55a77-c83e-5911-9063-b304e0f2cc2b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 24, 2240.17, 1119.13),
+('4945c7dc-a133-5f9b-8984-4884c9c4c5b9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 25, 2235.09, 1112.98),
+('598a18f0-b45c-5f73-bbb4-2d7251ab8537', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 26, 2229.81, 1107.00),
+('7de94cb7-90b5-5004-a67d-02a12ca747a3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 27, 2224.33, 1101.21),
+('30d8a012-a55c-5b2f-97d4-f4121c44f83c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 28, 2218.63, 1095.62),
+('ec47afcd-208d-5a5d-b653-acba8d23f283', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 29, 2212.73, 1090.25),
+('ab728e62-94a1-5bf2-875b-9e7977a14119', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 30, 2206.62, 1085.12),
+('1f038554-cbe5-5f0c-8d43-851ef19e5df3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 31, 2200.31, 1080.24),
+('51c70aa3-05d1-522c-bbe1-ef2afc2c3078', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 32, 2193.84, 1075.57),
+('db4796e6-c269-50f6-acdc-aac5b76a9d29', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 33, 2187.25, 1071.08),
+('287ce137-701d-5c00-81bd-855192bfcdfb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 34, 2180.56, 1066.74),
+('f6872505-d92a-53f8-a1b5-eeff34132b72', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 35, 2173.77, 1062.54),
+('c4839e0d-29c8-55c6-a738-d2856bd41421', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 36, 2166.90, 1058.49),
+('356d2102-71d1-5cbb-aa44-a111652c8f12', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 37, 2159.95, 1054.58),
+('f95ea211-438e-5f0d-87e3-b3bb68acce1b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 38, 2152.93, 1050.79),
+('c3d94c55-7209-51e0-bd10-416fab5f328b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 39, 2145.84, 1047.13),
+('2d62fac7-a5aa-5a8c-b741-ab2f18e71eda', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 40, 2138.69, 1043.59),
+('8e4e3d5b-d9ef-5910-8eb4-e42e1460ab8f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 41, 2131.49, 1040.16),
+('869b956b-603c-5a97-a2e2-e6d7d5fbae56', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 42, 2124.23, 1036.85),
+('4f696e01-5a48-5f0a-b6c9-db3f45fad3b4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 43, 2116.91, 1033.67),
+('a7896720-9652-5798-a513-fd7567a586aa', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 44, 2109.55, 1030.60),
+('d5f0aef8-7ac8-53bd-b961-ed602fedb8d8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 45, 2102.14, 1027.63),
+('296672ba-8697-561e-a073-197f36bb8bb9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 46, 2094.70, 1024.77),
+('7282252d-24ec-5018-bfe6-76bdc5b2ae9f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 47, 2087.22, 1022.00),
+('54c93b1d-264e-5cae-bf4e-aac12895617b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 48, 2079.69, 1019.35),
+('a84f981c-3c36-53ae-9958-edddfab0ab16', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 49, 2072.13, 1016.82),
+('1c8dd8b2-3692-54c7-b4e6-0f1a6a27e992', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 50, 2064.53, 1014.38),
+('9c00f578-7847-500b-8abc-48a7a3a0e460', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 51, 2056.90, 1012.04),
+('454afc35-f923-5e9e-b154-510b83314f94', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 52, 2049.25, 1009.79),
+('057c9ad2-ab16-530a-a7b8-d34cf7b5e37b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 53, 2041.56, 1007.67),
+('93b5844d-0f66-573c-a054-b6631a4e77d2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 54, 2033.84, 1005.64),
+('3f2d2f50-2e37-517f-af9e-f8a2ffc6db53', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 55, 2026.11, 1003.70),
+('f0820d0a-aa95-5083-8057-b95166646d85', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 56, 2018.35, 1001.83),
+('ca57663c-243a-52af-bcf5-e5aa68406234', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 57, 2010.57, 1000.06),
+('b6ee3898-5da5-5899-8b39-1f85157e0321', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 58, 2002.77, 998.38),
+('760dab57-e4f9-5b30-a683-eec06737e6de', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 59, 1994.96, 996.76),
+('ec19dd03-cf53-5da9-ab9d-badb6866fdbf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 60, 1987.14, 995.20),
+('a7239ae3-cb0e-5d58-b6af-02f7879d7151', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 61, 1979.29, 993.75),
+('a5c97f93-9704-592c-97c6-ccd7358fde22', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 62, 1971.44, 992.36),
+('a4a8a63a-debf-52c4-b476-8b3f0db60370', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 63, 1963.57, 991.03),
+('73bd6100-5a1d-5cfb-9513-193c68b5d2dc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 64, 1955.69, 989.78),
+('fe26e3f1-e540-5498-9d8f-bf6cc7c5385e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 65, 1947.80, 988.60),
+('c04564e6-346b-54f8-b5da-2b4fe5bcf036', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 66, 1939.90, 987.48),
+('303acdbd-457a-5c16-b15e-8e5951deef1b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 67, 1931.99, 986.44),
+('f48298b0-dc39-5cde-9990-c24a82179eb3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 68, 1924.07, 985.47),
+('6ff01cc9-15d2-5e23-bb81-46f03d692bf4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 69, 1916.15, 984.57),
+('45a1ddef-7f16-5598-80c5-2f69e98257b1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 70, 1908.21, 983.73),
+('2d5e4612-ed47-58d8-b57d-104196cd2dc3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 71, 1900.27, 982.98),
+('20751d30-68f7-5df1-97f6-84e904236d01', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 72, 1892.32, 982.30),
+('ff0c9993-e4d7-539d-9f86-f60fc5ab9e56', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 73, 1884.37, 981.68),
+('69a85a5d-1dfa-5e76-a40f-46a91f47ecef', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 74, 1876.41, 981.17),
+('1e800d63-e66c-5ad7-a146-69fadf5c8032', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 75, 1868.44, 980.72),
+('c1cec50c-cece-5070-8750-c6d6d86aa8a7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 76, 1860.47, 980.35),
+('a1fad902-7f33-58d7-a8db-084c467e57da', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 77, 1852.50, 980.08),
+('8db97d1a-9e4f-5cd2-bda0-5ced275ee17c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 78, 1844.52, 979.92),
+('2b0cf1f3-3dca-576f-b1b1-f395a22bdf8b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 79, 1836.55, 979.86),
+('7e6c9099-9522-500c-b999-72ae0d2c0006', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 80, 1828.57, 979.91),
+('782b5061-d423-5ae3-906c-f3fd9598bd6f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 81, 1820.59, 980.11),
+('ed9d023a-c45c-5ea7-8b6d-3cd79c0430d4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 82, 1812.62, 980.39),
+('9f6e2810-5a07-5de1-ada3-658d847ae04e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 83, 1804.65, 980.75),
+('d5be53cb-5a0a-51d4-ade9-c3757f4ca602', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 84, 1796.69, 981.24),
+('6978cc22-ea0d-5c41-94bb-d07bae6e4c48', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 85, 1788.73, 981.81),
+('3012e475-4034-5941-a531-4dcca6dff523', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 86, 1780.78, 982.45),
+('6190dba3-3ec5-5d17-b179-249fc14cd111', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 87, 1772.83, 983.17),
+('16108343-e5d1-5810-991e-871aed89054a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 88, 1764.90, 983.97),
+('0b4971b2-b4e3-5c91-9d73-b9bf75d82230', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 89, 1756.96, 984.83),
+('f0083c99-191a-5584-8bf7-5efa0b4ae677', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 90, 1749.04, 985.74),
+('ed6e66cb-05dd-518b-a487-a60da142aa86', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 91, 1741.12, 986.72),
+('0a530f67-6230-5afa-a338-376cddbaee95', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 92, 1733.21, 987.74),
+('ed8136f6-bba2-53de-a66f-c412ae5bf89b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 93, 1725.30, 988.80),
+('5b696961-9201-5f2f-8fe9-eff38b817cc7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 94, 1717.40, 989.90),
+('2e3aea94-e6a0-58dd-be9f-6d0abedd03ba', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 95, 1709.50, 991.03),
+('8b19489b-885e-5810-8bca-36be94893f74', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 96, 1701.61, 992.19),
+('7a84c77f-e031-5f2d-9984-974abdcb89b0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 97, 1693.72, 993.36),
+('666bcf83-9585-5ca5-9af8-47c84a86abc4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 98, 1685.83, 994.55),
+('92756eaa-571d-527c-8d0a-806e0bad9813', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 99, 1677.94, 995.75),
+('790fabda-6303-55e2-9e11-a5ebecb0153f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 100, 1670.06, 996.96),
+('6899cbbc-f071-55b5-91ec-4bed09e6e707', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 101, 1662.17, 998.16),
+('b7859401-5200-5937-9b76-b431545ab929', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 102, 1654.28, 999.35),
+('717b82e6-d2cf-58ae-b640-6f8ffe7a5c48', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 103, 1646.40, 1000.59),
+('01843746-4445-5d1f-bfee-99b274cf728e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 104, 1638.53, 1001.88),
+('af8702d5-35f7-5a0f-b397-2cd60e5d3249', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 105, 1630.69, 1003.35),
+('07ff7557-5f13-594e-a38d-b0dce953c2b0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 106, 1622.86, 1004.92),
+('826abb04-eff5-5fb2-baec-21036ee0d58f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 107, 1615.06, 1006.56),
+('c8c85c17-9a4d-5ca3-b830-079a20c12887', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 108, 1607.27, 1008.31),
+('aae65652-7a94-5859-81b1-0034508aa792', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 109, 1599.51, 1010.13),
+('b5e6f50c-08a3-5489-83a5-dbde906352de', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 110, 1591.75, 1012.00),
+('c8b7befe-b973-5d09-8ea1-8de2f9e7acc8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 111, 1584.00, 1013.91),
+('9f748efd-c71c-510d-bcb1-9bee1ff86315', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 112, 1576.27, 1015.86),
+('4890fdb3-a58b-53c3-85bb-bdc74cb8fcdc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 113, 1568.53, 1017.81),
+('75da20e8-c44b-597a-9353-b4935990b83b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 114, 1560.80, 1019.78),
+('7f03dfef-d504-567d-b533-a5f09c712bc7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 115, 1553.07, 1021.73),
+('d9178cea-2741-5c77-aebd-b9983dbc02e1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 116, 1545.32, 1023.65),
+('fd6ecba8-d15b-5fd1-b33f-4790a0977088', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 117, 1537.57, 1025.55),
+('968de8e6-3ac7-5873-b947-8ec3568942e7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 118, 1529.81, 1027.39),
+('4bad164e-eb2d-55f3-9354-0836abee149b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 119, 1522.03, 1029.17),
+('0a4e6e2e-3463-54e7-8263-23eaace857fd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 120, 1514.24, 1030.87),
+('07cb3528-8d16-50f4-9bc5-74168562b743', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 121, 1506.43, 1032.50),
+('381c8f44-c563-5e7f-8c4e-735787582b80', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 122, 1498.59, 1033.98),
+('9a6749c9-b6b2-5ba9-986b-9c5052bb0ec8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 123, 1490.74, 1035.37),
+('15ff0bb4-a181-571c-9da6-93204f0a3b97', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 124, 1482.86, 1036.64),
+('ba8cedf6-6f86-548b-bd54-809cce09be1c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 125, 1474.95, 1037.71),
+('a5ddd34e-93e8-50e5-9376-98c6b6c76e9f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 126, 1467.03, 1038.62),
+('e8e5169d-c069-5da2-bbe8-194b56529dc4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 127, 1459.09, 1039.37),
+('1a5de65e-404f-51e6-ab34-fde5881ddd02', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 128, 1451.13, 1039.92),
+('bafe8cb4-1e89-554a-ae30-2004c46edb29', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 129, 1443.16, 1040.20),
+('84a1a837-28fd-5367-b738-9127ae672e1e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 130, 1435.18, 1040.31),
+('277007dc-e62d-5880-a69f-8ca5e15dabf5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 131, 1427.20, 1040.24),
+('39a5b781-13b7-5f21-bfce-4baaa9f41a97', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 132, 1419.23, 1039.93),
+('df344698-10cd-5f28-b3cc-fe5c3810b200', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 133, 1411.27, 1039.49),
+('3bba87e2-15dc-5b16-a67a-b47b3e836a4e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 134, 1403.31, 1038.95),
+('c8471db3-eb4d-5c8f-8d0c-bcf9c4d939e8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 135, 1395.36, 1038.24),
+('b3931e6b-bfbf-5954-9804-3574071955b2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 136, 1387.42, 1037.43),
+('08446279-1692-52d0-affc-ea3841fa4c38', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 137, 1379.49, 1036.56),
+('1235a581-88a5-5dea-b898-23d1af9ca34e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 138, 1371.58, 1035.57),
+('a8d4f0cb-7e23-53fe-b79a-62ec3fc3f85b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 139, 1363.67, 1034.53),
+('e2f0918b-47ab-5d0c-ad89-1a74f5033743', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 140, 1355.77, 1033.44),
+('7df52e2d-80d7-5a95-9ee9-6565a5c24682', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 141, 1347.87, 1032.29),
+('c70c159b-6058-501f-a134-423ca211f066', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 142, 1339.98, 1031.12),
+('a448270b-5c32-508f-bead-24e859723614', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 143, 1332.09, 1029.92),
+('e4738cbb-20f5-55ed-ae3e-bc507b08a67c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 144, 1324.21, 1028.71),
+('c4653062-f972-5687-8b22-675f698d9ce6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 145, 1316.32, 1027.51),
+('6041d210-c8e8-5fe0-adc5-611db610f5a4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 146, 1308.43, 1026.33),
+('044e170b-dccd-5bc9-a63e-60d90be1c794', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 147, 1300.54, 1025.17),
+('b5e9c8e3-11c6-5d8d-ba72-2ee16a3cac59', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 148, 1292.63, 1024.07),
+('cce31c9c-bffe-562b-8105-93f3ea7b75a0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 149, 1284.72, 1023.04),
+('3f938976-abac-5dd9-8eda-f6b118dfe993', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 150, 1276.80, 1022.09),
+('a30ae128-8d82-55c3-80ce-f86359a0df26', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 151, 1268.87, 1021.25),
+('548ef1bd-e52b-5947-a954-080e5312321f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 152, 1260.92, 1020.60),
+('5f7ee552-7de9-5a5c-ad87-65b154a8cd73', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 153, 1252.95, 1020.15),
+('c84ac3a3-a749-5263-9a45-7205c058c71d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 154, 1244.98, 1019.86),
+('7a7210d5-c302-57b6-82be-4b23efdee6d8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 155, 1237.01, 1019.66),
+('28b2fb7a-a9ce-522b-a737-fcd027aebe9c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 156, 1229.03, 1019.52),
+('47f1cfbf-a337-5275-a7da-fed16ff62ef4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 157, 1221.05, 1019.45),
+('bb205317-6294-5bc3-b0f8-071b54c239d4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 158, 1213.07, 1019.46),
+('7d938158-6412-589d-9775-7066c98625ff', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 159, 1205.10, 1019.57),
+('409675c1-2d14-51e8-a268-9bacdb809eab', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 160, 1197.12, 1019.80),
+('423a65fc-b833-53d2-a440-5027c3714fa3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 161, 1189.15, 1020.16),
+('7f45af11-6cbb-5be7-bb8c-3d98cbb88e33', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 162, 1181.19, 1020.68),
+('84ec019a-5e21-5dc3-aa56-9414b8ea0b4f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 163, 1173.25, 1021.41),
+('e5b0f2ff-6f42-5ecc-a044-aed7f1272ba3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 164, 1165.33, 1022.34),
+('6520a825-6400-5c1e-a204-be9d05e3ae43', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 165, 1157.43, 1023.50),
+('fb70b5c3-3b98-5b5b-aace-94fd6a460f30', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 166, 1149.59, 1024.96),
+('46347809-b77c-5be5-9cf1-82b8baa0f88f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 167, 1141.81, 1026.71),
+('a62d8afb-f626-5d32-b354-7cbcb24620fa', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 168, 1134.10, 1028.77),
+('9bb0c921-7f21-53ef-8272-4c67dbaacbd0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 169, 1126.50, 1031.20),
+('2fe79982-0b4c-5f11-a81d-3eac94900b17', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 170, 1119.07, 1034.10),
+('f4bc865b-cabe-5332-bd26-f02078a6da99', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 171, 1111.88, 1037.54),
+('eaefe080-dc49-5e97-99a8-67db78b66a1d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 172, 1104.95, 1041.49),
+('47d81f95-8f90-5f35-9aa1-606ec1fd8976', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 173, 1098.30, 1045.90),
+('af092f86-04f8-5377-9c94-6b55f1ce867f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 174, 1091.94, 1050.71),
+('ed690407-8cdd-5465-85da-72207b18c9b8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 175, 1085.82, 1055.83),
+('3f7a0ba4-2259-519f-b89c-ef6747b91233', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 176, 1079.89, 1061.16),
+('08ebb46b-8935-5e0e-b6f5-814e2349b289', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 177, 1074.08, 1066.63),
+('06aa5e45-43e1-53d4-9c49-99a648c09814', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 178, 1068.32, 1072.14),
+('4243d471-716a-5989-91e2-fa7619fa0c1b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 179, 1062.53, 1077.64),
+('2ba9a2a8-ff2a-56e9-955e-fb1eed2d6969', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 180, 1056.73, 1083.11),
+('399b8e9d-3fc1-55f2-8b6c-31ec39710cbe', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 181, 1051.13, 1088.79),
+('ba73bed7-a9b1-5e5f-a544-a42722f8279e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 182, 1045.69, 1094.63),
+('9561263b-21cb-5c8d-a28f-3c55f8c6acb3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 183, 1040.38, 1100.58),
+('e571c0ad-96f9-5a67-9531-607e2c4b6f77', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 184, 1035.18, 1106.63),
+('6d20841b-6b94-54e5-a52b-b8ad9189ee1c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 185, 1030.05, 1112.74),
+('52734335-6151-50d1-a416-ce94b4e70579', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 186, 1024.99, 1118.91),
+('46ca1041-113a-54aa-b339-0d32884e525e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 187, 1019.98, 1125.12),
+('76df187d-434e-5e48-8516-aa146ed32758', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 188, 1015.00, 1131.35),
+('ec31dbac-eb0a-5c82-aaa8-09cea8e12a78', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 189, 1010.04, 1137.60),
+('7bc677f9-33bb-5dc8-9ff6-ae65a3581e1c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 190, 1005.06, 1143.83),
+('e56cc552-42a1-5efc-9be3-95f343034f47', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 191, 1000.00, 1150.00),
+('3483bcf5-3b3d-5f18-a121-fa243edf241b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 192, 992.59, 1152.68),
+('cbd1cb0c-f717-57e5-be93-fc1771789238', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 193, 985.23, 1155.53),
+('5bc14ef0-98a6-5b86-8cb0-ca72131bf95d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 194, 977.91, 1158.44),
+('4d3f21da-6a30-54c2-b75b-e8bde46a191b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 195, 970.59, 1161.38),
+('2ef71188-33fb-56ae-8fff-533690c3b6ea', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 196, 963.27, 1164.32),
+('cda19253-eac1-533f-b1cb-047579580bbf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 197, 955.95, 1167.24),
+('0987ab27-01f9-5dcd-a45c-d66197bef0c6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 198, 948.62, 1170.13),
+('99a829b2-a3be-50ab-a489-361f4851e9cd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 199, 941.27, 1172.99),
+('f6d07fdd-afc7-5c2d-a0c4-74e56e07498a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 200, 933.90, 1175.80),
+('5dca6ed7-10ba-56bb-800d-6f74beb8aac7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 201, 926.51, 1178.55),
+('6e953e73-e7af-5201-a861-5db8aafcaa01', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 202, 919.10, 1181.23),
+('9161b3d5-47aa-5bb7-8a95-7a6f0466e24d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 203, 911.66, 1183.84),
+('d7890c26-793c-56a8-bf38-45ead5dd6df3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 204, 904.19, 1186.37),
+('f2cee7e6-219d-519b-8086-334ed94dbec0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 205, 896.69, 1188.79),
+('c5d90cce-f500-512e-bad0-bd1e49b117fb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 206, 889.14, 1191.08),
+('ebd4366d-82b2-5cef-a7e8-3ecc181efa8a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 207, 881.56, 1193.24),
+('4ba10366-d70a-5145-b715-3f65d09e1a13', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 208, 873.94, 1195.24),
+('a318a178-be97-5ffb-bbed-e132a502d29e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 209, 866.26, 1197.06),
+('0257b6bc-836f-5db7-b05e-435725bc582f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 210, 858.54, 1198.64),
+('f24ca807-e759-52b9-a230-e00ecba32052', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 211, 850.75, 1199.88),
+('da78c1e3-a75f-598f-be8c-a62224b9bec0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 212, 842.92, 1200.77),
+('a4e07ff3-e8f6-5fb3-802b-30fb4eafe1a5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 213, 835.06, 1201.33),
+('68fb1263-b6aa-5413-b634-e02f94d12a64', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 214, 827.18, 1201.61),
+('da6f4ed4-5518-558d-8337-1b0b5bd6f2ae', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 215, 819.30, 1201.65),
+('8d182a7a-a75b-570d-9d75-048f3310d0ee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 216, 811.42, 1201.48),
+('44a96ae0-e8df-50be-b870-be7cb284ee69', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 217, 803.54, 1201.12),
+('405f9e83-f8d6-5aee-abb8-19a97bdc85e9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 218, 795.67, 1200.60),
+('e8e4b9e1-faa7-523f-96f8-1b054028c755', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 219, 787.82, 1199.95),
+('605c9ac3-abb6-5446-950c-ad8078e58aea', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 220, 779.97, 1199.17),
+('7ba175de-7b8c-5de2-b45d-2ec842a79c1c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 221, 772.13, 1198.29),
+('b174df68-2ad8-5ffe-b840-659d157fbe95', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 222, 764.31, 1197.35),
+('44322332-18be-5381-8758-90d0651ca047', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 223, 756.49, 1196.35),
+('8fe5d5a1-cf87-5412-84d3-009d0260cd59', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 224, 748.67, 1195.33),
+('97079603-92f1-50d1-b42c-0341a2795f81', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 225, 740.85, 1194.29),
+('d9299e21-3295-55cb-820c-17cbc1ea63d8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 226, 733.03, 1193.27),
+('11b6ecdf-2359-5850-b912-f483325a6004', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 227, 725.21, 1192.29),
+('10744b2e-b21b-5b6a-b4f1-fd4ad309a34a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 228, 717.38, 1191.40),
+('ecba0d20-cb1c-586d-a01c-0e3d33e23f9a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 229, 709.53, 1190.65),
+('e709f487-534c-5f7d-a2cf-a8a2d90d0e16', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 230, 701.67, 1190.10),
+('c0958a3b-8d77-51d9-b71f-f303faaed66d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 231, 693.79, 1189.75),
+('2f666b25-e986-5292-bbbc-aa5bcf70bb33', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 232, 685.91, 1189.51),
+('abf4dd8b-e15d-5c77-abd4-ef7d4d6549c5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 233, 678.03, 1189.34),
+('72716a97-4fa7-5a0c-ae4e-3e513fc219de', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 234, 670.14, 1189.27),
+('c4199dc4-9721-5afb-bdb2-afe79e25382a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 235, 662.26, 1189.29),
+('7a45d480-30aa-58c5-8bd8-64ebf80d0db3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 236, 654.37, 1189.39),
+('3c6eaaca-7ff3-5dfc-b039-a7332684dd2f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 237, 646.49, 1189.56),
+('780041af-2dea-5a31-ab8c-214a55cab69e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 238, 638.61, 1189.75),
+('27d49825-c1e3-5a92-a27f-3bcf79388d9e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 239, 630.73, 1189.91),
+('2b692e6b-e451-5dd3-a718-d0c304ffb710', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 240, 622.84, 1189.99),
+('eca9f410-0628-509f-b747-90a35b987595', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 241, 614.96, 1190.00),
+('147c5587-b3ab-5b78-b891-6706ae664b43', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 242, 607.07, 1190.00),
+('3b53ebde-cc41-546c-8f9f-3572a3477b58', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 243, 599.19, 1190.00),
+('4348b2ba-23cd-55d5-8311-135283649191', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 244, 591.31, 1190.00),
+('b801bce7-9089-55ff-b9a2-3fcbf7b466be', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 245, 583.42, 1190.00),
+('80237cdc-412c-5335-b56a-1d27d2061c6f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 246, 575.54, 1190.00),
+('5d6884ed-0e6f-5443-b160-932c8e36ef20', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 247, 567.65, 1190.00),
+('2865a95f-7ef4-50f5-8049-5c72bc68c885', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 248, 559.77, 1190.00),
+('afcdbd82-4b0c-503c-bb8e-3059771b5ec3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 249, 551.88, 1190.00),
+('b0348da7-437c-57bd-88a9-fcf0508a705a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1, 250, 544.00, 1190.00),
+('38028784-32f2-521e-8168-aaedca1e1171', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 0, 1500.00, 562.00),
+('8198889c-70af-5a5b-a932-bbacbc2e2c40', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 1, 1502.43, 569.50),
+('f9bd32d8-c69f-573e-9ee8-3236d49a528e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 2, 1505.62, 576.75),
+('70490413-f281-50c0-a53e-6d065cb42ddf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 3, 1508.53, 584.12),
+('a4a0bce6-a061-5abc-9b43-beda994e0e89', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 4, 1510.61, 591.75),
+('ed04ae17-7aaf-5bde-b30b-08530b86ea9e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 5, 1510.84, 599.63),
+('03c77b1e-bc66-5865-acd4-e1af51598a01', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 6, 1507.09, 606.43),
+('81c3d5c9-d64f-52d2-804a-60bec654cd2f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 7, 1500.09, 609.97),
+('05c77271-0234-54ec-9c06-af7ff09b5909', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 8, 1492.27, 611.16),
+('219ce423-ea6c-5161-b3a0-94cf339a2276', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 9, 1484.36, 611.55),
+('76efda00-8b5e-55f6-a03c-b06db8df97d0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 10, 1476.44, 611.47),
+('c560d929-28f1-5c1f-b750-1dabb118368e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 11, 1468.53, 611.10),
+('3145ddab-9d4e-5875-8451-f5477cf34716', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 12, 1460.62, 610.55),
+('d0f92ff6-9e84-5913-86e8-4ea9f24bbd24', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 13, 1452.73, 609.88),
+('f3fc27cc-91bd-586d-ba88-fbf02bed61e9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 14, 1444.85, 609.10),
+('9d133eb0-f9f9-5f53-aef9-625247036250', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 15, 1436.97, 608.28),
+('32ec5e3b-7e6a-5a33-8772-1d83b69728ff', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 16, 1429.09, 607.41),
+('007277b1-ce8d-5009-b37c-6df0bc52a2a0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 17, 1421.22, 606.52),
+('62d22135-dc54-515a-a200-858cfc69556b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 18, 1413.35, 605.63),
+('5cd78d42-3f43-5be6-8ae9-1eca13e2af4e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 19, 1405.48, 604.73),
+('b223df8f-caf3-5552-938b-9862aa8cab77', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 20, 1397.60, 603.86),
+('bc547e18-ee43-5f72-83df-017b367ada5e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 21, 1389.72, 603.03),
+('d18850c7-61eb-579f-bf01-b17793553852', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 22, 1381.84, 602.25),
+('933bf434-2143-5d9d-90f4-94cc63b7fa4a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 23, 1373.95, 601.53),
+('3daad5ce-5722-52e3-a295-f84b58a26d5f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 24, 1366.05, 600.89),
+('017ccd05-f2c1-5665-bc69-49c55e6c75bd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 25, 1358.15, 600.37),
+('61aeb5c6-e6ae-5e27-8c82-f79c5bc4413f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 26, 1350.23, 600.01),
+('8edf7364-ae32-55b4-b4f8-79b963795dd6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 27, 1342.32, 599.69),
+('b4753153-15e9-5fdb-b6b5-8be5f874c72f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 28, 1334.41, 599.30),
+('d7ddf480-a9d2-54bc-80e9-7bdc3fc866dd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 29, 1326.50, 598.85),
+('e2af9581-0ca4-511f-8344-8e0e2ae7fd3b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 30, 1318.59, 598.36),
+('847f994b-fbe3-53fe-8065-ec71bfa23a08', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 31, 1310.68, 597.85),
+('dd30a246-6fac-5641-b768-53932bfd913a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 32, 1302.78, 597.34),
+('36371ef9-30ef-5f85-bf4c-95e1e5923849', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 33, 1294.87, 596.84),
+('102a6533-f706-513e-bba5-3292ba460e95', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 34, 1286.96, 596.37),
+('ca794494-6710-5270-b95f-5deb27131ce6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 35, 1279.05, 595.95),
+('ebb5c5f2-958d-5d5f-9296-31190ac455d8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 36, 1271.14, 595.60),
+('261f5e0c-1fc7-59e6-be76-f77a4c11969f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 37, 1263.22, 595.34),
+('730fa481-5722-54a9-bab7-87482e62d599', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 38, 1255.30, 595.19),
+('58c05d55-afbd-5083-8a2e-8ad39e930a4f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 39, 1247.38, 595.18),
+('a367b584-14ef-56eb-9f77-2d238f88544a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 40, 1239.46, 595.34),
+('ef84a3e8-ee06-5b14-9a7e-90616fded3a8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 41, 1231.54, 595.70),
+('88a174b2-9257-5372-a121-a09d158c1bb6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 42, 1223.64, 596.29),
+('6f1a678a-8ee5-5ee2-9e73-9adbf982fdec', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 43, 1215.77, 597.16),
+('4b80c703-ee38-59c4-92a0-0633c929544a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 44, 1207.94, 598.36),
+('f647c078-7953-58cb-911a-5a96c82e5705', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 45, 1200.18, 599.96),
+('e3f6841b-0596-5955-9132-45b14fa8ebb3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 46, 1192.52, 601.99),
+('b00c6ae6-ce5c-5642-9431-8c2929592914', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 47, 1184.97, 604.38),
+('7556a53b-a16e-550a-83d2-3b0c1d5a3e48', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 48, 1177.53, 607.08),
+('f56d7fb9-90ed-5a91-b79b-d24815eb970e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 49, 1170.20, 610.09),
+('98a6a644-d0b7-5c18-ab53-83f7cc6ab2c0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 50, 1162.99, 613.38),
+('3d654fcc-cac9-51a3-af39-0bde256e6f0e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 51, 1155.92, 616.94),
+('98bf43c5-d632-57f3-9b4d-a97575d4dd52', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 52, 1148.97, 620.76),
+('6b062603-fd6f-50b3-9399-da31027f12d6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 53, 1142.17, 624.82),
+('c1b8c0fe-1a08-548b-9869-abbefe61829a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 54, 1135.53, 629.14),
+('64f62c03-7040-585c-ab83-a181d0a3df61', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 55, 1129.06, 633.71),
+('25d1ab27-d4a9-5aa6-b95b-7c85a9dec925', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 56, 1122.76, 638.50),
+('3459a294-cada-5213-869c-aab4f4ee44c6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 57, 1116.64, 643.54),
+('5bb272ff-2c1e-5f36-a6d6-683249dcd0ea', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 58, 1110.75, 648.83),
+('904f7d58-0b90-545a-bca7-7cd1c9a3ff5d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 59, 1105.12, 654.41),
+('811990f6-53cd-53ca-bc93-d62e84361534', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 60, 1099.79, 660.27),
+('fb7ceb53-b41d-59d3-837b-c8e7b85c7340', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 61, 1095.21, 666.71),
+('1dd8a8cb-d691-5c4c-99be-1bc68ef7a2b9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 62, 1091.61, 673.76),
+('b3bf9ce1-6056-53dd-9f02-7f9cbd22f5e7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 63, 1088.96, 681.22),
+('c1cb959e-d3de-55d7-b0b8-88e6a9553395', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 64, 1087.19, 688.94),
+('e0094025-3bb3-575c-83cd-bb06263ab511', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 65, 1086.00, 696.77),
+('65fd9d1c-d538-5892-85aa-e89c37825fc5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 66, 1085.19, 704.65),
+('8bb72b9f-be62-555c-add2-2fcee6c1dda2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 67, 1084.56, 712.55),
+('9ec6ab01-0c2b-5d6c-bd7d-14288808f083', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 68, 1083.87, 720.44),
+('ec2bf0b7-8dc6-55af-a89d-dfa2e42d8752', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 69, 1082.86, 728.29),
+('bf8a5bfe-face-5db2-9d20-39f8b8c4290a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 70, 1081.24, 736.04),
+('42d459f4-09c6-5b74-a684-0da8398eea88', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 71, 1078.68, 743.54),
+('5bc20ff8-c5ab-54cd-914b-f1d586b22a11', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 72, 1075.66, 750.86),
+('a2363ceb-b601-5a22-8e44-8eb9702096ba', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 73, 1072.37, 758.07),
+('65298d8f-6c45-570b-a7a1-04b1e3cb1c6a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 74, 1068.88, 765.18),
+('e4cd3f69-15ac-5dce-ad9f-f1cff347146d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 75, 1065.23, 772.21),
+('cea61cc9-180c-533f-b33c-b833aa489526', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 76, 1061.47, 779.19),
+('b4ebf257-7c5f-5539-89bd-4f937199f74a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 77, 1057.63, 786.11),
+('cedd38f7-2638-5156-b6f6-1855ab0a0259', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 78, 1053.76, 793.03),
+('b36d7b6e-ac55-5749-943c-601d928903a6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 79, 1050.00, 800.00),
+('dc94434b-fe52-52b2-905a-457ff051ae66', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 80, 1042.54, 802.70),
+('b4a970b8-8e7c-5e0e-b66c-883ef7e0e1ce', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 81, 1035.14, 805.56),
+('e93c1a3b-b672-59ba-b3de-e4e3151e3874', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 82, 1027.77, 808.49),
+('3efcf3e4-14ca-5060-ad08-3b3c440481bf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 83, 1020.41, 811.45),
+('e13330e0-6199-539d-80c1-855eb31348d8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 84, 1013.05, 814.41),
+('3f7c4a55-6cee-581a-9a5c-ff190b5bbea4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 85, 1005.68, 817.34),
+('5df71bec-651b-5a8b-878d-c499cbb5558f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 86, 998.30, 820.25),
+('c411f107-da01-529f-b58f-90f6b6f25462', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 87, 990.91, 823.12),
+('7bae0659-c91e-55c4-9180-da8fd5f3d483', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 88, 983.50, 825.95),
+('9206f1bb-9ddd-5ae9-b17c-23b10a977d61', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 89, 976.06, 828.72),
+('d476bbf8-9e82-5b42-8c9e-f54fa2b96b1f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 90, 968.60, 831.41),
+('7dc38292-9172-5246-87b6-b7c266e9fbdc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 91, 961.11, 834.02),
+('d0054849-feb5-5913-bf07-2d9bcc3434ee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 92, 953.60, 836.56),
+('751d5a46-f129-5858-99a3-b6a5a32231e6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 93, 946.05, 839.00),
+('3b3460e0-e0ff-521b-8911-25c4f0cb95ed', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 94, 938.45, 841.29),
+('b3ae4bf9-3ca9-51a8-9090-ce0b85f748bb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 95, 930.82, 843.44),
+('28b2af26-7673-50cb-a08e-4b661f58feb2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 96, 923.14, 845.43),
+('2d1fd3b2-ec87-52e2-8114-ebd2e052d411', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 97, 915.42, 847.23),
+('e1d658a9-6ae9-5a7e-b977-a84f550dd88c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 98, 907.64, 848.78),
+('3e369b91-016c-5ce1-b266-612235d015e5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 99, 899.80, 850.02),
+('8f6c7f71-6b7c-5df0-97e0-9beb7fc052c9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 100, 891.92, 850.87),
+('ba640216-dd79-5d65-b73b-dc5ac077c55b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 101, 884.00, 851.37),
+('07556d2e-1176-522d-9cf1-9c5fce54f200', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 102, 876.07, 851.55),
+('3f574cec-fc8a-561a-a920-d3db542e6bf2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 103, 868.14, 851.46),
+('f1c38553-b459-5cb9-8292-9a832e149704', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 104, 860.21, 851.13),
+('0ea7183a-c1db-5bf9-a599-5e55fbb9f51e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 105, 852.30, 850.60),
+('9568b9e8-0b58-5772-a147-6c682cdf268b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 106, 844.40, 849.90),
+('1579cd3a-09e6-5972-a3fa-4dda41f574fa', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 107, 836.51, 849.06),
+('559999f3-972d-5ce4-9647-5bb693144442', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 108, 828.64, 848.12),
+('cd81b9d0-03e9-549c-816c-40bf651c7dc5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 109, 820.77, 847.10),
+('4e3ec816-552b-5115-8370-499682f9e8e7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 110, 812.91, 846.04),
+('f04f9ef6-7e35-503a-bcd8-c88311fdc81d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 111, 805.05, 844.96),
+('783507ae-4ccb-5596-9d33-4fc326720ce3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 112, 797.19, 843.90),
+('691725ee-dd06-5f84-8329-dfab1b38c4de', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 113, 789.32, 842.89),
+('c35bfa2b-0033-5350-bb6b-6161b8641d7d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 114, 781.44, 841.97),
+('5d6b17db-a1c8-5533-a7be-fa6af4b4b126', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 115, 773.55, 841.18),
+('f0c8fa3e-373f-5ddd-8e27-aa00af3b37a9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 116, 765.64, 840.55),
+('c910d72b-7a10-557d-8b1d-2083ef108d4e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 117, 757.72, 840.15),
+('3eec82e9-ccdc-5a95-8147-d2faf94432a3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 118, 749.79, 840.00),
+('872b6a45-5f20-5844-befb-a6a089aea6f6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 119, 741.86, 840.08),
+('5a507719-defe-5baa-86ac-ba940bad9104', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 120, 733.93, 840.31),
+('e03c20fd-7186-57a6-a29b-9cdac32ba254', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 121, 726.00, 840.66),
+('286b2664-6412-566c-9a67-6242d6d3e9f5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 122, 718.08, 841.11),
+('474bf0a7-deb6-5db0-a2d0-750ea0cc9e3e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 123, 710.17, 841.67),
+('62aee750-4cce-5ff2-86b3-079147f21d31', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 124, 702.26, 842.30),
+('88ea605b-0993-58ed-b4b8-58c8a1ab68b7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 125, 694.36, 843.01),
+('a14ddede-30e2-5172-9dd8-21ce702f7ecc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 126, 686.47, 843.76),
+('70b1cae6-3d71-59fe-9383-6ecafe393188', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 127, 678.57, 844.56),
+('0970a2f3-9922-522e-bb34-7c717b3c9412', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 128, 670.68, 845.39),
+('09c22eb4-a85b-5bd6-a3fc-c6fe083cb5b2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 129, 662.80, 846.22),
+('c1b932c1-fa67-5e3e-a043-be2e7e3740c3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 130, 654.91, 847.05),
+('199c2739-6538-5848-9e9d-a16424b4f34c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 131, 647.01, 847.85),
+('059c6243-8d0c-5959-955e-af1a6e9c5fa7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 132, 639.12, 848.60),
+('b7c492d8-3b20-5cfe-a9d0-93d257265eed', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 133, 631.21, 849.27),
+('c717a0fc-0717-5635-8013-968d4aaefb34', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 134, 623.30, 849.81),
+('c13cc33c-42e6-5e40-9896-70d0bcae4321', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 135, 615.38, 850.20),
+('cb1aefd6-ecaf-53fb-b3be-223dd3cd310a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 136, 607.45, 850.47),
+('19c27364-5fdc-5cb9-9922-c9d6da6c30c0', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 137, 599.52, 850.65),
+('6e8958a9-1634-501c-9a90-568e0fc57f72', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 138, 591.59, 850.73),
+('5147b7c7-def7-54a8-8985-90845e3548d5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 139, 583.65, 850.73),
+('08e40e70-4df1-5ded-a26e-262787e5feae', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 140, 575.72, 850.65),
+('143ad7ce-26d9-5bac-beb2-259df315c17e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 141, 567.79, 850.51),
+('8f5fa1da-ad53-5d2f-8059-96a60ef5a233', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 142, 559.86, 850.32),
+('00f79046-7530-5387-a908-6d2d6f52da35', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 143, 551.93, 850.12),
+('e937baf0-f71a-5809-82ca-f8f5ea97a3b3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2, 144, 544.00, 850.00),
+('c65d2184-d2a1-50b3-89eb-69a6732015a5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 0, 2324.00, 780.00),
+('bf3047ae-c2c9-5d71-b15b-71b96a12b6b1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 1, 2316.07, 779.40),
+('25c5be60-2387-5f63-833b-bd5e8442d324', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 2, 2308.13, 778.84),
+('b66770bf-96bb-5a28-8438-0439bf36a13a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 3, 2300.19, 778.29),
+('0d958ae6-4fd1-5cf5-9f3e-db7ce159668a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 4, 2292.25, 777.74),
+('2005bf21-02e8-5374-b50a-245ca6497c73', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 5, 2284.31, 777.18),
+('51f6d7e9-06b7-5d6e-8b0e-7a7c4185bf05', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 6, 2276.38, 776.61),
+('5436c15d-14b7-5b57-95d8-623404530ad3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 7, 2268.44, 776.03),
+('9b57e436-55ee-526a-85da-6f7871912e1a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 8, 2260.50, 775.43),
+('252665bd-abf1-5c80-95fc-dfe48165e530', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 9, 2252.57, 774.82),
+('6ae0208e-bf31-56a7-a1ab-aaedd8013cde', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 10, 2244.64, 774.18),
+('02ad41f0-e86b-58a5-97c3-d447c4d65e1a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 11, 2236.71, 773.52),
+('f745f034-d8a5-5c3e-8d28-e06dc6d93e0a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 12, 2228.78, 772.83),
+('0caa648e-f6fd-5a8f-af18-db7801a9f0bf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 13, 2220.86, 772.10),
+('f11d143e-b4b2-5f1f-93a2-4ebb14a55ee3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 14, 2212.94, 771.34),
+('81a2c56f-193f-5b07-94b5-49e721c91979', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 15, 2205.02, 770.53),
+('7b197411-275d-5270-bd3b-bb002a1597a7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 16, 2197.11, 769.65),
+('a9689e38-5904-52a4-8ff5-074fb3a8e8d5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 17, 2189.22, 768.65),
+('e38a818b-478e-5d93-8734-d1c3f74ed24a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 18, 2181.34, 767.52),
+('60d10028-ad7e-5c82-936b-7626c0084b06', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 19, 2173.48, 766.29),
+('c89156de-e35b-5460-8744-cd473408af89', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 20, 2165.63, 764.98),
+('08cebfc1-60ea-5751-bb82-39924a552b01', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 21, 2157.79, 763.63),
+('327b23c2-5369-50a9-b822-824582df7877', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 22, 2149.95, 762.24),
+('27bcd34f-30f4-540e-95f6-3c606caa3232', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 23, 2142.12, 760.85),
+('1532ab1a-7605-5290-bc62-1a9e3d0a03b7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 24, 2134.28, 759.46),
+('bddf661a-4615-5070-ada1-4e72b116f2f3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 25, 2126.44, 758.09),
+('ecf6b70d-290d-5eff-9ffe-3c64906b8500', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 26, 2118.60, 756.78),
+('c98db3cc-c72d-56a7-a649-6bfbda919450', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 27, 2110.74, 755.53),
+('7a606db9-c954-5dfc-975f-736a8698dafd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 28, 2102.87, 754.35),
+('fca71577-da5f-5c53-a98e-8fc145c27260', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 29, 2094.98, 753.28),
+('1c0c436f-d61d-5062-865a-9b1230367ad2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 30, 2087.08, 752.32),
+('4d170605-6169-5dc1-a842-137bda215ee2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 31, 2079.17, 751.50),
+('fc9680da-797b-5524-82f5-81e0f7602495', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 32, 2071.24, 750.84),
+('4dc95484-df9d-5932-bd3d-0c027600c4c7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 33, 2063.30, 750.36),
+('d38d2d48-0632-5f81-b81c-9982c6cb8676', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 34, 2055.34, 750.09),
+('964dc0fc-dc2c-5846-9c2a-c2834d1e5344', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 35, 2047.39, 750.03),
+('30afb78d-3543-5afd-a624-61c2adb26596', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 36, 2039.43, 750.19),
+('04ea78ec-5f2c-5ba8-82e1-1cf2e73bda7a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 37, 2031.48, 750.52),
+('d9986200-ba30-5144-99a8-a74e8791dc2e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 38, 2023.54, 751.02),
+('963e64aa-bd28-56cf-99e2-3732205b062e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 39, 2015.61, 751.67),
+('6ee70890-f9e9-530b-aa5e-5d749ed409d3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 40, 2007.69, 752.45),
+('a369005c-b4c4-5aec-b2f4-a6d595fd84f2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 41, 1999.79, 753.36),
+('44093abd-f2fd-53eb-8a8e-6bca96825e0d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 42, 1991.89, 754.38),
+('d5f3f956-015c-5214-bbc8-4412bbeba062', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 43, 1984.02, 755.50),
+('3cb63e76-3530-559b-a5f7-86a353d67e76', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 44, 1976.15, 756.70),
+('f830c5e8-59cb-574c-80e3-8c7272f3b38e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 45, 1968.29, 757.97),
+('888abd3f-8766-509d-9d90-2775e47bd06e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 46, 1960.45, 759.29),
+('bfe3e08b-e9e8-59f7-b084-ec1741da6dc9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 47, 1952.61, 760.65),
+('d5303a30-29ad-50cf-a42d-f190d883ca8a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 48, 1944.77, 762.05),
+('52800a4f-a8dd-5568-9cbf-a74dd8e8d55c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 49, 1936.94, 763.46),
+('a0125c26-7721-5d7a-881d-46d1ce96ebb9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 50, 1929.11, 764.88),
+('07fb450d-7e20-5186-be48-0dbf329a9b9b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 51, 1921.28, 766.29),
+('bc1b3056-bf46-56be-8496-d7faf58a4703', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 52, 1913.45, 767.69),
+('394edd8b-dd1b-5ea1-ae6b-a26eec4d3d7b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 53, 1905.61, 769.05),
+('fb8358ba-9f31-51b0-b00c-c2fd15727cda', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 54, 1897.76, 770.39),
+('5cba25ca-451d-5d78-99a1-2f0241cac3ce', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 55, 1889.92, 771.75),
+('8ac34d34-50ff-5165-b774-dc2503d08d11', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 56, 1882.09, 773.19),
+('5a1a14ef-f3e2-5902-96c9-78d74fa73035', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 57, 1874.28, 774.68),
+('64dc4984-6ac6-574a-8c43-8d3d14e00057', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 58, 1866.47, 776.23),
+('f1c818ff-1404-5cf4-893b-76fa19438567', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 59, 1858.68, 777.82),
+('87aa2c76-d799-51b0-bd50-0806968b6562', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 60, 1850.89, 779.44),
+('7002abe4-842f-53f5-9fb4-976721996aab', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 61, 1843.10, 781.10),
+('ae8ed305-6167-5e46-a657-0e419c185a8e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 62, 1835.32, 782.77),
+('ba660f14-5fa0-5063-8737-e9489e805a5a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 63, 1827.55, 784.45),
+('a90aaa43-d6d8-599c-84aa-7802dc40d12f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 64, 1819.77, 786.13),
+('6aa39e8c-1b49-5669-ae96-161038e0eab3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 65, 1811.99, 787.81),
+('0a31edaf-c3d5-5997-b1d0-3a25fffdd762', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 66, 1804.21, 789.48),
+('906a2add-9fcf-528c-9e62-777dbf1e675e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 67, 1796.42, 791.12),
+('057408d4-8454-5f0b-ad64-51c1a8e0b641', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 68, 1788.63, 792.73),
+('dd3833e0-a426-532a-934c-f931de772e8a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 69, 1780.83, 794.31),
+('2177794d-7bde-5da0-867d-93579dab99ba', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 70, 1773.02, 795.84),
+('8b64d8e0-941d-5665-b70d-c6cf9b9c8e69', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 71, 1765.20, 797.32),
+('a1b0cde2-3698-53c0-9529-5b3a34a040a6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 72, 1757.37, 798.73),
+('db997757-4735-5101-b032-4ee14ecaf38c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 73, 1749.53, 800.08),
+('ecd68148-99df-5cc1-8f1f-b0b5f7fa1944', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 74, 1741.68, 801.41),
+('63ffc403-be97-5c1d-956e-48a0e262a64f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 75, 1733.85, 802.79),
+('58de832a-0766-5c10-aa29-fe84b3ca488a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 76, 1726.01, 804.19),
+('ebe41fa6-1fef-5ceb-8157-060d6bd623e8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 77, 1718.18, 805.61),
+('9277a2ce-7e6b-5670-9118-8bea6aee40f9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 78, 1710.35, 807.03),
+('5ab447ab-cd7a-5472-9bf4-80710e350c08', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 79, 1702.52, 808.44),
+('710533b2-92b4-53b6-9826-6d7d911a6b93', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 80, 1694.69, 809.82),
+('9e77e950-7dc7-57b7-9084-39ac15d4b61f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 81, 1686.84, 811.17),
+('3cd2284d-ebb6-5c13-b5c1-979a005d53b6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 82, 1678.99, 812.48),
+('d5350fce-3e58-5852-834d-4ec5e73c4fed', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 83, 1671.13, 813.72),
+('f94b9bc4-ae07-5720-8dc0-10d698cced2e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 84, 1663.26, 814.89),
+('9d9030f2-ea3d-5a76-856a-369b927b26b7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 85, 1655.38, 815.97),
+('8f4afab1-3078-57b1-9638-381fdc99c0c9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 86, 1647.48, 816.95),
+('14ab59ef-b31d-52f4-a89b-a313ac34c47d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 87, 1639.57, 817.83),
+('823df94d-7a52-519a-ae5a-92b56a7c0b3a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 88, 1631.65, 818.57),
+('241bcd99-30be-519a-afc5-369414ed25b8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 89, 1623.72, 819.17),
+('235df206-466e-5879-a66d-be3005c98047', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 90, 1615.77, 819.62),
+('746465fd-8139-59da-b556-d4ac00a6bbd8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 91, 1607.82, 819.90),
+('3529a937-2971-5ac3-8a88-fb2fd0b4eead', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 92, 1599.86, 820.00),
+('7a23d727-72eb-51c0-989f-767c72d8fa58', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 93, 1591.91, 819.88),
+('e61c7d8c-33ff-54eb-9277-7cf53689a740', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 94, 1583.96, 819.56),
+('622be1bd-aa5a-5e71-b39f-c07f175c2f94', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 95, 1576.01, 819.05),
+('e5d83ceb-d131-5651-87d4-cedb7bcb2378', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 96, 1568.09, 818.37),
+('c7fecefb-d7d1-5236-b505-38bdd0787e59', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 97, 1560.17, 817.54),
+('76d6fb65-f77e-5a2d-9e1f-40aeae2ee7ff', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 98, 1552.27, 816.58),
+('edc750a0-c0ac-5efa-ae52-a92a4dcb029b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 99, 1544.39, 815.51),
+('94268365-b73e-59d7-8ae2-0e3f8b32e002', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 100, 1536.52, 814.34),
+('364a47a3-066d-5196-b1fd-5a646a7f3663', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 101, 1528.66, 813.09),
+('1be433ae-e7ad-53e3-9d3e-215eef07f6ef', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 102, 1520.81, 811.79),
+('621a752f-44d5-5904-a11f-8e65d6e9da8a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 103, 1512.97, 810.44),
+('17794581-8944-57a2-8329-93390b36bc62', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 104, 1505.13, 809.06),
+('a7892197-a785-50d8-be27-ea2926b5588d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 105, 1497.29, 807.67),
+('75207bdd-eefa-570e-bb1c-5ea132ef3c37', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 106, 1489.46, 806.28),
+('7b68e623-1719-582f-a58e-8776c1fa1f0f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 107, 1481.62, 804.92),
+('02154fc2-80e7-5299-a2f2-5bc052d8ae38', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 108, 1473.77, 803.60),
+('3bdd1fae-64d6-536b-8b9b-9e8f20287b6f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 109, 1465.92, 802.33),
+('4d38427f-9cbe-5e37-b553-bebddfb72742', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 110, 1458.05, 801.13),
+('c1b2a825-025c-5b0f-80f3-e8a097bc6e38', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 111, 1450.17, 800.02),
+('a530b573-77ab-5caf-8ced-70e3af3ffc56', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 112, 1442.29, 798.92),
+('48831c1a-9cf5-514f-b027-4b9f3b3445a4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 113, 1434.42, 797.75),
+('57fe373f-9045-5763-93ae-e2152068c4df', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 114, 1426.56, 796.51),
+('f6d3682b-ade0-5dc1-8e4a-fcaeb3b64229', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 115, 1418.71, 795.22),
+('eded4e11-3e20-5934-8c06-7f0acdb6759d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 116, 1410.86, 793.90),
+('be13fda0-34e6-57f8-8f11-b4eb4e70d3ea', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 117, 1403.01, 792.56),
+('67517e07-1618-5781-8d2c-672faa62ca21', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 118, 1395.17, 791.21),
+('ecb69e3a-669f-504a-a58f-ed7d88ee27e6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 119, 1387.33, 789.87),
+('e7a290e0-094f-553f-8a09-64d5b197feae', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 120, 1379.48, 788.55),
+('e48c5ccf-146b-57fd-b959-f48905511023', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 121, 1371.63, 787.26),
+('b0ab7e68-7b5e-505b-9155-6f1829fc0ae5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 122, 1363.77, 786.02),
+('3f360ea9-00b2-50e6-9dad-18be6434b9de', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 123, 1355.90, 784.84),
+('351d0091-4385-50c1-8443-af663232f6e3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 124, 1348.02, 783.74),
+('4b343274-72f4-5ee6-abd9-eb81a14f64dd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 125, 1340.12, 782.74),
+('bf8d14cd-ca88-5b11-a6ea-a27d8ea0159b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 126, 1332.22, 781.85),
+('53e79f64-8087-5a2d-89fa-69c291e8e229', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 127, 1324.29, 781.11),
+('bc4308fc-e2c5-5527-9dea-9be3fe74dd17', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 128, 1316.36, 780.54),
+('e92a1caf-6d5b-5373-bed0-860909e32f6b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 129, 1308.41, 780.16),
+('3d07eca0-78ba-55a6-bcca-f6bdea8cba58', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 130, 1300.45, 780.01),
+('b896636d-4891-5138-bece-4351125faa90', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 131, 1292.50, 780.09),
+('6fa49b4f-58a0-5dc2-8467-e341b07c686a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 132, 1284.54, 780.39),
+('3fcd804f-2eea-51b7-89d4-8911e457130a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 133, 1276.60, 780.88),
+('32f62cb3-8ff4-5b15-871a-c052782be46a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 134, 1268.67, 781.56),
+('6415a343-d708-5382-bf9e-075023248ed3', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 135, 1260.76, 782.42),
+('170005c1-3e7e-5215-b6bb-dab76122d627', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 136, 1252.87, 783.45),
+('b56e1ee5-37f6-55d1-9286-4d1e7e5eb683', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 137, 1245.00, 784.63),
+('ae2b9c2e-2c07-5dda-89c3-30749e65e6a8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 138, 1237.16, 785.98),
+('0eb07333-17a8-52b1-a15f-7e839befea1d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 139, 1229.34, 787.47),
+('5d54a5da-32e6-530d-a7f2-95a0730e2e5d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 140, 1221.56, 789.11),
+('0b081ecf-eb61-521b-b75b-1817a18744bc', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 141, 1213.80, 790.88),
+('2f375d38-555f-599d-8f8a-2150e28cd85a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 142, 1206.07, 792.77),
+('724df023-04a6-54fe-be6e-badcecf01dad', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 143, 1198.37, 794.77),
+('919f86d4-70b6-5000-93b4-f08c4928f2a8', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 144, 1190.70, 796.88),
+('979771df-7152-57d4-a241-79a43ef13036', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 145, 1183.05, 799.10),
+('c4eee837-7483-5bdf-a9df-63f3bbb5cfea', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 146, 1175.48, 801.52),
+('16b46f0e-085d-53bd-a1ee-b4e20e3e4dd2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 147, 1168.11, 804.51),
+('a9e1f144-b21c-5ed3-b630-5d50d6743fbd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 148, 1160.97, 808.03),
+('c100c607-0ca4-54b4-b046-f91644db6a5e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 149, 1154.02, 811.90),
+('44c433d0-d857-5dea-a231-4efa7d1d8e05', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 150, 1147.26, 816.10),
+('0551af64-984d-53a3-b262-93c2bea9015f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 151, 1140.59, 820.44),
+('24622d60-422d-5c7b-89fc-19694e8c2050', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 152, 1133.97, 824.85),
+('529fd465-2f26-5288-8e1e-3eb30f0ee15e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 153, 1127.30, 829.19),
+('9cd7b14e-8425-593a-9a74-ef718f467f61', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 154, 1120.46, 833.26),
+('809c73ba-c319-52d0-93b2-a670aa0a27c7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 155, 1113.34, 836.80),
+('58da9f03-c9e5-581b-bb88-0720a13da334', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 156, 1105.80, 839.28),
+('12c89611-4f0b-5194-9720-bec7ce95be92', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 157, 1097.91, 839.83),
+('a8849b3f-e1b2-5a76-868c-6afc69be5092', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 158, 1090.24, 837.84),
+('d098a3b2-8f76-5667-b36a-69d1d1f2fe06', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 159, 1083.27, 834.04),
+('49f3654c-6333-5574-b0fd-3379758c2118', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 160, 1076.98, 829.18),
+('4ce400d3-aa39-56db-b26f-89c2d3b293c5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 161, 1071.20, 823.71),
+('2588d908-9079-5145-986b-a6df142fa572', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 162, 1065.79, 817.88),
+('7e77c79f-a400-5add-b609-78379ad40311', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 163, 1060.60, 811.84),
+('5108a0ab-5449-5c0d-8d9c-7c361f091e49', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 164, 1055.49, 805.75),
+('ab55ea97-dc1b-527b-9305-cfc81c3446c4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 165, 1050.00, 800.00),
+('84f8b497-2df4-57a2-89d5-f1bdcb55cca4', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 166, 1042.54, 802.70),
+('9815c224-ea7c-5611-839b-095788e15029', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 167, 1035.14, 805.56),
+('26adde20-7e5b-5191-a024-fd6b21c28539', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 168, 1027.77, 808.49),
+('af0dc834-3ec2-52db-a291-0ac2f2a9631a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 169, 1020.41, 811.45),
+('cd2e6da2-37bf-5375-89e2-e7e7e0fdd468', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 170, 1013.05, 814.41),
+('15bd1adb-d996-5926-bba1-555aa0ad6cba', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 171, 1005.68, 817.34),
+('87ae1a68-e118-535c-9b10-cfa50faed1ac', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 172, 998.30, 820.25),
+('005e8a7c-7f2f-517c-9c90-5f2ea05801e6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 173, 990.91, 823.12),
+('1ae03ec8-d271-5a62-9eca-a076cacb688f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 174, 983.50, 825.95),
+('1d98e576-a924-5395-9de0-53bcb99e70f2', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 175, 976.06, 828.72),
+('47818600-6a42-50ef-8c5c-6e5de4028c00', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 176, 968.60, 831.41),
+('94fa9b12-64bc-56f9-a098-00b2813f23e5', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 177, 961.11, 834.02),
+('71d34d95-f5d9-540a-871d-f89b107b3513', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 178, 953.60, 836.56),
+('4885cc2b-c177-5d01-a72e-54f5412f9e39', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 179, 946.05, 839.00),
+('5e271ccd-c1f1-5be6-b5da-291e5084ba52', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 180, 938.45, 841.29),
+('dc0c973d-0a3d-5953-af62-e8ef7508bc3a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 181, 930.82, 843.44),
+('44127960-270d-5a52-8aaf-84dda112d454', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 182, 923.14, 845.43),
+('c35a923c-82de-5966-af37-7da16f0e189d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 183, 915.42, 847.23),
+('9dfd4456-ee60-5133-a2c9-8d73d6a5040d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 184, 907.64, 848.78),
+('2251c4a7-0a94-51b1-a59c-7d0f859b1361', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 185, 899.80, 850.02),
+('3249dadd-0be3-543e-b614-2ff8b751b361', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 186, 891.92, 850.87),
+('090a163e-67df-5c34-913b-1fd0ae231ffe', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 187, 884.00, 851.37),
+('82b03758-62dd-5ced-9f84-802d6d5a35d9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 188, 876.07, 851.55),
+('da7ad052-51a3-5c10-8496-5f2233416a7c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 189, 868.14, 851.46),
+('6f155125-2050-5b21-938a-c4e70afea1a1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 190, 860.21, 851.13),
+('4d948c5e-f0ae-55bc-a44f-19d5621a0de6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 191, 852.30, 850.60),
+('710f4ff0-b711-5a6c-aac4-96257775de6f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 192, 844.40, 849.90),
+('d9733526-4446-5bbc-98f4-172df67320d9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 193, 836.51, 849.06),
+('b27245b7-63ad-58d0-8cdc-a15095fa98cd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 194, 828.64, 848.12),
+('3f462a35-c80d-5032-974f-37c07a8fcaca', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 195, 820.77, 847.10),
+('135776a6-3ac7-5612-981b-8381683e1168', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 196, 812.91, 846.04),
+('65f2a564-c8ad-52d0-a0d5-f4c3544f8375', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 197, 805.05, 844.96),
+('d6fc44ac-fc71-578a-a3bb-58fec8eeeb78', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 198, 797.19, 843.90),
+('67d7f549-ba87-539f-a1d7-268b40341e6b', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 199, 789.32, 842.89),
+('127a4e7e-bf74-595c-9b78-80e4c8f3581d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 200, 781.44, 841.97),
+('7e7a3c93-ecb6-593e-8041-cb7848b3bd00', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 201, 773.55, 841.18),
+('91d381ef-3fe8-5574-bb37-b91eb3def1d7', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 202, 765.64, 840.55),
+('69676739-db1b-5dcf-822a-ec2cfd2fca1d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 203, 757.72, 840.15),
+('d784bb78-f008-546e-ac33-2a6d543251cd', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 204, 749.79, 840.00),
+('21431080-920b-5bf4-b07a-6cff57e420ca', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 205, 741.86, 840.08),
+('051f75ad-e198-5091-871e-dfb1ce88539c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 206, 733.93, 840.31),
+('d12e7954-23ec-5306-831b-240fc1d76b9e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 207, 726.00, 840.66),
+('e23c781a-b57a-5f8e-9353-f3d07c03011f', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 208, 718.08, 841.11),
+('105e7f3c-1432-5c07-b438-c44e8cf27b96', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 209, 710.17, 841.67),
+('fadf4ab1-5dc1-56da-b195-38b096e1a699', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 210, 702.26, 842.30),
+('f32a2ecf-acc0-5869-9d6f-c773c4402703', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 211, 694.36, 843.01),
+('d97a0a79-673d-5919-875e-1140e47e828e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 212, 686.47, 843.76),
+('5a5aa0ec-b50c-585b-9102-7f00372d1428', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 213, 678.57, 844.56),
+('4c9e0a8c-f939-523a-a326-b906f20a5418', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 214, 670.68, 845.39),
+('f1734f3c-afb1-5513-8bd9-4f4ae888e190', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 215, 662.80, 846.22),
+('1bc188b0-55f9-59ea-acba-2dcac378377e', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 216, 654.91, 847.05),
+('7d12d192-7243-50f2-a898-11cd874a5f35', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 217, 647.01, 847.85),
+('07b76620-c162-5747-8e8b-8c010a814581', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 218, 639.12, 848.60),
+('1c1d9246-2930-540d-bc9d-1e27fd03d997', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 219, 631.21, 849.27),
+('0d80c274-b6ec-5e1f-84f0-f0cf58c05267', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 220, 623.30, 849.81),
+('78646608-bf0e-5f21-84f6-21942c516c5d', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 221, 615.38, 850.20),
+('0afa5696-9330-51ac-b4a7-0002fde6c1bf', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 222, 607.45, 850.47),
+('245a272a-df66-520c-9b80-160556d18b46', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 223, 599.52, 850.65),
+('1f6742ce-10ce-5c69-9d59-5087bf85df6a', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 224, 591.59, 850.73),
+('4a3ff454-42e0-5398-832a-113040dbb454', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 225, 583.65, 850.73),
+('74aa01ea-c7f5-5559-a2f8-0f3658a4e761', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 226, 575.72, 850.65),
+('21f778a1-59ce-50c0-9066-c85183897739', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 227, 567.79, 850.51),
+('decd0624-9f74-51a2-b356-e2f58f80dbc9', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 228, 559.86, 850.32),
+('4e2fc46c-ce76-5a51-8af0-3787147637cb', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 229, 551.93, 850.12),
+('c14bdf6c-f61b-51b8-939c-c46da1f420de', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 3, 230, 544.00, 850.00);

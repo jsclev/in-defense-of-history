@@ -107,8 +107,8 @@ struct LevelMapView: View {
             ?? debugRangeBands[debugRangeBands.count - 1].tint
     }
 
-    private static let slotTowerScale: CGFloat = 1.270
-    private static let slotTowerLift: CGFloat = 0.11
+    private static let slotTowerScale: CGFloat = 1.443
+    private static let slotTowerLift: CGFloat = 0.230
     
     private var db: Db
     private var virtualCanvas: VirtualCanvas

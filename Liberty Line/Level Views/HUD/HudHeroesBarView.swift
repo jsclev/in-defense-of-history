@@ -1,23 +1,19 @@
 import SwiftUI
 
 struct HudHeroesBarView: View {
+    private let numHeroes = 3
     private let heroes: [Hero]
     private let buttonSize: CGFloat
     private let buttonSpacing: CGFloat
     
     public init(runtimeCanvas: RuntimeCanvas, db: Db) {
-        buttonSize = runtimeCanvas.bottomLeftHudRect.size.width / (5.0 + 4.0 * 0.1)
+        let buttonSections = CGFloat(numHeroes) + ((CGFloat(numHeroes) - 1.0) * 0.1)
+        buttonSize = runtimeCanvas.bottomLeftHudRect.size.width / buttonSections
         buttonSpacing = buttonSize * 0.1
 
         do {
             let allHeroes = try db.heroDao.getAll()
-            self.heroes = [
-                allHeroes[0],
-                allHeroes[1],
-                allHeroes[2],
-                allHeroes[3],
-                allHeroes[4]
-            ]
+            self.heroes = Array(allHeroes.prefix(upTo: numHeroes))
         }
         catch {
             fatalError()
