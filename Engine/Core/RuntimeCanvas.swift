@@ -18,9 +18,10 @@ public struct RuntimeCanvas {
     public let hudTopMargin: CGFloat
     public let hudHorizontalMargin: CGFloat
     public let hudBottomMargin: CGFloat
-    public let topRightHudRect: CGRect
-    public let bottomLeftHudRect: CGRect
-    public let bottomRightHudRect: CGRect
+    public let heroBarSize: CGSize
+    public let statsViewSize: CGSize
+    public let miscViewSize: CGSize
+    public let masterControlsSize: CGSize
 //    private let hudMarginFactor = 0.04
 //    public let hudLowerLeftRect: CGRect
 
@@ -99,50 +100,24 @@ public struct RuntimeCanvas {
         hudTopMargin = hudRect.minY
         hudBottomMargin = physicalRect.maxY - hudRect.maxY
         
-        var bottomLeftHudWidth = virtualCanvas.lowerLeftOcclusionCornerFraction.width * playAreaRect.width
-        bottomLeftHudWidth += (safeInsetsRect.width - playAreaRect.width) / 2.0
-
-        var bottomLeftHudHeight = virtualCanvas.lowerLeftOcclusionCornerFraction.height * playAreaRect.height
-        bottomLeftHudHeight += (safeInsetsRect.height - playAreaRect.height) / 2.0
-        
-        bottomLeftHudRect = CGRect(
-            x: hudRect.minX,
-            y: hudRect.maxY - bottomLeftHudHeight,
-            width: bottomLeftHudWidth,
-            height: bottomLeftHudHeight
-        )
-        
-        var topRightHudWidth = virtualCanvas.upperRightOcclusionCornerFraction.width * playAreaRect.width
-        topRightHudWidth += (safeInsetsRect.width - playAreaRect.width) / 2.0
-
-        var topRightHudHeight = virtualCanvas.upperRightOcclusionCornerFraction.height * playAreaRect.height
-        topRightHudHeight += (safeInsetsRect.height - playAreaRect.height) / 2.0
-        
-        topRightHudRect = CGRect(
-            x: hudRect.maxX - topRightHudWidth,
-            y: hudRect.minY,
-            width: topRightHudWidth,
-            height: topRightHudHeight
-        )
-        
-        var bottomRightHudWidth = virtualCanvas.lowerRightOcclusionCornerFraction.width * playAreaRect.width
-        bottomRightHudWidth += (safeInsetsRect.width - playAreaRect.width) / 2.0
-
-        var bottomRightHudHeight = virtualCanvas.lowerRightOcclusionCornerFraction.height * playAreaRect.height
-        bottomRightHudHeight += (safeInsetsRect.height - playAreaRect.height) / 2.0
-        
-        bottomRightHudRect = CGRect(
-            x: hudRect.maxX - bottomRightHudWidth,
-            y: hudRect.maxY - bottomRightHudHeight,
-            width: bottomRightHudWidth,
-            height: bottomRightHudHeight
-        )
+        heroBarSize = CGSize(
+            width: virtualCanvas.heroBarSizeFraction.width * playAreaRect.width,
+            height: virtualCanvas.heroBarSizeFraction.height * playAreaRect.height)
+        statsViewSize = CGSize(
+            width: virtualCanvas.statsViewSizeFraction.width * playAreaRect.width,
+            height: virtualCanvas.statsViewSizeFraction.height * playAreaRect.height)
+        miscViewSize = CGSize(
+            width: virtualCanvas.miscViewSizeFraction.width * playAreaRect.width,
+            height: virtualCanvas.miscViewSizeFraction.height * playAreaRect.height)
+        masterControlsSize = CGSize(
+            width: virtualCanvas.masterControlsSizeFraction.width * playAreaRect.width,
+            height: virtualCanvas.masterControlsSizeFraction.height * playAreaRect.height)
     }
     
 //    public var lowerLeftHudWidth: CGFloat {
 //        let extraWidth = (safeInsetsRect.width - playAreaRect.width) / 2.0
-////        let occlusionWidth = virtualCanvas.lowerLeftOcclusionCornerFraction.width * playAreaRect.width
+////        let occlusionWidth = virtualCanvas.heroBarSizeFraction.width * playAreaRect.width
 //        
-//        return virtualCanvas.lowerLeftOcclusionCornerFraction.width * playAreaRect.width + extraWidth
+//        return virtualCanvas.heroBarSizeFraction.width * playAreaRect.width + extraWidth
 //    }
 }

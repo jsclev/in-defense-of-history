@@ -22,14 +22,14 @@ public class VirtualCanvasDAO: BaseDAO {
                 path_width,
                 tower_menu_total_width,
                 tower_menu_total_height,
-                upper_left_occlusion_corner_width_fraction,
-                upper_left_occlusion_corner_height_fraction,
-                upper_right_occlusion_corner_width_fraction,
-                upper_right_occlusion_corner_height_fraction,
-                lower_left_occlusion_corner_width_fraction,
-                lower_left_occlusion_corner_height_fraction,
-                lower_right_occlusion_corner_width_fraction,
-                lower_right_occlusion_corner_height_fraction
+                stats_view_width_fraction,
+                stats_view_height_fraction,
+                master_controls_width_fraction,
+                master_controls_height_fraction,
+                hero_bar_width_fraction,
+                hero_bar_height_fraction,
+                misc_view_width_fraction,
+                misc_view_height_fraction
             FROM
                 virtual_canvas
         """)
@@ -54,13 +54,13 @@ public class VirtualCanvasDAO: BaseDAO {
         let pathWidth = getDouble(stmt: stmt, colIndex: 8)
         let towerMenuTotalSize = CGSize(width: getDouble(stmt: stmt, colIndex: 9),
                                         height: getDouble(stmt: stmt, colIndex: 10))
-        let upperLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 11),
+        let statsViewSizeFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 11),
                                                       height: getDouble(stmt: stmt, colIndex: 12))
-        let upperRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
+        let masterControlsSizeFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 13),
                                                        height: getDouble(stmt: stmt, colIndex: 14))
-        let lowerLeftOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 15),
+        let heroBarSizeFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 15),
                                                       height: getDouble(stmt: stmt, colIndex: 16))
-        let lowerRightOcclusionCornerFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 17),
+        let miscViewSizeFraction = CGSize(width: getDouble(stmt: stmt, colIndex: 17),
                                                        height: getDouble(stmt: stmt, colIndex: 18))
         
         let virtualCanvas = VirtualCanvas(size: canvasSize,
@@ -68,10 +68,10 @@ public class VirtualCanvasDAO: BaseDAO {
                                     pathWidth: pathWidth,
                                     towerSlotSize: towerSlotSize,
                                     towerMenuTotalSize: towerMenuTotalSize,
-                                    upperLeftOcclusionCornerFraction: upperLeftOcclusionCornerFraction,
-                                    upperRightOcclusionCornerFraction: upperRightOcclusionCornerFraction,
-                                    lowerLeftOcclusionCornerFraction: lowerLeftOcclusionCornerFraction,
-                                    lowerRightOcclusionCornerFraction: lowerRightOcclusionCornerFraction)
+                                    statsViewSizeFraction: statsViewSizeFraction,
+                                    masterControlsSizeFraction: masterControlsSizeFraction,
+                                    heroBarSizeFraction: heroBarSizeFraction,
+                                    miscViewSizeFraction: miscViewSizeFraction)
 
         let extraRow = sqlite3_step(stmt) == SQLITE_ROW
         sqlite3_finalize(stmt)

@@ -1,7 +1,7 @@
 import SwiftUI
 
 @available(iOS 26.0, *)
-struct HudTopSectionRightView: View {
+struct HudMasterControlsView: View {
     private let buttonSize: CGFloat
     private let buttonSpacing: CGFloat
     private let onSpeedUp: () -> Void
@@ -12,10 +12,10 @@ struct HudTopSectionRightView: View {
                 onExit: @escaping () -> Void) {
         self.onSpeedUp = onSpeedUp
         self.onExit = onExit
-        let width = runtimeCanvas.topRightHudRect.width
-        let height = runtimeCanvas.topRightHudRect.height
+        let width = runtimeCanvas.masterControlsSize.width
+        let height = runtimeCanvas.masterControlsSize.height
         let minDimension = max(width, height)
-        
+
         self.buttonSize = (minDimension / 2.0) * 0.90
         self.buttonSpacing = (minDimension / 2.0) * 0.10
     }

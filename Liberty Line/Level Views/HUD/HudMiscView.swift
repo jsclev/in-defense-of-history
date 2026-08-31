@@ -5,8 +5,8 @@ struct HudMiscView: View {
     private let buttonSize: CGFloat
     
     public init(runtimeCanvas: RuntimeCanvas) {
-        let width = runtimeCanvas.bottomRightHudRect.width
-        let height = runtimeCanvas.bottomRightHudRect.height
+        let width = runtimeCanvas.miscViewSize.width
+        let height = runtimeCanvas.miscViewSize.height
         self.buttonSize = min(width, height)
     }
 

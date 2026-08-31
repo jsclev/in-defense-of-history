@@ -3,10 +3,10 @@ INSERT INTO virtual_canvas (
     play_area_x, play_area_y, play_area_width, play_area_height,
     slot_width, slot_height, path_width,
     tower_menu_total_width, tower_menu_total_height,
-    upper_left_occlusion_corner_width_fraction, upper_left_occlusion_corner_height_fraction,
-    upper_right_occlusion_corner_width_fraction, upper_right_occlusion_corner_height_fraction,
-    lower_left_occlusion_corner_width_fraction, lower_left_occlusion_corner_height_fraction,
-    lower_right_occlusion_corner_width_fraction, lower_right_occlusion_corner_height_fraction
+    stats_view_width_fraction, stats_view_height_fraction,
+    master_controls_width_fraction, master_controls_height_fraction,
+    hero_bar_width_fraction, hero_bar_height_fraction,
+    misc_view_width_fraction, misc_view_height_fraction
 ) VALUES (
     '0dcc8703-0421-4c2a-94b8-67a3c5df2107',
     2868.0,

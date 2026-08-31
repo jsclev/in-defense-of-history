@@ -8,10 +8,10 @@ public struct VirtualCanvas: Equatable, Sendable {
     public let playAreaRect: CGRect
     public let towerSlotSize: CGSize
     public let towerMenuTotalSize: CGSize
-    public let upperLeftOcclusionCornerFraction: CGSize
-    public let upperRightOcclusionCornerFraction: CGSize
-    public let lowerLeftOcclusionCornerFraction: CGSize
-    public let lowerRightOcclusionCornerFraction: CGSize
+    public let statsViewSizeFraction: CGSize
+    public let masterControlsSizeFraction: CGSize
+    public let heroBarSizeFraction: CGSize
+    public let miscViewSizeFraction: CGSize
     public let upperLeftOcclusionArea: CGRect
     public let upperRightOcclusionArea: CGRect
     public let lowerLeftOcclusionArea: CGRect
@@ -22,28 +22,28 @@ public struct VirtualCanvas: Equatable, Sendable {
                 pathWidth: Double,
                 towerSlotSize: CGSize,
                 towerMenuTotalSize: CGSize,
-                upperLeftOcclusionCornerFraction: CGSize,
-                upperRightOcclusionCornerFraction: CGSize,
-                lowerLeftOcclusionCornerFraction: CGSize,
-                lowerRightOcclusionCornerFraction: CGSize) {
+                statsViewSizeFraction: CGSize,
+                masterControlsSizeFraction: CGSize,
+                heroBarSizeFraction: CGSize,
+                miscViewSizeFraction: CGSize) {
         self.size = size
         self.playAreaRect = playAreaRect
         self.pathWidth = pathWidth
         self.towerSlotSize = towerSlotSize
         self.towerMenuTotalSize = towerMenuTotalSize
-        self.upperLeftOcclusionCornerFraction = upperLeftOcclusionCornerFraction
-        self.upperRightOcclusionCornerFraction = upperRightOcclusionCornerFraction
-        self.lowerLeftOcclusionCornerFraction = lowerLeftOcclusionCornerFraction
-        self.lowerRightOcclusionCornerFraction = lowerRightOcclusionCornerFraction
+        self.statsViewSizeFraction = statsViewSizeFraction
+        self.masterControlsSizeFraction = masterControlsSizeFraction
+        self.heroBarSizeFraction = heroBarSizeFraction
+        self.miscViewSizeFraction = miscViewSizeFraction
 
         let cornerSize = { (f: CGSize) in
             CGSize(width: playAreaRect.width * f.width,
                    height: playAreaRect.height * f.height)
         }
-        let ul = cornerSize(upperLeftOcclusionCornerFraction)
-        let ur = cornerSize(upperRightOcclusionCornerFraction)
-        let ll = cornerSize(lowerLeftOcclusionCornerFraction)
-        let lr = cornerSize(lowerRightOcclusionCornerFraction)
+        let ul = cornerSize(statsViewSizeFraction)
+        let ur = cornerSize(masterControlsSizeFraction)
+        let ll = cornerSize(heroBarSizeFraction)
+        let lr = cornerSize(miscViewSizeFraction)
         upperLeftOcclusionArea = CGRect(x: playAreaRect.minX,
                                         y: playAreaRect.maxY - ul.height,
                                         width: ul.width, height: ul.height)

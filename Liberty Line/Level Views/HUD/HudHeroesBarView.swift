@@ -8,7 +8,7 @@ struct HudHeroesBarView: View {
     
     public init(runtimeCanvas: RuntimeCanvas, db: Db) {
         let buttonSections = CGFloat(numHeroes) + ((CGFloat(numHeroes) - 1.0) * 0.1)
-        buttonSize = runtimeCanvas.bottomLeftHudRect.size.width / buttonSections
+        buttonSize = runtimeCanvas.heroBarSize.width / buttonSections
         buttonSpacing = buttonSize * 0.1
 
         do {

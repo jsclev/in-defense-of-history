@@ -149,7 +149,7 @@ struct LevelMapView: View {
             HudView(runtimeCanvas: runtimeCanvas,
                     db: db,
                     runner: runner,
-                    towerMenuLayout: towerMenuLayout,
+                    hudLayoutConfig: .standard,
                     onSpeedUp: { runner.speedUp() },
                     onExit: onExit)
                 .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)
