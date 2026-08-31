@@ -113,19 +113,22 @@ struct LevelMapView: View {
     private var db: Db
     private var virtualCanvas: VirtualCanvas
     private var runtimeCanvas: RuntimeCanvas
+    private var hudLayoutConfig: HudLayoutConfig
 
     init(db: Db,
          virtualCanvas: VirtualCanvas,
          runtimeCanvas: RuntimeCanvas,
          towerMenuLayout: TowerMenuLayout,
          node: CampaignNode,
-         difficulty: Difficulty, onExit: @escaping () -> Void) {
+         difficulty: Difficulty,
+         hudLayoutConfig: HudLayoutConfig, onExit: @escaping () -> Void) {
         self.db = db
         self.virtualCanvas = virtualCanvas
         self.runtimeCanvas = runtimeCanvas
         self.towerMenuLayout = towerMenuLayout
         self.node = node
         self.difficulty = difficulty
+        self.hudLayoutConfig = hudLayoutConfig
         self.onExit = onExit
         _runner = StateObject(wrappedValue: LevelRunner(
             db: db,
@@ -149,7 +152,7 @@ struct LevelMapView: View {
             HudView(runtimeCanvas: runtimeCanvas,
                     db: db,
                     runner: runner,
-                    hudLayoutConfig: .standard,
+                    hudLayoutConfig: hudLayoutConfig,
                     onSpeedUp: { runner.speedUp() },
                     onExit: onExit)
                 .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)

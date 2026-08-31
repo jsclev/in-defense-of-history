@@ -5,9 +5,17 @@ struct RootView: View {
     @State private var selectedNode: CampaignNode?
     @State private var playingDifficulty: Difficulty?
     @State private var menuScreen: MenuScreen?
+    @State private var configuringHudLayout = false
+    @State private var hudLayoutConfig: HudLayoutConfig
 
     let store: Store
     let runtimeCanvas: RuntimeCanvas
+
+    init(store: Store, runtimeCanvas: RuntimeCanvas) {
+        self.store = store
+        self.runtimeCanvas = runtimeCanvas
+        _hudLayoutConfig = State(initialValue: (try? store.db.hudLayoutDao.get()) ?? .standard)
+    }
 
     var body: some View {
         if let selectedNode {
@@ -16,7 +24,8 @@ struct RootView: View {
                              virtualCanvas: store.virtualCanvas,
                              runtimeCanvas: runtimeCanvas,
                              towerMenuLayout: store.towerMenuLayout,
-                             node: selectedNode, difficulty: playingDifficulty) {
+                             node: selectedNode, difficulty: playingDifficulty,
+                             hudLayoutConfig: hudLayoutConfig) {
                     self.playingDifficulty = nil
                     self.selectedNode = nil
                 }
@@ -35,8 +44,18 @@ struct RootView: View {
                 self.menuScreen = nil
             }
         } else if menuScreen == .settings {
-            SettingsView(runtimeCanvas: runtimeCanvas) {
-                self.menuScreen = nil
+            if configuringHudLayout {
+                HudLayoutConfigView(db: store.db,
+                                    runtimeCanvas: runtimeCanvas,
+                                    hudLayoutConfig: hudLayoutConfig,
+                                    onSave: { hudLayoutConfig = $0 }) {
+                    self.configuringHudLayout = false
+                }
+            } else {
+                SettingsView(runtimeCanvas: runtimeCanvas,
+                             onConfigureHudLayout: { configuringHudLayout = true }) {
+                    self.menuScreen = nil
+                }
             }
         } else if let menuScreen {
             MenuPlaceholderView(menuScreen: menuScreen, runtimeCanvas: runtimeCanvas) {

@@ -91,6 +91,20 @@ CREATE TABLE player_unlocked_hero (
     hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id)
 );
 
+CREATE TABLE player_hud_layout (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    hud_section_name TEXT NOT NULL UNIQUE CHECK (
+        hud_section_name IN ('hero_bar', 'stats_view', 'misc_view', 'master_controls')
+    ),
+    hud_location_name TEXT NOT NULL UNIQUE CHECK (
+        hud_location_name IN (
+            'north_west', 'north', 'north_east',
+            'west', 'east',
+            'south_west', 'south', 'south_east'
+        )
+    )
+);
+
 CREATE TABLE virtual_canvas (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     canvas_width REAL NOT NULL CHECK (canvas_width > 0.0),

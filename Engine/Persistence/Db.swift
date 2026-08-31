@@ -25,6 +25,7 @@ public class Db {
     public let levelGeoJSONDao: LevelGeoJSONDAO
     public let waveDao: WaveDAO
     public let difficultyDao: DifficultyDAO
+    public let hudLayoutDao: HudLayoutDAO
     
     public static func getAbsolutePathToDb(dbFilename: String, fullRefresh: Bool) -> String {
         let logger = LogUtility.getLogger(LogCategory.Db, Db.self)
@@ -130,6 +131,7 @@ public class Db {
         heroDao = HeroDAO(conn: conn)
         levelGeoJSONDao = LevelGeoJSONDAO()
         difficultyDao = DifficultyDAO(conn: conn)
+        hudLayoutDao = HudLayoutDAO(conn: conn)
     }
 
     public func close() {

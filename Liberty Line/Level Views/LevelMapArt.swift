@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The layered map art for a level, resolved by the asset-library naming
+/// The layered map art for a level, resolved by the LevelMaps naming
 /// convention. Above the base terrain image a level may ship road art
 /// ("<map>_path"), an overlay ("<map>_overlay"), and occlusion art drawn
 /// over everything that moves ("<map>_forest_occlusion", then
@@ -9,7 +9,7 @@ import SwiftUI
 /// name — no code or schema change — and a level without one simply has
 /// none.
 ///
-/// The asset library is probed once, at construction; the level runtimeCanvas
+/// The map folder is read once, at construction; the level runtimeCanvas
 /// keeps one of these on its runner so the per-frame render never
 /// re-answers which layers exist.
 ///
@@ -22,27 +22,30 @@ import SwiftUI
 struct LevelMapArt {
     let mapImageName: String
 
-    /// The road-art layer's asset name, if the level ships one.
-    let pathName: String?
+    let mapImage: UIImage?
 
-    /// The overlay layer's asset name, if the level ships one.
-    let overlayName: String?
+    /// The road-art layer, if the level ships one.
+    let pathImage: UIImage?
+
+    /// The overlay layer, if the level ships one.
+    let overlayImage: UIImage?
 
     /// Foliage clusters at the path endpoints, if the level ships them.
     /// Drawn after the walkers, so soldiers enter from and disappear into
     /// the foliage.
-    let forestOcclusionName: String?
+    let forestOcclusionImage: UIImage?
 
     /// The occlusion art covering the entrances and exits, if the level
     /// ships one. The topmost art layer.
-    let occlusionName: String?
+    let occlusionImage: UIImage?
 
     init(mapImageName: String) {
         self.mapImageName = mapImageName
-        pathName = Self.existing(mapImageName + "_path")
-        overlayName = Self.existing(mapImageName + "_overlay")
-        forestOcclusionName = Self.existing(mapImageName + "_forest_occlusion")
-        occlusionName = Self.existing(mapImageName + "_occlusion")
+        mapImage = Self.loaded(mapImageName)
+        pathImage = Self.loaded(mapImageName + "_path")
+        overlayImage = Self.loaded(mapImageName + "_overlay")
+        forestOcclusionImage = Self.loaded(mapImageName + "_forest_occlusion")
+        occlusionImage = Self.loaded(mapImageName + "_occlusion")
     }
 
     /// Whether the level has any map art at all.
@@ -60,19 +63,19 @@ struct LevelMapArt {
     /// Tier 1 — the map below everything that moves: base terrain, road
     /// art, overlay.
     @ViewBuilder func underlay(in projection: LevelMapProjection) -> some View {
-        layer(mapImageName, in: projection)
-        layer(pathName, in: projection)
-        layer(overlayName, in: projection)
+        layer(mapImage, in: projection)
+        layer(pathImage, in: projection)
+        layer(overlayImage, in: projection)
     }
 
     /// Tier 2 — foliage at the path endpoints. Above the walkers.
     @ViewBuilder func forestOcclusion(in projection: LevelMapProjection) -> some View {
-        layer(forestOcclusionName, in: projection)
+        layer(forestOcclusionImage, in: projection)
     }
 
     /// Tier 3 — the entrance/exit occlusion. Above every playable layer.
     @ViewBuilder func occlusion(in projection: LevelMapProjection) -> some View {
-        layer(occlusionName, in: projection)
+        layer(occlusionImage, in: projection)
     }
 
     /// The finished map at rest — all three tiers, in the level screen's
@@ -89,10 +92,10 @@ struct LevelMapArt {
     /// projected canvas and centred on it, so every layer registers
     /// pixel-for-pixel with the terrain. Never hit-tested — art layers sit
     /// among tappable controls and must not swallow their taps.
-    @ViewBuilder private func layer(_ name: String?,
+    @ViewBuilder private func layer(_ image: UIImage?,
                                     in projection: LevelMapProjection) -> some View {
-        if let name, !name.isEmpty {
-            Image(name)
+        if let image {
+            Image(uiImage: image)
                 .resizable()
                 .frame(width: projection.imageFrameSize.width,
                        height: projection.imageFrameSize.height)
@@ -101,7 +104,12 @@ struct LevelMapArt {
         }
     }
 
-    private static func existing(_ name: String) -> String? {
-        UIImage(named: name) != nil ? name : nil
+    private static func loaded(_ name: String) -> UIImage? {
+        guard !name.isEmpty,
+              let url = Bundle.main.url(forResource: name,
+                                        withExtension: "png",
+                                        subdirectory: "LevelMaps")
+        else { return nil }
+        return UIImage(contentsOfFile: url.path)
     }
 }

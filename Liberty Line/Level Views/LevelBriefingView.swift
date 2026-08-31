@@ -8,6 +8,21 @@ struct LevelBriefingView: View {
     let node: CampaignNode
     let onStart: (Difficulty) -> Void
 
+    private let art: LevelMapArt
+
+    init(db: Db,
+         virtualCanvas: VirtualCanvas,
+         runtimeCanvas: RuntimeCanvas,
+         node: CampaignNode,
+         onStart: @escaping (Difficulty) -> Void) {
+        self.db = db
+        self.virtualCanvas = virtualCanvas
+        self.runtimeCanvas = runtimeCanvas
+        self.node = node
+        self.onStart = onStart
+        self.art = LevelMapArt(mapImageName: node.mapImageName)
+    }
+
     @State private var difficulties: [Difficulty] = []
     @State private var selected: Difficulty?
 
@@ -101,7 +116,6 @@ struct LevelBriefingView: View {
         let height = 260 * metrics.scale
         let aspect = virtualCanvas.playAreaRect.width / virtualCanvas.playAreaRect.height
         let frame = CGSize(width: height * aspect, height: height)
-        let art = LevelMapArt(mapImageName: node.mapImageName)
         return ZStack {
             if art.hasArt {
                 // The map exactly as the level runtimeCanvas composites it — same

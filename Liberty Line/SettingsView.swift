@@ -7,13 +7,17 @@ struct SettingsView: View {
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     private let runtimeCanvas: RuntimeCanvas
+    private let onConfigureHudLayout: () -> Void
     private let onExit: () -> Void
     private let metrics: HudMetrics
     private let contentInsets: EdgeInsets
     private let doneButtonHeight: CGFloat
 
-    init(runtimeCanvas: RuntimeCanvas, onExit: @escaping () -> Void) {
+    init(runtimeCanvas: RuntimeCanvas,
+         onConfigureHudLayout: @escaping () -> Void,
+         onExit: @escaping () -> Void) {
         self.runtimeCanvas = runtimeCanvas
+        self.onConfigureHudLayout = onConfigureHudLayout
         self.onExit = onExit
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         self.metrics = metrics
@@ -45,6 +49,18 @@ struct SettingsView: View {
             toggle("Simulation readout",
                    detail: "Wave and spawn state, top-left of the level map.",
                    isOn: $showDebugInfo)
+
+            Button(action: onConfigureHudLayout) {
+                VStack(alignment: .leading, spacing: 3 * metrics.scale) {
+                    Text("HUD layout")
+                        .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
+                        .foregroundStyle(Color(red: 0.87, green: 0.72, blue: 0.35))
+                    Text("Drag the hero bar, stats, misc button, and master controls "
+                         + "to any edge or corner of the screen.")
+                        .font(.system(size: Typography.size(13 * metrics.scale)))
+                        .foregroundStyle(.white.opacity(0.65))
+                }
+            }
 
             Spacer()
 

@@ -64,6 +64,7 @@ sqlite3 in_defense_of_history.sqlite < DML/level_tower_unlocks.sql
 sqlite3 in_defense_of_history.sqlite < DML/enemy_types.sql
 sqlite3 in_defense_of_history.sqlite < DML/difficulties.sql
 sqlite3 in_defense_of_history.sqlite < DML/selected_difficulty.sql
+sqlite3 in_defense_of_history.sqlite < DML/hud_layout.sql
 sqlite3 in_defense_of_history.sqlite < DML/tower_types.sql
 sqlite3 in_defense_of_history.sqlite < DML/towers.sql
 sqlite3 in_defense_of_history.sqlite < DML/melee_units.sql
