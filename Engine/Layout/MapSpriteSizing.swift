@@ -78,6 +78,9 @@ public enum MapSpriteSizing {
     }
 
     public static let walker = SpriteHeight(mapPixels: 58.04)
+    public static let meleeUnit = SpriteHeight(mapPixels: 55.26)
+    public static let heroMapHeight: CGFloat = 87.06
+    public static let hero = SpriteHeight(mapPixels: heroMapHeight)
     public static let cannonball = SpriteHeight(mapPixels: 20.8)
     public static let musketBall = SpriteHeight(mapPixels: 13.66)
 

@@ -1,7 +1,8 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
+    unit_image_name
 ) VALUES
 (
     '75a615ca-f880-44ca-8386-e28f72fe2f7f', 'Israel Putnam', 'Israel Old Put Putnam', 'Old Put', (
@@ -18,5 +19,6 @@ INSERT INTO hero (
     || 'At Bunker Hill he helped hold Breed''s Hill and the rail fence, bellowing encouragement through the smoke.
 
 Already a folk legend for crawling into a wolf''s den alone, Old Put embodied the rough courage of the New England militia until a stroke ended his field service in 1779.',
-    'hero_old_put_card_16x15', 'hero_details_old_put', 'hero_icon_old_put', 'hero_ability_icon_old_put'
+    'hero_old_put_card_16x15', 'hero_details_old_put', 'hero_icon_old_put', 'hero_ability_icon_old_put',
+    'hero_unit_old_put'
 );

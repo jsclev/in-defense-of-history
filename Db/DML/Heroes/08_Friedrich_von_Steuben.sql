@@ -1,7 +1,8 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
+    unit_image_name
 ) VALUES
 (
     '1d9dba5f-e46a-4ca6-ac50-d62b22e7bd1b', 'Friedrich von Steuben', 'Baron von Steuben, the Drillmaster of Valley Forge', 'The Drillmaster of Valley Forge', (
@@ -18,5 +19,6 @@ INSERT INTO hero (
     || 'Arriving at Valley Forge in 1778 speaking no English, he drilled a model company in person, swearing magnificently in German and French while aides translated.
 
 His Blue Book of regulations turned the Continental Army into a professional force and remained the Army''s manual for decades.',
-    'hero_baron_von_steuben_card_16x15', 'hero_details_baron_von_steuben', 'hero_icon_baron_von_steuben', 'hero_ability_icon_baron_von_steuben'
+    'hero_baron_von_steuben_card_16x15', 'hero_details_baron_von_steuben', 'hero_icon_baron_von_steuben', 'hero_ability_icon_baron_von_steuben',
+    'hero_unit_baron_von_steuben'
 );

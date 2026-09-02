@@ -6,6 +6,7 @@ final class GPUEngine {
     let queue: MTLCommandQueue
     let pipeline: MTLComputePipelineState
     var threadTickBudget = 16_000_000
+    let meleeFormation = MeleeFormation()
     private var pool: [String: MTLBuffer] = [:]
 
     private func pooledBuffer(_ name: String, minLength: Int) throws -> MTLBuffer {
@@ -151,7 +152,7 @@ extension GPUEngine {
         lvl.militiaEngageScanRadius = Float(MilitiaTunables.engageScanRadius)
         lvl.militiaMeleeReach = Float(MilitiaTunables.meleeReach)
         lvl.militiaLeashRadius = Float(MilitiaTunables.leashRadius)
-        lvl.militiaRallySpread = Float(MilitiaTunables.rallySpread)
+        lvl.militiaRallySpread = Float(meleeFormation.postSpread)
         lvl.militiaEnemySwingTicks = Int32(Simulation.fireTicks(MilitiaTunables.enemySwingInterval))
         return lvl
     }

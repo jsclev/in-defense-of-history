@@ -58,7 +58,7 @@ struct HudView: View {
     private func section(at hudLocation: HudLocation) -> some View {
         switch hudLayoutConfig.section(at: hudLocation) {
         case .heroBar:
-            HudHeroesBarView(runtimeCanvas: runtimeCanvas, db: db)
+            EmptyView()
         case .statsView:
             HudStatsView(runtimeCanvas: runtimeCanvas, runner: runner)
         case .miscView:

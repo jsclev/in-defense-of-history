@@ -65,6 +65,8 @@ struct LevelMapView: View {
     /// persisted — a fresh level starts with every ring showing.
     @State private var hiddenRangeSlots: Set<Int> = []
 
+    @State private var contextMenuPoint: CGPoint?
+
     @AppStorage(Constants.debugModeKey) private var debugMode = false
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
@@ -107,9 +109,16 @@ struct LevelMapView: View {
             ?? debugRangeBands[debugRangeBands.count - 1].tint
     }
 
+    private static let contextMenuHeroCount = 2
+    private static let reinforcementsIconName = "action_icon_call_reinforcements"
+    private static let contextMenuIconScale: CGFloat = 0.75
+    private static let contextMenuIndicatorScale: CGFloat = 0.5
+
     private static let slotTowerScale: CGFloat = 1.443
     private static let slotTowerLift: CGFloat = 0.230
     
+    private let contextMenuIcons: [String]
+
     private var db: Db
     private var virtualCanvas: VirtualCanvas
     private var runtimeCanvas: RuntimeCanvas
@@ -130,6 +139,10 @@ struct LevelMapView: View {
         self.difficulty = difficulty
         self.hudLayoutConfig = hudLayoutConfig
         self.onExit = onExit
+        let heroIcons = ((try? db.heroDao.getAll()) ?? [])
+            .prefix(upTo: Self.contextMenuHeroCount)
+            .map(\.iconImageName)
+        contextMenuIcons = heroIcons + [Self.reinforcementsIconName]
         _runner = StateObject(wrappedValue: LevelRunner(
             db: db,
             virtualCanvas: virtualCanvas,
@@ -193,6 +206,8 @@ struct LevelMapView: View {
             .allowsHitTesting(false)
 
             art.underlay(in: projection)
+
+            contextMenuCatcher(projection: projection)
 
             LevelTowerSlotsView(
                 debugMode: debugMode,
@@ -282,8 +297,43 @@ struct LevelMapView: View {
                 }
             }
 
+            ForEach(runner.heroes) { hero in
+                let spriteHeight = sprites.points(MapSpriteSizing.hero)
+                let footPoint = projection.viewPoint(hero.position)
+                if hero.isSelected {
+                    Circle()
+                        .stroke(Color.yellow.opacity(0.9), lineWidth: 2)
+                        .frame(width: spriteHeight * 0.8, height: spriteHeight * 0.8)
+                        .position(x: footPoint.x, y: footPoint.y - spriteHeight * 0.1)
+                        .allowsHitTesting(false)
+                }
+                Image(hero.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: spriteHeight)
+                    .position(x: footPoint.x, y: footPoint.y - spriteHeight / 2)
+                    .onTapGesture { runner.selectHero(hero.id) }
+
+                if hero.hp < hero.maxHP {
+                    let fraction = CGFloat(max(0, hero.hp / hero.maxHP))
+                    let barWidth = sprites.points(MapSpriteSizing.healthBarWidth)
+                    let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color.red)
+                        Capsule()
+                            .fill(Color.green)
+                            .frame(width: barWidth * fraction, height: barHeight)
+                    }
+                    .frame(width: barWidth, height: barHeight)
+                    .position(x: footPoint.x,
+                              y: footPoint.y - spriteHeight - sprites.points(MapSpriteSizing.walkerLabelLift))
+                    .allowsHitTesting(false)
+                }
+            }
+
             ForEach(runner.militia) { soldier in
-                let spriteHeight = sprites.points(MapSpriteSizing.walker)
+                let spriteHeight = sprites.points(MapSpriteSizing.meleeUnit)
                 let footPoint = projection.viewPoint(soldier.position)
                 Image(soldier.assetName)
                     .resizable()
@@ -408,7 +458,79 @@ struct LevelMapView: View {
                 }
             }
 
+            if let contextMenuPoint {
+                contextMenu(at: contextMenuPoint, projection: projection)
+            }
+
+            if runner.selectedHeroIndex != nil {
+                heroDestinationCatcher(projection: projection)
+            }
         }
+    }
+
+    private func contextMenuCatcher(projection: LevelMapProjection) -> some View {
+        Color.black.opacity(0.001)
+            .gesture(SpatialTapGesture().onEnded { value in
+                let mapPoint = projection.mapPoint(value.location)
+                contextMenuPoint = runner.isOnPath(mapPoint) ? mapPoint : nil
+            })
+    }
+
+    private func contextMenu(at mapPoint: CGPoint,
+                             projection: LevelMapProjection) -> some View {
+        let center = projection.viewPoint(mapPoint)
+        let playAreaScalingFactor = runtimeCanvas.scaleFactor
+        let bgSize = towerMenuLayout.getBgSize(playAreaScalingFactor: playAreaScalingFactor)
+        let buttonSize = towerMenuLayout.getTowerButtonSize(
+            playAreaScalingFactor: playAreaScalingFactor)
+        return ZStack {
+            Color.black.opacity(0.001)
+                .onTapGesture { contextMenuPoint = nil }
+
+            Image("tower_menu_bg")
+                .resizable()
+                .frame(width: bgSize.width, height: bgSize.height)
+                .position(center)
+                .allowsHitTesting(false)
+
+            PathTapIndicator(size: buttonSize.width * Self.contextMenuIndicatorScale)
+                .position(center)
+                .allowsHitTesting(false)
+
+            ForEach(Array(contextMenuIcons.enumerated()), id: \.offset) { slot, iconName in
+                ZStack {
+                    Image("tower_menu_square_frame")
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: buttonSize.width, height: buttonSize.height)
+                    Image(iconName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: buttonSize.width * Self.contextMenuIconScale,
+                               height: buttonSize.height * Self.contextMenuIconScale)
+                }
+                .position(towerMenuLayout.getButtonCenterPoint(
+                    index: slot,
+                    count: contextMenuIcons.count,
+                    menuCenterPoint: center,
+                    playAreaScalingFactor: playAreaScalingFactor,
+                    towerButtonSize: buttonSize.width))
+                .onTapGesture {
+                    if iconName == Self.reinforcementsIconName {
+                        runner.callReinforcements(at: mapPoint)
+                        contextMenuPoint = nil
+                    }
+                }
+            }
+        }
+    }
+
+    private func heroDestinationCatcher(projection: LevelMapProjection) -> some View {
+        Color.black.opacity(0.001)
+            .gesture(SpatialTapGesture().onEnded { value in
+                runner.commandSelectedHero(to: projection.mapPoint(value.location))
+            })
     }
 
     private func towerMenuLayer(in viewSize: CGSize, runtimeCanvas: RuntimeCanvas) -> some View {
@@ -875,6 +997,22 @@ private struct RallyMenuItem: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+}
+
+private struct PathTapIndicator: View {
+    let size: CGFloat
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Color.white.opacity(0.85), lineWidth: size * 0.09)
+            Circle()
+                .fill(Color(red: 0.16, green: 0.32, blue: 0.7))
+                .frame(width: size * 0.34, height: size * 0.34)
+        }
+        .frame(width: size, height: size)
+        .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
     }
 }
 

@@ -28,7 +28,8 @@ public class HeroDAO: BaseDAO {
                 CASE WHEN u.hero_id IS NULL THEN 0 ELSE 1 END AS unlocked,
                 lw.wave_index,
                 h.icon_image_name,
-                h.ability_icon_image_name
+                h.ability_icon_image_name,
+                h.unit_image_name
             FROM
                 hero h
             LEFT JOIN
@@ -72,7 +73,8 @@ public class HeroDAO: BaseDAO {
                     primaryImageName: primaryImageName,
                     detailsImageName: detailsImageName,
                     iconImageName: iconImageName,
-                    abilityIconImageName: abilityIconImageName
+                    abilityIconImageName: abilityIconImageName,
+                    unitImageName: try getString(stmt: stmt, colIndex: 17)
                 ))
             }
         }

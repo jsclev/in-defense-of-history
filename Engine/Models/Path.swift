@@ -31,6 +31,29 @@ public struct Path: Sendable, Equatable {
         let t = segLen > 0 ? (d - segStart) / segLen : 0
         return Point.lerp(points[lo], points[hi], t)
     }
+
+    public func nearestDistance(to target: Point) -> Double {
+        var bestDistanceAlong = 0.0
+        var bestGap = Double.infinity
+        for i in 1..<points.count {
+            let a = points[i - 1]
+            let b = points[i]
+            let dx = b.x - a.x
+            let dy = b.y - a.y
+            let segmentLengthSquared = dx * dx + dy * dy
+            var t = 0.0
+            if segmentLengthSquared > 0 {
+                t = ((target.x - a.x) * dx + (target.y - a.y) * dy) / segmentLengthSquared
+                t = min(max(t, 0), 1)
+            }
+            let gap = Point(a.x + dx * t, a.y + dy * t).distance(to: target)
+            if gap < bestGap {
+                bestGap = gap
+                bestDistanceAlong = cumulative[i - 1] + (cumulative[i] - cumulative[i - 1]) * t
+            }
+        }
+        return bestDistanceAlong
+    }
 }
 
 extension Path: Codable {

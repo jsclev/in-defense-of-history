@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		520082C0300C300000DF4F64 /* LibertyLineAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */; };
-		52D0FEED000000000000C002 /* LevelMaps in Resources */ = {isa = PBXBuildFile; fileRef = 52D0FEED000000000000C001 /* LevelMaps */; };
 		52A55E710000000000000001 /* CampaignCompass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000001 /* CampaignCompass.swift */; };
 		52A55E710000000000000002 /* CampaignDecor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000002 /* CampaignDecor.swift */; };
 		52A55E710000000000000003 /* CampaignMapAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000003 /* CampaignMapAsset.swift */; };
@@ -30,6 +29,7 @@
 		52A55E710000000000000018 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000018 /* SettingsView.swift */; };
 		52A55E710000000000000019 /* TiledBackgroundMetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E700000000000000019 /* TiledBackgroundMetalView.swift */; };
 		52A55E71000000000000001A /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 52A55E70000000000000001A /* Shaders.metal */; };
+		52D0FEED000000000000C002 /* LevelMaps in Resources */ = {isa = PBXBuildFile; fileRef = 52D0FEED000000000000C001 /* LevelMaps */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -47,7 +47,6 @@
 /* Begin PBXFileReference section */
 		520082B7300C245B00DF4F64 /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		520082C1300C300000DF4F64 /* LibertyLineAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = LibertyLineAssets.xcassets; path = "../in-defense-of-history-data/LibertyLineAssets.xcassets"; sourceTree = SOURCE_ROOT; };
-		52D0FEED000000000000C001 /* LevelMaps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LevelMaps; path = "../in-defense-of-history-data/LevelMaps"; sourceTree = SOURCE_ROOT; };
 		520082C2300C300000DF4F64 /* GameName.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = GameName.xcconfig; sourceTree = "<group>"; };
 		5263FCBD3002C99600C1546D /* Liberty Line.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Liberty Line.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52A55E700000000000000001 /* CampaignCompass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CampaignCompass.swift; sourceTree = "<group>"; };
@@ -74,6 +73,7 @@
 		52A55E70000000000000001B /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		52A55E70000000000000001C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		52AB1A00000000000000BA01 /* LevelEditor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LevelEditor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		52D0FEED000000000000C001 /* LevelMaps */ = {isa = PBXFileReference; lastKnownFileType = folder; name = LevelMaps; path = "../in-defense-of-history-data/LevelMaps"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */

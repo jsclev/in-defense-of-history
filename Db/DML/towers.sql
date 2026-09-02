@@ -72,7 +72,7 @@ INSERT INTO tower (
     tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '3d7e4f95-1c6b-4ac0-ae53-9b8d2f1a0c04', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Militia',
-    1, 1, 70, 160.0, 0.0
+    1, 1, 70, 259.2, 0.0
 );
 
 -- Melee Level 2 (Minutemen)
@@ -81,7 +81,7 @@ INSERT INTO tower (
     tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '4e8f5a06-2d7c-4bd1-bf64-0c9e3a2b1d05', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Minutemen',
-    2, 1, 120, 160.0, 0.0
+    2, 1, 120, 259.2, 0.0
 );
 
 -- Melee Level 3 (Continental Line)
@@ -90,7 +90,7 @@ INSERT INTO tower (
     tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '5f9a6b17-3e8d-4ce2-c075-1d0f4b3c2e06', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Line',
-    3, 1, 170, 160.0, 0.0
+    3, 1, 170, 259.2, 0.0
 );
 
 -- Melee Level 4 (Continental Regulars)
@@ -99,7 +99,7 @@ INSERT INTO tower (
     tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '9c1aa74b-b783-4fc1-b9c3-daeaf5284146', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Regulars',
-    4, 1, 300, 160.0, 0.0
+    4, 1, 300, 259.2, 0.0
 );
 
 -- Melee Level 4 (Continental Light Infantry)
@@ -108,7 +108,7 @@ INSERT INTO tower (
     tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '634b9957-dce1-4b53-8665-1017904ad89d', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Light Infantry',
-    4, 2, 300, 160.0, 0.0
+    4, 2, 300, 259.2, 0.0
 );
 
 -- Melee Level 4 (Maryland Line)
@@ -117,7 +117,7 @@ INSERT INTO tower (
     tower_level, branch, cost, tower_range, fire_interval
 ) VALUES (
     '550638ec-0f26-4329-9719-2d3f2e697238', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Maryland Line',
-    4, 3, 300, 160.0, 0.0
+    4, 3, 300, 259.2, 0.0
 );
 
 -- Area of Effect Level 1 (4-pounder)

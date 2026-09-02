@@ -1,7 +1,8 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name
+    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
+    unit_image_name
 ) VALUES
 (
     'dd5b7c53-5f26-4035-aa43-b78b5e177b08', 'William Prescott', 'Colonel William Prescott', NULL, (
@@ -18,5 +19,6 @@ INSERT INTO hero (
     || 'to steady his men.
 
 His order to hold fire until the last moment made every round of scarce powder count, and twice threw the regulars back down the hill before the ammunition gave out.',
-    'hero_william_prescott_card_16x15', 'hero_details_william_prescott', 'hero_icon_william_prescott', 'hero_ability_icon_william_prescott'
+    'hero_william_prescott_card_16x15', 'hero_details_william_prescott', 'hero_icon_william_prescott', 'hero_ability_icon_william_prescott',
+    'hero_unit_william_prescott'
 );

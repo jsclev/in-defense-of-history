@@ -16,6 +16,7 @@ public class Db {
     public let pathDao: PathDAO
     public let enemyTypeDao: EnemyTypeDAO
     public let towerUnlockDao: TowerUnlockDAO
+    public let levelHeroDao: LevelHeroDAO
     public let meleeUnitDao: MeleeUnitDAO
     public let towerTypeDao: TowerTypeDAO
     public let simBoundsDao: SimBoundsDAO
@@ -123,6 +124,7 @@ public class Db {
                                     pathDao: pathDao, waveDao: waveDao)
         enemyTypeDao = EnemyTypeDAO(conn: conn)
         towerUnlockDao = TowerUnlockDAO(conn: conn)
+        levelHeroDao = LevelHeroDAO(conn: conn)
         meleeUnitDao = MeleeUnitDAO(conn: conn)
         towerTypeDao = TowerTypeDAO(conn: conn, meleeUnitDao: meleeUnitDao)
         simBoundsDao = SimBoundsDAO(conn: conn)

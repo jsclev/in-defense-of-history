@@ -211,7 +211,28 @@ CREATE TABLE hero (
     primary_image_name TEXT NOT NULL,
     details_image_name TEXT NOT NULL,
     icon_image_name TEXT NOT NULL,
-    ability_icon_image_name TEXT NOT NULL
+    ability_icon_image_name TEXT NOT NULL,
+    unit_image_name TEXT
+);
+
+CREATE TABLE hero_combat (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id),
+    attack_rating REAL NOT NULL CHECK (attack_rating > 0),
+    defense_rating REAL NOT NULL CHECK (defense_rating >= 0.0 AND defense_rating < 1.0),
+    hp REAL NOT NULL CHECK (hp > 0),
+    attack_interval REAL NOT NULL CHECK (attack_interval > 0),
+    respawn_seconds REAL NOT NULL CHECK (respawn_seconds > 0),
+    heal_per_second REAL NOT NULL DEFAULT 0 CHECK (heal_per_second >= 0),
+    move_speed REAL NOT NULL CHECK (move_speed > 0)
+);
+
+CREATE TABLE level_hero (
+    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
+    level_info_id TEXT NOT NULL REFERENCES level_info (id),
+    hero_id TEXT NOT NULL REFERENCES hero (id),
+    enemy_path_index INTEGER NOT NULL CHECK (enemy_path_index >= 0),
+    UNIQUE (level_info_id, hero_id)
 );
 
 CREATE TABLE sim_enemy_type (

@@ -258,10 +258,43 @@ public final class LevelRunner: NSObject, ObservableObject {
         var maxHP: Double
     }
 
+    struct HeroSoldier: Identifiable {
+        let id: Int
+        let assetName: String
+        var position: CGPoint
+        var hp: Double
+        var maxHP: Double
+        var isSelected: Bool
+    }
+
+    private struct HeroRoads {
+        let points: [Point]
+        let neighbors: [[Int]]
+    }
+
+    private struct HeroPost {
+        let assetName: String
+        let combat: HeroCombatStats
+        var unit: MilitiaUnit
+        var stationNode: Int
+        let spawnNode: Int
+        var route: [Int] = []
+        var routeTarget: Int = -1
+        var enemySwingTicks: [Int: Int] = [:]
+    }
+
     private struct MilitiaGarrison {
         var rallyPoint: Point
         var units: [MilitiaUnit]
         var enemySwingTicks: [Int: Int] = [:]
+        var stats: MeleeUnitStats? = nil
+        var anchor: Point? = nil
+    }
+
+    private struct MilitiaPose {
+        var facing: UnitFacing
+        var walkPhase: Double
+        var isWalking: Bool
     }
 
     @Published private(set) var projectiles: [Projectile] = []
@@ -322,7 +355,18 @@ public final class LevelRunner: NSObject, ObservableObject {
     /// the last two ticks so they glide like the frame-interpolated walkers.
     private var militiaPrevPositions: [Int: CGPoint] = [:]
     private var militiaRespawnedIDs: Set<Int> = []
-    private static let militiaAssetName = "militia_soldier"
+    private var militiaPoses: [Int: MilitiaPose] = [:]
+    private let meleeFormation = MeleeFormation()
+    private static let reinforcementCount = 2
+    private var nextReinforcementSlot = -1
+    private static let heroRoadSpacing = 20.0
+
+    @Published private(set) var heroes: [HeroSoldier] = []
+    @Published private(set) var selectedHeroIndex: Int?
+    private var heroPosts: [HeroPost] = []
+    private var heroRoads = HeroRoads(points: [], neighbors: [])
+    private var heroPrevPositions: [Int: CGPoint] = [:]
+    private var heroRespawnedIDs: Set<Int> = []
 
     private struct ScheduledSpawn {
         let tick: Int64
@@ -477,6 +521,24 @@ public final class LevelRunner: NSObject, ObservableObject {
             }
 
             paths = level.paths
+            heroRoads = buildHeroRoads()
+            heroPosts = try db.levelHeroDao.getHeroesFor(levelInfoId: levelInfoID)
+                .compactMap { levelHero in
+                    guard let hero = heroesById[levelHero.heroId],
+                          let assetName = hero.unitImageName,
+                          levelHero.enemyPathIndex < paths.count else { return nil }
+                    let path = paths[levelHero.enemyPathIndex]
+                    let spawnNode = heroNearestNode(to: path.point(atDistance: path.totalLength))
+                    guard spawnNode >= 0 else { return nil }
+                    return HeroPost(
+                        assetName: assetName,
+                        combat: levelHero.combat,
+                        unit: MilitiaUnit(position: heroRoads.points[spawnNode],
+                                          hp: levelHero.combat.hp),
+                        stationNode: spawnNode,
+                        spawnNode: spawnNode)
+                }
+            publishHeroes()
             precomputeLaneCoverage()
             isReady = true
             holdWave(0)
@@ -604,8 +666,10 @@ public final class LevelRunner: NSObject, ObservableObject {
             rallyPointsBySlot[slotIndex] = CGPoint(x: rally.x, y: rally.y)
             garrisonsBySlot[slotIndex] = MilitiaGarrison(
                 rallyPoint: rally,
-                units: (0..<melee.soldierCount).map { _ in
-                    MilitiaUnit(position: towerPos, hp: melee.hp)
+                units: (0..<melee.soldierCount).map { index in
+                    MilitiaUnit(position: meleeFormation.spawnPoint(
+                        index: index, of: melee.soldierCount, building: towerPos),
+                                hp: melee.hp)
                 })
             publishMilitia()
         }
@@ -790,6 +854,9 @@ public final class LevelRunner: NSObject, ObservableObject {
         if !garrisonsBySlot.isEmpty {
             publishMilitia(alpha: alpha)
         }
+        if !heroPosts.isEmpty {
+            publishHeroes(alpha: alpha)
+        }
 
         if pendingSpawns.isEmpty && walkers.isEmpty && !awaitingWaveStart {
             if waveIndex + 1 < waves.count {
@@ -809,12 +876,14 @@ public final class LevelRunner: NSObject, ObservableObject {
         guard timer.tick > lastMilitiaTick else { return }
         let dueTicks = min(Int(timer.tick - lastMilitiaTick), 8)
         lastMilitiaTick = timer.tick
-        guard !garrisonsBySlot.isEmpty else {
+        guard !garrisonsBySlot.isEmpty || !heroPosts.isEmpty else {
             blockedWalkerIDs.removeAll()
             return
         }
         militiaPrevPositions = militiaPositionsById()
+        heroPrevPositions = heroPositionsById()
         militiaRespawnedIDs.removeAll()
+        heroRespawnedIDs.removeAll()
         for _ in 0..<dueTicks {
             stepMilitiaTick()
         }
@@ -824,6 +893,81 @@ public final class LevelRunner: NSObject, ObservableObject {
                 militiaPrevPositions[id] = now[id]
             }
         }
+        if !heroRespawnedIDs.isEmpty {
+            let now = heroPositionsById()
+            for id in heroRespawnedIDs {
+                heroPrevPositions[id] = now[id]
+            }
+        }
+        updateMilitiaPoses()
+    }
+
+    private func updateMilitiaPoses() {
+        let now = militiaPositionsById()
+        var poses: [Int: MilitiaPose] = [:]
+        poses.reserveCapacity(now.count)
+        for (id, cur) in now {
+            let prev = militiaPrevPositions[id] ?? cur
+            let dx = Double(cur.x - prev.x)
+            let dy = Double(cur.y - prev.y)
+            let moved = (dx * dx + dy * dy).squareRoot()
+            var pose = militiaPoses[id]
+                ?? MilitiaPose(facing: .south, walkPhase: 0, isWalking: false)
+            pose.isWalking = moved > MeleeWalkCycle.walkingThreshold
+            if pose.isWalking {
+                pose.facing = UnitFacing(dx: dx, dy: dy)
+                pose.walkPhase = (pose.walkPhase + moved)
+                    .truncatingRemainder(dividingBy: MeleeWalkCycle.cycleDistance)
+            }
+            poses[id] = pose
+        }
+        militiaPoses = poses
+    }
+
+    private func heroPositionsById() -> [Int: CGPoint] {
+        var out: [Int: CGPoint] = [:]
+        for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
+            out[i] = CGPoint(x: post.unit.position.x, y: post.unit.position.y)
+        }
+        return out
+    }
+
+    private var reinforcementStats: MeleeUnitStats? {
+        guard let levels = towerLevels[.melee] else { return nil }
+        for level in levels.keys.sorted() {
+            guard let branches = levels[level] else { continue }
+            for branch in branches.keys.sorted() {
+                if let melee = branches[branch]?.meleeUnit { return melee }
+            }
+        }
+        return nil
+    }
+
+    private func garrisonMelee(slot: Int,
+                               garrison: MilitiaGarrison) -> (stats: MeleeUnitStats,
+                                                              anchor: Point)? {
+        if let stats = garrison.stats, let anchor = garrison.anchor {
+            return (stats, anchor)
+        }
+        guard let tower = placedTower(atSlot: slot),
+              let stats = towerLevel(for: tower)?.meleeUnit else { return nil }
+        return (stats, Point(Double(tower.position.x), Double(tower.position.y)))
+    }
+
+    func callReinforcements(at point: CGPoint) {
+        guard let melee = reinforcementStats else { return }
+        let anchor = Point(Double(point.x), Double(point.y))
+        garrisonsBySlot[nextReinforcementSlot] = MilitiaGarrison(
+            rallyPoint: anchor,
+            units: (0..<Self.reinforcementCount).map { index in
+                MilitiaUnit(position: meleeFormation.spawnPoint(
+                    index: index, of: Self.reinforcementCount, building: anchor),
+                            hp: melee.hp)
+            },
+            stats: melee,
+            anchor: anchor)
+        nextReinforcementSlot -= 1
+        publishMilitia()
     }
 
     private func militiaPositionsById() -> [Int: CGPoint] {
@@ -856,10 +1000,10 @@ public final class LevelRunner: NSObject, ObservableObject {
 
         for slot in garrisonsBySlot.keys.sorted() {
             guard var g = garrisonsBySlot[slot],
-                  let tower = placedTower(atSlot: slot),
-                  let melee = towerLevel(for: tower)?.meleeUnit
+                  let resolved = garrisonMelee(slot: slot, garrison: g)
             else { continue }
-            let towerPos = Point(Double(tower.position.x), Double(tower.position.y))
+            let melee = resolved.stats
+            let towerPos = resolved.anchor
 
             var free: [(spawnID: Int, position: Point)] = []
             for w in walkers where !w.blockImmune && !claimed.contains(w.id)
@@ -875,11 +1019,11 @@ public final class LevelRunner: NSObject, ObservableObject {
                     targetPos = Point(Double(walkers[wi].position.x),
                                       Double(walkers[wi].position.y))
                 }
-                let offset = MilitiaAI.formationOffset(index: ui, of: g.units.count)
                 let context = MilitiaContext(
                     freeEnemies: free,
                     targetPosition: targetPos,
-                    rallyPoint: Point(g.rallyPoint.x + offset.x, g.rallyPoint.y + offset.y),
+                    rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
+                                                        rallyPoint: g.rallyPoint),
                     towerPosition: towerPos)
                 if unit.swingTicksLeft > 0 { unit.swingTicksLeft -= 1 }
 
@@ -889,7 +1033,8 @@ public final class LevelRunner: NSObject, ObservableObject {
                 case .countdownRespawn:
                     unit.respawnTicksLeft -= 1
                 case .respawn:
-                    unit = MilitiaUnit(position: towerPos, hp: melee.hp)
+                    unit = MilitiaUnit(position: meleeFormation.spawnPoint(
+                        index: ui, of: g.units.count, building: towerPos), hp: melee.hp)
                     militiaRespawnedIDs.insert(slot * 8 + ui)
                 case .heal:
                     unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
@@ -967,25 +1112,307 @@ public final class LevelRunner: NSObject, ObservableObject {
             garrisonsBySlot[slot] = g
         }
 
+        stepHeroesTick(claimed: &claimed, killedIDs: &killedIDs,
+                       indexByWalkerID: indexByWalkerID)
+
         if !killedIDs.isEmpty {
             walkers.removeAll { killedIDs.contains($0.id) }
         }
+    }
+
+    private var heroStandRect: CGRect {
+        let height = MapSpriteSizing.heroMapHeight
+        return CGRect(x: playArea.minX + height / 2,
+                      y: playArea.minY,
+                      width: max(0, playArea.width - height),
+                      height: max(0, playArea.height - height))
+    }
+
+    private func buildHeroRoads() -> HeroRoads {
+        let rect = heroStandRect
+        var points: [Point] = []
+        var neighbors: [[Int]] = []
+        for path in paths {
+            var previous: Int? = nil
+            var travelled = 0.0
+            while travelled <= path.totalLength {
+                let p = path.point(atDistance: travelled)
+                if rect.contains(CGPoint(x: p.x, y: p.y)) {
+                    points.append(p)
+                    neighbors.append([])
+                    let index = points.count - 1
+                    if let previous {
+                        neighbors[previous].append(index)
+                        neighbors[index].append(previous)
+                    }
+                    previous = index
+                } else {
+                    previous = nil
+                }
+                travelled += Self.heroRoadSpacing
+            }
+        }
+        let junction = virtualCanvas.pathWidth / 2
+        for i in 0..<points.count {
+            for j in (i + 1)..<points.count where !neighbors[i].contains(j) {
+                if points[i].distance(to: points[j]) <= junction {
+                    neighbors[i].append(j)
+                    neighbors[j].append(i)
+                }
+            }
+        }
+        return HeroRoads(points: points, neighbors: neighbors)
+    }
+
+    private func heroNearestNode(to p: Point) -> Int {
+        var best = -1
+        var bestGap = Double.infinity
+        for (i, q) in heroRoads.points.enumerated() {
+            let gap = q.distance(to: p)
+            if gap < bestGap {
+                bestGap = gap
+                best = i
+            }
+        }
+        return best
+    }
+
+    private func heroRoute(from: Int, to: Int) -> [Int] {
+        guard from != to, heroRoads.points.indices.contains(from),
+              heroRoads.points.indices.contains(to) else { return [] }
+        let count = heroRoads.points.count
+        var distances = [Double](repeating: .infinity, count: count)
+        var previous = [Int](repeating: -1, count: count)
+        var settled = [Bool](repeating: false, count: count)
+        distances[from] = 0
+        while true {
+            var best = -1
+            var bestDistance = Double.infinity
+            for i in 0..<count where !settled[i] && distances[i] < bestDistance {
+                bestDistance = distances[i]
+                best = i
+            }
+            if best < 0 || best == to { break }
+            settled[best] = true
+            for n in heroRoads.neighbors[best] {
+                let d = distances[best]
+                    + heroRoads.points[best].distance(to: heroRoads.points[n])
+                if d < distances[n] {
+                    distances[n] = d
+                    previous[n] = best
+                }
+            }
+        }
+        guard distances[to].isFinite else { return [] }
+        var route: [Int] = []
+        var current = to
+        while current != from && current >= 0 {
+            route.append(current)
+            current = previous[current]
+        }
+        return current == from ? route.reversed() : []
+    }
+
+    private func stepHeroesTick(claimed: inout Set<Int>,
+                                killedIDs: inout Set<Int>,
+                                indexByWalkerID: [Int: Int]) {
+        guard !heroPosts.isEmpty else { return }
+        let dt = SimClock.dt
+
+        for hi in 0..<heroPosts.count {
+            var post = heroPosts[hi]
+            let station = heroRoads.points[post.stationNode]
+
+            var free: [(spawnID: Int, position: Point)] = []
+            for w in walkers where !w.blockImmune && !claimed.contains(w.id)
+                && !killedIDs.contains(w.id) {
+                free.append((w.id, Point(Double(w.position.x), Double(w.position.y))))
+            }
+
+            var targetPos: Point? = nil
+            if post.unit.targetSpawnID >= 0, !killedIDs.contains(post.unit.targetSpawnID),
+               let wi = indexByWalkerID[post.unit.targetSpawnID] {
+                targetPos = Point(Double(walkers[wi].position.x),
+                                  Double(walkers[wi].position.y))
+            }
+
+            let context = MilitiaContext(freeEnemies: free,
+                                         targetPosition: targetPos,
+                                         rallyPoint: station,
+                                         towerPosition: station)
+            if post.unit.swingTicksLeft > 0 { post.unit.swingTicksLeft -= 1 }
+
+            switch MilitiaAI.decide(post.unit, context: context) {
+            case .idle:
+                if post.unit.state == .returning { post.unit.state = .holding }
+            case .countdownRespawn:
+                post.unit.respawnTicksLeft -= 1
+            case .respawn:
+                post.stationNode = post.spawnNode
+                post.route = []
+                post.routeTarget = -1
+                post.unit = MilitiaUnit(position: heroRoads.points[post.spawnNode],
+                                        hp: post.combat.hp)
+                heroRespawnedIDs.insert(hi)
+            case .heal:
+                post.unit.hp = min(post.combat.hp,
+                                   post.unit.hp + post.combat.healPerSecond * dt)
+            case let .move(toward):
+                let target = heroNearestNode(to: toward)
+                if target != post.routeTarget {
+                    post.routeTarget = target
+                    post.route = heroRoute(from: heroNearestNode(to: post.unit.position),
+                                           to: target)
+                }
+                var step = post.combat.moveSpeed * dt
+                while step > 0, let next = post.route.first {
+                    let goal = heroRoads.points[next]
+                    let dx = goal.x - post.unit.position.x
+                    let dy = goal.y - post.unit.position.y
+                    let gap = (dx * dx + dy * dy).squareRoot()
+                    if gap <= step {
+                        post.unit.position = goal
+                        post.route.removeFirst()
+                        step -= gap
+                    } else {
+                        post.unit.position = Point(post.unit.position.x + dx / gap * step,
+                                                   post.unit.position.y + dy / gap * step)
+                        step = 0
+                    }
+                }
+            case let .engage(targetSpawnID):
+                post.unit.state = .engaging
+                post.unit.targetSpawnID = targetSpawnID
+                claimed.insert(targetSpawnID)
+            case let .strike(targetSpawnID):
+                if post.unit.state == .engaging {
+                    post.unit.state = .fighting
+                    post.enemySwingTicks[targetSpawnID] =
+                        Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                }
+                if !killedIDs.contains(targetSpawnID),
+                   let wi = indexByWalkerID[targetSpawnID] {
+                    var w = walkers[wi]
+                    let roll = Double.random(in: post.combat.damageRange)
+                    w.hp -= roll * (1.0 - w.cover)
+                    walkers[wi] = w
+                    if w.hp <= 0 {
+                        money += w.bounty
+                        killedIDs.insert(targetSpawnID)
+                        post.unit.state = .holding
+                        post.unit.targetSpawnID = -1
+                        post.enemySwingTicks[targetSpawnID] = nil
+                    }
+                }
+                post.unit.swingTicksLeft = Simulation.fireTicks(post.combat.attackInterval)
+            case .disengage:
+                if post.unit.targetSpawnID >= 0 {
+                    claimed.remove(post.unit.targetSpawnID)
+                    post.enemySwingTicks[post.unit.targetSpawnID] = nil
+                }
+                post.unit.state = .returning
+                post.unit.targetSpawnID = -1
+            }
+
+            if post.unit.state == .fighting, post.unit.targetSpawnID >= 0,
+               !killedIDs.contains(post.unit.targetSpawnID),
+               let wi = indexByWalkerID[post.unit.targetSpawnID] {
+                blockedWalkerIDs.insert(post.unit.targetSpawnID)
+                var swing = post.enemySwingTicks[post.unit.targetSpawnID]
+                    ?? Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                swing -= 1
+                if swing <= 0 {
+                    let w = walkers[wi]
+                    post.unit.hp -= Double.random(in: w.damageMin...w.damageMax)
+                        * (1.0 - post.combat.defenseRating)
+                    swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                    if post.unit.hp <= 0 {
+                        claimed.remove(post.unit.targetSpawnID)
+                        blockedWalkerIDs.remove(post.unit.targetSpawnID)
+                        post.enemySwingTicks[post.unit.targetSpawnID] = nil
+                        post.unit.state = .dead
+                        post.unit.targetSpawnID = -1
+                        post.unit.respawnTicksLeft =
+                            Simulation.fireTicks(post.combat.respawnSeconds)
+                        if selectedHeroIndex == hi { selectedHeroIndex = nil }
+                    }
+                }
+                if post.unit.targetSpawnID >= 0 {
+                    post.enemySwingTicks[post.unit.targetSpawnID] = swing
+                }
+            }
+
+            heroPosts[hi] = post
+        }
+    }
+
+    private func publishHeroes(alpha: Double = 1) {
+        var out: [HeroSoldier] = []
+        for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
+            let cur = CGPoint(x: post.unit.position.x, y: post.unit.position.y)
+            let prev = heroPrevPositions[i] ?? cur
+            out.append(HeroSoldier(
+                id: i,
+                assetName: post.assetName,
+                position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
+                                  y: prev.y + (cur.y - prev.y) * alpha),
+                hp: post.unit.hp,
+                maxHP: post.combat.hp,
+                isSelected: selectedHeroIndex == i))
+        }
+        heroes = out
+    }
+
+    func isOnPath(_ point: CGPoint) -> Bool {
+        let target = Point(Double(point.x), Double(point.y))
+        let reach = virtualCanvas.pathWidth / 2
+        for path in paths {
+            let nearest = path.point(atDistance: path.nearestDistance(to: target))
+            if nearest.distance(to: target) <= reach { return true }
+        }
+        return false
+    }
+
+    func selectHero(_ index: Int) {
+        guard heroPosts.indices.contains(index) else { return }
+        selectedHeroIndex = selectedHeroIndex == index ? nil : index
+        publishHeroes()
+    }
+
+    func commandSelectedHero(to point: CGPoint) {
+        guard let index = selectedHeroIndex, heroPosts.indices.contains(index) else { return }
+        let node = heroNearestNode(to: Point(Double(point.x), Double(point.y)))
+        guard node >= 0 else { return }
+        heroPosts[index].stationNode = node
+        heroPosts[index].route = []
+        heroPosts[index].routeTarget = -1
+        if heroPosts[index].unit.targetSpawnID >= 0 {
+            heroPosts[index].enemySwingTicks[heroPosts[index].unit.targetSpawnID] = nil
+        }
+        heroPosts[index].unit.state = .returning
+        heroPosts[index].unit.targetSpawnID = -1
+        selectedHeroIndex = nil
+        publishHeroes()
     }
 
     private func publishMilitia(alpha: Double = 1) {
         var out: [MilitiaSoldier] = []
         for slot in garrisonsBySlot.keys.sorted() {
             guard let g = garrisonsBySlot[slot],
-                  let tower = placedTower(atSlot: slot),
-                  let melee = towerLevel(for: tower)?.meleeUnit
+                  let resolved = garrisonMelee(slot: slot, garrison: g)
             else { continue }
+            let melee = resolved.stats
             for (i, u) in g.units.enumerated() where u.state != .dead {
                 let id = slot * 8 + i
                 let cur = CGPoint(x: u.position.x, y: u.position.y)
                 let prev = militiaPrevPositions[id] ?? cur
+                let pose = militiaPoses[id]
+                    ?? MilitiaPose(facing: .south, walkPhase: 0, isWalking: false)
                 out.append(MilitiaSoldier(
                     id: id,
-                    assetName: Self.militiaAssetName,
+                    assetName: MeleeWalkCycle.assetName(facing: pose.facing,
+                                                        walkPhase: pose.walkPhase,
+                                                        isWalking: pose.isWalking),
                     position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
                                       y: prev.y + (cur.y - prev.y) * alpha),
                     hp: u.hp,

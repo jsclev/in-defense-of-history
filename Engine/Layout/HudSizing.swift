@@ -82,12 +82,12 @@ public enum HudSizing {
     public static let menuButtonSpacing = ScaledDimension(14)
 
     public static let livesIcon = ScaledDimension(41.86)
-    public static let livesText = ScaledDimension.text(37.1)
+    public static let livesText = ScaledDimension.text(28.57)
     public static let livesValueWidth = ScaledDimension(60)
     public static let livesRowSpacing = ScaledDimension(8)
 
     public static let moneyIcon = ScaledDimension(43.6)
-    public static let moneyText = ScaledDimension.text(37.1)
+    public static let moneyText = ScaledDimension.text(28.57)
     public static let moneyRowSpacing = ScaledDimension(8)
 
     public static let counterDigitAdvanceFraction: CGFloat = 0.70
@@ -105,7 +105,7 @@ public enum HudSizing {
         return width + trailingPad
     }
 
-    public static let waveText = ScaledDimension.text(28.9)
+    public static let waveText = ScaledDimension.text(22.25)
 
     /// The debug range overlay's legend. Deliberately small, so the
     /// Typography floor is what keeps it legible on a phone.

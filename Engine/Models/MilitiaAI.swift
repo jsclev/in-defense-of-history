@@ -30,7 +30,6 @@ public enum MilitiaTunables {
     public static let meleeReach: Double = 26
     public static let leashRadius: Double = 130
     public static let enemySwingInterval: Double = 1.2
-    public static let rallySpread: Double = 16
 }
 
 public enum MilitiaDecision: Sendable, Equatable {
@@ -98,13 +97,6 @@ public enum MilitiaAI {
             if unit.swingTicksLeft > 0 { return .idle }
             return .strike(targetSpawnID: unit.targetSpawnID)
         }
-    }
-
-    public static func formationOffset(index: Int, of count: Int) -> Point {
-        guard count > 1 else { return .zero }
-        let angle = 2.0 * Double.pi * Double(index) / Double(count)
-        return Point(MilitiaTunables.rallySpread * cos(angle),
-                     MilitiaTunables.rallySpread * sin(angle))
     }
 
     private static func nearestFreeEnemy(in context: MilitiaContext) -> Int? {

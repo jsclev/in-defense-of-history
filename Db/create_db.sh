@@ -89,6 +89,8 @@ sqlite3 in_defense_of_history.sqlite < DML/Heroes/12_Thaddeus_Kosciuszko.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/13_Salem_Poor.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/14_John_Glover.sql
 sqlite3 in_defense_of_history.sqlite < DML/Heroes/15_Horatio_Gates.sql
+sqlite3 in_defense_of_history.sqlite < DML/hero_combat.sql
+sqlite3 in_defense_of_history.sqlite < DML/level_heroes.sql
 sqlite3 in_defense_of_history.sqlite < DML/selected_heroes.sql
 sqlite3 in_defense_of_history.sqlite < DML/unlocked_heroes.sql
 

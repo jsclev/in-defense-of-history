@@ -3,6 +3,7 @@ import Foundation
 public final class Simulation {
     public let catalog: ContentCatalog
     public let level: LevelInfo
+    public let meleeFormation = MeleeFormation()
 
     public private(set) var time: Double = 0
     public private(set) var tick: Int = 0
@@ -150,8 +151,10 @@ public final class Simulation {
                                           flagRange: melee.rallyPointRadius)
             garrisons[slot] = Garrison(
                 rallyPoint: rally,
-                units: (0..<melee.soldierCount).map { _ in
-                    MilitiaUnit(position: towerPos, hp: melee.hp)
+                units: (0..<melee.soldierCount).map { index in
+                    MilitiaUnit(position: meleeFormation.spawnPoint(
+                        index: index, of: melee.soldierCount, building: towerPos),
+                                hp: melee.hp)
                 }
             )
         }
@@ -443,11 +446,11 @@ public final class Simulation {
                    enemies[ei].state != .broken {
                     targetPos = positions[ei]
                 }
-                let offset = MilitiaAI.formationOffset(index: ui, of: g.units.count)
                 let context = MilitiaContext(
                     freeEnemies: free,
                     targetPosition: targetPos,
-                    rallyPoint: Point(g.rallyPoint.x + offset.x, g.rallyPoint.y + offset.y),
+                    rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
+                                                        rallyPoint: g.rallyPoint),
                     towerPosition: towerPos
                 )
                 if unit.swingTicksLeft > 0 { unit.swingTicksLeft -= 1 }
@@ -458,7 +461,8 @@ public final class Simulation {
                 case .countdownRespawn:
                     unit.respawnTicksLeft -= 1
                 case .respawn:
-                    unit = MilitiaUnit(position: towerPos, hp: melee.hp)
+                    unit = MilitiaUnit(position: meleeFormation.spawnPoint(
+                        index: ui, of: g.units.count, building: towerPos), hp: melee.hp)
                     militiaRespawns += 1
                 case .heal:
                     unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
