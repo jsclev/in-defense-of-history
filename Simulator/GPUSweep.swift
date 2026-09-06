@@ -149,9 +149,7 @@ extension GPUEngine {
         lvl.dt = Float(SimClock.dt)
         lvl.ticksPerSecond = Int32(SimClock.ticksPerSecond)
         lvl.militiaMoveSpeed = Float(MilitiaTunables.moveSpeed)
-        lvl.militiaEngageScanRadius = Float(MilitiaTunables.engageScanRadius)
         lvl.militiaMeleeReach = Float(MilitiaTunables.meleeReach)
-        lvl.militiaLeashRadius = Float(MilitiaTunables.leashRadius)
         lvl.militiaRallySpread = Float(meleeFormation.postSpread)
         lvl.militiaEnemySwingTicks = Int32(Simulation.fireTicks(MilitiaTunables.enemySwingInterval))
         return lvl
@@ -224,6 +222,8 @@ extension GPUEngine {
                         t.meleeAttackTicks = Int32(Simulation.fireTicks(melee.attackInterval))
                         t.meleeRespawnTicks = Int32(Simulation.fireTicks(melee.respawnSeconds))
                         t.meleeHealPerSecond = Float(melee.healPerSecond)
+                        t.meleeLeashRadius = Float(melee.leashRadius)
+                        t.meleeEngageScanRadius = Float(melee.engageScanRadius)
                     }
                     switch l.targeting {
                     case .first: t.targeting = UInt32(SIM_TARGET_FIRST)

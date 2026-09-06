@@ -26,10 +26,12 @@ public enum MilitiaTunables {
     /// Swing damage rolls uniformly within ±this fraction of attack_rating.
     public static let attackSpread: Double = 0.25
     public static let moveSpeed: Double = 70
-    public static let engageScanRadius: Double = 80
+    public static let engageScanRadiusFraction: Double = 0.3
     public static let meleeReach: Double = 26
-    public static let leashRadius: Double = 130
+    public static let leashRadiusFraction: Double = 0.5
     public static let enemySwingInterval: Double = 1.2
+    public static let heroEngageScanRadius: Double = 80
+    public static let heroLeashRadius: Double = 130
 }
 
 public enum MilitiaDecision: Sendable, Equatable {
@@ -48,13 +50,18 @@ public struct MilitiaContext {
     public var targetPosition: Point?
     public var rallyPoint: Point
     public var towerPosition: Point
+    public var leashRadius: Double
+    public var engageScanRadius: Double
 
     public init(freeEnemies: [(spawnID: Int, position: Point)],
-                targetPosition: Point?, rallyPoint: Point, towerPosition: Point) {
+                targetPosition: Point?, rallyPoint: Point, towerPosition: Point,
+                leashRadius: Double, engageScanRadius: Double) {
         self.freeEnemies = freeEnemies
         self.targetPosition = targetPosition
         self.rallyPoint = rallyPoint
         self.towerPosition = towerPosition
+        self.leashRadius = leashRadius
+        self.engageScanRadius = engageScanRadius
     }
 }
 
@@ -81,7 +88,7 @@ public enum MilitiaAI {
 
         case .engaging:
             guard let targetPos = context.targetPosition else { return .disengage }
-            if targetPos.distance(to: context.rallyPoint) > MilitiaTunables.leashRadius {
+            if targetPos.distance(to: context.rallyPoint) > context.leashRadius {
                 return .disengage
             }
             if unit.position.distance(to: targetPos) <= MilitiaTunables.meleeReach {
@@ -91,7 +98,7 @@ public enum MilitiaAI {
 
         case .fighting:
             guard let targetPos = context.targetPosition else { return .disengage }
-            if targetPos.distance(to: context.rallyPoint) > MilitiaTunables.leashRadius {
+            if targetPos.distance(to: context.rallyPoint) > context.leashRadius {
                 return .disengage
             }
             if unit.swingTicksLeft > 0 { return .idle }
@@ -101,7 +108,7 @@ public enum MilitiaAI {
 
     private static func nearestFreeEnemy(in context: MilitiaContext) -> Int? {
         var best: Int? = nil
-        var bestDist = MilitiaTunables.engageScanRadius
+        var bestDist = context.engageScanRadius
         for enemy in context.freeEnemies {
             let d = enemy.position.distance(to: context.rallyPoint)
             if d <= bestDist {

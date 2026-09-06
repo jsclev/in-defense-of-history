@@ -451,7 +451,9 @@ public final class Simulation {
                     targetPosition: targetPos,
                     rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
                                                         rallyPoint: g.rallyPoint),
-                    towerPosition: towerPos
+                    towerPosition: towerPos,
+                    leashRadius: melee.leashRadius,
+                    engageScanRadius: melee.engageScanRadius
                 )
                 if unit.swingTicksLeft > 0 { unit.swingTicksLeft -= 1 }
 

@@ -41,6 +41,14 @@ public struct MeleeUnitStats: Codable, Sendable, Equatable {
         let spread = attackRating * MilitiaTunables.attackSpread
         return (attackRating - spread)...(attackRating + spread)
     }
+
+    public var leashRadius: Double {
+        rallyPointRadius * MilitiaTunables.leashRadiusFraction
+    }
+
+    public var engageScanRadius: Double {
+        rallyPointRadius * MilitiaTunables.engageScanRadiusFraction
+    }
 }
 
 public struct TowerLevel: Codable, Sendable, Equatable {

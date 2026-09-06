@@ -113,6 +113,7 @@ struct LevelMapView: View {
     private static let reinforcementsIconName = "action_icon_call_reinforcements"
     private static let contextMenuIconScale: CGFloat = 0.75
     private static let contextMenuIndicatorScale: CGFloat = 0.5
+    private static let rallyButtonScale: CGFloat = 0.495
 
     private static let slotTowerScale: CGFloat = 1.443
     private static let slotTowerLift: CGFloat = 0.230
@@ -298,7 +299,8 @@ struct LevelMapView: View {
             }
 
             ForEach(runner.heroes) { hero in
-                let spriteHeight = sprites.points(MapSpriteSizing.hero)
+                let spriteHeight = sprites.points(
+                    MapSpriteSizing.hero(baseAssetName: hero.baseAssetName))
                 let footPoint = projection.viewPoint(hero.position)
                 if hero.isSelected {
                     Circle()
@@ -539,8 +541,7 @@ struct LevelMapView: View {
         return ZStack(alignment: .topLeading) {
             if let buildSlot = runner.selectedSlotIndex,
                runner.slotPositions.indices.contains(buildSlot) {
-                if let radius = runner.armedBuildKind.flatMap({ runner.buildPreviewRadius(for: $0) })
-                    ?? runner.defaultBuildPreviewRadius() {
+                if let radius = runner.armedBuildKind.flatMap({ runner.buildPreviewRadius(for: $0) }) {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
                         range: radius, pointsPerMapUnit: projection.scale)
@@ -563,14 +564,16 @@ struct LevelMapView: View {
                     rallyPlacementCatcher(projection: projection)
                 } else {
                     dismissCatcher()
+                    upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
+                                playAreaScalingFactor: playAreaScalingFactor)
                 }
-                upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
-                            playAreaScalingFactor: playAreaScalingFactor)
-                if let rally = runner.rallyPoint(forSlot: upgradeSlot) {
-                    RallyFlag(size: HudSizing.cornerButton.resolved(at: HudMetrics(runtimeCanvas: runtimeCanvas).scale) * 0.6)
-                        .position(projection.viewPoint(rally))
-                        .allowsHitTesting(false)
-                }
+            }
+            if let flash = runner.rallyFlagFlash {
+                TemporaryRallyFlag(
+                    size: HudSizing.cornerButton.resolved(
+                        at: HudMetrics(runtimeCanvas: runtimeCanvas).scale) * 0.45,
+                    plantPoint: projection.viewPoint(flash.position))
+                    .id(flash.id)
             }
         }
     }
@@ -741,6 +744,7 @@ struct LevelMapView: View {
                               kind: kind,
                               isAvailable: runner.maxLevel(for: kind) >= 1,
                               isArmed: runner.armedBuildKind == kind,
+                              cost: runner.buildCost(for: kind),
                               buttonSize: buttonSize) {
                     runner.tapBuildButton(kind)
                 }
@@ -758,6 +762,8 @@ struct LevelMapView: View {
         let center = towerMenuLayout.getCenterPoint(anchor: anchor, scale: playAreaScalingFactor)
         let buttonSize = towerMenuLayout.getTowerButtonSize(playAreaScalingFactor: playAreaScalingFactor)
         let hasRally = runner.rallyPoint(forSlot: tower.slotIndex) != nil
+        let rallyButtonSize = CGSize(width: buttonSize.width * Self.rallyButtonScale,
+                                     height: buttonSize.height * Self.rallyButtonScale)
         let upgradeCount = max(offers.count, 1)
         let count = upgradeCount + (hasRally ? 1 : 0)
         func place(_ index: Int) -> CGPoint {
@@ -787,10 +793,12 @@ struct LevelMapView: View {
                 }
             }
             if hasRally {
-                RallyMenuItem(towerMenuLayout: towerMenuLayout, isArmed: runner.isPlacingRallyPoint, buttonSize: buttonSize) {
+                RallyMenuItem(towerMenuLayout: towerMenuLayout, buttonSize: rallyButtonSize) {
                     runner.toggleRallyPlacement()
                 }
-                .position(place(upgradeCount))
+                .position(towerMenuLayout.getButtonSeatCenterPoint(
+                    index: upgradeCount, count: count, menuCenterPoint: center,
+                    playAreaScalingFactor: playAreaScalingFactor))
             }
         }
     }
@@ -859,18 +867,29 @@ private struct TowerMenuItem: View {
     let kind: TowerKind
     let isAvailable: Bool
     let isArmed: Bool
+    let cost: Int?
     let buttonSize: CGSize
     let action: () -> Void
 
+    private static let frameBottomEdgeCenter: CGFloat = 0.9568
+
     var body: some View {
-        Button(action: action) { icon }
+        Button(action: action) { content }
             .buttonStyle(.plain)
+    }
+
+    @ViewBuilder private var content: some View {
+        if isArmed {
+            BuildConfirmButton(buttonSize: buttonSize)
+        } else {
+            icon
+        }
     }
 
     private var icon: some View {
         let frameSize = buttonSize.width
         let iconSize = towerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
-        
+
         return ZStack {
             Image("tower_menu_square_frame")
                 .resizable()
@@ -882,18 +901,37 @@ private struct TowerMenuItem: View {
                 .scaledToFit()
                 .frame(width: isAvailable ? iconSize : iconSize * 0.81,
                        height: isAvailable ? iconSize : iconSize * 0.81)
-        }
-        .frame(width: frameSize, height: frameSize)
-        .overlay(alignment: .topTrailing) {
-            if isArmed {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: iconSize * 0.38, weight: .bold))
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.white, .green)
-                    .shadow(radius: frameSize * 0.015)
+            if isAvailable, let cost {
+                costCapsule(cost: cost, frameSize: frameSize)
+                    .fixedSize()
+                    .position(x: frameSize / 2, y: frameSize * Self.frameBottomEdgeCenter)
             }
         }
+        .frame(width: frameSize, height: frameSize)
         .contentShape(Rectangle())
+    }
+
+    private func costCapsule(cost: Int, frameSize: CGFloat) -> some View {
+        Text("\(cost)")
+            .font(.system(size: Typography.size(frameSize * 0.25), weight: .bold))
+            .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
+            .padding(.horizontal, frameSize * 0.077)
+            .padding(.vertical, frameSize * 0.022)
+            .background(.black.opacity(0.78), in: Capsule())
+    }
+}
+
+private struct BuildConfirmButton: View {
+    let buttonSize: CGSize
+
+    var body: some View {
+        let side = buttonSize.width
+        return Image("tower_build_confirm")
+            .resizable()
+            .interpolation(.high)
+            .scaledToFit()
+            .frame(width: side, height: side)
+            .contentShape(Rectangle())
     }
 }
 
@@ -907,41 +945,42 @@ private struct UpgradeMenuItem: View {
     let action: () -> Void
 
     var body: some View {
+        Button(action: action) { content }
+            .buttonStyle(.plain)
+            .disabled(cost == nil)
+    }
+
+    @ViewBuilder private var content: some View {
+        if isArmed {
+            BuildConfirmButton(buttonSize: buttonSize)
+        } else {
+            icon
+        }
+    }
+
+    private var icon: some View {
         let frameSize = buttonSize.width
         let iconSize = towerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
-        
-        return Button(action: action) {
-            ZStack {
-                Image("tower_menu_square_frame")
-                    .resizable()
-                    .interpolation(.high)
-                    .scaledToFit()
-                    .frame(width: frameSize, height: frameSize)
-                Image(iconName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: iconSize, height: iconSize)
-                    .opacity(cost != nil ? 1 : 0.5)
-            }
-            .frame(width: frameSize, height: frameSize)
-            .overlay(alignment: .bottom) {
-                costCapsule(frameSize: frameSize)
-                    .fixedSize()
-                    .alignmentGuide(.bottom) { $0[.top] - frameSize * 0.05 }
-            }
-            .overlay(alignment: .topTrailing) {
-                if isArmed {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: iconSize * 0.38, weight: .bold))
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, .green)
-                        .shadow(radius: frameSize * 0.015)
-                }
-            }
-            .contentShape(Rectangle())
+
+        return ZStack {
+            Image("tower_menu_square_frame")
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: frameSize, height: frameSize)
+            Image(iconName)
+                .resizable()
+                .scaledToFit()
+                .frame(width: iconSize, height: iconSize)
+                .opacity(cost != nil ? 1 : 0.5)
         }
-        .buttonStyle(.plain)
-        .disabled(cost == nil)
+        .frame(width: frameSize, height: frameSize)
+        .overlay(alignment: .bottom) {
+            costCapsule(frameSize: frameSize)
+                .fixedSize()
+                .alignmentGuide(.bottom) { $0[.top] - frameSize * 0.05 }
+        }
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder private func costCapsule(frameSize: CGFloat) -> some View {
@@ -968,7 +1007,6 @@ private struct UpgradeMenuItem: View {
 
 private struct RallyMenuItem: View {
     let towerMenuLayout: TowerMenuLayout
-    let isArmed: Bool
     let buttonSize: CGSize
     let action: () -> Void
 
@@ -982,18 +1020,13 @@ private struct RallyMenuItem: View {
                     .interpolation(.high)
                     .scaledToFit()
                     .frame(width: side, height: side)
-                RallyFlag(size: iconSize)
+                Image("rally_point_icon")
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: iconSize, height: iconSize)
             }
             .frame(width: side, height: side)
-            .overlay(alignment: .topTrailing) {
-                if isArmed {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: iconSize * 0.38, weight: .bold))
-                        .symbolRenderingMode(.palette)
-                        .foregroundStyle(.white, .green)
-                        .shadow(radius: side * 0.015)
-                }
-            }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -1016,27 +1049,26 @@ private struct PathTapIndicator: View {
     }
 }
 
-private struct RallyFlag: View {
-    let size: CGFloat
+private struct TemporaryRallyFlag: View {
+    private static let targetCenterFraction: CGFloat = 0.69
 
-    private var pennant: SwiftUI.Path {
-        var p = SwiftUI.Path()
-        p.move(to: CGPoint(x: size * 0.08, y: 0))
-        p.addLine(to: CGPoint(x: size * 0.95, y: size * 0.22))
-        p.addLine(to: CGPoint(x: size * 0.08, y: size * 0.44))
-        p.closeSubpath()
-        return p
-    }
+    let size: CGFloat
+    let plantPoint: CGPoint
+
+    @State private var faded = false
 
     var body: some View {
-        ZStack(alignment: .bottomLeading) {
-            Rectangle()
-                .fill(Color(red: 0.25, green: 0.2, blue: 0.15))
-                .frame(width: size * 0.08, height: size)
-            pennant.fill(Color(red: 0.16, green: 0.32, blue: 0.7))
-            pennant.stroke(Color.white.opacity(0.85), lineWidth: 1)
-        }
-        .frame(width: size, height: size, alignment: .bottomLeading)
-        .shadow(color: .black.opacity(0.5), radius: 2, y: 1)
+        Image("rally_point_icon")
+            .resizable()
+            .interpolation(.high)
+            .scaledToFit()
+            .frame(width: size, height: size)
+            .position(x: plantPoint.x,
+                      y: plantPoint.y + size * (0.5 - Self.targetCenterFraction))
+            .opacity(faded ? 0 : 1)
+            .allowsHitTesting(false)
+            .onAppear {
+                withAnimation(.easeOut(duration: 1).delay(3)) { faded = true }
+            }
     }
 }

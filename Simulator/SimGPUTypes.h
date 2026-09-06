@@ -109,6 +109,8 @@ typedef struct {
     int meleeAttackTicks;
     int meleeRespawnTicks;
     float meleeHealPerSecond;
+    float meleeLeashRadius;
+    float meleeEngageScanRadius;
 } TowerLevelGPU;
 
 // Everything shared by every permutation of one sweep dispatch: the level.
@@ -147,9 +149,7 @@ typedef struct {
     int ticksPerSecond;
     // Militia tunables (mirrors MilitiaTunables).
     float militiaMoveSpeed;
-    float militiaEngageScanRadius;
     float militiaMeleeReach;
-    float militiaLeashRadius;
     float militiaRallySpread;
     int militiaEnemySwingTicks;
 } LevelGPU;

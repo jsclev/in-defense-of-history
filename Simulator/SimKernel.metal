@@ -234,7 +234,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                 // Nearest free enemy inside the scan radius of the
                 // POST (soldiers defend their ground).
                 int best = -1;
-                float bestDist = lvl.militiaEngageScanRadius;
+                float bestDist = ms.meleeEngageScanRadius;
                 for (uint i = 0; i < n; i++) {
                     if (!muFree[i]) continue;
                     float d = distance(positions[i], post);
@@ -256,7 +256,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                 }
             } else if (st == SIM_MU_ENGAGING) {
                 if (!hasTarget
-                    || distance(targetPos, post) > lvl.militiaLeashRadius) {
+                    || distance(targetPos, post) > ms.meleeLeashRadius) {
                     doDisengage = true;
                 } else if (distance(pos, targetPos) <= lvl.militiaMeleeReach) {
                     doStrike = true;   // first blow starts the fight
@@ -269,7 +269,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                 }
             } else if (st == SIM_MU_FIGHTING) {
                 if (!hasTarget
-                    || distance(targetPos, post) > lvl.militiaLeashRadius) {
+                    || distance(targetPos, post) > ms.meleeLeashRadius) {
                     doDisengage = true;
                 } else if (S.muSwingTicks[m] <= 0) {
                     doStrike = true;

@@ -109,9 +109,9 @@ struct PlaytestCanvas: View {
             if let (type, lvl) = session.towerType(at: i) {
                 let color = Palette.color(forTowerID: type.id)
                 if session.selectedSlot == i {
-                    let range = CGFloat(type.levels[lvl].range) * s
-                    let rangeRect = CGRect(x: c.x - range, y: c.y - range,
-                                           width: 2 * range, height: 2 * range)
+                    let rangeRect = TowerRangeOverlay.rect(center: c,
+                                                           range: CGFloat(type.levels[lvl].range),
+                                                           pointsPerMapUnit: s)
                     ctx.fill(SwiftUI.Path(ellipseIn: rangeRect), with: .color(color.opacity(0.10)))
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect), with: .color(color.opacity(0.5)), lineWidth: 1.5)
                 }

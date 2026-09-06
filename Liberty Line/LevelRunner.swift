@@ -261,6 +261,7 @@ public final class LevelRunner: NSObject, ObservableObject {
     struct HeroSoldier: Identifiable {
         let id: Int
         let assetName: String
+        let baseAssetName: String
         var position: CGPoint
         var hp: Double
         var maxHP: Double
@@ -291,7 +292,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         var anchor: Point? = nil
     }
 
-    private struct MilitiaPose {
+    private struct WalkPose {
         var facing: UnitFacing
         var walkPhase: Double
         var isWalking: Bool
@@ -312,11 +313,32 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var isPlacingRallyPoint = false
 
-    func toggleRallyPlacement() { isPlacingRallyPoint.toggle() }
+    struct RallyFlagFlash: Equatable {
+        let id: Int
+        let position: CGPoint
+    }
+
+    @Published private(set) var rallyFlagFlash: RallyFlagFlash?
+
+    private var rallyFlagFlashCount = 0
+
+    func toggleRallyPlacement() {
+        isPlacingRallyPoint.toggle()
+        if isPlacingRallyPoint { armedUpgradeBranch = nil }
+    }
 
     func placeRallyPoint(at point: CGPoint) {
         guard isPlacingRallyPoint, let slot = selectedTowerSlotIndex else { return }
-        setRallyPoint(slot: slot, to: point)
+        if let tower = placedTower(atSlot: slot),
+           let melee = towerLevel(for: tower)?.meleeUnit,
+           hypot(point.x - tower.position.x, point.y - tower.position.y)
+               <= CGFloat(melee.rallyPointRadius) {
+            setRallyPoint(slot: slot, to: point)
+            if let placed = rallyPointsBySlot[slot] {
+                rallyFlagFlashCount += 1
+                rallyFlagFlash = RallyFlagFlash(id: rallyFlagFlashCount, position: placed)
+            }
+        }
         isPlacingRallyPoint = false
         selectedTowerSlotIndex = nil
     }
@@ -355,7 +377,7 @@ public final class LevelRunner: NSObject, ObservableObject {
     /// the last two ticks so they glide like the frame-interpolated walkers.
     private var militiaPrevPositions: [Int: CGPoint] = [:]
     private var militiaRespawnedIDs: Set<Int> = []
-    private var militiaPoses: [Int: MilitiaPose] = [:]
+    private var militiaPoses: [Int: WalkPose] = [:]
     private let meleeFormation = MeleeFormation()
     private static let reinforcementCount = 2
     private var nextReinforcementSlot = -1
@@ -367,6 +389,7 @@ public final class LevelRunner: NSObject, ObservableObject {
     private var heroRoads = HeroRoads(points: [], neighbors: [])
     private var heroPrevPositions: [Int: CGPoint] = [:]
     private var heroRespawnedIDs: Set<Int> = []
+    private var heroPoses: [Int: WalkPose] = [:]
 
     private struct ScheduledSpawn {
         let tick: Int64
@@ -584,12 +607,15 @@ public final class LevelRunner: NSObject, ObservableObject {
         isPlacingRallyPoint = false
     }
 
-    /// First tap on a build button arms that kind; a second tap on the same
-    /// button builds it. Tapping a different button re-arms to that kind.
+    /// First tap on a build button arms that kind and turns it into the build
+    /// confirmation. Tapping that confirmation builds; tapping anything else,
+    /// including another build button, cancels without building.
     func tapBuildButton(_ kind: TowerKind) {
         guard maxLevel(for: kind) >= 1 else { return }
         if armedBuildKind == kind {
             buildTower(kind)
+        } else if armedBuildKind != nil {
+            armedBuildKind = nil
         } else {
             armedBuildKind = kind
         }
@@ -599,13 +625,6 @@ public final class LevelRunner: NSObject, ObservableObject {
     /// shooting towers, rally-point radius for melee.
     func buildPreviewRadius(for kind: TowerKind) -> CGFloat? {
         towerLevels[kind]?[1]?[1].flatMap(Self.overlayRadius)
-    }
-
-    /// Radius previewed the moment an empty slot is selected, before any
-    /// build choice is armed: the first available kind's level-1 reach.
-    func defaultBuildPreviewRadius() -> CGFloat? {
-        TowerKind.allCases.first { maxLevel(for: $0) >= 1 }
-            .flatMap { buildPreviewRadius(for: $0) }
     }
 
     /// Radius shown while a placed tower's upgrade menu is open, at the
@@ -622,6 +641,7 @@ public final class LevelRunner: NSObject, ObservableObject {
             upgradeSelectedTower(branch: branch)
         } else {
             armedUpgradeBranch = branch
+            isPlacingRallyPoint = false
         }
     }
 
@@ -900,11 +920,12 @@ public final class LevelRunner: NSObject, ObservableObject {
             }
         }
         updateMilitiaPoses()
+        updateHeroPoses()
     }
 
     private func updateMilitiaPoses() {
         let now = militiaPositionsById()
-        var poses: [Int: MilitiaPose] = [:]
+        var poses: [Int: WalkPose] = [:]
         poses.reserveCapacity(now.count)
         for (id, cur) in now {
             let prev = militiaPrevPositions[id] ?? cur
@@ -912,7 +933,7 @@ public final class LevelRunner: NSObject, ObservableObject {
             let dy = Double(cur.y - prev.y)
             let moved = (dx * dx + dy * dy).squareRoot()
             var pose = militiaPoses[id]
-                ?? MilitiaPose(facing: .south, walkPhase: 0, isWalking: false)
+                ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
             pose.isWalking = moved > MeleeWalkCycle.walkingThreshold
             if pose.isWalking {
                 pose.facing = UnitFacing(dx: dx, dy: dy)
@@ -922,6 +943,28 @@ public final class LevelRunner: NSObject, ObservableObject {
             poses[id] = pose
         }
         militiaPoses = poses
+    }
+
+    private func updateHeroPoses() {
+        let now = heroPositionsById()
+        var poses: [Int: WalkPose] = [:]
+        poses.reserveCapacity(now.count)
+        for (id, cur) in now {
+            let prev = heroPrevPositions[id] ?? cur
+            let dx = Double(cur.x - prev.x)
+            let dy = Double(cur.y - prev.y)
+            let moved = (dx * dx + dy * dy).squareRoot()
+            var pose = heroPoses[id]
+                ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
+            pose.isWalking = moved > MeleeWalkCycle.walkingThreshold
+            if pose.isWalking {
+                pose.facing = UnitFacing(dx: dx, dy: dy)
+                pose.walkPhase = (pose.walkPhase + moved)
+                    .truncatingRemainder(dividingBy: HeroWalkCycle.cycleDistance)
+            }
+            poses[id] = pose
+        }
+        heroPoses = poses
     }
 
     private func heroPositionsById() -> [Int: CGPoint] {
@@ -980,6 +1023,30 @@ public final class LevelRunner: NSObject, ObservableObject {
         return out
     }
 
+    private func pathNearest(to target: Point) -> Path? {
+        var nearest: Path?
+        var nearestGap = Double.infinity
+        for path in paths {
+            let gap = path.point(atDistance: path.nearestDistance(to: target)).distance(to: target)
+            if gap < nearestGap {
+                nearestGap = gap
+                nearest = path
+            }
+        }
+        return nearest
+    }
+
+    private func marchWaypoint(from current: Point, to target: Point,
+                               path: Path, targetAlong: Double) -> Point {
+        let fallInRadius = meleeFormation.postSpread
+        guard current.distance(to: target) > fallInRadius else { return target }
+        let currentAlong = path.nearestDistance(to: current)
+        let remaining = targetAlong - currentAlong
+        guard abs(remaining) > fallInRadius else { return target }
+        let lookahead = remaining > 0 ? fallInRadius : -fallInRadius
+        return path.point(atDistance: currentAlong + lookahead)
+    }
+
     private func stepMilitiaTick() {
         let dt = SimClock.dt
 
@@ -1004,6 +1071,8 @@ public final class LevelRunner: NSObject, ObservableObject {
             else { continue }
             let melee = resolved.stats
             let towerPos = resolved.anchor
+            let marchPath = pathNearest(to: g.rallyPoint)
+            let marchTargetAlong = marchPath?.nearestDistance(to: g.rallyPoint)
 
             var free: [(spawnID: Int, position: Point)] = []
             for w in walkers where !w.blockImmune && !claimed.contains(w.id)
@@ -1024,7 +1093,9 @@ public final class LevelRunner: NSObject, ObservableObject {
                     targetPosition: targetPos,
                     rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
                                                         rallyPoint: g.rallyPoint),
-                    towerPosition: towerPos)
+                    towerPosition: towerPos,
+                    leashRadius: melee.leashRadius,
+                    engageScanRadius: melee.engageScanRadius)
                 if unit.swingTicksLeft > 0 { unit.swingTicksLeft -= 1 }
 
                 switch MilitiaAI.decide(unit, context: context) {
@@ -1039,10 +1110,18 @@ public final class LevelRunner: NSObject, ObservableObject {
                 case .heal:
                     unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
                 case let .move(toward):
-                    let d = unit.position.distance(to: toward)
+                    let chasing = unit.state == .engaging || unit.state == .fighting
+                    let waypoint: Point
+                    if !chasing, let path = marchPath, let targetAlong = marchTargetAlong {
+                        waypoint = marchWaypoint(from: unit.position, to: toward,
+                                                 path: path, targetAlong: targetAlong)
+                    } else {
+                        waypoint = toward
+                    }
+                    let d = unit.position.distance(to: waypoint)
                     let step = MilitiaTunables.moveSpeed * dt
-                    unit.position = d <= step ? toward
-                        : Point.lerp(unit.position, toward, step / d)
+                    unit.position = d <= step ? waypoint
+                        : Point.lerp(unit.position, waypoint, step / d)
                 case let .engage(targetSpawnID):
                     unit.state = .engaging
                     unit.targetSpawnID = targetSpawnID
@@ -1239,7 +1318,9 @@ public final class LevelRunner: NSObject, ObservableObject {
             let context = MilitiaContext(freeEnemies: free,
                                          targetPosition: targetPos,
                                          rallyPoint: station,
-                                         towerPosition: station)
+                                         towerPosition: station,
+                                         leashRadius: MilitiaTunables.heroLeashRadius,
+                                         engageScanRadius: MilitiaTunables.heroEngageScanRadius)
             if post.unit.swingTicksLeft > 0 { post.unit.swingTicksLeft -= 1 }
 
             switch MilitiaAI.decide(post.unit, context: context) {
@@ -1351,9 +1432,23 @@ public final class LevelRunner: NSObject, ObservableObject {
         for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
             let cur = CGPoint(x: post.unit.position.x, y: post.unit.position.y)
             let prev = heroPrevPositions[i] ?? cur
+            let pose = heroPoses[i]
+                ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
+            let stepDistance = hypot(Double(cur.x - prev.x),
+                                     Double(cur.y - prev.y))
+            let renderedPhase = MeleeWalkCycle.interpolatedPhase(
+                currentPhase: pose.walkPhase,
+                stepDistance: stepDistance,
+                alpha: alpha,
+                cycleDistance: HeroWalkCycle.cycleDistance)
             out.append(HeroSoldier(
                 id: i,
-                assetName: post.assetName,
+                assetName: HeroWalkCycle.assetName(
+                    baseAssetName: post.assetName,
+                    facing: pose.facing,
+                    walkPhase: renderedPhase,
+                    isWalking: pose.isWalking),
+                baseAssetName: post.assetName,
                 position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
                                   y: prev.y + (cur.y - prev.y) * alpha),
                 hp: post.unit.hp,
@@ -1407,11 +1502,18 @@ public final class LevelRunner: NSObject, ObservableObject {
                 let cur = CGPoint(x: u.position.x, y: u.position.y)
                 let prev = militiaPrevPositions[id] ?? cur
                 let pose = militiaPoses[id]
-                    ?? MilitiaPose(facing: .south, walkPhase: 0, isWalking: false)
+                    ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
+                let stepDistance = hypot(Double(cur.x - prev.x),
+                                         Double(cur.y - prev.y))
+                let renderedPhase = MeleeWalkCycle.interpolatedPhase(
+                    currentPhase: pose.walkPhase,
+                    stepDistance: stepDistance,
+                    alpha: alpha,
+                    cycleDistance: MeleeWalkCycle.cycleDistance)
                 out.append(MilitiaSoldier(
                     id: id,
                     assetName: MeleeWalkCycle.assetName(facing: pose.facing,
-                                                        walkPhase: pose.walkPhase,
+                                                        walkPhase: renderedPhase,
                                                         isWalking: pose.isWalking),
                     position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
                                       y: prev.y + (cur.y - prev.y) * alpha),
