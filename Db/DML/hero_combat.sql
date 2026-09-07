@@ -11,4 +11,24 @@ INSERT INTO hero_combat (
     '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c002',
     (SELECT id FROM hero WHERE short_name = 'Henry Knox'),
     12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
+),
+(
+    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c003',
+    (SELECT id FROM hero WHERE short_name = 'Daniel Morgan'),
+    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
+),
+(
+    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c004',
+    (SELECT id FROM hero WHERE short_name = 'Salem Poor'),
+    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
+),
+(
+    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c005',
+    (SELECT id FROM hero WHERE short_name = 'Israel Putnam'),
+    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
+),
+(
+    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c006',
+    (SELECT id FROM hero WHERE short_name = 'Friedrich von Steuben'),
+    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
 );

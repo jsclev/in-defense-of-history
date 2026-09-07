@@ -258,6 +258,7 @@
 				5263FCBA3002C99600C1546D /* Frameworks */,
 				5263FCBB3002C99600C1546D /* Resources */,
 				52C0FFEE000000000000A001 /* Stamp Build Number */,
+				52C0FFEE000000000000A004 /* Verify App Icon */,
 			);
 			buildRules = (
 			);
@@ -360,6 +361,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		52C0FFEE000000000000A004 /* Verify App Icon */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Tools/app_icon.py",
+				"$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Assets.car",
+			);
+			name = "Verify App Icon";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$ACTION\" in\n    archive | install) /usr/bin/python3 \"$SRCROOT/Tools/app_icon.py\" --bundle \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" ;;\nesac\n";
+		};
 		52C0FFEE000000000000A001 /* Stamp Build Number */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;

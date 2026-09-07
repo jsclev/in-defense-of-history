@@ -16,14 +16,10 @@ public enum Typography {
 public struct HudScale: Equatable {
     public static let referencePlayableHeight: CGFloat = 680.625
 
-    public static let minimum: CGFloat = 0.66
-    public static let maximum: CGFloat = 1.15
-
     public let value: CGFloat
 
     public init(playableHeight: CGFloat) {
-        let raw = playableHeight / Self.referencePlayableHeight
-        value = Swift.min(Swift.max(raw, Self.minimum), Self.maximum)
+        value = playableHeight / Self.referencePlayableHeight
     }
 
     public init(viewSize: CGSize, virtualCanvas: VirtualCanvas) {

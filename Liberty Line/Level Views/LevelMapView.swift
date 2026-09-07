@@ -157,7 +157,7 @@ struct LevelMapView: View {
         let fullSize = runtimeCanvas.physicalRect.size
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         ZStack(alignment: .topLeading) {
-            content(in: fullSize, runtimeCanvas: runtimeCanvas)
+            content(runtimeCanvas: runtimeCanvas)
 
             if runner.isDefeated {
                 failBanner(metrics: metrics)
@@ -183,13 +183,13 @@ struct LevelMapView: View {
         .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
     }
 
-    private func content(in viewSize: CGSize, runtimeCanvas: RuntimeCanvas) -> some View {
+    private func content(runtimeCanvas: RuntimeCanvas) -> some View {
         // Full-bleed map: fit the 16:9 playable rect, not safe — HUD only.
         let safe = runtimeCanvas.safeInsetsRect
         let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         let sprites = MapSpriteScale(playArea: runner.playArea,
-                                     viewSize: viewSize)
+                                     viewSize: runtimeCanvas.playAreaRect.size)
         let art = runner.mapArt
         return ZStack(alignment: .topLeading) {
             Color.black
@@ -304,7 +304,7 @@ struct LevelMapView: View {
                 let footPoint = projection.viewPoint(hero.position)
                 if hero.isSelected {
                     Circle()
-                        .stroke(Color.yellow.opacity(0.9), lineWidth: 2)
+                        .stroke(Color.yellow.opacity(0.9), lineWidth: spriteHeight * 0.054)
                         .frame(width: spriteHeight * 0.8, height: spriteHeight * 0.8)
                         .position(x: footPoint.x, y: footPoint.y - spriteHeight * 0.1)
                         .allowsHitTesting(false)
@@ -744,6 +744,8 @@ struct LevelMapView: View {
                               kind: kind,
                               isAvailable: runner.maxLevel(for: kind) >= 1,
                               isArmed: runner.armedBuildKind == kind,
+                              isAffordable: runner.buildCost(for: kind)
+                                  .map { runner.money >= $0 } ?? false,
                               cost: runner.buildCost(for: kind),
                               buttonSize: buttonSize) {
                     runner.tapBuildButton(kind)
@@ -867,15 +869,15 @@ private struct TowerMenuItem: View {
     let kind: TowerKind
     let isAvailable: Bool
     let isArmed: Bool
+    let isAffordable: Bool
     let cost: Int?
     let buttonSize: CGSize
     let action: () -> Void
 
-    private static let frameBottomEdgeCenter: CGFloat = 0.9568
-
     var body: some View {
         Button(action: action) { content }
             .buttonStyle(.plain)
+            .disabled(isAvailable && !isAffordable)
     }
 
     @ViewBuilder private var content: some View {
@@ -890,6 +892,8 @@ private struct TowerMenuItem: View {
         let frameSize = buttonSize.width
         let iconSize = towerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
 
+        let isUnaffordable = isAvailable && !isAffordable
+
         return ZStack {
             Image("tower_menu_square_frame")
                 .resizable()
@@ -901,22 +905,43 @@ private struct TowerMenuItem: View {
                 .scaledToFit()
                 .frame(width: isAvailable ? iconSize : iconSize * 0.81,
                        height: isAvailable ? iconSize : iconSize * 0.81)
+                .grayscale(isUnaffordable ? 0.65 : 0)
+                .opacity(isUnaffordable ? 0.85 : 1)
             if isAvailable, let cost {
-                costCapsule(cost: cost, frameSize: frameSize)
-                    .fixedSize()
-                    .position(x: frameSize / 2, y: frameSize * Self.frameBottomEdgeCenter)
+                TowerCostLabel(cost: cost, frameSize: frameSize)
             }
         }
         .frame(width: frameSize, height: frameSize)
         .contentShape(Rectangle())
     }
+}
 
-    private func costCapsule(cost: Int, frameSize: CGFloat) -> some View {
-        Text("\(cost)")
+private struct TowerCostLabel: View {
+    let cost: Int?
+    let frameSize: CGFloat
+
+    private static let frameBottomEdgeCenter: CGFloat = 0.9568
+
+    var body: some View {
+        capsule
+            .fixedSize()
+            .position(x: frameSize / 2, y: frameSize * Self.frameBottomEdgeCenter)
+    }
+
+    @ViewBuilder private var capsule: some View {
+        if let cost {
+            pill(Text("\(cost)"), tint: Color(red: 1.0, green: 0.85, blue: 0.4))
+        } else {
+            pill(Text("MAX"), tint: .white.opacity(0.8))
+        }
+    }
+
+    private func pill(_ text: Text, tint: Color) -> some View {
+        text
             .font(.system(size: Typography.size(frameSize * 0.25), weight: .bold))
-            .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
-            .padding(.horizontal, frameSize * 0.077)
-            .padding(.vertical, frameSize * 0.022)
+            .foregroundStyle(tint)
+            .padding(.horizontal, frameSize * 0.089)
+            .padding(.vertical, frameSize * 0.0254)
             .background(.black.opacity(0.78), in: Capsule())
     }
 }
@@ -973,35 +998,10 @@ private struct UpgradeMenuItem: View {
                 .scaledToFit()
                 .frame(width: iconSize, height: iconSize)
                 .opacity(cost != nil ? 1 : 0.5)
+            TowerCostLabel(cost: cost, frameSize: frameSize)
         }
         .frame(width: frameSize, height: frameSize)
-        .overlay(alignment: .bottom) {
-            costCapsule(frameSize: frameSize)
-                .fixedSize()
-                .alignmentGuide(.bottom) { $0[.top] - frameSize * 0.05 }
-        }
         .contentShape(Rectangle())
-    }
-
-    @ViewBuilder private func costCapsule(frameSize: CGFloat) -> some View {
-        let scale = frameSize / towerMenuLayout.getTowerIconSize(towerButtonSize: frameSize)
-
-        if let cost {
-            Label("\(cost)", systemImage: "circle.fill")
-                .font(.system(size: Typography.size(12 * scale), weight: .bold))
-                .labelStyle(.titleOnly)
-                .foregroundStyle(Color(red: 1.0, green: 0.85, blue: 0.4))
-                .padding(.horizontal, 8 * scale)
-                .padding(.vertical, 2 * scale)
-                .background(.black.opacity(0.7), in: Capsule())
-        } else {
-            Text("MAX")
-                .font(.system(size: Typography.size(11 * scale), weight: .bold))
-                .foregroundStyle(.white.opacity(0.8))
-                .padding(.horizontal, 8 * scale)
-                .padding(.vertical, 2 * scale)
-                .background(.black.opacity(0.55), in: Capsule())
-        }
     }
 }
 

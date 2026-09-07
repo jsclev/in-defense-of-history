@@ -74,7 +74,7 @@ public enum SlotTapTarget {
 
 public enum MapSpriteSizing {
     public static func tower(mapPixels: CGFloat) -> SpriteHeight {
-        SpriteHeight(mapPixels: mapPixels, atLeast: TouchTarget.minimum)
+        SpriteHeight(mapPixels: mapPixels)
     }
 
     public static func hero(baseAssetName: String) -> SpriteHeight {
@@ -97,7 +97,7 @@ public enum MapSpriteSizing {
     public static let musketBall = SpriteHeight(mapPixels: 13.66)
 
     public static let healthBarWidth = SpriteHeight(mapPixels: 30)
-    public static let healthBarHeight = SpriteHeight(mapPixels: 4, atLeast: 3, atMost: 9)
+    public static let healthBarHeight = SpriteHeight(mapPixels: 4)
 
     public static let towerBaseLift = SpriteHeight(mapPixels: 14)
     public static let walkerLabelLift = SpriteHeight(mapPixels: 3.5)

@@ -67,6 +67,12 @@ public enum HeroWalkCycle {
     public static let salemPoorFrameCount = 16
     public static let johnGloverAssetName = "hero_unit_john_glover"
     public static let johnGloverFrameCount = 16
+    public static let francisMarionAssetName = "hero_unit_francis_marion"
+    public static let francisMarionFrameCount = 16
+    public static let oldPutAssetName = "hero_unit_old_put"
+    public static let oldPutFrameCount = 16
+    public static let baronVonSteubenAssetName = "hero_unit_baron_von_steuben"
+    public static let baronVonSteubenFrameCount = 16
 
     private static let animatedAssetNames: Set<String> = [
         henryKnoxAssetName,
@@ -74,6 +80,9 @@ public enum HeroWalkCycle {
         danielMorganAssetName,
         salemPoorAssetName,
         johnGloverAssetName,
+        francisMarionAssetName,
+        oldPutAssetName,
+        baronVonSteubenAssetName,
     ]
 
     private static let directionalFrameCounts: [String: Int] = [
@@ -81,6 +90,9 @@ public enum HeroWalkCycle {
         danielMorganAssetName: danielMorganFrameCount,
         salemPoorAssetName: salemPoorFrameCount,
         johnGloverAssetName: johnGloverFrameCount,
+        francisMarionAssetName: francisMarionFrameCount,
+        oldPutAssetName: oldPutFrameCount,
+        baronVonSteubenAssetName: baronVonSteubenFrameCount,
     ]
 
     public static func assetName(baseAssetName: String,

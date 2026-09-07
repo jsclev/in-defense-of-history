@@ -3,6 +3,7 @@ import CoreGraphics
 import Combine
 import QuartzCore
 import UIKit
+import CoreHaptics
 
 struct PlacedTower: Identifiable {
     let slotIndex: Int
@@ -360,6 +361,8 @@ public final class LevelRunner: NSObject, ObservableObject {
     /// Build choice awaiting its confirming second tap: the first tap on a
     /// tower button arms it (checkmark + range preview), the second builds.
     @Published private(set) var armedBuildKind: TowerKind?
+    private let buildFeedback = UINotificationFeedbackGenerator()
+    private var hapticEngine: CHHapticEngine?
 
     /// Upgrade branch awaiting its confirming second tap, same flow as
     /// armedBuildKind: the range preview shows the upgraded tier's range.
@@ -618,6 +621,7 @@ public final class LevelRunner: NSObject, ObservableObject {
             armedBuildKind = nil
         } else {
             armedBuildKind = kind
+            buildFeedback.prepare()
         }
     }
 
@@ -642,6 +646,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         } else {
             armedUpgradeBranch = branch
             isPlacingRallyPoint = false
+            buildFeedback.prepare()
         }
     }
 
@@ -693,6 +698,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 })
             publishMilitia()
         }
+        playBuildHaptic()
         selectedSlotIndex = nil
         armedBuildKind = nil
     }
@@ -727,6 +733,7 @@ public final class LevelRunner: NSObject, ObservableObject {
             garrisonsBySlot[slotIndex] = g
             publishMilitia()
         }
+        playBuildHaptic()
         selectedTowerSlotIndex = nil
         armedUpgradeBranch = nil
     }
@@ -783,6 +790,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         if !awaitingWaveStart {
             enterWave(waveIndex)
         }
+        startHapticEngine()
         let link = CADisplayLink(target: self, selector: #selector(handleFrame))
         link.add(to: .main, forMode: .common)
         displayLink = link
@@ -791,6 +799,39 @@ public final class LevelRunner: NSObject, ObservableObject {
     func stop() {
         displayLink?.invalidate()
         displayLink = nil
+        hapticEngine?.stop()
+        hapticEngine = nil
+    }
+
+    private func startHapticEngine() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
+              let engine = try? CHHapticEngine() else { return }
+        engine.isAutoShutdownEnabled = true
+        engine.resetHandler = { [weak engine] in try? engine?.start() }
+        try? engine.start()
+        hapticEngine = engine
+    }
+
+    private func playBuildHaptic() {
+        guard let engine = hapticEngine else {
+            buildFeedback.notificationOccurred(.success)
+            return
+        }
+        let seat = CHHapticEvent(eventType: .hapticTransient, parameters: [
+            CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.7),
+            CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.45),
+        ], relativeTime: 0)
+        let confirm = CHHapticEvent(eventType: .hapticTransient, parameters: [
+            CHHapticEventParameter(parameterID: .hapticIntensity, value: 1),
+            CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.8),
+        ], relativeTime: 0.055)
+        guard let pattern = try? CHHapticPattern(events: [seat, confirm], parameters: []),
+              let player = try? engine.makePlayer(with: pattern),
+              (try? engine.start()) != nil,
+              (try? player.start(atTime: CHHapticTimeImmediate)) != nil else {
+            buildFeedback.notificationOccurred(.success)
+            return
+        }
     }
 
     private func loseLife() {
