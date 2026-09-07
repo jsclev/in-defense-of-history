@@ -1,0 +1,416 @@
+{
+  "reviewed_date": "2026-09-07",
+  "scope": "All 15 shipped heroes, Revolutionary War adult portrayals",
+  "user_approved_unknown_policy": "Conservative provisional sizes, explicitly marked as estimates in this record.",
+  "reference": {
+    "stature_inches": 74,
+    "standing_body_minimum_points": 38.038,
+    "smallest_playable_height_points": 340
+  },
+  "method": "One uniform scale and one ground inset per hero for all poses/directions/densities. Scale uses standing-equivalent body length, not image bounds. Manual anatomical calibration is approximate, especially under hats and in lunging/kneeling poses; it is not anthropometric proof. Keep the existing aspect ratio and build. Do not convert weight into an invented body width. No art samples cropped or redrawn.",
+  "heroes": [
+    {
+      "id": "baron_von_steuben",
+      "name": "Friedrich von Steuben",
+      "stature_inches": 69.0,
+      "evidence": "provisional",
+      "historical_finding": "A 1994 Congressional tribute describes middle height; no verified numeric measurement located.",
+      "uncertainty": "69 in is a conservative provisional drawing value. A modern tribute is weaker evidence than a contemporary record.",
+      "build": "Upright military bearing; no verified weight located.",
+      "sources": [
+        {
+          "title": "Congressional Record, September 12, 1994, p. 24364",
+          "url": "https://www.govinfo.gov/content/pkg/GPO-CRECB-1994-pt17/pdf/GPO-CRECB-1994-pt17-9-3.pdf"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_baron_von_steuben_idle_se",
+        "reference_sha256": "aa84cdb1387d03bce648f6ac1fa297247aa297108826551ae280172cd05b808b",
+        "normalized_canvas_height": 270,
+        "crown_y": 36,
+        "sole_y": 260,
+        "standing_equivalent_height": 224,
+        "ground_inset_fraction": 0.037037037037037035,
+        "note": "Crown inferred under tall bicorne, not the top of the hat."
+      }
+    },
+    {
+      "id": "benedict_arnold",
+      "name": "Benedict Arnold",
+      "stature_inches": 68.0,
+      "evidence": "provisional",
+      "historical_finding": "J. L. Bell traces contemporary descriptions of middling or somewhat below middle height and muscular build.",
+      "uncertainty": "68 in is provisional. The often-repeated 5 ft 9 in militia record belongs to a different Benedict Arnold.",
+      "build": "Stout, muscular, active.",
+      "sources": [
+        {
+          "title": "Boston 1775: How Tall Was Benedict Arnold?",
+          "url": "https://boston1775.blogspot.com/2013/07/how-tall-was-benedict-arnold.html"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_benedict_arnold",
+        "reference_sha256": "4f2f04b6be97939b75142a581685739403a319a8463f0ad2f7f09a6915692fdd",
+        "normalized_canvas_height": 270,
+        "crown_y": 63,
+        "sole_y": 268,
+        "standing_equivalent_height": 275,
+        "ground_inset_fraction": 0.007407407407407408,
+        "note": "Deep lunge: estimated upright torso plus extended leg chain; sword and scarf excluded. Higher pose uncertainty."
+      }
+    },
+    {
+      "id": "daniel_morgan",
+      "name": "Daniel Morgan",
+      "stature_inches": 72.0,
+      "evidence": "approximate",
+      "historical_finding": "An early biography describes him as six feet; later accounts describe him as over six feet.",
+      "uncertainty": "72 in uses the conservative early description. Accounts disagree; do not present an exact Washington–Morgan ranking as proven.",
+      "build": "Strong, active, robust physique.",
+      "sources": [
+        {
+          "title": "John Frost: Lives of the Heroes of the American Revolution, p. 89 (public-domain scan)",
+          "url": "https://upload.wikimedia.org/wikipedia/commons/b/b9/Lives_of_the_heroes_of_the_American_revolution-_%28IA_livesofheroesofa01fros%29.pdf"
+        },
+        {
+          "title": "American Heritage: Daniel Morgan",
+          "url": "https://www.americanheritage.com/men-revolution-16-daniel-morgan"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_daniel_morgan_idle_se",
+        "reference_sha256": "3735ad80cf2010990ebc98a835c7abc847dd71a120b7112038543f887742ddd1",
+        "normalized_canvas_height": 270,
+        "crown_y": 10,
+        "sole_y": 259,
+        "standing_equivalent_height": 249,
+        "ground_inset_fraction": 0.040740740740740744,
+        "note": "Upright SE idle; rifle excluded."
+      }
+    },
+    {
+      "id": "francis_marion",
+      "name": "Francis Marion",
+      "stature_inches": 61.0,
+      "evidence": "approximate",
+      "historical_finding": "Historian Scott Kaufman distinguishes evidence of a slight figure from a later account of about five feet and 110 lb.",
+      "uncertainty": "61 in is an approximation of slightly over five feet, not a measured value. Later description has lower confidence.",
+      "build": "Small and slight; much shorter than Washington is supported qualitatively.",
+      "sources": [
+        {
+          "title": "Age of Revolutions: Marion and the Historical Record",
+          "url": "https://ageofrevolutions.com/2026/02/02/fact-versus-fabrication-popular-depictions-of-francis-marion-and-the-historical-record/"
+        },
+        {
+          "title": "Christopher Miskimon: Francis Marion",
+          "url": "https://warfarehistorynetwork.com/article/why-francis-marion-became-the-father-of-guerrilla-warfare/"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_francis_marion_idle_se",
+        "reference_sha256": "da970da25146f6b7003300256c148de3fbc874c3acbf1e983116cd1db4490d2f",
+        "normalized_canvas_height": 270,
+        "crown_y": 44,
+        "sole_y": 260,
+        "standing_equivalent_height": 222,
+        "ground_inset_fraction": 0.037037037037037035,
+        "note": "Skull crown inferred beneath hat; slight forward lean allowed."
+      }
+    },
+    {
+      "id": "george_washington",
+      "name": "George Washington",
+      "stature_inches": 74.0,
+      "evidence": "reported",
+      "historical_finding": "About 6 ft 2 in, including ordinary shoes, in a later family recollection preserved by Mount Vernon.",
+      "uncertainty": "Reported recollection; not a modern barefoot measurement.",
+      "build": "Tall, powerful frame. 209 lb in the August 19, 1783 West Point weighing reported by NPS.",
+      "sources": [
+        {
+          "title": "Mount Vernon: Descriptions of George Washington, p. 122",
+          "url": "https://catalog.mountvernon.org/digital/api/collection/p16829coll4/id/2375/download"
+        },
+        {
+          "title": "NPS: Weight of a War",
+          "url": "https://www.nps.gov/fost/blogs/weight-of-a-war-or-the-big-men-of-the-continental-army.htm"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_george_washington_idle_se",
+        "reference_sha256": "a5c720a5a4cebff1a195bbb237180827da814746d2e86427eac02ca529b21e24",
+        "normalized_canvas_height": 270,
+        "crown_y": 12,
+        "sole_y": 264,
+        "standing_equivalent_height": 252,
+        "ground_inset_fraction": 0.022222222222222223,
+        "note": "Upright; crown approximated beneath the hair mass."
+      }
+    },
+    {
+      "id": "henry_knox",
+      "name": "Henry Knox",
+      "stature_inches": 73.0,
+      "evidence": "provisional",
+      "historical_finding": "NPS says over six feet; this does not establish whether he was taller or shorter than Washington.",
+      "uncertainty": "73 in is a provisional drawing value, not an exact measurement; no reliable upper bound established.",
+      "build": "Very heavy build; 280 lb at the same August 19, 1783 weighing. Retain broad torso; weight does not imply a measured shoulder width.",
+      "sources": [
+        {
+          "title": "NPS: Henry Knox",
+          "url": "https://www.nps.gov/people/henry-knox.htm"
+        },
+        {
+          "title": "NPS: Weight of a War",
+          "url": "https://www.nps.gov/fost/blogs/weight-of-a-war-or-the-big-men-of-the-continental-army.htm"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_henry_knox_walk_se_16",
+        "reference_sha256": "08bd186e393d587c114cc438efbf13ff6857872965ac8918bbc44bfc66d43724",
+        "normalized_canvas_height": 270,
+        "crown_y": 25,
+        "sole_y": 254,
+        "standing_equivalent_height": 244,
+        "ground_inset_fraction": 0.05776173285198556,
+        "note": "Raised knee/stride shortens the vertical silhouette. Standing equivalent includes about 15 units of leg extension; retain the shared source ground line."
+      }
+    },
+    {
+      "id": "horatio_gates",
+      "name": "Horatio Gates",
+      "stature_inches": 69.0,
+      "evidence": "provisional",
+      "historical_finding": "No verified height located; JAR traces problems in the later small, stooped caricature.",
+      "uncertainty": "69 in is a neutral provisional drawing value. Do not use the disputed caricature to make him exceptionally short.",
+      "build": "Glasses are supported; exact body dimensions remain unknown.",
+      "sources": [
+        {
+          "title": "Journal of the American Revolution: The Myth of Granny Gates",
+          "url": "https://allthingsliberty.com/2014/10/the-myth-of-granny-gates/"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_horatio_gates",
+        "reference_sha256": "23d66d72ca85edebb29182ed4e90c5a77ad3053038a52ea64e3b80faa7d3760b",
+        "normalized_canvas_height": 270,
+        "crown_y": 11,
+        "sole_y": 267,
+        "standing_equivalent_height": 256,
+        "ground_inset_fraction": 0.011111111111111112,
+        "note": "Near upright; hair mass excluded from estimated skull crown."
+      }
+    },
+    {
+      "id": "john_glover",
+      "name": "John Glover",
+      "stature_inches": 66.0,
+      "evidence": "provisional",
+      "historical_finding": "The Army Historical Foundation describes a short, stocky man; no reliable numeric measurement located.",
+      "uncertainty": "66 in is a provisional interpretation of short stature.",
+      "build": "Short, stocky; red hair.",
+      "sources": [
+        {
+          "title": "Army Historical Foundation: John Glover",
+          "url": "https://armyhistory.org/john-glover/"
+        },
+        {
+          "title": "Journal of the American Revolution: John Glover",
+          "url": "https://allthingsliberty.com/2013/07/overlooked-hero-general-john-glover/"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_john_glover_idle_se",
+        "reference_sha256": "e7b2952f4b7d6e125e62673f7a6b94fcce597db222cd6314048bd4ab2187b9b5",
+        "normalized_canvas_height": 270,
+        "crown_y": 34,
+        "sole_y": 260,
+        "standing_equivalent_height": 226,
+        "ground_inset_fraction": 0.037037037037037035,
+        "note": "Crown under hat; oar and rope excluded."
+      }
+    },
+    {
+      "id": "louis_duportail",
+      "name": "Louis Duportail",
+      "stature_inches": 69.0,
+      "evidence": "provisional",
+      "historical_finding": "No verified height or weight located in the consulted biography catalog and NPS portrait documentation.",
+      "uncertainty": "69 in is a neutral provisional drawing value. Portrait dimensions are not the sitter’s dimensions.",
+      "build": "Existing build retained; no measured body width established.",
+      "sources": [
+        {
+          "title": "French Ministry of Defense: Duportail biography catalog",
+          "url": "https://bibliotheques-numeriques.defense.gouv.fr/mediatheque-en/document/19e4c6d1-3975-41c0-8b66-c8605743c70b"
+        },
+        {
+          "title": "NPS: Peale portrait of Duportail",
+          "url": "https://artsandculture.google.com/asset/louis-le-begue-de-presle-duportail/7QEg6HBrlQ7_zg"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_louis_duportail",
+        "reference_sha256": "b1ef39aae707d89d5c35628f6c18652d0b45b92b85b8cade36d45a1cef1d0240",
+        "normalized_canvas_height": 270,
+        "crown_y": 35,
+        "sole_y": 268,
+        "standing_equivalent_height": 300,
+        "ground_inset_fraction": 0.007407407407407408,
+        "note": "Kneeling: estimated crown-to-hip plus extended thigh/lower leg; divider and hat excluded. Higher pose uncertainty."
+      }
+    },
+    {
+      "id": "molly_pitcher",
+      "name": "Mary Ludwig Hays",
+      "stature_inches": 65.0,
+      "evidence": "provisional",
+      "historical_finding": "No verified height or weight located. Sources distinguish Mary Hays from the composite Molly Pitcher legend.",
+      "uncertainty": "65 in is a conservative provisional drawing value, not a recorded height or asserted population average.",
+      "build": "Existing build retained; no measured body width established.",
+      "sources": [
+        {
+          "title": "National Women’s History Museum: Mary Ludwig Hays",
+          "url": "https://www.womenshistory.org/education-resources/biographies/mary-ludwig-hays"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_molly_pitcher",
+        "reference_sha256": "07894c53e29a917f7f3dc8bdc66627f9ef581bc5e1c55d56f83f7f11eff0e415",
+        "normalized_canvas_height": 270,
+        "crown_y": 20,
+        "sole_y": 267,
+        "standing_equivalent_height": 260,
+        "ground_inset_fraction": 0.011111111111111112,
+        "note": "Crown beneath cap; wide stance allowance; rammer and bucket excluded."
+      }
+    },
+    {
+      "id": "nathanael_greene",
+      "name": "Nathanael Greene",
+      "stature_inches": 71.5,
+      "evidence": "approximate",
+      "historical_finding": "World History Encyclopedia, citing David McCullough, describes him as nearly six feet.",
+      "uncertainty": "71.5 in is a drawing approximation of nearly six feet, not half-inch measurement precision.",
+      "build": "Robust build and strong arms.",
+      "sources": [
+        {
+          "title": "World History Encyclopedia: Nathanael Greene",
+          "url": "https://www.worldhistory.org/Nathanael_Greene/"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_nathanael_greene",
+        "reference_sha256": "31c81b32f515961edc975cc1a42101c7b8bcaf866957333367e3a8193eb7c7a4",
+        "normalized_canvas_height": 270,
+        "crown_y": 22,
+        "sole_y": 268,
+        "standing_equivalent_height": 258,
+        "ground_inset_fraction": 0.007407407407407408,
+        "note": "Crown beneath hat; slight bent-leg stance allowance."
+      }
+    },
+    {
+      "id": "old_put",
+      "name": "Israel Putnam",
+      "stature_inches": 66.0,
+      "evidence": "reported",
+      "historical_finding": "Richard M. Ketchum gives 5 ft 6 in in his American Heritage biography.",
+      "uncertainty": "Reported secondary biographical height, not an inspected military measurement.",
+      "build": "Powerfully built; compact, stout figure.",
+      "sources": [
+        {
+          "title": "American Heritage: Israel Putnam",
+          "url": "https://www.americanheritage.com/men-revolution-9-israel-putnam"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_old_put_idle_se",
+        "reference_sha256": "7eea90b500e22ca0be1b63cccc421bc3f36bbdb1d68fcc28466f14ea694ddb61",
+        "normalized_canvas_height": 270,
+        "crown_y": 25,
+        "sole_y": 259,
+        "standing_equivalent_height": 234,
+        "ground_inset_fraction": 0.040740740740740744,
+        "note": "Crown beneath hair; fur, raised weapon excluded."
+      }
+    },
+    {
+      "id": "salem_poor",
+      "name": "Salem Poor",
+      "stature_inches": 69.0,
+      "evidence": "provisional",
+      "historical_finding": "No verified height or weight located in the NPS biography or its Patriots of Color research.",
+      "uncertainty": "69 in is a neutral provisional drawing value. Not inferred from racial identity or modern commemorative artwork.",
+      "build": "Existing build retained; bravery descriptions do not establish body measurements.",
+      "sources": [
+        {
+          "title": "NPS: Salem Poor, including George Quintal research",
+          "url": "https://home.nps.gov/people/salem-poor.htm"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_salem_poor_idle_se",
+        "reference_sha256": "93a891cdc2a64b356455c0dd307b13be014102d20bdd6442ef21f02aadf559b9",
+        "normalized_canvas_height": 270,
+        "crown_y": 29,
+        "sole_y": 260,
+        "standing_equivalent_height": 231,
+        "ground_inset_fraction": 0.037037037037037035,
+        "note": "Upright; rifle/bayonet excluded."
+      }
+    },
+    {
+      "id": "thaddeus_kosciuszko",
+      "name": "Thaddeus Kosciuszko",
+      "stature_inches": 66.0,
+      "evidence": "provisional",
+      "historical_finding": "The Kosciuszko Mound Committee describes a slender man, not tall, with a slight frame.",
+      "uncertainty": "66 in is a provisional interpretation, not a verified measurement.",
+      "build": "Slender and lightly built; no numeric weight or width established.",
+      "sources": [
+        {
+          "title": "Kosciuszko Mound Committee: Friend of Freedom, p. 44",
+          "url": "https://kopieckosciuszki.pl/wp-content/uploads/2026/03/Kosciuszko_Friend_of_Freedom_EN_2026.pdf"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_thaddeus_kosciuszko",
+        "reference_sha256": "13b85294410b6e64028404b8384a5996b9164b9061a4c852ed3977becf1f94cd",
+        "normalized_canvas_height": 270,
+        "crown_y": 12,
+        "sole_y": 268,
+        "standing_equivalent_height": 285,
+        "ground_inset_fraction": 0.007407407407407408,
+        "note": "Running stride: modest extended-leg allowance; shovel and map excluded. Higher pose uncertainty."
+      }
+    },
+    {
+      "id": "william_prescott",
+      "name": "William Prescott",
+      "stature_inches": 74.5,
+      "evidence": "approximate",
+      "historical_finding": "A retrospective battle account quoted by historian Phillip Greenwalt gives six feet two or three inches.",
+      "uncertainty": "74.5 in is the midpoint of a recollected range, not a half-inch measurement.",
+      "build": "Tall, large frame.",
+      "sources": [
+        {
+          "title": "Emerging Revolutionary War: William Prescott",
+          "url": "https://emergingrevolutionarywar.org/2025/06/18/colonel-william-prescott/"
+        },
+        {
+          "title": "Richard Frothingham: Centennial, Battle of Bunker Hill, p. 17",
+          "url": "https://tile.loc.gov/storage-services/public/gdcmassbookdig/centennialbattle01frot/centennialbattle01frot.pdf"
+        }
+      ],
+      "calibration": {
+        "reference_asset": "hero_unit_william_prescott",
+        "reference_sha256": "07bc73e0bc44f345cebcb0fbd9042f852ef2605fb26fe86d2e24f0d603ae610e",
+        "normalized_canvas_height": 270,
+        "crown_y": 8,
+        "sole_y": 265,
+        "standing_equivalent_height": 264,
+        "ground_inset_fraction": 0.018518518518518517,
+        "note": "Hair crown estimate; spread stance adds about seven units to upright equivalent."
+      }
+    }
+  ]
+}

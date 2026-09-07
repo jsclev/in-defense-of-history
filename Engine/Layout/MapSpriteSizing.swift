@@ -73,26 +73,23 @@ public enum SlotTapTarget {
 }
 
 public enum MapSpriteSizing {
+    public static func heroGroundInset(baseAssetName: String, spriteHeight: CGFloat) -> CGFloat {
+        spriteHeight * (HeroSpriteProfile.all[baseAssetName]?.groundInsetFraction ?? 0)
+    }
+
     public static func tower(mapPixels: CGFloat) -> SpriteHeight {
         SpriteHeight(mapPixels: mapPixels)
     }
 
     public static func hero(baseAssetName: String) -> SpriteHeight {
-        switch baseAssetName {
-        case HeroWalkCycle.georgeWashingtonAssetName: return georgeWashingtonHero
-        case HeroWalkCycle.henryKnoxAssetName: return henryKnoxHero
-        default: return hero
-        }
+        HeroSpriteProfile.all[baseAssetName]?.imageHeight ?? hero
     }
 
     public static let walker = SpriteHeight(mapPixels: 58.04)
     public static let meleeUnit = SpriteHeight(mapPixels: 55.26)
     public static let heroMapHeight: CGFloat = 87.06
-    public static let georgeWashingtonMapHeight: CGFloat = 65.3
-    public static let henryKnoxMapHeight: CGFloat = 74.0
+    // Fallback for future assets; the current roster uses HeroSpriteProfile.
     public static let hero = SpriteHeight(mapPixels: heroMapHeight)
-    public static let georgeWashingtonHero = SpriteHeight(mapPixels: georgeWashingtonMapHeight)
-    public static let henryKnoxHero = SpriteHeight(mapPixels: henryKnoxMapHeight)
     public static let cannonball = SpriteHeight(mapPixels: 20.8)
     public static let musketBall = SpriteHeight(mapPixels: 13.66)
 

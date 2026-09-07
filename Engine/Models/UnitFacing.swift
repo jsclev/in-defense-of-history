@@ -60,7 +60,7 @@ public enum HeroWalkCycle {
     public static let cycleDistance: Double = 75.6
     public static let henryKnoxAssetName = "hero_unit_henry_knox"
     public static let georgeWashingtonAssetName = "hero_unit_george_washington"
-    public static let georgeWashingtonFrameCount = 16
+    public static let georgeWashingtonFrameCount = 4
     public static let danielMorganAssetName = "hero_unit_daniel_morgan"
     public static let danielMorganFrameCount = 16
     public static let salemPoorAssetName = "hero_unit_salem_poor"
@@ -95,11 +95,22 @@ public enum HeroWalkCycle {
         baronVonSteubenAssetName: baronVonSteubenFrameCount,
     ]
 
+    /// Settle rear-facing arrivals into a profile so the hero's face stays visible.
+    /// A straight north arrival turns right; diagonals retain their left/right side.
+    private static func idleFacing(from facing: UnitFacing) -> UnitFacing {
+        switch facing {
+        case .north, .northEast: return .east
+        case .northWest: return .west
+        default: return facing
+        }
+    }
+
     public static func assetName(baseAssetName: String,
                                  facing: UnitFacing,
                                  walkPhase: Double,
                                  isWalking: Bool) -> String {
         guard animatedAssetNames.contains(baseAssetName) else { return baseAssetName }
+        let facing = isWalking ? facing : idleFacing(from: facing)
         if let frameCount = directionalFrameCounts[baseAssetName] {
             guard isWalking else { return "\(baseAssetName)_idle_\(facing.assetSuffix)" }
             let pitch = cycleDistance / Double(frameCount)

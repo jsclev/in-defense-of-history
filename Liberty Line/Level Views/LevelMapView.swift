@@ -301,6 +301,8 @@ struct LevelMapView: View {
             ForEach(runner.heroes) { hero in
                 let spriteHeight = sprites.points(
                     MapSpriteSizing.hero(baseAssetName: hero.baseAssetName))
+                let groundInset = MapSpriteSizing.heroGroundInset(
+                    baseAssetName: hero.baseAssetName, spriteHeight: spriteHeight)
                 let footPoint = projection.viewPoint(hero.position)
                 if hero.isSelected {
                     Circle()
@@ -313,8 +315,10 @@ struct LevelMapView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: spriteHeight)
-                    .position(x: footPoint.x, y: footPoint.y - spriteHeight / 2)
+                    .frame(minWidth: TouchTarget.minimum, minHeight: TouchTarget.minimum)
+                    .contentShape(Rectangle())
                     .onTapGesture { runner.selectHero(hero.id) }
+                    .position(x: footPoint.x, y: footPoint.y - spriteHeight / 2 + groundInset)
 
                 if hero.hp < hero.maxHP {
                     let fraction = CGFloat(max(0, hero.hp / hero.maxHP))
