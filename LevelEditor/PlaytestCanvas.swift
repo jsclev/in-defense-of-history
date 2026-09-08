@@ -109,9 +109,15 @@ struct PlaytestCanvas: View {
             if let (type, lvl) = session.towerType(at: i) {
                 let color = Palette.color(forTowerID: type.id)
                 if session.selectedSlot == i {
+                    let runtimeCanvas = RuntimeCanvas(
+                        virtualCanvas: session.virtualCanvas,
+                        physicalRect: t.frame,
+                        safeInsetsRect: t.view(session.virtualCanvas.playAreaRect))
+                    let tuning = type.levels[lvl]
+                    let radius = tuning.meleeUnit?.rallyPointRadius ?? tuning.range
                     let rangeRect = TowerRangeOverlay.rect(center: c,
-                                                           range: CGFloat(type.levels[lvl].range),
-                                                           pointsPerMapUnit: s)
+                                                           range: CGFloat(radius),
+                                                           runtimeCanvas: runtimeCanvas)
                     ctx.fill(SwiftUI.Path(ellipseIn: rangeRect), with: .color(color.opacity(0.10)))
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect), with: .color(color.opacity(0.5)), lineWidth: 1.5)
                 }

@@ -60,7 +60,7 @@ public enum HeroWalkCycle {
     public static let cycleDistance: Double = 75.6
     public static let henryKnoxAssetName = "hero_unit_henry_knox"
     public static let georgeWashingtonAssetName = "hero_unit_george_washington"
-    public static let georgeWashingtonFrameCount = 4
+    public static let georgeWashingtonFrameCount = 16
     public static let danielMorganAssetName = "hero_unit_daniel_morgan"
     public static let danielMorganFrameCount = 16
     public static let salemPoorAssetName = "hero_unit_salem_poor"

@@ -879,13 +879,17 @@ struct EditorCanvas: View {
             state.towerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: selected)
 
             if selected, state.showRanges {
+                let runtimeCanvas = RuntimeCanvas(
+                    virtualCanvas: virtualCanvas,
+                    physicalRect: t.frame,
+                    safeInsetsRect: t.view(virtualCanvas.playAreaRect))
                 // Ranges come from the tower table. They were hardcoded here as
                 // 210 and 240 with tower names copied alongside them, and had
                 // already drifted from the real values.
                 for ring in content.ringsByName {
                     let label = "\(ring.name) \(Int(ring.range))"
                     let rangeRect = TowerRangeOverlay.rect(center: c, range: ring.range,
-                                                       pointsPerMapUnit: s)
+                                                           runtimeCanvas: runtimeCanvas)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
                                with: .color(.cyan.opacity(0.4)),
                                style: StrokeStyle(lineWidth: 1.5, dash: [6, 5]))

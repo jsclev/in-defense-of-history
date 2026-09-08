@@ -22,6 +22,13 @@ public struct RuntimeCanvas {
     public let statsViewSize: CGSize
     public let miscViewSize: CGSize
     public let masterControlsSize: CGSize
+
+    /// Database ranges are radii in canonical map units, just like combat
+    /// positions. Resolve them with the live play-area fit, never a device's
+    /// pixel density, image dimensions, or a cached screen-size multiplier.
+    public func rangeRadius(forMapRadius radius: CGFloat) -> CGFloat {
+        max(0, radius) * scaleFactor
+    }
 //    private let hudMarginFactor = 0.04
 //    public let hudLowerLeftRect: CGRect
 

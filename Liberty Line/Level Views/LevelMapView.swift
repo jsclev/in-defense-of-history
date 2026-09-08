@@ -71,9 +71,9 @@ struct LevelMapView: View {
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     private static let debugRangeBands: [(upperBound: CGFloat, tint: Color)] = [
-        (200, Color(red: 0.13, green: 0.83, blue: 0.93)),        // cyan
-        (250, Color(red: 0.38, green: 0.65, blue: 0.98)),        // blue
-        (285, Color(red: 0.75, green: 0.52, blue: 0.99)),        // violet
+        (350, Color(red: 0.13, green: 0.83, blue: 0.93)),        // cyan
+        (425, Color(red: 0.38, green: 0.65, blue: 0.98)),        // blue
+        (500, Color(red: 0.75, green: 0.52, blue: 0.99)),        // violet
         (.infinity, Color(red: 1.00, green: 0.31, blue: 0.64)),  // magenta
     ]
 
@@ -548,7 +548,7 @@ struct LevelMapView: View {
                 if let radius = runner.armedBuildKind.flatMap({ runner.buildPreviewRadius(for: $0) }) {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
-                        range: radius, pointsPerMapUnit: projection.scale)
+                        range: radius, runtimeCanvas: runtimeCanvas)
                 }
                 dismissCatcher()
                 towerMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
@@ -559,10 +559,10 @@ struct LevelMapView: View {
                let tower = runner.placedTower(atSlot: upgradeSlot) {
                 let previewRadius = runner.armedUpgradeBranch
                     .flatMap { runner.upgradePreviewRadius(branch: $0) }
-                if let radius = previewRadius ?? runner.rangeOverlayRadius(for: tower) {
+                if let radius = runner.rangeOverlayRadius(for: tower) {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[upgradeSlot]),
-                        range: radius, pointsPerMapUnit: projection.scale)
+                        range: radius, upgradeRange: previewRadius, runtimeCanvas: runtimeCanvas)
                 }
                 if runner.isPlacingRallyPoint {
                     rallyPlacementCatcher(projection: projection)
@@ -613,7 +613,7 @@ struct LevelMapView: View {
                                    projection: LevelMapProjection,
                                    safe: CGRect,
                                    metrics: HudMetrics) -> DebugRingGeometry {
-        let size = TowerRangeOverlay.size(range: range, pointsPerMapUnit: projection.scale)
+        let size = TowerRangeOverlay.size(range: range, runtimeCanvas: runtimeCanvas)
         let center = projection.viewPoint(tower.position)
         let gap = 6 * metrics.scale
 

@@ -33,7 +33,7 @@ public struct HeroSpriteProfile: Equatable {
         "hero_unit_benedict_arnold": .init(statureInches: 68, evidence: .provisional, standingBodyFraction: 275.0 / 270, groundInsetFraction: 2.0 / 270),
         "hero_unit_daniel_morgan": .init(statureInches: 72, evidence: .approximate, standingBodyFraction: 249.0 / 270, groundInsetFraction: 11.0 / 270),
         "hero_unit_francis_marion": .init(statureInches: 61, evidence: .approximate, standingBodyFraction: 222.0 / 270, groundInsetFraction: 10.0 / 270),
-        "hero_unit_george_washington": .init(statureInches: 74, evidence: .reported, standingBodyFraction: 252.0 / 270, groundInsetFraction: 6.0 / 270),
+        "hero_unit_george_washington": .init(statureInches: 74, evidence: .reported, standingBodyFraction: 249.0 / 270, groundInsetFraction: 3.0 / 270),
         "hero_unit_henry_knox": .init(statureInches: 73, evidence: .provisional, standingBodyFraction: 244.0 / 270, groundInsetFraction: 16.0 / 277),
         "hero_unit_horatio_gates": .init(statureInches: 69, evidence: .provisional, standingBodyFraction: 256.0 / 270, groundInsetFraction: 3.0 / 270),
         "hero_unit_john_glover": .init(statureInches: 66, evidence: .provisional, standingBodyFraction: 226.0 / 270, groundInsetFraction: 10.0 / 270),

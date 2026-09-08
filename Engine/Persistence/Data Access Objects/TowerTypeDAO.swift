@@ -189,8 +189,8 @@ public class TowerTypeDAO: BaseDAO {
     ///
     /// This is what a ContentCatalog needs. `DesignArsenal` used to carry a
     /// hardcoded copy of the same numbers, under its own invented UUIDs, and it
-    /// had drifted from the tower table - tier-1 range read 140 there against
-    /// 150 here.
+    /// had drifted from the tower table. Range tuning must come from the same
+    /// rows in the game, editor and simulator.
     public func getTowerTypes() throws -> [String: TowerType] {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""

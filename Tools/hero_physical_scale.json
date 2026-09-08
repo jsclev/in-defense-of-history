@@ -137,13 +137,13 @@
       ],
       "calibration": {
         "reference_asset": "hero_unit_george_washington_idle_se",
-        "reference_sha256": "a5c720a5a4cebff1a195bbb237180827da814746d2e86427eac02ca529b21e24",
+        "reference_sha256": "3f83299fb7dd9fe979e5f86b6435d90259af82b14c3cc65615d045dc635b98a6",
         "normalized_canvas_height": 270,
-        "crown_y": 12,
-        "sole_y": 264,
-        "standing_equivalent_height": 252,
-        "ground_inset_fraction": 0.022222222222222223,
-        "note": "Upright; crown approximated beneath the hair mass."
+        "crown_y": 18,
+        "sole_y": 267,
+        "standing_equivalent_height": 249,
+        "ground_inset_fraction": 0.011111111111111112,
+        "note": "Upright-sword illustration v6. Crown estimated beneath swept-back hair at y18; sole baseline y267. One body fraction and ground inset for every pose. Existing global 38.038-point body scale retained; manual anatomical estimate."
       }
     },
     {

@@ -257,6 +257,7 @@
 				5263FCB93002C99600C1546D /* Sources */,
 				5263FCBA3002C99600C1546D /* Frameworks */,
 				5263FCBB3002C99600C1546D /* Resources */,
+				52C0FFEE000000000000A005 /* Verify Washington Assets */,
 				52C0FFEE000000000000A001 /* Stamp Build Number */,
 				52C0FFEE000000000000A004 /* Verify App Icon */,
 			);
@@ -428,6 +429,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "case \"$ACTION\" in\n    archive | install) /usr/bin/python3 \"$SRCROOT/Tools/app_icon.py\" --bundle \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" ;;\nesac\n";
+		};
+		52C0FFEE000000000000A005 /* Verify Washington Assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Tools/check_washington_assets.py",
+				"$(SRCROOT)/Tools/washington_asset_manifest.json",
+				"$(SRCROOT)/Tools/hero_physical_scale.json",
+				"$(SRCROOT)/Engine/Models/UnitFacing.swift",
+				"$(SRCROOT)/../in-defense-of-history-data/LibertyLineAssets.xcassets",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Assets.car",
+			);
+			name = "Verify Washington Assets";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/washington-assets-check.json",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/bin/python3 \"$SRCROOT/Tools/check_washington_assets.py\" --bundle \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" --output \"$DERIVED_FILE_DIR/washington-assets-check.json\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
