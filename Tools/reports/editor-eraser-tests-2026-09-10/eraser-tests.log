@@ -1,0 +1,86 @@
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'in-defense-of-history': failed storing manifest for 'in-defense-of-history' in cache: attempt to write a readonly database
+Building for debugging...
+[0/4] Write sources
+[2/4] Write swift-version--58304C5D6DBC2206.txt
+[4/6] Emitting module LevelEditorFormats
+[5/6] Compiling LevelEditorFormats MapDocument.swift
+[6/9] Compiling LevelEditorFormatsTests EditorEraserTests.swift
+[7/9] Emitting module LevelEditorFormatsTests
+[7/9] Write Objects.LinkFileList
+[8/9] Linking LevelEditorFormatsPackageTests
+Build complete! (2.56s)
+Test Suite 'Selected tests' started at 2026-09-10 15:10:29.008.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 15:10:29.009.
+Test Suite 'EditorEraserIntegrationTests' started at 2026-09-10 15:10:29.009.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCancelDiscardsPreviewAndIgnoresLateMoveAndRelease]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCancelDiscardsPreviewAndIgnoresLateMoveAndRelease]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCanvasCoordinatesAtDifferentZoomsAndPanOffsetsEraseUnderTheCursor]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCanvasCoordinatesAtDifferentZoomsAndPanOffsetsEraseUnderTheCursor]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testClickWithoutDraggingErasesACircularDab]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testClickWithoutDraggingErasesACircularDab]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCoordinatesClampToCanvasAndInvalidInputCannotCommit]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCoordinatesClampToCanvasAndInvalidInputCannotCommit]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDragPreviewDoesNotChangeDocumentOrUndoUntilRelease]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDragPreviewDoesNotChangeDocumentOrUndoUntilRelease]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDuplicateReleaseCannotCommitTwice]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDuplicateReleaseCannotCommitTwice]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testEraserThenPainterUseSeparateStrokesAndUndoSeparately]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testEraserThenPainterUseSeparateStrokesAndUndoSeparately]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testErasingLeavesTowersHeroesMarkersImagesAndWaveDataIntact]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testErasingLeavesTowersHeroesMarkersImagesAndWaveDataIntact]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testGestureCutSurvivesActualNativeFileAndGeoJSONFileRoundTrips]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testGestureCutSurvivesActualNativeFileAndGeoJSONFileRoundTrips]' passed (0.010 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMissDoesNotDirtyDocumentOrAddUndo]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMissDoesNotDirtyDocumentOrAddUndo]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testSeparateDocumentsHaveIndependentPreviewsAndUndo]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testSeparateDocumentsHaveIndependentPreviewsAndUndo]' passed (0.000 seconds).
+Test Suite 'EditorEraserIntegrationTests' passed at 2026-09-10 15:10:29.027.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.017 (0.018) seconds
+Test Suite 'EditorEraserTests' started at 2026-09-10 15:10:29.027.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testBrushSizeAndEdgeMatrixMatchesCircularFootprint]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testBrushSizeAndEdgeMatrixMatchesCircularFootprint]' passed (0.027 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteEraseAndRepaintPreserveImportedRouteIndices]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteEraseAndRepaintPreserveImportedRouteIndices]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteNativeAndPaintEraseCannotReappearOnSave]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteNativeAndPaintEraseCannotReappearOnSave]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCutsSurviveNativeSaveAndGeoJSONExport]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCutsSurviveNativeSaveAndGeoJSONExport]' passed (0.004 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testDraggedPreviewAndCommitMatchTheBrushAcrossOverlappingSurfaces]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testDraggedPreviewAndCommitMatchTheBrushAcrossOverlappingSurfaces]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testErasingKeepsEditableWaypointsAndWaveAssignments]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testErasingKeepsEditableWaypointsAndWaveAssignments]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testFastSparseDragErasesContinuouslyLikeDenseSamples]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testFastSparseDragErasesContinuouslyLikeDenseSamples]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testImportedHolesAndDisconnectedIslandsSurviveAnEdgeCutAndReload]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testImportedHolesAndDisconnectedIslandsSurviveAnEdgeCutAndReload]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testInvalidEraserDataIsANoOp]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testInvalidEraserDataIsANoOp]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testLegacyStoredErasuresPreservePaintOrderAndDoNotCutWaypoints]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testLegacyStoredErasuresPreservePaintOrderAndDoNotCutWaypoints]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testNewPaintCanRefillACutAndBeErasedAgain]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testNewPaintCanRefillACutAndBeErasedAgain]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testOneDragHasOneUndoAndRedo]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testOneDragHasOneUndoAndRedo]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testRepeatingTheSameEraseDoesNotCreateAnotherEdit]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testRepeatingTheSameEraseDoesNotCreateAnotherEdit]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle]' passed (0.000 seconds).
+Test Suite 'EditorEraserTests' passed at 2026-09-10 15:10:29.075.
+	 Executed 16 tests, with 0 failures (0 unexpected) in 0.047 (0.048) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-10 15:10:29.075.
+	 Executed 28 tests, with 0 failures (0 unexpected) in 0.064 (0.066) seconds
+Test Suite 'Selected tests' passed at 2026-09-10 15:10:29.075.
+	 Executed 28 tests, with 0 failures (0 unexpected) in 0.064 (0.067) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

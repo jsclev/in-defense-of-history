@@ -1,0 +1,267 @@
+[
+  {
+    "file": "Db/level_002_bunker_hill.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1120,
+          1150.5614489747068
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_003_great_bridge.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          2035.9069017793026,
+          1420.2000000000003
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_004_moores_creek_bridge.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          2078.2,
+          674.6614489747068
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_005_dorchester_heights.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1053.3,
+          1208.361448974707
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_006_sullivans_island.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1284.2,
+          1208.361448974707
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          1773.3,
+          1181.8287124479516
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_007_long_island.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1501.2,
+          1237.6231971047255
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          1366.5775638255634,
+          1242.9118221258855
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_008_trenton.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1337.5,
+          803.7614489747068
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          1647.6,
+          809.9287124479517
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_009_princeton.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          958.5999999999999,
+          1238.5589882709646
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          2022.3660262846713,
+          1428.5276132921244
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_010_fort_ann.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1806,
+          812.5614489747068
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          1671.3775638255634,
+          792
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_011_saratoga.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1544.2,
+          1237.6231971047255
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          1409.5775638255636,
+          1242.9118221258855
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_012_kettle_creek.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          733.1683071343465,
+          1190
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          690.787177057947,
+          930.7287124479517
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_013_new_haven.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1360,
+          555.5614489747068
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          2025,
+          561.7287124479517
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_014_savannah_bastion_v7.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          660.3930982206973,
+          1216.1
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          557.6339737153286,
+          968.3287124479517
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_01_battle_road.geojson",
+    "source": "hero-exit-proximity-2026-09-09/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          2206.731414314122,
+          1108.5614489747068
+        ]
+      }
+    ]
+  },
+  {
+    "file": "Db/level_15_charleston.geojson",
+    "source": "hero-inside-exits-2026-09-10/hero-exits.json",
+    "starts": [
+      {
+        "role": "primary",
+        "position": [
+          1623.214359279312,
+          614.191049533232
+        ]
+      },
+      {
+        "role": "secondary",
+        "position": [
+          2181.690858821886,
+          1258.9154281334208
+        ]
+      }
+    ]
+  }
+]

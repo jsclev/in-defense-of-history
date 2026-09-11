@@ -1,0 +1,65 @@
+[0/1] Planning build
+Building for debugging...
+[0/5] Write sources
+[2/5] Write swift-version--58304C5D6DBC2206.txt
+[4/8] Emitting module LevelEditorFormats
+[5/8] Compiling LevelEditorFormats Constants.swift
+[6/8] Compiling LevelEditorFormats EnemyEscapeHapticPolicy.swift
+[7/9] Compiling LevelEditorFormats LogUtility.swift
+[8/18] Compiling LevelEditorFormatsTests EnemyEscapeHapticTests.swift
+[9/18] Compiling LevelEditorFormatsTests PresentationStackTests.swift
+[10/18] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[11/18] Compiling LevelEditorFormatsTests WaveStartTimingTests.swift
+[12/18] Compiling LevelEditorFormatsTests ReinforcementTests.swift
+[13/18] Emitting module LevelEditorFormatsTests
+[14/18] Compiling LevelEditorFormatsTests HeroBarLayoutTests.swift
+[15/18] Compiling LevelEditorFormatsTests LevelGeoJSONTests.swift
+[16/18] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[16/18] Write Objects.LinkFileList
+[17/18] Linking LevelEditorFormatsPackageTests
+Build complete! (2.45s)
+Test Suite 'Selected tests' started at 2026-09-08 16:17:15.066.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-08 16:17:15.067.
+Test Suite 'EnemyEscapeHapticTests' started at 2026-09-08 16:17:15.067.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testDefeatOverridesRecentWarningAndCoalescedLossesPlayOnlyDefeat]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testDefeatOverridesRecentWarningAndCoalescedLossesPlayOnlyDefeat]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testLoadingAndCounterResetDoNotProduceLossFeedback]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testLoadingAndCounterResetDoNotProduceLossFeedback]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testMutedAndInactiveLossesDoNotReplayWhenEnabledOrResumed]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testMutedAndInactiveLossesDoNotReplayWhenEnabledOrResumed]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testSeparateEscapesWarnAndBurstDoesNotAccumulateDelayedFeedback]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testSeparateEscapesWarnAndBurstDoesNotAccumulateDelayedFeedback]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testWarningBecomesAvailableAtHalfSecondRegardlessOfEscapeCount]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testWarningBecomesAvailableAtHalfSecondRegardlessOfEscapeCount]' passed (0.000 seconds).
+Test Suite 'EnemyEscapeHapticTests' passed at 2026-09-08 16:17:15.068.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+Test Suite 'LevelViewportTests' started at 2026-09-08 16:17:15.068.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.043 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.246 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-08 16:17:16.357.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.288 (1.288) seconds
+Test Suite 'PresentationStackTests' started at 2026-09-08 16:17:16.357.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' passed (0.000 seconds).
+Test Suite 'PresentationStackTests' passed at 2026-09-08 16:17:16.358.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-08 16:17:16.358.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 1.290 (1.292) seconds
+Test Suite 'Selected tests' passed at 2026-09-08 16:17:16.358.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 1.290 (1.293) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

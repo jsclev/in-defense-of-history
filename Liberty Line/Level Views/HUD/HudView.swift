@@ -18,40 +18,30 @@ struct HudView: View {
         self.db = db
         self.runtimeCanvas = runtimeCanvas
         self.runner = runner
-        self.hudLayoutConfig = hudLayoutConfig
+        self.hudLayoutConfig = hudLayoutConfig.moving(.heroBar, to: .southWest)
         self.onSpeedUp = onSpeedUp
         self.onExit = onExit
     }
 
     var body: some View {
-        VStack {
-            HStack(alignment: .top) {
-                section(at: .northWest)
-                Spacer()
-                section(at: .north)
-                Spacer()
-                section(at: .northEast)
+        let hud = runtimeCanvas.hudRect
+        ZStack(alignment: .topLeading) {
+            ForEach(HudLocation.allCases, id: \.self) { location in
+                // Independent anchors: text changes in one section cannot
+                // push the center or opposite edge's controls around.
+                Color.clear
+                    .frame(width: hud.width, height: hud.height)
+                    .overlay(alignment: location.alignment) {
+                        section(at: location)
+                    }
+                    .position(x: hud.midX, y: hud.midY)
             }
-            Spacer()
-            HStack {
-                section(at: .west)
-                Spacer()
-                section(at: .east)
-            }
-            Spacer()
-            HStack(alignment: .bottom) {
-                section(at: .southWest)
-                Spacer()
-                section(at: .south)
-                Spacer()
-                section(at: .southEast)
-            }
-            .clipped()
         }
-        .border(debugMode ? Color.black : Color.clear, width: debugMode ? 5 : 0)
-        .padding(.top, runtimeCanvas.hudTopMargin)
-        .padding(.horizontal, runtimeCanvas.hudHorizontalMargin)
-        .padding(.bottom, runtimeCanvas.hudBottomMargin)
+        .overlay(alignment: .topLeading) {
+            let layout = HeroBarLayout(runtimeCanvas: runtimeCanvas)
+            HudHeroesBarView(layout: layout, runner: runner)
+                .position(x: layout.frame.midX, y: layout.frame.midY)
+        }
     }
 
     @ViewBuilder
@@ -69,6 +59,21 @@ struct HudView: View {
                                   onExit: onExit)
         case nil:
             EmptyView()
+        }
+    }
+}
+
+private extension HudLocation {
+    var alignment: Alignment {
+        switch self {
+        case .northWest: return .topLeading
+        case .north: return .top
+        case .northEast: return .topTrailing
+        case .west: return .leading
+        case .east: return .trailing
+        case .southWest: return .bottomLeading
+        case .south: return .bottom
+        case .southEast: return .bottomTrailing
         }
     }
 }

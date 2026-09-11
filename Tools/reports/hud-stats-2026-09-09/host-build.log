@@ -1,0 +1,42 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write sources
+[1/2] Write swift-version--58304C5D6DBC2206.txt
+[3/17] Compiling LevelEditorFormats MapSpriteSizing.swift
+[4/17] Compiling LevelEditorFormats TowerMenuLayout.swift
+[5/17] Compiling LevelEditorFormats LevelGeoJSONDAO.swift
+[6/19] Compiling LevelEditorFormats RuntimeCanvas.swift
+[7/19] Compiling LevelEditorFormats VirtualCanvas.swift
+[8/20] Compiling LevelEditorFormats HeroSpriteFootprint.swift
+[9/20] Compiling LevelEditorFormats HudLayoutConfig.swift
+[10/20] Compiling LevelEditorFormats HeroDAO.swift
+[11/20] Compiling LevelEditorFormats GeoJSONExport.swift
+[12/20] Compiling LevelEditorFormats GeoJSONImport.swift
+[13/25] Compiling LevelEditorFormats Store.swift
+[14/26] Compiling LevelEditorFormats TowerKind.swift
+[15/27] Compiling LevelEditorFormats HeroSelection.swift
+[16/28] Compiling LevelEditorFormats HeroBarLayout.swift
+[17/29] Emitting module LevelEditorFormats
+[18/29] Compiling LevelEditorFormats EditorDocumentLifecycle.swift
+[19/29] Compiling LevelEditorFormats LevelGeoJSON.swift
+[20/29] Compiling LevelEditorFormats LevelHeroConfiguration.swift
+[21/33] Compiling LevelEditorFormats HudPlacementSolver.swift
+[22/34] Compiling LevelEditorFormats CallWaveButtonLayout.swift
+[23/34] Compiling LevelEditorFormats Db.swift
+[24/34] Compiling LevelEditorFormats Blueprints.swift
+[25/34] Compiling LevelEditorFormats LevelBlueprint.swift
+[26/37] Compiling LevelEditorFormats HudElementLayouts.swift
+[27/37] Compiling LevelEditorFormats HudSizing.swift
+[28/37] Compiling LevelEditorFormats RuntimeCanvasView.swift
+[29/37] Compiling LevelEditorFormats TowerRangeOverlay.swift
+[30/37] Compiling LevelEditorFormats MasterControlsLayout.swift
+[31/37] Compiling LevelEditorFormats MenuContentLayout.swift
+[32/37] Compiling LevelEditorFormats VirtualCanvasDAO.swift
+[33/37] Compiling LevelEditorFormats GeoJSONFile.swift
+[34/37] Compiling LevelEditorFormats NativeMapFile.swift
+[35/37] Compiling LevelEditorFormats HeroSelectionStore.swift
+[36/37] Compiling LevelEditorFormats HudLayoutDAO.swift
+[37/37] Compiling LevelEditorFormats MapDocument.swift
+[38/39] Compiling LevelEditorFormats BrushStroke.swift
+[39/39] Compiling LevelEditorFormats SwiftExport.swift
+Build complete! (2.79s)

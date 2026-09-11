@@ -1,0 +1,172 @@
+{
+  "reference_height": 655,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868,
+    "height": 2064,
+    "play_rect": [
+      474,
+      492,
+      1920,
+      1080
+    ]
+  },
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "90071efe2420db1b86adcf77e1b2f00c57108f63a1d8bf549d64688f5a1b1200"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/ExitMarkerLayout.swift",
+      "sha256": "3c71984ff4bbfa2f4ced233d2c100ad4dc712ae6c2dd7208002b067b9a76a1d3"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/LevelMapProjection.swift",
+      "sha256": "dbe947a973f4bf0372ee68708dc6dbdfef87e71fb156c19f5fd5cab854a2c2b5"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "1cad4847792853a374ba3325f5b0b509e657571b9ec2d18839854c6d160c2146"
+    }
+  ],
+  "sizing_note": "Current tightly cropped crown at actual 24.533 pt minimum height, centered on authored exit. This lab measures readability, not actual placement; physical-device probe measures that.",
+  "assets": [
+    {
+      "id": "exit_crown",
+      "label": "Exit / centered crop",
+      "animated": false,
+      "map_height": 47.26274509803922,
+      "ground_inset_fraction": 0.5,
+      "files": {
+        "crown": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_crown.imageset/path_exit_crown.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_crown.imageset/path_exit_crown@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_crown.imageset/path_exit_crown@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/exit_crown-1x.png",
+          "boxes": {
+            "crown": [
+              1,
+              1,
+              89,
+              92
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/exit_crown-2x.png",
+          "boxes": {
+            "crown": [
+              1,
+              1,
+              178,
+              184
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/exit_crown-3x.png",
+          "boxes": {
+            "crown": [
+              1,
+              1,
+              267,
+              276
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "e": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "se": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "s": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "w": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "crown"
+          ],
+          "walk": [
+            "crown"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "charleston",
+      "label": "Level 15 / latest path",
+      "under": "charleston-under.jpg",
+      "over": "charleston-over.png"
+    }
+  ]
+}

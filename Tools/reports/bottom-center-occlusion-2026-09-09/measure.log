@@ -1,0 +1,16 @@
+Measuring iPhone 13 mini 6E283B09-F460-4082-A96E-C7DA1572807A
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 0CA93206-4109-4AFD-BAEB-13855C561B87 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPhone-13-mini-iOS-26.5.png
+{"model": "iPhone 13 mini", "runtime": "26.5", "geometry": {"screen": [812, 375], "safeInsets": [0, 50, 20, 50], "window": [812, 375], "scale": 3}, "screenshot": "iPhone-13-mini-iOS-26.5.png", "normalizedScreenshotSize": [2340, 1080], "rotationDegrees": 90, "threshold": 16, "indicatorPixelBounds": [869, 1042, 1471, 1057], "indicatorWidthPoints": 208.8991452991453, "screenWidthFraction": 0.25726495726495724}
+Measuring iPad mini (A17 Pro) 444E8022-6319-4343-A683-975C2BBE4E49
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: DA4BBE86-7A31-4EC4-A6EC-8FCA9933B302 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-mini-(A17-Pro)-iOS-26.5.png
+Traceback (most recent call last):
+  File "/Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/measure-home-indicator.py", line 91, in <module>
+    main()
+  File "/Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/measure-home-indicator.py", line 74, in main
+    assert points, ('No visible home indicator', name, str(screenshot))
+           ^^^^^^
+AssertionError: ('No visible home indicator', 'iPad mini (A17 Pro)', '/Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-mini-(A17-Pro)-iOS-26.5.png')

@@ -1,0 +1,70 @@
+{
+  "assetLogicalSize" : [
+    176,
+    96
+  ],
+  "buildTransition" : {
+    "passed" : true,
+    "slotBoxPoints" : [
+      55.555416666666666,
+      30.373020833333332
+    ],
+    "slotIndex" : 0,
+    "towerCount" : 1,
+    "transition" : "Available hammer marker changes to existing ground after real select\/arm\/confirm build"
+  },
+  "captures" : [
+    {
+      "density" : 1,
+      "file" : "level_15_charleston-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "level_15_charleston-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "level_01_battle_road-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "level_01_battle_road-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "level_15_charleston-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604
+    },
+    {
+      "density" : 3,
+      "file" : "level_15_charleston-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604
+    },
+    {
+      "density" : 1,
+      "file" : "level_01_battle_road-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604
+    },
+    {
+      "density" : 3,
+      "file" : "level_01_battle_road-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604
+    }
+  ],
+  "device" : "iPhone",
+  "passed" : true,
+  "runID" : "52a86097-be2f-4ffd-a31c-ec8a80505dcf",
+  "systemVersion" : "26.6.1"
+}

@@ -1,0 +1,276 @@
+{
+  "levels" : [
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "total" : 6
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "total" : 8
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "total" : 8
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "total" : 8
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "total" : 9
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "total" : 10
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "total" : 10
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "total" : 11
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "total" : 12
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "total" : 12
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "total" : 13
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "total" : 15
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "total" : 15
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "total" : 14
+    },
+    {
+      "displayedWaveNumbers" : [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "total" : 15
+    }
+  ],
+  "passed" : true
+}

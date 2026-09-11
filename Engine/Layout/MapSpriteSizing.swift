@@ -4,6 +4,11 @@ public struct MapSpriteScale: Equatable {
     public let projectionScale: CGFloat
     public let playableHeightOnScreen: CGFloat
 
+    public init(runtimeCanvas: RuntimeCanvas) {
+        projectionScale = runtimeCanvas.scaleFactor
+        playableHeightOnScreen = runtimeCanvas.playAreaRect.height
+    }
+
     public init(playArea: CGRect, viewSize: CGSize) {
         guard playArea.width > 0, playArea.height > 0,
               viewSize.width > 0, viewSize.height > 0 else {
@@ -87,6 +92,11 @@ public enum MapSpriteSizing {
 
     public static let walker = SpriteHeight(mapPixels: 58.04)
     public static let meleeUnit = SpriteHeight(mapPixels: 55.26)
+    // A 25.6-point calibration unit at minimum size. The exit view accounts
+    // for the crown's cropped bounds while preserving face scale. The visible
+    // crown is centered on the authored exit point.
+    public static let exitMarker = SpriteHeight(
+        mapPixels: 25.6 * SpriteHeight.referenceMapHeight / SpriteHeight.smallestPlayableHeight)
     public static let heroMapHeight: CGFloat = 87.06
     // Fallback for future assets; the current roster uses HeroSpriteProfile.
     public static let hero = SpriteHeight(mapPixels: heroMapHeight)

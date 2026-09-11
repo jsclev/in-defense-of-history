@@ -1,0 +1,74 @@
+{
+  "error" : {
+    "code" : 3002,
+    "domain" : "com.apple.dt.CoreDeviceError",
+    "userInfo" : {
+      "NSLocalizedDescription" : {
+        "string" : "Failed to install the app on the device."
+      },
+      "NSURL" : {
+        "url" : "file:///tmp/td-runtime-canvas-device-build/Build/Products/Debug-iphoneos/Liberty%20Line.app/"
+      },
+      "NSUnderlyingError" : {
+        "error" : {
+          "code" : 14,
+          "domain" : "IXUserPresentableErrorDomain",
+          "userInfo" : {
+            "NSLocalizedDescription" : {
+              "string" : "Unable to Install “Liberty Line”"
+            },
+            "NSLocalizedFailureReason" : {
+              "string" : "This app cannot be installed because its integrity could not be verified."
+            },
+            "NSLocalizedRecoverySuggestion" : {
+              "string" : "Failed to verify code signature of /var/installd/Library/Caches/com.apple.mobile.installd.staging/temp.UZgYLr/extracted/Liberty Line.app : 0xe800801c (No code signature found.)"
+            },
+            "NSUnderlyingError" : {
+              "error" : {
+                "code" : 13,
+                "domain" : "MIInstallerErrorDomain",
+                "userInfo" : {
+                  "FunctionName" : {
+                    "string" : "+[MICodeSigningVerifier _validateSignatureAndCopyInfoForURL:withOptions:error:]"
+                  },
+                  "LegacyErrorString" : {
+                    "string" : "ApplicationVerificationFailed"
+                  },
+                  "LibMISErrorNumber" : {
+                    "int" : -402620388
+                  },
+                  "NSLocalizedDescription" : {
+                    "string" : "Failed to verify code signature of /var/installd/Library/Caches/com.apple.mobile.installd.staging/temp.UZgYLr/extracted/Liberty Line.app : 0xe800801c (No code signature found.)"
+                  },
+                  "SourceFileLine" : {
+                    "int" : 80
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "install",
+      "app",
+      "--device",
+      "00008130-000161D93E82001C",
+      "/private/tmp/td-runtime-canvas-device-build/Build/Products/Debug-iphoneos/Liberty Line.app",
+      "--json-output",
+      "Tools/reports/range-grass-contrast-2026-09-09/install.json"
+    ],
+    "commandType" : "devicectl.device.install.app",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "failed",
+    "version" : "518.33"
+  }
+}

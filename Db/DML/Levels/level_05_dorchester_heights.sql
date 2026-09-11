@@ -16,20 +16,6 @@ INSERT INTO level_info (
     'level_005_dorchester_heights'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('01a825db-9975-5479-8542-49edcef5e8f9', '17914ebc-7052-490d-b606-afc1746da512', 888.0, 1122.4),
-('621fccee-8a7b-5e9d-b374-26c8b69284eb', '17914ebc-7052-490d-b606-afc1746da512', 1105.0, 1062.2),
-('3c489954-9582-5869-b6d4-97efe381f5cc', '17914ebc-7052-490d-b606-afc1746da512', 927.6, 938.2),
-('23e3f010-0f02-563a-b37a-b69d39b543a0', '17914ebc-7052-490d-b606-afc1746da512', 1142.9, 896.8),
-('be691319-f391-5ede-b01c-658d24a6490b', '17914ebc-7052-490d-b606-afc1746da512', 1046.5, 757.4),
-('46102173-2fff-5810-80d2-c9d63c722b5e', '17914ebc-7052-490d-b606-afc1746da512', 1813.0, 1075.9),
-('20ecfaa2-2736-5bce-a817-3f0ac0fe4b8c', '17914ebc-7052-490d-b606-afc1746da512', 2024.8, 962.3),
-('aa72be36-0387-58ec-97f8-98d224328298', '17914ebc-7052-490d-b606-afc1746da512', 1794.0, 907.2),
-('0cf5c60a-7d85-5eae-9936-542120500e63', '17914ebc-7052-490d-b606-afc1746da512', 2086.8, 826.2),
-('b73edb4d-0b4e-58ec-a6de-3e226d669761', '17914ebc-7052-490d-b606-afc1746da512', 1893.9, 755.7);
-
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

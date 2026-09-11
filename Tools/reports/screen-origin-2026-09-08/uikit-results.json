@@ -1,0 +1,524 @@
+[
+  {
+    "frames": {
+      "hud": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        84,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        -3,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        -3,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        -10,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-0-wave-true",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        84,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        -3,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        -3,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        -10,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-0-wave-false",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        84,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        -3,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        -3,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        -10,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-0-wave-true",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        84,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        -3,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        -3,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        -10,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-1-wave-true",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        84,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        -3,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        -3,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        -10,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-1-wave-false",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        -10,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        84,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        -3,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        -3,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        -10,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-1-wave-true",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        0,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        0,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        94,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        7,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        7,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        0,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-2-wave-true",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        0,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        0,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        94,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        7,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        7,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        0,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-2-wave-false",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  },
+  {
+    "frames": {
+      "hud": [
+        0,
+        0,
+        874,
+        402
+      ],
+      "map": [
+        0,
+        0,
+        874,
+        402
+      ],
+      "map-marker": [
+        94,
+        94,
+        12,
+        12
+      ],
+      "pause": [
+        771,
+        7,
+        44,
+        44
+      ],
+      "speed": [
+        719,
+        7,
+        44,
+        44
+      ],
+      "stage": [
+        0,
+        0,
+        874,
+        402
+      ]
+    },
+    "measured": [
+      874,
+      402
+    ],
+    "measuredBottom": 20,
+    "measuredTop": 0,
+    "phase": "mode-2-wave-true",
+    "runID": "be1d8174-3ede-4a11-8bba-f689165bd9ef",
+    "safeInsets": [
+      0,
+      62,
+      20,
+      62
+    ],
+    "window": [
+      874,
+      402
+    ]
+  }
+]

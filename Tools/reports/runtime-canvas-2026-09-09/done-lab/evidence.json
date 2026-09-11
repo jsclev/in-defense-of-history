@@ -1,0 +1,84 @@
+{
+  "generated_at": "2026-09-09T06:55:54.918227+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HudSizing.swift",
+      "sha256": "601a9ee47d86df51138245ee1ec58cc175d5fbf5efbe712ca61498ab4beeed2d"
+    }
+  ],
+  "assets": [
+    {
+      "id": "done-button",
+      "minimum_box_pt": 35.65,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              974,
+              387
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              974,
+              387
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              974,
+              387
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        35.558,
+        35.558
+      ],
+      "opaque_edge_touch_frames": [
+        "done"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png",
+      "sha256": "d7aed612179b0c8598640c1d63dfc362002935ed99f0d0ffd1ec49a44ba77745",
+      "dimensions": [
+        974,
+        387
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png",
+      "sha256": "f2c51dbbabe573b2383595b222d7991cdfdc7395b0bfed51e996fcd4f0df52b9"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_overlay.png",
+      "sha256": "d0237f9729cd8f9b7e23f77f6fde9485eb0dab6f1660ade57e7384335f1e854c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png",
+      "sha256": "cc93bf4d9567eca1f9683cbb71d13a01f77043198890bf322e5ca5eb07f5bf4d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png",
+      "sha256": "e56a386b796ef34f9cedb76c9004108f406c95b8dc46258703b893da144c1b60"
+    }
+  ]
+}

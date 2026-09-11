@@ -1,0 +1,173 @@
+{
+  "assetLogicalSize" : [
+    128,
+    128
+  ],
+  "captures" : [
+    {
+      "buttonPoints" : 44,
+      "countdownFontPoints" : 12.869999999999999,
+      "density" : 1,
+      "file" : "charleston-device@1x.png",
+      "points" : [
+        852,
+        393
+      ],
+      "pulsePoints" : [
+        41.359999999999999,
+        47.520000000000003
+      ]
+    },
+    {
+      "buttonPoints" : 44,
+      "countdownFontPoints" : 12.869999999999999,
+      "density" : 2,
+      "file" : "charleston-device@2x.png",
+      "points" : [
+        852,
+        393
+      ],
+      "pulsePoints" : [
+        41.359999999999999,
+        47.520000000000003
+      ]
+    },
+    {
+      "buttonPoints" : 44,
+      "countdownFontPoints" : 12.869999999999999,
+      "density" : 3,
+      "file" : "charleston-device@3x.png",
+      "points" : [
+        852,
+        393
+      ],
+      "pulsePoints" : [
+        41.359999999999999,
+        47.520000000000003
+      ]
+    },
+    {
+      "buttonPoints" : 44,
+      "countdownFontPoints" : 12.869999999999999,
+      "density" : 1,
+      "file" : "charleston-minimum@1x.png",
+      "points" : [
+        604.44444444444446,
+        340
+      ],
+      "pulsePoints" : [
+        41.359999999999999,
+        47.520000000000003
+      ]
+    },
+    {
+      "buttonPoints" : 44,
+      "countdownFontPoints" : 12.869999999999999,
+      "density" : 2,
+      "file" : "charleston-minimum@2x.png",
+      "points" : [
+        604.44444444444446,
+        340
+      ],
+      "pulsePoints" : [
+        41.359999999999999,
+        47.520000000000003
+      ]
+    },
+    {
+      "buttonPoints" : 44,
+      "countdownFontPoints" : 12.869999999999999,
+      "density" : 3,
+      "file" : "charleston-minimum@3x.png",
+      "points" : [
+        604.44444444444446,
+        340
+      ],
+      "pulsePoints" : [
+        41.359999999999999,
+        47.520000000000003
+      ]
+    }
+  ],
+  "countdownFixtures" : [
+    "manual\/no badge",
+    "13s (maximum authored countdown)",
+    "1s"
+  ],
+  "device" : "iPhone",
+  "manualStart" : {
+    "firstCallStartsWaveOnce" : true,
+    "note" : "Invoked the real runner action; this is not a physical double-tap gesture test.",
+    "passed" : true,
+    "prematureRepeatedCallIgnored" : true
+  },
+  "passed" : true,
+  "pulseFrames" : [
+    {
+      "elapsedSeconds" : 0.010784458339912817,
+      "file" : "pulse-00@1x.png"
+    },
+    {
+      "elapsedSeconds" : 0.14522016666887794,
+      "file" : "pulse-01@1x.png"
+    },
+    {
+      "elapsedSeconds" : 0.29333895833406132,
+      "file" : "pulse-02@1x.png"
+    },
+    {
+      "elapsedSeconds" : 0.4433253333409084,
+      "file" : "pulse-03@1x.png"
+    },
+    {
+      "elapsedSeconds" : 0.59052833334135357,
+      "file" : "pulse-04@1x.png"
+    },
+    {
+      "elapsedSeconds" : 0.73585758333501872,
+      "file" : "pulse-05@1x.png"
+    },
+    {
+      "elapsedSeconds" : 0.88506450000568293,
+      "file" : "pulse-06@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.0355795416689944,
+      "file" : "pulse-07@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.1841830000048503,
+      "file" : "pulse-08@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.3353904166724533,
+      "file" : "pulse-09@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.4842362916679122,
+      "file" : "pulse-10@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.6357436250109458,
+      "file" : "pulse-11@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.7857429166760994,
+      "file" : "pulse-12@1x.png"
+    },
+    {
+      "elapsedSeconds" : 1.9281478750053793,
+      "file" : "pulse-13@1x.png"
+    },
+    {
+      "elapsedSeconds" : 2.0741207916726125,
+      "file" : "pulse-14@1x.png"
+    },
+    {
+      "elapsedSeconds" : 2.2202307083352935,
+      "file" : "pulse-15@1x.png"
+    }
+  ],
+  "runID" : "e2ea4dc8-5c97-433d-884d-0c18b878f44f",
+  "systemVersion" : "26.6.1"
+}

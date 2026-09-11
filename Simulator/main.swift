@@ -578,7 +578,7 @@ do {
         throw DbError.Db(message: "Unable to get level info id")
     }
 
-    let levelInfo = try store.db.levelInfoDao.getBy(id: levelInfoId)
+    let levelInfo = try store.db.levelLoader.load(id: levelInfoId)
 
     let minutemanPost = TowerType(
         id: UUID(),

@@ -1,0 +1,57 @@
+{
+  "cobalt": {
+    "hex": "#3159D9",
+    "luminance": 0.12807478974525197,
+    "contrast_percentiles": [
+      1.6077535027274696,
+      2.4236488802703393,
+      3.277221779640596
+    ]
+  },
+  "blue-violet": {
+    "hex": "#6352D9",
+    "luminance": 0.13696989607511498,
+    "contrast_percentiles": [
+      1.5312645135416112,
+      2.3083436094817364,
+      3.1213077164229825
+    ]
+  },
+  "violet": {
+    "hex": "#7447CC",
+    "luminance": 0.12579113650807827,
+    "contrast_percentiles": [
+      1.628639376520727,
+      2.4551338215543246,
+      3.3197952465097202
+    ]
+  },
+  "sky-blue": {
+    "hex": "#338CFF",
+    "luminance": 0.2667997436382089,
+    "contrast_percentiles": [
+      1.0356785616270496,
+      1.368563878418161,
+      1.8421434710014497
+    ]
+  },
+  "cyan": {
+    "hex": "#67DFFF",
+    "luminance": 0.6287891702389539,
+    "contrast_percentiles": [
+      1.1631256470796751,
+      1.5727611099370293,
+      2.370898708393459
+    ]
+  },
+  "selected-blue-violet": {
+    "hex": "#5842C7",
+    "luminance": 0.10094657640135857,
+    "contrast_percentiles": [
+      1.896699970187663,
+      2.8592285764923893,
+      3.8662061324685144
+    ],
+    "basis": "Hue separation from yellow-green plus a darker value; numerical comparison is not a perceptual pass."
+  }
+}

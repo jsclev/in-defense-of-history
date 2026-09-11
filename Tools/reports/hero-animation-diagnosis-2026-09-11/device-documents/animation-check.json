@@ -1,0 +1,325 @@
+{
+  "compiledPixelComparisons" : 26,
+  "cycleSeconds" : 0.41999999999999998,
+  "directions" : 8,
+  "limitation" : "Physical iPhone executes production pose\/publish and HeroMapLayer with deterministic movement samples. Frozen world anchors isolate gait; this does not measure live display-link performance or touch input.",
+  "passed" : true,
+  "pixelChecks" : [
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.079894179894179893,
+      "name" : "hero_unit_george_washington_walk_e_0",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.085864197530864203,
+      "name" : "hero_unit_george_washington_walk_e_4",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.081256613756613763,
+      "name" : "hero_unit_george_washington_walk_e_8",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.082940917107583778,
+      "name" : "hero_unit_george_washington_walk_e_12",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.083209876543209882,
+      "name" : "hero_unit_george_washington_walk_e_15",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.096397707231040561,
+      "name" : "hero_unit_george_washington_walk_se_0",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.10074514991181657,
+      "name" : "hero_unit_george_washington_walk_se_4",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.098271604938271612,
+      "name" : "hero_unit_george_washington_walk_se_8",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.10018518518518518,
+      "name" : "hero_unit_george_washington_walk_se_12",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        210,
+        270
+      ],
+      "meanByteDifference" : 0.10097442680776014,
+      "name" : "hero_unit_george_washington_walk_se_15",
+      "sourcePixels" : [
+        210,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.089849887766554434,
+      "name" : "hero_unit_henry_knox_walk_e_0",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.088811728395061726,
+      "name" : "hero_unit_henry_knox_walk_e_8",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.078395061728395068,
+      "name" : "hero_unit_henry_knox_walk_e_16",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.089130892255892255,
+      "name" : "hero_unit_henry_knox_walk_e_24",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.090172558922558918,
+      "name" : "hero_unit_henry_knox_walk_e_32",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.095654461279461284,
+      "name" : "hero_unit_henry_knox_walk_e_40",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.094104236812570144,
+      "name" : "hero_unit_henry_knox_walk_e_48",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.097565937149270476,
+      "name" : "hero_unit_henry_knox_walk_e_56",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.10925925925925926,
+      "name" : "hero_unit_henry_knox_walk_se_0",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.10849116161616161,
+      "name" : "hero_unit_henry_knox_walk_se_8",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.10310746352413019,
+      "name" : "hero_unit_henry_knox_walk_se_16",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.11496562850729518,
+      "name" : "hero_unit_henry_knox_walk_se_24",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.10994318181818181,
+      "name" : "hero_unit_henry_knox_walk_se_32",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.12450897867564534,
+      "name" : "hero_unit_henry_knox_walk_se_40",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.11698933782267115,
+      "name" : "hero_unit_henry_knox_walk_se_48",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    },
+    {
+      "compiledPixels" : [
+        264,
+        270
+      ],
+      "meanByteDifference" : 0.1255331088664422,
+      "name" : "hero_unit_henry_knox_walk_se_56",
+      "sourcePixels" : [
+        264,
+        270
+      ]
+    }
+  ],
+  "playableHeight" : 339.75,
+  "runID" : "e59bcbc0-96b3-48d0-ae2c-71364e60ed1d",
+  "samplesPerDirection" : 126,
+  "uniqueImages" : 640
+}

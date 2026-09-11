@@ -16,20 +16,6 @@ INSERT INTO level_info (
     'level_004_moores_creek_bridge'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('a87a65d5-0ab2-582f-b09a-6bdd4648919a', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 967.2, 1370.3),
-('5fd17939-5fe4-59eb-bf67-93c1ff3e12ab', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 717.5, 1268.7),
-('4f774b6d-b894-5f8e-8bbd-3d41402b6151', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 924.1, 1272.2),
-('4094b2ee-64f3-5877-8213-af5cd47107d5', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 1139.5, 1168.8),
-('223bf305-785d-582e-9275-9fe220897ae6', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 944.8, 1103.5),
-('911f3f6e-69d3-5e9a-9daa-24476940b1ea', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 1974.8, 995.0),
-('c5905355-de92-557b-92d3-ac53498f5b60', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 1845.7, 957.1),
-('c9933b2f-aa99-543f-9d48-33e942143876', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 1819.8, 843.5),
-('3492e42f-bcc3-587e-b5e3-3901475fee33', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 1509.8, 829.7),
-('18e84b0d-6f60-59ad-8bbc-dac56c951005', '4cbeebf1-cd0c-4818-84b1-cb62f246d1ed', 1668.2, 774.6);
-
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

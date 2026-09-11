@@ -1,0 +1,207 @@
+{
+  "reference_height": 340,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    "Production HudStatsView, minimum runtime canvas: {'fixture': 'minimum', 'font': 15.174500000000002, 'height': 59.020125, 'state': 'start', 'width': 197.4505745142857}. macOS SwiftUI renderer with explicit value fixtures; not device gameplay."
+  ],
+  "assets": [
+    {
+      "id": "minimum-start",
+      "label": "minimum-start",
+      "animated": false,
+      "map_height": 59.020125,
+      "files": {
+        "minimum-start": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-start@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-start@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-start@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/minimum-start-1x.png",
+          "boxes": {
+            "minimum-start": [
+              1,
+              1,
+              198,
+              60
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/minimum-start-2x.png",
+          "boxes": {
+            "minimum-start": [
+              1,
+              1,
+              395,
+              119
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/minimum-start-3x.png",
+          "boxes": {
+            "minimum-start": [
+              1,
+              1,
+              593,
+              178
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "minimum-start"
+          ],
+          "walk": [
+            "minimum-start"
+          ]
+        }
+      }
+    },
+    {
+      "id": "minimum-end",
+      "label": "minimum-end",
+      "animated": false,
+      "map_height": 59.020125,
+      "files": {
+        "minimum-end": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-end@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-end@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-end@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/minimum-end-1x.png",
+          "boxes": {
+            "minimum-end": [
+              1,
+              1,
+              198,
+              60
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/minimum-end-2x.png",
+          "boxes": {
+            "minimum-end": [
+              1,
+              1,
+              395,
+              119
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/minimum-end-3x.png",
+          "boxes": {
+            "minimum-end": [
+              1,
+              1,
+              593,
+              178
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "minimum-end"
+          ],
+          "walk": [
+            "minimum-end"
+          ]
+        }
+      }
+    },
+    {
+      "id": "minimum-wide",
+      "label": "minimum-wide",
+      "animated": false,
+      "map_height": 59.020125,
+      "files": {
+        "minimum-wide": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-wide@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-wide@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-wide@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/minimum-wide-1x.png",
+          "boxes": {
+            "minimum-wide": [
+              1,
+              1,
+              198,
+              60
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/minimum-wide-2x.png",
+          "boxes": {
+            "minimum-wide": [
+              1,
+              1,
+              395,
+              119
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/minimum-wide-3x.png",
+          "boxes": {
+            "minimum-wide": [
+              1,
+              1,
+              593,
+              178
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "minimum-wide"
+          ],
+          "walk": [
+            "minimum-wide"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": []
+}

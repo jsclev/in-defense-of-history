@@ -1,0 +1,2292 @@
+{
+  "files": [
+    {
+      "path": "Engine/Combat/TargetCommand.swift",
+      "sha256": "fc927c1bbc12e26022bae29693c276600fb2b0598900f362f93316da28ecb17d",
+      "lines": 94,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/Constants.swift",
+      "sha256": "99dffa4d0a96940ee5deb717393875118739136b0e627ac8f19f40e3e14864f3",
+      "lines": 29,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/Enums.swift",
+      "sha256": "65db6e9cf059cda454f1542a36a279f82bc8a18155a65494c82689df4dcc4a8d",
+      "lines": 1235,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/GameError.swift",
+      "sha256": "35ba772eb1f276dea04e0d1da423d71c9cc38dc8703f87c06b95a7e30df2835f",
+      "lines": 14,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/GameIdentity.swift",
+      "sha256": "bea1051fde4a0478ae94f5c7f56015843a696f5e8ae0935bdd2ca0eb7068aad5",
+      "lines": 26,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/RuntimeCanvas.swift",
+      "sha256": "7e7415ea4c62aba525c30c63c877c5204920ecdab34edc7bd4aecc22fb302fa4",
+      "lines": 130,
+      "render_declarations": [
+        {
+          "line": 7,
+          "source": "public struct RuntimeCanvas {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/Store.swift",
+      "sha256": "7334404e26a55f210166621b1e5ee429609964198a433bc42fc0ebbadbdb38d9",
+      "lines": 20,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Core/Timer.swift",
+      "sha256": "62eebf01a0d156280ed9797018deaafc51e308ac835d4526a095f2337ab7e930",
+      "lines": 161,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Debug/DebugLayoutGuidesView.swift",
+      "sha256": "0fdb9c46443ea5508085e3719e386e5e0989ca22796e30e28a0b82d769527742",
+      "lines": 67,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "public struct DebugLayoutGuidesView: View {"
+        }
+      ],
+      "geometry_sites": [
+        54,
+        55
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Debug/HapticAuditionPlayer.swift",
+      "sha256": "20e81a39e91cef2396b73fe34fcacec700fae4f5974a806cab5d10673afe66e3",
+      "lines": 174,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Design/Blueprints.swift",
+      "sha256": "0ccda764def446e18f3e3e01c1e6cd383aebef719992a5772a6e1f0c37b9adc5",
+      "lines": 185,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Design/DesignArsenal.swift",
+      "sha256": "eb32632d6fb85bb3b7189d89c9151ba18c2948d0075a03f201c303737970b03f",
+      "lines": 60,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Design/DesignRoster.swift",
+      "sha256": "637e7c72b4f053e35363389d72921059c7983ac3403072edd4fa7f45d7c3abaa",
+      "lines": 100,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Design/LevelBlueprint.swift",
+      "sha256": "a99ee8e163db93ecfcf718b0efb2aa7060b465bac49a48122d98f29cc2dee2b1",
+      "lines": 146,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Design/VirtualCanvas.swift",
+      "sha256": "98d186a9001117e86cd49f3f427a55b5529c5e33497213e053f852a4ebd31ee2",
+      "lines": 138,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/CallWaveButtonLayout.swift",
+      "sha256": "60271a61a1f6d6d1fd6ce6f28fdabf8a7993d30717dddeed98b8adbc4f94a8f9",
+      "lines": 34,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/HeroBarLayout.swift",
+      "sha256": "9d940d954c4b02bcd845593ef29c3f24b17461fa254dd83d8dae578d02b69861",
+      "lines": 28,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/HeroSpriteProfile.swift",
+      "sha256": "ffefa33dfff13c2527ad8fe41a53358f87ffe953776dff22aba94ad155e05d50",
+      "lines": 48,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/HudElementLayouts.swift",
+      "sha256": "097c3bf9d062efe57f73539b43d2c82243f30a50074241350c4f9e740f045ca5",
+      "lines": 178,
+      "render_declarations": [],
+      "geometry_sites": [
+        31,
+        141,
+        159,
+        173
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/HudLayoutConfig.swift",
+      "sha256": "9b1248f8e3165c0a4c29d8e8c4dc0193da9d25822aaf2e174c898a4eb17bb682",
+      "lines": 76,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/HudPlacementSolver.swift",
+      "sha256": "298f1ba7d982fcfdcbf654df45ce9cfce1886240f4d82770116387caa9ab8bf1",
+      "lines": 80,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/HudSizing.swift",
+      "sha256": "601a9ee47d86df51138245ee1ec58cc175d5fbf5efbe712ca61498ab4beeed2d",
+      "lines": 135,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/LevelViewport.swift",
+      "sha256": "dc2699f3b0914abb0ba232d92a9af3b93a01b692b7c9b9ab79770b10c60da22c",
+      "lines": 36,
+      "render_declarations": [
+        {
+          "line": 7,
+          "source": "public struct LevelViewport<MapContent: View, InterfaceContent: View, PresentationContent: View>: View {"
+        }
+      ],
+      "geometry_sites": [
+        25,
+        27,
+        30,
+        33
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "77b7849a44b72eddc74644a349be0f33b5153abde0d530bed1d29586feb59b92",
+      "lines": 106,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/MenuContentLayout.swift",
+      "sha256": "2b0d49eb5e70e7bca40b9f5ad740448d1f3295c36377fad87dc3b7e861d455dc",
+      "lines": 14,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/PresentationStack.swift",
+      "sha256": "703314d6dea889537e46b727159eb540a22810b4cfaefd1e4de551af193cd275",
+      "lines": 27,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/RuntimeCanvasView.swift",
+      "sha256": "fb32709b6719bd13e7b65d3d4146d1ab882ee68cc342ca4c3af94db7eb0a4b20",
+      "lines": 21,
+      "render_declarations": [
+        {
+          "line": 5,
+          "source": "public struct RuntimeCanvasView<Content: View>: View {"
+        }
+      ],
+      "geometry_sites": [
+        16,
+        18
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/ScreenCanvas.swift",
+      "sha256": "20e0da01db499062ac913bc019f39ca1cdb74204e804db38a3a8309d7178f4d2",
+      "lines": 23,
+      "render_declarations": [
+        {
+          "line": 6,
+          "source": "public struct ScreenCanvas<Content: View>: View {"
+        },
+        {
+          "line": 16,
+          "source": "GeometryReader { _ in"
+        }
+      ],
+      "geometry_sites": [
+        16
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/StackLayout.swift",
+      "sha256": "dc35f531940a427f02cf1452586277a2644d50724522e6f9ba1025fc005bde7b",
+      "lines": 38,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/TowerMenuLayout.swift",
+      "sha256": "4f38afb2285ad1f3c6ba9c5200a7fd090f454b87a2daeca59c26931987f97d76",
+      "lines": 159,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be",
+      "lines": 20,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Logging/LogCategory.swift",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Logging/LogUtility.swift",
+      "sha256": "8e25c532a8c3a5b6997ad61e6cb636a46a2269034b4e900a292d10e18d6212b4",
+      "lines": 19,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/CallWaveButtonPosition.swift",
+      "sha256": "2c17a209b443a7b0627d7bbbb2dbd1d703220325ff0621dab7a230d3047d4885",
+      "lines": 27,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Campaign.swift",
+      "sha256": "38af620dc95c05105b6c04bf8cfc5529fbd1aeb0caeb5bea0ba2f7a8abd15d75",
+      "lines": 12,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/CampaignLevel.swift",
+      "sha256": "ead355f74f8f1a9ae2686393631bb5646099b7b45baf17d26669b15924be2be1",
+      "lines": 19,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/CommanderPolicy.swift",
+      "sha256": "cd2032ac05e77e712225e210df680b69e908f4b93f4e172429c65dd3bb04bf97",
+      "lines": 58,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/ContentCatalog.swift",
+      "sha256": "99abbe9b87d4c43bf69692d82cdd3b7176cc47217c4ae95c220f2e4903478ee0",
+      "lines": 49,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Core.swift",
+      "sha256": "6299d98e29be8cdd82927618364b68a1eac18a8e2c37ece12b234e4086f811c6",
+      "lines": 151,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Difficulty.swift",
+      "sha256": "5fa9d1bfe67cd70ec6986bbe52ed41f9c36e1d4670770294afbc8895dc91630e",
+      "lines": 18,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Enemy.swift",
+      "sha256": "484b919c3d29b6fe3cfc90c61c8f937d28530b5f685703eb955bfc6d189c08bf",
+      "lines": 53,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/EnemyEscapeHapticPolicy.swift",
+      "sha256": "eed8431314075209dccd14369e3d7af666561cdad07dde9817184dc119d6f573",
+      "lines": 29,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/EnemyType.swift",
+      "sha256": "5ae993c8f46ac585636863cc4a2b38da684c67b267710a52f8f42ba853a3b3e2",
+      "lines": 19,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Engine.swift",
+      "sha256": "49f0b46639d1fe3a6bcac8d1e8f9c3105d2a37a2ff693f098ed9bedefb640f58",
+      "lines": 15,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/GameplayHapticPattern.swift",
+      "sha256": "88ae7a33594f94b4a71d88bcc21f7a2a1fdd717a755dc12ddd68e83eba81ee4d",
+      "lines": 59,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/HapticAuditionSample.swift",
+      "sha256": "e6eb638e104715741edd0c99965cf90f58a8f8286a5a40b85d1bf265db62c458",
+      "lines": 126,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Hero.swift",
+      "sha256": "bb1e52fd96906f4651e8a01cf1dabb9712e692c753b6a042a7524373a1223abd",
+      "lines": 62,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/LevelHero.swift",
+      "sha256": "4f00d6e6cd4939f33218c0522f333f5e0431ffee24fabe704728363624b3a4f0",
+      "lines": 46,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/LevelInfo.swift",
+      "sha256": "49e7deda6e919a5eace46c54668cf6c152f7843e9db10646f290b9955437d5c8",
+      "lines": 46,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/MeleeFormation.swift",
+      "sha256": "1c87ef16dbac204401a3e6b36d2c4dd7dd3a50eb53614d370c7d39af4e1d7c41",
+      "lines": 27,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/MilitiaAI.swift",
+      "sha256": "b5f06bc385251924bef9b7d1a50fff37d79d0c1faa0bb7e0d80ce1b7b1e1b930",
+      "lines": 121,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Outcome.swift",
+      "sha256": "51d3439df060f07dd0c7fce0205ee7a54b9276d8ea62a2c6e7643a4554b7c442",
+      "lines": 5,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Path.swift",
+      "sha256": "6dcfa45f94fa4cd6556a6cd5446808824a564e2a6d016bb160e60b0ee12c9d04",
+      "lines": 71,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/ReinforcementConfig.swift",
+      "sha256": "c5b4aca1b418c7f473ecd9a5359b5acf18fbd5aeb52bbe3788162462f6d66175",
+      "lines": 18,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/ReinforcementSchedule.swift",
+      "sha256": "a594f3e4972d6488b20a11af8b5c114a06aed27292f38fa4d3b9e4232bf3d206",
+      "lines": 46,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Report.swift",
+      "sha256": "d6f6ef0e8e16554f896d09d41d1d725e198cbad694d2febc7fbb5f16a5e5778c",
+      "lines": 112,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Simulation.swift",
+      "sha256": "bb38b2657b56310147bb812c6a553284c0650d4c0f76a8d0cb3fe0fa3b985c17",
+      "lines": 864,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/SpawnEntry.swift",
+      "sha256": "8642ae11fc0b11f2303da91073a0dafbd57617abdc0f083fee6c37e4f1815fd8",
+      "lines": 17,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Stats.swift",
+      "sha256": "328b9e4872d2201c7020f7641f88ed205533411fef6be170ffd17e9592c62970",
+      "lines": 49,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Tower.swift",
+      "sha256": "2fe32b6e5bcdb7da2be6a0d2edef8c2697eae1b29d39d25dc81031b6ea555f90",
+      "lines": 127,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/TowerKind.swift",
+      "sha256": "19bd1318c7b8349a2a3f02a298cec7898cf77c7f13bd80efef13dcd6895f2894",
+      "lines": 76,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/TowerSlot.swift",
+      "sha256": "2c52f4209f4c39bba8efda1e71b46a1bc6a2a26586459d94294799b64e523f4c",
+      "lines": 16,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Traits.swift",
+      "sha256": "8acdf9b03c79f1312e05b189433522c619474de1ba2af14c2ac54f172bc25d9e",
+      "lines": 98,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/UnitFacing.swift",
+      "sha256": "d6e61bec08fb2b7ace2d10a223cf8fd1fc82e1b202f8d947315e858dd172b8ae",
+      "lines": 126,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/Wave.swift",
+      "sha256": "251e3f5802aac6fe0c17b6944dabcac9d9949419b3f451568021377b43e62af6",
+      "lines": 23,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Models/WaveStartSchedule.swift",
+      "sha256": "615daa7612a23688cc4d08f2a34a76bda96b245b6d5cab5a569c1c9d67cbcbcd",
+      "lines": 77,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/BaseDAO.swift",
+      "sha256": "a8d10722da605c9ccd54cec082432141a9adedb9a3ca2abf3d23822711248de2",
+      "lines": 536,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/CampaignDAO.swift",
+      "sha256": "d6da455a61c6575f94733ec65455f9be85b5c4fae64644abf70ebc6bd07927b9",
+      "lines": 9,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/DifficultyDAO.swift",
+      "sha256": "f4c5e5a9e7838dfd6eb69d666e0b280499c8bb22acb560207c3367d2c51b14e4",
+      "lines": 106,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/EnemyTypeDAO.swift",
+      "sha256": "84b2859fa4d185cf8726c94e85c56d233a227d7d20218a0111dcacce980b17c2",
+      "lines": 89,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/HeroDAO.swift",
+      "sha256": "557cc51f0c3f354b6ee74a7186cadd24538b7929901fa52975e9f57ecf6db757",
+      "lines": 119,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/HudLayoutDAO.swift",
+      "sha256": "1014e1367b48e22a789a9503f84991c3f25efe4a10bbb38294f282b63e7a6318",
+      "lines": 72,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/LevelGeoJSONDAO.swift",
+      "sha256": "d687e52b257ef93afbe22f788ccbfa6368e1eacdc4b79f5374b410064e88193c",
+      "lines": 90,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/LevelHeroDAO.swift",
+      "sha256": "fcdc847d2d08deba417c904a099ada8d5a7bfac275f05948d6c54e97061a7455",
+      "lines": 60,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/LevelInfoDAO.swift",
+      "sha256": "8385201b68c659efb59b64416b68280956c9fb91500c0a1883a4e13a83079427",
+      "lines": 182,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/MeleeUnitDAO.swift",
+      "sha256": "80b12b9bb1ea70f3ecbc5d24aef00b4380affec120c2fccb0c9602e6f4e9cc33",
+      "lines": 49,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/PathDAO.swift",
+      "sha256": "f2ccbc9d9909549b1e64cf0c2801639a38d3442ab654ecb7dbf7269961bfe75d",
+      "lines": 60,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/ReinforcementConfigDAO.swift",
+      "sha256": "31d1ba132c801a691e81cb168f3c99ecb1e587db089cbd2d6d402a041297ef99",
+      "lines": 26,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/SimBoundsDAO.swift",
+      "sha256": "f49b519b9c4d8e4897775f58da0d774882879e36ca6b443b62697772ee11de29",
+      "lines": 161,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/SimEnemyTypeDAO.swift",
+      "sha256": "aabf1f0b1f7b5be8d48e89dbaba693e905c1bb6edee3fd8b331c1e92f2fbab9f",
+      "lines": 50,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/SimMeleeUnitDAO.swift",
+      "sha256": "ca733d72fc1362b6b1da118eb8a723fd6ac20b67cec3cc4204c1f4294214507a",
+      "lines": 52,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/SimulatorRunDAO.swift",
+      "sha256": "58e9578cd3f9c64e8f9e941da9a88e694362d0c22181cdf7994b2ed3ae310a02",
+      "lines": 273,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/TowerSlotDAO.swift",
+      "sha256": "42f7e5378c2f9640eb7dc319a54b27099cc8ceb578b35db8fa641bd9c9fdbb78",
+      "lines": 46,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/TowerTypeDAO.swift",
+      "sha256": "a85d39e43e562420c3eeddbc9b5c750e540b91f38077cd2b5f5fafd1bafac032",
+      "lines": 255,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/TowerUnlockDAO.swift",
+      "sha256": "bfe4bdd8bc34d54fae1917719580653e03e95f0b0a4c0e25e4de45c8d2e397f7",
+      "lines": 40,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/VirtualCanvasDAO.swift",
+      "sha256": "29441ea6a25b0366cfafd5e98dc787fbba3dc01c4096a23ce3903227e4bac64e",
+      "lines": 85,
+      "render_declarations": [
+        {
+          "line": 10,
+          "source": "public func get() throws -> VirtualCanvas {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Data Access Objects/WaveDAO.swift",
+      "sha256": "e8cbdc4cd06b83c9ea70551744b18951aa54b92b4589af70e519ad9866e8f346",
+      "lines": 98,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Db.swift",
+      "sha256": "62a1961fe8250bd9f4c75ec0f43c479b1b6f4691acbc10fa05ecd3b63b4dfa59",
+      "lines": 154,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/DbError.swift",
+      "sha256": "d48e9582bf846bf6ef5b6997bb9412ab2fb2b44326145682f550795617bbff8e",
+      "lines": 3,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/Repositories.swift",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/SQLite.swift",
+      "sha256": "c3f553566d5643bef053f1fc7af549e2194082a695163a396ba88827c6f9392e",
+      "lines": 201,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/SQLiteError.swift",
+      "sha256": "9f34a947baed0c4c43d3afa849e76e654c95b68b82918c48a64abb0a03bb1e1e",
+      "lines": 6,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Persistence/SeedContent.swift",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lines": 0,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Engine/Utilities/FileUtil.swift",
+      "sha256": "eba10efe1b9c2722c6e94c8064f38faa567b9db9b919c66b3aa558a1e27957e3",
+      "lines": 32,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignCompass.swift",
+      "sha256": "16500938cf1580d9bd8206c726a140242688109ad3d849257c0022ac7fa32733",
+      "lines": 56,
+      "render_declarations": [
+        {
+          "line": 44,
+          "source": "struct CampaignCompassView: View {"
+        }
+      ],
+      "geometry_sites": [
+        52,
+        53
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignDecor.swift",
+      "sha256": "8b90d0b50872f0e9fd3444f819df49216628a28139cda3973c9e5bd9d86cefaf",
+      "lines": 131,
+      "render_declarations": [
+        {
+          "line": 117,
+          "source": "struct CampaignDecorView: View {"
+        }
+      ],
+      "geometry_sites": [
+        125
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignMapAsset.swift",
+      "sha256": "50f7db3aa54c4ace3940f6ee4dcc6a7b7c4ddca59621a0a7071c5f3f8e81774f",
+      "lines": 14,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignMapLayout.swift",
+      "sha256": "61eec5bf8d79c51b45e821701edeacdf47fa258bf57ffd755e5240ef0c2d86ff",
+      "lines": 138,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignMapMetalView.swift",
+      "sha256": "cb9a47a7a407a47b6333a9e4d300d6e2edbcc3dddce43490d1a86bbf51ed5174",
+      "lines": 65,
+      "render_declarations": [
+        {
+          "line": 5,
+          "source": "struct CampaignMapMetalView: UIViewRepresentable {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignMapView.swift",
+      "sha256": "2d702f1b6446cf22b58b1e598a3178530a5757c05065701b54a8bbac2a9e8c0b",
+      "lines": 126,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct CampaignMapView: View {"
+        }
+      ],
+      "geometry_sites": [
+        45,
+        49,
+        71,
+        81,
+        84,
+        93
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignMarkers.swift",
+      "sha256": "cfad7254d53679f078e62a2afa376dfd8a2e74c7567b635dbee37cea381384c0",
+      "lines": 208,
+      "render_declarations": [
+        {
+          "line": 132,
+          "source": "struct CampaignLevelMarker: View {"
+        },
+        {
+          "line": 177,
+          "source": "struct CampaignMarkerTethers: Shape {"
+        },
+        {
+          "line": 196,
+          "source": "struct CampaignMarkerAnchors: View {"
+        }
+      ],
+      "geometry_sites": [
+        144,
+        149,
+        151,
+        153,
+        160,
+        164,
+        171,
+        204,
+        205
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignNode.swift",
+      "sha256": "9631a3f77179026d2df95189c3daee7e89bea5304f705b21e5c3b80344625ce7",
+      "lines": 30,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/CampaignRoute.swift",
+      "sha256": "ee789eb1d46decc72fe2f3b06bdd54e142c50c1ad8d34b117dfcc6124afac773",
+      "lines": 162,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/EncyclopediaView.swift",
+      "sha256": "6203a1e24590884ab5becdf0447ec76283004215410477c4c88c3919cde4cdfd",
+      "lines": 81,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct EncyclopediaView: View {"
+        }
+      ],
+      "geometry_sites": [
+        27,
+        42,
+        55,
+        56
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/HeroesView.swift",
+      "sha256": "2c4c940d515e701b6d162684dd51224f4b0877c9a3f4cefda03d0405931881d2",
+      "lines": 483,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct HeroesView: View {"
+        },
+        {
+          "line": 161,
+          "source": "private struct HeroSlot: View {"
+        },
+        {
+          "line": 334,
+          "source": "private struct MusketSteelFrame: View {"
+        },
+        {
+          "line": 393,
+          "source": "struct HeroDetailsView: View {"
+        }
+      ],
+      "geometry_sites": [
+        41,
+        65,
+        66,
+        68,
+        206,
+        209,
+        212,
+        225,
+        238,
+        246,
+        254,
+        257,
+        259,
+        292,
+        298,
+        299,
+        306,
+        310,
+        311,
+        312,
+        317,
+        327,
+        343,
+        344,
+        346,
+        347,
+        349,
+        350,
+        352,
+        353,
+        360,
+        368,
+        370,
+        413,
+        430,
+        436,
+        439,
+        442,
+        456,
+        460,
+        461,
+        473
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/HudMetrics.swift",
+      "sha256": "268dfb7e43be2de46761bdf72606de7f34e6d0c9a78f9bbda65ced6c5ea4066f",
+      "lines": 62,
+      "render_declarations": [
+        {
+          "line": 47,
+          "source": "struct HudIcon: View {"
+        }
+      ],
+      "geometry_sites": [
+        55
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Info.plist",
+      "sha256": "0c29fbc6c3aeb02f87ab56fb36ba6fddbbab56ec7a323b0c18c408a69fbfe7ef",
+      "lines": 15,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/CallWaveButtonLayer.swift",
+      "sha256": "40d9991b777c096691c0872d84e9f05cb30b0917d78879913caa04b1d4b1aaa7",
+      "lines": 23,
+      "render_declarations": [
+        {
+          "line": 5,
+          "source": "struct CallWaveButtonLayer: View {"
+        }
+      ],
+      "geometry_sites": [
+        20
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/CallWaveButtonView.swift",
+      "sha256": "416e4fedd0264605f03e8ad03ec5702107b3a815e49522750c4d36718d37b84a",
+      "lines": 56,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct CallWaveButtonView: View {"
+        }
+      ],
+      "geometry_sites": [
+        25,
+        37,
+        39,
+        44,
+        47,
+        48
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HeroHUDButton.swift",
+      "sha256": "e46d5dcf49e3b54fa516aed9237099425bf5c65797b4844b832b1dfd69e05b73",
+      "lines": 42,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct HeroHUDButton: View {"
+        }
+      ],
+      "geometry_sites": [
+        21,
+        24
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudButtonView.swift",
+      "sha256": "6958cc4416c7033415cef835bacad4ffa377f22d11f722f216ab5ccaffe3e6d4",
+      "lines": 34,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct HudButtonView: View {"
+        }
+      ],
+      "geometry_sites": [
+        24,
+        28
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudHeroesBarView.swift",
+      "sha256": "5faabc96443618d6fe08129e9bcd101d5dd606b30d15ffc4db9bd56ea8163706",
+      "lines": 29,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct HudHeroesBarView: View {"
+        }
+      ],
+      "geometry_sites": [
+        27
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudLayoutConfigView.swift",
+      "sha256": "4677dd7d6a75ba90e5381419a93df63b3d8151de4f58aca0b0cd8a2bfd8e50b7",
+      "lines": 299,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct HudLayoutConfigView: View {"
+        }
+      ],
+      "geometry_sites": [
+        76,
+        77,
+        114,
+        118,
+        131,
+        142,
+        143,
+        193,
+        198,
+        200,
+        207,
+        212,
+        220,
+        232,
+        233,
+        240,
+        242,
+        243
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudMasterControlsView.swift",
+      "sha256": "863d329b8b04e26418cadf16dadb4c607ccd2c66409fa8d2d8c8a3a13c32045f",
+      "lines": 33,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct HudMasterControlsView: View {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudMiscView.swift",
+      "sha256": "7371d236b33260325029407c1317d6e6f87f0d6f8877acad7cd5dab3dfc1e0ae",
+      "lines": 16,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct HudMiscView: View {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudStatsView.swift",
+      "sha256": "9adc8275fe24dcf55791d256c938b5eb34c23e487052e90360b12c547850f400",
+      "lines": 112,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct HudStatsView: View {"
+        }
+      ],
+      "geometry_sites": [
+        53,
+        54,
+        62,
+        68,
+        71,
+        72,
+        73,
+        75,
+        104,
+        109,
+        110
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/HudView.swift",
+      "sha256": "4674e85297beec86bc375a1c20a1c72cd899b3e8c371efb1c5d800b05729dea2",
+      "lines": 79,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct HudView: View {"
+        }
+      ],
+      "geometry_sites": [
+        33,
+        37,
+        43
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/HUD/ReinforcementButton.swift",
+      "sha256": "d82c7b71c3fd3a2b1644ef2f9becfe08b2123b338453d424e1f5fcfa5c5ea1a7",
+      "lines": 74,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct ReinforcementButton: View {"
+        }
+      ],
+      "geometry_sites": [
+        20,
+        26,
+        51,
+        52,
+        54,
+        57,
+        58,
+        60,
+        63
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/LevelBriefingView.swift",
+      "sha256": "d0ebd741ea74155c7eafb130229fdfaec0e4b6aab0e463a98203e1e8a89357f5",
+      "lines": 197,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct LevelBriefingView: View {"
+        },
+        {
+          "line": 144,
+          "source": "private struct DifficultyCard: View {"
+        }
+      ],
+      "geometry_sites": [
+        41,
+        50,
+        62,
+        63,
+        64,
+        66,
+        126,
+        158,
+        165,
+        171,
+        175,
+        176
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/LevelMapArt.swift",
+      "sha256": "ea4c67715d4cdee3a2add3b6acbeb24342d6e1921bc570e150eda3cc19b325d9",
+      "lines": 115,
+      "render_declarations": [],
+      "geometry_sites": [
+        100,
+        102
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "61ea789f524c7dba6f0f3d8c6ba58c7b174d60dae4493e9611f1ab6afee94a9c",
+      "lines": 992,
+      "render_declarations": [
+        {
+          "line": 53,
+          "source": "struct LevelMapView: View {"
+        },
+        {
+          "line": 775,
+          "source": "private struct TowerMenuItem: View {"
+        },
+        {
+          "line": 825,
+          "source": "private struct TowerCostLabel: View {"
+        },
+        {
+          "line": 855,
+          "source": "private struct BuildConfirmButton: View {"
+        },
+        {
+          "line": 886,
+          "source": "private struct UpgradeMenuItem: View {"
+        },
+        {
+          "line": 934,
+          "source": "private struct RallyMenuItem: View {"
+        },
+        {
+          "line": 962,
+          "source": "private struct TemporaryRallyFlag: View {"
+        }
+      ],
+      "geometry_sites": [
+        230,
+        266,
+        267,
+        282,
+        283,
+        294,
+        296,
+        297,
+        311,
+        312,
+        318,
+        319,
+        322,
+        333,
+        335,
+        336,
+        348,
+        349,
+        360,
+        362,
+        363,
+        378,
+        380,
+        410,
+        412,
+        420,
+        424,
+        425,
+        428,
+        459,
+        573,
+        574,
+        589,
+        603,
+        650,
+        651,
+        652,
+        688,
+        716,
+        730,
+        737,
+        749,
+        750,
+        758,
+        808,
+        812,
+        820,
+        834,
+        847,
+        849,
+        850,
+        870,
+        882,
+        919,
+        923,
+        929,
+        948,
+        953,
+        955,
+        976,
+        977
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/LevelTowerSlotsView.swift",
+      "sha256": "a9c3d1d051abb1d7eba010f1109a69fdd9d313e03d4a675e1fd431243d77c9c9",
+      "lines": 40,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct LevelTowerSlotsView: View {"
+        }
+      ],
+      "geometry_sites": [
+        18,
+        23,
+        27,
+        33,
+        36
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/PresentationLayers.swift",
+      "sha256": "126eaaca059041bedad271f728ff09b440f27ea6d8a58924701d97f72f467f55",
+      "lines": 21,
+      "render_declarations": [
+        {
+          "line": 6,
+          "source": "struct PresentationLayers<Presentation: Equatable, LayerContent: View>: View {"
+        }
+      ],
+      "geometry_sites": [
+        16
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Level Views/TowerRangeOverlayView.swift",
+      "sha256": "e9e88256bd48a9da981b9c40a0ef2427283a7b9bb8f04227f3e6c220a5223647",
+      "lines": 41,
+      "render_declarations": [
+        {
+          "line": 3,
+          "source": "struct TowerRangeOverlayView: View {"
+        }
+      ],
+      "geometry_sites": [
+        25,
+        39
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/LevelRunner.swift",
+      "sha256": "4b3024a90e87dd9669c9aa9f3be3a6cfc847943e59d7eeeeea0a92fd4a137d9a",
+      "lines": 1815,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/LibertyLineApp.swift",
+      "sha256": "11bbbe6fe74fff422a1f832934a7e1b49c22eda255d85a43e69bd10fcf5b2ac1",
+      "lines": 49,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/MenuScreens.swift",
+      "sha256": "cb745d9d0908e5ab55f2d782e2a83dfedffae8dabea10a3e1d639dd0ff7a8651",
+      "lines": 164,
+      "render_declarations": [
+        {
+          "line": 41,
+          "source": "struct MenuButton: View {"
+        },
+        {
+          "line": 76,
+          "source": "struct DoneButton: View {"
+        },
+        {
+          "line": 124,
+          "source": "struct MenuPlaceholderView: View {"
+        }
+      ],
+      "geometry_sites": [
+        61,
+        66,
+        90,
+        93,
+        140,
+        146,
+        150,
+        153,
+        157
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Renderer.swift",
+      "sha256": "58143a302fa78cb072e0e104387e0840ecfe7b621ec16a06547b84a00c6ef770",
+      "lines": 406,
+      "render_declarations": [
+        {
+          "line": 8,
+          "source": "final class Renderer: NSObject, MTKViewDelegate {"
+        },
+        {
+          "line": 213,
+          "source": "func draw(in view: MTKView) {"
+        }
+      ],
+      "geometry_sites": [
+        10,
+        206,
+        291,
+        292
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/RootView.swift",
+      "sha256": "dd20d9058b2e01951fb1ec2efa87a6dfc5996a06a60bfdc14805e6d767010354",
+      "lines": 125,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct RootView: View {"
+        },
+        {
+          "line": 87,
+          "source": "private struct HapticAuditionPanel: View {"
+        }
+      ],
+      "geometry_sites": [
+        75,
+        95,
+        100,
+        102,
+        103,
+        105,
+        107,
+        114,
+        118,
+        119,
+        120
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/ScreenGeometry+SwiftUI.swift",
+      "sha256": "db3234acc7e3308272db9f4d1f9b3001a3acb30dd37b52027d95c4a34d93257c",
+      "lines": 37,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct ScreenGeometryGate<Content: View>: View {"
+        },
+        {
+          "line": 11,
+          "source": "ScreenCanvas {"
+        }
+      ],
+      "geometry_sites": [
+        13
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/SettingsView.swift",
+      "sha256": "577955dcc1c2686562b46d1c6f5dcd608ded2aa8c02d78167d4519223a4c984f",
+      "lines": 120,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct SettingsView: View {"
+        }
+      ],
+      "geometry_sites": [
+        38,
+        49,
+        54,
+        57,
+        59,
+        60,
+        95,
+        99,
+        111,
+        114
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/ShaderTypes.h",
+      "sha256": "c0983a27a5d7100f991b0be969bde41e2eca5b6ecac80cf1cbbeeea73489be6b",
+      "lines": 67,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/Shaders.metal",
+      "sha256": "53a45237e5e50b1f89e4cc7f46eb76dbdf9a985fc8402867a93a4b8547845114",
+      "lines": 103,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/TiledBackgroundMetalView.swift",
+      "sha256": "f8155e38362d01e113a8f739519f9e7579b8d008d04092da43a3aa4beb4b4639",
+      "lines": 243,
+      "render_declarations": [
+        {
+          "line": 6,
+          "source": "final class TiledBackgroundRenderer: NSObject, MTKViewDelegate {"
+        },
+        {
+          "line": 138,
+          "source": "func draw(in view: MTKView) {"
+        },
+        {
+          "line": 209,
+          "source": "struct TiledBackgroundMetalView: UIViewRepresentable {"
+        }
+      ],
+      "geometry_sites": [
+        132,
+        161,
+        162,
+        177,
+        178
+      ],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "Liberty Line/WindowReader.swift",
+      "sha256": "18e4fd2fd3dbd706cb30dea72a04f0584cf4f95a1108135f285543e91da3c33e",
+      "lines": 86,
+      "render_declarations": [
+        {
+          "line": 28,
+          "source": "struct WindowReader: UIViewRepresentable {"
+        },
+        {
+          "line": 41,
+          "source": "final class WindowSpyView: UIView {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "game",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/BrushInputView.swift",
+      "sha256": "c7aef26957076733e2bb737879cebfbb1bbf1b48e2e36c2bfd94a812b89e0364",
+      "lines": 141,
+      "render_declarations": [
+        {
+          "line": 69,
+          "source": "struct BrushInputView: UIViewRepresentable {"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/BrushStroke.swift",
+      "sha256": "c55b091851cc5889639ba809c22d2befd45becd1eb69369bfbce35d2004a75bd",
+      "lines": 239,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/EditorCanvas.swift",
+      "sha256": "0b3f45af06ea606308a9390ffe8364f62d7a22e180f77190dd73e54999d357cd",
+      "lines": 990,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct EditorCanvas: View {"
+        },
+        {
+          "line": 9,
+          "source": "private var virtualCanvas: VirtualCanvas { state.virtualCanvas }"
+        },
+        {
+          "line": 30,
+          "source": "GeometryReader { geo in"
+        },
+        {
+          "line": 58,
+          "source": "Canvas { ctx, _ in"
+        },
+        {
+          "line": 530,
+          "source": "private func draw(_ ctx: inout GraphicsContext, _ t: DesignTransform) {"
+        }
+      ],
+      "geometry_sites": [
+        30,
+        61,
+        103,
+        105,
+        106,
+        110,
+        485,
+        604,
+        633,
+        733,
+        884,
+        914,
+        945,
+        961
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/EditorContent.swift",
+      "sha256": "2dd3f9c9a84f3101fcfd52c8f81f654f7ba857e6903d47d89792a92171a04d74",
+      "lines": 69,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/EditorLayers.swift",
+      "sha256": "aed5ce3754dad80f67ebad7e2a5f721855a7c247960c469997808dfa755d9c3a",
+      "lines": 129,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/EditorView.swift",
+      "sha256": "f62c70755625163ff4f6de4b2a76dd5acb5c336f73bfbac6c6e4a92f42be7a93",
+      "lines": 623,
+      "render_declarations": [
+        {
+          "line": 245,
+          "source": "struct EditorView: View {"
+        }
+      ],
+      "geometry_sites": [
+        389,
+        457,
+        498,
+        574,
+        589,
+        600,
+        601,
+        602
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/GeoJSONExport.swift",
+      "sha256": "d7c72190de0f3b1c6acfc396429a22a69902002da618ee454ec3e7e2a924ef62",
+      "lines": 104,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/GeoJSONFile.swift",
+      "sha256": "8a3210e3e06edbc5de097969f2cc5df36bc3eba49f891262340b78dc836083ba",
+      "lines": 23,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/GeoJSONImport.swift",
+      "sha256": "5ac1e02a43b29a5986c102d05c86743704eb97461d4df7fbe06978dbd91f2ffc",
+      "lines": 172,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/Info.plist",
+      "sha256": "65b69be8bcc358018f824896f86ff6d4be4eb70bc00426b5c7d59de10b7c0b14",
+      "lines": 64,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/InspectorView.swift",
+      "sha256": "5d83342fbbd62e3336819fb1049ca7172898f6dc56ce36a8c930b5daf68b6aac",
+      "lines": 836,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct InspectorView: View {"
+        }
+      ],
+      "geometry_sites": [
+        24,
+        44,
+        57,
+        64,
+        74,
+        81,
+        82,
+        83,
+        88,
+        89,
+        96,
+        149,
+        154,
+        155,
+        171,
+        181,
+        182,
+        201,
+        204,
+        206,
+        210,
+        217,
+        218,
+        229,
+        234,
+        237,
+        253,
+        270,
+        272,
+        289,
+        321,
+        322,
+        339,
+        369,
+        370,
+        371,
+        384,
+        386,
+        427,
+        440,
+        441,
+        442,
+        454,
+        456,
+        482,
+        578,
+        580,
+        596,
+        622,
+        625,
+        628,
+        694,
+        699,
+        701,
+        710,
+        748,
+        751,
+        753,
+        804,
+        818,
+        825,
+        833
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/LevelEditorApp.swift",
+      "sha256": "24c2ea233b3bd4923d38f1bc959b4292ee3c95f9530e0e3b836d9fa191d55ca5",
+      "lines": 151,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/LevelGeoJSON.swift",
+      "sha256": "f5e60d9bc1c47716ac854a832355c77a46e690787e0bd3b2cdcf09ce33dd9980",
+      "lines": 250,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/MapDocument.swift",
+      "sha256": "6a6fd94d7bfc7b23b440517cb89a5cbd1bc004ae96bcf1aa13d3f652b6414d11",
+      "lines": 723,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/NativeMapFile.swift",
+      "sha256": "f0d8ec4ef70ac0ee6662789fd20d7366bc13c714238ceae7bc11050e7275a704",
+      "lines": 24,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/Palette.swift",
+      "sha256": "491d6f9815aee574bb1784dddcacbe5a358f024dc1570dd52d91820a753b89f2",
+      "lines": 96,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/PathArtist.swift",
+      "sha256": "a3fb7dbd40f6307db4309c3e34ec9d86aa76796265621d8eb74180d7f2e3a779",
+      "lines": 131,
+      "render_declarations": [
+        {
+          "line": 109,
+          "source": "static func draw(_ ctx: inout GraphicsContext,"
+        }
+      ],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/PathFlattening.swift",
+      "sha256": "dcd5ae20c5528148bcad8099c0ec2d68fc20f537ebae772f9115338f5d240741",
+      "lines": 82,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/PlatformSupport.swift",
+      "sha256": "9117a92edcfcd52e40530b02920a741e0d15998bcba5b1b34b14c2c08867a9f0",
+      "lines": 180,
+      "render_declarations": [
+        {
+          "line": 154,
+          "source": "struct EditorSplit<Sidebar: View, Detail: View>: View {"
+        }
+      ],
+      "geometry_sites": [
+        164,
+        167,
+        172,
+        176
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/PlaytestCanvas.swift",
+      "sha256": "65d1b12ce366f746a7cb9f1ade90ac708800857092da3c018857677fe52aae60",
+      "lines": 195,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct PlaytestCanvas: View {"
+        },
+        {
+          "line": 9,
+          "source": "GeometryReader { geo in"
+        },
+        {
+          "line": 12,
+          "source": "Canvas { ctx, _ in"
+        },
+        {
+          "line": 37,
+          "source": "private func draw(in ctx: inout GraphicsContext, transform t: DesignTransform) {"
+        }
+      ],
+      "geometry_sites": [
+        9,
+        85,
+        112,
+        129
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/PlaytestView.swift",
+      "sha256": "36779b0d2a3c9987278fcef9025559ceb5298f06b986b6f82c605eaf8312ccc1",
+      "lines": 249,
+      "render_declarations": [
+        {
+          "line": 4,
+          "source": "struct PlaytestView: View {"
+        }
+      ],
+      "geometry_sites": [
+        17,
+        18,
+        19,
+        24,
+        44,
+        54,
+        55,
+        64,
+        65,
+        93,
+        127,
+        136,
+        137,
+        146,
+        158,
+        167,
+        168,
+        169,
+        179,
+        198,
+        211,
+        218,
+        219,
+        238,
+        245,
+        246
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/SimSession.swift",
+      "sha256": "2431a79421218205a9764effe059d487944669c2424c907f8afdb09bdd2c5259",
+      "lines": 182,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/SwiftExport.swift",
+      "sha256": "ad6e61f78fd655eaeae5136659ad8538ba91b3d624ce648aea34c10db48c972a",
+      "lines": 99,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "LevelEditor/TowerSlotImage.swift",
+      "sha256": "e4c22533b8b912125edba31ae370149bc59ffa638667145d2ce6279bb51f9512",
+      "lines": 32,
+      "render_declarations": [
+        {
+          "line": 14,
+          "source": "func draw(_ ctx: inout GraphicsContext, at center: CGPoint,"
+        }
+      ],
+      "geometry_sites": [
+        27
+      ],
+      "scope": "editor",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/BuildVersion.swift",
+      "sha256": "81c1e30d0bd236e20625ba7b80cc5dcfe25da6599b61e8e9eef8ee5d089d961a",
+      "lines": 4,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/FocusReport.swift",
+      "sha256": "ed6bf68655dff222ff2aec76e26f1cb58dd21581bcee089875aba1e0ca08d384",
+      "lines": 730,
+      "render_declarations": [],
+      "geometry_sites": [
+        186,
+        187
+      ],
+      "scope": "generated browser report",
+      "html_rendering": true
+    },
+    {
+      "path": "Simulator/GPUSweep.swift",
+      "sha256": "ab6a7309659531b56e89990fbbbab19a3e2a07f595f52dc29f4504545d0fa980",
+      "lines": 1009,
+      "render_declarations": [],
+      "geometry_sites": [
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        195,
+        196,
+        197,
+        198,
+        199,
+        253,
+        254,
+        255,
+        263
+      ],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/SimGPUTypes.h",
+      "sha256": "8993379ba5386fc13c7dac1ec8179e73f13047cbe29440510fb5cdf7078bc33f",
+      "lines": 280,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/SimKernel.metal",
+      "sha256": "8ce078b00a427667a161ddb6b176b0741989eea652d20084f388e0a52ce28527",
+      "lines": 913,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/SimulatorStore.swift",
+      "sha256": "9276f25af33864f0835ade7efeedb741581357a69db065501d037b922d43ef99",
+      "lines": 23,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/Sweep.swift",
+      "sha256": "2d10acd3c6dae41919a89cff5dc840bbc6bf03c42130c3510fed688cecc3e38a",
+      "lines": 1207,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/SweepResultStore.swift",
+      "sha256": "00c204532956ec520d892881d3697304420063cc8ad606f68b8ad7814f457a7a",
+      "lines": 192,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    },
+    {
+      "path": "Simulator/main.swift",
+      "sha256": "7fd634730ed91f467747c0f9cf92682795813a1eadb51d89593403d6f9acf1e9",
+      "lines": 674,
+      "render_declarations": [],
+      "geometry_sites": [],
+      "scope": "simulation CLI",
+      "html_rendering": false
+    }
+  ],
+  "file_count": 168,
+  "render_source_count": 46
+}

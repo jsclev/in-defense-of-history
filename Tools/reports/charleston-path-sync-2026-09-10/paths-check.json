@@ -1,0 +1,55 @@
+{
+  "callWaveCenters" : [
+    [
+      538,
+      1268
+    ],
+    [
+      1330,
+      1456
+    ]
+  ],
+  "captures" : [
+    {
+      "density" : 1,
+      "file" : "charleston-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "charleston-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "charleston-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "charleston-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    }
+  ],
+  "device" : "iPhone",
+  "geojsonHash" : "fa65e68824572da35146401758893c789fb74345f10cc7eb17d19a506d9a0df8",
+  "mapHeight" : 2064,
+  "mapWidth" : 2868,
+  "passed" : true,
+  "pathAlphaInfo" : 1,
+  "pathHash" : "434a21ab0efcfbb233cb1bab181cbde3b9d0379338fe81c51776226d74777a57",
+  "runID" : "3e38d632-1e81-430e-9e2f-444589e03ad7",
+  "systemVersion" : "26.6.2"
+}

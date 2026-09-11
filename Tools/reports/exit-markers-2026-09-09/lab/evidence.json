@@ -1,0 +1,416 @@
+{
+  "generated_at": "2026-09-09T21:55:17.010026+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "a751360a0d668bc1e187466adcd4ff2315d28c2dd50b94bb29489918398c2a4a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Models/UnitFacing.swift",
+      "sha256": "d6e61bec08fb2b7ace2d10a223cf8fd1fc82e1b202f8d947315e858dd172b8ae"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HeroSpriteProfile.swift",
+      "sha256": "ffefa33dfff13c2527ad8fe41a53358f87ffe953776dff22aba94ad155e05d50"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "a751360a0d668bc1e187466adcd4ff2315d28c2dd50b94bb29489918398c2a4a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "156589615120d4478f25cf8fd7b69c8ed07822043b18e7365c41c8002e3b437f"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/LevelRunner.swift",
+      "sha256": "a305ca979013f152b1d68704876b1eb3adc3ecefe6d759012432d46ffb1ffd6c"
+    }
+  ],
+  "assets": [
+    {
+      "id": "path_exit_rounded_x",
+      "minimum_box_pt": 32.0,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              96,
+              96
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              192,
+              192
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              288,
+              288
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        28.889,
+        28.889
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "rally_flag_comparison",
+      "minimum_box_pt": 32.0,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              96,
+              96
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              192,
+              192
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              288,
+              288
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        29.778,
+        29.778
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "militia_soldier",
+      "minimum_box_pt": 28.685,
+      "densities": {
+        "1": {
+          "frame_count": 8,
+          "sizes": [
+            [
+              117,
+              89
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 8,
+          "sizes": [
+            [
+              234,
+              178
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 8,
+          "sizes": [
+            [
+              351,
+              267
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        25.462,
+        25.462
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x.png",
+      "sha256": "2d95f4d0760784fcfc987b8bb1b453afbd161291b014eddcf7245e08b4adf21a",
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@2x.png",
+      "sha256": "64f75ddb7e0e74296b3cb71949de3399690c8fc6b5a4457fefe4d4115907df9d",
+      "dimensions": [
+        192,
+        192
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@3x.png",
+      "sha256": "434e0a9edb015e2f1d686f3c7d523bd1c051e6de46fe10bed775516673120908",
+      "dimensions": [
+        288,
+        288
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/rally_point_icon.imageset/rally_point_icon.png",
+      "sha256": "8d563f0157eec12ff8a311d7aa10e9fe1eec3d6a99a35a795766a0cd61903d30",
+      "dimensions": [
+        96,
+        96
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/rally_point_icon.imageset/rally_point_icon@2x.png",
+      "sha256": "9a82b279580631b2124defcaf56db20ab48b72f55057974b1099e6c25c857175",
+      "dimensions": [
+        192,
+        192
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/rally_point_icon.imageset/rally_point_icon@3x.png",
+      "sha256": "1800d5798c8abb7d20d6a78e29b39d496926db44913ddfb8554190c7795f7051",
+      "dimensions": [
+        288,
+        288
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_n_16.imageset/militia_soldier_walk_n_16.png",
+      "sha256": "5c7c283933c38141855f046c7f26e31ea61608ff88d7153a6d40bb47074c4aea",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_ne_16.imageset/militia_soldier_walk_ne_16.png",
+      "sha256": "2ea8496d559f6a8e4808be5ce60fc5072020b5258a785f9dd1421c529c7614dc",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_e_16.imageset/militia_soldier_walk_e_16.png",
+      "sha256": "b7f80e3142d15bafa3aa12c5fa18ad3a30f07ad1d18a89e38163bf965140bf16",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_se_16.imageset/militia_soldier_walk_se_16.png",
+      "sha256": "f389ddff516d3fa8ab11c0265ee047c1a3f1c22d5c59ec7759c10be71f1a6105",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_s_16.imageset/militia_soldier_walk_s_16.png",
+      "sha256": "c340d36c4a1d38a3f9106d0595ad0328e6990b454002377833e71ad8a33b719e",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_sw_16.imageset/militia_soldier_walk_sw_16.png",
+      "sha256": "bcdc67825b091c0dee58bd770ffa53399484f66eabb7418424d6dabd7cf05312",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_w_16.imageset/militia_soldier_walk_w_16.png",
+      "sha256": "77992afb0d30b29dd568514a75ff85898211ace4470db2a13f288d2e28fa9fad",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_nw_16.imageset/militia_soldier_walk_nw_16.png",
+      "sha256": "5e4aa9ac0edd499caba92d8467453cd77b1d09c2ba79ffee63ca8b101e5634ae",
+      "dimensions": [
+        117,
+        89
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_n_16.imageset/militia_soldier_walk_n_16@2x.png",
+      "sha256": "9107c93c685153b5dd505edb58ea506bb74e0f3e7404423d232d2f91ee76657c",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_ne_16.imageset/militia_soldier_walk_ne_16@2x.png",
+      "sha256": "03ad08ffbc302f9d674842ca68c97250d7c9c39944d38c924dd4663e9148f650",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_e_16.imageset/militia_soldier_walk_e_16@2x.png",
+      "sha256": "bb7306d381ca72f45429554f69cd7d7dfd01a8644b1b18cd0083cfe4f592f2bb",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_se_16.imageset/militia_soldier_walk_se_16@2x.png",
+      "sha256": "5a014cea567c4f07bef98c8728e4c00e61d4c29fec5a3c5f3563767e3b2f20cc",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_s_16.imageset/militia_soldier_walk_s_16@2x.png",
+      "sha256": "7ddc28afc74b4b8136487dd9f6b6d818fcbebb83d84a676869adae68cc16a1d6",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_sw_16.imageset/militia_soldier_walk_sw_16@2x.png",
+      "sha256": "2f285af249829cdd937688c45f752192b2fab7ef81bf299c041e0a09e4982664",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_w_16.imageset/militia_soldier_walk_w_16@2x.png",
+      "sha256": "51d07263ad087fd2eeb1a0f395fec9535c632f4f66b51eaea570ae36d1d841a0",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_nw_16.imageset/militia_soldier_walk_nw_16@2x.png",
+      "sha256": "4830911ddf94010070e7f1964778347a173061b4f2b1e5b28a40e9e632f04dd3",
+      "dimensions": [
+        234,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_n_16.imageset/militia_soldier_walk_n_16@3x.png",
+      "sha256": "5e3ff8396acf025064076bdf2b7aa95e31786a7c0ed18aabbac1c92cb33a717c",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_ne_16.imageset/militia_soldier_walk_ne_16@3x.png",
+      "sha256": "bbbb60e586593e3fdc06ea31389263b23c1bd31f3d55e8dabdf8a5bdf934243f",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_e_16.imageset/militia_soldier_walk_e_16@3x.png",
+      "sha256": "3d5b05d575fb754a28b22e25620b0e3b84ab8a01e5cb20aab22bbd94953e0e44",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_se_16.imageset/militia_soldier_walk_se_16@3x.png",
+      "sha256": "125327020eb2e8982880c73645cdd7d3b575190c3616a738d732904fbfe97748",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_s_16.imageset/militia_soldier_walk_s_16@3x.png",
+      "sha256": "e9f6f4f0455a852b2d823d01e0cf4dee2b21eb69b6cbd2ee7f383bcc4ae4d292",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_sw_16.imageset/militia_soldier_walk_sw_16@3x.png",
+      "sha256": "6c824616dba7161d2c81168ea27443df2d35138459665b319862b4a00c38f4a2",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_w_16.imageset/militia_soldier_walk_w_16@3x.png",
+      "sha256": "02592a5990421a05f2728b3854896d539da824a796ace308f4f3de7e5caabbb5",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/militia_soldier_walk_nw_16.imageset/militia_soldier_walk_nw_16@3x.png",
+      "sha256": "9f35b36fee35ac47ebeff7462ff97f12123fdd5a5feff8c3f8314badf7faafae",
+      "dimensions": [
+        351,
+        267
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_01_battle_road.png",
+      "sha256": "f2c51dbbabe573b2383595b222d7991cdfdc7395b0bfed51e996fcd4f0df52b9"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_01_battle_road_overlay.png",
+      "sha256": "d0237f9729cd8f9b7e23f77f6fde9485eb0dab6f1660ade57e7384335f1e854c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_003_great_bridge.png",
+      "sha256": "cc93bf4d9567eca1f9683cbb71d13a01f77043198890bf322e5ca5eb07f5bf4d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_008_trenton.png",
+      "sha256": "e56a386b796ef34f9cedb76c9004108f406c95b8dc46258703b893da144c1b60"
+    }
+  ]
+}

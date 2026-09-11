@@ -1,0 +1,296 @@
+[
+  {
+    "file": "hero-minimum@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "ready-minimum@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "selected-minimum@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "cooldown-minimum@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "mode": "minimum",
+    "density": 1,
+    "frame_bounds_px": {
+      "hero": [
+        0,
+        0,
+        45,
+        45
+      ],
+      "knox-ready": [
+        0,
+        0,
+        45,
+        45
+      ],
+      "ready": [
+        0,
+        0,
+        45,
+        45
+      ]
+    },
+    "blue_frames_match": true
+  },
+  {
+    "file": "hero-minimum@2x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "ready-minimum@2x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "selected-minimum@2x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "cooldown-minimum@2x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "mode": "minimum",
+    "density": 2,
+    "frame_bounds_px": {
+      "hero": [
+        0,
+        0,
+        90,
+        90
+      ],
+      "knox-ready": [
+        0,
+        0,
+        90,
+        90
+      ],
+      "ready": [
+        0,
+        0,
+        90,
+        90
+      ]
+    },
+    "blue_frames_match": true
+  },
+  {
+    "file": "hero-minimum@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "ready-minimum@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "selected-minimum@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "cooldown-minimum@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "mode": "minimum",
+    "density": 3,
+    "frame_bounds_px": {
+      "hero": [
+        0,
+        0,
+        135,
+        135
+      ],
+      "knox-ready": [
+        0,
+        0,
+        135,
+        135
+      ],
+      "ready": [
+        0,
+        0,
+        135,
+        135
+      ]
+    },
+    "blue_frames_match": true
+  },
+  {
+    "file": "hero-device@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "ready-device@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "selected-device@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "cooldown-device@1x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "mode": "device",
+    "density": 1,
+    "frame_bounds_px": {
+      "hero": [
+        0,
+        0,
+        57,
+        57
+      ],
+      "knox-ready": [
+        0,
+        0,
+        57,
+        58
+      ],
+      "ready": [
+        0,
+        0,
+        57,
+        58
+      ]
+    },
+    "blue_frames_match": true
+  },
+  {
+    "file": "hero-device@2x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "ready-device@2x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "selected-device@2x.png",
+    "pixels_unchanged": false,
+    "changed_pixels": 10,
+    "max_channel_delta_0_to_255": 1
+  },
+  {
+    "file": "cooldown-device@2x.png",
+    "pixels_unchanged": false,
+    "changed_pixels": 10,
+    "max_channel_delta_0_to_255": 1
+  },
+  {
+    "mode": "device",
+    "density": 2,
+    "frame_bounds_px": {
+      "hero": [
+        0,
+        0,
+        114,
+        114
+      ],
+      "knox-ready": [
+        0,
+        0,
+        114,
+        114
+      ],
+      "ready": [
+        0,
+        0,
+        114,
+        114
+      ]
+    },
+    "blue_frames_match": true
+  },
+  {
+    "file": "hero-device@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "ready-device@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "selected-device@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "file": "cooldown-device@3x.png",
+    "pixels_unchanged": true,
+    "changed_pixels": 0,
+    "max_channel_delta_0_to_255": 0
+  },
+  {
+    "mode": "device",
+    "density": 3,
+    "frame_bounds_px": {
+      "hero": [
+        0,
+        1,
+        170,
+        171
+      ],
+      "knox-ready": [
+        0,
+        0,
+        171,
+        172
+      ],
+      "ready": [
+        0,
+        0,
+        171,
+        172
+      ]
+    },
+    "blue_frames_match": true
+  }
+]

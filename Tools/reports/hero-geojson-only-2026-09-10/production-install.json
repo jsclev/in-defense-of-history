@@ -1,0 +1,37 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "install",
+      "app",
+      "--device",
+      "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+      "/tmp/hero-placement-game-build/Build/Products/Debug-iphoneos/Liberty Line.app",
+      "--json-output",
+      "Tools/reports/hero-geojson-only-2026-09-10/production-install.json"
+    ],
+    "commandType" : "devicectl.device.install.app",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.33"
+  },
+  "result" : {
+    "deviceIdentifier" : "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+    "installedApplications" : [
+      {
+        "bundleID" : "com.zippyzen.liberty-line",
+        "databaseSequenceNumber" : 2036,
+        "databaseUUID" : "717E0170-E9D0-4AB4-988E-77A4FB6B7E28",
+        "installationURL" : "file:///private/var/containers/Bundle/Application/9CFC83CF-AC0A-4AA7-A0E5-33F06EEC0AEA/Liberty%20Line.app/",
+        "launchServicesIdentifier" : "unknown",
+        "options" : {
+
+        }
+      }
+    ]
+  }
+}

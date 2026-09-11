@@ -28,13 +28,23 @@ struct TowerRangeOverlayView: View {
 
     private func ring(size: CGSize, isUpgrade: Bool) -> some View {
         let stroke = StrokeStyle(lineWidth: 2, dash: isUpgrade ? [6, 4] : [])
+        let edgeOpacity = isUpgrade ? 0.4 : 0.7
+        // Blue-violet separates friendly reach from the dominant yellow-green
+        // terrain. Use one hue and one border, with only an inward alpha fade.
+        let rangeColor = Color(.sRGB, red: 88 / 255, green: 66 / 255, blue: 199 / 255, opacity: 1)
+        // Keep the blend short even on large maps: at most six vertical points.
+        let fadeFraction = min(0.10, 6 / max(size.height / 2, 1))
         return Ellipse()
-            .fill(Color.green.opacity(isUpgrade ? 0.08 : 0.16))
+            .fill(
+                EllipticalGradient(stops: [
+                    .init(color: .clear, location: 0),
+                    .init(color: rangeColor.opacity(0), location: 1 - fadeFraction),
+                    .init(color: rangeColor.opacity(edgeOpacity * 0.35), location: 1 - fadeFraction / 2),
+                    .init(color: rangeColor.opacity(edgeOpacity), location: 1)
+                ], center: .center, startRadiusFraction: 0, endRadiusFraction: 0.5)
+            )
             .overlay(
-                ZStack {
-                    Ellipse().stroke(.black.opacity(0.35), lineWidth: 4)
-                    Ellipse().stroke(Color.green.opacity(isUpgrade ? 1 : 0.8), style: stroke)
-                }
+                Ellipse().strokeBorder(rangeColor, style: stroke)
             )
             .frame(width: size.width, height: size.height)
     }

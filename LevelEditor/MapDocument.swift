@@ -3,13 +3,15 @@ import Combine
 import UniformTypeIdentifiers
 
 extension UTType {
-    static let tdmap = UTType(exportedAs: "com.zippyzen.td.map")
+    static let tdmap = UTType(exportedAs: "com.zippyzen.td.map", conformingTo: .json)
 }
 
 nonisolated struct MapDraft: Codable, Equatable, Sendable {
     nonisolated struct Road: Codable, Equatable, Sendable {
         var name: String
         var points: [Point]
+        /// Cutouts in the rendered band; navigation waypoints stay editable.
+        var erasedArea: LevelGeoJSON.Geometry?
 
         init(name: String, points: [Point]) {
             self.name = name
@@ -32,6 +34,9 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     nonisolated struct Wave: Codable, Equatable, Sendable {
         var breather: Double
         var lines: [SpawnLine]
+        var callButtonDelay: Double? = nil
+        var autoStartCountdown: Double? = nil
+        var earlyCallBonus: Int? = nil
     }
 
     nonisolated struct BuildStep: Codable, Equatable, Sendable {
@@ -47,6 +52,8 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     var startingGold: Int
     var lives: Int
     var roads: [Road]
+    /// Directed enemy marches; kept separate from the painted road footprint.
+    var enemyRoutes: [EnemyRoute] = []
     var slots: [Point]
     var entrances: [Point]
     var exits: [Point]
@@ -59,11 +66,52 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
     var guideOpacity: Double = 0.5
     var coordinateSpace: String = Self.canvasSpace
     var roadPaint: [PaintStroke] = []
+    /// A GeoJSON import is one flattened layer; native roads remain separate.
+    /// An empty MultiPolygon represents an imported layer erased completely.
+    var flattenedPath: LevelGeoJSON.Geometry?
+    var backgroundImageData: Data?
+    var overlayImageData: Data?
+    var guideImageData: Data?
+    var hiddenLayers: [String] = []
+    /// Authored centers and the incoming routes that make each button visible.
+    var callWaveButtons: [CallWaveButtonPosition] = []
+    var heroCount: Int = 0
+    var primaryHeroPosition: Point?
+    var secondaryHeroPosition: Point?
+
+    func hasHero(_ role: HeroSelection.Role) -> Bool {
+        heroCount >= (role == .primary ? 1 : 2)
+    }
+
+    func heroPosition(_ role: HeroSelection.Role) -> Point? {
+        role == .primary ? primaryHeroPosition : secondaryHeroPosition
+    }
+
+    func heroMarkerPosition(_ role: HeroSelection.Role) -> Point? {
+        hasHero(role) ? heroPosition(role) : nil
+    }
+
+    mutating func placeHero(_ role: HeroSelection.Role, at position: Point) {
+        heroCount = max(heroCount, role == .primary ? 1 : 2)
+        if role == .primary { primaryHeroPosition = position }
+        else { secondaryHeroPosition = position }
+    }
+
+    mutating func removeHeroStart(_ role: HeroSelection.Role) {
+        if role == .primary { primaryHeroPosition = nil }
+        else { secondaryHeroPosition = nil }
+    }
+
+    mutating func removeExit(at index: Int) {
+        guard exits.indices.contains(index) else { return }
+        exits.remove(at: index)
+    }
 
     nonisolated struct PaintStroke: Codable, Equatable, Sendable {
         var points: [Point]
         var width: Double
         var erases: Bool
+        var erasedArea: LevelGeoJSON.Geometry?
     }
 
     static let starter = MapDraft(
@@ -87,39 +135,46 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
         roads.contains { $0.points.count >= 2 } && !waves.isEmpty
     }
 
-    /// Merges an eraser stroke straight into the waypoints. Covered waypoints go
-    /// away, a road cut through the middle becomes two roads, and painted area
-    /// under the eraser is cut the same way. The stroke itself is not kept.
+    /// Subtracts the circular brush from every existing visible path surface.
+    /// Cutouts belong to their road/paint, so later painting can fill them back
+    /// in. Erasing the footprint does not delete or renumber navigation routes.
     mutating func applyErase(_ eraser: PaintStroke, mapGeometry: MapGeometry) {
-        var taken = Set(roads.map(\.name))
-        var cut: [Road] = []
-        var firstPiece: [Int: Int] = [:]
-        for (old, road) in roads.enumerated() {
-            let pieces = BrushGeometry.erase(polyline: road.points,
-                                             halfWidth: mapGeometry.roadHalfWidth,
-                                             with: eraser)
-                .filter { $0.count >= 2 }
-            for (i, points) in pieces.enumerated() {
-                if i == 0 { firstPiece[old] = cut.count }
-                let name = i == 0 ? road.name : Self.freeRoadName(taken: taken)
-                taken.insert(name)
-                cut.append(Road(name: name, points: points))
+        guard !eraser.points.isEmpty, eraser.width.isFinite, eraser.width > 0,
+              eraser.points.allSatisfy({ $0.x.isFinite && $0.y.isFinite }) else { return }
+        let strokeArea = BrushGeometry.strokeArea(points: eraser.points, width: eraser.width)
+        guard let brushGeometry = try? PathFlattening.geometry(from: strokeArea) else { return }
+        // Commit the same polygon we persist. Re-subtracting the original
+        // curve from its flattened cutout would change rounding on every dab.
+        let brush = PathFlattening.area(for: brushGeometry)
+        func mask(addingTo previous: LevelGeoJSON.Geometry?) -> LevelGeoJSON.Geometry? {
+            guard let previous else { return brushGeometry }
+            if previous == brushGeometry { return previous }
+            let existing = PathFlattening.area(for: previous)
+            guard !brush.subtracting(existing).isEmpty else { return previous }
+            return try? PathFlattening.geometry(from: existing.union(brush))
+        }
+        if let base = flattenedPath {
+            let area = PathFlattening.area(for: base)
+            if !area.intersection(brush).isEmpty {
+                // Keep the imported-layer identity even when completely erased,
+                // so its wave route indices survive painting a replacement.
+                let remaining = area.subtracting(brush)
+                flattenedPath = remaining.isEmpty ? .multiPolygon([])
+                    : (try? PathFlattening.geometry(from: remaining)) ?? base
             }
         }
-        roads = cut
-        // Spawn lines address a road by position, so a split or a road erased
-        // away renumbers them. A line follows its road to the first piece that
-        // survived; a road erased away entirely falls back to road 0, the same
-        // fallback deleteRoad uses.
-        for w in waves.indices {
-            for l in waves[w].lines.indices {
-                waves[w].lines[l].road = firstPiece[waves[w].lines[l].road] ?? 0
-            }
+        for i in roads.indices {
+            let area = BrushGeometry.strokeArea(points: roads[i].points,
+                width: mapGeometry.roadHalfWidth * 2, erasedArea: roads[i].erasedArea)
+            guard !area.intersection(brush).isEmpty else { continue }
+            roads[i].erasedArea = mask(addingTo: roads[i].erasedArea) ?? roads[i].erasedArea
         }
-        roadPaint = roadPaint.flatMap { stroke in
-            BrushGeometry.erase(polyline: stroke.points, halfWidth: stroke.width / 2,
-                                with: eraser)
-                .map { PaintStroke(points: $0, width: stroke.width, erases: false) }
+        for i in roadPaint.indices where !roadPaint[i].erases {
+            let stroke = roadPaint[i]
+            let area = BrushGeometry.strokeArea(points: stroke.points, width: stroke.width,
+                                                erasedArea: stroke.erasedArea)
+            guard !area.intersection(brush).isEmpty else { continue }
+            roadPaint[i].erasedArea = mask(addingTo: stroke.erasedArea) ?? stroke.erasedArea
         }
     }
 
@@ -139,8 +194,7 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
         }
     }
 
-    /// THE road name allocator. Erasing can split and drop roads, so a name
-    /// taken from the count alone would collide with a road already there.
+    /// Deleted roads can leave gaps, so allocating by count would collide.
     static func freeRoadName(taken: Set<String>) -> String {
         var n = taken.count + 1
         while taken.contains("Road \(n)") { n += 1 }
@@ -155,9 +209,14 @@ extension MapDraft {
         startingGold = try c.decodeIfPresent(Int.self, forKey: .startingGold) ?? 220
         lives = try c.decodeIfPresent(Int.self, forKey: .lives) ?? 20
         roads = try c.decodeIfPresent([Road].self, forKey: .roads) ?? []
+        enemyRoutes = try c.decodeIfPresent([EnemyRoute].self, forKey: .enemyRoutes) ?? []
         slots = try c.decodeIfPresent([Point].self, forKey: .slots) ?? []
         entrances = try c.decodeIfPresent([Point].self, forKey: .entrances) ?? []
+        callWaveButtons = try c.decodeIfPresent([CallWaveButtonPosition].self, forKey: .callWaveButtons) ?? []
         exits = try c.decodeIfPresent([Point].self, forKey: .exits) ?? []
+        heroCount = try c.decodeIfPresent(Int.self, forKey: .heroCount) ?? 0
+        primaryHeroPosition = try c.decodeIfPresent(Point.self, forKey: .primaryHeroPosition)
+        secondaryHeroPosition = try c.decodeIfPresent(Point.self, forKey: .secondaryHeroPosition)
         waves = try c.decodeIfPresent([Wave].self, forKey: .waves) ?? []
         intendedSolution = try c.decodeIfPresent([BuildStep].self, forKey: .intendedSolution) ?? []
         backgroundImagePath = try c.decodeIfPresent(String.self, forKey: .backgroundImagePath)
@@ -167,6 +226,19 @@ extension MapDraft {
         guideOpacity = try c.decodeIfPresent(Double.self, forKey: .guideOpacity) ?? 0.5
         coordinateSpace = try c.decodeIfPresent(String.self, forKey: .coordinateSpace) ?? "design1600x900"
         roadPaint = try c.decodeIfPresent([PaintStroke].self, forKey: .roadPaint) ?? []
+        flattenedPath = try c.decodeIfPresent(LevelGeoJSON.Geometry.self, forKey: .flattenedPath)
+        backgroundImageData = try c.decodeIfPresent(Data.self, forKey: .backgroundImageData)
+        overlayImageData = try c.decodeIfPresent(Data.self, forKey: .overlayImageData)
+        guideImageData = try c.decodeIfPresent(Data.self, forKey: .guideImageData)
+        hiddenLayers = try c.decodeIfPresent([String].self, forKey: .hiddenLayers) ?? []
+        enum LegacyKeys: String, CodingKey { case primaryHeroExitIndex, secondaryHeroExitIndex }
+        let legacy = try decoder.container(keyedBy: LegacyKeys.self)
+        func oldPosition(_ key: LegacyKeys) throws -> Point? {
+            guard let index = try legacy.decodeIfPresent(Int.self, forKey: key), exits.indices.contains(index) else { return nil }
+            return exits[index]
+        }
+        if primaryHeroPosition == nil { primaryHeroPosition = try oldPosition(.primaryHeroExitIndex) }
+        if secondaryHeroPosition == nil { secondaryHeroPosition = try oldPosition(.secondaryHeroExitIndex) }
     }
 
     /// Brings a freshly opened draft into the canonical space: legacy
@@ -190,9 +262,15 @@ extension MapDraft {
             for r in roads.indices {
                 roads[r].points = roads[r].points.map(upgrade)
             }
+            for r in enemyRoutes.indices { enemyRoutes[r].points = enemyRoutes[r].points.map(upgrade) }
             slots = slots.map(upgrade)
             entrances = entrances.map(upgrade)
+            for i in callWaveButtons.indices {
+                callWaveButtons[i].position = upgrade(callWaveButtons[i].position)
+            }
             exits = exits.map(upgrade)
+            primaryHeroPosition = primaryHeroPosition.map(upgrade)
+            secondaryHeroPosition = secondaryHeroPosition.map(upgrade)
             coordinateSpace = Self.canvasSpace
         }
         bakeStoredErasures(mapGeometry: mapGeometry)
@@ -258,37 +336,64 @@ extension MapDraft {
 }
 
 final class MapDocument: ReferenceFileDocument {
-    typealias Snapshot = MapDraft
+    typealias Snapshot = NativeMapFile
 
     @Published var draft: MapDraft
+    var canvas: VirtualCanvas?
+    var sourceFolder: URL?
 
-    // .geojson is readable so a level can be opened straight from its single
-    // source of truth. Writing stays .tdmap only: the GeoJSON is authored by the
-    // generator, and the editor saving over it would fork the source.
-    static var readableContentTypes: [UTType] { [.tdmap, .geoJSON] }
+    // Open/Save work only with the native document. GeoJSON is explicitly
+    // imported or exported so autosave can never overwrite an export.
+    static var readableContentTypes: [UTType] { [.tdmap] }
     static var writableContentTypes: [UTType] { [.tdmap] }
 
-    init() {
+    init(canvas: VirtualCanvas) {
         draft = .starter
+        self.canvas = canvas
     }
 
     init(configuration: ReadConfiguration) throws {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        if configuration.contentType == .geoJSON {
-            draft = try GeoJSONImport.draft(from: data)
+        let root = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        if root?["format"] != nil || root?["version"] != nil || root?["draft"] != nil {
+            let file = try NativeMapFile.read(data)
+            draft = file.draft
+            canvas = file.canvas
         } else {
+            guard root?["roads"] != nil else {
+                throw CocoaError(.fileReadCorruptFile)
+            }
+            // Existing unversioned .tdmap files remain readable.
             draft = try JSONDecoder().decode(MapDraft.self, from: data)
         }
     }
 
-    func snapshot(contentType: UTType) throws -> MapDraft { draft }
+    func snapshot(contentType: UTType) throws -> NativeMapFile {
+        guard let canvas else {
+            throw LevelGeoJSON.ValidationError(message: "The document's canvas has not loaded yet.")
+        }
+        var saved = draft
+        func embedded(_ data: Data?, path: String?) throws -> Data? {
+            guard let path else { return nil }
+            if let data { return data }
+            let original = URL(fileURLWithPath: path)
+            let sibling = sourceFolder?.appendingPathComponent(original.lastPathComponent)
+            let url = FileManager.default.fileExists(atPath: original.path) ? original : sibling ?? original
+            guard let bytes = PlatformImageLoader.freshRead(url) else {
+                throw LevelGeoJSON.ValidationError(message: "Cannot embed \(original.lastPathComponent). Locate the image or remove its layer before saving.")
+            }
+            return bytes
+        }
+        saved.backgroundImageData = try embedded(saved.backgroundImageData, path: saved.backgroundImagePath)
+        saved.overlayImageData = try embedded(saved.overlayImageData, path: saved.overlayImagePath)
+        saved.guideImageData = try embedded(saved.guideImageData, path: saved.guideImagePath)
+        return NativeMapFile(draft: saved, canvas: canvas)
+    }
 
-    func fileWrapper(snapshot: MapDraft, configuration: WriteConfiguration) throws -> FileWrapper {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-        return FileWrapper(regularFileWithContents: try encoder.encode(snapshot))
+    func fileWrapper(snapshot: NativeMapFile, configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: try snapshot.data())
     }
 
     @MainActor
@@ -356,6 +461,14 @@ final class MapDocument: ReferenceFileDocument {
     }
 
     @MainActor
+    func deleteCallWaveButton(_ i: Int, _ undoManager: UndoManager?) {
+        edit(undoManager) { d in
+            guard d.callWaveButtons.indices.contains(i) else { return }
+            d.callWaveButtons.remove(at: i)
+        }
+    }
+
+    @MainActor
     func deleteEntrance(_ i: Int, _ undoManager: UndoManager?) {
         edit(undoManager) { d in
             guard d.entrances.indices.contains(i) else { return }
@@ -366,8 +479,7 @@ final class MapDocument: ReferenceFileDocument {
     @MainActor
     func deleteExit(_ i: Int, _ undoManager: UndoManager?) {
         edit(undoManager) { d in
-            guard d.exits.indices.contains(i) else { return }
-            d.exits.remove(at: i)
+            d.removeExit(at: i)
         }
     }
 

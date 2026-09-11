@@ -1,0 +1,53 @@
+{
+  "change": "Ground-plane rendering of the existing rounded red X",
+  "renderer": "Production LevelExitMarkersView, physical iPhone iOS 26.6.1",
+  "sourceWidthMinimumPoints": 32,
+  "renderedHeightMinimumPoints": 22.4,
+  "verticalFraction": 0.7,
+  "perspectiveSource": "Engine/Layout/TowerRangeOverlay.swift",
+  "productionAssetEdited": false,
+  "selfReview": "PASS",
+  "cues": [
+    "Four distinct rounded arms and a central crossing remain legible.",
+    "Broad red mass separates the symbol from grass, snow, and adjacent soldiers."
+  ],
+  "checks": [
+    "Minimum native-size color, grayscale, silhouette, and three-value views in the existing lab.",
+    "2x and 3x browser lab against Battle Road, Great Bridge, and Trenton with nearby troops.",
+    "Actual iPhone minimum-size map captures of Battle Road, Trenton, and Charleston.",
+    "All 26 authored exit centers preserved; 52 raster bounds checks at 1x and 3x passed within 2 pixels."
+  ],
+  "notMeasured": [
+    "Independent human recognition/meaning test"
+  ],
+  "lesson": "A readability pass on a face-on glyph does not establish that a ground marker matches the map perspective. Apply the existing ground-plane projection in the view and inspect runtime terrain context.",
+  "comparison": {
+    "before": "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-markers-2026-09-09/initial-under-foliage/device-documents/level_15_charleston-minimum@1x.png",
+    "after": "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/device-documents/level_15_charleston-minimum@1x.png",
+    "crop": [
+      285,
+      245,
+      435,
+      340
+    ],
+    "rescaled": false
+  },
+  "sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/device-documents/level_15_charleston-minimum@1x.png",
+      "sha256": "d019bba7aa44c79b5f67eb889a05afb4c211a4de17e83a30edf9303cad903a39"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/comparison-minimum.png",
+      "sha256": "9d90337e462383cd333e7693585db8a5a54c41478576ebf4eec1684f27af9f6b"
+    }
+  ]
+}

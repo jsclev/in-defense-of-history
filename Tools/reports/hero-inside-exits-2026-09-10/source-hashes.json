@@ -1,0 +1,7 @@
+{
+  "Engine/Layout/HeroExitPlacement.swift": "35648e119ec5db457af5098f7128984e8cc4b1666dc6fb91759deb444d677616",
+  "Liberty Line/LevelRunner.swift": "7f6c2607b85790b9f2ea41403521bbcfbf8695a1825ea68f33bf4c5c945bb4fd",
+  "Tests/LevelEditorFormatsTests/HeroExitPlacementTests.swift": "c07326d0733fe6893df884a44f6dd9f34a75b4368972a2cbc64a9c74ed640dbc",
+  "Tools/HeroExitRuntimeProbe.swift": "ceaa84de0714361d3992559c896aba9ff0cb2ec615828b78a4d41ed67151238f",
+  "Tools/render_hero_exit_review.py": "b40378f542dad668bdacf3c68743c92991a68bcd60198d11a4041a536456d073"
+}

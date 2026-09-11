@@ -1,0 +1,24 @@
+{
+  "result": "PASS: primary-first HUD with reversed unit order and solo choice; actual HUD button presses match map selection; switching, toggling, targeting, menu dismissal, reinforcement cancellation, identity after death, unavailable IDs, and respawn",
+  "production_blocks": [
+    "struct HeroSoldier:",
+    "private struct HeroPost {",
+    "private struct WalkPose {",
+    "private struct HeroRoads {",
+    "var hudHeroes:",
+    "func hudHeroIndex(",
+    "func selectHero(_",
+    "func selectHero(heroID:",
+    "private func publishHeroes(",
+    "func dismissMenu()",
+    "func commandSelectedHero(",
+    "private func heroNearestNode("
+  ],
+  "sources": {
+    "Liberty Line/LevelRunner.swift": "c27e41a71f4266cc4232a2417ec7e78d858a2f4c8781590150e60e2dd3f0aae9",
+    "Liberty Line/Level Views/HUD/HudHeroesBarView.swift": "8aa6b1f210da0a555666acdc271a1242e025fe58ddacb04e0b8bcbde420709df",
+    "Liberty Line/Level Views/HUD/HeroHUDButton.swift": "e46d5dcf49e3b54fa516aed9237099425bf5c65797b4844b832b1dfd69e05b73",
+    "Liberty Line/Level Views/HUD/ReinforcementButton.swift": "d82c7b71c3fd3a2b1644ef2f9becfe08b2123b338453d424e1f5fcfa5c5ea1a7"
+  },
+  "limitation": "macOS SwiftUI pointer events with fixture units; not iOS touch delivery or full game loading."
+}

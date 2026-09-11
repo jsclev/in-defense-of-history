@@ -1,0 +1,8 @@
+test_hole_does_not_erase_separate_road (test_render_level_path_image.RoadExportTests.test_hole_does_not_erase_separate_road) ... ok
+test_holes_disconnected_areas_and_y_up_coordinates (test_render_level_path_image.RoadExportTests.test_holes_disconnected_areas_and_y_up_coordinates) ... ok
+test_legacy_road_and_ordered_erase_then_paint (test_render_level_path_image.RoadExportTests.test_legacy_road_and_ordered_erase_then_paint) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK

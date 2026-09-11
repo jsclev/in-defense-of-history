@@ -12,8 +12,14 @@ final class SimulatorStore {
     let runs: SimulatorRunDAO?
 
     init() throws {
+        // The command-line target has no resource bundle. Read the authoritative
+        // exports from the checkout, or an explicitly configured GeoJSON directory.
+        let levelDirectory = ProcessInfo.processInfo.environment["LIBERTY_LINE_GEOJSON_DIRECTORY"]
+            .map { URL(fileURLWithPath: $0, isDirectory: true) }
+            ?? URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+                .deletingLastPathComponent().appendingPathComponent("Db", isDirectory: true)
         db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
-                fullRefresh: false)
+                fullRefresh: false, levelGeoJSONDao: LevelGeoJSONDAO(directory: levelDirectory))
         virtualCanvas = try db.virtualCanvasDao.get()
         roster = DesignRoster()
         arsenal = DesignArsenal()

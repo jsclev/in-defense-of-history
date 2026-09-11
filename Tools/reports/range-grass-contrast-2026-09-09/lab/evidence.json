@@ -1,0 +1,169 @@
+{
+  "generated_at": "2026-09-10T00:08:05.898559+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/TowerRangeOverlayView.swift",
+      "sha256": "d2231b55221ecff2a9dc2cf61fe13d3aa64117f1e5da7b6a597a129a379984a2"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Core/RuntimeCanvas.swift",
+      "sha256": "c21ddc77643dafc06d5c8d83da8bd546f8c4710454eb8d6e21e67037f51ee919"
+    }
+  ],
+  "assets": [
+    {
+      "id": "current",
+      "minimum_box_pt": 100.0,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              139,
+              100
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              278,
+              200
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              417,
+              300
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        91.333,
+        91.333
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "upgrade",
+      "minimum_box_pt": 113.0,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              158,
+              113
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              316,
+              226
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              474,
+              339
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        104.333,
+        104.333
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-current-1x.png",
+      "sha256": "9261717f823a1f88993641cbee3ee840efca5db01c9988c2aafecde7a37d5314",
+      "dimensions": [
+        139,
+        100
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-current-2x.png",
+      "sha256": "01a5ba92a8551a5520deba1859acdee0f38b7a556dcdfed89326364d566d6262",
+      "dimensions": [
+        278,
+        200
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-current-3x.png",
+      "sha256": "0f1efe39ef74345a366631977c380f25de3fbc9339fca22fe14687dd319f83eb",
+      "dimensions": [
+        417,
+        300
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-upgrade-1x.png",
+      "sha256": "c358d7c895b0ebb1174ccda4ce5b1c049cba456b844967e56c5f5a47bceb42e0",
+      "dimensions": [
+        158,
+        113
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-upgrade-2x.png",
+      "sha256": "70dfcc7f7589fb7cf6b5785177ee7dcf54885f0d5dcb9a0e5315d8da2f119fd5",
+      "dimensions": [
+        316,
+        226
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-upgrade-3x.png",
+      "sha256": "30c178a61556b2ec33c31031382ef300b705a7e3e2cff500171300587fb90882",
+      "dimensions": [
+        474,
+        339
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Levels/grass_bastion.png",
+      "sha256": "7992517c6e34a242c7ce24d82837a7e3c390c9134d0623aaa19ab9f2b58c773e"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/grass-bastion-2026-09-09/runtime/level_01_battle_road.png",
+      "sha256": "100b83743c18e9991093c1ed8e67d2ba9413c1f9d381a1ae02df02bf2678a741"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/grass-bastion-2026-09-09/runtime/level_01_battle_road_overlay.png",
+      "sha256": "bf4d8a5eedcac94ed0609310029660a9679d3fc509fba19eab29e53bd7b6791a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/grass-bastion-2026-09-09/runtime/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/trenton.png",
+      "sha256": "c4cc4f9b2ca316f402cc47f4c58c59a214de2223bb386d51ff90dbe62c86e517"
+    }
+  ]
+}

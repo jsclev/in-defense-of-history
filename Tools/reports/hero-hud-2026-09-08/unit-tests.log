@@ -1,0 +1,75 @@
+[0/1] Planning build
+Building for debugging...
+[0/5] Write sources
+[2/5] Write swift-version--58304C5D6DBC2206.txt
+[4/7] Emitting module LevelEditorFormats
+[5/7] Compiling LevelEditorFormats HeroBarLayout.swift
+[6/15] Compiling LevelEditorFormatsTests ReinforcementTests.swift
+[7/15] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[8/15] Compiling LevelEditorFormatsTests HeroBarLayoutTests.swift
+[9/15] Compiling LevelEditorFormatsTests PresentationStackTests.swift
+[10/15] Compiling LevelEditorFormatsTests WaveStartTimingTests.swift
+[11/15] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[12/15] Emitting module LevelEditorFormatsTests
+[13/15] Compiling LevelEditorFormatsTests LevelGeoJSONTests.swift
+[13/15] Write Objects.LinkFileList
+[14/15] Linking LevelEditorFormatsPackageTests
+Build complete! (2.52s)
+Test Suite 'Selected tests' started at 2026-09-08 12:56:56.078.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-08 12:56:56.079.
+Test Suite 'HeroBarLayoutTests' started at 2026-09-08 12:56:56.079.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testHudMarginConsumesTheAvailableOcclusionWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testHudMarginConsumesTheAvailableOcclusionWidth]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testRowStaysInsideLowerLeftOcclusionAcrossScreenAndSafeAreaSizes]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testRowStaysInsideLowerLeftOcclusionAcrossScreenAndSafeAreaSizes]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testShortOcclusionLimitsHeightInsteadOfClippingTheButtons]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testShortOcclusionLimitsHeightInsteadOfClippingTheButtons]' passed (0.000 seconds).
+Test Suite 'HeroBarLayoutTests' passed at 2026-09-08 12:56:56.080.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'LevelViewportTests' started at 2026-09-08 12:56:56.080.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.049 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.220 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-08 12:56:57.349.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.268 (1.268) seconds
+Test Suite 'PresentationStackTests' started at 2026-09-08 12:56:57.349.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' passed (0.000 seconds).
+Test Suite 'PresentationStackTests' passed at 2026-09-08 12:56:57.350.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+Test Suite 'ReinforcementTests' started at 2026-09-08 12:56:57.350.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testBothTimersFollowGameTicksAcrossPauseAndSpeedChanges]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testBothTimersFollowGameTicksAcrossPauseAndSpeedChanges]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testExpirationDoesNotEndLongerCooldown]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testExpirationDoesNotEndLongerCooldown]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testFractionalTimesRoundUpToAvoidEarlyExpiryOrReadiness]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testFractionalTimesRoundUpToAvoidEarlyExpiryOrReadiness]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testInvalidConfigurationIsRejected]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testInvalidConfigurationIsRejected]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testOverlappingGroupsExpireIndependentlyAndOnlyOnce]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testOverlappingGroupsExpireIndependentlyAndOnlyOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testProductionSchemaSeedAndDAOUseIndependentDatabaseValues]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testProductionSchemaSeedAndDAOUseIndependentDatabaseValues]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testRepeatedCallsAreBlockedUntilExactCooldownBoundary]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testRepeatedCallsAreBlockedUntilExactCooldownBoundary]' passed (0.000 seconds).
+Test Suite 'ReinforcementTests' passed at 2026-09-08 12:56:57.354.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.003 (0.004) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-08 12:56:57.354.
+	 Executed 18 tests, with 0 failures (0 unexpected) in 1.274 (1.275) seconds
+Test Suite 'Selected tests' passed at 2026-09-08 12:56:57.354.
+	 Executed 18 tests, with 0 failures (0 unexpected) in 1.274 (1.276) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

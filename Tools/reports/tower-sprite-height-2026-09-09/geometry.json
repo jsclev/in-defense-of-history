@@ -1,0 +1,2942 @@
+[
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 2,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 2,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 2,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 2,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 2,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 2,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 2,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 2,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 7.7862595419847329,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 15.572519083969466,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 38.931297709923662,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 3,
+    "image_height" : 77.862595419847324,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 3,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 3,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 3,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 3,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 3,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 3,
+    "image_height" : 41.526717557251906,
+    "playable" : 340,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 3,
+    "image_height" : 83.053435114503813,
+    "playable" : 340,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_1",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_2",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_3",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 20.610687022900763,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "ranged_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 41.221374045801525,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "melee_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_1",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_2",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 103.05343511450381,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "artillery_tower_level_4_branch_3",
+    "density" : 1,
+    "image_height" : 206.10687022900763,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 219.84732824427479,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_1",
+    "density" : 1,
+    "image_height" : 219.84732824427479,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 219.84732824427479,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_2",
+    "density" : 1,
+    "image_height" : 219.84732824427479,
+    "playable" : 900,
+    "variant" : "before-double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "current"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 219.84732824427479,
+    "playable" : 900,
+    "variant" : "double"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "wide-slot"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 109.9236641221374,
+    "playable" : 900,
+    "variant" : "before"
+  },
+  {
+    "asset" : "special_tower_level_3",
+    "density" : 1,
+    "image_height" : 219.84732824427479,
+    "playable" : 900,
+    "variant" : "before-double"
+  }
+]

@@ -1,0 +1,21 @@
+{
+  "sources": {
+    "Engine/Models/GameplayHapticPattern.swift": "6de00cf92f75c617fcbb581e54c196f5aeef13dfabec2845d3bb117d85228ebe",
+    "Engine/Models/EnemyEscapeHapticPolicy.swift": "eed8431314075209dccd14369e3d7af666561cdad07dde9817184dc119d6f573",
+    "Liberty Line/LevelRunner.swift": "de9608dcb8d311ea46d33f174e8e6899f3cae028b419fb121a622635fa3e5a0a",
+    "Liberty Line/Level Views/LevelMapView.swift": "9f857fd75de0ba1f15ae22ba4ee5465e093b37f24a2f32b9542184c125b98fc6",
+    "Tests/LevelEditorFormatsTests/GameplayHapticPatternTests.swift": "4b33b40d347b4a35fc41e5ce47c508e6503f96c9bf9caa267db24fc4b3231f67",
+    "Tests/LevelEditorFormatsTests/EnemyEscapeHapticTests.swift": "11572c7b5702100a28a34b08e4124b57cdbbf0faba50ba32dfab5fc9316f03ae"
+  },
+  "swift_tests": "17 passed, 0 failures",
+  "iphone_build": "SUCCEEDED (unsigned)",
+  "playback_probe": "PASS",
+  "exit_crossing_probe": "PASS",
+  "previous_pattern_device_result": "User reported escape warning feels too similar to tower build; rejected as insufficiently distinct.",
+  "revised_pattern_physical_sensation": "NOT MEASURED",
+  "pattern_files": {
+    "build.ahap": "2c7b6347efce0b2484683c3e73652fa42c3f2cf7e7494b88d176e0076605642e",
+    "lifeLoss.ahap": "57b05008bf1e9d2a397f8a1723351b85d03cd62fa47d9431bb904507e62421b3",
+    "defeat.ahap": "dd54f1b1ae377a9d3120fb6de63a4c39a29dc71b95adb0651e40bd113e3b3fe7"
+  }
+}

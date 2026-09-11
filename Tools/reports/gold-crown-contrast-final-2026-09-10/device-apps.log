@@ -1,0 +1,14 @@
+01:34:51  Acquired tunnel connection to device.
+01:34:51  Enabling developer disk image services.
+01:34:51  Acquired usage assertion.
+Apps installed:
+Name                Bundle Identifier                     Version   Bundle Version
+-----------------   -----------------------------------   -------   --------------
+Exit Marker Check   com.zippyzen.exit-marker-probe        1.0       1             
+Exit Marker Check   com.zippyzen.exit-size-probe          1.0       1             
+Exit Marker Check   com.zippyzen.exit-perspective-probe   1.0       1             
+Hero Exit Check     com.zippyzen.hero-exit-probe          1.0       1             
+Level Editor        com.zippyzen.td.leveleditor           1.0.159   159           
+Liberty Line        com.zippyzen.liberty-line             1.0       1             
+Mammoth Lifts       com.timothycleveland.Mammoth-Lifts    1.0       12            
+Stone to Space      com.zippyzen.StoneToSpace             0.3       7             

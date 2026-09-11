@@ -1,0 +1,463 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.40s)
+Test Suite 'All tests' started at 2026-09-10 22:22:07.731.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 22:22:07.732.
+Test Suite 'BottomCenterOcclusionTests' started at 2026-09-10 22:22:07.732.
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testAuthoredCutoutIsCenteredFlushWithBottomAndUsesReducedCornerHeight]' started.
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testAuthoredCutoutIsCenteredFlushWithBottomAndUsesReducedCornerHeight]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testCutoutIsRemovedFromPlayAndTowerPlacementShapes]' started.
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testCutoutIsRemovedFromPlayAndTowerPlacementShapes]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testEditorAndRuntimeUseTheSameAuthoredReferenceAndExtremeWidthsStayInsidePlay]' started.
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testEditorAndRuntimeUseTheSameAuthoredReferenceAndExtremeWidthsStayInsidePlay]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testRuntimeWidthUsesFullScreenAcrossLandscapeSizesAndSafeInsets]' started.
+Test Case '-[LevelEditorFormatsTests.BottomCenterOcclusionTests testRuntimeWidthUsesFullScreenAcrossLandscapeSizesAndSafeInsets]' passed (0.000 seconds).
+Test Suite 'BottomCenterOcclusionTests' passed at 2026-09-10 22:22:07.735.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'CallWaveButtonTests' started at 2026-09-10 22:22:07.735.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testBundledMapsProvideEditableRuntimeButtonCenters]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testBundledMapsProvideEditableRuntimeButtonCenters]' passed (0.305 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testCharlestonUsesTheCurrentAuthoredButtonCoordinates]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testCharlestonUsesTheCurrentAuthoredButtonCoordinates]' passed (0.365 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testExactCentersSurviveNativeGeoJSONAndRuntimeLoading]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testExactCentersSurviveNativeGeoJSONAndRuntimeLoading]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testInvalidRouteAssignmentsAreRejected]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testInvalidRouteAssignmentsAreRejected]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLayoutProjectsExactCoordinatesAcrossRuntimeCanvases]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLayoutProjectsExactCoordinatesAcrossRuntimeCanvases]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLegacyDocumentsOpenWithoutInventingButtonPositions]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLegacyDocumentsOpenWithoutInventingButtonPositions]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testOnlyUpcomingRoutesShowButtonsAndSharedEntrancesAppearOnce]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testOnlyUpcomingRoutesShowButtonsAndSharedEntrancesAppearOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testRuntimeRejectsMissingAndMalformedButtons]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testRuntimeRejectsMissingAndMalformedButtons]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testSizingUsesRuntimeHUDScaleAndReadableMinimum]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testSizingUsesRuntimeHUDScaleAndReadableMinimum]' passed (0.000 seconds).
+Test Suite 'CallWaveButtonTests' passed at 2026-09-10 22:22:08.409.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.674 (0.674) seconds
+Test Suite 'CharlestonWaveTests' started at 2026-09-10 22:22:08.409.
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves]' started.
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves]' passed (0.835 seconds).
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testEditorPreservesAllRoutesAndAllWaveTiming]' started.
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testEditorPreservesAllRoutesAndAllWaveTiming]' passed (0.901 seconds).
+Test Suite 'CharlestonWaveTests' passed at 2026-09-10 22:22:10.145.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.736 (1.736) seconds
+Test Suite 'EditorArrowKeyTests' started at 2026-09-10 22:22:10.145.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testAllArrowsReachSelectionWithFocusOutsideCanvasExactlyOnce]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testAllArrowsReachSelectionWithFocusOutsideCanvasExactlyOnce]' passed (0.102 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testHiddenOrDetachedCanvasCannotConsumeArrows]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testHiddenOrDetachedCanvasCannotConsumeArrows]' passed (0.008 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testInactiveAndOtherDocumentWindowsCannotNudge]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testInactiveAndOtherDocumentWindowsCannotNudge]' passed (0.014 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSelectionChangesAndKeyRepeatUseCurrentHandler]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSelectionChangesAndKeyRepeatUseCurrentHandler]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testShortcutsAndNonArrowKeysPassThrough]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testShortcutsAndNonArrowKeysPassThrough]' passed (0.006 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSwiftUIHostingViewDoesNotBlockCanvasArrows]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSwiftUIHostingViewDoesNotBlockCanvasArrows]' passed (0.009 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testTextFieldEditorKeepsArrowKeys]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testTextFieldEditorKeepsArrowKeys]' passed (0.021 seconds).
+Test Suite 'EditorArrowKeyTests' passed at 2026-09-10 22:22:10.309.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.163 (0.164) seconds
+Test Suite 'EditorDocumentLifecycleTests' started at 2026-09-10 22:22:10.309.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testExplicitlyOpenedDocumentTakesPriorityOverStartupRecents]' started.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testExplicitlyOpenedDocumentTakesPriorityOverStartupRecents]' passed (0.006 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testFailedOpenKeepsUntitledDocument]' started.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testFailedOpenKeepsUntitledDocument]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testNoRecentFilesCreatesOnlyOneUntitledDocument]' started.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testNoRecentFilesCreatesOnlyOneUntitledDocument]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testStartupUsesLastEditInsteadOfLastOpenAndCreatesNoUntitledWindow]' started.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testStartupUsesLastEditInsteadOfLastOpenAndCreatesNoUntitledWindow]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testSuccessfulOpenClosesOnlyPristineUntitledDocuments]' started.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testSuccessfulOpenClosesOnlyPristineUntitledDocuments]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testUnreadableRecentFallsBackToNextMapThenUntitled]' started.
+Test Case '-[LevelEditorFormatsTests.EditorDocumentLifecycleTests testUnreadableRecentFallsBackToNextMapThenUntitled]' passed (0.001 seconds).
+Test Suite 'EditorDocumentLifecycleTests' passed at 2026-09-10 22:22:10.319.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.010 (0.010) seconds
+Test Suite 'EditorEraserIntegrationTests' started at 2026-09-10 22:22:10.319.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCancelDiscardsPreviewAndIgnoresLateMoveAndRelease]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCancelDiscardsPreviewAndIgnoresLateMoveAndRelease]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCanvasCoordinatesAtDifferentZoomsAndPanOffsetsEraseUnderTheCursor]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCanvasCoordinatesAtDifferentZoomsAndPanOffsetsEraseUnderTheCursor]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testClickWithoutDraggingErasesACircularDab]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testClickWithoutDraggingErasesACircularDab]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCoordinatesClampToCanvasAndInvalidInputCannotCommit]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testCoordinatesClampToCanvasAndInvalidInputCannotCommit]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDragPreviewDoesNotChangeDocumentOrUndoUntilRelease]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDragPreviewDoesNotChangeDocumentOrUndoUntilRelease]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDuplicateReleaseCannotCommitTwice]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testDuplicateReleaseCannotCommitTwice]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testEraserThenPainterUseSeparateStrokesAndUndoSeparately]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testEraserThenPainterUseSeparateStrokesAndUndoSeparately]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testErasingLeavesTowersHeroesMarkersImagesAndWaveDataIntact]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testErasingLeavesTowersHeroesMarkersImagesAndWaveDataIntact]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testGestureCutSurvivesActualNativeFileAndGeoJSONFileRoundTrips]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testGestureCutSurvivesActualNativeFileAndGeoJSONFileRoundTrips]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMissDoesNotDirtyDocumentOrAddUndo]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMissDoesNotDirtyDocumentOrAddUndo]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testSeparateDocumentsHaveIndependentPreviewsAndUndo]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testSeparateDocumentsHaveIndependentPreviewsAndUndo]' passed (0.000 seconds).
+Test Suite 'EditorEraserIntegrationTests' passed at 2026-09-10 22:22:10.328.
+	 Executed 12 tests, with 0 failures (0 unexpected) in 0.008 (0.009) seconds
+Test Suite 'EditorEraserTests' started at 2026-09-10 22:22:10.328.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testBrushSizeAndEdgeMatrixMatchesCircularFootprint]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testBrushSizeAndEdgeMatrixMatchesCircularFootprint]' passed (0.036 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteEraseAndRepaintPreserveImportedRouteIndices]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteEraseAndRepaintPreserveImportedRouteIndices]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteNativeAndPaintEraseCannotReappearOnSave]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCompleteNativeAndPaintEraseCannotReappearOnSave]' passed (0.004 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCutsSurviveNativeSaveAndGeoJSONExport]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCutsSurviveNativeSaveAndGeoJSONExport]' passed (0.004 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testDraggedPreviewAndCommitMatchTheBrushAcrossOverlappingSurfaces]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testDraggedPreviewAndCommitMatchTheBrushAcrossOverlappingSurfaces]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testErasingKeepsEditableWaypointsAndWaveAssignments]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testErasingKeepsEditableWaypointsAndWaveAssignments]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testFastSparseDragErasesContinuouslyLikeDenseSamples]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testFastSparseDragErasesContinuouslyLikeDenseSamples]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testImportedHolesAndDisconnectedIslandsSurviveAnEdgeCutAndReload]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testImportedHolesAndDisconnectedIslandsSurviveAnEdgeCutAndReload]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testInvalidEraserDataIsANoOp]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testInvalidEraserDataIsANoOp]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testLegacyStoredErasuresPreservePaintOrderAndDoNotCutWaypoints]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testLegacyStoredErasuresPreservePaintOrderAndDoNotCutWaypoints]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testNewPaintCanRefillACutAndBeErasedAgain]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testNewPaintCanRefillACutAndBeErasedAgain]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testOneDragHasOneUndoAndRedo]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testOneDragHasOneUndoAndRedo]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testRepeatingTheSameEraseDoesNotCreateAnotherEdit]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testRepeatingTheSameEraseDoesNotCreateAnotherEdit]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle]' started.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle]' passed (0.000 seconds).
+Test Suite 'EditorEraserTests' passed at 2026-09-10 22:22:10.386.
+	 Executed 16 tests, with 0 failures (0 unexpected) in 0.057 (0.059) seconds
+Test Suite 'EnemyEscapeHapticTests' started at 2026-09-10 22:22:10.386.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testDefeatOverridesRecentLossAndCoalescedLossesPlayOnlyDefeat]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testDefeatOverridesRecentLossAndCoalescedLossesPlayOnlyDefeat]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testLoadingAndCounterResetDoNotProduceLossFeedback]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testLoadingAndCounterResetDoNotProduceLossFeedback]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testLossBecomesAvailableAtHalfSecondRegardlessOfEscapeCount]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testLossBecomesAvailableAtHalfSecondRegardlessOfEscapeCount]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testMutedAndInactiveLossesDoNotReplayWhenEnabledOrResumed]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testMutedAndInactiveLossesDoNotReplayWhenEnabledOrResumed]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testSeparateEscapesSignalLossAndBurstDoesNotAccumulateDelayedFeedback]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyEscapeHapticTests testSeparateEscapesSignalLossAndBurstDoesNotAccumulateDelayedFeedback]' passed (0.000 seconds).
+Test Suite 'EnemyEscapeHapticTests' passed at 2026-09-10 22:22:10.388.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'EnemyRouteTests' started at 2026-09-10 22:22:10.388.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testEditorRejectsExportAfterErasingAnExplicitEnemyRoute]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testEditorRejectsExportAfterErasingAnExplicitEnemyRoute]' passed (0.334 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testExplicitRoutesAreSortedAndDoNotExpandHeroMovementArea]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testExplicitRoutesAreSortedAndDoNotExpandHeroMovementArea]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testLoaderPrefersGeoJSONAndRefusesInvalidRoutesInsteadOfUsingSQL]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testLoaderPrefersGeoJSONAndRefusesInvalidRoutesInsteadOfUsingSQL]' passed (0.257 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testLoadsDirectedRouteAndRejectsSegmentAcrossHoleEvenWithValidEndpoints]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testLoadsDirectedRouteAndRejectsSegmentAcrossHoleEvenWithValidEndpoints]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testRejectsMissingMarkersDuplicateIndicesInvalidEndpointsAndMissingWaveRoutes]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testRejectsMissingMarkersDuplicateIndicesInvalidEndpointsAndMissingWaveRoutes]' passed (0.001 seconds).
+Test Suite 'EnemyRouteTests' passed at 2026-09-10 22:22:10.982.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.594 (0.594) seconds
+Test Suite 'GameplayHapticPatternTests' started at 2026-09-10 22:22:10.982.
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testActualCoreHapticsPatternsValidateAndRoundTripWithoutAudio]' started.
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testActualCoreHapticsPatternsValidateAndRoundTripWithoutAudio]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testBuildRetainsSingleHeavyThudWithFirmerAttack]' started.
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testBuildRetainsSingleHeavyThudWithFirmerAttack]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testDefeatRetainsItsSeparateTwoRumblesWithSilenceBetweenThem]' started.
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testDefeatRetainsItsSeparateTwoRumblesWithSilenceBetweenThem]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testLossUsesDistinctSustainedShapeAndLeavesAGapBetweenRepeatedCues]' started.
+Test Case '-[LevelEditorFormatsTests.GameplayHapticPatternTests testLossUsesDistinctSustainedShapeAndLeavesAGapBetweenRepeatedCues]' passed (0.000 seconds).
+Test Suite 'GameplayHapticPatternTests' passed at 2026-09-10 22:22:10.984.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'HapticAuditionTests' started at 2026-09-10 22:22:10.984.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testAllTwentyPlayInOrderWithOneAndAQuarterSecondsOnlyAfterEachCompletion]' started.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testAllTwentyPlayInOrderWithOneAndAQuarterSecondsOnlyAfterEachCompletion]' passed (0.039 seconds).
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testHardwareFailureEndsAuditionWithoutMislabelledFallback]' started.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testHardwareFailureEndsAuditionWithoutMislabelledFallback]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testLeavingScreenStopsAndReturningDoesNotAutoplayAgain]' started.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testLeavingScreenStopsAndReturningDoesNotAutoplayAgain]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testProductionDefaultDoesNotAutoplayOnLaunchOrReturn]' started.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testProductionDefaultDoesNotAutoplayOnLaunchOrReturn]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testStopDuringGapCannotLeakIntoReplay]' started.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testStopDuringGapCannotLeakIntoReplay]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testTwentyDistinctValidPatternsHaveStableNumbers]' started.
+Test Case '-[LevelEditorFormatsTests.HapticAuditionTests testTwentyDistinctValidPatternsHaveStableNumbers]' passed (0.001 seconds).
+Test Suite 'HapticAuditionTests' passed at 2026-09-10 22:22:11.034.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.049 (0.049) seconds
+Test Suite 'HeroBarLayoutTests' started at 2026-09-10 22:22:11.034.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testHudMarginConsumesTheAvailableOcclusionWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testHudMarginConsumesTheAvailableOcclusionWidth]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testPhoneUsesSpaceBesideTheMapToReachFullOcclusionHeight]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testPhoneUsesSpaceBesideTheMapToReachFullOcclusionHeight]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testRowStaysInsideLowerLeftOcclusionAcrossScreenAndSafeAreaSizes]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testRowStaysInsideLowerLeftOcclusionAcrossScreenAndSafeAreaSizes]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testShortOcclusionLimitsHeightInsteadOfClippingTheButtons]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testShortOcclusionLimitsHeightInsteadOfClippingTheButtons]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testSpaceBelowTheMapCanIncreaseHeightBeyondTheOcclusion]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testSpaceBelowTheMapCanIncreaseHeightBeyondTheOcclusion]' passed (0.000 seconds).
+Test Suite 'HeroBarLayoutTests' passed at 2026-09-10 22:22:11.035.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'HeroExitConfigurationTests' started at 2026-09-10 22:22:11.035.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testCapacityLimitsAndOptionalSecondChoice]' started.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testCapacityLimitsAndOptionalSecondChoice]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testEveryMainLevelHasExplicitCapacityAndStartingPoints]' started.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testEveryMainLevelHasExplicitCapacityAndStartingPoints]' passed (0.308 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testLegacyImportCopiesCoordinatesOnceAndExportUsesIndependentPoints]' started.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testLegacyImportCopiesCoordinatesOnceAndExportUsesIndependentPoints]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testRankingResolvesRolesAndExactStartingCoordinatesAtLoadTime]' started.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testRankingResolvesRolesAndExactStartingCoordinatesAtLoadTime]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testRejectsMissingDuplicateUnknownAndMisplacedAssignments]' started.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testRejectsMissingDuplicateUnknownAndMisplacedAssignments]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testRolesCanHaveIdenticalExplicitCoordinates]' started.
+Test Case '-[LevelEditorFormatsTests.HeroExitConfigurationTests testRolesCanHaveIdenticalExplicitCoordinates]' passed (0.000 seconds).
+Test Suite 'HeroExitConfigurationTests' passed at 2026-09-10 22:22:11.348.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.312 (0.312) seconds
+Test Suite 'HeroMovementIntegrationTests' started at 2026-09-10 22:22:11.348.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllAuthoredHeroStartsCanMoveAndRespawnInsideTheirLevelArea]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllAuthoredHeroStartsCanMoveAndRespawnInsideTheirLevelArea]' passed (2.720 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllLegacyLevelRoadsPermitMovementAlongWaypointsAndAcrossTheirWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllLegacyLevelRoadsPermitMovementAlongWaypointsAndAcrossTheirWidth]' passed (7.385 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testCharlestonPolygonAllowsAreaDestinationsAndPreservesItsHoles]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testCharlestonPolygonAllowsAreaDestinationsAndPreservesItsHoles]' passed (4.497 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints]' passed (0.004 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testRuntimeCanvasInputRoundTripAndResizeDoNotChangeMovement]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testRuntimeCanvasInputRoundTripAndResizeDoNotChangeMovement]' passed (1.025 seconds).
+Test Suite 'HeroMovementIntegrationTests' passed at 2026-09-10 22:22:26.978.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 15.630 (15.631) seconds
+Test Suite 'HeroMovementTests' started at 2026-09-10 22:22:26.978.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testAuthoredWidthAndPolygonOverrideDefaultWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testAuthoredWidthAndPolygonOverrideDefaultWidth]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testEnemyChaseReturnAndUnreachableEnemyUseSameArea]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testEnemyChaseReturnAndUnreachableEnemyUseSameArea]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMalformedAndMissingAreasFailInsteadOfUsingDatabaseRoads]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMalformedAndMissingAreasFailInsteadOfUsingDatabaseRoads]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMovesToExactOffCenterAndSubTwoUnitDestinations]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMovesToExactOffCenterAndSubTwoUnitDestinations]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNarrowBentPassageUsesBoundaryRouteInsteadOfBecomingUnreachable]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNarrowBentPassageUsesBoundaryRouteInsteadOfBecomingUnreachable]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNewCommandMidStepAndRespawnUseActualPosition]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNewCommandMidStepAndRespawnUseActualPosition]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testRejectedCommandsKeepExistingOrderAndCombatState]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testRejectedCommandsKeepExistingOrderAndCombatState]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testWalksAroundHoleAndDoesNotCrossThinExclusions]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testWalksAroundHoleAndDoesNotCrossThinExclusions]' passed (0.004 seconds).
+Test Suite 'HeroMovementTests' passed at 2026-09-10 22:22:26.988.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.009 (0.009) seconds
+Test Suite 'HeroRankingTests' started at 2026-09-10 22:22:26.988.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testEveryChosenHeroHasDatabaseCombatStats]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testEveryChosenHeroHasDatabaseCombatStats]' passed (0.063 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testFailedSecondInsertRollsBackTheEntireChoice]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testFailedSecondInsertRollsBackTheEntireChoice]' passed (0.062 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testInvalidChoicesLeavePreviousSelectionIntact]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testInvalidChoicesLeavePreviousSelectionIntact]' passed (0.062 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testOneOrTwoHeroesAlwaysHaveRankingDerivedRoles]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testOneOrTwoHeroesAlwaysHaveRankingDerivedRoles]' passed (0.061 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testPreferencesRestoreOneHeroAndNormalizeOldOrder]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testPreferencesRestoreOneHeroAndNormalizeOldOrder]' passed (0.065 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testProductionSeedsExposeRankingThroughDAO]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testProductionSeedsExposeRankingThroughDAO]' passed (0.060 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testRankingEditsAndTiesDoNotDependOnSavedSlots]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testRankingEditsAndTiesDoNotDependOnSavedSlots]' passed (0.060 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testRankingEnforcesWholeNumbersFromOneToOneHundred]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testRankingEnforcesWholeNumbersFromOneToOneHundred]' passed (0.059 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testRemovingAndReplacingHeroesReassignsRoles]' started.
+Test Case '-[LevelEditorFormatsTests.HeroRankingTests testRemovingAndReplacingHeroesReassignsRoles]' passed (0.058 seconds).
+Test Suite 'HeroRankingTests' passed at 2026-09-10 22:22:27.539.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.550 (0.551) seconds
+Test Suite 'HeroStartingPositionTests' started at 2026-09-10 22:22:27.539.
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testBothEnabledRolesRequireExplicitStartsAndDisabledRolesAreNotExported]' started.
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testBothEnabledRolesRequireExplicitStartsAndDisabledRolesAreNotExported]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testLoaderRejectsMissingMultipleAndDuplicateRoles]' started.
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testLoaderRejectsMissingMultipleAndDuplicateRoles]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testNativeAndGeoJSONPreserveIndependentStartsAndRepositioning]' started.
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testNativeAndGeoJSONPreserveIndependentStartsAndRepositioning]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testPlacementMoveAndResetUndoRedo]' started.
+Test Case '-[LevelEditorFormatsTests.HeroStartingPositionTests testPlacementMoveAndResetUndoRedo]' passed (0.000 seconds).
+Test Suite 'HeroStartingPositionTests' passed at 2026-09-10 22:22:27.543.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
+Test Suite 'LevelGeoJSONTests' started at 2026-09-10 22:22:27.543.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testDecodingCannotBypassValidation]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testDecodingCannotBypassValidation]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testDisconnectedRoadsStayDisconnectedInOneFeature]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testDisconnectedRoadsStayDisconnectedInOneFeature]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testDumpPropagatesWriteFailure]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testDumpPropagatesWriteFailure]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testEnforcesFeatureGeometryAndPathReferences]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testEnforcesFeatureGeometryAndPathReferences]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testEraserRemovesImportedPathArea]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testEraserRemovesImportedPathArea]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testExporterDoesNotInventMarkersOrSilentlyDropBrokenRoads]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testExporterDoesNotInventMarkersOrSilentlyDropBrokenRoads]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testExportsUnionOfRoadsAndPaintWithoutChangingDraft]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testExportsUnionOfRoadsAndPaintWithoutChangingDraft]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testFlattenedImportCanBeSavedAndExportedAgain]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testFlattenedImportCanBeSavedAndExportedAgain]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testFlatteningPreservesHolesAndNestedIslands]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testFlatteningPreservesHolesAndNestedIslands]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testLegacyGeoJSONImportsSeparateRoads]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testLegacyGeoJSONImportsSeparateRoads]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testMissingHeroAssignmentReportsReadableValidationError]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testMissingHeroAssignmentReportsReadableValidationError]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testNativeFormatPreservesEditableDataImagesAndCanvas]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testNativeFormatPreservesEditableDataImagesAndCanvas]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testNativeRejectsFutureVersionsAndLegacyDraftStillDecodes]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testNativeRejectsFutureVersionsAndLegacyDraftStillDecodes]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testNativeSnapshotEmbedsLegacyImagesAndRejectsMissingFiles]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testNativeSnapshotEmbedsLegacyImagesAndRejectsMissingFiles]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsDuplicateOrMismatchedIDs]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsDuplicateOrMismatchedIDs]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsEmptyOpenAndDegenerateRings]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsEmptyOpenAndDegenerateRings]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsNonfiniteAndMalformedCoordinates]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsNonfiniteAndMalformedCoordinates]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsUnsupportedTypesAndVersions]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRejectsUnsupportedTypesAndVersions]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRequiresEntranceAndExit]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRequiresEntranceAndExit]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRequiresExactlyOnePath]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testRequiresExactlyOnePath]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testSinglePaintDabIsExported]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testSinglePaintDabIsExported]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidatesCanvasAndLevelSettings]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidatesCanvasAndLevelSettings]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidatesSlotNumbering]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidatesSlotNumbering]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidatesWaves]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidatesWaves]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidModelRoundTripsAndDumpsAFile]' started.
+Test Case '-[LevelEditorFormatsTests.LevelGeoJSONTests testValidModelRoundTripsAndDumpsAFile]' passed (0.002 seconds).
+Test Suite 'LevelGeoJSONTests' passed at 2026-09-10 22:22:27.562.
+	 Executed 25 tests, with 0 failures (0 unexpected) in 0.017 (0.018) seconds
+Test Suite 'LevelMarkerPlacementTests' started at 2026-09-10 22:22:27.562.
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testBothMarkersUseTheSameExactProjectionAsPathPixels]' started.
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testBothMarkersUseTheSameExactProjectionAsPathPixels]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testCroppedCrownKeepsItsApprovedSizeWithoutMovingTheCenter]' started.
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testCroppedCrownKeepsItsApprovedSizeWithoutMovingTheCenter]' passed (0.000 seconds).
+Test Suite 'LevelMarkerPlacementTests' passed at 2026-09-10 22:22:27.562.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'LevelViewportTests' started at 2026-09-10 22:22:27.562.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.008 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.225 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-10 22:22:28.795.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.233 (1.233) seconds
+Test Suite 'MasterControlsLayoutTests' started at 2026-09-10 22:22:28.795.
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testNarrowLayoutFitsWidthIncludingGapAndHudMargin]' started.
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testNarrowLayoutFitsWidthIncludingGapAndHudMargin]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testNoAvailableSpaceProducesZeroSizedRow]' started.
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testNoAvailableSpaceProducesZeroSizedRow]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testPhoneUsesRightGutterAndReachesOcclusionBottom]' started.
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testPhoneUsesRightGutterAndReachesOcclusionBottom]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testRowStaysInsideHudAndOnlyOverlapsOccludedMap]' started.
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testRowStaysInsideHudAndOnlyOverlapsOccludedMap]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testSpaceAboveMapCanIncreaseHeightBeyondOcclusion]' started.
+Test Case '-[LevelEditorFormatsTests.MasterControlsLayoutTests testSpaceAboveMapCanIncreaseHeightBeyondOcclusion]' passed (0.000 seconds).
+Test Suite 'MasterControlsLayoutTests' passed at 2026-09-10 22:22:28.797.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'PresentationStackTests' started at 2026-09-10 22:22:28.797.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' passed (0.000 seconds).
+Test Suite 'PresentationStackTests' passed at 2026-09-10 22:22:28.798.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'ReinforcementTests' started at 2026-09-10 22:22:28.798.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testBothTimersFollowGameTicksAcrossPauseAndSpeedChanges]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testBothTimersFollowGameTicksAcrossPauseAndSpeedChanges]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testExpirationDoesNotEndLongerCooldown]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testExpirationDoesNotEndLongerCooldown]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testFractionalTimesRoundUpToAvoidEarlyExpiryOrReadiness]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testFractionalTimesRoundUpToAvoidEarlyExpiryOrReadiness]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testInvalidConfigurationIsRejected]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testInvalidConfigurationIsRejected]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testOverlappingGroupsExpireIndependentlyAndOnlyOnce]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testOverlappingGroupsExpireIndependentlyAndOnlyOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testProductionSchemaSeedAndDAOUseIndependentDatabaseValues]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testProductionSchemaSeedAndDAOUseIndependentDatabaseValues]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testRepeatedCallsAreBlockedUntilExactCooldownBoundary]' started.
+Test Case '-[LevelEditorFormatsTests.ReinforcementTests testRepeatedCallsAreBlockedUntilExactCooldownBoundary]' passed (0.000 seconds).
+Test Suite 'ReinforcementTests' passed at 2026-09-10 22:22:28.801.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'RuntimeCanvasTests' started at 2026-09-10 22:22:28.801.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testAllGeometryFitsTheLiveSafeArea]' started.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testAllGeometryFitsTheLiveSafeArea]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testMenuContentCannotResizeTheRuntimeCanvas]' started.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testMenuContentCannotResizeTheRuntimeCanvas]' passed (0.001 seconds).
+Test Suite 'RuntimeCanvasTests' passed at 2026-09-10 22:22:28.802.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'TapAreaTests' started at 2026-09-10 22:22:28.803.
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testEmptyTopCornersExposeTheWholeTopEdgeAndOverlappingCornersExposeNone]' started.
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testEmptyTopCornersExposeTheWholeTopEdgeAndOverlappingCornersExposeNone]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testRuntimeInsetUsesPlayHeightAndFollowsSafeAreaAndCoordinateOrigin]' started.
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testRuntimeInsetUsesPlayHeightAndFollowsSafeAreaAndCoordinateOrigin]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testShallowCornerEdgesAreNotMovedDownWithTheExposedTopSegment]' started.
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testShallowCornerEdgesAreNotMovedDownWithTheExposedTopSegment]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testTapAreaRemovesExactlyTheExposedTopStrip]' started.
+Test Case '-[LevelEditorFormatsTests.TapAreaTests testTapAreaRemovesExactlyTheExposedTopStrip]' passed (0.000 seconds).
+Test Suite 'TapAreaTests' passed at 2026-09-10 22:22:28.806.
+	 Executed 4 tests, with 0 failures (0 unexpected) in 0.004 (0.004) seconds
+Test Suite 'TowerSlotLoadingTests' started at 2026-09-10 22:22:28.806.
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testAuthoredOrderCoordinatesAndStableIdentities]' started.
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testAuthoredOrderCoordinatesAndStableIdentities]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testEveryBundledMapMatchesEditorSlots]' started.
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testEveryBundledMapMatchesEditorSlots]' passed (0.291 seconds).
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testLegacyNumberOnlySlotsAndExplicitlyEmptyMap]' started.
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testLegacyNumberOnlySlotsAndExplicitlyEmptyMap]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testRejectsMalformedCoordinatesAndNumbering]' started.
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testRejectsMalformedCoordinatesAndNumbering]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testSharedLoaderWorksWithoutSQLSlotsAndImmediatelyUsesReexports]' started.
+Test Case '-[LevelEditorFormatsTests.TowerSlotLoadingTests testSharedLoaderWorksWithoutSQLSlotsAndImmediatelyUsesReexports]' passed (0.565 seconds).
+Test Suite 'TowerSlotLoadingTests' passed at 2026-09-10 22:22:29.664.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 0.857 (0.858) seconds
+Test Suite 'WaveStartTimingTests' started at 2026-09-10 22:22:29.664.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testBonusIsFixedUntilDeadlineAndCanBeConfiguredToZero]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testBonusIsFixedUntilDeadlineAndCanBeConfiguredToZero]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testConfiguredRevealAndAutomaticStartDeadlines]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testConfiguredRevealAndAutomaticStartDeadlines]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testDAOLoadsExplicitTimingAndPreservesSpawnGroups]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testDAOLoadsExplicitTimingAndPreservesSpawnGroups]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testEarlyCallReanchorsFollowingWaveAndRejectsRepeatedTap]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testEarlyCallReanchorsFollowingWaveAndRejectsRepeatedTap]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFirstWaveWaitsIndefinitelyAndSingleWaveFinishesSchedule]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFirstWaveWaitsIndefinitelyAndSingleWaveFinishesSchedule]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFractionalTimingNeverStartsBeforeConfiguredDuration]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFractionalTimingNeverStartsBeforeConfiguredDuration]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testInteractiveScheduleRequiresValidBonusData]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testInteractiveScheduleRequiresValidBonusData]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testManualEarlyCallAwardsItsDatabaseBonusExactlyOnce]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testManualEarlyCallAwardsItsDatabaseBonusExactlyOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testPausedClockDoesNotConsumeCountdown]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testPausedClockDoesNotConsumeCountdown]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testRevealCountdownAndAutomaticDeadlineUseActualPreviousStart]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testRevealCountdownAndAutomaticDeadlineUseActualPreviousStart]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testScheduleRejectsMissingAndInvalidTimingInsteadOfUsingDefaults]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testScheduleRejectsMissingAndInvalidTimingInsteadOfUsingDefaults]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testWaveDocumentCompatibilityAndTimingRoundTrip]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testWaveDocumentCompatibilityAndTimingRoundTrip]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testZeroDelayZeroCountdownAndEmptySchedules]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testZeroDelayZeroCountdownAndEmptySchedules]' passed (0.000 seconds).
+Test Suite 'WaveStartTimingTests' passed at 2026-09-10 22:22:29.667.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.002 (0.003) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-10 22:22:29.667.
+	 Executed 184 tests, with 0 failures (0 unexpected) in 21.920 (21.935) seconds
+Test Suite 'All tests' passed at 2026-09-10 22:22:29.667.
+	 Executed 184 tests, with 0 failures (0 unexpected) in 21.920 (21.936) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

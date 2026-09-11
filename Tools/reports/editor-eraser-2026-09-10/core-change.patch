@@ -1,0 +1,316 @@
+--- before/LevelEditor/BrushStroke.swift
++++ after/LevelEditor/BrushStroke.swift
+@@ -94,7 +94,8 @@
+         return left + right.reversed()
+     }
+ 
+-    static func strokeArea(points: [Point], width: Double) -> CGPath {
++    static func strokeArea(points: [Point], width: Double,
++                           erasedArea: LevelGeoJSON.Geometry? = nil) -> CGPath {
+         let line = CGMutablePath()
+         guard let first = points.first else { return line }
+         line.move(to: CGPoint(x: first.x, y: first.y))
+@@ -103,121 +104,25 @@
+         } else {
+             for p in points.dropFirst() { line.addLine(to: CGPoint(x: p.x, y: p.y)) }
+         }
+-        return line.copy(strokingWithWidth: width, lineCap: .round, lineJoin: .round, miterLimit: 10)
+-    }
+-
+-    /// Cuts one width-carrying polyline with an eraser stroke, returning the
+-    /// pieces that survive. A cut through the middle returns two.
+-    ///
+-    /// The cut lands where the line CROSSES the eraser band, not merely where a
+-    /// point of it lands inside: a road whose waypoints sit further apart than
+-    /// the brush is wide would otherwise be uncuttable, and a run left holding a
+-    /// single waypoint would have no length to trim. Every piece end the eraser
+-    /// created is then pulled back by `halfWidth`, because the piece is drawn
+-    /// with a round cap of that radius — without the pull-back the cap fills the
+-    /// hole straight back in and a 60-wide erase across a 140-wide road would
+-    /// leave no visible gap at all.
+-    static func erase(polyline: [Point], halfWidth: Double,
+-                      with eraser: MapDraft.PaintStroke) -> [[Point]] {
+-        guard !polyline.isEmpty else { return [] }
+-        guard !eraser.points.isEmpty else { return [polyline] }
+-        let reach = eraser.width / 2
+-        func covers(_ p: Point) -> Bool {
+-            let d = eraser.points.count == 1
+-                ? p.distance(to: eraser.points[0])
+-                : p.distance(toPolyline: eraser.points)
+-            return d <= reach
+-        }
+-        guard polyline.count > 1 else { return covers(polyline[0]) ? [] : [polyline] }
+-
+-        return survivingRuns(polyline, step: max(0.5, reach / 2), covers: covers)
+-            .compactMap { run in
+-                var piece = run.points
+-                if run.cutAtStart { piece = trimmingFront(piece, by: halfWidth) }
+-                if run.cutAtEnd { piece = trimmingBack(piece, by: halfWidth) }
+-                return piece.count >= 2 ? piece : nil
+-            }
+-    }
+-
+-    private struct SurvivingRun {
+-        var points: [Point] = []
+-        var cutAtStart = false
+-        var cutAtEnd = false
+-    }
+-
+-    /// The stretches of the polyline outside the covered region, each ending on
+-    /// the boundary itself. Segments are walked in `step` increments and each
+-    /// crossing is bisected onto the boundary, so the original points are kept
+-    /// and only the crossings are added.
+-    private static func survivingRuns(_ polyline: [Point], step: Double,
+-                                      covers: (Point) -> Bool) -> [SurvivingRun] {
+-        var runs: [SurvivingRun] = []
+-        var run: SurvivingRun?
+-        var state = covers(polyline[0])
+-        if !state { run = SurvivingRun(points: [polyline[0]]) }
+-
+-        for i in 0..<(polyline.count - 1) {
+-            let a = polyline[i], b = polyline[i + 1]
+-            let length = a.distance(to: b)
+-            let steps = length > step ? Int((length / step).rounded(.up)) : 1
+-            var previousT = 0.0
+-            for s in 1...steps {
+-                let t = Double(s) / Double(steps)
+-                let covered = covers(Point.lerp(a, b, t))
+-                if covered != state {
+-                    var old = previousT, new = t
+-                    while (new - old) * length > 0.05 {
+-                        let mid = (old + new) / 2
+-                        if covers(Point.lerp(a, b, mid)) == state { old = mid } else { new = mid }
+-                    }
+-                    // The boundary point belongs to the surviving side.
+-                    let boundary = Point.lerp(a, b, covered ? old : new)
+-                    if covered {
+-                        run?.points.append(boundary)
+-                        run?.cutAtEnd = true
+-                        if let run { runs.append(run) }
+-                        run = nil
+-                    } else {
+-                        run = SurvivingRun(points: [boundary], cutAtStart: true)
+-                    }
+-                    state = covered
+-                }
+-                if s == steps, !state { run?.points.append(b) }
+-                previousT = t
+-            }
+-        }
+-        if let run { runs.append(run) }
+-        return runs
+-    }
+-
+-    private static func trimmingFront(_ input: some Sequence<Point>,
+-                                      by distance: Double) -> [Point] {
+-        let pts = Array(input)
+-        guard distance > 0, pts.count > 1 else { return [] }
+-        var remaining = distance
+-        for i in 0..<(pts.count - 1) {
+-            let seg = pts[i].distance(to: pts[i + 1])
+-            if seg >= remaining {
+-                let cut = Point.lerp(pts[i], pts[i + 1], seg > 0 ? remaining / seg : 1)
+-                return [cut] + pts[(i + 1)...]
+-            }
+-            remaining -= seg
+-        }
+-        return []
+-    }
+-
+-    private static func trimmingBack(_ pts: [Point], by distance: Double) -> [Point] {
+-        Array(trimmingFront(pts.reversed(), by: distance).reversed())
++        let area = line.copy(strokingWithWidth: width, lineCap: .round, lineJoin: .round, miterLimit: 10)
++        return erasedArea.map { area.subtracting(PathFlattening.area(for: $0)) } ?? area
+     }
+ 
+     static func roadArea(roads: [MapDraft.Road], paint: [MapDraft.PaintStroke],
+-                         roadHalfWidth: Double, base: LevelGeoJSON.Geometry? = nil) -> CGPath {
++                         roadHalfWidth: Double, base: LevelGeoJSON.Geometry? = nil,
++                         preview: MapDraft.PaintStroke? = nil) -> CGPath {
+         var area = base.map(PathFlattening.area(for:)) ?? CGMutablePath() as CGPath
+         for road in roads where road.points.count >= 2 {
+-            area = area.union(strokeArea(points: road.points, width: roadHalfWidth * 2))
++            area = area.union(strokeArea(points: road.points, width: roadHalfWidth * 2,
++                                         erasedArea: road.erasedArea))
+         }
+         for stroke in paint where !stroke.points.isEmpty {
+-            area = area.union(strokeArea(points: stroke.points, width: stroke.width))
++            let shape = strokeArea(points: stroke.points, width: stroke.width, erasedArea: stroke.erasedArea)
++            area = stroke.erases ? area.subtracting(shape) : area.union(shape)
++        }
++        if let preview, !preview.points.isEmpty {
++            let shape = strokeArea(points: preview.points, width: preview.width)
++            area = preview.erases ? area.subtracting(shape) : area.union(shape)
+         }
+         return area
+     }
+--- before/LevelEditor/MapDocument.swift
++++ after/LevelEditor/MapDocument.swift
+@@ -10,6 +10,8 @@
+     nonisolated struct Road: Codable, Equatable, Sendable {
+         var name: String
+         var points: [Point]
++        /// Cutouts in the rendered band; navigation waypoints stay editable.
++        var erasedArea: LevelGeoJSON.Geometry?
+ 
+         init(name: String, points: [Point]) {
+             self.name = name
+@@ -63,6 +65,7 @@
+     var coordinateSpace: String = Self.canvasSpace
+     var roadPaint: [PaintStroke] = []
+     /// A GeoJSON import is one flattened layer; native roads remain separate.
++    /// An empty MultiPolygon represents an imported layer erased completely.
+     var flattenedPath: LevelGeoJSON.Geometry?
+     var backgroundImageData: Data?
+     var overlayImageData: Data?
+@@ -106,6 +109,7 @@
+         var points: [Point]
+         var width: Double
+         var erases: Bool
++        var erasedArea: LevelGeoJSON.Geometry?
+     }
+ 
+     static let starter = MapDraft(
+@@ -129,45 +133,40 @@
+         roads.contains { $0.points.count >= 2 } && !waves.isEmpty
+     }
+ 
+-    /// Merges an eraser stroke straight into the waypoints. Covered waypoints go
+-    /// away, a road cut through the middle becomes two roads, and painted area
+-    /// under the eraser is cut the same way. The stroke itself is not kept.
++    /// Subtracts the circular brush from every existing visible path surface.
++    /// Cutouts belong to their road/paint, so later painting can fill them back
++    /// in. Erasing the footprint does not delete or renumber navigation routes.
+     mutating func applyErase(_ eraser: PaintStroke, mapGeometry: MapGeometry) {
+-        let editingFlattenedPath = flattenedPath != nil
++        guard !eraser.points.isEmpty, eraser.width.isFinite, eraser.width > 0,
++              eraser.points.allSatisfy({ $0.x.isFinite && $0.y.isFinite }) else { return }
++        let brush = BrushGeometry.strokeArea(points: eraser.points, width: eraser.width)
++        guard let brushGeometry = try? PathFlattening.geometry(from: brush) else { return }
++        func mask(addingTo previous: LevelGeoJSON.Geometry?) -> LevelGeoJSON.Geometry? {
++            guard let previous else { return brushGeometry }
++            return try? PathFlattening.geometry(from: PathFlattening.area(for: previous).union(brush))
++        }
+         if let base = flattenedPath {
+-            let area = PathFlattening.area(for: base).subtracting(
+-                BrushGeometry.strokeArea(points: eraser.points, width: eraser.width))
+-            flattenedPath = try? PathFlattening.geometry(from: area)
+-        }
+-        var taken = Set(roads.map(\.name))
+-        var cut: [Road] = []
+-        var firstPiece: [Int: Int] = [:]
+-        for (old, road) in roads.enumerated() {
+-            let pieces = BrushGeometry.erase(polyline: road.points,
+-                                             halfWidth: mapGeometry.roadHalfWidth,
+-                                             with: eraser)
+-                .filter { $0.count >= 2 }
+-            for (i, points) in pieces.enumerated() {
+-                if i == 0 { firstPiece[old] = cut.count }
+-                let name = i == 0 ? road.name : Self.freeRoadName(taken: taken)
+-                taken.insert(name)
+-                cut.append(Road(name: name, points: points))
+-            }
+-        }
+-        roads = cut
+-        // Spawn lines address a road by position, so a split or a road erased
+-        // away renumbers them. A line follows its road to the first piece that
+-        // survived; a road erased away entirely falls back to road 0, the same
+-        // fallback deleteRoad uses.
+-        for w in waves.indices where !editingFlattenedPath {
+-            for l in waves[w].lines.indices {
+-                waves[w].lines[l].road = firstPiece[waves[w].lines[l].road] ?? 0
+-            }
+-        }
+-        roadPaint = roadPaint.flatMap { stroke in
+-            BrushGeometry.erase(polyline: stroke.points, halfWidth: stroke.width / 2,
+-                                with: eraser)
+-                .map { PaintStroke(points: $0, width: stroke.width, erases: false) }
++            let area = PathFlattening.area(for: base)
++            if !area.intersection(brush).isEmpty {
++                // Keep the imported-layer identity even when completely erased,
++                // so its wave route indices survive painting a replacement.
++                let remaining = area.subtracting(brush)
++                flattenedPath = remaining.isEmpty ? .multiPolygon([])
++                    : (try? PathFlattening.geometry(from: remaining)) ?? base
++            }
++        }
++        for i in roads.indices {
++            let area = BrushGeometry.strokeArea(points: roads[i].points,
++                width: mapGeometry.roadHalfWidth * 2, erasedArea: roads[i].erasedArea)
++            guard !area.intersection(brush).isEmpty else { continue }
++            roads[i].erasedArea = mask(addingTo: roads[i].erasedArea) ?? roads[i].erasedArea
++        }
++        for i in roadPaint.indices where !roadPaint[i].erases {
++            let stroke = roadPaint[i]
++            let area = BrushGeometry.strokeArea(points: stroke.points, width: stroke.width,
++                                                erasedArea: stroke.erasedArea)
++            guard !area.intersection(brush).isEmpty else { continue }
++            roadPaint[i].erasedArea = mask(addingTo: stroke.erasedArea) ?? stroke.erasedArea
+         }
+     }
+ 
+@@ -187,8 +186,7 @@
+         }
+     }
+ 
+-    /// THE road name allocator. Erasing can split and drop roads, so a name
+-    /// taken from the count alone would collide with a road already there.
++    /// Deleted roads can leave gaps, so allocating by count would collide.
+     static func freeRoadName(taken: Set<String>) -> String {
+         var n = taken.count + 1
+         while taken.contains("Road \(n)") { n += 1 }
+--- before/LevelEditor/EditorCanvas.swift
++++ after/LevelEditor/EditorCanvas.swift
+@@ -205,7 +205,9 @@
+     }
+ 
+     private func extendPaint(to p: CGPoint, _ t: DesignTransform) {
+-        state.paintStroke.add(clampToCanvas(t.design(p)),
++        let point = clampToCanvas(t.design(p))
++        state.cursor = point
++        state.paintStroke.add(point,
+                               minSpacing: max(0.5, 1 / max(t.scale, 0.05)))
+     }
+ 
+@@ -217,7 +219,6 @@
+                                           erases: state.tool == .eraser)
+         if stroke.erases {
+             document.edit(undoManager) { $0.applyErase(stroke, mapGeometry: state.mapGeometry) }
+-            // A split renumbers the roads, and selection is held by index.
+             state.selection = .none
+         } else {
+             document.edit(undoManager) { $0.roadPaint.append(stroke) }
+@@ -355,6 +356,7 @@
+                     return
+                 }
+                 if state.tool == .paint || state.tool == .eraser {
++                    extendPaint(to: v.location, t)
+                     commitPaint()
+                     return
+                 }
+@@ -952,16 +954,17 @@
+     private func drawRoads(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+         let s = t.scale
+         let draft = document.draft
+-        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint, roadHalfWidth: state.mapGeometry.roadHalfWidth, base: draft.flattenedPath))
++        let preview = MapDraft.PaintStroke(points: state.paintStroke.points,
++            width: state.paintWidth, erases: state.tool == .eraser)
++        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint,
++            roadHalfWidth: state.mapGeometry.roadHalfWidth, base: draft.flattenedPath,
++            preview: preview))
+             .applying(t.viewTransform)
+         PathArtist.drawArea(&ctx, area, t)
+-        if !state.paintStroke.isEmpty {
+-            let wet = SwiftUI.Path(BrushGeometry.strokeArea(points: state.paintStroke.points,
+-                                                            width: state.paintWidth))
+-                .applying(t.viewTransform)
+-            let tint: Color = state.tool == .eraser ? .red : PathArtist.fillColor
+-            ctx.fill(wet, with: .color(tint.opacity(0.45)))
+-        }
++        // Keep route guides from redrawing a line through an erased hole.
++        let savedContext = ctx
++        ctx.clip(to: area)
++        defer { ctx = savedContext }
+         for (ri, road) in draft.roads.enumerated() {
+             let pts = road.points.map { t.view($0) }
+             let isSelected: Bool = switch state.selection {

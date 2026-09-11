@@ -1,0 +1,23 @@
+22:23:34  Acquired tunnel connection to device.
+22:23:34  Enabling developer disk image services.
+22:23:34  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.crown-half-tilt-probe
+• installationURL: file:///private/var/containers/Bundle/Application/ADE49B32-799C-42D4-A0A1-3A05006378DB/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4932
+• options: 
+22:23:51  Enabling developer disk image services.
+22:23:51  Acquired usage assertion.
+Launched application with com.zippyzen.crown-half-tilt-probe bundle identifier.
+22:24:19  Acquired tunnel connection to device.
+22:24:19  Enabling developer disk image services.
+22:24:19  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/gold-crown-half-tilt-2026-09-10/device-documents
+22:24:24  Acquired tunnel connection to device.
+22:24:24  Enabling developer disk image services.
+22:24:24  Acquired usage assertion.
+App uninstalled.
+PASS: 26 authored exits across 15 levels; physical-iPhone renders saved.

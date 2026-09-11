@@ -1,0 +1,56 @@
+[
+  {
+    "file": "221-current-1x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "221-current-2x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "221-current-3x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "340-current-1x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "340-current-2x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "340-current-3x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "900-current-1x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "900-current-2x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  },
+  {
+    "file": "900-current-3x.png",
+    "inner_90_percent_max_alpha": 0,
+    "peak_alpha": 255,
+    "equal_upgrade_identical": true
+  }
+]

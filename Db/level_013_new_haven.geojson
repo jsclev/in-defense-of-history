@@ -3421,89 +3421,89 @@
       }
     },
     {
-      "type": "Feature",
-      "id": "gameplay.exit.0",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1360,
-          535
-        ]
-      },
-      "properties": {
-        "id": "gameplay.exit.0",
-        "name": "Route 1 exit",
-        "category": "gameplay",
-        "kind": "goal_point",
-        "layer": 75,
-        "playable": true,
-        "insidePlayArea": true,
-        "pathIndex": 0
-      }
-    },
+  "type": "Feature",
+  "id": "gameplay.exit.0",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      1360,
+      535
+    ]
+  },
+  "properties": {
+    "id": "gameplay.exit.0",
+    "name": "Route 1 exit",
+    "category": "gameplay",
+    "kind": "goal_point",
+    "layer": 75,
+    "playable": true,
+    "insidePlayArea": true,
+    "pathIndex": 0
+  }
+},
     {
-      "type": "Feature",
-      "id": "gameplay.exit.1",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          2025,
-          535
-        ]
-      },
-      "properties": {
-        "id": "gameplay.exit.1",
-        "name": "Route 2 exit",
-        "category": "gameplay",
-        "kind": "goal_point",
-        "layer": 75,
-        "playable": true,
-        "insidePlayArea": true,
-        "pathIndex": 1
-      }
-    },
+  "type": "Feature",
+  "id": "gameplay.exit.1",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      2025,
+      535
+    ]
+  },
+  "properties": {
+    "id": "gameplay.exit.1",
+    "name": "Route 2 exit",
+    "category": "gameplay",
+    "kind": "goal_point",
+    "layer": 75,
+    "playable": true,
+    "insidePlayArea": true,
+    "pathIndex": 1
+  }
+},
     {
-      "type": "Feature",
-      "id": "gameplay.exit.2",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1360,
-          535
-        ]
-      },
-      "properties": {
-        "id": "gameplay.exit.2",
-        "name": "Route 3 exit",
-        "category": "gameplay",
-        "kind": "goal_point",
-        "layer": 75,
-        "playable": true,
-        "insidePlayArea": true,
-        "pathIndex": 2
-      }
-    },
+  "type": "Feature",
+  "id": "gameplay.exit.2",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      1360,
+      535
+    ]
+  },
+  "properties": {
+    "id": "gameplay.exit.2",
+    "name": "Route 3 exit",
+    "category": "gameplay",
+    "kind": "goal_point",
+    "layer": 75,
+    "playable": true,
+    "insidePlayArea": true,
+    "pathIndex": 2
+  }
+},
     {
-      "type": "Feature",
-      "id": "gameplay.exit.3",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          2025,
-          535
-        ]
-      },
-      "properties": {
-        "id": "gameplay.exit.3",
-        "name": "Route 4 exit",
-        "category": "gameplay",
-        "kind": "goal_point",
-        "layer": 75,
-        "playable": true,
-        "insidePlayArea": true,
-        "pathIndex": 3
-      }
-    },
+  "type": "Feature",
+  "id": "gameplay.exit.3",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      2025,
+      535
+    ]
+  },
+  "properties": {
+    "id": "gameplay.exit.3",
+    "name": "Route 4 exit",
+    "category": "gameplay",
+    "kind": "goal_point",
+    "layer": 75,
+    "playable": true,
+    "insidePlayArea": true,
+    "pathIndex": 3
+  }
+},
     {
       "type": "Feature",
       "id": "gameplay.tower_slot.1",
@@ -3855,6 +3855,123 @@
         "slotIndex": 15,
         "slotNumber": 16
       }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.0",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          614,
+          1160.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.0",
+        "name": "Call wave button 1",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1450.0,
+          1432
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.1",
+        "name": "Call wave button 2",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2254,
+          1160.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.2",
+        "name": "Call wave button 3",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.hero_spawn.primary",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1360,
+          555.5614489747068
+        ]
+      },
+      "properties": {
+        "id": "gameplay.hero_spawn.primary",
+        "name": "Primary hero start",
+        "category": "gameplay",
+        "kind": "hero_spawn",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "heroRoles": [
+          "primary"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.hero_spawn.secondary",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2025,
+          561.7287124479517
+        ]
+      },
+      "properties": {
+        "id": "gameplay.hero_spawn.secondary",
+        "name": "Secondary hero start",
+        "category": "gameplay",
+        "kind": "hero_spawn",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "heroRoles": [
+          "secondary"
+        ]
+      }
     }
-  ]
+  ],
+  "heroCount": 2
 }

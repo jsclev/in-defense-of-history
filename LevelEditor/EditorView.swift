@@ -2,7 +2,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 enum EditorTool: Hashable {
-    case select, slot, brush, paint, eraser, entrance, exitPoint, zoomIn, zoomOut
+    case select, pan, slot, brush, paint, eraser, entrance, exitPoint, callWaveButton, primaryHero, secondaryHero, zoomIn, zoomOut
 }
 
 enum EditorMode: Hashable {
@@ -16,6 +16,8 @@ enum EditorSelection: Equatable {
     case road(Int)
     case entrance(Int)
     case exitPoint(Int)
+    case callWaveButton(Int)
+    case hero(HeroSelection.Role)
 }
 
 @MainActor
@@ -27,6 +29,7 @@ final class EditorState {
     let towerMenuLayout: TowerMenuLayout
     let blueprints: Blueprints
     let towerSlotImage: TowerSlotImage
+    let grid: EditorGrid
 
     init(content: EditorContent, virtualCanvas: VirtualCanvas) {
         self.content = content
@@ -35,23 +38,38 @@ final class EditorState {
         towerMenuLayout = TowerMenuLayout(virtualCanvas: virtualCanvas)
         blueprints = Blueprints(virtualCanvas: virtualCanvas)
         towerSlotImage = TowerSlotImage(virtualCanvas: virtualCanvas)
+        grid = EditorGrid(unit: 4, major: 120,
+                          origin: Point(virtualCanvas.playAreaRect.minX,
+                                        virtualCanvas.playAreaRect.minY))
     }
 
     var mode: EditorMode = .edit
     var tool: EditorTool = .select
     var selection: EditorSelection = .none
+    private(set) var canvasFocusRequest = 0
     var visibleLayers: Set<EditorLayer> = Set(EditorLayer.allCases)
     var menuPreviewSlot: Int?
 
     var activeLayer: EditorLayer? { tool.layer }
 
+    /// An explicit inspector selection returns keyboard control to the map,
+    /// including clicking the same row after editing a coordinate field.
+    func selectFromInspector(_ selection: EditorSelection) {
+        self.selection = selection
+        canvasFocusRequest += 1
+    }
+
     func isVisible(_ layer: EditorLayer) -> Bool { visibleLayers.contains(layer) }
 
     func toggleVisibility(_ layer: EditorLayer) {
-        if visibleLayers.contains(layer) {
-            visibleLayers.remove(layer)
-        } else {
+        setVisibility(layer, !isVisible(layer))
+    }
+
+    func setVisibility(_ layer: EditorLayer, _ visible: Bool) {
+        if visible {
             visibleLayers.insert(layer)
+        } else {
+            visibleLayers.remove(layer)
         }
     }
 
@@ -63,9 +81,12 @@ final class EditorState {
         }
     }
 
-    var showGrid = true
     var snapToGrid = true
     var showRanges = true
+
+    func snapped(_ point: Point) -> Point {
+        snapToGrid ? grid.snap(point) : point
+    }
     var showPlayArea = true
 
     /// The inspector sidebar. Hidden, it slides off the left edge so the
@@ -105,9 +126,10 @@ final class EditorState {
     var showOuterEdge = true
     var stroke = BrushStroke()
     var paintWidth: Double = 60
-    var paintStroke = BrushStroke()
+    var paintGesture = EditorPaintGesture()
 
     var zoom: Double?
+    var fitRequest = 0
     var fitScale: Double = 0.4
     var pinchBase: Double?
 
@@ -132,7 +154,10 @@ final class EditorState {
         zoom = Self.zoomLadder.last { $0 < c * 0.999 } ?? Self.zoomLadder.first
     }
 
-    func zoomFit() { zoom = nil }
+    func zoomFit() {
+        zoom = nil
+        fitRequest += 1
+    }
 
     func setZoom(_ z: Double) { zoom = min(max(z, 0.05), 8) }
 
@@ -213,6 +238,24 @@ final class EditorState {
         }
     }
 
+    func loadImages(from draft: MapDraft) {
+        if let data = draft.backgroundImageData, draft.backgroundImagePath != nil {
+            let loaded = PlatformImageLoader.load(data: data)
+            background = loaded?.image
+            backgroundPixelSize = loaded?.pixelSize
+        } else { loadBackground(from: draft.backgroundImagePath, force: true) }
+        if let data = draft.overlayImageData, draft.overlayImagePath != nil {
+            let loaded = PlatformImageLoader.load(data: data)
+            overlay = loaded?.image
+            overlayPixelSize = loaded?.pixelSize
+        } else { loadOverlay(from: draft.overlayImagePath, force: true) }
+        if let data = draft.guideImageData, draft.guideImagePath != nil {
+            let loaded = PlatformImageLoader.load(data: data)
+            guide = loaded?.image
+            guidePixelSize = loaded?.pixelSize
+        } else { loadGuide(from: draft.guideImagePath, force: true) }
+    }
+
     func flash(_ message: String) {
         toast = message
         Task { @MainActor in
@@ -248,10 +291,12 @@ struct EditorView: View {
     /// it survives the chooser's dismissal resetting `importingImage`.
     @State private var importTarget: ImageImportTarget = .background
     @State private var exportingGeoJSON = false
-    @State private var geoJSONFile = GeoJSONFile(data: Data())
+    @State private var importingGeoJSON = false
+    @State private var geoJSONFile: GeoJSONFile?
+    @State private var fileError: String?
     @Environment(\.undoManager) private var undoManager
 
-    var body: some View {
+    private var modeContent: some View {
         Group {
             if state.mode == .playtest, let session {
                 PlaytestView(session: session, slotArt: state.towerSlotImage) { recorded in
@@ -262,64 +307,116 @@ struct EditorView: View {
                 editorBody
             }
         }
-        .toolbar { toolbarContent }
-        .fileImporter(isPresented: $importingImage,
-                      allowedContentTypes: [.png, .jpeg, .tiff]) { result in
-            // Loads run here directly (not only via the onChange handlers
-            // below) so re-picking the SAME file, updated in place in iCloud,
-            // reloads it even though its path string hasn't changed. The
-            // loader owns the security scope and reads fresh bytes.
-            if case let .success(url) = result {
-                switch importTarget {
-                case .background:
-                    state.loadBackground(from: url)
-                    document.edit(undoManager) { $0.backgroundImagePath = url.path }
-                    if let px = state.backgroundPixelSize, px != state.virtualCanvas.size {
-                        state.flash("Image is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
-                    }
-                case .overlay:
-                    state.loadOverlay(from: url)
-                    document.edit(undoManager) { $0.overlayImagePath = url.path }
-                    if let px = state.overlayPixelSize, px != state.virtualCanvas.size {
-                        state.flash("Occlusion is \(Int(px.width))×\(Int(px.height)) — artwork must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
-                    }
-                case .guide:
-                    state.loadGuide(from: url)
-                    document.edit(undoManager) { $0.guideImagePath = url.path }
+    }
+
+    private var fileControls: some View {
+        modeContent
+            .toolbar { toolbarContent }
+            .fileImporter(isPresented: $importingImage,
+                          allowedContentTypes: [.png, .jpeg, .tiff], onCompletion: importImage)
+            .fileImporter(isPresented: $importingGeoJSON,
+                          allowedContentTypes: [.geoJSON, .json], onCompletion: importGeoJSON)
+            .fileExporter(isPresented: $exportingGeoJSON, document: geoJSONFile,
+                          contentType: .geoJSON,
+                          defaultFilename: GeoJSONExport(virtualCanvas: state.virtualCanvas)
+                              .filename(for: document.draft)) { result in
+                switch result {
+                case let .success(url): state.flash("Exported \(url.lastPathComponent)")
+                case let .failure(error): fileError = error.localizedDescription
                 }
             }
-        }
-        .fileExporter(isPresented: $exportingGeoJSON,
-                      document: geoJSONFile,
-                      contentType: .geoJSON,
-                      defaultFilename: GeoJSONExport(virtualCanvas: state.virtualCanvas)
-                          .filename(for: document.draft)) { result in
-            switch result {
-            case let .success(url):
-                state.flash("Saved \(url.lastPathComponent)")
-            case let .failure(error):
-                state.flash("Save failed: \(error.localizedDescription)")
+            .alert("File operation failed", isPresented: Binding(
+                get: { fileError != nil }, set: { if !$0 { fileError = nil } }
+            )) { Button("OK", role: .cancel) { fileError = nil } }
+            message: { Text(fileError ?? "") }
+    }
+
+    private func importImage(_ result: Result<URL, Error>) {
+        do {
+            let url = try result.get()
+            guard let data = PlatformImageLoader.freshRead(url),
+                  let loaded = PlatformImageLoader.load(data: data) else {
+                throw LevelGeoJSON.ValidationError(message: "The selected image could not be read.")
             }
-        }
+            document.edit(undoManager) { draft in
+                switch importTarget {
+                case .background:
+                    draft.backgroundImagePath = url.path
+                    draft.backgroundImageData = data
+                case .overlay:
+                    draft.overlayImagePath = url.path
+                    draft.overlayImageData = data
+                case .guide:
+                    draft.guideImagePath = url.path
+                    draft.guideImageData = data
+                }
+            }
+            if importTarget != .guide, loaded.pixelSize != state.virtualCanvas.size {
+                state.flash("Image is \(Int(loaded.pixelSize.width))×\(Int(loaded.pixelSize.height)) — artwork must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
+            }
+        } catch { fileError = error.localizedDescription }
+    }
+
+    private func importGeoJSON(_ result: Result<URL, Error>) {
+        do {
+            let url = try result.get()
+            let scoped = url.startAccessingSecurityScopedResource()
+            defer { if scoped { url.stopAccessingSecurityScopedResource() } }
+            var imported = try GeoJSONImport.draft(from: Data(contentsOf: url))
+            imported.normalize(mapGeometry: state.mapGeometry)
+            document.edit(undoManager) { $0 = imported }
+            state.selection = .none
+            state.flash("Imported \(url.lastPathComponent). Save the editable document as .tdmap.")
+        } catch { fileError = error.localizedDescription }
+    }
+
+    var body: some View {
+        fileControls
         .onAppear {
-            document.draft.normalize(mapGeometry: state.mapGeometry)
-            state.documentFolder = documentURL?.deletingLastPathComponent()
-            state.loadBackground(from: document.draft.backgroundImagePath)
-            state.loadOverlay(from: document.draft.overlayImagePath)
-            state.loadGuide(from: document.draft.guideImagePath)
+            document.canvas = state.virtualCanvas
+            document.sourceFolder = documentURL?.deletingLastPathComponent()
+            var normalized = document.draft
+            normalized.normalize(mapGeometry: state.mapGeometry)
+            // Publishing an unchanged draft marks a pristine untitled document
+            // as edited in DocumentGroup, preventing placeholder replacement.
+            if normalized != document.draft { document.draft = normalized }
+            state.documentFolder = document.sourceFolder
+            if document.draft.backgroundImagePath?.isEmpty ?? true,
+               let terrain = EditorResources.url(
+                "../in-defense-of-history-data/Levels/grass_bastion.png") {
+                document.edit(undoManager) {
+                    $0.backgroundImagePath = terrain.path
+                    $0.backgroundImageData = nil
+                }
+            }
+            state.visibleLayers = Set(EditorLayer.allCases).subtracting(
+                document.draft.hiddenLayers.compactMap(EditorLayer.init(rawValue:)))
+            state.loadImages(from: document.draft)
         }
         .onChange(of: documentURL) { _, url in
-            state.documentFolder = url?.deletingLastPathComponent()
+            document.sourceFolder = url?.deletingLastPathComponent()
+            state.documentFolder = document.sourceFolder
         }
-        .onChange(of: document.draft.backgroundImagePath) { _, path in
-            state.loadBackground(from: path)
+        .onChange(of: [document.draft.backgroundImagePath, document.draft.overlayImagePath,
+                       document.draft.guideImagePath]) { _, _ in
+            state.loadImages(from: document.draft)
         }
-        .onChange(of: document.draft.overlayImagePath) { _, path in
-            state.loadOverlay(from: path)
+        .onChange(of: [document.draft.backgroundImageData, document.draft.overlayImageData,
+                       document.draft.guideImageData]) { _, _ in
+            state.loadImages(from: document.draft)
         }
-        .onChange(of: document.draft.guideImagePath) { _, path in
-            state.loadGuide(from: path)
+        .onChange(of: state.visibleLayers) { _, layers in
+            let hidden = EditorLayer.allCases.filter { !layers.contains($0) }.map(\.rawValue)
+            if document.draft.hiddenLayers != hidden {
+                document.edit(undoManager) { $0.hiddenLayers = hidden }
+            }
         }
+        .onChange(of: document.draft.hiddenLayers) { _, hidden in
+            state.visibleLayers = Set(EditorLayer.allCases).subtracting(
+                hidden.compactMap(EditorLayer.init(rawValue:)))
+        }
+        .focusedSceneValue(\.editorFileActions, EditorFileActions(
+            importGeoJSON: { importingGeoJSON = true }, exportGeoJSON: exportGeoJSON))
         .focusedSceneValue(\.editorState, state)
         .background(
             Button("") { state.zoomIn() }
@@ -346,11 +443,11 @@ struct EditorView: View {
 
     private func exportGeoJSON() {
         do {
-            geoJSONFile = GeoJSONFile(data: try GeoJSONExport(virtualCanvas: state.virtualCanvas)
-                .data(for: document.draft))
+            geoJSONFile = GeoJSONFile(document: try GeoJSONExport(virtualCanvas: state.virtualCanvas)
+                .document(for: document.draft))
             exportingGeoJSON = true
         } catch {
-            state.flash("Could not build geojson: \(error.localizedDescription)")
+            fileError = error.localizedDescription
         }
     }
 
@@ -403,6 +500,8 @@ struct EditorView: View {
                 )) {
                     Image(systemName: "cursorarrow").tag(EditorTool.select)
                         .help("Select and move")
+                    Image(systemName: "hand.draw").tag(EditorTool.pan)
+                        .help("Pan: drag the map without changing zoom or moving its entities")
                     Image(systemName: "scribble").tag(EditorTool.brush)
                         .help("Path tool: draw an enemy path freehand; width is fixed by virtual_canvas")
                     Image(systemName: "paintbrush.pointed").tag(EditorTool.paint)
@@ -415,8 +514,16 @@ struct EditorView: View {
                         .help("Place tower slots")
                     Image(systemName: "arrow.right.circle").tag(EditorTool.entrance)
                         .help("Place entrance points where enemies spawn")
+                    Image(systemName: "megaphone.fill").tag(EditorTool.callWaveButton)
+                        .help("Place call wave buttons; drag to move or edit exact X/Y in the inspector")
                     Image(systemName: "flag.checkered").tag(EditorTool.exitPoint)
                         .help("Place exit points the enemies march for")
+                    HeroPlacementIcon.image(for: .primary).tag(EditorTool.primaryHero)
+                        .accessibilityLabel("Primary hero start (1)")
+                        .help("Primary hero (1): click anywhere to place its start; drag to move")
+                    HeroPlacementIcon.image(for: .secondary).tag(EditorTool.secondaryHero)
+                        .accessibilityLabel("Secondary hero start (2)")
+                        .help("Secondary hero (2): click anywhere to place its start; drag to move")
                     Image(systemName: "plus.magnifyingglass").tag(EditorTool.zoomIn)
                         .help("Zoom in centered on wherever you click the map")
                     Image(systemName: "minus.magnifyingglass").tag(EditorTool.zoomOut)
@@ -440,11 +547,14 @@ struct EditorView: View {
                     .help("Show the generated outer-edge waypoints of each road")
 
                 Toggle(isOn: $s.showPlayArea) { Image(systemName: "rectangle.dashed") }
-                    .help("Highlight the \(Int(state.virtualCanvas.playAreaRect.width))×\(Int(state.virtualCanvas.playAreaRect.height)) play area and dim the bleed")
-                Toggle(isOn: $s.showGrid) { Image(systemName: "grid") }
-                    .help("Show grid (15 px minor, 120 px major)")
+                    .help("Highlight the \(Int(state.virtualCanvas.playAreaRect.width))×\(Int(state.virtualCanvas.playAreaRect.height)) play area in purple, tap area in cyan, and dim the bleed")
+                Toggle(isOn: Binding(
+                    get: { state.isVisible(.grid) },
+                    set: { state.setVisibility(.grid, $0) }
+                )) { Image(systemName: "grid") }
+                    .help("Show the \(Int(state.grid.unit))-unit grid over every layer, with major lines every \(Int(state.grid.major))")
                 Toggle(isOn: $s.snapToGrid) { Image(systemName: "dot.squareshape.split.2x2") }
-                    .help("Snap to 6-unit grid")
+                    .help("Snap moves, placements and arrow-key nudges to the \(Int(state.grid.unit))-unit grid")
                 Toggle(isOn: $s.showRanges) { Image(systemName: "circle.dashed") }
                     .help("Show tower range circular overlays on the selected slot")
 
@@ -467,8 +577,11 @@ struct EditorView: View {
                 }
                 .help("Copy a Blueprints.swift-ready LevelBlueprint to the clipboard")
 
+                Button { importingGeoJSON = true } label: {
+                    Label("Import GeoJSON…", systemImage: "square.and.arrow.down")
+                }
                 Button { exportGeoJSON() } label: {
-                    Label("Save GeoJSON", systemImage: "square.and.arrow.down")
+                    Label("Export GeoJSON…", systemImage: "square.and.arrow.up")
                 }
                 .help("Write this level out as a .geojson FeatureCollection")
             }
@@ -551,6 +664,8 @@ struct EditorView: View {
         case let .road(r): return "Road \(r)"
         case let .entrance(i): return "Entrance \(i)"
         case let .exitPoint(i): return "Exit \(i)"
+        case let .callWaveButton(i): return "Call wave button \(i)"
+        case let .hero(role): return "\(role.title) start"
         }
     }
 }

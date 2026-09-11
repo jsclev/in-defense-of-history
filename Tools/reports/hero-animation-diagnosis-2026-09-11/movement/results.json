@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "command": [
+    "swift",
+    "test",
+    "--disable-sandbox",
+    "--scratch-path",
+    "/tmp/td-hero-movement-tests",
+    "--filter",
+    "HeroMovement"
+  ],
+  "sources": {
+    "Engine/Models/HeroMovementArea.swift": "89667b75f7d9a0cf01774178622d46f36d0980df50c44039826c3caff70187e2",
+    "Engine/Models/HeroMovement.swift": "914c60e4f729855ed6a0bbc6aa14c51f72c7817dd266aa7dd8d394a6fb2b0421",
+    "Engine/Layout/MapDestinationInput.swift": "c7436129e552111f2676a7117da70d35315356d7804dbfa484df713f44d4afcf",
+    "Engine/Persistence/Data Access Objects/LevelGeoJSONDAO.swift": "bdc924e256dc09b8b52b644fbe2ceed60dbcdcba17a7b54dbee1f60b41fe51be",
+    "Liberty Line/LevelRunner.swift": "dc4b3f6e1c31228a2aa61129068d092f19404a195f12c4afc0c9bd540c8c31e8",
+    "Liberty Line/Level Views/HeroMapLayer.swift": "5e2739d35739067e09988a3a143d246e6a394cb73056d971fad860b6a842924b",
+    "Liberty Line/Level Views/MapDestinationInputView.swift": "cd5ec886a8e8558402800067cac5de3bbe1bbdb1fa4ddb1749db81147ddcf892",
+    "Tests/LevelEditorFormatsTests/HeroMovementTests.swift": "7287884d5ce017d616f6e1ef5beb0b9f19576dd268616d6962c6d6a7272cb328",
+    "Tests/LevelEditorFormatsTests/HeroMovementIntegrationTests.swift": "9e969574fce105b179fd2fa4970a817a35a8a2601afb92f7f35109be51df45e1",
+    "Db/level_002_bunker_hill.geojson": "923281994de2f6006ae1b6a8e8171b6b8d4b26ccfa97ef7c0ff918e0024e26b2",
+    "Db/level_003_great_bridge.geojson": "33fe85b75b8a9ef26c758e67f9907f92df9039c3d1edaeda587fe687de2a156a",
+    "Db/level_004_moores_creek_bridge.geojson": "92edd73edb36870e40c58b23459ea3e7a1ac8de5f66917aa0a15aae79a4415cc",
+    "Db/level_005_dorchester_heights.geojson": "46b023e09788795049ca0d37ba8d7184c3247a65b480e4e793fe27426ab5d6e0",
+    "Db/level_006_sullivans_island.geojson": "8ebb2c8f0b99ddce266364e58c6839b7f910f372d8ce71e9ba29e70b0f7c329b",
+    "Db/level_007_long_island.geojson": "5e6b0e404f1872847253cd1f200334792acf82d76780c33b8111389d376c0771",
+    "Db/level_008_trenton.geojson": "b8d3d0f973b3541a0c301dc4aabf55bd9d7ea98e8078421c2b9a806e9f9c8fb8",
+    "Db/level_009_princeton.geojson": "094aeb76c8c2ba4befce9f4f56ebff29421697704f9099c3a0f5108e44764b80",
+    "Db/level_010_fort_ann.geojson": "df672ac2d9e14f8f83f26abf2aed2408efb5c3974d442b13b0dbd411e1361765",
+    "Db/level_011_saratoga.geojson": "85af27f4528c668edae459df56a18354d7dc81572a1f8325e938e403b8c94299",
+    "Db/level_012_kettle_creek.geojson": "60c20a586c3d821a2d73bfa5ad7d67325840f3f9ee8a6b6b5f1d7fb6b403dc16",
+    "Db/level_013_new_haven.geojson": "47c2345bda99921cf727c3628d77dcc317740ddced54d0bdff094ca31a12d212",
+    "Db/level_014_savannah_bastion_v7.geojson": "48f38d93e7143c039faea2835cd3f9bd6c4e5975f702a847d1972a21c652b499",
+    "Db/level_01_battle_road.geojson": "e197d5204c827a2efde8dbcd5b673c6b7a8f1cb2a3c4a56b537a7eca898a5be9",
+    "Db/level_15_charleston.geojson": "f800d10e0d9afcfbcac64b876483c5f23609ffc7b25c48830d626e761eb2ea43"
+  },
+  "limitation": "Host tests invoke the production model and input projection; no iPhone touch-delivery claim."
+}

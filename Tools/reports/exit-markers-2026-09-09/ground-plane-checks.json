@@ -1,0 +1,43 @@
+{
+  "renderer": "macOS SwiftUI, production view with NSImage asset loader",
+  "sourceBoxPoints": 32,
+  "verticalFraction": 0.7,
+  "checks": [
+    {
+      "density": 1,
+      "bounds": [
+        146,
+        90,
+        174,
+        110
+      ],
+      "visibleWidthPoints": 28.0,
+      "visibleHeightPoints": 20.0,
+      "sha256": "bb8c3ca6d45993fcf98cf3718a53280c4403b62830cf2b7b1fd65ef6f57b79cc"
+    },
+    {
+      "density": 2,
+      "bounds": [
+        291,
+        180,
+        349,
+        220
+      ],
+      "visibleWidthPoints": 29.0,
+      "visibleHeightPoints": 20.0,
+      "sha256": "b266a489724264ffc9f0a277f02f4398e4a670117082b56b2b9d38ceb9e9b85e"
+    },
+    {
+      "density": 3,
+      "bounds": [
+        436,
+        270,
+        524,
+        330
+      ],
+      "visibleWidthPoints": 29.333333333333332,
+      "visibleHeightPoints": 20.0,
+      "sha256": "0675da1ec79a54921fd0b7fa2def9f2da5589ca5029759e5013293b1efbd0c13"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x.png",
+    "sha256": "2d95f4d0760784fcfc987b8bb1b453afbd161291b014eddcf7245e08b4adf21a",
+    "sourceSize": [
+      96,
+      96
+    ],
+    "diagnosticSize": [
+      96,
+      67
+    ]
+  },
+  {
+    "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@2x.png",
+    "sha256": "64f75ddb7e0e74296b3cb71949de3399690c8fc6b5a4457fefe4d4115907df9d",
+    "sourceSize": [
+      192,
+      192
+    ],
+    "diagnosticSize": [
+      192,
+      134
+    ]
+  },
+  {
+    "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@3x.png",
+    "sha256": "434e0a9edb015e2f1d686f3c7d523bd1c051e6de46fe10bed775516673120908",
+    "sourceSize": [
+      288,
+      288
+    ],
+    "diagnosticSize": [
+      288,
+      202
+    ]
+  }
+]

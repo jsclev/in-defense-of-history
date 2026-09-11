@@ -41,7 +41,8 @@ struct CampaignMapView: View {
         )
         ZStack(alignment: .topLeading) {
             ZStack {
-                CampaignMapMetalView()
+                CampaignMapMetalView(canvasSize: mapSize)
+                    .frame(width: mapSize.width, height: mapSize.height)
 
                 ForEach(decor) { piece in
                     CampaignDecorView(placement: piece)
@@ -85,7 +86,7 @@ struct CampaignMapView: View {
 
             ZStack(alignment: .topLeading) {
                 ForEach(Array(MenuScreen.allCases.enumerated()), id: \.element.id) { index, item in
-                    MenuButton(runtimeCanvas: item,
+                    MenuButton(menuScreen: item,
                                size: menu.itemFrames[index].height) {
                         onSelectMenu(item)
                     }

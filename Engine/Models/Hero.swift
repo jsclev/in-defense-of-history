@@ -4,6 +4,8 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
     public let id: UUID
     public let shortName: String
     public let longName: String
+    /// Provisional historical military effectiveness and impact, from 1 to 100 (higher is better).
+    public let ranking: Int
     public let nickname: String?
     public let unlockedAtLevelId: UUID?
     public let unlockedAtLevelName: String?
@@ -24,6 +26,7 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         id: UUID,
         shortName: String,
         longName: String,
+        ranking: Int,
         nickname: String?,
         unlockedAtLevelId: UUID?,
         unlockedAtLevelName: String?,
@@ -43,6 +46,7 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         self.id = id
         self.shortName = shortName
         self.longName = longName
+        self.ranking = ranking
         self.nickname = nickname
         self.unlockedAtLevelId = unlockedAtLevelId
         self.unlockedAtLevelName = unlockedAtLevelName

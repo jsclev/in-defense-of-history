@@ -1,0 +1,9 @@
+{
+  "Engine/Design/VirtualCanvas.swift": "5f4a658234659777dc7159fb2df8be207d961e2d5dd1dbe6b0b176d4310984b7",
+  "Engine/Core/RuntimeCanvas.swift": "c21ddc77643dafc06d5c8d83da8bd546f8c4710454eb8d6e21e67037f51ee919",
+  "Engine/Debug/DebugLayoutGuidesView.swift": "5382bf7022e498d9f8136b873854e9dfcf6fcd4a67fda962ccca8533a4c2335e",
+  "Liberty Line/SettingsView.swift": "c61254c5bbe814f08b49322f65ab7c811e6f3552fed36451f4e6512ae67bfa1e",
+  "LevelEditor/EditorCanvas.swift": "3a6a05a9f627ff33da8779f5383c9a5faf513c9dcd183653c0eacb3ba7a54f0c",
+  "LevelEditor/EditorView.swift": "db4b968d4ca63f36caa2638fa1c10d505367d5262de4bbfd64dd01e876dba50e",
+  "Tests/LevelEditorFormatsTests/TapAreaTests.swift": "9b4092cbfed10735d0d4d1fdc5483aae26738fb9760f19fe18b5313ca0039248"
+}

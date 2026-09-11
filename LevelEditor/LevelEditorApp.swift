@@ -5,26 +5,21 @@ import AppKit
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private func openUntitledIfNoWindows() {
-        let hasWindow = NSApp.windows.contains { $0.isVisible && !($0 is NSPanel) }
-        if !hasWindow {
-            NSApp.sendAction(#selector(NSDocumentController.newDocument(_:)), to: nil, from: nil)
-        }
-    }
-
     func applicationWillFinishLaunching(_ notification: Notification) {
         UserDefaults.standard.set(false, forKey: "NSQuitAlwaysKeepsWindows")
     }
 
+    func applicationShouldOpenUntitledFile(_ sender: NSApplication) -> Bool { false }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.openUntitledIfNoWindows()
+            EditorDocumentLifecycle.shared.openInitialDocument()
         }
     }
 
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
         if !hasVisibleWindows {
-            NSApp.sendAction(#selector(NSDocumentController.newDocument(_:)), to: nil, from: nil)
+            EditorDocumentLifecycle.shared.openInitialDocument()
             return false
         }
         return true
@@ -60,19 +55,27 @@ struct LevelEditorApp: App {
 
     var body: some Scene {
         #if os(macOS)
-        DocumentGroup(newDocument: { MapDocument() }) { config in
+        DocumentGroup(newDocument: { MapDocument(canvas: virtualCanvas) }) { config in
             EditorView(document: config.document, documentURL: config.fileURL,
-                       content: content, virtualCanvas: virtualCanvas)
+                       content: content, virtualCanvas: config.document.canvas ?? virtualCanvas)
+                .task {
+                    // Let DocumentGroup finish registering its NSDocument before
+                    // closing any untouched placeholder windows.
+                    await Task.yield()
+                    if let url = config.fileURL {
+                        EditorDocumentLifecycle.shared.documentDidOpen(at: url)
+                    }
+                }
         }
         .defaultSize(width: 1380, height: 900)
         .defaultLaunchBehavior(.suppressed)
-        .commands { ZoomCommands() }
+        .commands { ZoomCommands(); EditorFileCommands() }
         #else
-        DocumentGroup(newDocument: { MapDocument() }) { config in
+        DocumentGroup(newDocument: { MapDocument(canvas: virtualCanvas) }) { config in
             EditorView(document: config.document, documentURL: config.fileURL,
-                       content: content, virtualCanvas: virtualCanvas)
+                       content: content, virtualCanvas: config.document.canvas ?? virtualCanvas)
         }
-        .commands { ZoomCommands() }
+        .commands { ZoomCommands(); EditorFileCommands() }
         #endif
     }
 }
@@ -115,6 +118,37 @@ struct ZoomCommands: Commands {
             Button("200%") { state?.setZoom(2) }
                 .disabled(state == nil)
             Divider()
+        }
+    }
+}
+
+struct EditorFileActions {
+    var importGeoJSON: () -> Void
+    var exportGeoJSON: () -> Void
+}
+
+struct EditorFileActionsKey: FocusedValueKey {
+    typealias Value = EditorFileActions
+}
+
+extension FocusedValues {
+    var editorFileActions: EditorFileActions? {
+        get { self[EditorFileActionsKey.self] }
+        set { self[EditorFileActionsKey.self] = newValue }
+    }
+}
+
+struct EditorFileCommands: Commands {
+    @FocusedValue(\.editorFileActions) private var actions
+
+    var body: some Commands {
+        CommandGroup(after: .saveItem) {
+            Divider()
+            Button("Import GeoJSON…") { actions?.importGeoJSON() }
+                .disabled(actions == nil)
+            Button("Export GeoJSON…") { actions?.exportGeoJSON() }
+                .keyboardShortcut("e", modifiers: [.command, .shift])
+                .disabled(actions == nil)
         }
     }
 }

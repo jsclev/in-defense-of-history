@@ -1,0 +1,169 @@
+Building for debugging...
+[0/7] /Users/john/projects/td/in-defense-of-history/.build/arm64-apple-macosx/debug/LevelEditorFormatsPackageTests.derived/runner.swift
+[1/7] Write sources
+[4/7] Write swift-version--58304C5D6DBC2206.txt
+[6/108] Compiling LevelEditorFormats CommanderPolicy.swift
+[7/108] Compiling LevelEditorFormats ContentCatalog.swift
+[8/108] Compiling LevelEditorFormats Core.swift
+[9/108] Compiling LevelEditorFormats Difficulty.swift
+[10/108] Compiling LevelEditorFormats Enemy.swift
+[11/108] Compiling LevelEditorFormats EnemyEscapeHapticPolicy.swift
+[12/108] Compiling LevelEditorFormats EnemyType.swift
+[13/108] Compiling LevelEditorFormats Engine.swift
+[14/108] Compiling LevelEditorFormats GameplayHapticPattern.swift
+[15/117] Compiling LevelEditorFormats Path.swift
+[16/117] Compiling LevelEditorFormats ReinforcementConfig.swift
+[17/117] Compiling LevelEditorFormats ReinforcementSchedule.swift
+[18/117] Compiling LevelEditorFormats Report.swift
+[19/117] Compiling LevelEditorFormats Simulation.swift
+[20/117] Compiling LevelEditorFormats SpawnEntry.swift
+[21/117] Compiling LevelEditorFormats Stats.swift
+[22/117] Compiling LevelEditorFormats Tower.swift
+[23/117] Compiling LevelEditorFormats TowerKind.swift
+[24/117] Compiling LevelEditorFormats HeroDAO.swift
+[25/117] Compiling LevelEditorFormats HudLayoutDAO.swift
+[26/117] Compiling LevelEditorFormats LevelGeoJSONDAO.swift
+[27/117] Compiling LevelEditorFormats LevelHeroDAO.swift
+[28/117] Compiling LevelEditorFormats LevelInfoDAO.swift
+[29/117] Compiling LevelEditorFormats MeleeUnitDAO.swift
+[30/117] Compiling LevelEditorFormats PathDAO.swift
+[31/117] Compiling LevelEditorFormats ReinforcementConfigDAO.swift
+[32/117] Compiling LevelEditorFormats SimBoundsDAO.swift
+[33/117] Compiling LevelEditorFormats DesignArsenal.swift
+[34/117] Compiling LevelEditorFormats DesignRoster.swift
+[35/117] Compiling LevelEditorFormats LevelBlueprint.swift
+[36/117] Compiling LevelEditorFormats VirtualCanvas.swift
+[37/117] Compiling LevelEditorFormats CallWaveButtonLayout.swift
+[38/117] Compiling LevelEditorFormats HeroBarLayout.swift
+[39/117] Compiling LevelEditorFormats HeroSpriteFootprint.swift
+[40/117] Compiling LevelEditorFormats HeroSpriteProfile.swift
+[41/117] Compiling LevelEditorFormats HudElementLayouts.swift
+[42/117] Compiling LevelEditorFormats TowerSlot.swift
+[43/117] Compiling LevelEditorFormats Traits.swift
+[44/117] Compiling LevelEditorFormats UnitFacing.swift
+[45/117] Compiling LevelEditorFormats Wave.swift
+[46/117] Compiling LevelEditorFormats WaveStartSchedule.swift
+[47/117] Compiling LevelEditorFormats BaseDAO.swift
+[48/117] Compiling LevelEditorFormats CampaignDAO.swift
+[49/117] Compiling LevelEditorFormats DifficultyDAO.swift
+[50/117] Compiling LevelEditorFormats EnemyTypeDAO.swift
+[51/117] Compiling LevelEditorFormats SimEnemyTypeDAO.swift
+[52/117] Compiling LevelEditorFormats SimMeleeUnitDAO.swift
+[53/117] Compiling LevelEditorFormats SimulatorRunDAO.swift
+[54/117] Compiling LevelEditorFormats TowerSlotDAO.swift
+[55/117] Compiling LevelEditorFormats TowerTypeDAO.swift
+[56/117] Compiling LevelEditorFormats TowerUnlockDAO.swift
+[57/117] Compiling LevelEditorFormats VirtualCanvasDAO.swift
+[58/117] Compiling LevelEditorFormats WaveDAO.swift
+[59/117] Compiling LevelEditorFormats Db.swift
+[60/117] Compiling LevelEditorFormats DbError.swift
+[61/117] Compiling LevelEditorFormats HeroSelectionStore.swift
+[62/117] Compiling LevelEditorFormats Repositories.swift
+[63/117] Compiling LevelEditorFormats SQLite.swift
+[64/117] Compiling LevelEditorFormats SQLiteError.swift
+[65/117] Compiling LevelEditorFormats SeedContent.swift
+[66/117] Compiling LevelEditorFormats FileUtil.swift
+[67/117] Compiling LevelEditorFormats BrushStroke.swift
+[68/117] Compiling LevelEditorFormats EditorDocumentLifecycle.swift
+[69/117] Compiling LevelEditorFormats ScreenCanvas.swift
+[70/117] Compiling LevelEditorFormats StackLayout.swift
+[71/117] Compiling LevelEditorFormats TowerMenuLayout.swift
+[72/117] Compiling LevelEditorFormats TowerRangeOverlay.swift
+[73/117] Compiling LevelEditorFormats LogCategory.swift
+[74/117] Compiling LevelEditorFormats LogUtility.swift
+[75/117] Compiling LevelEditorFormats CallWaveButtonPosition.swift
+[76/117] Compiling LevelEditorFormats Campaign.swift
+[77/117] Compiling LevelEditorFormats CampaignLevel.swift
+[78/117] Compiling LevelEditorFormats TargetCommand.swift
+[79/117] Compiling LevelEditorFormats Constants.swift
+[80/117] Compiling LevelEditorFormats Enums.swift
+[81/117] Compiling LevelEditorFormats GameError.swift
+[82/117] Compiling LevelEditorFormats GameIdentity.swift
+[83/117] Compiling LevelEditorFormats RuntimeCanvas.swift
+[84/117] Compiling LevelEditorFormats Store.swift
+[85/117] Compiling LevelEditorFormats Timer.swift
+[86/117] Compiling LevelEditorFormats HapticAuditionPlayer.swift
+[87/117] Compiling LevelEditorFormats Blueprints.swift
+[88/117] Compiling LevelEditorFormats HapticAuditionSample.swift
+[89/117] Compiling LevelEditorFormats Hero.swift
+[90/117] Compiling LevelEditorFormats HeroSelection.swift
+[91/117] Compiling LevelEditorFormats LevelHero.swift
+[92/117] Compiling LevelEditorFormats LevelHeroConfiguration.swift
+[93/117] Compiling LevelEditorFormats LevelInfo.swift
+[94/117] Compiling LevelEditorFormats MeleeFormation.swift
+[95/117] Compiling LevelEditorFormats MilitiaAI.swift
+[96/117] Compiling LevelEditorFormats Outcome.swift
+[97/117] Compiling LevelEditorFormats HudLayoutConfig.swift
+[98/117] Compiling LevelEditorFormats HudPlacementSolver.swift
+[99/117] Compiling LevelEditorFormats HudSizing.swift
+[100/117] Compiling LevelEditorFormats LevelViewport.swift
+[101/117] Compiling LevelEditorFormats MapSpriteSizing.swift
+[102/117] Compiling LevelEditorFormats MasterControlsLayout.swift
+[103/117] Compiling LevelEditorFormats MenuContentLayout.swift
+[104/117] Compiling LevelEditorFormats PresentationStack.swift
+[105/117] Compiling LevelEditorFormats RuntimeCanvasView.swift
+[106/117] Emitting module LevelEditorFormats
+[107/117] Compiling LevelEditorFormats GeoJSONExport.swift
+[108/117] Compiling LevelEditorFormats GeoJSONFile.swift
+[109/117] Compiling LevelEditorFormats GeoJSONImport.swift
+[110/117] Compiling LevelEditorFormats LevelGeoJSON.swift
+[111/117] Compiling LevelEditorFormats MapDocument.swift
+[112/117] Compiling LevelEditorFormats NativeMapFile.swift
+[113/117] Compiling LevelEditorFormats PathFlattening.swift
+[114/117] Compiling LevelEditorFormats PlatformSupport.swift
+[115/117] Compiling LevelEditorFormats SwiftExport.swift
+[116/135] Compiling LevelEditorFormatsTests PresentationStackTests.swift
+[117/135] Compiling LevelEditorFormatsTests MasterControlsLayoutTests.swift
+[118/135] Compiling LevelEditorFormatsTests TapAreaTests.swift
+[119/135] Compiling LevelEditorFormatsTests RuntimeCanvasTests.swift
+[120/135] Compiling LevelEditorFormatsTests ReinforcementTests.swift
+[121/136] Compiling LevelEditorFormatsTests HeroExitConfigurationTests.swift
+[122/136] Compiling LevelEditorFormatsTests HeroRankingTests.swift
+[123/136] Compiling LevelEditorFormatsTests EnemyEscapeHapticTests.swift
+[124/136] Compiling LevelEditorFormatsTests GameplayHapticPatternTests.swift
+[125/136] Compiling LevelEditorFormatsTests HapticAuditionTests.swift
+[126/136] Compiling LevelEditorFormatsTests HeroBarLayoutTests.swift
+[127/136] Emitting module LevelEditorFormatsTests
+[128/136] Compiling LevelEditorFormatsTests CharlestonWaveTests.swift
+[129/136] Compiling LevelEditorFormatsTests EditorDocumentLifecycleTests.swift
+[130/136] Compiling LevelEditorFormatsTests BottomCenterOcclusionTests.swift
+[131/136] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[132/136] Compiling LevelEditorFormatsTests LevelGeoJSONTests.swift
+[133/136] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[134/136] Compiling LevelEditorFormatsTests WaveStartTimingTests.swift
+[135/138] Compiling LevelEditorFormatsPackageTests runner.swift
+[136/138] Emitting module LevelEditorFormatsPackageTests
+[136/138] Write Objects.LinkFileList
+[137/138] Linking LevelEditorFormatsPackageTests
+Build complete! (20.51s)
+Test Suite 'Selected tests' started at 2026-09-09 21:55:14.827.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-09 21:55:14.828.
+Test Suite 'CallWaveButtonTests' started at 2026-09-09 21:55:14.828.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testBundledMapsProvideEditableRuntimeButtonCenters]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testBundledMapsProvideEditableRuntimeButtonCenters]' passed (0.073 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testCharlestonUsesTheCurrentAuthoredButtonCoordinates]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testCharlestonUsesTheCurrentAuthoredButtonCoordinates]' passed (0.028 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testExactCentersSurviveNativeGeoJSONAndRuntimeLoading]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testExactCentersSurviveNativeGeoJSONAndRuntimeLoading]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testInvalidRouteAssignmentsAreRejected]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testInvalidRouteAssignmentsAreRejected]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLayoutProjectsExactCoordinatesAcrossRuntimeCanvases]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLayoutProjectsExactCoordinatesAcrossRuntimeCanvases]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLegacyDocumentsOpenWithoutInventingButtonPositions]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLegacyDocumentsOpenWithoutInventingButtonPositions]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testOnlyUpcomingRoutesShowButtonsAndSharedEntrancesAppearOnce]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testOnlyUpcomingRoutesShowButtonsAndSharedEntrancesAppearOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testRuntimeRejectsMissingAndMalformedButtons]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testRuntimeRejectsMissingAndMalformedButtons]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testSizingUsesRuntimeHUDScaleAndReadableMinimum]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testSizingUsesRuntimeHUDScaleAndReadableMinimum]' passed (0.000 seconds).
+Test Suite 'CallWaveButtonTests' passed at 2026-09-09 21:55:14.933.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.104 (0.105) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-09 21:55:14.933.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.104 (0.105) seconds
+Test Suite 'Selected tests' passed at 2026-09-09 21:55:14.933.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.104 (0.106) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

@@ -1,0 +1,34 @@
+{
+  "captures" : [
+    {
+      "buttonSide" : 49.609000000000002,
+      "buttonSpacing" : 4.9609000000000005,
+      "controlsFrame" : [
+        688.8211,
+        7.46,
+        104.17890000000001,
+        49.609000000000002
+      ],
+      "heroButtonSide" : 57.069000000000017,
+      "mode" : "device",
+      "playableHeight" : 373
+    },
+    {
+      "buttonSide" : 37.417989417989418,
+      "buttonSpacing" : 3.7417989417989421,
+      "controlsFrame" : [
+        513.77777777777783,
+        6.7999999999999998,
+        78.577777777777783,
+        37.417989417989418
+      ],
+      "heroButtonSide" : 44.955555555555563,
+      "mode" : "minimum",
+      "playableHeight" : 340
+    }
+  ],
+  "device" : "iPhone",
+  "passed" : true,
+  "runID" : "91792410-c916-475f-8447-98dae2b2074a",
+  "systemVersion" : "26.6.2"
+}

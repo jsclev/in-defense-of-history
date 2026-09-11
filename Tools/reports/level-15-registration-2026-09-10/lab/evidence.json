@@ -1,0 +1,98 @@
+{
+  "generated_at": "2026-09-10T21:25:38.231221+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "90071efe2420db1b86adcf77e1b2f00c57108f63a1d8bf549d64688f5a1b1200"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/ExitMarkerLayout.swift",
+      "sha256": "3c71984ff4bbfa2f4ced233d2c100ad4dc712ae6c2dd7208002b067b9a76a1d3"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/LevelMapProjection.swift",
+      "sha256": "dbe947a973f4bf0372ee68708dc6dbdfef87e71fb156c19f5fd5cab854a2c2b5"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "1cad4847792853a374ba3325f5b0b509e657571b9ec2d18839854c6d160c2146"
+    }
+  ],
+  "assets": [
+    {
+      "id": "exit_crown",
+      "minimum_box_pt": 24.533,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              89,
+              92
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              178,
+              184
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              267,
+              276
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        24.0,
+        24.0
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_crown.imageset/path_exit_crown.png",
+      "sha256": "456a2af2becf613c911e0e1269c2833062163ff719f8898ac857944527c733f2",
+      "dimensions": [
+        89,
+        92
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_crown.imageset/path_exit_crown@2x.png",
+      "sha256": "0849abcce51c0f9853c03c20c60c8aff58757fb25dc0443d253d0d1845384e72",
+      "dimensions": [
+        178,
+        184
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_crown.imageset/path_exit_crown@3x.png",
+      "sha256": "b5bf6323ad20b221fa296d0691c47e208bd7f0099c80f0721977648d04bcfd54",
+      "dimensions": [
+        267,
+        276
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/level-15-registration-2026-09-10/lab-input/level_15_charleston.png",
+      "sha256": "aed1388adbd7b6c4398fbc1c37f9a7bf01644d667e1e9255877a7e4e101015ea"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/level-15-registration-2026-09-10/lab-input/level_15_charleston_path.png",
+      "sha256": "bfa13cba8a81a0906513c17e8ab88d933b5ecefe8a2ae1d710aaa411d634e3c2"
+    }
+  ]
+}

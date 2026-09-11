@@ -1,8 +1,9 @@
+-- Provisional ranking (1-100, higher is better); rationale: ../../../Tools/hero_rankings.md.
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
     primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
-    unit_image_name
+    unit_image_name, ranking
 ) VALUES
 (
     '4e290eb7-6af2-4e3e-8bd6-ff0759b1b13d', 'Thaddeus Kosciuszko', 'Colonel Thaddeus Kosciuszko', NULL, (
@@ -19,5 +20,5 @@ INSERT INTO hero (
 
 He chose and fortified Bemis Heights, the ground that made Saratoga unwinnable for Burgoyne, and spent three years building the fortress at West Point. He went home to lead Poland''s own fight for liberty in 1794.',
     'hero_thaddeus_kosciuszko_card_16x15', 'hero_details_thaddeus_kosciuszko', 'hero_icon_thaddeus_kosciuszko', 'hero_ability_icon_thaddeus_kosciuszko',
-    'hero_unit_thaddeus_kosciuszko'
+    'hero_unit_thaddeus_kosciuszko', 88
 );

@@ -1,0 +1,61 @@
+{
+  "source": "/Users/john/projects/td/in-defense-of-history/Db/level_15_charleston.geojson",
+  "sha256": "cd46724e08744459a6656cc3644af2309b5c7f86868ddf4a17def94fb82a31b9",
+  "playArea": {
+    "height": 1080,
+    "width": 1920,
+    "x": 474,
+    "y": 492
+  },
+  "exits": [
+    {
+      "id": "gameplay.exit.0",
+      "coordinates": [
+        1395.1,
+        338.71
+      ],
+      "heroRoles": [
+        "primary"
+      ],
+      "insidePlayArea": false
+    },
+    {
+      "id": "gameplay.exit.1",
+      "coordinates": [
+        2340,
+        1233
+      ],
+      "heroRoles": [
+        "secondary"
+      ],
+      "insidePlayArea": true
+    },
+    {
+      "id": "gameplay.exit.2",
+      "coordinates": [
+        399.34,
+        1223.83
+      ],
+      "heroRoles": [],
+      "insidePlayArea": false
+    },
+    {
+      "id": "gameplay.exit.3",
+      "coordinates": [
+        1587,
+        561
+      ],
+      "heroRoles": [],
+      "insidePlayArea": true
+    },
+    {
+      "id": "gameplay.exit.4",
+      "coordinates": [
+        1635.4,
+        841.77
+      ],
+      "heroRoles": [],
+      "insidePlayArea": true
+    }
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "reference_height": 340,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    "Current production MasterControlsLayout: minimum 37.41798941798942pt buttons, 7pt proof padding. Glyphs remain 60% of the frame side."
+  ],
+  "assets": [
+    {
+      "id": "speed_up_icon_glyph",
+      "label": "speed_up_icon_glyph",
+      "animated": false,
+      "map_height": 51.41798941798942,
+      "files": {
+        "speed_up_icon_glyph": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/speed_up_icon_glyph@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/speed_up_icon_glyph@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/speed_up_icon_glyph@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/speed_up_icon_glyph-1x.png",
+          "boxes": {
+            "speed_up_icon_glyph": [
+              1,
+              1,
+              52,
+              52
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/speed_up_icon_glyph-2x.png",
+          "boxes": {
+            "speed_up_icon_glyph": [
+              1,
+              1,
+              103,
+              103
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/speed_up_icon_glyph-3x.png",
+          "boxes": {
+            "speed_up_icon_glyph": [
+              1,
+              1,
+              155,
+              155
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "speed_up_icon_glyph"
+          ],
+          "walk": [
+            "speed_up_icon_glyph"
+          ]
+        }
+      }
+    },
+    {
+      "id": "pause_icon_glyph",
+      "label": "pause_icon_glyph",
+      "animated": false,
+      "map_height": 51.41798941798942,
+      "files": {
+        "pause_icon_glyph": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/pause_icon_glyph@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/pause_icon_glyph@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/pause_icon_glyph@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/pause_icon_glyph-1x.png",
+          "boxes": {
+            "pause_icon_glyph": [
+              1,
+              1,
+              52,
+              52
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/pause_icon_glyph-2x.png",
+          "boxes": {
+            "pause_icon_glyph": [
+              1,
+              1,
+              103,
+              103
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/pause_icon_glyph-3x.png",
+          "boxes": {
+            "pause_icon_glyph": [
+              1,
+              1,
+              155,
+              155
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "pause_icon_glyph"
+          ],
+          "walk": [
+            "pause_icon_glyph"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "battle-road",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "great-bridge",
+      "under": "great-bridge-under.jpg",
+      "over": "great-bridge-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "trenton",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

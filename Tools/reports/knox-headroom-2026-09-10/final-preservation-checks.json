@@ -1,0 +1,14 @@
+{
+  "tested-source-hashes.json": {
+    "verified_files": 30,
+    "changed": []
+  },
+  "original-knox-hashes.json": {
+    "verified_files": 4,
+    "changed": []
+  },
+  "unchanged-art-hashes.json": {
+    "verified_files": 32,
+    "changed": []
+  }
+}

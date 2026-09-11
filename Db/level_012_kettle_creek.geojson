@@ -4420,6 +4420,145 @@
           "heightPx": 96.55
         }
       }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.0",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1500.0,
+          1432
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.0",
+        "name": "Call wave button 1",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2254,
+          1290.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.1",
+        "name": "Call wave button 2",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1500.0,
+          632
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.2",
+        "name": "Call wave button 3",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.3",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2254,
+          780.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.3",
+        "name": "Call wave button 4",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          3
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.hero_spawn.primary",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          733.1683071343465,
+          1190
+        ]
+      },
+      "properties": {
+        "id": "gameplay.hero_spawn.primary",
+        "name": "Primary hero start",
+        "category": "gameplay",
+        "kind": "hero_spawn",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "heroRoles": [
+          "primary"
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.hero_spawn.secondary",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          688.9775813449996,
+          912.8589547825958
+        ]
+      },
+      "properties": {
+        "id": "gameplay.hero_spawn.secondary",
+        "name": "Secondary hero start",
+        "category": "gameplay",
+        "kind": "hero_spawn",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "heroRoles": [
+          "secondary"
+        ]
+      }
     }
-  ]
+  ],
+  "heroCount": 2
 }

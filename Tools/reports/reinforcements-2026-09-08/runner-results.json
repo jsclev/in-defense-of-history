@@ -1,0 +1,16 @@
+{
+  "source_sha256": "3144470e3ba64e2cc0b9d573e8903508faff34c88d97b09267021949a71472d7",
+  "production_blocks": [
+    "struct MilitiaSoldier:",
+    "private struct MilitiaGarrison {",
+    "private struct WalkPose {",
+    "var canCallReinforcements:",
+    "private var reinforcementStats:",
+    "private func garrisonMelee(",
+    "func callReinforcements(",
+    "private func advanceReinforcements(",
+    "private func publishMilitia("
+  ],
+  "result": "PASS: runner deployment, repeated taps, expiry cleanup, dead groups, overlapping groups, tower/hero preservation, unavailable states",
+  "limitation": "Method harness with level/tower/hero/clock fixtures; not full game on a physical device."
+}

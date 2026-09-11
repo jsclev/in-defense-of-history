@@ -1,0 +1,57 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+      "--terminate-existing",
+      "com.zippyzen.liberty-line",
+      "--json-output",
+      "Tools/reports/heroes-above-exits-2026-09-10/production-launch.json"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.33"
+  },
+  "result" : {
+    "deviceIdentifier" : "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+    "launchOptions" : {
+      "activatedWhenStarted" : true,
+      "arguments" : [
+
+      ],
+      "environmentVariables" : {
+        "TERM" : "dumb"
+      },
+      "platformSpecificOptions" : {
+
+      },
+      "startStopped" : false,
+      "terminateExistingInstances" : true,
+      "user" : {
+        "active" : true
+      }
+    },
+    "process" : {
+      "auditToken" : [
+        4294967295,
+        501,
+        501,
+        501,
+        501,
+        1300,
+        0,
+        3603
+      ],
+      "executable" : "file:///private/var/containers/Bundle/Application/0A9F9C6F-9F92-4D70-A8BF-2BA59DA20E77/Liberty%20Line.app/Liberty%20Line",
+      "processIdentifier" : 1300
+    }
+  }
+}

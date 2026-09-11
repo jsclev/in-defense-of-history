@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Small art readability lab</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f1f0e9;color:#263328;font:15px/1.5 system-ui,sans-serif}main{max-width:1160px;margin:auto;padding:24px}
+h1{font-size:30px;line-height:1.1;margin:0 0 12px}h2{font-size:20px;margin:0 0 10px}p{margin:8px 0 16px}.muted{color:#576457;font-size:13px}.status{background:#e3e9dc;padding:12px 16px;border-left:4px solid #567b45}
+.controls{display:flex;flex-wrap:wrap;gap:12px 18px;padding:18px 0}label{display:grid;gap:5px;font-size:13px}label.check{display:flex;align-items:center;gap:7px;padding-top:22px}
+select,input,button,textarea{font:inherit}select,input[type=number],button{padding:8px;border:1px solid #9ca99a;border-radius:5px;background:#fff;color:#263328}input[type=range]{width:150px}button{cursor:pointer}button:disabled{opacity:.45;cursor:default}button.primary{background:#345736;color:white;border-color:#345736}
+.panels{display:flex;flex-wrap:wrap;gap:18px}.panel{padding:14px;background:#fafbf7;border:1px solid #d7ddd0;border-radius:7px}.stage-wrap{width:320px;overflow:auto;max-width:100%}canvas{display:block;max-width:none;flex-shrink:0}section{margin-top:28px;border-top:1px solid #cbd3c5;padding-top:22px}
+.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}.unit{background:#e8e7db;padding:8px}.unit canvas{width:128px;height:96px}.unit .name{font-size:12px;min-height:38px}.answers{display:flex;gap:7px;flex-wrap:wrap;max-width:700px;margin:12px 0}.answers button{font-size:13px}textarea{width:min(100%,700px);height:100px;padding:10px}summary{cursor:pointer}table{border-collapse:collapse}td,th{padding:6px 12px;text-align:left;border-bottom:1px solid #d4d9cf}a{color:#27532b}
+@media(max-width:540px){main{padding:14px}.panel{padding:8px}.controls{gap:10px}h1{font-size:25px}}
+</style></head><body><main>
+<h1>Small art readability lab</h1>
+<p>Judge the small image first. Enlargements are for diagnosing a failure after it has been observed.</p>
+<p class="status" id="status" role="status">Loading shipped assets…</p>
+<p class="muted">Code-derived sizing; this is a Canvas2D approximation, not a captured iPhone level. CSS pixels approximate iOS points at normal phone browser scale. Keep browser zoom at 100%. No panel scales its art to fit. A physical iPhone check is still required before calling an asset device-verified.</p>
+<div class="controls">
+<label>Asset<select id="asset"></select></label>
+<label>Playable height <output id="playValue"></output><input id="play" type="range" min="340" max="900" step="1" value="340"></label>
+<label>Density / source family<select id="density"><option value="1">1× optical stress</option><option value="2">2× export</option><option value="3" selected>3× export</option></select></label>
+<label>Facing<select id="direction"><option>n</option><option>ne</option><option>e</option><option selected>se</option><option>s</option><option>sw</option><option>w</option><option>nw</option></select></label>
+<label>State<select id="state"><option value="idle">Idle</option><option value="walk">Walk</option></select></label>
+<label>Frame <output id="frameValue">0</output><input id="frame" type="range" min="0" max="15" value="0" step="1"></label>
+<label class="check"><input type="checkbox" id="animate">Animate walk</label>
+<label>Cycle duration (s)<input id="cycle" type="number" value="1" min="0.25" max="5" step="0.05"></label>
+</div>
+<div class="controls">
+<label>Terrain<select id="terrain"><option value="neutral">Neutral</option></select></label>
+<label>Terrain crop X <output id="xValue"></output><input id="cropX" type="range" min="0" max="100" value="50"></label>
+<label>Terrain crop Y <output id="yValue"></output><input id="cropY" type="range" min="0" max="100" value="50"></label>
+<label class="check"><input id="crowd" type="checkbox">Nearby troops</label>
+<label class="check"><input id="health" type="checkbox">Damaged health bar</label>
+<label class="check"><input id="labels" type="checkbox">Reveal roster names</label>
+</div>
+<div class="panels">
+<div class="panel"><h2>Color / context</h2><div class="stage-wrap"><canvas id="color" role="img" aria-label="Selected asset at runtime size on terrain"></canvas></div></div>
+<div class="panel"><h2>Grayscale / context</h2><div class="stage-wrap"><canvas id="gray" role="img" aria-label="Grayscale scene at runtime size"></canvas></div></div>
+<div class="panel"><h2>Silhouette / neutral</h2><div class="stage-wrap"><canvas id="silhouette" role="img" aria-label="Selected silhouette at runtime size"></canvas></div></div>
+</div>
+<p class="muted">Terrain crops retain the map’s scale. Nearby troops are a constructed overlap test, not a gameplay capture. Animation uses a chosen cycle duration; the game actually advances frames by distance traveled. Complete foliage occlusion is expected to hide a unit.</p>
+<details><summary>Diagnostic enlargement and three-value view</summary><div class="panels" style="margin-top:14px">
+<div class="panel"><h2>4× enlargement — not acceptance</h2><canvas id="zoom" role="img" aria-label="Magnified pixels for diagnosis"></canvas></div>
+<div class="panel"><h2>Three values at runtime size</h2><canvas id="values" role="img" aria-label="Sprite reduced to three grayscale values"></canvas></div>
+</div></details>
+<section><h2>Roster comparison</h2><p class="muted">All assets retain their individual runtime sizes. Static assets have no directional animation. The roster holds its frame during playback; change facing or scrub a frame to update it. Compare overall shape and light/dark regions before revealing names.</p><div class="roster" id="roster"></div></section>
+<section><h2>Timed recognition test</h2>
+<p>Identify the hero after a brief exposure. Names appear as response choices only after the image is masked. Record first-exposure performance separately from practice. This test measures roster identification, not spontaneous historical likeness.</p>
+<div class="controls"><label>Exposure<select id="exposure"><option value="500">0.5 s stress</option><option value="1000" selected>1 s</option><option value="2000">2 s</option></select></label><label>Observer type<select id="observer"><option value="developer-familiar">Developer / already knows assets</option><option value="first-exposure-human">Human / first exposure</option><option value="trained-human">Human / roster learned</option></select></label><button class="primary" id="start" disabled>Start balanced roster test</button><button id="next" disabled>Next trial</button><button id="stop" disabled>End block</button><button id="export" disabled>Export results</button></div>
+<p class="muted">One trial per asset, shuffled. Each block balances all eight facings across the roster. Repeat independent blocks for coverage; no population accuracy is inferred from one block. Visual controls freeze during a block. Wait for all images to load before starting.</p>
+<p id="trialStatus" role="status">No recognition measurements yet.</p><div class="stage-wrap"><canvas id="trial" aria-label="Timed recognition stimulus"></canvas></div><div class="answers" id="answers"></div>
+<label>Unprompted identity / cue notes<textarea id="notes" placeholder="Before a historical-name test, show only the small image and ask who it depicts. Record the exact answer and the visible cues; do not suggest Washington in the question."></textarea></label>
+</section>
+<section><h2>Evidence to keep with each review</h2><p>Save the size, direction, state, background, observer type, visible identity cues, likely confusions, and a pass/fail decision. Use the worst direction and background to decide. Technical validity never assigns a recognition pass.</p><p><a href="evidence.json">Input hashes and geometry</a> · <a href="roster-minimum.png">Minimum-size plate</a> · <a id="washingtonLink" href="washington-directions.png">Washington direction plate</a></p></section>
+</main><script>
+'use strict';
+const model = {"reference_height": 1080.0, "clamp": [340, 900], "default_playable_height": 340, "canvas": {"width": 2868.0, "height": 2064.0, "play_rect": [474.0, 492.0, 1920.0, 1080.0]}, "sizing_note": "Production scaledToFit, unchanged slot 176.6 x 96.55 map units. Recomputed from SQLite and actual exports.", "assets": [{"id": "previous", "label": "Previous / hard front edge", "animated": false, "map_height": 96.32727272727273, "files": {"previous": ["/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available.png", "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available@2x.png", "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available@3x.png"]}, "atlases": {"1": {"url": "atlases/previous-1x.png", "boxes": {"previous": [1, 1, 176, 96]}}, "2": {"url": "atlases/previous-2x.png", "boxes": {"previous": [1, 1, 352, 192]}}, "3": {"url": "atlases/previous-3x.png", "boxes": {"previous": [1, 1, 528, 288]}}}, "directions": ["se"], "frames": {"se": {"idle": ["previous"], "walk": ["previous"]}}}, {"id": "revised", "label": "Revised / grass blended front", "animated": false, "map_height": 96.32727272727273, "files": {"revised": ["/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available.png", "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available@2x.png", "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available@3x.png"]}, "atlases": {"1": {"url": "atlases/revised-1x.png", "boxes": {"revised": [1, 1, 176, 96]}}, "2": {"url": "atlases/revised-2x.png", "boxes": {"revised": [1, 1, 352, 192]}}, "3": {"url": "atlases/revised-3x.png", "boxes": {"revised": [1, 1, 528, 288]}}}, "directions": ["se"], "frames": {"se": {"idle": ["revised"], "walk": ["revised"]}}}, {"id": "occupied", "label": "Occupied site / unchanged ground", "animated": false, "map_height": 93.21530815109344, "files": {"occupied": ["/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png", "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png", "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png"]}, "atlases": {"1": {"url": "atlases/occupied-1x.png", "boxes": {"occupied": [1, 1, 1006, 531]}}, "2": {"url": "atlases/occupied-2x.png", "boxes": {"occupied": [1, 1, 1006, 531]}}, "3": {"url": "atlases/occupied-3x.png", "boxes": {"occupied": [1, 1, 1006, 531]}}}, "directions": ["se"], "frames": {"se": {"idle": ["occupied"], "walk": ["occupied"]}}}], "maps": [{"id": "grass", "label": "Current Bastion grass", "under": "grass-under.jpg", "over": "grass-over.png"}, {"id": "charleston", "label": "Current Charleston with painted paths", "under": "charleston-under.jpg", "over": "charleston-over.png"}, {"id": "snow", "label": "Trenton / bright busy terrain", "under": "snow-under.jpg", "over": "snow-over.png"}]};
+const $ = id => document.getElementById(id);
+const images = new Map(), transformed = new Map();
+const state = {loaded:false, t0:0, test:null, trials:[], trial:null, shownAt:0, maskedAt:0, sequence:[], controls:null};
+const assets = model.assets;
+if(!assets.some(a=>a.id==='george_washington'))$('washingtonLink').hidden=true;
+const dirs = ['n','ne','e','se','s','sw','w','nw'];
+assets.forEach(a => $('asset').add(new Option(a.label,a.id)));
+$('asset').value = assets.find(a=>a.id==='george_washington')?.id || assets[0].id;
+$('play').min=model.clamp[0];$('play').max=model.clamp[1];$('play').value=model.default_playable_height;
+model.maps.forEach(m=>$('terrain').add(new Option(m.label,m.id)));
+const selected = () => assets.find(a=>a.id===$('asset').value);
+const hFor = a => a.map_height/model.reference_height*Math.min(Math.max(+$('play').value,model.clamp[0]),model.clamp[1]);
+function canvas(id,w=320,h=200,d=+$('density').value){const c=typeof id==='string'?$(id):id;if(c.width!==Math.round(w*d)||c.height!==Math.round(h*d)){c.width=Math.round(w*d);c.height=Math.round(h*d);c.style.width=w+'px';c.style.height=h+'px';}const ctx=c.getContext('2d');ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';return ctx;}
+function frameName(a,dir,walking,frame){const f=a.frames[dir]||a.frames[a.directions[0]];const list=f[walking?'walk':'idle'];return list[Math.floor(frame)%list.length];}
+function sprite(ctx,a,dir,walking,frame,cx,foot,mode='color'){
+ const den=$('density').value,atlas=a.atlases[den],name=frameName(a,dir,walking,frame),box=atlas.boxes[name];const im=images.get(atlas.url);if(!im)return;
+ const hh=hFor(a),ww=hh*box[2]/box[3];foot+=hh*(a.ground_inset_fraction||0);
+ if(mode==='color'){ctx.drawImage(im,...box,cx-ww/2,foot-hh,ww,hh);return;}
+ const key=atlas.url+name+mode;let temp=transformed.get(key);if(!temp){temp=document.createElement('canvas');temp.width=box[2];temp.height=box[3];const t=temp.getContext('2d');t.drawImage(im,...box,0,0,box[2],box[3]);const pix=t.getImageData(0,0,temp.width,temp.height);
+ for(let i=0;i<pix.data.length;i+=4){let v=.2126*pix.data[i]+.7152*pix.data[i+1]+.0722*pix.data[i+2];v=mode==='silhouette'?24:(v<85?40:v<170?135:230);pix.data[i]=pix.data[i+1]=pix.data[i+2]=v;}t.putImageData(pix,0,0);if(transformed.size>160)transformed.clear();transformed.set(key,temp);}ctx.drawImage(temp,cx-ww/2,foot-hh,ww,hh);
+}
+function terrain(ctx,overlay=false){const map=model.maps.find(m=>m.id===$('terrain').value);if(!map)return;const im=images.get(overlay?map.over:map.under);if(!im)return;const hh=+$('play').value,ww=hh*model.canvas.play_rect[2]/model.canvas.play_rect[3];ctx.drawImage(im,160-ww*(+$('cropX').value/100),150-hh*(+$('cropY').value/100),ww,hh);}
+function scene(id,a,dir,walking,frame,mode='color'){
+ const ctx=canvas(id);ctx.fillStyle='#d5d1b9';ctx.fillRect(0,0,320,200);if(mode==='color'||mode==='gray')terrain(ctx);
+ if($('crowd').checked && (mode==='color'||mode==='gray')){const troop=assets.find(a=>a.id==='militia_soldier')||assets[0];for(const [x,y] of [[129,147],[187,142]])sprite(ctx,troop,'se',walking,frame,x,y);}
+ sprite(ctx,a,dir,walking,frame,160,150,mode==='gray'?'color':mode);
+ if($('crowd').checked && (mode==='color'||mode==='gray')){const troop=assets.find(a=>a.id==='militia_soldier')||assets[0];sprite(ctx,troop,'sw',walking,frame,174,164);}
+ if($('health').checked && (mode==='color'||mode==='gray')){const k=Math.min(Math.max(+$('play').value,model.clamp[0]),model.clamp[1])/model.reference_height;ctx.fillStyle='#d43122';ctx.fillRect(160-15*k,150-hFor(a)-7.5*k,30*k,4*k);ctx.fillStyle='#5dc14d';ctx.fillRect(160-15*k,150-hFor(a)-7.5*k,18*k,4*k);}
+ if(mode==='color'||mode==='gray')terrain(ctx,true);
+ if(mode==='gray'){const c=ctx.canvas,p=ctx.getImageData(0,0,c.width,c.height);for(let i=0;i<p.data.length;i+=4){let v=.2126*p.data[i]+.7152*p.data[i+1]+.0722*p.data[i+2];p.data[i]=p.data[i+1]=p.data[i+2]=v;}ctx.putImageData(p,0,0);}
+ return ctx;
+}
+function render(time=performance.now(),motionTick=false){
+ if(!state.loaded)return;
+ const a=selected(),walking=$('state').value==='walk',dir=$('direction').value;
+ const frames=(a.frames[dir]||a.frames[a.directions[0]])[walking?'walk':'idle'];$('frame').max=frames.length-1;
+ let frame=+$('frame').value;
+ if(walking&&$('animate').checked){frame=Math.floor((time-state.t0)/1000/Math.max(.25,+$('cycle').value||1)*frames.length)%frames.length;$('frame').value=frame;}
+ $('frameValue').textContent=frame;$('playValue').textContent=$('play').value+' pt';$('xValue').textContent=$('cropX').value+'%';$('yValue').textContent=$('cropY').value+'%';
+ $('status').textContent=`${a.label}: ${hFor(a).toFixed(2)} pt image height. ${a.standing_body_fraction?`Standing-equivalent body: ${(hFor(a)*a.standing_body_fraction).toFixed(2)} pt; ${a.height_evidence} stature basis. `:''}${a.animated?'':'Static art; selected walk/facing is not available.'}`;
+ for(const mode of ['color','gray','silhouette'])scene(mode,a,dir,walking,frame,mode);
+ if(document.querySelector('details').open){scene('values',a,dir,walking,frame,'values');
+ const z=canvas('zoom',320,360,1);z.imageSmoothingEnabled=false;const den=+$('density').value;z.drawImage($('color'),120*den,65*den,80*den,90*den,0,0,320,360);}
+ if(!motionTick)for(const aa of assets){const c=$('roster-'+aa.id),ctx=canvas(c,128,96);ctx.fillStyle='#e8e7db';ctx.fillRect(0,0,128,96);sprite(ctx,aa,dir,walking,frame,64,84);$('label-'+aa.id).textContent=$('labels').checked?aa.label:`Asset ${assets.indexOf(aa)+1}`;}
+}
+assets.forEach(a=>{const card=document.createElement('div');card.className='unit';const c=document.createElement('canvas');c.id='roster-'+a.id;c.setAttribute('aria-label','Unlabeled roster sprite');const name=document.createElement('div');name.id='label-'+a.id;name.className='name';card.append(c,name);$('roster').append(card);});
+const reviewInputs=[...document.querySelectorAll('.controls input,.controls select')].filter(el=>!['exposure','observer'].includes(el.id));
+reviewInputs.forEach(el=>el.addEventListener('input',()=>{state.t0=performance.now();render();}));
+document.querySelector('details').addEventListener('toggle',()=>render());
+let last=0;function tick(t){if(t-last>65&&$('animate').checked&&!state.test){render(t,true);last=t;}requestAnimationFrame(tick);}requestAnimationFrame(tick);
+function shuffle(v){for(let i=v.length-1;i>0;i--){const random=new Uint32Array(1);crypto.getRandomValues(random);const j=random[0]%(i+1);[v[i],v[j]]=[v[j],v[i]];}return v;}
+function lock(on){reviewInputs.forEach(e=>e.disabled=on);$('exposure').disabled=on;$('observer').disabled=on;$('start').disabled=on||!state.loaded;$('stop').disabled=!on;}
+function mask(){const c=canvas('trial');c.fillStyle='#8d998c';c.fillRect(0,0,320,200);c.fillStyle='#fff';c.font='16px system-ui';c.fillText('Image hidden',108,104);}
+function testNext(){
+ if(!state.sequence.length){state.test=null;lock(false);$('next').disabled=true;$('export').disabled=false;const correct=state.trials.filter(t=>t.correct).length;$('trialStatus').textContent=`Block finished: ${correct}/${state.trials.length} correct. Observer: ${state.controls.observer}. This is a descriptive result, not a population estimate.`;return;}
+ const trial=state.sequence.shift();state.trial=trial;$('next').disabled=true;$('answers').replaceChildren();$('trialStatus').textContent=`Trial ${state.trials.length+1}/${assets.length}: watch the image.`;
+ scene('trial',trial.asset,trial.direction,false,0,'color');$('trial').scrollIntoView({block:'center',behavior:'instant'});
+ requestAnimationFrame(()=>{if(!state.test)return;state.shownAt=performance.now();state.timer=setTimeout(()=>{if(!state.test)return;mask();state.maskedAt=performance.now();$('trialStatus').textContent='Which asset did you see?';
+ for(const answer of [...shuffle([...assets]),{id:'unknown',label:'Cannot tell'}]){const b=document.createElement('button');b.textContent=answer.label;b.onclick=()=>respond(answer.id);$('answers').append(b);}
+ },state.controls.exposure);});
+}
+function respond(id){const t=state.trial;if(!t)return;state.trials.push({asset:t.asset.id,direction:t.direction,response:id,correct:id===t.asset.id,exposure_actual_ms:Math.round(state.maskedAt-state.shownAt),response_after_mask_ms:Math.round(performance.now()-state.maskedAt)});state.trial=null;$('answers').replaceChildren();$('trialStatus').textContent='Response recorded. Continue when ready.';$('next').disabled=false;$('export').disabled=false;}
+$('start').onclick=()=>{state.controls={playable_height:+$('play').value,density:+$('density').value,terrain:$('terrain').value,crop:[+$('cropX').value,+$('cropY').value],crowd:$('crowd').checked,health:$('health').checked,exposure:+$('exposure').value,observer:$('observer').value,date:new Date().toISOString()};state.trials=[];state.sequence=shuffle([...assets]).map((a,i)=>({asset:a,direction:dirs[i%8]}));state.test=true;lock(true);testNext();};
+$('next').onclick=testNext;
+$('stop').onclick=()=>{clearTimeout(state.timer);state.test=null;state.trial=null;state.sequence=[];$('answers').replaceChildren();mask();lock(false);$('next').disabled=true;$('export').disabled=!state.trials.length;$('trialStatus').textContent=`Block ended with ${state.trials.length} recorded trials. Incomplete coverage.`;};
+$('export').onclick=()=>{const confusion={};for(const t of state.trials){confusion[t.asset]??={};confusion[t.asset][t.response]=(confusion[t.asset][t.response]||0)+1;}const report={conditions:state.controls,trials:state.trials,confusion,notes:$('notes').value,limitations:'Familiar developer performance is not independent human recognition. No historical-likeness score is inferred.',sizing_sources:model.sizing_sources};const link=document.createElement('a');link.href=URL.createObjectURL(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}));link.download='recognition-'+Date.now()+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(link.href),1000);};
+const urls=new Set(assets.flatMap(a=>Object.values(a.atlases).map(x=>x.url)).concat(model.maps.flatMap(m=>[m.under,m.over])));
+Promise.all([...urls].map(url=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{images.set(url,im);resolve();};im.onerror=()=>reject(new Error('Cannot load '+url));im.src=url;}))).then(()=>{state.loaded=true;$('start').disabled=false;render();mask();}).catch(err=>{$('status').textContent=err.message;});
+</script></body></html>

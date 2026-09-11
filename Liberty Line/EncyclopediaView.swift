@@ -41,7 +41,7 @@ struct EncyclopediaView: View {
             }
             .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
-            DoneButton(action: onExit)
+            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

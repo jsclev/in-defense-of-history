@@ -1,0 +1,20 @@
+21:58:45  Acquired tunnel connection to device.
+21:58:45  Enabling developer disk image services.
+21:58:45  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.call-wave-art-probe
+• installationURL: file:///private/var/containers/Bundle/Application/86E381FA-7DD9-49E8-9985-1BB77FCABD45/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4868
+• options: 
+21:59:00  Acquired tunnel connection to device.
+21:59:00  Enabling developer disk image services.
+21:59:00  Acquired usage assertion.
+Launched application with com.zippyzen.call-wave-art-probe bundle identifier.
+21:59:11  Acquired tunnel connection to device.
+21:59:11  Enabling developer disk image services.
+21:59:11  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/call-wave-bastion-2026-09-09/device-documents
+PASS: compiled call-wave art, real wave start, native countdown, and live pulse at minimum and device sizes.

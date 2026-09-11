@@ -1,0 +1,106 @@
+[
+  {
+    "map": "level_003_great_bridge.geojson",
+    "role": "primary",
+    "before": [
+      2035.9069017793026,
+      1420.2000000000003
+    ],
+    "after": [
+      2093.365240380285,
+      1413.0177076748776
+    ],
+    "outsideDistance": 56.9054919487663
+  },
+  {
+    "map": "level_007_long_island.geojson",
+    "role": "primary",
+    "before": [
+      1501.2,
+      1237.6231971047255
+    ],
+    "after": [
+      1467.474606421907,
+      1258.453587255899
+    ],
+    "outsideDistance": 38.63971904349707
+  },
+  {
+    "map": "level_009_princeton.geojson",
+    "role": "primary",
+    "before": [
+      958.5999999999999,
+      1238.5589882709646
+    ],
+    "after": [
+      892.8764488407514,
+      1263.4273589798686
+    ],
+    "outsideDistance": 69.27105405996002
+  },
+  {
+    "map": "level_009_princeton.geojson",
+    "role": "secondary",
+    "before": [
+      2022.3660262846713,
+      1428.5276132921244
+    ],
+    "after": [
+      2169.2061095273652,
+      1430.4818075092312
+    ],
+    "outsideDistance": 145.85308618398
+  },
+  {
+    "map": "level_010_fort_ann.geojson",
+    "role": "secondary",
+    "before": [
+      1671.3775638255634,
+      792
+    ],
+    "after": [
+      1669.0416663868527,
+      807.1100207523987
+    ],
+    "outsideDistance": 14.289510913763479
+  },
+  {
+    "map": "level_011_saratoga.geojson",
+    "role": "primary",
+    "before": [
+      1544.2,
+      1237.6231971047255
+    ],
+    "after": [
+      1518.5548234254102,
+      1254.2171348882846
+    ],
+    "outsideDistance": 29.54560283750382
+  },
+  {
+    "map": "level_012_kettle_creek.geojson",
+    "role": "secondary",
+    "before": [
+      690.787177057947,
+      930.7287124479517
+    ],
+    "after": [
+      688.9775813449996,
+      912.8589547825958
+    ],
+    "outsideDistance": 16.961149062987687
+  },
+  {
+    "map": "level_01_battle_road.geojson",
+    "role": "primary",
+    "before": [
+      2206.731414314122,
+      1108.5614489747068
+    ],
+    "after": [
+      2147.0270072155654,
+      1035.0639445266474
+    ],
+    "outsideDistance": 93.6916014601226
+  }
+]

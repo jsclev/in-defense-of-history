@@ -1,0 +1,40 @@
+[
+  {
+    "AssetType": "Image",
+    "BitsPerComponent": 8,
+    "ColorModel": "RGB",
+    "Colorspace": "srgb",
+    "Compression": "deepmap2",
+    "Encoding": "ARGB",
+    "Idiom": "universal",
+    "Name": "hud_back_to_main_framed",
+    "NameIdentifier": 20657,
+    "Opaque": true,
+    "PixelHeight": 384,
+    "PixelWidth": 384,
+    "RenditionName": "hud_back_to_main_framed@3x.png",
+    "Scale": 3,
+    "SHA1Digest": "BFA3E36825CDAFE24D8643EFFCAAE58BFE90DF1091F0232399D73294310E2374",
+    "SizeOnDisk": 155082,
+    "Template Mode": "automatic"
+  },
+  {
+    "AssetType": "Image",
+    "BitsPerComponent": 8,
+    "ColorModel": "RGB",
+    "Colorspace": "srgb",
+    "Compression": "deepmap2",
+    "Encoding": "ARGB",
+    "Idiom": "universal",
+    "Name": "hud_speed_up_framed",
+    "NameIdentifier": 816,
+    "Opaque": true,
+    "PixelHeight": 384,
+    "PixelWidth": 384,
+    "RenditionName": "hud_speed_up_framed@3x.png",
+    "Scale": 3,
+    "SHA1Digest": "D0A860AF1BF2E4588590F475BD74D5320828F05E6916CAE5FF1A949C46370B1F",
+    "SizeOnDisk": 145379,
+    "Template Mode": "automatic"
+  }
+]

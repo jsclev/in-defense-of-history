@@ -1,0 +1,118 @@
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'in-defense-of-history': failed storing manifest for 'in-defense-of-history' in cache: attempt to write a readonly database
+[0/1] Planning build
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Compiling LevelEditorFormats MapSpriteSizing.swift
+[4/5] Emitting module LevelEditorFormats
+[4/6] Write Objects.LinkFileList
+[5/6] Linking LevelEditorFormatsPackageTests
+Build complete! (2.02s)
+Test Suite 'Selected tests' started at 2026-09-10 17:24:18.203.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 17:24:18.204.
+Test Suite 'CallWaveButtonTests' started at 2026-09-10 17:24:18.204.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testBundledMapsProvideEditableRuntimeButtonCenters]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testBundledMapsProvideEditableRuntimeButtonCenters]' passed (0.085 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testCharlestonUsesTheCurrentAuthoredButtonCoordinates]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testCharlestonUsesTheCurrentAuthoredButtonCoordinates]' passed (0.033 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testExactCentersSurviveNativeGeoJSONAndRuntimeLoading]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testExactCentersSurviveNativeGeoJSONAndRuntimeLoading]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testInvalidRouteAssignmentsAreRejected]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testInvalidRouteAssignmentsAreRejected]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLayoutProjectsExactCoordinatesAcrossRuntimeCanvases]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLayoutProjectsExactCoordinatesAcrossRuntimeCanvases]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLegacyDocumentsOpenWithoutInventingButtonPositions]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testLegacyDocumentsOpenWithoutInventingButtonPositions]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testOnlyUpcomingRoutesShowButtonsAndSharedEntrancesAppearOnce]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testOnlyUpcomingRoutesShowButtonsAndSharedEntrancesAppearOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testRuntimeRejectsMissingAndMalformedButtons]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testRuntimeRejectsMissingAndMalformedButtons]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testSizingUsesRuntimeHUDScaleAndReadableMinimum]' started.
+Test Case '-[LevelEditorFormatsTests.CallWaveButtonTests testSizingUsesRuntimeHUDScaleAndReadableMinimum]' passed (0.000 seconds).
+Test Suite 'CallWaveButtonTests' passed at 2026-09-10 17:24:18.325.
+	 Executed 9 tests, with 0 failures (0 unexpected) in 0.121 (0.122) seconds
+Test Suite 'CharlestonWaveTests' started at 2026-09-10 17:24:18.325.
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves]' started.
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:38: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("Optional(LevelEditorFormats.Point(x: 495.65, y: 1221.96))") is not equal to ("Optional(LevelEditorFormats.Point(x: 510.0, y: 1276.0))")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:39: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("Optional(LevelEditorFormats.Point(x: 1587.0, y: 549.0))") is not equal to ("Optional(LevelEditorFormats.Point(x: 1634.0, y: 552.0))")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:40: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("Optional(LevelEditorFormats.Point(x: 1224.0, y: 1495.0))") is not equal to ("Optional(LevelEditorFormats.Point(x: 1214.0, y: 1496.0))")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:41: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("Optional(LevelEditorFormats.Point(x: 2370.0, y: 1235.0))") is not equal to ("Optional(LevelEditorFormats.Point(x: 2366.0, y: 1304.0))")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:44: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertTrue failed
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:44: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertTrue failed
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:73: error: -[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves] : XCTAssertEqual failed: ("1") is not equal to ("0")
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves]' failed (0.122 seconds).
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testEditorPreservesBothRoutesAndAllWaveTiming]' started.
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/CharlestonWaveTests.swift:20: error: -[LevelEditorFormatsTests.CharlestonWaveTests testEditorPreservesBothRoutesAndAllWaveTiming] : XCTAssertEqual failed: ("[0]") is not equal to ("[0, 1]")
+Test Case '-[LevelEditorFormatsTests.CharlestonWaveTests testEditorPreservesBothRoutesAndAllWaveTiming]' failed (0.073 seconds).
+Test Suite 'CharlestonWaveTests' failed at 2026-09-10 17:24:18.521.
+	 Executed 2 tests, with 46 failures (0 unexpected) in 0.195 (0.196) seconds
+Test Suite 'LevelMarkerPlacementTests' started at 2026-09-10 17:24:18.521.
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testBothMarkersUseTheSameExactProjectionAsPathPixels]' started.
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testBothMarkersUseTheSameExactProjectionAsPathPixels]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testCroppedCrownKeepsItsApprovedSizeWithoutMovingTheCenter]' started.
+Test Case '-[LevelEditorFormatsTests.LevelMarkerPlacementTests testCroppedCrownKeepsItsApprovedSizeWithoutMovingTheCenter]' passed (0.000 seconds).
+Test Suite 'LevelMarkerPlacementTests' passed at 2026-09-10 17:24:18.522.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.000 (0.001) seconds
+Test Suite 'LevelViewportTests' started at 2026-09-10 17:24:18.522.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.015 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.217 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-10 17:24:19.753.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.232 (1.232) seconds
+Test Suite 'RuntimeCanvasTests' started at 2026-09-10 17:24:19.753.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testAllGeometryFitsTheLiveSafeArea]' started.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testAllGeometryFitsTheLiveSafeArea]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testMenuContentCannotResizeTheRuntimeCanvas]' started.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testMenuContentCannotResizeTheRuntimeCanvas]' passed (0.001 seconds).
+Test Suite 'RuntimeCanvasTests' passed at 2026-09-10 17:24:19.755.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.001 (0.002) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' failed at 2026-09-10 17:24:19.755.
+	 Executed 17 tests, with 46 failures (0 unexpected) in 1.550 (1.551) seconds
+Test Suite 'Selected tests' failed at 2026-09-10 17:24:19.755.
+	 Executed 17 tests, with 46 failures (0 unexpected) in 1.550 (1.552) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "sourceSize": [
+    288,
+    288
+  ],
+  "originalVioletPixels": 3249,
+  "remainingVioletPixels": 0,
+  "warmCoreRetention": 1.0,
+  "outputAlphaExtrema": [
+    0,
+    255
+  ]
+}

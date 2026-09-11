@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "level": 15,
+  "routes": 4,
+  "waves": 15,
+  "enemies": 424,
+  "hostTests": 184,
+  "editorTests": 79,
+  "deviceLoads": 12,
+  "processIdentifier": 5259,
+  "installedDatabaseMatches": true,
+  "installedGeoJSONMatches": true,
+  "databaseIntegrity": "ok",
+  "foreignKeyViolations": 0,
+  "generatorReproducible": true,
+  "geoJSONSHA256": "f800d10e0d9afcfbcac64b876483c5f23609ffc7b25c48830d626e761eb2ea43",
+  "bundledDatabaseSHA256": "166e16a2b965f2222226b66d30372f5dc2f029b6c916bbb1d8876d106aae7562"
+}

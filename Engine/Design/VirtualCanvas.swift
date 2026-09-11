@@ -1,7 +1,7 @@
 import Foundation
 import CoreGraphics
 
-public struct VirtualCanvas: Equatable, Sendable {
+public struct VirtualCanvas: Codable, Equatable, Sendable {
     public let size: CGSize
     public let pathWidth: Double
 
@@ -37,8 +37,9 @@ public struct VirtualCanvas: Equatable, Sendable {
         self.miscViewSizeFraction = miscViewSizeFraction
 
         let cornerSize = { (f: CGSize) in
+            // Reserve 90% of each HUD region's height for the corner cutout.
             CGSize(width: playAreaRect.width * f.width,
-                   height: playAreaRect.height * f.height)
+                   height: playAreaRect.height * f.height * 0.9)
         }
         let ul = cornerSize(statsViewSizeFraction)
         let ur = cornerSize(masterControlsSizeFraction)
@@ -77,13 +78,46 @@ public struct VirtualCanvas: Equatable, Sendable {
          upperLeftOcclusionArea, upperRightOcclusionArea]
     }
 
+    /// Largest verified landscape home-indicator / full-screen width ratio:
+    /// iPad mini (6th generation), 315 pt / 1133 pt. See the measurement report
+    /// in Tools/reports/bottom-center-occlusion-2026-09-09.
+    public static let homeIndicatorScreenWidthFraction: CGFloat = 315.0 / 1133.0
+
+    /// Authored geometry uses the full virtual canvas as its screen reference.
+    /// Computed so existing saved canvases acquire the cutout without migration.
+    public var bottomCenterOcclusionArea: CGRect {
+        bottomCenterOcclusionArea(forScreenWidth: size.width)
+    }
+
+    /// `screenWidth` must be expressed in canonical map units. RuntimeCanvas
+    /// converts the physical screen width using the live map scale.
+    public func bottomCenterOcclusionArea(forScreenWidth screenWidth: CGFloat) -> CGRect {
+        let width = min(playAreaRect.width, max(0, screenWidth) * Self.homeIndicatorScreenWidthFraction)
+        return CGRect(x: playAreaRect.midX - width / 2,
+                      y: playAreaRect.minY,
+                      width: width,
+                      height: lowerLeftOcclusionArea.height * 0.2)
+    }
+
+    public var occlusionAreas: [CGRect] { occlusionAreas(forScreenWidth: size.width) }
+
+    public func occlusionAreas(forScreenWidth screenWidth: CGFloat) -> [CGRect] {
+        cornerOcclusionAreas + [bottomCenterOcclusionArea(forScreenWidth: screenWidth)]
+    }
+
     /// Where a slot's CENTRE may sit. Test placements against this.
-    public var towerSlotValidCentres: CGPath { slotValidShape(measuringFootprintEdge: false) }
+    public var towerSlotValidCentres: CGPath {
+        slotValidShape(measuringFootprintEdge: false, screenWidth: size.width)
+    }
 
     /// Where the outer edge of a slot's pad may reach. Draw this.
-    public var towerSlotValidFootprint: CGPath { slotValidShape(measuringFootprintEdge: true) }
+    public var towerSlotValidFootprint: CGPath { towerSlotValidFootprint(forScreenWidth: size.width) }
 
-    private func slotValidShape(measuringFootprintEdge: Bool) -> CGPath {
+    public func towerSlotValidFootprint(forScreenWidth screenWidth: CGFloat) -> CGPath {
+        slotValidShape(measuringFootprintEdge: true, screenWidth: screenWidth)
+    }
+
+    private func slotValidShape(measuringFootprintEdge: Bool, screenWidth: CGFloat) -> CGPath {
         let menuHalfWidth = towerMenuTotalSize.width / 2
         let menuHalfHeight = towerMenuTotalSize.height / 2
         let slotHalfWidth = towerSlotSize.width / 2
@@ -98,6 +132,10 @@ public struct VirtualCanvas: Equatable, Sendable {
         let blocked = CGMutablePath()
         for corner in [lowerLeftOcclusionArea, lowerRightOcclusionArea, upperRightOcclusionArea] {
             blocked.addRect(corner.insetBy(dx: -insetWidth, dy: -insetHeight))
+        }
+        let bottomCenter = bottomCenterOcclusionArea(forScreenWidth: screenWidth)
+        if !bottomCenter.isEmpty {
+            blocked.addRect(bottomCenter.insetBy(dx: -insetWidth, dy: -insetHeight))
         }
         blocked.addRect(upperLeftOcclusionArea.insetBy(dx: -upperLeftStandoffWidth,
                                                        dy: -upperLeftStandoffHeight))
@@ -118,19 +156,54 @@ public struct VirtualCanvas: Equatable, Sendable {
                       width: width, height: height)
     }
 
-    public var playAreaShape: CGPath {
+    public var playAreaShape: CGPath { playAreaShape(forScreenWidth: size.width) }
+
+    /// Reserve finger clearance at the exposed top edge for tappable elements.
+    public static let tapAreaTopInsetFraction: CGFloat = 0.05
+
+    /// Only the top segment between the upper corner occlusions moves inward.
+    /// Canonical map coordinates have +Y up, so downward means decreasing Y.
+    public var tapAreaTopExclusionArea: CGRect {
+        let play = playAreaRect
+        let left = upperLeftOcclusionArea.isEmpty ? play.minX
+            : min(play.maxX, max(play.minX, upperLeftOcclusionArea.maxX))
+        let right = upperRightOcclusionArea.isEmpty ? play.maxX
+            : max(play.minX, min(play.maxX, upperRightOcclusionArea.minX))
+        let height = play.height * Self.tapAreaTopInsetFraction
+        return CGRect(x: left, y: play.maxY - height,
+                      width: max(0, right - left), height: height)
+    }
+
+    /// Placement region for tappable map elements, inside the play polygon.
+    public var tapAreaShape: CGPath { tapAreaShape(forScreenWidth: size.width) }
+
+    public func tapAreaShape(forScreenWidth screenWidth: CGFloat) -> CGPath {
+        let play = playAreaShape(forScreenWidth: screenWidth)
+        let exclusion = tapAreaTopExclusionArea
+        guard !exclusion.isEmpty else { return play }
+        // Extend past shared outer edges, as for the play-area occlusions, so
+        // path subtraction cannot leave a stray segment on the old boundary.
+        let pad: CGFloat = 6
+        var cut = exclusion
+        cut.size.height += pad
+        if exclusion.minX == playAreaRect.minX { cut.origin.x -= pad; cut.size.width += pad }
+        if exclusion.maxX == playAreaRect.maxX { cut.size.width += pad }
+        return play.subtracting(CGPath(rect: cut, transform: nil), using: .winding)
+    }
+
+    public func playAreaShape(forScreenWidth screenWidth: CGFloat) -> CGPath {
         let play = playAreaRect
         // Cuts extend past the boundary so subtraction removes the shared edge cleanly.
         let pad = 6.0
         let shape = CGMutablePath()
         shape.addRect(play)
         let cuts = CGMutablePath()
-        for corner in cornerOcclusionAreas {
-            var cut = corner
-            if abs(corner.minX - play.minX) < 0.5 { cut.origin.x -= pad; cut.size.width += pad }
-            if abs(corner.maxX - play.maxX) < 0.5 { cut.size.width += pad }
-            if abs(corner.minY - play.minY) < 0.5 { cut.origin.y -= pad; cut.size.height += pad }
-            if abs(corner.maxY - play.maxY) < 0.5 { cut.size.height += pad }
+        for occlusion in occlusionAreas(forScreenWidth: screenWidth) where !occlusion.isEmpty {
+            var cut = occlusion
+            if abs(occlusion.minX - play.minX) < 0.5 { cut.origin.x -= pad; cut.size.width += pad }
+            if abs(occlusion.maxX - play.maxX) < 0.5 { cut.size.width += pad }
+            if abs(occlusion.minY - play.minY) < 0.5 { cut.origin.y -= pad; cut.size.height += pad }
+            if abs(occlusion.maxY - play.maxY) < 0.5 { cut.size.height += pad }
             cuts.addRect(cut)
         }
         return shape.subtracting(cuts, using: .winding)

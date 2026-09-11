@@ -1,0 +1,19 @@
+21:07:42  Acquired tunnel connection to device.
+21:07:42  Enabling developer disk image services.
+21:07:42  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.misc-sack-probe
+• installationURL: file:///private/var/containers/Bundle/Application/FAAEE4B2-4DCF-46B8-A7B9-D3D0CC268796/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4748
+• options: 
+21:08:35  Enabling developer disk image services.
+21:08:36  Acquired usage assertion.
+Launched application with com.zippyzen.misc-sack-probe bundle identifier.
+21:08:43  Acquired tunnel connection to device.
+21:08:43  Enabling developer disk image services.
+21:08:44  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/misc-sack-2026-09-09/device-documents
+PASS: compiled sack sprite, lower-right HUD, and physical-iPhone gameplay captures at minimum and device sizes.

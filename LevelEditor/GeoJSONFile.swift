@@ -1,24 +1,23 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// SwiftUI save-panel adapter; all bytes come from the validated model.
 struct GeoJSONFile: FileDocument {
-    static var readableContentTypes: [UTType] { [.geoJSON, .json] }
-    static var writableContentTypes: [UTType] { [.geoJSON, .json] }
+    static var readableContentTypes: [UTType] { [.geoJSON] }
+    static var writableContentTypes: [UTType] { [.geoJSON] }
 
-    var data: Data
+    let document: LevelGeoJSON
 
-    init(data: Data) {
-        self.data = data
-    }
+    init(document: LevelGeoJSON) { self.document = document }
 
     init(configuration: ReadConfiguration) throws {
         guard let contents = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
-        data = contents
+        document = try LevelGeoJSON(data: contents)
     }
 
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
-        FileWrapper(regularFileWithContents: data)
+        FileWrapper(regularFileWithContents: try document.data())
     }
 }

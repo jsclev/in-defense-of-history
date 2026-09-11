@@ -1,0 +1,29 @@
+Prepared ranged tower level 1: 7.786 pt minimum
+Prepared ranged tower level 2: 7.786 pt minimum
+Prepared ranged tower level 3: 7.786 pt minimum
+Prepared ranged tower level 4 branch 1: 7.786 pt minimum
+Prepared ranged tower level 4 branch 2: 7.786 pt minimum
+Prepared ranged tower level 4 branch 3: 7.786 pt minimum
+Prepared melee tower level 1: 38.931 pt minimum
+Prepared melee tower level 2: 38.931 pt minimum
+Prepared melee tower level 3: 38.931 pt minimum
+Prepared melee tower level 4 branch 1: 38.931 pt minimum
+Prepared melee tower level 4 branch 2: 38.931 pt minimum
+Prepared melee tower level 4 branch 3: 38.931 pt minimum
+Prepared artillery tower level 1: 38.931 pt minimum
+Prepared artillery tower level 2: 38.931 pt minimum
+Prepared artillery tower level 3: 38.931 pt minimum
+Prepared artillery tower level 4 branch 1: 38.931 pt minimum
+Prepared artillery tower level 4 branch 2: 38.931 pt minimum
+Prepared artillery tower level 4 branch 3: 38.931 pt minimum
+Prepared special tower level 1: 41.527 pt minimum
+Prepared special tower level 2: 41.527 pt minimum
+Prepared special tower level 3: 41.527 pt minimum
+Review: /Users/john/projects/td/in-defense-of-history/Tools/reports/tower-sprite-height-2026-09-09/lab/index.html
+Traceback (most recent call last):
+  File "/Users/john/projects/td/in-defense-of-history/Tools/check_tower_sprite_height.py", line 212, in <module>
+    main()
+  File "/Users/john/projects/td/in-defense-of-history/Tools/check_tower_sprite_height.py", line 182, in main
+    assert abs((b[high]-b[low]) - 2*(a[high]-a[low])) <= 2, (item, playable, density, a, b)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ({'name': 'ranged_tower_level_2', 'kind': 'ranged', 'level': 2, 'branch': 1}, 340, 1, (60, 110, 68, 117), (54, 104, 74, 119))

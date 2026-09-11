@@ -1,0 +1,37 @@
+/Users/john/projects/td/in-defense-of-history/Tools/RuntimeCanvasProbe.swift:92:43: warning: call to main actor-isolated instance method 'record()' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 31 |     override func didMoveToWindow() { super.didMoveToWindow(); record() }
+ 32 |     override func layoutSubviews() { super.layoutSubviews(); record() }
+ 33 |     func record() {
+    |          |- note: calls to instance method 'record()' from outside of its actor context are implicitly asynchronous
+    |          `- note: main actor isolation inferred from inheritance from class 'UIView'
+ 34 |         if let window { Evidence.frames[key] = Evidence.rect(convert(bounds, to: window)) }
+ 35 |     }
+    :
+ 90 |                 try? await Task.sleep(for: .milliseconds(600))
+ 91 |                 func refresh(_ view: UIView) {
+ 92 |                     (view as? FrameView)?.record()
+    |                                           `- warning: call to main actor-isolated instance method 'record()' in a synchronous nonisolated context [#ActorIsolatedCall]
+ 93 |                     view.subviews.forEach(refresh)
+ 94 |                 }
+
+/Users/john/projects/td/in-defense-of-history/Tools/RuntimeCanvasProbe.swift:93:26: warning: main actor-isolated property 'subviews' can not be referenced from a nonisolated context
+ 91 |                 func refresh(_ view: UIView) {
+ 92 |                     (view as? FrameView)?.record()
+ 93 |                     view.subviews.forEach(refresh)
+    |                          `- warning: main actor-isolated property 'subviews' can not be referenced from a nonisolated context
+ 94 |                 }
+ 95 |                 refresh(window)
+
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator26.5.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIView.h:226:64: note: property declared here
+224 | 
+225 | @property(nullable, nonatomic,readonly) UIView       *superview;
+226 | @property(nonatomic,readonly,copy) NSArray<__kindof UIView *> *subviews;
+    |                                                                `- note: property declared here
+227 | @property(nullable, nonatomic,readonly) UIWindow     *window;
+228 | 
+
+[#ActorIsolatedCall]: <https://docs.swift.org/compiler/documentation/diagnostics/actor-isolated-call>
+clang: warning: using sysroot for 'MacOSX' but targeting 'iPhone' [-Wincompatible-sysroot]
+/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-runtime-canvas-0l7b2ted/RuntimeCanvasProbe.app: replacing existing signature
+com.zippyzen.runtime-canvas-probe: 34118
+PASS: live window/safe-area measurement, stable root/map frames, preserved screen state. Tools/reports/runtime-canvas-2026-09-09/uikit-results.json

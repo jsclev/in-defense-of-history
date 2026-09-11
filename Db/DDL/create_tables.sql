@@ -66,6 +66,16 @@ CREATE TABLE melee_unit (
     heal_per_second REAL NOT NULL DEFAULT 0 CHECK (heal_per_second >= 0)
 );
 
+-- A single shared configuration, measured in game seconds. Lifetime and
+-- cooldown are independent: more than one group can be alive at a time.
+CREATE TABLE reinforcement_config (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    time_to_live_seconds REAL NOT NULL
+        CHECK (typeof(time_to_live_seconds) IN ('integer', 'real') AND time_to_live_seconds > 0),
+    cooldown_seconds REAL NOT NULL
+        CHECK (typeof(cooldown_seconds) IN ('integer', 'real') AND cooldown_seconds > 0)
+);
+
 CREATE TABLE difficulty (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     difficulty_level INTEGER NOT NULL UNIQUE CHECK (difficulty_level BETWEEN 1 AND 4),
@@ -83,6 +93,8 @@ CREATE TABLE player_selected_difficulty (
 CREATE TABLE player_selected_hero (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     hero_id TEXT NOT NULL UNIQUE REFERENCES hero (id),
+    -- Primary is slot 1, optional secondary is slot 2 when saved. Reads derive
+    -- roles from current hero rankings so a ranking edit immediately takes effect.
     selection_slot INTEGER NOT NULL UNIQUE CHECK (selection_slot BETWEEN 1 AND 2)
 );
 
@@ -177,6 +189,13 @@ CREATE TABLE level_wave (
     level_info_id TEXT NOT NULL REFERENCES level_info (id),
     wave_index INTEGER NOT NULL CHECK (wave_index >= 1),
     spawn_time REAL NOT NULL,
+    -- Game seconds after the previous wave STARTS before its call button appears.
+    call_button_delay REAL NOT NULL CHECK (call_button_delay >= 0.0),
+    -- Game seconds the button stays available before this wave starts itself.
+    -- Wave 1 always waits for a manual call, regardless of these values.
+    auto_start_countdown REAL NOT NULL CHECK (auto_start_countdown >= 0.0),
+    -- Money awarded once when this wave is called early. Wave 1 never awards it.
+    early_call_bonus INTEGER NOT NULL CHECK (early_call_bonus >= 0),
     UNIQUE (level_info_id, wave_index)
 );
 
@@ -192,17 +211,11 @@ CREATE TABLE level_wave_enemy_spawn (
     UNIQUE (level_wave_id, spawn_index, enemy_type_id)
 );
 
-CREATE TABLE tower_slot (
-    id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    level_info_id TEXT NOT NULL REFERENCES level_info (id),
-    map_position_x REAL NOT NULL,
-    map_position_y REAL NOT NULL
-);
-
 CREATE TABLE hero (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     short_name TEXT NOT NULL,
     long_name TEXT NOT NULL,
+    ranking INTEGER NOT NULL CHECK (typeof(ranking) = 'integer' AND ranking BETWEEN 1 AND 100),
     nickname TEXT,
     unlocked_at_level_wave_id TEXT NOT NULL REFERENCES level_wave (id),
     general_description TEXT NOT NULL,

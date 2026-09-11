@@ -59,8 +59,13 @@ public enum MeleeWalkCycle {
 public enum HeroWalkCycle {
     public static let cycleDistance: Double = 75.6
     public static let henryKnoxAssetName = "hero_unit_henry_knox"
+    // The other catalog frames are optical-flow blends of these four drawings.
+    // They contain doubled limbs, so playback must use the source poses only.
+    public static let henryKnoxFrameIndices = [0, 16, 32, 48]
     public static let georgeWashingtonAssetName = "hero_unit_george_washington"
     public static let georgeWashingtonFrameCount = 16
+    // The east cycle is exported from the offline artwork rig.
+    public static let georgeWashingtonEastFrameCount = 32
     public static let danielMorganAssetName = "hero_unit_daniel_morgan"
     public static let danielMorganFrameCount = 16
     public static let salemPoorAssetName = "hero_unit_salem_poor"
@@ -111,8 +116,17 @@ public enum HeroWalkCycle {
                                  isWalking: Bool) -> String {
         guard animatedAssetNames.contains(baseAssetName) else { return baseAssetName }
         let facing = isWalking ? facing : idleFacing(from: facing)
+        if baseAssetName == henryKnoxAssetName {
+            let pitch = cycleDistance / Double(henryKnoxFrameIndices.count)
+            let frame = isWalking
+                ? henryKnoxFrameIndices[Int(walkPhase / pitch) % henryKnoxFrameIndices.count]
+                : 16
+            return "\(baseAssetName)_walk_\(facing.assetSuffix)_\(frame)"
+        }
         if let frameCount = directionalFrameCounts[baseAssetName] {
             guard isWalking else { return "\(baseAssetName)_idle_\(facing.assetSuffix)" }
+            let frameCount = baseAssetName == georgeWashingtonAssetName && facing == .east
+                ? georgeWashingtonEastFrameCount : frameCount
             let pitch = cycleDistance / Double(frameCount)
             let frame = Int(walkPhase / pitch) % frameCount
             return "\(baseAssetName)_walk_\(facing.assetSuffix)_\(frame)"

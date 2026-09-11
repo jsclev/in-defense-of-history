@@ -1,0 +1,21 @@
+[
+  {
+    "AssetType": "Image",
+    "BitsPerComponent": 8,
+    "ColorModel": "RGB",
+    "Colorspace": "srgb",
+    "Compression": "deepmap2",
+    "Encoding": "ARGB",
+    "Idiom": "universal",
+    "Name": "hud_hero_henry_knox_framed",
+    "NameIdentifier": 65116,
+    "Opaque": true,
+    "PixelHeight": 384,
+    "PixelWidth": 384,
+    "RenditionName": "hud_hero_henry_knox_framed@3x.png",
+    "Scale": 3,
+    "SHA1Digest": "0E9E948B7FDD105FA60FB5B0853F3BEA1F73CC9F44696D6C4469AC3C9FC89240",
+    "SizeOnDisk": 195808,
+    "Template Mode": "automatic"
+  }
+]

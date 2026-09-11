@@ -39,15 +39,15 @@ enum MenuScreen: String, CaseIterable, Identifiable {
 }
 
 struct MenuButton: View {
-    let runtimeCanvas: MenuScreen
+    let menuScreen: MenuScreen
     let size: CGFloat
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
             Group {
-                if UIImage(named: runtimeCanvas.iconAssetName) != nil {
-                    Image(runtimeCanvas.iconAssetName)
+                if UIImage(named: menuScreen.iconAssetName) != nil {
+                    Image(menuScreen.iconAssetName)
                         .resizable()
                         .scaledToFit()
                 } else {
@@ -55,21 +55,21 @@ struct MenuButton: View {
                         Circle().fill(.black.opacity(0.55))
                         Circle().strokeBorder(
                             Color(red: 0.85, green: 0.7, blue: 0.3),
-                            lineWidth: 3
+                            lineWidth: size * 0.027
                         )
-                        Image(systemName: runtimeCanvas.placeholderSymbol)
+                        Image(systemName: menuScreen.placeholderSymbol)
                             .font(.system(size: Typography.size(size * 0.42), weight: .bold))
                             .foregroundStyle(.white)
                     }
                 }
             }
             .frame(width: size, height: size)
-            .shadow(color: .black.opacity(0.48), radius: 2, y: 3)
+            .shadow(color: .black.opacity(0.48), radius: size * 0.018, y: size * 0.027)
             .contentShape(Rectangle())
         }
         .buttonStyle(FloatingMenuButtonStyle())
-        .accessibilityLabel(runtimeCanvas.title)
-        .accessibilityHint(runtimeCanvas.accessibilityHint)
+        .accessibilityLabel(menuScreen.title)
+        .accessibilityHint(menuScreen.accessibilityHint)
     }
 }
 
@@ -78,15 +78,19 @@ struct DoneButton: View {
 
     static var aspect: CGFloat { HudIcon.aspect(of: assetName) }
 
+    let runtimeCanvas: RuntimeCanvas
     let action: () -> Void
 
     var body: some View {
+        let frame = DoneButtonLayout(runtimeCanvas: runtimeCanvas, aspect: Self.aspect).frame
         Button(action: action) {
             Image(Self.assetName)
                 .resizable()
                 .scaledToFit()
+                .frame(width: frame.width, height: frame.height)
         }
         .buttonStyle(DoneButtonStyle())
+        .position(x: frame.midX, y: frame.midY)
         .accessibilityLabel("Done")
     }
 }
@@ -152,7 +156,7 @@ struct MenuPlaceholderView: View {
             }
             .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
-            DoneButton(action: onExit)
+            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)

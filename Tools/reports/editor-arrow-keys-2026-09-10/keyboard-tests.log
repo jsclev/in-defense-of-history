@@ -1,0 +1,31 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.38s)
+Test Suite 'Selected tests' started at 2026-09-10 14:31:11.740.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 14:31:11.741.
+Test Suite 'EditorArrowKeyTests' started at 2026-09-10 14:31:11.741.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testAllArrowsReachSelectionWithFocusOutsideCanvasExactlyOnce]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testAllArrowsReachSelectionWithFocusOutsideCanvasExactlyOnce]' passed (0.086 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testHiddenOrDetachedCanvasCannotConsumeArrows]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testHiddenOrDetachedCanvasCannotConsumeArrows]' passed (0.007 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testInactiveAndOtherDocumentWindowsCannotNudge]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testInactiveAndOtherDocumentWindowsCannotNudge]' passed (0.014 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSelectionChangesAndKeyRepeatUseCurrentHandler]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSelectionChangesAndKeyRepeatUseCurrentHandler]' passed (0.007 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testShortcutsAndNonArrowKeysPassThrough]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testShortcutsAndNonArrowKeysPassThrough]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSwiftUIHostingViewDoesNotBlockCanvasArrows]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testSwiftUIHostingViewDoesNotBlockCanvasArrows]' passed (0.015 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testTextFieldEditorKeepsArrowKeys]' started.
+Test Case '-[LevelEditorFormatsTests.EditorArrowKeyTests testTextFieldEditorKeepsArrowKeys]' passed (0.015 seconds).
+Test Suite 'EditorArrowKeyTests' passed at 2026-09-10 14:31:11.889.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.147 (0.148) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-10 14:31:11.889.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.147 (0.148) seconds
+Test Suite 'Selected tests' passed at 2026-09-10 14:31:11.889.
+	 Executed 7 tests, with 0 failures (0 unexpected) in 0.147 (0.149) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

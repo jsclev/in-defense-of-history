@@ -6,22 +6,22 @@ DELETE FROM level_wave_enemy_spawn WHERE level_wave_id IN (
 );
 DELETE FROM level_wave WHERE level_info_id = '96170d0e-6983-47e0-bf80-93cd4c91ad3a';
 
-INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES
-('1bc032f7-8f52-5800-b265-7866136aedaf', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1, 5.0),
-('072061a4-a216-559b-84e4-781cb412301e', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 2, 27.0),
-('0bf5ffa1-d59e-5769-9899-21e52e55c609', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 3, 50.0),
-('79d7e68b-a4c7-590e-854b-e4cfd4df55f3', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 4, 74.0),
-('e1975f27-cfb6-5237-a972-c7a0dd7dc092', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 5, 99.0),
-('57338869-9e85-5db6-b2bd-ce1bc8ada7ee', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 6, 125.0),
-('6379bda3-2faa-560f-af02-4bff4841fc9f', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 7, 152.0),
-('d9a5e30d-1a13-5136-af08-28543c4e1217', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 8, 180.0),
-('642103b7-1dec-5516-92ac-33bb0fbaaaff', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 9, 209.0),
-('3b8b8e0f-2b34-5815-88ff-67a6a42ff657', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 10, 239.0),
-('4bdc01e5-ff0d-5bdb-8209-32371625f780', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 11, 270.0),
-('e985c042-b0c4-5726-a558-97a21667258e', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 12, 302.0),
-('377454c7-e238-5747-a8b4-f7c17fee3cdf', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 13, 335.0),
-('87014a07-3042-58cb-be10-a98585a1f72d', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 14, 369.0),
-('a34bc236-b1a8-5bb9-993d-690edd883480', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 15, 404.0);
+INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time, call_button_delay, auto_start_countdown, early_call_bonus) VALUES
+('1bc032f7-8f52-5800-b265-7866136aedaf', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1, 5.0, 0, 0, 0),
+('072061a4-a216-559b-84e4-781cb412301e', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 2, 27.0, 21.84, 13, 13),
+('0bf5ffa1-d59e-5769-9899-21e52e55c609', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 3, 50.0, 23.66, 13, 13),
+('79d7e68b-a4c7-590e-854b-e4cfd4df55f3', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 4, 74.0, 25.48, 13, 13),
+('e1975f27-cfb6-5237-a972-c7a0dd7dc092', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 5, 99.0, 27.3, 13, 13),
+('57338869-9e85-5db6-b2bd-ce1bc8ada7ee', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 6, 125.0, 29.12, 13, 13),
+('6379bda3-2faa-560f-af02-4bff4841fc9f', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 7, 152.0, 30.94, 13, 13),
+('d9a5e30d-1a13-5136-af08-28543c4e1217', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 8, 180.0, 32.76, 13, 13),
+('642103b7-1dec-5516-92ac-33bb0fbaaaff', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 9, 209.0, 34.58, 13, 13),
+('3b8b8e0f-2b34-5815-88ff-67a6a42ff657', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 10, 239.0, 36.4, 13, 13),
+('4bdc01e5-ff0d-5bdb-8209-32371625f780', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 11, 270.0, 38.22, 13, 13),
+('e985c042-b0c4-5726-a558-97a21667258e', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 12, 302.0, 40.04, 13, 13),
+('377454c7-e238-5747-a8b4-f7c17fee3cdf', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 13, 335.0, 41.86, 13, 13),
+('87014a07-3042-58cb-be10-a98585a1f72d', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 14, 369.0, 43.68, 13, 13),
+('a34bc236-b1a8-5bb9-993d-690edd883480', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 15, 404.0, 45.5, 13, 13);
 
 INSERT INTO level_wave_enemy_spawn (
     id, level_wave_id, enemy_type_id, spawn_index, num_enemies,

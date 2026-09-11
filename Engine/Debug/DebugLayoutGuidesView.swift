@@ -8,14 +8,15 @@ public struct DebugLayoutGuidesView: View {
     private let physicalRectDash: [CGFloat] = [16, 9]
     private let safeInsetsRectDash: [CGFloat] = [16, 9]
     private let hudRectDash: [CGFloat] = [16, 9]
-    private let playAreaRectDash: [CGFloat] = [6, 10]
-    private let playAreaDash: [CGFloat] = [6, 10]
+    private let playAreaDash: [CGFloat] = [7.935, 10]
+    // 60% cyan, 40% gap so the purple guide underneath remains visible.
+    private let tapAreaDash: [CGFloat] = [7.2, 4.8]
 
     private let physicalRectGuideColor = Color(red: 1.0, green: 0.16, blue: 0.16)
     private let safeInsetsRectGuideColor = Color(red: 0.18, green: 1.0, blue: 0.33)
     private let hudRectGuideColor = Color(red: 1.0, green: 0.8, blue: 0.0)
-    private let playAreaRectGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
     private let playAreaGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
+    private let tapAreaGuideColor = Color(red: 0.0, green: 1.0, blue: 1.0)
 
     public init(runtimeCanvas: RuntimeCanvas) {
         self.runtimeCanvas = runtimeCanvas
@@ -35,11 +36,8 @@ public struct DebugLayoutGuidesView: View {
                            borderColor: hudRectGuideColor,
                            borderThickness: lineThickness,
                            borderDash: hudRectDash)
-            createRectView(rect: runtimeCanvas.playAreaRect,
-                           borderColor: playAreaRectGuideColor,
-                           borderThickness: lineThickness,
-                           borderDash: playAreaRectDash)
             createPlayAreaView()
+            createTapAreaView()
         }
         .allowsHitTesting(false)
     }
@@ -63,5 +61,11 @@ public struct DebugLayoutGuidesView: View {
         
         return SwiftUI.Path(runtimeCanvas.runtimePlayArea)
             .stroke(playAreaGuideColor, style: lineStyle)
+    }
+
+    private func createTapAreaView() -> some View {
+        let lineStyle = StrokeStyle(lineWidth: CGFloat(lineThickness), dash: tapAreaDash)
+        return SwiftUI.Path(runtimeCanvas.runtimeTapArea)
+            .stroke(tapAreaGuideColor, style: lineStyle)
     }
 }

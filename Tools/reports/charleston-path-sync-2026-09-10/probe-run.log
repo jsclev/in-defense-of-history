@@ -1,0 +1,24 @@
+13:53:59  Acquired tunnel connection to device.
+13:53:59  Enabling developer disk image services.
+13:53:59  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.charleston-geometry-probe
+• installationURL: file:///private/var/containers/Bundle/Application/E4532235-B780-4D45-9931-23157242FBEE/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 717E0170-E9D0-4AB4-988E-77A4FB6B7E28
+• databaseSequenceNumber: 2116
+• options: 
+13:54:28  Acquired tunnel connection to device.
+13:54:29  Enabling developer disk image services.
+13:54:29  Acquired usage assertion.
+Launched application with com.zippyzen.charleston-geometry-probe bundle identifier.
+13:54:33  Acquired tunnel connection to device.
+13:54:33  Enabling developer disk image services.
+13:54:33  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/charleston-path-sync-2026-09-10/device-documents
+13:54:41  Acquired tunnel connection to device.
+13:54:41  Enabling developer disk image services.
+13:54:41  Acquired usage assertion.
+App uninstalled.
+PASS: physical-iPhone production map captures and exact path hash; temporary probe removed.

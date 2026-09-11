@@ -1,0 +1,1198 @@
+{
+  "generated_at": "2026-09-09T04:36:22.472258+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "6bf4d44f5416224004154586b7b3c806f1a61e2d28d8dd965cc7889c51509348"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Models/TowerKind.swift",
+      "sha256": "fe7dda816dd5bd49ba8693da440fe93b87256d5f35890f6145eb44e6e5f45d6b"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "d6e5f9fddcb8afff41f837bb6646594a8513a3806843790bec7d582e81fd6546"
+    }
+  ],
+  "assets": [
+    {
+      "id": "ranged_tower_level_1",
+      "minimum_box_pt": 7.786,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        7.213,
+        7.213
+      ],
+      "opaque_edge_touch_frames": [
+        "ranged_tower_level_1"
+      ]
+    },
+    {
+      "id": "ranged_tower_level_2",
+      "minimum_box_pt": 7.786,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        7.338,
+        7.338
+      ],
+      "opaque_edge_touch_frames": [
+        "ranged_tower_level_2"
+      ]
+    },
+    {
+      "id": "ranged_tower_level_3",
+      "minimum_box_pt": 7.786,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        7.587,
+        7.587
+      ],
+      "opaque_edge_touch_frames": [
+        "ranged_tower_level_3"
+      ]
+    },
+    {
+      "id": "ranged_tower_level_4_branch_1",
+      "minimum_box_pt": 7.786,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        7.786,
+        7.786
+      ],
+      "opaque_edge_touch_frames": [
+        "ranged_tower_level_4_branch_1"
+      ]
+    },
+    {
+      "id": "ranged_tower_level_4_branch_2",
+      "minimum_box_pt": 7.786,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        7.437,
+        7.437
+      ],
+      "opaque_edge_touch_frames": [
+        "ranged_tower_level_4_branch_2"
+      ]
+    },
+    {
+      "id": "ranged_tower_level_4_branch_3",
+      "minimum_box_pt": 7.786,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              850,
+              625
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        7.774,
+        7.774
+      ],
+      "opaque_edge_touch_frames": [
+        "ranged_tower_level_4_branch_3"
+      ]
+    },
+    {
+      "id": "melee_tower_level_1",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              388,
+              309
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              776,
+              618
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1164,
+              927
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        33.639,
+        33.639
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "melee_tower_level_2",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              388,
+              309
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              776,
+              618
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1164,
+              927
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        35.109,
+        35.109
+      ],
+      "opaque_edge_touch_frames": [
+        "melee_tower_level_2"
+      ]
+    },
+    {
+      "id": "melee_tower_level_3",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              388,
+              309
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              776,
+              618
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1164,
+              927
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        32.338,
+        32.338
+      ],
+      "opaque_edge_touch_frames": [
+        "melee_tower_level_3"
+      ]
+    },
+    {
+      "id": "melee_tower_level_4_branch_1",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              388,
+              309
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              776,
+              618
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1164,
+              927
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.805,
+        38.805
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "melee_tower_level_4_branch_2",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              388,
+              309
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              776,
+              618
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1164,
+              927
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.469,
+        38.469
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "melee_tower_level_4_branch_3",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              388,
+              309
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              776,
+              618
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1164,
+              927
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.259,
+        38.259
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "artillery_tower_level_1",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.515,
+        38.515
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "artillery_tower_level_2",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        37.961,
+        37.961
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "artillery_tower_level_3",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.654,
+        38.654
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "artillery_tower_level_4_branch_1",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.792,
+        38.792
+      ],
+      "opaque_edge_touch_frames": [
+        "artillery_tower_level_4_branch_1"
+      ]
+    },
+    {
+      "id": "artillery_tower_level_4_branch_2",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        33.943,
+        33.943
+      ],
+      "opaque_edge_touch_frames": [
+        "artillery_tower_level_4_branch_2"
+      ]
+    },
+    {
+      "id": "artillery_tower_level_4_branch_3",
+      "minimum_box_pt": 38.931,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              901,
+              562
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        38.862,
+        38.862
+      ],
+      "opaque_edge_touch_frames": [
+        "artillery_tower_level_4_branch_3"
+      ]
+    },
+    {
+      "id": "special_tower_level_1",
+      "minimum_box_pt": 41.527,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              273,
+              328
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              546,
+              656
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              819,
+              984
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        41.358,
+        41.358
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "special_tower_level_2",
+      "minimum_box_pt": 41.527,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              310,
+              436
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              620,
+              872
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              930,
+              1308
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        41.337,
+        41.337
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "special_tower_level_3",
+      "minimum_box_pt": 41.527,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              321,
+              422
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              642,
+              844
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              963,
+              1266
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        41.494,
+        41.494
+      ],
+      "opaque_edge_touch_frames": [
+        "special_tower_level_3"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_1.imageset/ranged_tower_level_1.png",
+      "sha256": "0f27a95beecfdcbc6b865f7ede80c8ea7f9226482590fe14c1ec3790e4244f15",
+      "dimensions": [
+        850,
+        625
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_2.imageset/ranged_tower_level_2.png",
+      "sha256": "23d9f4e437b9858a6ec064c68b2ab2e4711fe2043388bf4a2f8fbbd973520230",
+      "dimensions": [
+        850,
+        625
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_3.imageset/ranged_tower_level_3.png",
+      "sha256": "84719e3d56e3f4d06b300b1653075f4c79406d53314649bc67164c1d3b9c774c",
+      "dimensions": [
+        850,
+        625
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_1.imageset/ranged_tower_level_4_branch_1.png",
+      "sha256": "93d678cd3a0165f0b41778cea45f10c6948947fd91551a162c18658835c3d7e3",
+      "dimensions": [
+        850,
+        625
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_2.imageset/ranged_tower_level_4_branch_2.png",
+      "sha256": "5763e541f614961b23b2d10e55d8b85c1660a177422b34457a9e073fc297acf8",
+      "dimensions": [
+        850,
+        625
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_3.imageset/ranged_tower_level_4_branch_3.png",
+      "sha256": "9ace90bc7bea4455a487f4a7eebb838c7514290dcee2c703645de2d07eb4fc2f",
+      "dimensions": [
+        850,
+        625
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_1.imageset/melee_tower_level_1.png",
+      "sha256": "7b3a38c78536d74f0257b1f97816355009f7c2b192247b822d11a7c99b575924",
+      "dimensions": [
+        388,
+        309
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_1.imageset/melee_tower_level_1@2x.png",
+      "sha256": "63366c6aaea9e235181173b938f143c1f413e7642b43ff0998c02298a8c649d6",
+      "dimensions": [
+        776,
+        618
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_1.imageset/melee_tower_level_1@3x.png",
+      "sha256": "ada8a5256f43b94bb8f545e974be4ad7227d8da47e4c2442d9eb462e7d26b51e",
+      "dimensions": [
+        1164,
+        927
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_2.imageset/melee_tower_level_2.png",
+      "sha256": "158b04a0c3fbe0b5c40d5b4a8c468756eb5218760ef148f787839ed8c9544656",
+      "dimensions": [
+        388,
+        309
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_2.imageset/melee_tower_level_2@2x.png",
+      "sha256": "72d7400830f255d997fb16d4038f1abfa48fed188871a559072df6b8bbee1d9f",
+      "dimensions": [
+        776,
+        618
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_2.imageset/melee_tower_level_2@3x.png",
+      "sha256": "a05fcd6ce3f283adbbecd198e506ef6ef8704eb145218b6a6144d7cfd491fffa",
+      "dimensions": [
+        1164,
+        927
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_3.imageset/melee_tower_level_3.png",
+      "sha256": "dd22e6bd51e12809a2499fc4c8aa0575be047f22539a010380ed07dca687a82a",
+      "dimensions": [
+        388,
+        309
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_3.imageset/melee_tower_level_3@2x.png",
+      "sha256": "593493a72163e0a58f2fd5561f13fe34a38cf5b0f23f506ec614476093eb98ce",
+      "dimensions": [
+        776,
+        618
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_3.imageset/melee_tower_level_3@3x.png",
+      "sha256": "1378e93a0a0e2f00efd62961f7294305e4c8964fb2b7f83e535edb02ea49e1f0",
+      "dimensions": [
+        1164,
+        927
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_1.imageset/melee_tower_level_4_branch_1.png",
+      "sha256": "94a0dcf5fef154c13625f6e4860866052b913003b02ac51cc7a506f9ca836241",
+      "dimensions": [
+        388,
+        309
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_1.imageset/melee_tower_level_4_branch_1@2x.png",
+      "sha256": "8ef4ff01fca84b479d5aef4c8abf01dceabb12699e341ec363f76af7e5a41455",
+      "dimensions": [
+        776,
+        618
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_1.imageset/melee_tower_level_4_branch_1@3x.png",
+      "sha256": "0686a42bb9ade8001119a898e88d07c3ce7f2a307a5ad9466ae93bd8170309cc",
+      "dimensions": [
+        1164,
+        927
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_2.imageset/melee_tower_level_4_branch_2.png",
+      "sha256": "a6998ae08a9daf4b64ceeab4e476dd9b8d6c62a452d340e87227419adaa9107d",
+      "dimensions": [
+        388,
+        309
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_2.imageset/melee_tower_level_4_branch_2@2x.png",
+      "sha256": "3e5f0e34228f4ba3d5914a772c2fa02041886ab6dbce5177b4961b97b2f278de",
+      "dimensions": [
+        776,
+        618
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_2.imageset/melee_tower_level_4_branch_2@3x.png",
+      "sha256": "4348019fa06fb8e28b90fa68c769836c3c277c13e314e1958276ac749443436a",
+      "dimensions": [
+        1164,
+        927
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_3.imageset/melee_tower_level_4_branch_3.png",
+      "sha256": "b12c2008537586859ca79ee8396a38c78839719d5198acc49975edb28969d07d",
+      "dimensions": [
+        388,
+        309
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_3.imageset/melee_tower_level_4_branch_3@2x.png",
+      "sha256": "832fd35a37b020baf5ecc577ef14a3d6d628fe6097c4a2af23e2173fb502dd4d",
+      "dimensions": [
+        776,
+        618
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_3.imageset/melee_tower_level_4_branch_3@3x.png",
+      "sha256": "9fcf0aeea311954bd424ce9e9ec2b34bce8ae39b7edf1141f4a83a2e66de9004",
+      "dimensions": [
+        1164,
+        927
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_1.imageset/artillery_tower_level_1.png",
+      "sha256": "8625d1f8322d9609c405e323d7a18513a59e60c01df15e54cde9ec2b07560e15",
+      "dimensions": [
+        901,
+        562
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_2.imageset/artillery_tower_level_2.png",
+      "sha256": "e872ae874e01bb7a7579e490b7f2b84d73236daffe26edb5f3293666504b6a0d",
+      "dimensions": [
+        901,
+        562
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_3.imageset/artillery_tower_level_3.png",
+      "sha256": "bb29c2a5e40a6f8e84094bb6b22e67cbf873d0723b20e307125ddb16dd23b7e6",
+      "dimensions": [
+        901,
+        562
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_1.imageset/artillery_tower_level_4_branch_1.png",
+      "sha256": "497062ef37c9cede304a0f66556b3a1b16809c48656bdf8a4e4f716f8f7ecb7f",
+      "dimensions": [
+        901,
+        562
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_2.imageset/artillery_tower_level_4_branch_2.png",
+      "sha256": "fa01721037bba0397baca55bf6b5b83f5387413fc9a2a6b3e8c525fa4a42b4ae",
+      "dimensions": [
+        901,
+        562
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_3.imageset/artillery_tower_level_4_branch_3.png",
+      "sha256": "d81d7135adeaf5773b5f137a46f59febfd55a1caa30c5f92708883af17ff812f",
+      "dimensions": [
+        901,
+        562
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_1.imageset/special_tower_level_1.png",
+      "sha256": "58b0f0826228665b40948445179ca2ab250bed2015bee9719e46c9582418b421",
+      "dimensions": [
+        273,
+        328
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_1.imageset/special_tower_level_1@2x.png",
+      "sha256": "bb2d61982b5d096332575d1824b4dde3d78e4a61d5e7813a89e84fb2edc0cb09",
+      "dimensions": [
+        546,
+        656
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_1.imageset/special_tower_level_1@3x.png",
+      "sha256": "8f97d6a9bc2b20a555a056a5127084f3d65539d7521ad03df25a871bd7fc5414",
+      "dimensions": [
+        819,
+        984
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_2.imageset/special_tower_level_2.png",
+      "sha256": "da1eec2b3dc4063cbeaa618267ebfc1f08cf0cda2912385d0445853e0fca6f96",
+      "dimensions": [
+        310,
+        436
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_2.imageset/special_tower_level_2@2x.png",
+      "sha256": "fb85f41019603066ef03cfc23fdad4ba5d543f9f0607da4c4e5b28fd38250054",
+      "dimensions": [
+        620,
+        872
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_2.imageset/special_tower_level_2@3x.png",
+      "sha256": "a398ed3650b41f67756bc4ae8e8cf19a4075a32bd516a5b251c14909578a082f",
+      "dimensions": [
+        930,
+        1308
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_3.imageset/special_tower_level_3.png",
+      "sha256": "5f9f008c48f4ab9ab2e36cefd3a6c528e016d08cbd22dd95da9238912b6b3e30",
+      "dimensions": [
+        321,
+        422
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_3.imageset/special_tower_level_3@2x.png",
+      "sha256": "8b7cd707ddf7248a908d30633c3ef1ff9641fe9aec53dfa53687f994e149b0fb",
+      "dimensions": [
+        642,
+        844
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_3.imageset/special_tower_level_3@3x.png",
+      "sha256": "1a48832ddfab6c8f363c9f808a9b6e1ba24d612f2d42919f2f45a65f234d8e2b",
+      "dimensions": [
+        963,
+        1266
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png",
+      "sha256": "f2c51dbbabe573b2383595b222d7991cdfdc7395b0bfed51e996fcd4f0df52b9"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_overlay.png",
+      "sha256": "d0237f9729cd8f9b7e23f77f6fde9485eb0dab6f1660ade57e7384335f1e854c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png",
+      "sha256": "cc93bf4d9567eca1f9683cbb71d13a01f77043198890bf322e5ca5eb07f5bf4d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png",
+      "sha256": "e56a386b796ef34f9cedb76c9004108f406c95b8dc46258703b893da144c1b60"
+    }
+  ]
+}

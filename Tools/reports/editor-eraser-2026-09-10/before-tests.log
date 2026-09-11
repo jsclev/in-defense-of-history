@@ -1,0 +1,36 @@
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'in-defense-of-history': failed storing manifest for 'in-defense-of-history' in cache: attempt to write a readonly database
+[0/1] Planning build
+Building for debugging...
+[0/4] Write sources
+[1/4] Write swift-version--58304C5D6DBC2206.txt
+[3/6] Emitting module LevelEditorFormatsTests
+[4/6] Compiling LevelEditorFormatsTests EditorEraserTests.swift
+[4/6] Write Objects.LinkFileList
+[5/6] Linking LevelEditorFormatsPackageTests
+Build complete! (1.42s)
+Test Suite 'Selected tests' started at 2026-09-10 14:45:17.509.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 14:45:17.510.
+Test Suite 'EditorEraserTests' started at 2026-09-10 14:45:17.510.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' started.
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/EditorEraserTests.swift:37: error: -[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline] : XCTAssertFalse failed
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' failed (0.047 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs]' started.
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/EditorEraserTests.swift:57: error: -[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs] : XCTAssertFalse failed
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/EditorEraserTests.swift:58: error: -[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs] : XCTAssertFalse failed
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testEraserTrimsPaintedEdgesAndSingleDabs]' failed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle]' started.
+/Users/john/projects/td/in-defense-of-history/Tests/LevelEditorFormatsTests/EditorEraserTests.swift:46: error: -[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle] : XCTAssertTrue failed
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testSmallCenterDabDoesNotRemovePathOutsideTheCircle]' failed (0.000 seconds).
+Test Suite 'EditorEraserTests' failed at 2026-09-10 14:45:17.558.
+	 Executed 3 tests, with 4 failures (0 unexpected) in 0.048 (0.048) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' failed at 2026-09-10 14:45:17.558.
+	 Executed 3 tests, with 4 failures (0 unexpected) in 0.048 (0.048) seconds
+Test Suite 'Selected tests' failed at 2026-09-10 14:45:17.558.
+	 Executed 3 tests, with 4 failures (0 unexpected) in 0.048 (0.049) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

@@ -1,0 +1,15 @@
+Measuring iPhone 17 Pro BE14A6DA-09F9-4A03-93F6-E0004DC76B94
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 2D08FA6D-E666-4152-A2CF-97D4473AB31D (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPhone-17-Pro-iOS-26.5.png
+{"model": "iPhone 17 Pro", "runtime": "26.5", "geometry": {"scale": 3, "window": [874, 402], "interfaceOrientation": 3, "safeInsets": [0, 62, 20, 62], "screen": [874, 402]}, "screenshot": "iPhone-17-Pro-iOS-26.5.png", "normalizedScreenshotSize": [2622, 1206], "rotationDegrees": 90, "threshold": 230, "indicatorPixelBounds": [974, 1167, 1649, 1182], "indicatorWidthPoints": 225.0, "screenWidthFraction": 0.2574370709382151}
+Measuring iPad Pro 13-inch (M5) 08FBA0C4-CF8D-491A-AE1E-F7260E9EDF00
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 7C552264-AD88-4B28-AB9F-B446B22AF0F0 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-Pro-13-inch-(M5)-iOS-26.5.png
+MEASUREMENT ERROR iPad Pro 13-inch (M5) AssertionError(('iPad Pro 13-inch (M5)', 2004, 2064))
+Measuring iPad (A16) 2D56F1BE-BF1B-4596-80BD-A1A5327F15D6
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 5FE0A0A7-5CDA-4FF6-BC10-C4D885162899 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-(A16)-iOS-26.5.png
+MEASUREMENT ERROR iPad (A16) AssertionError(('iPad (A16)', 1580, 1640))

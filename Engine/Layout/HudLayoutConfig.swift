@@ -1,4 +1,5 @@
 import Foundation
+import CoreGraphics
 
 public enum HudLocation: String, CaseIterable, Sendable {
     case northWest = "north_west"
@@ -55,6 +56,24 @@ public struct HudLayoutConfig: Equatable, Sendable {
         case .miscView: return miscView
         case .masterControls: return masterControls
         }
+    }
+
+    /// Matches HudView's independent overlay anchors, for sprite avoidance.
+    public func frame(for section: HudSection, size: CGSize, in hud: CGRect) -> CGRect {
+        let location = location(of: section)
+        let x: CGFloat
+        let y: CGFloat
+        switch location {
+        case .northWest, .west, .southWest: x = hud.minX
+        case .north, .south: x = hud.midX - size.width / 2
+        case .northEast, .east, .southEast: x = hud.maxX - size.width
+        }
+        switch location {
+        case .northWest, .north, .northEast: y = hud.minY
+        case .west, .east: y = hud.midY - size.height / 2
+        case .southWest, .south, .southEast: y = hud.maxY - size.height
+        }
+        return CGRect(x: x, y: y, width: size.width, height: size.height)
     }
 
     public func moving(_ hudSection: HudSection, to hudLocation: HudLocation) -> HudLayoutConfig {

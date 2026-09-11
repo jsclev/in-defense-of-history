@@ -1,0 +1,227 @@
+[
+  {
+    "fixture": "minimum",
+    "density": 1,
+    "before_size": [
+      158,
+      59
+    ],
+    "after_size": [
+      158,
+      59
+    ],
+    "before_alpha_bounds": [
+      7,
+      7,
+      151,
+      52
+    ],
+    "after_alpha_bounds": [
+      7,
+      7,
+      151,
+      52
+    ],
+    "identical": true
+  },
+  {
+    "fixture": "minimum",
+    "density": 2,
+    "before_size": [
+      316,
+      118
+    ],
+    "after_size": [
+      316,
+      118
+    ],
+    "before_alpha_bounds": [
+      14,
+      14,
+      302,
+      104
+    ],
+    "after_alpha_bounds": [
+      14,
+      14,
+      302,
+      104
+    ],
+    "identical": true
+  },
+  {
+    "fixture": "minimum",
+    "density": 3,
+    "before_size": [
+      474,
+      177
+    ],
+    "after_size": [
+      474,
+      177
+    ],
+    "before_alpha_bounds": [
+      21,
+      21,
+      453,
+      156
+    ],
+    "after_alpha_bounds": [
+      21,
+      21,
+      453,
+      156
+    ],
+    "identical": true
+  },
+  {
+    "fixture": "phone",
+    "density": 1,
+    "before_size": [
+      190,
+      69
+    ],
+    "after_size": [
+      202,
+      73
+    ],
+    "before_alpha_bounds": [
+      7,
+      7,
+      182,
+      62
+    ],
+    "after_alpha_bounds": [
+      7,
+      7,
+      194,
+      65
+    ],
+    "identical": false
+  },
+  {
+    "fixture": "phone",
+    "density": 2,
+    "before_size": [
+      379,
+      138
+    ],
+    "after_size": [
+      403,
+      145
+    ],
+    "before_alpha_bounds": [
+      14,
+      14,
+      364,
+      123
+    ],
+    "after_alpha_bounds": [
+      14,
+      14,
+      388,
+      131
+    ],
+    "identical": false
+  },
+  {
+    "fixture": "phone",
+    "density": 3,
+    "before_size": [
+      568,
+      207
+    ],
+    "after_size": [
+      604,
+      218
+    ],
+    "before_alpha_bounds": [
+      21,
+      21,
+      547,
+      185
+    ],
+    "after_alpha_bounds": [
+      21,
+      21,
+      582,
+      196
+    ],
+    "identical": false
+  },
+  {
+    "fixture": "tablet",
+    "density": 1,
+    "before_size": [
+      258,
+      91
+    ],
+    "after_size": [
+      258,
+      91
+    ],
+    "before_alpha_bounds": [
+      7,
+      7,
+      251,
+      83
+    ],
+    "after_alpha_bounds": [
+      7,
+      7,
+      251,
+      83
+    ],
+    "identical": true
+  },
+  {
+    "fixture": "tablet",
+    "density": 2,
+    "before_size": [
+      516,
+      181
+    ],
+    "after_size": [
+      516,
+      181
+    ],
+    "before_alpha_bounds": [
+      14,
+      14,
+      501,
+      166
+    ],
+    "after_alpha_bounds": [
+      14,
+      14,
+      501,
+      166
+    ],
+    "identical": true
+  },
+  {
+    "fixture": "tablet",
+    "density": 3,
+    "before_size": [
+      774,
+      271
+    ],
+    "after_size": [
+      774,
+      271
+    ],
+    "before_alpha_bounds": [
+      21,
+      21,
+      752,
+      249
+    ],
+    "after_alpha_bounds": [
+      21,
+      21,
+      752,
+      249
+    ],
+    "identical": true
+  }
+]

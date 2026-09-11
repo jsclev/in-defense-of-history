@@ -1,0 +1,24 @@
+21:23:23  Acquired tunnel connection to device.
+21:23:23  Enabling developer disk image services.
+21:23:23  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.gold-crown-exit-probe
+• installationURL: file:///private/var/containers/Bundle/Application/677697AB-ADAE-45BE-90AC-3B25C8FBEEC5/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4788
+• options: 
+21:24:24  Acquired tunnel connection to device.
+21:24:24  Enabling developer disk image services.
+21:24:25  Acquired usage assertion.
+Launched application with com.zippyzen.gold-crown-exit-probe bundle identifier.
+21:24:56  Acquired tunnel connection to device.
+21:24:56  Enabling developer disk image services.
+21:24:56  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/gold-crown-exit-2026-09-10/device-documents
+21:25:21  Acquired tunnel connection to device.
+21:25:21  Enabling developer disk image services.
+21:25:22  Acquired usage assertion.
+App uninstalled.
+PASS: 26 authored exits across 15 levels; physical-iPhone renders saved.

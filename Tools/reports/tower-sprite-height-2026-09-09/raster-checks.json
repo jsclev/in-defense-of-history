@@ -1,0 +1,1554 @@
+{
+  "passed": [
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        60,
+        110,
+        68,
+        117
+      ],
+      "doubled_bounds": [
+        55,
+        105,
+        73,
+        119
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        119,
+        221,
+        137,
+        234
+      ],
+      "doubled_bounds": [
+        110,
+        209,
+        146,
+        237
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        178,
+        330,
+        206,
+        351
+      ],
+      "doubled_bounds": [
+        165,
+        313,
+        219,
+        356
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        168,
+        275,
+        192,
+        293
+      ],
+      "doubled_bounds": [
+        156,
+        259,
+        204,
+        297
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        60,
+        110,
+        68,
+        117
+      ],
+      "doubled_bounds": [
+        54,
+        104,
+        74,
+        119
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        118,
+        220,
+        138,
+        234
+      ],
+      "doubled_bounds": [
+        109,
+        208,
+        147,
+        237
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        177,
+        330,
+        207,
+        351
+      ],
+      "doubled_bounds": [
+        162,
+        312,
+        222,
+        356
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        167,
+        274,
+        193,
+        293
+      ],
+      "doubled_bounds": [
+        154,
+        259,
+        206,
+        297
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        60,
+        110,
+        68,
+        117
+      ],
+      "doubled_bounds": [
+        55,
+        104,
+        73,
+        119
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        119,
+        220,
+        137,
+        234
+      ],
+      "doubled_bounds": [
+        110,
+        207,
+        146,
+        237
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        178,
+        329,
+        206,
+        351
+      ],
+      "doubled_bounds": [
+        164,
+        310,
+        220,
+        356
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        168,
+        274,
+        192,
+        293
+      ],
+      "doubled_bounds": [
+        155,
+        257,
+        205,
+        297
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        61,
+        111,
+        67,
+        117
+      ],
+      "doubled_bounds": [
+        56,
+        104,
+        72,
+        119
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        120,
+        220,
+        136,
+        234
+      ],
+      "doubled_bounds": [
+        111,
+        207,
+        145,
+        237
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        179,
+        329,
+        205,
+        351
+      ],
+      "doubled_bounds": [
+        166,
+        309,
+        218,
+        356
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        169,
+        273,
+        191,
+        293
+      ],
+      "doubled_bounds": [
+        157,
+        256,
+        203,
+        297
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        60,
+        111,
+        68,
+        117
+      ],
+      "doubled_bounds": [
+        54,
+        104,
+        74,
+        119
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        118,
+        220,
+        138,
+        234
+      ],
+      "doubled_bounds": [
+        107,
+        208,
+        149,
+        237
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        176,
+        329,
+        208,
+        351
+      ],
+      "doubled_bounds": [
+        160,
+        311,
+        224,
+        356
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        166,
+        274,
+        194,
+        293
+      ],
+      "doubled_bounds": [
+        152,
+        258,
+        208,
+        297
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        60,
+        110,
+        68,
+        117
+      ],
+      "doubled_bounds": [
+        55,
+        104,
+        73,
+        119
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        119,
+        220,
+        137,
+        234
+      ],
+      "doubled_bounds": [
+        110,
+        206,
+        146,
+        237
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        178,
+        328,
+        206,
+        351
+      ],
+      "doubled_bounds": [
+        164,
+        309,
+        220,
+        356
+      ]
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        168,
+        273,
+        192,
+        293
+      ],
+      "doubled_bounds": [
+        156,
+        256,
+        204,
+        297
+      ]
+    },
+    {
+      "asset": "melee_tower_level_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        40,
+        90,
+        88,
+        123
+      ],
+      "doubled_bounds": [
+        15,
+        64,
+        113,
+        131
+      ]
+    },
+    {
+      "asset": "melee_tower_level_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        79,
+        180,
+        177,
+        247
+      ],
+      "doubled_bounds": [
+        31,
+        127,
+        226,
+        262
+      ]
+    },
+    {
+      "asset": "melee_tower_level_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        119,
+        269,
+        265,
+        370
+      ],
+      "doubled_bounds": [
+        46,
+        191,
+        339,
+        392
+      ]
+    },
+    {
+      "asset": "melee_tower_level_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        116,
+        221,
+        245,
+        310
+      ],
+      "doubled_bounds": [
+        52,
+        152,
+        309,
+        329
+      ]
+    },
+    {
+      "asset": "melee_tower_level_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        41,
+        88,
+        88,
+        123
+      ],
+      "doubled_bounds": [
+        15,
+        61,
+        113,
+        131
+      ]
+    },
+    {
+      "asset": "melee_tower_level_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        79,
+        177,
+        177,
+        247
+      ],
+      "doubled_bounds": [
+        31,
+        121,
+        226,
+        262
+      ]
+    },
+    {
+      "asset": "melee_tower_level_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        120,
+        265,
+        265,
+        370
+      ],
+      "doubled_bounds": [
+        46,
+        183,
+        338,
+        393
+      ]
+    },
+    {
+      "asset": "melee_tower_level_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        116,
+        217,
+        245,
+        310
+      ],
+      "doubled_bounds": [
+        52,
+        144,
+        308,
+        330
+      ]
+    },
+    {
+      "asset": "melee_tower_level_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        40,
+        91,
+        88,
+        123
+      ],
+      "doubled_bounds": [
+        15,
+        66,
+        113,
+        131
+      ]
+    },
+    {
+      "asset": "melee_tower_level_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        79,
+        182,
+        177,
+        247
+      ],
+      "doubled_bounds": [
+        30,
+        133,
+        226,
+        262
+      ]
+    },
+    {
+      "asset": "melee_tower_level_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        119,
+        273,
+        265,
+        370
+      ],
+      "doubled_bounds": [
+        46,
+        200,
+        338,
+        393
+      ]
+    },
+    {
+      "asset": "melee_tower_level_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        115,
+        225,
+        245,
+        310
+      ],
+      "doubled_bounds": [
+        52,
+        159,
+        308,
+        330
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        40,
+        85,
+        88,
+        123
+      ],
+      "doubled_bounds": [
+        15,
+        53,
+        113,
+        131
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        79,
+        169,
+        177,
+        247
+      ],
+      "doubled_bounds": [
+        30,
+        106,
+        226,
+        262
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        119,
+        253,
+        265,
+        370
+      ],
+      "doubled_bounds": [
+        46,
+        161,
+        339,
+        393
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        115,
+        208,
+        245,
+        310
+      ],
+      "doubled_bounds": [
+        52,
+        125,
+        309,
+        329
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        40,
+        85,
+        88,
+        123
+      ],
+      "doubled_bounds": [
+        15,
+        54,
+        113,
+        131
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        79,
+        170,
+        177,
+        247
+      ],
+      "doubled_bounds": [
+        30,
+        108,
+        226,
+        262
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        119,
+        255,
+        265,
+        370
+      ],
+      "doubled_bounds": [
+        46,
+        163,
+        339,
+        393
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        115,
+        208,
+        245,
+        310
+      ],
+      "doubled_bounds": [
+        52,
+        126,
+        309,
+        330
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        41,
+        85,
+        88,
+        123
+      ],
+      "doubled_bounds": [
+        15,
+        55,
+        113,
+        131
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        79,
+        171,
+        177,
+        247
+      ],
+      "doubled_bounds": [
+        31,
+        109,
+        226,
+        262
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        119,
+        255,
+        265,
+        370
+      ],
+      "doubled_bounds": [
+        46,
+        164,
+        339,
+        393
+      ]
+    },
+    {
+      "asset": "melee_tower_level_4_branch_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        116,
+        209,
+        245,
+        310
+      ],
+      "doubled_bounds": [
+        52,
+        127,
+        308,
+        330
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        43,
+        85,
+        85,
+        122
+      ],
+      "doubled_bounds": [
+        21,
+        53,
+        107,
+        130
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        85,
+        169,
+        171,
+        246
+      ],
+      "doubled_bounds": [
+        42,
+        106,
+        215,
+        260
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        127,
+        254,
+        257,
+        369
+      ],
+      "doubled_bounds": [
+        63,
+        161,
+        321,
+        391
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        123,
+        208,
+        237,
+        309
+      ],
+      "doubled_bounds": [
+        66,
+        125,
+        294,
+        328
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        37,
+        85,
+        91,
+        122
+      ],
+      "doubled_bounds": [
+        10,
+        55,
+        118,
+        130
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        74,
+        171,
+        182,
+        246
+      ],
+      "doubled_bounds": [
+        19,
+        109,
+        237,
+        260
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        110,
+        255,
+        274,
+        368
+      ],
+      "doubled_bounds": [
+        28,
+        164,
+        356,
+        391
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        108,
+        209,
+        252,
+        309
+      ],
+      "doubled_bounds": [
+        36,
+        128,
+        324,
+        328
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        34,
+        85,
+        94,
+        123
+      ],
+      "doubled_bounds": [
+        4,
+        54,
+        124,
+        130
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        68,
+        170,
+        188,
+        246
+      ],
+      "doubled_bounds": [
+        7,
+        107,
+        249,
+        261
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        102,
+        254,
+        283,
+        369
+      ],
+      "doubled_bounds": [
+        12,
+        161,
+        373,
+        392
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        100,
+        208,
+        260,
+        309
+      ],
+      "doubled_bounds": [
+        21,
+        125,
+        340,
+        329
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        35,
+        85,
+        93,
+        123
+      ],
+      "doubled_bounds": [
+        5,
+        54,
+        123,
+        131
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        69,
+        170,
+        187,
+        247
+      ],
+      "doubled_bounds": [
+        8,
+        107,
+        248,
+        262
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        102,
+        254,
+        282,
+        370
+      ],
+      "doubled_bounds": [
+        13,
+        161,
+        371,
+        393
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        101,
+        208,
+        259,
+        310
+      ],
+      "doubled_bounds": [
+        22,
+        125,
+        338,
+        330
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        33,
+        89,
+        95,
+        123
+      ],
+      "doubled_bounds": [
+        2,
+        63,
+        126,
+        131
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        66,
+        179,
+        190,
+        247
+      ],
+      "doubled_bounds": [
+        3,
+        126,
+        253,
+        262
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        98,
+        268,
+        286,
+        370
+      ],
+      "doubled_bounds": [
+        5,
+        190,
+        379,
+        393
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        97,
+        220,
+        263,
+        310
+      ],
+      "doubled_bounds": [
+        15,
+        150,
+        345,
+        330
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        37,
+        84,
+        90,
+        123
+      ],
+      "doubled_bounds": [
+        9,
+        53,
+        118,
+        131
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        73,
+        169,
+        182,
+        247
+      ],
+      "doubled_bounds": [
+        18,
+        107,
+        239,
+        262
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        109,
+        254,
+        275,
+        370
+      ],
+      "doubled_bounds": [
+        27,
+        161,
+        358,
+        393
+      ]
+    },
+    {
+      "asset": "artillery_tower_level_4_branch_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        107,
+        208,
+        253,
+        310
+      ],
+      "doubled_bounds": [
+        34,
+        125,
+        326,
+        330
+      ]
+    },
+    {
+      "asset": "special_tower_level_1",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        48,
+        82,
+        81,
+        124
+      ],
+      "doubled_bounds": [
+        29,
+        49,
+        99,
+        132
+      ]
+    },
+    {
+      "asset": "special_tower_level_1",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        94,
+        165,
+        162,
+        248
+      ],
+      "doubled_bounds": [
+        60,
+        99,
+        196,
+        263
+      ]
+    },
+    {
+      "asset": "special_tower_level_1",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        141,
+        248,
+        243,
+        370
+      ],
+      "doubled_bounds": [
+        89,
+        148,
+        295,
+        395
+      ]
+    },
+    {
+      "asset": "special_tower_level_1",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        135,
+        201,
+        225,
+        310
+      ],
+      "doubled_bounds": [
+        90,
+        114,
+        270,
+        332
+      ]
+    },
+    {
+      "asset": "special_tower_level_2",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        50,
+        83,
+        78,
+        123
+      ],
+      "doubled_bounds": [
+        35,
+        50,
+        93,
+        131
+      ]
+    },
+    {
+      "asset": "special_tower_level_2",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        99,
+        166,
+        157,
+        247
+      ],
+      "doubled_bounds": [
+        70,
+        99,
+        186,
+        263
+      ]
+    },
+    {
+      "asset": "special_tower_level_2",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        149,
+        248,
+        235,
+        370
+      ],
+      "doubled_bounds": [
+        104,
+        148,
+        280,
+        395
+      ]
+    },
+    {
+      "asset": "special_tower_level_2",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        141,
+        202,
+        218,
+        311
+      ],
+      "doubled_bounds": [
+        103,
+        114,
+        257,
+        333
+      ]
+    },
+    {
+      "asset": "special_tower_level_3",
+      "playable": 340,
+      "density": 1,
+      "configured_bounds": [
+        49,
+        83,
+        79,
+        124
+      ],
+      "doubled_bounds": [
+        33,
+        50,
+        95,
+        132
+      ]
+    },
+    {
+      "asset": "special_tower_level_3",
+      "playable": 340,
+      "density": 2,
+      "configured_bounds": [
+        97,
+        166,
+        159,
+        248
+      ],
+      "doubled_bounds": [
+        66,
+        99,
+        190,
+        264
+      ]
+    },
+    {
+      "asset": "special_tower_level_3",
+      "playable": 340,
+      "density": 3,
+      "configured_bounds": [
+        146,
+        248,
+        238,
+        371
+      ],
+      "doubled_bounds": [
+        98,
+        148,
+        286,
+        396
+      ]
+    },
+    {
+      "asset": "special_tower_level_3",
+      "playable": 900,
+      "density": 1,
+      "configured_bounds": [
+        138,
+        202,
+        221,
+        311
+      ],
+      "doubled_bounds": [
+        96,
+        113,
+        264,
+        333
+      ]
+    }
+  ],
+  "reproduced_old_bug": [
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 340,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 340,
+      "density": 2
+    },
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 340,
+      "density": 3
+    },
+    {
+      "asset": "ranged_tower_level_1",
+      "playable": 900,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 340,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 340,
+      "density": 2
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 340,
+      "density": 3
+    },
+    {
+      "asset": "ranged_tower_level_2",
+      "playable": 900,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 340,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 340,
+      "density": 2
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 340,
+      "density": 3
+    },
+    {
+      "asset": "ranged_tower_level_3",
+      "playable": 900,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 2
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 340,
+      "density": 3
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_1",
+      "playable": 900,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 2
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 340,
+      "density": 3
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_2",
+      "playable": 900,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 1
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 2
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 340,
+      "density": 3
+    },
+    {
+      "asset": "ranged_tower_level_4_branch_3",
+      "playable": 900,
+      "density": 1
+    }
+  ]
+}

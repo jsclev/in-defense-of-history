@@ -1,0 +1,22 @@
+clang: warning: using sysroot for 'MacOSX' but targeting 'iPhone' [-Wincompatible-sysroot]
+/Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/HomeIndicatorProbe.app: replacing existing signature
+Measuring iPad mini (A17 Pro) BDCEEE60-E58C-47E2-B7B7-CE0C137F87CF
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 6FDEF6DA-5C83-4A9A-B1CF-98738A0A8077 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-mini-(A17-Pro)-iOS-26.5.png
+MEASUREMENT ERROR iPad mini (A17 Pro) TypeError("'NoneType' object is not subscriptable")
+Measuring iPhone 17 Pro CD347EF5-CB73-404D-A337-9889CA3BE67D
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 2D068994-24A7-4A52-ADC9-0707A632C3CF (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPhone-17-Pro-iOS-26.5.png
+MEASUREMENT ERROR iPhone 17 Pro AssertionError(('iPhone 17 Pro', 1116, 1182))
+Measuring iPad (A16) 5616160B-F07A-47FA-9FFD-7C78640C60F9
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 98EF2014-9A82-4EA5-B5B9-263ED87E7E4D (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-(A16)-iOS-26.5.png
+MEASUREMENT ERROR iPad (A16) TypeError("'NoneType' object is not subscriptable")
+Measuring iPad Pro 13-inch (M5) 33250515-8086-495D-9465-D207CA7D688F
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 396614C5-4372-41F5-95B4-122AAE1EF13B (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-Pro-13-inch-(M5)-iOS-26.5.png
+MEASUREMENT ERROR iPad Pro 13-inch (M5) AssertionError(('No visible home indicator', 'iPad Pro 13-inch (M5)', '/Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-Pro-13-inch-(M5)-iOS-26.5.png'))

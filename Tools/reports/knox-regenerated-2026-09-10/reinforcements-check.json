@@ -1,0 +1,20 @@
+{
+  "captures" : [
+    {
+      "buttonSide" : 57.069000000000017,
+      "iconSide" : 36.524160000000009,
+      "mode" : "device",
+      "playableHeight" : 373
+    },
+    {
+      "buttonSide" : 44.955555555555563,
+      "iconSide" : 28.771555555555562,
+      "mode" : "minimum",
+      "playableHeight" : 340
+    }
+  ],
+  "device" : "iPhone",
+  "passed" : true,
+  "runID" : "4f6eb14f-9c2a-4353-ab96-3ab64d08ccaa",
+  "systemVersion" : "26.6.1"
+}

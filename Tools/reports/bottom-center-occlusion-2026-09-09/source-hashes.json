@@ -1,0 +1,7 @@
+{
+  "Engine/Design/VirtualCanvas.swift": "2f5bd6a597b52060cee1f576ec4a55800c396f51a08010675585078d6a10bdac",
+  "Engine/Core/RuntimeCanvas.swift": "422aaf253486d83d9542ee2b2335d93a0dd5ace29fc58a1c0e9ba6aced68e1ea",
+  "Engine/Layout/TowerMenuLayout.swift": "c2ad24c2ce22f254e5ef01118ce5588b225607756ece2035137ebd439b0bf48c",
+  "Engine/Layout/HeroStartingPositionManager.swift": "638e9117229734fcf80dfa29caa8346477ee75cdb41671180f56990dcfa9231f",
+  "Tests/LevelEditorFormatsTests/BottomCenterOcclusionTests.swift": "9d49a498f799d566fb64afeadb80c0e7b571acf112de5df432d2b87492b3c6fb"
+}

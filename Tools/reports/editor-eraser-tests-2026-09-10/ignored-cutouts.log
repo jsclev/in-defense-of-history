@@ -1,0 +1,175 @@
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'editor-eraser-mutations-j8m_s32_': failed storing manifest for 'editor-eraser-mutations-j8m_s32_' in cache: attempt to write a readonly database
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Db': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/GameName.xcconfig': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Images': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Versioning': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Liberty Line': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/InDefenseOfHistory.xcodeproj': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/in_defense_of_history.sqlite': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/build': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/AGENTS.md': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Tools': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Simulator': File not found.
+Building for debugging...
+[0/7] /private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/.build/arm64-apple-macosx/debug/LevelEditorFormatsPackageTests.derived/runner.swift
+[1/7] Write sources
+[4/7] Write swift-version--58304C5D6DBC2206.txt
+[6/110] Compiling LevelEditorFormats HeroSelection.swift
+[7/110] Compiling LevelEditorFormats LevelHero.swift
+[8/110] Compiling LevelEditorFormats LevelHeroConfiguration.swift
+[9/110] Compiling LevelEditorFormats LevelInfo.swift
+[10/110] Compiling LevelEditorFormats MeleeFormation.swift
+[11/110] Compiling LevelEditorFormats MilitiaAI.swift
+[12/110] Compiling LevelEditorFormats Outcome.swift
+[13/110] Compiling LevelEditorFormats Path.swift
+[14/110] Compiling LevelEditorFormats ReinforcementConfig.swift
+[15/119] Compiling LevelEditorFormats Core.swift
+[16/119] Compiling LevelEditorFormats Difficulty.swift
+[17/119] Compiling LevelEditorFormats Enemy.swift
+[18/119] Compiling LevelEditorFormats EnemyEscapeHapticPolicy.swift
+[19/119] Compiling LevelEditorFormats EnemyType.swift
+[20/119] Compiling LevelEditorFormats Engine.swift
+[21/119] Compiling LevelEditorFormats GameplayHapticPattern.swift
+[22/119] Compiling LevelEditorFormats HapticAuditionSample.swift
+[23/119] Compiling LevelEditorFormats Hero.swift
+[24/119] Compiling LevelEditorFormats LevelGeoJSONDAO.swift
+[25/119] Compiling LevelEditorFormats LevelHeroDAO.swift
+[26/119] Compiling LevelEditorFormats LevelInfoDAO.swift
+[27/119] Compiling LevelEditorFormats MeleeUnitDAO.swift
+[28/119] Compiling LevelEditorFormats PathDAO.swift
+[29/119] Compiling LevelEditorFormats ReinforcementConfigDAO.swift
+[30/119] Compiling LevelEditorFormats SimBoundsDAO.swift
+[31/119] Compiling LevelEditorFormats SimEnemyTypeDAO.swift
+[32/119] Compiling LevelEditorFormats SimMeleeUnitDAO.swift
+[33/119] Compiling LevelEditorFormats ReinforcementSchedule.swift
+[34/119] Compiling LevelEditorFormats Report.swift
+[35/119] Compiling LevelEditorFormats Simulation.swift
+[36/119] Compiling LevelEditorFormats SpawnEntry.swift
+[37/119] Compiling LevelEditorFormats Stats.swift
+[38/119] Compiling LevelEditorFormats Tower.swift
+[39/119] Compiling LevelEditorFormats TowerKind.swift
+[40/119] Compiling LevelEditorFormats TowerSlot.swift
+[41/119] Compiling LevelEditorFormats Traits.swift
+[42/119] Compiling LevelEditorFormats UnitFacing.swift
+[43/119] Compiling LevelEditorFormats Wave.swift
+[44/119] Compiling LevelEditorFormats WaveStartSchedule.swift
+[45/119] Compiling LevelEditorFormats BaseDAO.swift
+[46/119] Compiling LevelEditorFormats CampaignDAO.swift
+[47/119] Compiling LevelEditorFormats DifficultyDAO.swift
+[48/119] Compiling LevelEditorFormats EnemyTypeDAO.swift
+[49/119] Compiling LevelEditorFormats HeroDAO.swift
+[50/119] Compiling LevelEditorFormats HudLayoutDAO.swift
+[51/119] Compiling LevelEditorFormats SimulatorRunDAO.swift
+[52/119] Compiling LevelEditorFormats TowerSlotDAO.swift
+[53/119] Compiling LevelEditorFormats TowerTypeDAO.swift
+[54/119] Compiling LevelEditorFormats TowerUnlockDAO.swift
+[55/119] Compiling LevelEditorFormats VirtualCanvasDAO.swift
+[56/119] Compiling LevelEditorFormats WaveDAO.swift
+[57/119] Compiling LevelEditorFormats Db.swift
+[58/119] Compiling LevelEditorFormats DbError.swift
+[59/119] Compiling LevelEditorFormats HeroSelectionStore.swift
+[60/119] Emitting module LevelEditorFormats
+[61/119] Compiling LevelEditorFormats TargetCommand.swift
+[62/119] Compiling LevelEditorFormats Constants.swift
+[63/119] Compiling LevelEditorFormats Enums.swift
+[64/119] Compiling LevelEditorFormats GameError.swift
+[65/119] Compiling LevelEditorFormats GameIdentity.swift
+[66/119] Compiling LevelEditorFormats RuntimeCanvas.swift
+[67/119] Compiling LevelEditorFormats Store.swift
+[68/119] Compiling LevelEditorFormats Timer.swift
+[69/119] Compiling LevelEditorFormats HapticAuditionPlayer.swift
+[70/119] Compiling LevelEditorFormats Blueprints.swift
+[71/119] Compiling LevelEditorFormats Repositories.swift
+[72/119] Compiling LevelEditorFormats SQLite.swift
+[73/119] Compiling LevelEditorFormats SQLiteError.swift
+[74/119] Compiling LevelEditorFormats SeedContent.swift
+[75/119] Compiling LevelEditorFormats FileUtil.swift
+[76/119] Compiling LevelEditorFormats BrushStroke.swift
+[77/119] Compiling LevelEditorFormats EditorDocumentLifecycle.swift
+[78/119] Compiling LevelEditorFormats EditorPaintGesture.swift
+[79/119] Compiling LevelEditorFormats GeoJSONExport.swift
+[80/119] Compiling LevelEditorFormats TowerMenuLayout.swift
+[81/119] Compiling LevelEditorFormats TowerRangeOverlay.swift
+[82/119] Compiling LevelEditorFormats LogCategory.swift
+[83/119] Compiling LevelEditorFormats LogUtility.swift
+[84/119] Compiling LevelEditorFormats CallWaveButtonPosition.swift
+[85/119] Compiling LevelEditorFormats Campaign.swift
+[86/119] Compiling LevelEditorFormats CampaignLevel.swift
+[87/119] Compiling LevelEditorFormats CommanderPolicy.swift
+[88/119] Compiling LevelEditorFormats ContentCatalog.swift
+[89/119] Compiling LevelEditorFormats DesignArsenal.swift
+[90/119] Compiling LevelEditorFormats DesignRoster.swift
+[91/119] Compiling LevelEditorFormats LevelBlueprint.swift
+[92/119] Compiling LevelEditorFormats VirtualCanvas.swift
+[93/119] Compiling LevelEditorFormats CallWaveButtonLayout.swift
+[94/119] Compiling LevelEditorFormats HeroBarLayout.swift
+[95/119] Compiling LevelEditorFormats HeroSpriteFootprint.swift
+[96/119] Compiling LevelEditorFormats HeroSpriteProfile.swift
+[97/119] Compiling LevelEditorFormats HudElementLayouts.swift
+[98/119] Compiling LevelEditorFormats HudLayoutConfig.swift
+[99/119] Compiling LevelEditorFormats HudPlacementSolver.swift
+[100/119] Compiling LevelEditorFormats HudSizing.swift
+[101/119] Compiling LevelEditorFormats LevelViewport.swift
+[102/119] Compiling LevelEditorFormats MapSpriteSizing.swift
+[103/119] Compiling LevelEditorFormats MasterControlsLayout.swift
+[104/119] Compiling LevelEditorFormats MenuContentLayout.swift
+[105/119] Compiling LevelEditorFormats PresentationStack.swift
+[106/119] Compiling LevelEditorFormats RuntimeCanvasView.swift
+[107/119] Compiling LevelEditorFormats ScreenCanvas.swift
+[108/119] Compiling LevelEditorFormats StackLayout.swift
+[109/119] Compiling LevelEditorFormats GeoJSONFile.swift
+[110/119] Compiling LevelEditorFormats GeoJSONImport.swift
+[111/119] Compiling LevelEditorFormats LevelGeoJSON.swift
+[112/119] Compiling LevelEditorFormats MapDocument.swift
+[113/119] Compiling LevelEditorFormats NativeMapFile.swift
+[114/119] Compiling LevelEditorFormats Palette.swift
+[115/119] Compiling LevelEditorFormats PathFlattening.swift
+[116/119] Compiling LevelEditorFormats PlatformSupport.swift
+[117/119] Compiling LevelEditorFormats SwiftExport.swift
+[118/141] Compiling LevelEditorFormatsTests EditorDocumentLifecycleTests.swift
+[119/141] Compiling LevelEditorFormatsTests EditorEraserIntegrationTests.swift
+[120/141] Compiling LevelEditorFormatsTests TapAreaTests.swift
+[121/141] Compiling LevelEditorFormatsTests ReinforcementTests.swift
+[122/141] Compiling LevelEditorFormatsTests RuntimeCanvasTests.swift
+[123/141] Compiling LevelEditorFormatsTests MasterControlsLayoutTests.swift
+[124/141] Compiling LevelEditorFormatsTests PresentationStackTests.swift
+[125/142] Compiling LevelEditorFormatsTests LevelGeoJSONTests.swift
+[126/142] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[127/142] Compiling LevelEditorFormatsTests EditorEraserTests.swift
+[128/142] Compiling LevelEditorFormatsTests EnemyEscapeHapticTests.swift
+[129/142] Compiling LevelEditorFormatsTests BottomCenterOcclusionTests.swift
+[130/142] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[131/142] Compiling LevelEditorFormatsTests HeroRankingTests.swift
+[132/142] Compiling LevelEditorFormatsTests HeroStartingPositionTests.swift
+[133/142] Compiling LevelEditorFormatsTests GameplayHapticPatternTests.swift
+[134/142] Compiling LevelEditorFormatsTests HapticAuditionTests.swift
+[135/142] Compiling LevelEditorFormatsTests HeroBarLayoutTests.swift
+[136/142] Compiling LevelEditorFormatsTests HeroExitConfigurationTests.swift
+[137/142] Emitting module LevelEditorFormatsTests
+[138/142] Compiling LevelEditorFormatsTests CharlestonWaveTests.swift
+[139/142] Compiling LevelEditorFormatsTests EditorArrowKeyTests.swift
+[140/142] Compiling LevelEditorFormatsTests WaveStartTimingTests.swift
+[141/144] Emitting module LevelEditorFormatsPackageTests
+[142/144] Compiling LevelEditorFormatsPackageTests runner.swift
+[142/144] Write Objects.LinkFileList
+[143/144] Linking LevelEditorFormatsPackageTests
+Build complete! (15.88s)
+Test Suite 'Selected tests' started at 2026-09-10 15:11:52.155.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 15:11:52.156.
+Test Suite 'EditorEraserTests' started at 2026-09-10 15:11:52.156.
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' started.
+/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Tests/LevelEditorFormatsTests/EditorEraserTests.swift:37: error: -[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline] : XCTAssertFalse failed
+Test Case '-[LevelEditorFormatsTests.EditorEraserTests testCircularDabErasesVisibleRoadEdgeWithoutTouchingCenterline]' failed (0.044 seconds).
+Test Suite 'EditorEraserTests' failed at 2026-09-10 15:11:52.200.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.044 (0.044) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' failed at 2026-09-10 15:11:52.200.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.044 (0.044) seconds
+Test Suite 'Selected tests' failed at 2026-09-10 15:11:52.200.
+	 Executed 1 test, with 1 failure (0 unexpected) in 0.044 (0.045) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

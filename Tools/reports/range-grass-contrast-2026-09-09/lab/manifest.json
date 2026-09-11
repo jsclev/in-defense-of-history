@@ -1,0 +1,176 @@
+{
+  "reference_height": 1080.0,
+  "clamp": [
+    221.0625,
+    221.0625
+  ],
+  "default_playable_height": 221.0625,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/TowerRangeOverlayView.swift",
+      "sha256": "d2231b55221ecff2a9dc2cf61fe13d3aa64117f1e5da7b6a597a129a379984a2"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Core/RuntimeCanvas.swift",
+      "sha256": "c21ddc77643dafc06d5c8d83da8bd546f8c4710454eb8d6e21e67037f51ee919"
+    }
+  ],
+  "assets": [
+    {
+      "id": "current",
+      "label": "current range",
+      "animated": false,
+      "map_height": 488.5496183206107,
+      "files": {
+        "current": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-current-1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-current-2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-current-3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/current-1x.png",
+          "boxes": {
+            "current": [
+              1,
+              1,
+              139,
+              100
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/current-2x.png",
+          "boxes": {
+            "current": [
+              1,
+              1,
+              278,
+              200
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/current-3x.png",
+          "boxes": {
+            "current": [
+              1,
+              1,
+              417,
+              300
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "current"
+          ],
+          "walk": [
+            "current"
+          ]
+        }
+      }
+    },
+    {
+      "id": "upgrade",
+      "label": "upgrade range",
+      "animated": false,
+      "map_height": 552.0610687022901,
+      "files": {
+        "upgrade": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-upgrade-1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-upgrade-2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/range-grass-contrast-2026-09-09/221-upgrade-3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/upgrade-1x.png",
+          "boxes": {
+            "upgrade": [
+              1,
+              1,
+              158,
+              113
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/upgrade-2x.png",
+          "boxes": {
+            "upgrade": [
+              1,
+              1,
+              316,
+              226
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/upgrade-3x.png",
+          "boxes": {
+            "upgrade": [
+              1,
+              1,
+              474,
+              339
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "upgrade"
+          ],
+          "walk": [
+            "upgrade"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "grass-only",
+      "label": "New Bastion grass",
+      "under": "grass-only-under.jpg",
+      "over": "grass-only-over.png"
+    },
+    {
+      "id": "battle-road",
+      "label": "Battle Road with new grass",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton snow",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

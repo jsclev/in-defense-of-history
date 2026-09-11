@@ -1,0 +1,21 @@
+{
+  "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HudSizing.swift": "fdb95f9da73f7cbdfca100ed93f004f836f19262197f642a79407d971c36d4f9",
+  "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/HUD/HudButtonView.swift": "3b56ea2f8d590b4fee9fd776c65640d9b83c04a41dc50df450ec6aaf20a00110",
+  "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/HUD/ReinforcementButton.swift": "917fa3a66830b88b678872449a7ceb2b04493dac28c440bbe0dbd9a9fcd5110c",
+  "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/HUD/CallWaveButtonView.swift": "f404f82ac94d90b3c4ddfb9e991c4c4f3d86149c98d8c23bbd7d7984363b3904",
+  "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift": "4fce9b7804c58e0506d5f5de5c6eb913fc86a94d98bbf4f3d924f5f498f91677",
+  "/Users/john/projects/td/in-defense-of-history/Engine/Models/TowerKind.swift": "3d238229a3a45565044de74e88332ef60b112f3a5e9f852b6c73bb4d87bd43b5",
+  "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerMenuLayout.swift": "51f549cc11a4db180c1d37584fee39d6da2f8c65586aa5dd80288f07d120a630",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/action_icon_call_reinforcements.imageset/action_icon_call_reinforcements@3x.png": "4bddf60756c5885505313653714a6438e766815805c2fbb314486c9dde6921c4",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/action_icon_call_reinforcements.imageset/action_icon_call_reinforcements@2x.png": "48f86f354a5227ad32a27cdcc49a878b510967d0b07b908fdf8159092970a487",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/action_icon_call_reinforcements.imageset/Contents.json": "4eb8b7c5b4d921e6317a531fb8ab7fdd45192d925762be9eff5dbb07455e7b56",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/action_icon_call_reinforcements.imageset/action_icon_call_reinforcements.png": "45e24613e8f8c80babc2eda1b9d977d7d55d7ee1834f59b051bcd23d72e40d6e",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/hud_misc_sack_blue_frame.imageset/hud_misc_sack_blue_frame@3x.png": "3dffc0dfd73903ccd7bc71c1d4ee2ad07ee72c0897ca717b2d7e983f5e45621c",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/hud_misc_sack_blue_frame.imageset/hud_misc_sack_blue_frame@2x.png": "6ac1701491da255e07911672dca856ba4b0b4b983ecca169d217c29216710427",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/hud_misc_sack_blue_frame.imageset/Contents.json": "e3fd7ecc65680a507841642e37a72321e122da70e46f790769fd4b4663e82604",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/hud_misc_sack_blue_frame.imageset/hud_misc_sack_blue_frame.png": "95df0f7cee92982d70f62d41220a296eeb91c972e8bdbc70c86dde4006f16e2b",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_menu_square_frame.imageset/tower_menu_square_frame@2x.png": "b20e851f2ec7afb742e6460e4e7b920081a87ae3d93d9bc451c616175c43bfaf",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_menu_square_frame.imageset/tower_menu_square_frame@3x.png": "c7afdcec4e97abea3e8502c376dbea060d7d520f902d5a610371402417ced51c",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_menu_square_frame.imageset/Contents.json": "3dbfcfe96f33122d60c5c6974358c165b9b6fb9e8364eaec3f5ca47876e3988a",
+  "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_menu_square_frame.imageset/tower_menu_square_frame.png": "88e5e1493dbf8f031f13a9603d3da68818d7db5530b4287ec456dbee35eae19e"
+}

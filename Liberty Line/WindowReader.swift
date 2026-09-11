@@ -14,6 +14,10 @@ public struct WindowGeometryReport: Equatable {
     public let windowFrame: CGRect
     /// UIScreen.bounds — the screen in points, current orientation.
     public let screenBounds: CGRect
+    /// Layout uses this window, including its live safe area, never another
+    /// connected scene or the physical display's pixel dimensions.
+    public let windowBounds: CGRect
+    public let safeRect: CGRect
 }
 
 /// Hands the hosting UIWindow and the measured coordinate chain to SwiftUI
@@ -28,12 +32,15 @@ struct WindowReader: UIViewRepresentable {
     func makeUIView(context: Context) -> WindowSpyView {
         WindowSpyView(onWindow: onWindow, onReport: onReport)
     }
-    func updateUIView(_ uiView: WindowSpyView, context: Context) {}
+    func updateUIView(_ uiView: WindowSpyView, context: Context) {
+        uiView.onWindow = onWindow
+        uiView.onReport = onReport
+    }
 }
 
 final class WindowSpyView: UIView {
-    let onWindow: (UIWindow) -> Void
-    let onReport: (WindowGeometryReport) -> Void
+    var onWindow: (UIWindow) -> Void
+    var onReport: (WindowGeometryReport) -> Void
     private var lastReport: WindowGeometryReport?
 
     init(onWindow: @escaping (UIWindow) -> Void,
@@ -59,11 +66,18 @@ final class WindowSpyView: UIView {
         if let window { report(in: window) }
     }
 
+    override func safeAreaInsetsDidChange() {
+        super.safeAreaInsetsDidChange()
+        if let window { report(in: window) }
+    }
+
     private func report(in window: UIWindow) {
         let next = WindowGeometryReport(
             viewInWindow: convert(bounds, to: window),
             windowFrame: window.frame,
-            screenBounds: window.screen.bounds
+            screenBounds: window.screen.bounds,
+            windowBounds: window.bounds,
+            safeRect: window.bounds.inset(by: window.safeAreaInsets)
         )
         guard next != lastReport else { return }
         lastReport = next

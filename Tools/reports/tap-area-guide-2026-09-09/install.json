@@ -1,0 +1,37 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "install",
+      "app",
+      "--device",
+      "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+      "/tmp/td-hero-bar-fit-device-build/Build/Products/Debug-iphoneos/Liberty Line.app",
+      "--json-output",
+      "Tools/reports/tap-area-guide-2026-09-09/install.json"
+    ],
+    "commandType" : "devicectl.device.install.app",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.33"
+  },
+  "result" : {
+    "deviceIdentifier" : "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+    "installedApplications" : [
+      {
+        "bundleID" : "com.zippyzen.liberty-line",
+        "databaseSequenceNumber" : 4440,
+        "databaseUUID" : "CE2E26A6-BAAA-4347-8415-22A50C08CB00",
+        "installationURL" : "file:///private/var/containers/Bundle/Application/C7DEFC98-8F5B-451D-A318-3DB4202FAA81/Liberty%20Line.app/",
+        "launchServicesIdentifier" : "unknown",
+        "options" : {
+
+        }
+      }
+    ]
+  }
+}

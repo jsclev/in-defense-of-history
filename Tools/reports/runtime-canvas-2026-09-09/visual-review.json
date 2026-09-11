@@ -1,0 +1,64 @@
+{
+  "status": "PASS for reviewed layout conditions; broader identity/device checks NOT MEASURED",
+  "renderer": "Production SwiftUI views hosted in isolated UIKit simulator app, iOS 26.5",
+  "conditions": [
+    "874x402pt phone window with live safe area",
+    "604.44x340pt synthetic reference canvas, no safe insets",
+    "1x logical stress captures and saved 3x raster captures"
+  ],
+  "changed_art_size": [
+    "Heroes menu grid reserves a footer; individual gameplay sprite calibration unchanged",
+    "Briefing cards fit available height above footer",
+    "Done now has explicit 35.65pt minimum height and aspect-preserving width"
+  ],
+  "observations": [
+    "Done word and long gold plaque silhouette remain clear at minimum size",
+    "All 15 hero cards and their labels clear the footer; distinctive large portrait cues remain visible, including Putnam's raised sword and Knox's cannon",
+    "Briefing titles, descriptions, HP values, map preview, and Done are separated at the reference minimum",
+    "Stats and HUD controls retain their screen anchors in captured gameplay fixture"
+  ],
+  "failures_corrected": [
+    "Heroes Done overlapped the last card label",
+    "Briefing descriptions truncated",
+    "Minimum briefing card overlapped Done"
+  ],
+  "not_measured": [
+    "Physical-device interaction",
+    "Independent human recognition",
+    "Every hero detail and gameplay animation/frame",
+    "Metal campaign output on the simulator",
+    "Every HUD configuration and accessibility/localization setting"
+  ],
+  "lab_note": "The generic lab roster plate uses narrow cells and overlaps this wide plaque. Full unclipped minimum artwork is visible in the production-view captures. The lab manifest uses the exact HudSizing floor/ceiling conversion, with default playable height 340.",
+  "assets_and_hashes": "done-lab/evidence.json",
+  "screen_hashes": {
+    "screens/briefing@1x.png": "1de9b70c27a0c020b4fa3e5a4fe4a9a62ddefa8f6d58645d6dc2bdce67fe2f98",
+    "screens/briefing@3x.png": "254ccaa894f039f8d5dcf9bb688d908ac6ce3142248f167389cf8aee6731615e",
+    "screens/encyclopedia@1x.png": "95ffbf4740c5c98260aad8bab5576a5f5929a259b458c53e361a819e974ef1e3",
+    "screens/encyclopedia@3x.png": "63bd385af38ef29800568fa0358afc9d22932089391a2bf00b411eba3095027b",
+    "screens/hero-details@1x.png": "ae9dc43fbe5b6772f6f1eb184222f4954370fcfc3c557269fee19f3ec2e39129",
+    "screens/hero-details@3x.png": "9b5c7b93efe8c4d85f31663cc11a7bf1903e60b1f0b9fe1502a4e87d4f9e693d",
+    "screens/heroes@1x.png": "1ad47ac1e794fe53609b0409ff7fc87b42aa19e361a943518166990d9787194f",
+    "screens/heroes@3x.png": "80668276d252af82412395ba006cec47b3492fb929380e78729b1099616dcdb1",
+    "screens/hud-layout@1x.png": "f9fdf5dc238c0b4f17164f8bec30509bfaedf4a204eadf6c7f4157072fcffff1",
+    "screens/hud-layout@3x.png": "ff0134616871b5090134aed2e1f8b0d03245880aaff3bbc7710df8e48918799b",
+    "screens/level@1x.png": "433d3288d6bbcc6792d6f15df7fb6d022ee6560e44a60c44035d92aefed8e388",
+    "screens/level@3x.png": "eebce27ab3d3a962f7d80995d4d039780333f0b84da857fdfb42aeb319dacc0b",
+    "screens/minimum-briefing@1x.png": "5cb74faa0e1f53c230e26a6fa1d4df22435573d6ac03867246e40da317f20530",
+    "screens/minimum-briefing@3x.png": "256e63ce60cc60bdf7e4e547ea88b067661681ebe57d81f92bc18251eea166fb",
+    "screens/minimum-encyclopedia@1x.png": "f848d286dd7e24d302912fca013d14cbb50ddc6418e635e6e63472c36f2cffc8",
+    "screens/minimum-encyclopedia@3x.png": "f153ee75d00e5f6f65a7782ef95e975c848792d90548f6d50ba31c6a5c44dd2a",
+    "screens/minimum-hero-details@1x.png": "f119ea0e189ee9e96a26abc5acd807d945043129afde58ed0402cfcf24b362c9",
+    "screens/minimum-hero-details@3x.png": "c3536ac25a912e6d7788f94fb02bdc6fb4d8ce7bcc9d54211e7f25ffc9dd5059",
+    "screens/minimum-heroes@1x.png": "610f7d39a2cad431f8c3523bb2d4a3ed630b48771ad968975b38ecb40b5c7f8e",
+    "screens/minimum-heroes@3x.png": "c1b23ba33c5f392da3cfc605d0b26e650f9cd62757cea9b03154174993126e8e",
+    "screens/minimum-hud-layout@1x.png": "d7e2db7fa887000c1afeddca0a3890d1b672c37a67b3b784e70dc84821bf12de",
+    "screens/minimum-hud-layout@3x.png": "887fd2b64b3fd38c9f922555f4ff36d0832abc1f06edf44e7a39f234bd2e7942",
+    "screens/minimum-level@1x.png": "73f09fab6d5ab3bfcb48ba897e40da0725db72b3997a9df15de31236aa0a5163",
+    "screens/minimum-level@3x.png": "814078105afe6ab7033e42ea3bfb6f6cd230ab940f72b0add0e5414a9a310152",
+    "screens/minimum-settings@1x.png": "56c2d1e7cce3c16791abaf6b306d9425b79f4f12de8e7b07b1311e08465d3496",
+    "screens/minimum-settings@3x.png": "57fb84b68801903182d89599432a8078b2c5e4863c54e5004d1c0ad90b8f3d96",
+    "screens/settings@1x.png": "09bf09320c89b0b0f900fbec7aab242d3a0de51e182da46c8b18d363e85250a1",
+    "screens/settings@3x.png": "61d174849ce7cbb3a0eb85fcc770089150bd8200e1436042d561468dfadbb71c"
+  }
+}

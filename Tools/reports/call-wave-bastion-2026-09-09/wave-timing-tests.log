@@ -1,0 +1,43 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.88s)
+Test Suite 'Selected tests' started at 2026-09-09 21:57:48.891.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-09 21:57:48.892.
+Test Suite 'WaveStartTimingTests' started at 2026-09-09 21:57:48.892.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testBonusIsFixedUntilDeadlineAndCanBeConfiguredToZero]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testBonusIsFixedUntilDeadlineAndCanBeConfiguredToZero]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testConfiguredRevealAndAutomaticStartDeadlines]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testConfiguredRevealAndAutomaticStartDeadlines]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testDAOLoadsExplicitTimingAndPreservesSpawnGroups]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testDAOLoadsExplicitTimingAndPreservesSpawnGroups]' passed (0.003 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testEarlyCallReanchorsFollowingWaveAndRejectsRepeatedTap]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testEarlyCallReanchorsFollowingWaveAndRejectsRepeatedTap]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFirstWaveWaitsIndefinitelyAndSingleWaveFinishesSchedule]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFirstWaveWaitsIndefinitelyAndSingleWaveFinishesSchedule]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFractionalTimingNeverStartsBeforeConfiguredDuration]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testFractionalTimingNeverStartsBeforeConfiguredDuration]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testInteractiveScheduleRequiresValidBonusData]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testInteractiveScheduleRequiresValidBonusData]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testManualEarlyCallAwardsItsDatabaseBonusExactlyOnce]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testManualEarlyCallAwardsItsDatabaseBonusExactlyOnce]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testPausedClockDoesNotConsumeCountdown]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testPausedClockDoesNotConsumeCountdown]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testRevealCountdownAndAutomaticDeadlineUseActualPreviousStart]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testRevealCountdownAndAutomaticDeadlineUseActualPreviousStart]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testScheduleRejectsMissingAndInvalidTimingInsteadOfUsingDefaults]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testScheduleRejectsMissingAndInvalidTimingInsteadOfUsingDefaults]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testWaveDocumentCompatibilityAndTimingRoundTrip]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testWaveDocumentCompatibilityAndTimingRoundTrip]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testZeroDelayZeroCountdownAndEmptySchedules]' started.
+Test Case '-[LevelEditorFormatsTests.WaveStartTimingTests testZeroDelayZeroCountdownAndEmptySchedules]' passed (0.000 seconds).
+Test Suite 'WaveStartTimingTests' passed at 2026-09-09 21:57:48.898.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.006 (0.006) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-09 21:57:48.898.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.006 (0.007) seconds
+Test Suite 'Selected tests' passed at 2026-09-09 21:57:48.898.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.006 (0.008) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

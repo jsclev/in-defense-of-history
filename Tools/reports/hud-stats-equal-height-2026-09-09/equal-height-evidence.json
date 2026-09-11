@@ -1,0 +1,20 @@
+[
+  {
+    "counter": "lives",
+    "firstRow": 0,
+    "lastRow": 99,
+    "height": 100
+  },
+  {
+    "counter": "money",
+    "firstRow": 0,
+    "lastRow": 99,
+    "height": 100
+  },
+  {
+    "counter": "wave",
+    "firstRow": 0,
+    "lastRow": 99,
+    "height": 100
+  }
+]

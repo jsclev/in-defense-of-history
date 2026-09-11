@@ -1,0 +1,555 @@
+{
+  "reference_height": 655.0,
+  "clamp": [
+    340.0,
+    900.0
+  ],
+  "default_playable_height": 340.0,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "a751360a0d668bc1e187466adcd4ff2315d28c2dd50b94bb29489918398c2a4a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Models/UnitFacing.swift",
+      "sha256": "d6e61bec08fb2b7ace2d10a223cf8fd1fc82e1b202f8d947315e858dd172b8ae"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HeroSpriteProfile.swift",
+      "sha256": "ffefa33dfff13c2527ad8fe41a53358f87ffe953776dff22aba94ad155e05d50"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "a751360a0d668bc1e187466adcd4ff2315d28c2dd50b94bb29489918398c2a4a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "156589615120d4478f25cf8fd7b69c8ed07822043b18e7365c41c8002e3b437f"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/LevelRunner.swift",
+      "sha256": "a305ca979013f152b1d68704876b1eb3adc3ecefe6d759012432d46ffb1ffd6c"
+    }
+  ],
+  "sizing_note": "Production MapSpriteSizing.exitMarker = 32 points at the 340-point minimum, centered on all authored goal_point coordinates. The marker layer immediately follows art.occlusion, the final map-art layer, so endpoint foliage does not hide exit symbols.",
+  "assets": [
+    {
+      "id": "path_exit_rounded_x",
+      "label": "Rounded red X exit",
+      "animated": false,
+      "map_height": 61.64705882352941,
+      "files": {
+        "exit": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/path_exit_rounded_x-1x.png",
+          "boxes": {
+            "exit": [
+              1,
+              1,
+              96,
+              96
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/path_exit_rounded_x-2x.png",
+          "boxes": {
+            "exit": [
+              1,
+              1,
+              192,
+              192
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/path_exit_rounded_x-3x.png",
+          "boxes": {
+            "exit": [
+              1,
+              1,
+              288,
+              288
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "e": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "se": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "s": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "w": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        }
+      }
+    },
+    {
+      "id": "rally_flag_comparison",
+      "label": "Rally flag \u2014 equal-size comparison",
+      "animated": false,
+      "map_height": 61.64705882352941,
+      "atlases": {
+        "1": {
+          "url": "atlases/rally_flag_comparison-1x.png",
+          "boxes": {
+            "rally_point_icon": [
+              1,
+              1,
+              96,
+              96
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/rally_flag_comparison-2x.png",
+          "boxes": {
+            "rally_point_icon": [
+              1,
+              1,
+              192,
+              192
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/rally_flag_comparison-3x.png",
+          "boxes": {
+            "rally_point_icon": [
+              1,
+              1,
+              288,
+              288
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "e": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "se": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "s": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "w": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "militia_soldier",
+      "label": "Militia soldier",
+      "map_height": 55.26,
+      "animated": false,
+      "atlases": {
+        "1": {
+          "url": "atlases/militia_soldier-1x.png",
+          "boxes": {
+            "militia_soldier_walk_n_16": [
+              1,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_ne_16": [
+              120,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_e_16": [
+              239,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_se_16": [
+              358,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_s_16": [
+              477,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_sw_16": [
+              596,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_w_16": [
+              715,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_nw_16": [
+              834,
+              1,
+              117,
+              89
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/militia_soldier-2x.png",
+          "boxes": {
+            "militia_soldier_walk_n_16": [
+              1,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_ne_16": [
+              237,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_e_16": [
+              473,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_se_16": [
+              709,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_s_16": [
+              945,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_sw_16": [
+              1181,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_w_16": [
+              1417,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_nw_16": [
+              1653,
+              1,
+              234,
+              178
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/militia_soldier-3x.png",
+          "boxes": {
+            "militia_soldier_walk_n_16": [
+              1,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_ne_16": [
+              354,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_e_16": [
+              707,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_se_16": [
+              1060,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_s_16": [
+              1413,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_sw_16": [
+              1766,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_w_16": [
+              2119,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_nw_16": [
+              2472,
+              1,
+              351,
+              267
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "militia_soldier_walk_n_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_n_16"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "militia_soldier_walk_ne_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_ne_16"
+          ]
+        },
+        "e": {
+          "idle": [
+            "militia_soldier_walk_e_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_e_16"
+          ]
+        },
+        "se": {
+          "idle": [
+            "militia_soldier_walk_se_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_se_16"
+          ]
+        },
+        "s": {
+          "idle": [
+            "militia_soldier_walk_s_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_s_16"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "militia_soldier_walk_sw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_sw_16"
+          ]
+        },
+        "w": {
+          "idle": [
+            "militia_soldier_walk_w_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_w_16"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "militia_soldier_walk_nw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_nw_16"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "under": "great-bridge-under.jpg",
+      "over": "great-bridge-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

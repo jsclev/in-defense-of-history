@@ -8,6 +8,7 @@ struct HeroesView: View {
 
     @State private var heroes: [Hero] = []
     @State private var selectedHero: Hero?
+    @State private var selectionError: String?
 
     private static let columns = 5
     private static let rows = 3
@@ -23,8 +24,10 @@ struct HeroesView: View {
     }
 
     private var heroGrid: some View {
-        let rectHeight = runtimeCanvas.playAreaRect.height
-        let rectWidth = runtimeCanvas.playAreaRect.width
+        let footer = DoneButtonLayout(runtimeCanvas: runtimeCanvas, aspect: DoneButton.aspect).frame
+        let contentRect = MenuContentLayout(runtimeCanvas: runtimeCanvas, footer: footer).frame
+        let rectHeight = contentRect.height
+        let rectWidth = contentRect.width
         let margin = rectHeight * 0.028
         let gap = rectHeight * 0.02
         let cellWidth = (rectWidth - 2 * margin - CGFloat(Self.columns - 1) * gap)
@@ -61,15 +64,20 @@ struct HeroesView: View {
                     }
                 }
                 .frame(width: rectWidth, height: rectHeight)
-                .position(x: runtimeCanvas.physicalRect.width / 2, y: runtimeCanvas.physicalRect.height / 2)
+                .position(x: contentRect.midX, y: contentRect.midY)
             }
             .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
-            DoneButton(action: onExit)
+            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear(perform: loadHeroes)
+        .alert("Unable to load hero choices", isPresented: Binding(
+            get: { selectionError != nil }, set: { if !$0 { selectionError = nil } }
+        )) { Button("OK", role: .cancel) { selectionError = nil } } message: {
+            Text(selectionError ?? "")
+        }
     }
 
     static func unlockFontSize(heroes: [Hero], cellWidth: CGFloat,
@@ -102,17 +110,11 @@ struct HeroesView: View {
         }
         heroes = (try? db.heroDao.getAll()) ?? []
 
-        let unlocked = Set(heroes.filter(\.unlocked).map(\.id.uuidString))
-        var selection = (UserDefaults.standard.string(forKey: "selectedHeroIDs") ?? "")
-            .split(separator: ",").map(String.init)
-            .filter { unlocked.contains($0) }
-        if selection.isEmpty {
-            selection = ((try? db.heroDao.getSelectedHeroIds()) ?? [])
-                .map(\.uuidString)
-                .filter { unlocked.contains($0) }
+        do {
+            try HeroSelectionStore(dao: db.heroDao).load()
+        } catch {
+            selectionError = error.localizedDescription
         }
-        UserDefaults.standard.set(selection.joined(separator: ","),
-                                  forKey: "selectedHeroIDs")
     }
 }
 
@@ -125,34 +127,6 @@ fileprivate func heroUnlockMessage(_ hero: Hero) -> String? {
         }
     }
     return hero.unlockedAtLevelName.map { "Unlocked at\n\($0)" }
-}
-
-enum HeroSelection {
-    static let maxSelected = 2
-    private static let key = "selectedHeroIDs"
-
-    static func ids() -> [String] {
-        (UserDefaults.standard.string(forKey: key) ?? "")
-            .split(separator: ",").map(String.init)
-    }
-
-    static func isSelected(_ hero: Hero) -> Bool {
-        ids().contains(hero.id.uuidString)
-    }
-
-    static func toggle(_ hero: Hero) {
-        guard hero.unlocked else { return }
-        var current = ids()
-        if let index = current.firstIndex(of: hero.id.uuidString) {
-            current.remove(at: index)
-        } else {
-            current.append(hero.id.uuidString)
-            while current.count > maxSelected {
-                current.removeFirst()
-            }
-        }
-        UserDefaults.standard.set(current.joined(separator: ","), forKey: key)
-    }
 }
 
 @available(iOS 26.0, *)
@@ -175,6 +149,14 @@ private struct HeroSlot: View {
         return !hero.unlocked || !hasArt
     }
 
+    private var heroID: UUID? { hero?.id }
+
+    private var selectionRole: HeroSelection.Role? {
+        let ids = selectedIDs.split(separator: ",").compactMap { UUID(uuidString: String($0)) }
+        guard let index = ids.firstIndex(where: { $0 == heroID }) else { return nil }
+        return index == 0 ? .primary : .secondary
+    }
+
     private var isSelected: Bool {
         guard let hero else { return false }
         return selectedIDs.split(separator: ",").map(String.init)
@@ -187,6 +169,7 @@ private struct HeroSlot: View {
                 Button(action: { onSelect(hero) }) { slotContent }
                     .buttonStyle(HeroCardButtonStyle())
                     .accessibilityLabel(isLocked ? "\(hero.shortName), locked" : hero.shortName)
+                    .accessibilityValue(selectionRole?.title ?? "Not chosen")
             } else {
                 slotContent
                     .accessibilityLabel("Locked hero slot")
@@ -396,6 +379,24 @@ struct HeroDetailsView: View {
 
     @AppStorage("selectedHeroIDs") private var selectedIDs = ""
 
+    @State private var selectionError: String?
+
+    private var selectionRole: HeroSelection.Role? {
+        let ids = selectedIDs.split(separator: ",").compactMap { UUID(uuidString: String($0)) }
+        guard let index = ids.firstIndex(of: hero.id) else { return nil }
+        return index == 0 ? .primary : .secondary
+    }
+
+    private var isOnlyChoice: Bool {
+        isSelected && selectedIDs.split(separator: ",").count == 1
+    }
+
+    private var selectionButtonTitle: String {
+        if isOnlyChoice { return "Primary hero" }
+        if let role = selectionRole { return "\(role.title) — tap to remove" }
+        return "Select Hero"
+    }
+
     private var isSelected: Bool {
         selectedIDs.split(separator: ",").map(String.init)
             .contains(hero.id.uuidString)
@@ -441,16 +442,15 @@ struct HeroDetailsView: View {
                             .foregroundStyle(.white.opacity(0.78))
                             .lineSpacing(4 * metrics.scale)
 
-                        if hero.unlocked {
+                        if hero.unlocked || isSelected {
                             Button {
-                                HeroSelection.toggle(hero)
-                                selectedIDs = UserDefaults.standard
-                                    .string(forKey: "selectedHeroIDs") ?? ""
-                                let ids = selectedIDs.split(separator: ",")
-                                    .compactMap { UUID(uuidString: String($0)) }
-                                try? db.heroDao.setSelectedHeroes(ids)
+                                do {
+                                    try HeroSelectionStore(dao: db.heroDao).toggle(hero)
+                                } catch {
+                                    selectionError = error.localizedDescription
+                                }
                             } label: {
-                                Text(isSelected ? "Selected — tap to remove" : "Select Hero")
+                                Text(selectionButtonTitle)
                                     .font(.custom("HoeflerText-Black", size: 20 * metrics.scale))
                                     .foregroundStyle(isSelected
                                         ? Color(red: 0.16, green: 0.12, blue: 0.05)
@@ -466,6 +466,10 @@ struct HeroDetailsView: View {
                                                       lineWidth: 2))
                             }
                             .buttonStyle(.plain)
+                            .disabled(isOnlyChoice)
+                            .accessibilityHint(isOnlyChoice
+                                ? "Choose another hero before removing your only hero."
+                                : "The higher-ranked chosen hero is primary.")
                         }
                     }
                     .frame(maxWidth: 430 * metrics.scale, alignment: .leading)
@@ -473,9 +477,18 @@ struct HeroDetailsView: View {
                 }
             }
 
-            DoneButton(action: onExit)
+            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
+        .onAppear {
+            do { try HeroSelectionStore(dao: db.heroDao).load() }
+            catch { selectionError = error.localizedDescription }
+        }
+        .alert("Unable to save hero choices", isPresented: Binding(
+            get: { selectionError != nil }, set: { if !$0 { selectionError = nil } }
+        )) { Button("OK", role: .cancel) { selectionError = nil } } message: {
+            Text(selectionError ?? "")
+        }
     }
 }

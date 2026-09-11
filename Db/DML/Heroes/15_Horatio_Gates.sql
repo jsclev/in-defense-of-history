@@ -1,8 +1,9 @@
+-- Provisional ranking (1-100, higher is better); rationale: ../../../Tools/hero_rankings.md.
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
     primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
-    unit_image_name
+    unit_image_name, ranking
 ) VALUES
 (
     'a8c1a230-8fb2-421e-bd22-4aadf6770c3a', 'Horatio Gates', 'Horatio Granny Gates', 'Granny Gates', (
@@ -20,5 +21,5 @@ INSERT INTO hero (
 
 His soldiers called him Granny Gates for his fussing care of them. Camden, in 1780, unmade his reputation as thoroughly as Saratoga had made it.',
     'hero_horatio_gates_card_16x15', 'hero_details_horatio_gates', 'hero_icon_horatio_gates', 'hero_ability_icon_horatio_gates',
-    'hero_unit_horatio_gates'
+    'hero_unit_horatio_gates', 66
 );

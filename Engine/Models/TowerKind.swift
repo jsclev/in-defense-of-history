@@ -51,12 +51,18 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    public var menuFrameName: String {
+        "tower_menu_square_frame"
+    }
+
+    /// Full image height for every tower level and branch, including transparent
+    /// padding. This is the single size setting used by the map renderer.
     public var spriteHeight: SpriteHeight {
         switch self {
-        case .ranged: return MapSpriteSizing.tower(mapPixels: 80)
-        case .melee: return MapSpriteSizing.tower(mapPixels: 70.81)
-        case .areaOfEffect: return MapSpriteSizing.tower(mapPixels: 37.04)
-        case .special: return MapSpriteSizing.tower(mapPixels: 70.76)
+        case .ranged: return MapSpriteSizing.tower(mapPixels: 70.0)
+        case .melee: return MapSpriteSizing.tower(mapPixels: 75.0)
+        case .areaOfEffect: return MapSpriteSizing.tower(mapPixels: 70.0)
+        case .special: return MapSpriteSizing.tower(mapPixels: 80.0)
         }
     }
 
@@ -71,7 +77,4 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
     public var projectileHeight: SpriteHeight {
         self == .areaOfEffect ? MapSpriteSizing.cannonball : MapSpriteSizing.musketBall
     }
-
-    /// Ranged art is drawn on the tower_slot.png canvas; the others are tight-cropped.
-    public var usesSlotCanvasArt: Bool { self == .ranged }
 }

@@ -31,9 +31,12 @@ def main():
     manifest = json.loads((GAME / "Tools/washington_asset_manifest.json").read_text())
     facing = (GAME / "Engine/Models/UnitFacing.swift").read_text()
     count = int(re.search(r"georgeWashingtonFrameCount = (\d+)", facing)[1])
+    east_count = int(re.search(r"georgeWashingtonEastFrameCount = (\d+)", facing)[1])
+    counts = {d: east_count if d == "e" else count for d in DIRECTIONS}
     require(count == manifest["frame_count"], "Runtime Washington frame count is stale")
+    require(counts == manifest["frame_counts_by_direction"], "Directional Washington counts are stale")
     names = {PREFIX} | {f"{PREFIX}_idle_{d}" for d in DIRECTIONS} | {
-        f"{PREFIX}_walk_{d}_{i}" for d in DIRECTIONS for i in range(count)}
+        f"{PREFIX}_walk_{d}_{i}" for d in DIRECTIONS for i in range(counts[d])}
     actual_names = {p.stem for p in CATALOG.glob(f"{PREFIX}*.imageset")}
     require(actual_names == names, "Missing or stale Washington imagesets in production catalog")
     rows = manifest["assets"]
@@ -60,7 +63,7 @@ def main():
             if r["name"] == PREFIX + "_idle_se" and r["scale"] == 3),
             "Physical size calibration points to old Washington artwork")
     result = {"status": "PASS", "revision": manifest["revision"],
-              "runtime_frames_per_direction": count, "imagesets": len(names),
+              "runtime_frames_per_direction": counts, "imagesets": len(names),
               "source_pngs_verified": len(rows), "compiled_app": "NOT_CHECKED"}
     if args.bundle:
         car = args.bundle / "Assets.car"

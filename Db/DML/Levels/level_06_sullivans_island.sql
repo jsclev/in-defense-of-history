@@ -16,20 +16,6 @@ INSERT INTO level_info (
     'level_006_sullivans_island'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('def449bb-f1e6-5f3e-8986-29ace3e61e77', '35916460-914a-457b-beb9-1c5bfe95e61a', 1096.4, 1106.9),
-('618b5546-4029-595f-9459-e99b30d9adc1', '35916460-914a-457b-beb9-1c5bfe95e61a', 1986.9, 1032.8),
-('af8ec07b-c268-5120-b1a7-9136fe34a1f1', '35916460-914a-457b-beb9-1c5bfe95e61a', 1062.0, 960.5),
-('c9f3657e-f04d-5468-9d02-d16bff9926fa', '35916460-914a-457b-beb9-1c5bfe95e61a', 1187.7, 989.8),
-('4c6645df-10a1-5d68-9c37-a535731fce03', '35916460-914a-457b-beb9-1c5bfe95e61a', 1613.2, 941.6),
-('2ae98d31-551c-5d53-9742-02fcfe213cbd', '35916460-914a-457b-beb9-1c5bfe95e61a', 1759.5, 903.8),
-('32b40a44-ae8b-5afd-a8c9-e95d2e911505', '35916460-914a-457b-beb9-1c5bfe95e61a', 1139.5, 871.0),
-('e64414ed-18c6-5336-84ce-d89b10c74b7a', '35916460-914a-457b-beb9-1c5bfe95e61a', 1621.8, 822.8),
-('dc9d6cca-a88a-58e5-934b-337004457f87', '35916460-914a-457b-beb9-1c5bfe95e61a', 984.5, 793.5),
-('c542ee02-2b6c-5b69-af7e-2c9d5181b37d', '35916460-914a-457b-beb9-1c5bfe95e61a', 1962.8, 798.8);
-
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

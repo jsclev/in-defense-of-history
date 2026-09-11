@@ -12,7 +12,7 @@ public class Db {
     public let virtualCanvasDao: VirtualCanvasDAO
     public let campaignDao: CampaignDAO
     public let levelInfoDao: LevelInfoDAO
-    public let towerSlotDao: TowerSlotDAO
+    public let levelLoader: LevelLoader
     public let pathDao: PathDAO
     public let enemyTypeDao: EnemyTypeDAO
     public let towerUnlockDao: TowerUnlockDAO
@@ -27,6 +27,7 @@ public class Db {
     public let waveDao: WaveDAO
     public let difficultyDao: DifficultyDAO
     public let hudLayoutDao: HudLayoutDAO
+    public let reinforcementConfigDao: ReinforcementConfigDAO
     
     public static func getAbsolutePathToDb(dbFilename: String, fullRefresh: Bool) -> String {
         let logger = LogUtility.getLogger(LogCategory.Db, Db.self)
@@ -83,7 +84,7 @@ public class Db {
         return dbPath
     }
     
-    public init(dbPath: String, fullRefresh: Bool) {
+    public init(dbPath: String, fullRefresh: Bool, levelGeoJSONDao: LevelGeoJSONDAO = LevelGeoJSONDAO()) {
         var rc: Int32
         rc = sqlite3_open_v2(dbPath, &conn, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, nil)
         
@@ -117,11 +118,11 @@ public class Db {
         
         virtualCanvasDao = VirtualCanvasDAO(conn: conn)
         campaignDao = CampaignDAO(conn: conn)
-        towerSlotDao = TowerSlotDAO(conn: conn)
         pathDao = PathDAO(conn: conn)
         waveDao = WaveDAO(conn: conn)
-        levelInfoDao = LevelInfoDAO(conn: conn, towerSlotDao: towerSlotDao,
-                                    pathDao: pathDao, waveDao: waveDao)
+        levelInfoDao = LevelInfoDAO(conn: conn)
+        self.levelGeoJSONDao = levelGeoJSONDao
+        levelLoader = LevelLoader(info: levelInfoDao, paths: pathDao, waves: waveDao, geoJSON: levelGeoJSONDao)
         enemyTypeDao = EnemyTypeDAO(conn: conn)
         towerUnlockDao = TowerUnlockDAO(conn: conn)
         levelHeroDao = LevelHeroDAO(conn: conn)
@@ -131,9 +132,9 @@ public class Db {
         simEnemyTypeDao = SimEnemyTypeDAO(conn: conn)
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)
         heroDao = HeroDAO(conn: conn)
-        levelGeoJSONDao = LevelGeoJSONDAO()
         difficultyDao = DifficultyDAO(conn: conn)
         hudLayoutDao = HudLayoutDAO(conn: conn)
+        reinforcementConfigDao = ReinforcementConfigDAO(conn: conn)
     }
 
     public func close() {

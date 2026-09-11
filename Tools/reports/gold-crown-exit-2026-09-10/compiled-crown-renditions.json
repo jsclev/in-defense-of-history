@@ -1,0 +1,21 @@
+[
+  {
+    "AssetType": "Image",
+    "BitsPerComponent": 8,
+    "ColorModel": "RGB",
+    "Colorspace": "srgb",
+    "Compression": "deepmap2",
+    "Encoding": "ARGB",
+    "Idiom": "universal",
+    "Name": "path_exit_crown",
+    "NameIdentifier": 15462,
+    "Opaque": false,
+    "PixelHeight": 288,
+    "PixelWidth": 288,
+    "RenditionName": "path_exit_crown@3x.png",
+    "Scale": 3,
+    "SHA1Digest": "968D2AD37F0CF7D96CEF34A847F0C9E9887CDBD7F22D6CD1177603EF6D12AF12",
+    "SizeOnDisk": 35857,
+    "Template Mode": "automatic"
+  }
+]

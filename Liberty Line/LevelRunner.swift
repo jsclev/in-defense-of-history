@@ -38,14 +38,18 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var lives = 0
 
+    /// Changes only when an enemy crosses an exit; loading/resetting the life
+    /// counter must not trigger loss feedback.
+    @Published private(set) var escapedEnemyCount = 0
+
     @Published private(set) var isDefeated = false
 
     @Published private(set) var isCleared = false
 
-    /// True while the level is holding a wave for the player. Nothing
-    /// spawns until an entrance icon is double-tapped, which calls
-    /// startNextWave() and releases it.
+    /// True only while the next wave's call button is available.
     @Published private(set) var awaitingWaveStart = false
+    /// Nil for the manual first wave and while the call button is hidden.
+    @Published private(set) var waveCountdownSeconds: Int?
 
     private(set) var towerCosts: [TowerKind: [Int: [Int: Int]]] = [:]
     private(set) var towerDisplayNames: [TowerKind: String] = [:]
@@ -65,11 +69,19 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var towerUnlocks: [TowerKind: Int] = [:]
 
-    private(set) var selectedHeroes: [Hero] = []
+    private(set) var chosenHeroes: HeroSelection?
+    private(set) var heroSelection: HeroSelection?
+    private var heroImageAspectRatios: [UUID: CGFloat] = [:]
+
+    var primaryHero: Hero? { heroSelection?.primary }
+    var secondaryHero: Hero? { heroSelection?.secondary }
 
     var availableTowerKinds: Set<TowerKind> { Set(towerUnlocks.keys) }
 
     private(set) var slotPositions: [CGPoint] = []
+
+    /// Every authored goal_point, including exits without a hero assignment.
+    private(set) var exitPositions: [CGPoint] = []
 
     /// How close a shot must get to count as a hit, in map pixels. Purely a
     /// rendering tolerance — it has no column in the tower table.
@@ -263,25 +275,19 @@ public final class LevelRunner: NSObject, ObservableObject {
         let id: Int
         let assetName: String
         let baseAssetName: String
+        let imageAspectRatio: CGFloat
         var position: CGPoint
         var hp: Double
         var maxHP: Double
         var isSelected: Bool
     }
 
-    private struct HeroRoads {
-        let points: [Point]
-        let neighbors: [[Int]]
-    }
-
     private struct HeroPost {
+        let hero: Hero
         let assetName: String
         let combat: HeroCombatStats
         var unit: MilitiaUnit
-        var stationNode: Int
-        let spawnNode: Int
-        var route: [Int] = []
-        var routeTarget: Int = -1
+        var movement: HeroMovement
         var enemySwingTicks: [Int: Int] = [:]
     }
 
@@ -323,6 +329,11 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     private var rallyFlagFlashCount = 0
 
+    func dismissRallyFlag(id: Int) {
+        guard rallyFlagFlash?.id == id else { return }
+        rallyFlagFlash = nil
+    }
+
     func toggleRallyPlacement() {
         isPlacingRallyPoint.toggle()
         if isPlacingRallyPoint { armedUpgradeBranch = nil }
@@ -363,6 +374,9 @@ public final class LevelRunner: NSObject, ObservableObject {
     @Published private(set) var armedBuildKind: TowerKind?
     private let buildFeedback = UINotificationFeedbackGenerator()
     private var hapticEngine: CHHapticEngine?
+    private var activeHapticPlayer: (any CHHapticPatternPlayer)?
+    private var hapticsActive = false
+    private var lossHapticProtectedUntil: TimeInterval = 0
 
     /// Upgrade branch awaiting its confirming second tap, same flow as
     /// armedBuildKind: the range preview shows the upgraded tier's range.
@@ -384,12 +398,26 @@ public final class LevelRunner: NSObject, ObservableObject {
     private let meleeFormation = MeleeFormation()
     private static let reinforcementCount = 2
     private var nextReinforcementSlot = -1
-    private static let heroRoadSpacing = 20.0
+    private var reinforcementSchedule: ReinforcementSchedule?
+    @Published private(set) var reinforcementCooldown: ReinforcementCooldown = .ready
+    @Published private(set) var isPlacingReinforcements = false
+
+    var canCallReinforcements: Bool {
+        isReady && !isDefeated && !isCleared && reinforcementStats != nil
+            && reinforcementSchedule?.cooldown(at: timer.tick).isReady == true
+    }
 
     @Published private(set) var heroes: [HeroSoldier] = []
     @Published private(set) var selectedHeroIndex: Int?
     private var heroPosts: [HeroPost] = []
-    private var heroRoads = HeroRoads(points: [], neighbors: [])
+
+    var hudHeroes: [Hero] {
+        heroSelection?.heroes ?? []
+    }
+
+    func hudHeroIndex(for heroID: UUID) -> Int? {
+        heroPosts.firstIndex { $0.hero.id == heroID && $0.unit.state != .dead }
+    }
     private var heroPrevPositions: [Int: CGPoint] = [:]
     private var heroRespawnedIDs: Set<Int> = []
     private var heroPoses: [Int: WalkPose] = [:]
@@ -410,46 +438,24 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     private var paths: [Path] = []
 
-    private var entrancePoints: [EntrancePoint] = []
+    private var callWaveButtons: [CallWaveButtonPosition] = []
 
-    var entranceWavePaths: [[CGPoint]] {
-        guard waves.indices.contains(waveIndex) else { return [] }
-        let active = Set(waves[waveIndex].spawns.map(\.pathIndex))
-        return active.sorted().compactMap { index in
-            guard paths.indices.contains(index),
-                  entrancePosition(forPath: index) != nil else { return nil }
-            return paths[index].points.map { CGPoint(x: $0.x, y: $0.y) }
-        }
-    }
-
-    /// The geojson spawn point tagged to the path; else the spawn point at
-    /// the path's mouth (two roads can share one entrance and the exporter
-    /// tags a marker to only one of them). Entrances live only in the
-    /// geojson: a path with no marker at its mouth has no icon.
-    private func entrancePosition(forPath pathIndex: Int) -> CGPoint? {
-        if let tagged = entrancePoints.first(where: { $0.pathIndex == pathIndex }) {
-            return CGPoint(x: tagged.position.x, y: tagged.position.y)
-        }
-        guard paths.indices.contains(pathIndex), let mouth = paths[pathIndex].points.first else {
-            return nil
-        }
-        let sameMouth = virtualCanvas.pathWidth * 2
-        guard let atMouth = entrancePoints
-            .map({ ($0.position, $0.position.distance(to: mouth)) })
-            .filter({ $0.1 <= sameMouth })
-            .min(by: { $0.1 < $1.1 })?.0 else {
-            return nil
-        }
-        return CGPoint(x: atMouth.x, y: atMouth.y)
+    var callWaveButtonPositions: [Point] {
+        let next = waveSchedule.nextWaveIndex
+        guard waves.indices.contains(next) else { return [] }
+        return CallWaveButtonPosition.visiblePositions(
+            callWaveButtons, forPathIndices: Set(waves[next].spawns.map(\.pathIndex)))
     }
 
     private var levelName = ""
     private var enemyTypesByID: [UUID: EnemyType] = [:]
     private var waves: [Wave] = []
     private var waveIndex = 0
+    private var waveSchedule = WaveStartSchedule()
 
     var waveCount: Int { waves.count }
     var currentWaveNumber: Int { min(waveIndex + 1, max(waves.count, 1)) }
+    var nextWaveNumber: Int { waveSchedule.nextWaveIndex + 1 }
 
     private static func assetName(for enemyName: String) -> String {
         enemyName.folding(options: .diacriticInsensitive, locale: .init(identifier: "en_US"))
@@ -464,14 +470,20 @@ public final class LevelRunner: NSObject, ObservableObject {
     
     private let db: Db
     private let virtualCanvas: VirtualCanvas
+    private var runtimeCanvas: RuntimeCanvas
+    private let hudLayoutConfig: HudLayoutConfig
 
     init(db: Db,
          virtualCanvas: VirtualCanvas,
+         runtimeCanvas: RuntimeCanvas,
+         hudLayoutConfig: HudLayoutConfig = .standard,
          levelInfoID: UUID?,
          mapImageName: String,
          enemyHPMultiplier: Double = 1.0) {
         self.db = db
         self.virtualCanvas = virtualCanvas
+        self.runtimeCanvas = runtimeCanvas
+        self.hudLayoutConfig = hudLayoutConfig.moving(.heroBar, to: .southWest)
         self.mapImageName = mapImageName
         self.mapArt = LevelMapArt(mapImageName: mapImageName)
         self.playArea = virtualCanvas.playAreaRect
@@ -491,12 +503,26 @@ public final class LevelRunner: NSObject, ObservableObject {
         }
 
         do {
-            let level = try db.levelInfoDao.getBy(id: levelInfoID)
+            reinforcementSchedule = ReinforcementSchedule(config: try db.reinforcementConfigDao.get())
+            let level = try db.levelLoader.load(id: levelInfoID)
             let enemies = try db.enemyTypeDao.getAll()
-            entrancePoints = try db.levelGeoJSONDao.getEntrancePoints(mapImageName: level.mapImageName)
+            callWaveButtons = try db.levelGeoJSONDao.getCallWaveButtons(mapImageName: level.mapImageName)
+            exitPositions = try db.levelGeoJSONDao.getExitPoints(mapImageName: level.mapImageName)
+                .map { CGPoint(x: $0.position.x, y: $0.position.y) }
 
-            let heroesById = Dictionary(uniqueKeysWithValues: try db.heroDao.getAll().map { ($0.id, $0) })
-            selectedHeroes = try db.heroDao.getSelectedHeroIds().compactMap { heroesById[$0] }
+            let chosen = try HeroSelectionStore(dao: db.heroDao).load()
+            chosenHeroes = chosen
+            let heroConfiguration = try db.levelGeoJSONDao.getHeroConfiguration(mapImageName: level.mapImageName)
+            let deployments = heroConfiguration.deployments(for: chosen)
+            heroImageAspectRatios = try Dictionary(uniqueKeysWithValues: deployments.map { deployment in
+                guard let name = deployment.hero.unitImageName, let image = UIImage(named: name),
+                      image.size.width > 0, image.size.height > 0 else {
+                    throw DbError.Db(message: "Missing sprite dimensions for \(deployment.hero.shortName)")
+                }
+                return (deployment.hero.id, image.size.width / image.size.height)
+            })
+            if deployments.isEmpty { heroSelection = nil }
+            else { heroSelection = try HeroSelection(heroes: deployments.map(\.hero)) }
 
             let unlockRows = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelInfoID)
             towerUnlocks = Dictionary(uniqueKeysWithValues: unlockRows.compactMap { key, value in
@@ -547,27 +573,26 @@ public final class LevelRunner: NSObject, ObservableObject {
             }
 
             paths = level.paths
-            heroRoads = buildHeroRoads()
-            heroPosts = try db.levelHeroDao.getHeroesFor(levelInfoId: levelInfoID)
-                .compactMap { levelHero in
-                    guard let hero = heroesById[levelHero.heroId],
-                          let assetName = hero.unitImageName,
-                          levelHero.enemyPathIndex < paths.count else { return nil }
-                    let path = paths[levelHero.enemyPathIndex]
-                    let spawnNode = heroNearestNode(to: path.point(atDistance: path.totalLength))
-                    guard spawnNode >= 0 else { return nil }
-                    return HeroPost(
-                        assetName: assetName,
-                        combat: levelHero.combat,
-                        unit: MilitiaUnit(position: heroRoads.points[spawnNode],
-                                          hp: levelHero.combat.hp),
-                        stationNode: spawnNode,
-                        spawnNode: spawnNode)
+            let movementArea = try db.levelGeoJSONDao.getHeroMovementArea(
+                mapImageName: level.mapImageName, defaultPathWidth: virtualCanvas.pathWidth)
+            heroPosts = try deployments.map { deployment in
+                let hero = deployment.hero
+                guard let assetName = hero.unitImageName else {
+                    throw DbError.Db(message: "Missing unit image for \(hero.shortName)")
                 }
+                let combat = try db.heroDao.getCombatStats(heroID: hero.id)
+                let position = deployment.spawn.position
+                let movement = try HeroMovement(area: movementArea, spawn: position)
+                return HeroPost(hero: hero, assetName: assetName, combat: combat,
+                    unit: MilitiaUnit(position: position, hp: combat.hp),
+                    movement: movement)
+            }
             publishHeroes()
             precomputeLaneCoverage()
+            waveSchedule = try WaveStartSchedule(waves: waves)
             isReady = true
-            holdWave(0)
+            refreshWaveStartState()
+            status = "\(levelName)  •  wave 1/\(waves.count) waiting  •  double-tap an entrance to start"
         } catch {
             status = "Database load failed: \(error)"
         }
@@ -587,6 +612,11 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     func selectSlot(_ index: Int) {
         guard !isSlotOccupied(index) else { return }
+        isPlacingReinforcements = false
+        if selectedHeroIndex != nil {
+            selectedHeroIndex = nil
+            publishHeroes()
+        }
         selectedTowerSlotIndex = nil
         armedBuildKind = nil
         armedUpgradeBranch = nil
@@ -595,6 +625,11 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     func selectPlacedTower(atSlot index: Int) {
         guard isSlotOccupied(index) else { return }
+        isPlacingReinforcements = false
+        if selectedHeroIndex != nil {
+            selectedHeroIndex = nil
+            publishHeroes()
+        }
         selectedSlotIndex = nil
         armedBuildKind = nil
         armedUpgradeBranch = nil
@@ -611,11 +646,15 @@ public final class LevelRunner: NSObject, ObservableObject {
     }
 
     /// First tap on a build button arms that kind and turns it into the build
-    /// confirmation. Tapping that confirmation builds; tapping anything else,
-    /// including another build button, cancels without building.
+    /// confirmation. Confirming builds if affordable, otherwise it dismisses
+    /// the menu. Tapping another build button cancels without building.
     func tapBuildButton(_ kind: TowerKind) {
-        guard maxLevel(for: kind) >= 1 else { return }
+        guard selectedSlotIndex != nil, maxLevel(for: kind) >= 1 else { return }
         if armedBuildKind == kind {
+            guard let cost = buildCost(for: kind), money >= cost else {
+                dismissMenu()
+                return
+            }
             buildTower(kind)
         } else if armedBuildKind != nil {
             armedBuildKind = nil
@@ -625,10 +664,11 @@ public final class LevelRunner: NSObject, ObservableObject {
         }
     }
 
-    /// Radius previewed while a build choice is armed: attack range for
-    /// shooting towers, rally-point radius for melee.
+    /// Radius previewed while an affordable build choice is armed: attack
+    /// range for shooting towers, rally-point radius for melee.
     func buildPreviewRadius(for kind: TowerKind) -> CGFloat? {
-        towerLevels[kind]?[1]?[1].flatMap(Self.overlayRadius)
+        guard let cost = buildCost(for: kind), money >= cost else { return nil }
+        return towerLevels[kind]?[1]?[1].flatMap(Self.overlayRadius)
     }
 
     /// Radius shown while a placed tower's upgrade menu is open, at the
@@ -638,10 +678,15 @@ public final class LevelRunner: NSObject, ObservableObject {
     }
 
     /// First tap on an upgrade button arms that branch; a second tap on the
-    /// same button performs the upgrade. Tapping a different branch re-arms.
+    /// same button upgrades if affordable, otherwise it dismisses the menu.
+    /// Tapping a different branch re-arms.
     func tapUpgradeButton(branch: Int) {
-        guard upgradeOffers.contains(where: { $0.branch == branch }) else { return }
+        guard let offer = upgradeOffers.first(where: { $0.branch == branch }) else { return }
         if armedUpgradeBranch == branch {
+            guard money >= offer.cost else {
+                dismissMenu()
+                return
+            }
             upgradeSelectedTower(branch: branch)
         } else {
             armedUpgradeBranch = branch
@@ -650,12 +695,13 @@ public final class LevelRunner: NSObject, ObservableObject {
         }
     }
 
-    /// Radius previewed while an upgrade is armed: what the tower's range
-    /// would become at the offered level and branch.
+    /// Radius previewed while an affordable upgrade is armed: what the
+    /// tower's range would become at the offered level and branch.
     func upgradePreviewRadius(branch: Int) -> CGFloat? {
         guard let slotIndex = selectedTowerSlotIndex,
               let tower = placedTower(atSlot: slotIndex),
-              let offer = upgradeOffers.first(where: { $0.branch == branch })
+              let offer = upgradeOffers.first(where: { $0.branch == branch }),
+              money >= offer.cost
         else { return nil }
         return towerLevels[tower.kind]?[offer.nextLevel]?[offer.branch]
             .flatMap(Self.overlayRadius)
@@ -738,22 +784,36 @@ public final class LevelRunner: NSObject, ObservableObject {
         armedUpgradeBranch = nil
     }
 
-    /// Parks the level on wave `index`: the wave is announced, but nothing
-    /// spawns until startNextWave() releases it.
-    private func holdWave(_ index: Int) {
-        guard waves.indices.contains(index) else { return }
-        waveIndex = index
-        awaitingWaveStart = true
-        status = "\(levelName)  •  wave \(index + 1)/\(waves.count) waiting  •  "
-            + "double-tap an entrance to start it"
+    private func refreshWaveStartState() {
+        let state = waveSchedule.state(at: timer.tick)
+        let visible = !isDefeated && !isCleared && state.canCall
+        if awaitingWaveStart != visible { awaitingWaveStart = visible }
+        let seconds: Int?
+        if visible, case .countingDown(let remaining) = state {
+            seconds = remaining
+        } else {
+            seconds = nil
+        }
+        if waveCountdownSeconds != seconds { waveCountdownSeconds = seconds }
     }
 
-    /// Releases the held wave. The entrance icons call this on a
-    /// double-tap; until then the level sits quiet.
+    /// Calls the visible wave early, or begins the manual first wave.
     func startNextWave() {
-        guard awaitingWaveStart, isReady, !isDefeated else { return }
-        awaitingWaveStart = false
-        enterWave(waveIndex)
+        guard isReady, !isDefeated, !isCleared,
+              let start = waveSchedule.startNextWave(at: timer.tick, manually: true)
+        else { return }
+        money += start.moneyBonus
+        enterWave(start.index)
+        refreshWaveStartState()
+    }
+
+    private func advanceWaveSchedule() {
+        // The loop also handles authored zero-duration gaps without losing a
+        // wave. Each successful start consumes one entry, so it is bounded.
+        while let start = waveSchedule.startNextWave(at: timer.tick, manually: false) {
+            enterWave(start.index)
+        }
+        refreshWaveStartState()
     }
 
     private func enterWave(_ index: Int) {
@@ -772,24 +832,21 @@ public final class LevelRunner: NSObject, ObservableObject {
                     pathIndex: entry.pathIndex))
             }
         }
-        pendingSpawns = scheduled.sorted { $0.tick < $1.tick }
-
-        walkers.removeAll()
-        projectiles.removeAll()
+        // Earlier waves can still be spawning, marching, or under fire.
+        pendingSpawns.append(contentsOf: scheduled)
+        pendingSpawns.sort { $0.tick < $1.tick }
         status = "\(levelName)  •  wave \(index + 1)/\(waves.count)  •  "
-            + "\(pendingSpawns.count) enemies"
+            + "\(scheduled.count) enemies"
     }
 
     func start() {
-        guard isReady, !isDefeated, displayLink == nil else { return }
+        guard isReady, !isDefeated, !isCleared, displayLink == nil else { return }
         timer.resync()
         lastStepGameTicks = Double(timer.tick) + timer.interpolationAlpha
         lastMilitiaTick = timer.tick
-        // A held wave stays held; a wave already in flight reschedules
-        // against the resynced clock, exactly as before the gate existed.
-        if !awaitingWaveStart {
-            enterWave(waveIndex)
-        }
+        // Resume the same game tick, preserving spawns and wave deadlines.
+        refreshWaveStartState()
+        hapticsActive = true
         startHapticEngine()
         let link = CADisplayLink(target: self, selector: #selector(handleFrame))
         link.add(to: .main, forMode: .common)
@@ -797,50 +854,85 @@ public final class LevelRunner: NSObject, ObservableObject {
     }
 
     func stop() {
-        displayLink?.invalidate()
-        displayLink = nil
+        stopSimulation()
+        hapticsActive = false
+        try? activeHapticPlayer?.stop(atTime: CHHapticTimeImmediate)
+        activeHapticPlayer = nil
+        lossHapticProtectedUntil = 0
         hapticEngine?.stop()
         hapticEngine = nil
     }
 
+    private func stopSimulation() {
+        displayLink?.invalidate()
+        displayLink = nil
+    }
+
     private func startHapticEngine() {
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics,
+        guard hapticsActive, hapticEngine == nil,
+              CHHapticEngine.capabilitiesForHardware().supportsHaptics,
               let engine = try? CHHapticEngine() else { return }
         engine.isAutoShutdownEnabled = true
-        engine.resetHandler = { [weak engine] in try? engine?.start() }
+        engine.playsHapticsOnly = true
+        engine.resetHandler = { [weak self, weak engine] in
+            Task { @MainActor in
+                guard let self, let engine, self.hapticsActive,
+                      self.hapticEngine === engine else { return }
+                self.activeHapticPlayer = nil
+                try? engine.start()
+                // Each request creates a fresh player; never replay an old cue.
+            }
+        }
         try? engine.start()
         hapticEngine = engine
     }
 
     private func playBuildHaptic() {
-        guard let engine = hapticEngine else {
-            buildFeedback.notificationOccurred(.success)
-            return
+        playHaptic(.build)
+    }
+
+    func playEnemyEscapeHaptic(_ cue: EnemyEscapeHapticPolicy.Cue) {
+        playHaptic(cue == .defeat ? .defeat : .lifeLoss)
+    }
+
+    private func playHaptic(_ cue: GameplayHapticPattern) {
+        guard hapticsActive else { return }
+        let now = ProcessInfo.processInfo.systemUptime
+        // Damage feedback takes priority; a build must not mix into its rhythm.
+        guard cue != .build || now >= lossHapticProtectedUntil else { return }
+        if cue != .build {
+            lossHapticProtectedUntil = now + max(EnemyEscapeHapticPolicy.minimumInterval,
+                                                 cue.duration + 0.05)
         }
-        let seat = CHHapticEvent(eventType: .hapticTransient, parameters: [
-            CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.7),
-            CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.45),
-        ], relativeTime: 0)
-        let confirm = CHHapticEvent(eventType: .hapticTransient, parameters: [
-            CHHapticEventParameter(parameterID: .hapticIntensity, value: 1),
-            CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.8),
-        ], relativeTime: 0.055)
-        guard let pattern = try? CHHapticPattern(events: [seat, confirm], parameters: []),
-              let player = try? engine.makePlayer(with: pattern),
-              (try? engine.start()) != nil,
-              (try? player.start(atTime: CHHapticTimeImmediate)) != nil else {
-            buildFeedback.notificationOccurred(.success)
-            return
+        try? activeHapticPlayer?.stop(atTime: CHHapticTimeImmediate)
+        activeHapticPlayer = nil
+        startHapticEngine()
+        do {
+            guard let engine = hapticEngine else {
+                buildFeedback.notificationOccurred(cue == .build ? .success : .error)
+                return
+            }
+            try engine.start()
+            let player = try engine.makePlayer(with: cue.makePattern())
+            try player.start(atTime: CHHapticTimeImmediate)
+            activeHapticPlayer = player
+        } catch {
+            // System feedback remains a fallback when custom playback fails.
+            buildFeedback.notificationOccurred(cue == .build ? .success : .error)
         }
     }
 
     private func loseLife() {
         guard !isDefeated else { return }
         lives = max(0, lives - 1)
+        escapedEnemyCount += 1
         guard lives == 0 else { return }
         isDefeated = true
         pendingSpawns.removeAll()
-        stop()
+        refreshWaveStartState()
+        // Defeat still needs its complete haptic while the game-over view is
+        // visible. Leaving/backgrounding the level calls stop() to end both.
+        stopSimulation()
     }
 
     func speedUp() {
@@ -857,7 +949,9 @@ public final class LevelRunner: NSObject, ObservableObject {
 
         for _ in 0..<timer.dueTicks() {
             timer.advanceTick()
+            advanceWaveSchedule()
         }
+        advanceReinforcements()
         refreshTowerStatsIfDue()
 
         while let next = pendingSpawns.first, timer.tick >= next.tick {
@@ -919,13 +1013,10 @@ public final class LevelRunner: NSObject, ObservableObject {
             publishHeroes(alpha: alpha)
         }
 
-        if pendingSpawns.isEmpty && walkers.isEmpty && !awaitingWaveStart {
-            if waveIndex + 1 < waves.count {
-                holdWave(waveIndex + 1)
-            } else if !isCleared {
-                isCleared = true
-                status = "\(levelName)  •  all \(waves.count) waves cleared"
-            }
+        if waveSchedule.allWavesStarted && pendingSpawns.isEmpty && walkers.isEmpty && !isCleared {
+            isCleared = true
+            refreshWaveStartState()
+            status = "\(levelName)  •  all \(waves.count) waves cleared"
         }
 
         updateCombat(gameDt: frameDtTicks * SimClock.dt)
@@ -1038,8 +1129,11 @@ public final class LevelRunner: NSObject, ObservableObject {
         return (stats, Point(Double(tower.position.x), Double(tower.position.y)))
     }
 
-    func callReinforcements(at point: CGPoint) {
-        guard let melee = reinforcementStats else { return }
+    @discardableResult
+    func callReinforcements(at point: CGPoint) -> Bool {
+        guard canCallReinforcements, let melee = reinforcementStats,
+              reinforcementSchedule?.deploy(slot: nextReinforcementSlot, at: timer.tick) == true
+        else { return false }
         let anchor = Point(Double(point.x), Double(point.y))
         garrisonsBySlot[nextReinforcementSlot] = MilitiaGarrison(
             rallyPoint: anchor,
@@ -1051,6 +1145,48 @@ public final class LevelRunner: NSObject, ObservableObject {
             stats: melee,
             anchor: anchor)
         nextReinforcementSlot -= 1
+        isPlacingReinforcements = false
+        reinforcementCooldown = reinforcementSchedule!.cooldown(at: timer.tick)
+        publishMilitia()
+        return true
+    }
+
+    func toggleReinforcementPlacement() {
+        guard canCallReinforcements else { return }
+        dismissMenu()
+        if selectedHeroIndex != nil {
+            selectedHeroIndex = nil
+            publishHeroes()
+        }
+        isPlacingReinforcements.toggle()
+    }
+
+    func placeReinforcements(at point: CGPoint) {
+        guard isPlacingReinforcements, isOnPath(point) else { return }
+        callReinforcements(at: point)
+    }
+
+    private func advanceReinforcements() {
+        guard let expired = reinforcementSchedule?.expire(at: timer.tick) else { return }
+        let cooldown = reinforcementSchedule!.cooldown(at: timer.tick)
+        if reinforcementCooldown != cooldown { reinforcementCooldown = cooldown }
+        guard !expired.isEmpty else { return }
+        for slot in expired {
+            guard let garrison = garrisonsBySlot.removeValue(forKey: slot) else { continue }
+            for index in garrison.units.indices {
+                let id = slot * 8 + index
+                militiaPrevPositions[id] = nil
+                militiaPoses[id] = nil
+                militiaRespawnedIDs.remove(id)
+            }
+            damageTotalBySlot[slot] = nil
+        }
+        // Release expired soldiers' targets before walkers move this frame.
+        // Preserve any blocks still held by a tower soldier or hero.
+        let fightingUnits = garrisonsBySlot.values.flatMap(\.units) + heroPosts.map(\.unit)
+        blockedWalkerIDs = Set(fightingUnits.filter { $0.state == .fighting && $0.targetSpawnID >= 0 }
+            .map(\.targetSpawnID))
+        // Publish even when the last garrison expired, clearing its sprites.
         publishMilitia()
     }
 
@@ -1240,97 +1376,9 @@ public final class LevelRunner: NSObject, ObservableObject {
         }
     }
 
-    private var heroStandRect: CGRect {
-        let height = MapSpriteSizing.heroMapHeight
-        return CGRect(x: playArea.minX + height / 2,
-                      y: playArea.minY,
-                      width: max(0, playArea.width - height),
-                      height: max(0, playArea.height - height))
-    }
-
-    private func buildHeroRoads() -> HeroRoads {
-        let rect = heroStandRect
-        var points: [Point] = []
-        var neighbors: [[Int]] = []
-        for path in paths {
-            var previous: Int? = nil
-            var travelled = 0.0
-            while travelled <= path.totalLength {
-                let p = path.point(atDistance: travelled)
-                if rect.contains(CGPoint(x: p.x, y: p.y)) {
-                    points.append(p)
-                    neighbors.append([])
-                    let index = points.count - 1
-                    if let previous {
-                        neighbors[previous].append(index)
-                        neighbors[index].append(previous)
-                    }
-                    previous = index
-                } else {
-                    previous = nil
-                }
-                travelled += Self.heroRoadSpacing
-            }
-        }
-        let junction = virtualCanvas.pathWidth / 2
-        for i in 0..<points.count {
-            for j in (i + 1)..<points.count where !neighbors[i].contains(j) {
-                if points[i].distance(to: points[j]) <= junction {
-                    neighbors[i].append(j)
-                    neighbors[j].append(i)
-                }
-            }
-        }
-        return HeroRoads(points: points, neighbors: neighbors)
-    }
-
-    private func heroNearestNode(to p: Point) -> Int {
-        var best = -1
-        var bestGap = Double.infinity
-        for (i, q) in heroRoads.points.enumerated() {
-            let gap = q.distance(to: p)
-            if gap < bestGap {
-                bestGap = gap
-                best = i
-            }
-        }
-        return best
-    }
-
-    private func heroRoute(from: Int, to: Int) -> [Int] {
-        guard from != to, heroRoads.points.indices.contains(from),
-              heroRoads.points.indices.contains(to) else { return [] }
-        let count = heroRoads.points.count
-        var distances = [Double](repeating: .infinity, count: count)
-        var previous = [Int](repeating: -1, count: count)
-        var settled = [Bool](repeating: false, count: count)
-        distances[from] = 0
-        while true {
-            var best = -1
-            var bestDistance = Double.infinity
-            for i in 0..<count where !settled[i] && distances[i] < bestDistance {
-                bestDistance = distances[i]
-                best = i
-            }
-            if best < 0 || best == to { break }
-            settled[best] = true
-            for n in heroRoads.neighbors[best] {
-                let d = distances[best]
-                    + heroRoads.points[best].distance(to: heroRoads.points[n])
-                if d < distances[n] {
-                    distances[n] = d
-                    previous[n] = best
-                }
-            }
-        }
-        guard distances[to].isFinite else { return [] }
-        var route: [Int] = []
-        var current = to
-        while current != from && current >= 0 {
-            route.append(current)
-            current = previous[current]
-        }
-        return current == from ? route.reversed() : []
+    /// Resizing changes projection only; movement stays in canonical map coordinates.
+    func updateRuntimeCanvas(_ canvas: RuntimeCanvas) {
+        runtimeCanvas = canvas
     }
 
     private func stepHeroesTick(claimed: inout Set<Int>,
@@ -1341,7 +1389,7 @@ public final class LevelRunner: NSObject, ObservableObject {
 
         for hi in 0..<heroPosts.count {
             var post = heroPosts[hi]
-            let station = heroRoads.points[post.stationNode]
+            let station = post.movement.station
 
             var free: [(spawnID: Int, position: Point)] = []
             for w in walkers where !w.blockImmune && !claimed.contains(w.id)
@@ -1364,44 +1412,20 @@ public final class LevelRunner: NSObject, ObservableObject {
                                          engageScanRadius: MilitiaTunables.heroEngageScanRadius)
             if post.unit.swingTicksLeft > 0 { post.unit.swingTicksLeft -= 1 }
 
-            switch MilitiaAI.decide(post.unit, context: context) {
+            switch post.movement.update(&post.unit, context: context,
+                                        moveSpeed: post.combat.moveSpeed, deltaTime: dt) {
             case .idle:
-                if post.unit.state == .returning { post.unit.state = .holding }
+                break
             case .countdownRespawn:
                 post.unit.respawnTicksLeft -= 1
             case .respawn:
-                post.stationNode = post.spawnNode
-                post.route = []
-                post.routeTarget = -1
-                post.unit = MilitiaUnit(position: heroRoads.points[post.spawnNode],
-                                        hp: post.combat.hp)
+                post.movement.respawn(unit: &post.unit, hp: post.combat.hp)
                 heroRespawnedIDs.insert(hi)
             case .heal:
                 post.unit.hp = min(post.combat.hp,
                                    post.unit.hp + post.combat.healPerSecond * dt)
-            case let .move(toward):
-                let target = heroNearestNode(to: toward)
-                if target != post.routeTarget {
-                    post.routeTarget = target
-                    post.route = heroRoute(from: heroNearestNode(to: post.unit.position),
-                                           to: target)
-                }
-                var step = post.combat.moveSpeed * dt
-                while step > 0, let next = post.route.first {
-                    let goal = heroRoads.points[next]
-                    let dx = goal.x - post.unit.position.x
-                    let dy = goal.y - post.unit.position.y
-                    let gap = (dx * dx + dy * dy).squareRoot()
-                    if gap <= step {
-                        post.unit.position = goal
-                        post.route.removeFirst()
-                        step -= gap
-                    } else {
-                        post.unit.position = Point(post.unit.position.x + dx / gap * step,
-                                                   post.unit.position.y + dy / gap * step)
-                        step = 0
-                    }
-                }
+            case .move:
+                break // HeroMovement has already advanced the model position.
             case let .engage(targetSpawnID):
                 post.unit.state = .engaging
                 post.unit.targetSpawnID = targetSpawnID
@@ -1490,6 +1514,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                     walkPhase: renderedPhase,
                     isWalking: pose.isWalking),
                 baseAssetName: post.assetName,
+                imageAspectRatio: heroImageAspectRatios[post.hero.id]!,
                 position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
                                   y: prev.y + (cur.y - prev.y) * alpha),
                 hp: post.unit.hp,
@@ -1510,25 +1535,34 @@ public final class LevelRunner: NSObject, ObservableObject {
     }
 
     func selectHero(_ index: Int) {
-        guard heroPosts.indices.contains(index) else { return }
+        guard heroPosts.indices.contains(index), heroPosts[index].unit.state != .dead else { return }
+        dismissMenu()
+        isPlacingReinforcements = false
         selectedHeroIndex = selectedHeroIndex == index ? nil : index
         publishHeroes()
     }
 
-    func commandSelectedHero(to point: CGPoint) {
-        guard let index = selectedHeroIndex, heroPosts.indices.contains(index) else { return }
-        let node = heroNearestNode(to: Point(Double(point.x), Double(point.y)))
-        guard node >= 0 else { return }
-        heroPosts[index].stationNode = node
-        heroPosts[index].route = []
-        heroPosts[index].routeTarget = -1
-        if heroPosts[index].unit.targetSpawnID >= 0 {
-            heroPosts[index].enemySwingTicks[heroPosts[index].unit.targetSpawnID] = nil
+    /// Resolve the portrait's identity when tapped, then use the same selection
+    /// behavior as tapping its map unit (including toggling and targeting).
+    func selectHero(heroID: UUID) {
+        guard let index = hudHeroIndex(for: heroID) else { return }
+        selectHero(index)
+    }
+
+    @discardableResult
+    func commandSelectedHero(to point: CGPoint) -> Bool {
+        guard let index = selectedHeroIndex, heroPosts.indices.contains(index) else { return false }
+        var post = heroPosts[index]
+        let previousTarget = post.unit.targetSpawnID
+        guard post.movement.command(to: Point(point.x, point.y), unit: &post.unit) else { return false }
+        if previousTarget >= 0 {
+            post.enemySwingTicks[previousTarget] = nil
+            blockedWalkerIDs.remove(previousTarget)
         }
-        heroPosts[index].unit.state = .returning
-        heroPosts[index].unit.targetSpawnID = -1
+        heroPosts[index] = post
         selectedHeroIndex = nil
         publishHeroes()
+        return true
     }
 
     private func publishMilitia(alpha: Double = 1) {

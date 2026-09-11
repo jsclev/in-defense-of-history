@@ -1,0 +1,14 @@
+{
+  "source": "/Users/john/projects/td/in-defense-of-history/Db/level_15_charleston.geojson",
+  "source_sha256": "fa65e68824572da35146401758893c789fb74345f10cc7eb17d19a506d9a0df8",
+  "geometry_sha256": "49a6224118fd163551cb4273de5c9c624999562179e0b848900c9bd1637b9c8c",
+  "output_sha256": "434a21ab0efcfbb233cb1bab181cbde3b9d0379338fe81c51776226d74777a57",
+  "dimensions": [
+    2868,
+    2064
+  ],
+  "material": "/Users/john/projects/td/in-defense-of-history-data/Images/Level Maps/15/Path Revisions/2026-09-10-geojson/painted-soil-material.png",
+  "material_sha256": "eb6f30dff22b414828e04f7b401ad856e7ce5c4e9bdb07fb040bcf8a66bf49a5",
+  "feather_source_pixels": 4.0,
+  "supersample": 3
+}

@@ -1,0 +1,207 @@
+{
+  "generated_at": "2026-09-10T02:17:13.167413+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    "Production HudStatsView, minimum runtime canvas: {'fixture': 'minimum', 'font': 19.484740000000002, 'height': 33.232, 'state': 'start', 'width': 337.5651185142857}. macOS SwiftUI renderer with explicit value fixtures; not device gameplay."
+  ],
+  "assets": [
+    {
+      "id": "minimum-start",
+      "minimum_box_pt": 33.232,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              338,
+              34
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              676,
+              67
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1013,
+              100
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        33.232,
+        33.232
+      ],
+      "opaque_edge_touch_frames": [
+        "minimum-start"
+      ]
+    },
+    {
+      "id": "minimum-end",
+      "minimum_box_pt": 33.232,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              338,
+              34
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              676,
+              67
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1013,
+              100
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        33.232,
+        33.232
+      ],
+      "opaque_edge_touch_frames": [
+        "minimum-end"
+      ]
+    },
+    {
+      "id": "minimum-wide",
+      "minimum_box_pt": 33.232,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              338,
+              34
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              676,
+              67
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1013,
+              100
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        33.232,
+        33.232
+      ],
+      "opaque_edge_touch_frames": [
+        "minimum-wide"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-start@1x.png",
+      "sha256": "0956882d681cd82e1c0b7c2a1f8bbdd5efd397b4285d2575e3965eefd9c3fc03",
+      "dimensions": [
+        338,
+        34
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-start@2x.png",
+      "sha256": "afe21c47a67a665dd2ba77cb8ca3a6e7fbfdf1f7aa46777e30323aa382fed156",
+      "dimensions": [
+        676,
+        67
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-start@3x.png",
+      "sha256": "529143d8228c9636a5d5739cc1271f983bb9ee1c498ac667018bedbf7e36b0f9",
+      "dimensions": [
+        1013,
+        100
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-end@1x.png",
+      "sha256": "eefa653da86f37aadf7c9cbb762c0cc0ac7e6285b9aa5f0f71ec8049366f9f2c",
+      "dimensions": [
+        338,
+        34
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-end@2x.png",
+      "sha256": "d88909f29f5b4a5273b1aae3ec46287ed6ccf94384f0cff41874b8dc6efa6d9a",
+      "dimensions": [
+        676,
+        67
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-end@3x.png",
+      "sha256": "02cbec0f8639969f58140c9912d3e6e82050f875535cb97258b8971cde61a3df",
+      "dimensions": [
+        1013,
+        100
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-wide@1x.png",
+      "sha256": "5e5f50c2523abbdd8f19fef2099cbe9c81825f600bba613b14667fe8f65d9704",
+      "dimensions": [
+        338,
+        34
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-wide@2x.png",
+      "sha256": "cde21be1d312ab262d3608cd93e86f15dd64fe8a1434e89eae3ddb67ed2c0876",
+      "dimensions": [
+        676,
+        67
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-equal-height-2026-09-09/minimum-wide@3x.png",
+      "sha256": "6c09bc6b1db27f8799887740d93128f2dfc1ce92ee5215467c8e5cd262626b4b",
+      "dimensions": [
+        1013,
+        100
+      ]
+    }
+  ]
+}

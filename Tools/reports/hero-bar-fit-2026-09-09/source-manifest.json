@@ -1,0 +1,201 @@
+{
+  "reference_height": 340,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "battle-road",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "great-bridge",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png"
+    },
+    {
+      "id": "trenton",
+      "label": "trenton",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png"
+    }
+  ],
+  "assets": [
+    {
+      "id": "hero-0-ready",
+      "label": "hero-0-ready",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "hero-0-ready"
+          ],
+          "walk": [
+            "hero-0-ready"
+          ]
+        }
+      },
+      "files": {
+        "hero-0-ready": [
+          "hero-0-ready@1x.png",
+          "hero-0-ready@2x.png",
+          "hero-0-ready@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "hero-1-ready",
+      "label": "hero-1-ready",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "hero-1-ready"
+          ],
+          "walk": [
+            "hero-1-ready"
+          ]
+        }
+      },
+      "files": {
+        "hero-1-ready": [
+          "hero-1-ready@1x.png",
+          "hero-1-ready@2x.png",
+          "hero-1-ready@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "hero-0-hero-selected",
+      "label": "hero-0-hero-selected",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "hero-0-hero-selected"
+          ],
+          "walk": [
+            "hero-0-hero-selected"
+          ]
+        }
+      },
+      "files": {
+        "hero-0-hero-selected": [
+          "hero-0-hero-selected@1x.png",
+          "hero-0-hero-selected@2x.png",
+          "hero-0-hero-selected@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "reinforcement-placing",
+      "label": "reinforcement-placing",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "reinforcement-placing"
+          ],
+          "walk": [
+            "reinforcement-placing"
+          ]
+        }
+      },
+      "files": {
+        "reinforcement-placing": [
+          "reinforcement-placing@1x.png",
+          "reinforcement-placing@2x.png",
+          "reinforcement-placing@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "reinforcement-cooldown-20",
+      "label": "reinforcement-cooldown-20",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "reinforcement-cooldown-20"
+          ],
+          "walk": [
+            "reinforcement-cooldown-20"
+          ]
+        }
+      },
+      "files": {
+        "reinforcement-cooldown-20": [
+          "reinforcement-cooldown-20@1x.png",
+          "reinforcement-cooldown-20@2x.png",
+          "reinforcement-cooldown-20@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "reinforcement-cooldown-10",
+      "label": "reinforcement-cooldown-10",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "reinforcement-cooldown-10"
+          ],
+          "walk": [
+            "reinforcement-cooldown-10"
+          ]
+        }
+      },
+      "files": {
+        "reinforcement-cooldown-10": [
+          "reinforcement-cooldown-10@1x.png",
+          "reinforcement-cooldown-10@2x.png",
+          "reinforcement-cooldown-10@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "reinforcement-cooldown-1",
+      "label": "reinforcement-cooldown-1",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "states": {
+        "se": {
+          "idle": [
+            "reinforcement-cooldown-1"
+          ],
+          "walk": [
+            "reinforcement-cooldown-1"
+          ]
+        }
+      },
+      "files": {
+        "reinforcement-cooldown-1": [
+          "reinforcement-cooldown-1@1x.png",
+          "reinforcement-cooldown-1@2x.png",
+          "reinforcement-cooldown-1@3x.png"
+        ]
+      }
+    }
+  ],
+  "sizing_sources": [
+    "Current production HeroBarLayout and HUD views; unchanged 44.9556pt minimum buttons, 7pt proof padding. See layout.json for phone/tablet measurements."
+  ]
+}

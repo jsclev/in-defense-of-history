@@ -1,0 +1,39 @@
+01:14:19  Acquired tunnel connection to device.
+01:14:19  Enabling developer disk image services.
+01:14:19  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.hud-stats-probe
+• installationURL: file:///private/var/containers/Bundle/Application/6AA33002-71FD-46DF-9968-84F30C5F53D3/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5232
+• options: 
+01:14:38  Acquired tunnel connection to device.
+01:14:38  Enabling developer disk image services.
+01:14:38  Acquired usage assertion.
+Launched application with com.zippyzen.hud-stats-probe bundle identifier.
+01:14:58  Acquired tunnel connection to device.
+01:14:58  Enabling developer disk image services.
+01:14:58  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-smaller-stacked-2026-09-10/device-documents
+PASS: device HUD captures saved
+01:14:59  Acquired tunnel connection to device.
+01:14:59  Enabling developer disk image services.
+01:14:59  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.liberty-line
+• installationURL: file:///private/var/containers/Bundle/Application/F5EDC92E-9B8F-4984-83C4-7244DEC389EA/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5240
+• options: 
+01:15:15  Acquired tunnel connection to device.
+01:15:15  Enabling developer disk image services.
+01:15:15  Acquired usage assertion.
+Launched application with com.zippyzen.liberty-line bundle identifier.
+01:15:15  Acquired tunnel connection to device.
+01:15:15  Enabling developer disk image services.
+01:15:16  Acquired usage assertion.
+App uninstalled.
+COMPLETE: updated game installed and opened; diagnostic removed

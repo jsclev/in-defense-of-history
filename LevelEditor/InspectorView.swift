@@ -16,6 +16,8 @@ struct InspectorView: View {
                 slotsBox
                 entrancesBox
                 exitsBox
+                heroesBox
+                callWaveButtonsBox
                 selectionBox
                 wavesBox
                 solutionBox
@@ -105,6 +107,9 @@ struct InspectorView: View {
             return (path as NSString).lastPathComponent
         case .path:
             let n = document.draft.roads.count
+            if document.draft.flattenedPath != nil {
+                return n == 0 ? "flattened path" : "flattened path + \(n) editable"
+            }
             return n == 1 ? "1 path" : "\(n) paths"
         case .slots:
             let n = document.draft.slots.count
@@ -115,12 +120,19 @@ struct InspectorView: View {
         case .exits:
             let n = document.draft.exits.count
             return n == 1 ? "1 exit" : "\(n) exits"
+        case .callWaveButtons:
+            let n = document.draft.callWaveButtons.count
+            return n == 1 ? "1 button" : "\(n) buttons"
+        case .heroStarts:
+            return "\(document.draft.heroCount) heroes"
         case .occlusion:
             guard let path = document.draft.overlayImagePath else { return "empty" }
             return (path as NSString).lastPathComponent
         case .mapGuide:
             guard let path = document.draft.guideImagePath else { return "empty" }
             return (path as NSString).lastPathComponent
+        case .grid:
+            return "\(Int(state.grid.unit))-unit, major \(Int(state.grid.major))"
         }
     }
 
@@ -131,7 +143,7 @@ struct InspectorView: View {
                 Button("Choose…") { requestImport(.overlay) }
                 if document.draft.overlayImagePath != nil {
                     Button("Clear") {
-                        document.edit(undoManager) { $0.overlayImagePath = nil }
+                        document.edit(undoManager) { $0.overlayImagePath = nil; $0.overlayImageData = nil }
                     }
                 }
             }
@@ -155,7 +167,7 @@ struct InspectorView: View {
                 Button("Choose…") { requestImport(.guide) }
                 if document.draft.guideImagePath != nil {
                     Button("Clear") {
-                        document.edit(undoManager) { $0.guideImagePath = nil }
+                        document.edit(undoManager) { $0.guideImagePath = nil; $0.guideImageData = nil }
                     }
                 }
             }
@@ -182,7 +194,7 @@ struct InspectorView: View {
                 Button("Choose…") { requestImport(.background) }
                 if document.draft.backgroundImagePath != nil {
                     Button("Clear") {
-                        document.edit(undoManager) { $0.backgroundImagePath = nil }
+                        document.edit(undoManager) { $0.backgroundImagePath = nil; $0.backgroundImageData = nil }
                     }
                 }
             }
@@ -234,6 +246,18 @@ struct InspectorView: View {
     private var roadsBox: some View {
         GroupBox("Paths") {
             VStack(alignment: .leading, spacing: 6) {
+                if document.draft.flattenedPath != nil {
+                    HStack {
+                        Text("Imported flattened path")
+                        Spacer()
+                        Button("Remove") {
+                            document.edit(undoManager) { $0.flattenedPath = nil }
+                        }
+                    }
+                    Text("Use the painter or eraser to edit its area. Open the original .tdmap to edit its waypoints or playtest its routes.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
                 ForEach(document.draft.roads.indices, id: \.self) { ri in
                     roadRow(ri)
                 }
@@ -241,10 +265,10 @@ struct InspectorView: View {
                     document.edit(undoManager) { d in
                         d.roads.append(.init(
                             name: MapDraft.freeRoadName(taken: Set(d.roads.map(\.name))),
-                            points: [Point(2520, 1032), Point(2130, 1032)]
+                            points: [Point(2520, 1032), Point(2130, 1032)].map(state.snapped)
                         ))
                     }
-                    state.selection = .road(document.draft.roads.count - 1)
+                    state.selectFromInspector(.road(document.draft.roads.count - 1))
                 } label: {
                     Label("Add Path", systemImage: "plus")
                 }
@@ -304,7 +328,7 @@ struct InspectorView: View {
         .background(isSelected ? Color.cyan.opacity(0.12) : .clear,
                     in: RoundedRectangle(cornerRadius: 4))
         .contentShape(Rectangle())
-        .onTapGesture { state.selection = .road(ri) }
+        .onTapGesture { state.selectFromInspector(.road(ri)) }
     }
 
     private var slotsBox: some View {
@@ -353,12 +377,13 @@ struct InspectorView: View {
                     .background(selected ? Color.yellow.opacity(0.15) : .clear,
                                 in: RoundedRectangle(cornerRadius: 4))
                     .contentShape(Rectangle())
-                    .onTapGesture { state.selection = .slot(i) }
+                    .onTapGesture { state.selectFromInspector(.slot(i)) }
                 }
                 Button {
-                    state.selection = .slot(document.addSlot(
-                        at: Point(state.virtualCanvas.playAreaRect.midX, state.virtualCanvas.playAreaRect.midY),
-                        undoManager))
+                    state.selectFromInspector(.slot(document.addSlot(
+                        at: state.snapped(Point(state.virtualCanvas.playAreaRect.midX,
+                                                state.virtualCanvas.playAreaRect.midY)),
+                        undoManager)))
                 } label: {
                     Label("Add Slot", systemImage: "plus")
                 }
@@ -368,12 +393,65 @@ struct InspectorView: View {
         }
     }
 
+    private var callWaveButtonsBox: some View {
+        markerBox(title: "Call Wave Buttons", points: document.draft.callWaveButtons.map(\.position),
+                  select: { .callWaveButton($0) }, isSelected: { state.selection == .callWaveButton($0) },
+                  delete: { document.deleteCallWaveButton($0, undoManager) },
+                  add: { p in document.edit(undoManager) { $0.callWaveButtons.append(.init(position: p)) } },
+                  addLabel: "Add Call Wave Button")
+    }
+
     private var entrancesBox: some View {
         markerBox(title: "Entrances", points: document.draft.entrances,
                   select: { .entrance($0) }, isSelected: { state.selection == .entrance($0) },
                   delete: { document.deleteEntrance($0, undoManager) },
                   add: { p in document.edit(undoManager) { $0.entrances.append(p) } },
                   addLabel: "Add Entrance")
+    }
+
+    private var heroesBox: some View {
+        GroupBox("Heroes") {
+            VStack(alignment: .leading, spacing: 6) {
+                Picker("Available heroes", selection: document.binding(\.heroCount, undoManager)) {
+                    ForEach(0...2, id: \.self) { Text(String($0)).tag($0) }
+                }
+                ForEach(HeroSelection.Role.allCases, id: \.self) { role in
+                    heroStartRow(role)
+                }
+                Text("1 is the higher-ranked chosen hero; 2 is secondary. Select a hero tool, then click anywhere to set its starting position. Drag the marker or edit its X/Y below. Place a starting point for every available hero before exporting.")
+                    .font(.caption).foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func heroStartRow(_ role: HeroSelection.Role) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack {
+                Button {
+                    state.selectTool(role == .primary ? .primaryHero : .secondaryHero)
+                    state.selectFromInspector(.hero(role))
+                } label: {
+                    Label { Text(role.title) } icon: { HeroPlacementIcon.image(for: role) }
+                }
+                .help("Choose this tool, then click the map to place or move the starting position")
+                Spacer()
+                if document.draft.hasHero(role), document.draft.heroPosition(role) != nil {
+                    Button("Remove") {
+                        document.edit(undoManager) { $0.removeHeroStart(role) }
+                    }
+                    .help("Remove this starting point")
+                }
+            }
+            if document.draft.hasHero(role) {
+                if let position = document.draft.heroPosition(role) {
+                    Text("Start: \(position.x.formatted()) / \(position.y.formatted())")
+                        .font(.caption).foregroundStyle(.secondary)
+                } else {
+                    Text("Starting point not placed")
+                        .font(.caption).foregroundStyle(.orange)
+                }
+            }
+        }
     }
 
     private var exitsBox: some View {
@@ -416,11 +494,12 @@ struct InspectorView: View {
                     .background(isSelected(i) ? Color.yellow.opacity(0.15) : .clear,
                                 in: RoundedRectangle(cornerRadius: 4))
                     .contentShape(Rectangle())
-                    .onTapGesture { state.selection = select(i) }
+                    .onTapGesture { state.selectFromInspector(select(i)) }
                 }
                 Button {
-                    add(Point(state.virtualCanvas.playAreaRect.midX, state.virtualCanvas.playAreaRect.midY))
-                    state.selection = select(points.count)
+                    add(state.snapped(Point(state.virtualCanvas.playAreaRect.midX,
+                                            state.virtualCanvas.playAreaRect.midY)))
+                    state.selectFromInspector(select(points.count))
                 } label: {
                     Label(addLabel, systemImage: "plus")
                 }
@@ -434,25 +513,70 @@ struct InspectorView: View {
     private var selectionBox: some View {
         if let (label, get, set) = selectedPointAccessor() {
             GroupBox("Selected: \(label)") {
-                HStack {
-                    Text("X")
-                    TextField("X", value: Binding(
-                        get: { get().x },
-                        set: { nv in set(Point(nv, get().y)) }
-                    ), format: .number)
-                    Text("Y")
-                    TextField("Y", value: Binding(
-                        get: { get().y },
-                        set: { nv in set(Point(get().x, nv)) }
-                    ), format: .number)
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("X")
+                        TextField("X", value: Binding(
+                            get: { get().x },
+                            set: { nv in set(Point(nv, get().y)) }
+                        ), format: .number)
+                        Text("Y")
+                        TextField("Y", value: Binding(
+                            get: { get().y },
+                            set: { nv in set(Point(get().x, nv)) }
+                        ), format: .number)
+                    }
+                    if case let .callWaveButton(i) = state.selection,
+                       document.draft.callWaveButtons.indices.contains(i) {
+                        callWavePathsPicker(i)
+                    }
                 }
                 .padding(4)
             }
         }
     }
 
+    private func callWavePathsPicker(_ index: Int) -> some View {
+        let selected = document.draft.callWaveButtons[index].pathIndices
+        let authoredPaths = document.draft.callWaveButtons.flatMap { $0.pathIndices ?? [] }
+        let wavePaths = document.draft.waves.flatMap { $0.lines.map(\.road) }
+        let count = max(document.draft.entrances.count, document.draft.roads.count,
+                        (authoredPaths + wavePaths).max().map { $0 + 1 } ?? 1)
+        let label = selected.map { "Paths " + $0.map { String($0 + 1) }.joined(separator: ", ") } ?? "Every wave"
+        return HStack {
+            Text("Show for")
+            Menu(label) {
+                Button("Every wave") {
+                    document.edit(undoManager) { $0.callWaveButtons[index].pathIndices = nil }
+                }
+                ForEach(0..<count, id: \.self) { path in
+                    Toggle("Path \(path + 1)", isOn: Binding(
+                        get: { document.draft.callWaveButtons[index].pathIndices?.contains(path) == true },
+                        set: { enabled in
+                            document.edit(undoManager) { draft in
+                                var paths = Set(draft.callWaveButtons[index].pathIndices ?? [])
+                                if enabled { paths.insert(path) } else { paths.remove(path) }
+                                draft.callWaveButtons[index].pathIndices = paths.isEmpty ? nil : paths.sorted()
+                            }
+                        }))
+                }
+            }
+        }
+        .help("Show this button only when the upcoming wave uses a selected path. Path numbers match the gameplay routes.")
+    }
+
     private func selectedPointAccessor() -> (String, () -> Point, (Point) -> Void)? {
         switch state.selection {
+        case let .hero(role) where document.draft.heroMarkerPosition(role) != nil:
+            return ("\(role.title) start",
+                    { document.draft.heroMarkerPosition(role) ?? .zero },
+                    { p in document.edit(undoManager) { $0.placeHero(role, at: p) } })
+        case let .callWaveButton(i) where document.draft.callWaveButtons.indices.contains(i):
+            return ("Call wave button \(i)",
+                    { document.draft.callWaveButtons.indices.contains(i) ? document.draft.callWaveButtons[i].position : .zero },
+                    { p in document.edit(undoManager) { d in
+                        if d.callWaveButtons.indices.contains(i) { d.callWaveButtons[i].position = p }
+                    } })
         case let .slot(i) where document.draft.slots.indices.contains(i):
             return ("Slot \(i)",
                     { document.draft.slots.indices.contains(i) ? document.draft.slots[i] : .zero },
@@ -617,11 +741,13 @@ struct InspectorView: View {
                     get: { line()?.delay ?? 0 },
                     set: { nv in with { $0.delay = max(0, nv) } }
                 ))
-                if document.draft.roads.count > 1 {
+                let routeCount = document.draft.flattenedPath == nil
+                    ? document.draft.roads.count : document.draft.entrances.count
+                if routeCount > 1 {
                     Stepper(value: Binding(
                         get: { line()?.road ?? 0 },
                         set: { nv in with { $0.road = nv } }
-                    ), in: 0...(document.draft.roads.count - 1)) {
+                    ), in: 0...(routeCount - 1)) {
                         Text("road \(line()?.road ?? 0)")
                             .font(.caption)
                             .monospacedDigit()

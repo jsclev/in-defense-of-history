@@ -1,6 +1,6 @@
 {
-  "revision": "washington-upright-v6",
-  "description": "Upright sword and restrained illustration; production catalog integration",
+  "revision": "washington-east-offline-rig-v1",
+  "description": "East-facing prototype: 32 offline articulated frames from existing Washington artwork; other facings retain upright v6.",
   "frame_count": 16,
   "canvas_points_at_1x": [
     70,
@@ -1122,433 +1122,433 @@
       "name": "hero_unit_george_washington_walk_e_0",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_0.imageset/hero_unit_george_washington_walk_e_0.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_00@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_0@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "33481e817cc79e2f78a0a37813fae0412c7f1fcc969c387dccc2a37888f5b657"
+      "sha256": "311c5c490036d6fcd001088479b9752e8b9b7d0703783eac2a7548de70520ae8"
     },
     {
       "name": "hero_unit_george_washington_walk_e_0",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_0.imageset/hero_unit_george_washington_walk_e_0@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_00@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_0@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "d30bede2b1402c9e0106d7d0efb0e55d57337addcff8b8a045d657a4ef07e0cc"
+      "sha256": "1512a0638fc358aa52dcd6e160a42f68da485698d8cdc43c48f59e5c867c504a"
     },
     {
       "name": "hero_unit_george_washington_walk_e_0",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_0.imageset/hero_unit_george_washington_walk_e_0@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_00@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_0@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "844384850685986447f69a56a3b280eaea53e14ba16cd96a533628f647da58fb"
+      "sha256": "6c60c79b2e6878f24c2f9bf9a22fe58075bea2ce4e0d2d1b3e126ebe04df58c8"
     },
     {
       "name": "hero_unit_george_washington_walk_e_1",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_1.imageset/hero_unit_george_washington_walk_e_1.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_01@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_1@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "bbab9806df77ea9fd28e4f513b45ccc3f90d820244966c699740b6b8229c431b"
+      "sha256": "4b2ddf29b6657388c22bb76df1859d57247cebb7830b83989457ac31edfec39f"
     },
     {
       "name": "hero_unit_george_washington_walk_e_1",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_1.imageset/hero_unit_george_washington_walk_e_1@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_01@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_1@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "bcb43246b582c8be254e0d2d8dcc6ea94ded64615485d0ed3d77b9b73fb1aa0b"
+      "sha256": "7d3539533a4c08ccc49d05f7dff160ad9a8d29ef5e89982b6d53cf0f86fdb27d"
     },
     {
       "name": "hero_unit_george_washington_walk_e_1",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_1.imageset/hero_unit_george_washington_walk_e_1@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_01@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_1@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "3ac92bed22f800bd6025fb0f92c835e7be6e56e618c19877ffebf0017260e106"
+      "sha256": "cc44502d0c3415ed2b850608cada88d696548995f52127e3e66fdfb7dd068525"
     },
     {
       "name": "hero_unit_george_washington_walk_e_2",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_2.imageset/hero_unit_george_washington_walk_e_2.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_02@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_2@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "6bfb2a2be2e63a7a01258efcab440f983bc68b13243d2b01d0fe5ba27f222679"
+      "sha256": "236fff40c55e12ccfb2e33c37eed868c7c3273f48842bfc58fe3479b67e2cbc6"
     },
     {
       "name": "hero_unit_george_washington_walk_e_2",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_2.imageset/hero_unit_george_washington_walk_e_2@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_02@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_2@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "2f0e9f920e3152f92fd96887bdd60701bedfea21ac210d423033ce65f39954be"
+      "sha256": "006c8c8be094c35f46a687d5874e4f0e6d99939f5625ae3d131fd951e6e2c64d"
     },
     {
       "name": "hero_unit_george_washington_walk_e_2",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_2.imageset/hero_unit_george_washington_walk_e_2@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_02@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_2@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "409a57ad7188c2090e323bd153545f8039357703eb45903354684a6d9e826a06"
+      "sha256": "02dc7dbde69e249dd952be9531948ea5914bf0a114a8b0575d17f30e68fe6409"
     },
     {
       "name": "hero_unit_george_washington_walk_e_3",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_3.imageset/hero_unit_george_washington_walk_e_3.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_03@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_3@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "555331ef3adcaed17aa41b9f69a733f5ea55279e0ad2dd721ba30f3fe76b902c"
+      "sha256": "2aa6cfc9404ad2a70af18a15ac8a19ad126c8643395cfab0ffcb566633dfe4ac"
     },
     {
       "name": "hero_unit_george_washington_walk_e_3",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_3.imageset/hero_unit_george_washington_walk_e_3@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_03@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_3@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "d691f79b33e3082a14148bbc262a508392ea8e5de842c6f771626bc9add8845b"
+      "sha256": "f068897dd2e0240d604344c17931c05841d203d8f54005fe56ea615947fcbeb9"
     },
     {
       "name": "hero_unit_george_washington_walk_e_3",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_3.imageset/hero_unit_george_washington_walk_e_3@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_03@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_3@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "183ded394f187599d618720dcab2b7b293f7c3be0ba0593ec7bbe52c492c69a8"
+      "sha256": "609da40f86328cea82120fce11a2c28ec793c6c43e30ed3e944d7137b67abcd2"
     },
     {
       "name": "hero_unit_george_washington_walk_e_4",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_4.imageset/hero_unit_george_washington_walk_e_4.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_04@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_4@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "a8f578e43871e7d86a33eb9a9adcb020faee4f2e47eb2c8ccd09b50249511136"
+      "sha256": "334c26afb054efe2bb2c7a6b77965731c57d07e895917123ce7646ab96c5eaa0"
     },
     {
       "name": "hero_unit_george_washington_walk_e_4",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_4.imageset/hero_unit_george_washington_walk_e_4@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_04@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_4@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "79a80f7458ac5f78c2a7a19857cb2e055c885d76a221cda4a6d4f81b84181b98"
+      "sha256": "0cb75b698c381d0674e1e0a09360b31ba3e3311907edcdee477efc23cdb45bb5"
     },
     {
       "name": "hero_unit_george_washington_walk_e_4",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_4.imageset/hero_unit_george_washington_walk_e_4@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_04@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_4@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "1f60009fca547828e2ca931315f4db63bfcf3e130e546e617595f9981ebefe6a"
+      "sha256": "dcf8086953e9579b2177f6d1e64cd208f8aa037e4e21f10cb420c834afc8b505"
     },
     {
       "name": "hero_unit_george_washington_walk_e_5",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_5.imageset/hero_unit_george_washington_walk_e_5.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_05@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_5@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "7ceedbb1d97d675480fbeb8f6595504cd18f20959fe921723225cad874a67c0c"
+      "sha256": "a0b523bdde4112150c2cccefb5ed05927b513684fafef465e7eb50784e810116"
     },
     {
       "name": "hero_unit_george_washington_walk_e_5",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_5.imageset/hero_unit_george_washington_walk_e_5@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_05@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_5@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "9153074f00b9e8b05a56f59c8c24f28dd37f95eca4199f3fe81fa6e627e56001"
+      "sha256": "248fbc867252ccb50f925479ed9ad3d4b80fac4d2b7ebc970920c8f753d8309b"
     },
     {
       "name": "hero_unit_george_washington_walk_e_5",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_5.imageset/hero_unit_george_washington_walk_e_5@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_05@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_5@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "2ae6e9be6b7688ea19b4e0ea69b20387907058148adbaef3fcc40a87a6b2fc6a"
+      "sha256": "1e5c54dc04270028504439a040a6aa8324afcebc02acac5892241861942fa236"
     },
     {
       "name": "hero_unit_george_washington_walk_e_6",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_6.imageset/hero_unit_george_washington_walk_e_6.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_06@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_6@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "9fa46eb3fd7a8cc15e0790eb80eea2910788a97d0888dfcfae5bcebf1e9cd8f9"
+      "sha256": "279e1e87d70d80df19674cad3fe5a3f98d61771860ef82742ce0c27c22c9e20b"
     },
     {
       "name": "hero_unit_george_washington_walk_e_6",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_6.imageset/hero_unit_george_washington_walk_e_6@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_06@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_6@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "9bd82cc385112f1746edab0337853b43351744a036d905113b24bf2470d4d8a0"
+      "sha256": "f2f8d1a060e347a369fc5da49aefc8a99e94dec91cd98b688178724757edbc17"
     },
     {
       "name": "hero_unit_george_washington_walk_e_6",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_6.imageset/hero_unit_george_washington_walk_e_6@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_06@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_6@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "dc61b89e161b3148d0c2dd0eb74db81ad8758f42eae644219b577982732635d4"
+      "sha256": "5d5ee29ddfcf4fbead5756eea7603cbe5ceba5a8283f906a801b286c1ad0f6f8"
     },
     {
       "name": "hero_unit_george_washington_walk_e_7",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_7.imageset/hero_unit_george_washington_walk_e_7.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_07@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_7@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "a4fbcfce4ee0029f71c31b1979eeae0a15e284389f21d270ffaea8b4e6fb9719"
+      "sha256": "00604c0d1624b76ce59574f7f80649b288ad6af0b3e61c2df39546c4d27cf9a0"
     },
     {
       "name": "hero_unit_george_washington_walk_e_7",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_7.imageset/hero_unit_george_washington_walk_e_7@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_07@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_7@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "bd74fe7e54e33d9000b827c6a9c829b3f6ecbaa07aeb11a321a627c5a4d16ce5"
+      "sha256": "a7023026fed1b794ccde67083a3858b0adb667d90b261e50e7edeb518dbc79ca"
     },
     {
       "name": "hero_unit_george_washington_walk_e_7",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_7.imageset/hero_unit_george_washington_walk_e_7@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_07@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_7@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "e4fb0a9f54a80f427248f6bb83739688208e5266dca3ce3a9c2233e4b693b393"
+      "sha256": "85727cadf678a124e3a9e9b53bb3c08f3d50dc3ce96000f1ce3a26be53b13fa7"
     },
     {
       "name": "hero_unit_george_washington_walk_e_8",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_8.imageset/hero_unit_george_washington_walk_e_8.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_08@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_8@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "97548cf2fccf32647b7f0177dd3ac08b1b671862328f711ff31c7732f4841e45"
+      "sha256": "7ab1e2da92318c4dbad3b1c8164d8c940fa13f15cf4511c5b14bc6fe9c6a0393"
     },
     {
       "name": "hero_unit_george_washington_walk_e_8",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_8.imageset/hero_unit_george_washington_walk_e_8@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_08@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_8@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "653e81d8ea66f1913312bf6020ec5f9eef6a3c41def46a86ffe32a9fab49453a"
+      "sha256": "6313d5ae9970b88a1867bc892b397164ecf2707c01c0d5c1a704c9693e52546d"
     },
     {
       "name": "hero_unit_george_washington_walk_e_8",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_8.imageset/hero_unit_george_washington_walk_e_8@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_08@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_8@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "47db52d814238d9033d49b84028aef8f6fd3260ae289a34b6df6bc92bccda4c6"
+      "sha256": "a020184b600e8b79eb41ba5b0621847be38ec5d928eb79479640be37ff186248"
     },
     {
       "name": "hero_unit_george_washington_walk_e_9",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_9.imageset/hero_unit_george_washington_walk_e_9.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_09@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_9@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "c7b2554c0055354c6b545ded7212abc09c854cb28a23dba6598e7b18f20fd939"
+      "sha256": "7379f1a267a1bc755a31bf169b42bed6e64cef6ddf3a56f5ea0be22497eed47f"
     },
     {
       "name": "hero_unit_george_washington_walk_e_9",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_9.imageset/hero_unit_george_washington_walk_e_9@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_09@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_9@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "46b4639450cfbcdea5d9f07ee8bf5f700ce23af873d2cde38df4929869154be1"
+      "sha256": "b0c03bb593cc83c4941558e443b9159cea89509cf963c05ace2d47ba16f81c99"
     },
     {
       "name": "hero_unit_george_washington_walk_e_9",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_9.imageset/hero_unit_george_washington_walk_e_9@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_09@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_9@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "e6803f73b5a3ca856318b2e12b130e890ba20244714b79688c3edaaffc94fdd7"
+      "sha256": "c883b2649c52f1b0168e7797d91fa1e2e86fd4b3449601887a95e441208c5380"
     },
     {
       "name": "hero_unit_george_washington_walk_e_10",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_10.imageset/hero_unit_george_washington_walk_e_10.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_10@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_10@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "eb6bcb1687c9bb4d19171c2e318825df2b3f0e4b3269353d0d5fb7d6f2a2dc69"
+      "sha256": "135693762848491113b76325b64698f59277db1abd3b9188fdb229e0aabc77d5"
     },
     {
       "name": "hero_unit_george_washington_walk_e_10",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_10.imageset/hero_unit_george_washington_walk_e_10@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_10@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_10@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "d294ed46594b8c8e8c580975a3522d31014bd499920a9f6d5e55f3aa223b9d14"
+      "sha256": "97d7f2f4a4eb3a8ab2262719a6b826dda87776e02c81cc6c03ebbdc8500c820e"
     },
     {
       "name": "hero_unit_george_washington_walk_e_10",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_10.imageset/hero_unit_george_washington_walk_e_10@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_10@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_10@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "e2f32c3507a76e6bd3a38e66db1f86ce1be8784627bd1a6fa1cc644d2200d5c6"
+      "sha256": "4143e94c221cc73272179e7fc1ec0fdc4d466ab361cd959d93426f37395c5f10"
     },
     {
       "name": "hero_unit_george_washington_walk_e_11",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_11.imageset/hero_unit_george_washington_walk_e_11.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_11@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_11@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "f251707c41c4813bb52b07259f9be6eab9a8b9318b32df8c06c276f0e63384aa"
+      "sha256": "e9033dd3d23de6b17bc97ae1a4c202ed6c824513c0cc3f8bcbdaa4ddf809d41d"
     },
     {
       "name": "hero_unit_george_washington_walk_e_11",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_11.imageset/hero_unit_george_washington_walk_e_11@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_11@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_11@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "a4184b4027f194ba4ef00442a292ee15bfff79a68bb0fc4fea28cf503759b146"
+      "sha256": "c9c34fc06c6951e1f8ecd3e4b3f12c99b310935a425d8879c99535eb600941c4"
     },
     {
       "name": "hero_unit_george_washington_walk_e_11",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_11.imageset/hero_unit_george_washington_walk_e_11@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_11@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_11@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "cb56dc5bf02073f4d194da020ec367983dfaab62cbd0ef731e15b30df6c781d3"
+      "sha256": "d28d72d3b876ae908be1373564fe6d7b2cebf93aa0c2821f268589a0d58064b3"
     },
     {
       "name": "hero_unit_george_washington_walk_e_12",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_12.imageset/hero_unit_george_washington_walk_e_12.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_12@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_12@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "346ad74d9bdc7dc2ace3e65197039b5ad83ccbfc15249639d07c030c3aab9640"
+      "sha256": "8860878e4adbbbef00ca7b75a07dd9966d1e6b07cba18d88b24428bed68950fb"
     },
     {
       "name": "hero_unit_george_washington_walk_e_12",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_12.imageset/hero_unit_george_washington_walk_e_12@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_12@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_12@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "f89ce2cee1ee8cd9cddcf8154fecd40f493c519d4e0797f81c60542745d0bc14"
+      "sha256": "640da7ee174772f5bac533ce9cfc8fe5cfb1d9ffe21821240e4564a03487b585"
     },
     {
       "name": "hero_unit_george_washington_walk_e_12",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_12.imageset/hero_unit_george_washington_walk_e_12@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_12@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_12@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "e66514f5912cf6debe47adfd2b7365214c00887966ea29d73fb74f48b2e8421e"
+      "sha256": "e54cfedd0ed888c9913b6eb3d2a9d28fd4de24dd67027dd98b67f3549821455c"
     },
     {
       "name": "hero_unit_george_washington_walk_e_13",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_13.imageset/hero_unit_george_washington_walk_e_13.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_13@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_13@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "884d69c3eb7e1f9a416f8a960b1ac29f4d876d4fd112a6db074d204fadb13ee0"
+      "sha256": "1c354fc22b10c62758f15972ea331e2b30da83a96edb888fb29daadf4846c09f"
     },
     {
       "name": "hero_unit_george_washington_walk_e_13",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_13.imageset/hero_unit_george_washington_walk_e_13@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_13@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_13@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "4ac39477d2479a6fdf20cef22bba3602bd707239ca73c36187ba7bf42c1d8824"
+      "sha256": "f66b96ebca99c1977b3f161cf0c1660d0182ff69fa8a9846b292ccdfec1a2274"
     },
     {
       "name": "hero_unit_george_washington_walk_e_13",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_13.imageset/hero_unit_george_washington_walk_e_13@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_13@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_13@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "bb80a22a0abb23f8adfd9463dc390e30860bf34a9582af74083dcf78720b4a65"
+      "sha256": "0f9b8019a0fbd9016df3d3de91d5bd1ebc15cbc1eaf3dc2af0baed9a0be2838c"
     },
     {
       "name": "hero_unit_george_washington_walk_e_14",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_14.imageset/hero_unit_george_washington_walk_e_14.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_14@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_14@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "73b11c26f1a8c980b2f2794ca8a33530f6172ff19c5ba6c372a72cdcb57ef4bf"
+      "sha256": "60df1af91fde5999ef4e71a4723e313afc0f48e91953847497c433dca264c92c"
     },
     {
       "name": "hero_unit_george_washington_walk_e_14",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_14.imageset/hero_unit_george_washington_walk_e_14@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_14@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_14@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "e766cb6cd232612451d4a729d07fe823512adfaa8dc5bee544dd96e0b773ff41"
+      "sha256": "82a3156531c6a2a37cf45ff2fc90572d37924a1782123344f6e973f8260a46a3"
     },
     {
       "name": "hero_unit_george_washington_walk_e_14",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_14.imageset/hero_unit_george_washington_walk_e_14@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_14@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_14@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "477d58d813a45f900cae0ccb67a0c03b9070ca1adff64e597201694e2fe7430a"
+      "sha256": "47df4d621c9fd91f000690a08cf9ef2ccd88de2a99f575048383b515dd601d7e"
     },
     {
       "name": "hero_unit_george_washington_walk_e_15",
       "scale": 1,
       "file": "hero_unit_george_washington_walk_e_15.imageset/hero_unit_george_washington_walk_e_15.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_15@1x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_15@1x.png",
       "width": 70,
       "height": 90,
-      "sha256": "960b06dc7c4b08c519a56f05938b9c507043e61eb818c7bb9ff0502d15274593"
+      "sha256": "df145bd6bde454b27f4778fa123867629101b96450d17cda24e84d4058e0573d"
     },
     {
       "name": "hero_unit_george_washington_walk_e_15",
       "scale": 2,
       "file": "hero_unit_george_washington_walk_e_15.imageset/hero_unit_george_washington_walk_e_15@2x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_15@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_15@2x.png",
       "width": 140,
       "height": 180,
-      "sha256": "460cde36d6a6fca711628a5079242373bd3d53f0a9c7e9c56d77b8cd8f9e4b3d"
+      "sha256": "a3acd3c7050ce6bbb23ceedeec6df638d7b155f4280809d94bff9759045b4cf3"
     },
     {
       "name": "hero_unit_george_washington_walk_e_15",
       "scale": 3,
       "file": "hero_unit_george_washington_walk_e_15.imageset/hero_unit_george_washington_walk_e_15@3x.png",
-      "source": "Images/HeroUnits/Revisions/2026-09-07-washington-small-size/deliverables/frames/walk_e_15@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_15@3x.png",
       "width": 210,
       "height": 270,
-      "sha256": "db7eee47f22a76bd442e18b776076e461395acff5c08f6bf6bc4b43ece3d2f50"
+      "sha256": "e3829346e91c41fb32a88f2a1075c7c4c5e5a59d64fb10f27d27463c4bfaadf9"
     },
     {
       "name": "hero_unit_george_washington_walk_se_0",
@@ -3709,6 +3709,448 @@
       "width": 210,
       "height": 270,
       "sha256": "f0bdbe191ea9490e0efc37513d89516b7619cb458d323c74435194b27ca1f44a"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_16",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_16.imageset/hero_unit_george_washington_walk_e_16.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_16@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "19b97e3a748ab747e90459820575cbedcecec4959608f88b63bee763f97c8202"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_16",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_16.imageset/hero_unit_george_washington_walk_e_16@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_16@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "8b664b874048a42ef2ef46ed4b9ea94213309d55df444efe84f5398e5557122b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_16",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_16.imageset/hero_unit_george_washington_walk_e_16@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_16@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "92b606636a77e7a3787409a1a2ab13a14a5285dcac9a2968b215650a3cd7f74e"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_17",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_17.imageset/hero_unit_george_washington_walk_e_17.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_17@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "67936f1f9647079fb80fcbea476efee725a6d35ace24766fe62189877f69c98d"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_17",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_17.imageset/hero_unit_george_washington_walk_e_17@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_17@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "b558b0ee3bb53c4986049db76f795757dff0468a2a7a7b130a554ea0a6ed502b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_17",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_17.imageset/hero_unit_george_washington_walk_e_17@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_17@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "23ee1591ad6bb91041facf59e35d89175021e8df451f769fbd1ab3fc1c60ca8a"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_18",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_18.imageset/hero_unit_george_washington_walk_e_18.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_18@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "a08e13cae7a57ffa276e93e69f60964c84f3564483597f30872c5ec5c6614e02"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_18",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_18.imageset/hero_unit_george_washington_walk_e_18@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_18@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "fb914072a7e465df2003338d82be946cab49358f62131c03b136165603d6f2fc"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_18",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_18.imageset/hero_unit_george_washington_walk_e_18@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_18@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "773a77fc8aca0d7c5da3790bddb90b75fedb87e8d7c6864c79fcfd50683ebd2e"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_19",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_19.imageset/hero_unit_george_washington_walk_e_19.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_19@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "0703b606fd5bfb13cd85a81898894a03bacf55a033722b9a734d0c32d1350921"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_19",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_19.imageset/hero_unit_george_washington_walk_e_19@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_19@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "239ff3578e1bf9e4b807fe16c731d096f6233d038734887b670c978b6df75e31"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_19",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_19.imageset/hero_unit_george_washington_walk_e_19@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_19@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "fccc923bd53d00a7290f7071f710ccc539f66eed0f1c66b3556931f5c0dfe87c"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_20",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_20.imageset/hero_unit_george_washington_walk_e_20.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_20@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "9b756201622aa423190142822801278406e2d765c6d322929b22d64c4234cf00"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_20",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_20.imageset/hero_unit_george_washington_walk_e_20@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_20@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "e440f26aa627145fa61048540dfc6bb0f17c2b3414e81183b575d59caf14cdef"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_20",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_20.imageset/hero_unit_george_washington_walk_e_20@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_20@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "9667e442f1e777481dc06440a223456ff450c0a14a76c093859256a20fe9c471"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_21",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_21.imageset/hero_unit_george_washington_walk_e_21.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_21@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "4224f6ce26647112683fa175d11a4967d4a03252497ca9cf7346cff93cd7681e"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_21",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_21.imageset/hero_unit_george_washington_walk_e_21@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_21@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "66acf16e99ea48c033d378ff23c7a0a78cdd283a8753b6145e36d59c763546c2"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_21",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_21.imageset/hero_unit_george_washington_walk_e_21@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_21@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "f32925266c7fe239dd3deaa7d6ef8fa52116353771af6a05bebd55ee902caf6b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_22",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_22.imageset/hero_unit_george_washington_walk_e_22.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_22@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "df221ce98b6137fde870adc727523ea21cef346f0341ef96ad833d899e789ece"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_22",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_22.imageset/hero_unit_george_washington_walk_e_22@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_22@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "81fbb4992e23078808b6c20aff10b3d3228600d5c7c41c62f581ed67c44ead13"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_22",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_22.imageset/hero_unit_george_washington_walk_e_22@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_22@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "7490ec1a56769232c76cd3880f28f8aa4b7ccf751412e374ea83af460bf9303f"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_23",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_23.imageset/hero_unit_george_washington_walk_e_23.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_23@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "ac1436cef4f94fc7071aa5e4565944fbfb7a6a2bc1ebdf41246eb2445e209c38"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_23",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_23.imageset/hero_unit_george_washington_walk_e_23@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_23@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "86ae68b8190f517001af38f5854056d9fb54f538463ce114adb1bf0137064c9f"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_23",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_23.imageset/hero_unit_george_washington_walk_e_23@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_23@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "587f355afa35560d0a9cf119001dfc2f581fb401d11509f4fd4f76311d5ce6c8"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_24",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_24.imageset/hero_unit_george_washington_walk_e_24.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_24@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "ee8fdf7f424256b5e4ccdb902d3dad7e73ad978d9549dfc35fe4e7c84b65ef4f"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_24",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_24.imageset/hero_unit_george_washington_walk_e_24@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_24@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "36bb08a5a62fa24349fb695813aba1f745a6ba35949bb18abcdee639780bc72a"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_24",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_24.imageset/hero_unit_george_washington_walk_e_24@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_24@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "beb664daee3baea23d34edd609d404ef9c2cebe24e4f6b50a1eac409a6f3cd8b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_25",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_25.imageset/hero_unit_george_washington_walk_e_25.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_25@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "028b0ed2bb67d561bd783d37f4164d34ab57b74cd299e08e70950fe29bd27b8e"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_25",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_25.imageset/hero_unit_george_washington_walk_e_25@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_25@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "6cb5c832c0c1df5b8f01f54e602550918ae055b0b82df551518db27872199a1b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_25",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_25.imageset/hero_unit_george_washington_walk_e_25@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_25@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "8274058370b3e0173c3461845b006c52c73b839f91c01b57c4b8d570fdd998e0"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_26",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_26.imageset/hero_unit_george_washington_walk_e_26.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_26@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "25c157767015a3068c7b66d6f231731f02829c19dbd1b3905877599e1261f3f1"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_26",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_26.imageset/hero_unit_george_washington_walk_e_26@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_26@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "2f484942ca13e84b14e1a8e41ce41b66cbb3329ed48ab69c6bfe6b56fb4bd8cd"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_26",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_26.imageset/hero_unit_george_washington_walk_e_26@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_26@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "1e51d951aa6c32bab68b75fc161df19b29e5b76e1eb67ef61cb7b3f1cc140727"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_27",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_27.imageset/hero_unit_george_washington_walk_e_27.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_27@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "29ce006746dcb0c84b88b27f3ca8f731eb50c339e775def96dd98c1a55121533"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_27",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_27.imageset/hero_unit_george_washington_walk_e_27@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_27@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "810313af48cc34274ade4bfa633091f8bfed06327300859bdd1bf62748cc2e1b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_27",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_27.imageset/hero_unit_george_washington_walk_e_27@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_27@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "4bc5719eb9411bc4d4df8a6e8d956a54346246850346caef462491f1a2fa1cae"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_28",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_28.imageset/hero_unit_george_washington_walk_e_28.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_28@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "74cd46727d722480c332b6e4687ffa4267d93c3a9ed81fb542f83bf53d10a857"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_28",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_28.imageset/hero_unit_george_washington_walk_e_28@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_28@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "6957a8164b63712e8bb1f6ac3fe2b139a85e85f8c5b96ac037dcb93b6d9fa712"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_28",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_28.imageset/hero_unit_george_washington_walk_e_28@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_28@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "4783f989b625f50c325ed23a06578559b8b0e63b50d9a09063b3e499bb924e23"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_29",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_29.imageset/hero_unit_george_washington_walk_e_29.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_29@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "b7fcd2777e0083b4e67749cadee940403f6a74b6b1610839e4d95fc808a18a4d"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_29",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_29.imageset/hero_unit_george_washington_walk_e_29@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_29@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "bcc40269e9b24110a5fe83d119b117ec7191b2a6a8dd998e58f88eabfb99475a"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_29",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_29.imageset/hero_unit_george_washington_walk_e_29@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_29@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "02245787d204df977c4a05d9e3201221067a119836c0620edf6cc281c3083584"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_30",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_30.imageset/hero_unit_george_washington_walk_e_30.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_30@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "fc3beb624c89e5c9aa95df5c2b829d28f798ab5e7c2b9e06a62d564b1ae1b53b"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_30",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_30.imageset/hero_unit_george_washington_walk_e_30@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_30@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "4f86c2346469155c7edffa35643cfca1c84c7f5d1dfbcf6c70b1a54c2f6bb2ee"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_30",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_30.imageset/hero_unit_george_washington_walk_e_30@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_30@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "f20bf5c3127a7ba8db0bb44c90c84b7a1e9f6fb50c56a70a21f6005b8aef7619"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_31",
+      "scale": 1,
+      "file": "hero_unit_george_washington_walk_e_31.imageset/hero_unit_george_washington_walk_e_31.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_31@1x.png",
+      "width": 70,
+      "height": 90,
+      "sha256": "e5c728aee265ab0425d08d775774133e862a30e31e2e05876c222af0ac200a24"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_31",
+      "scale": 2,
+      "file": "hero_unit_george_washington_walk_e_31.imageset/hero_unit_george_washington_walk_e_31@2x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_31@2x.png",
+      "width": 140,
+      "height": 180,
+      "sha256": "619af474203cb678b7f8d090ba52ab9b2a02eb4634c09761d88a0eb6fe070c6c"
+    },
+    {
+      "name": "hero_unit_george_washington_walk_e_31",
+      "scale": 3,
+      "file": "hero_unit_george_washington_walk_e_31.imageset/hero_unit_george_washington_walk_e_31@3x.png",
+      "source": "Images/HeroUnits/Rigs/WashingtonEast/frames/e_31@3x.png",
+      "width": 210,
+      "height": 270,
+      "sha256": "6c26fc81eb6fb62d51f2906acd6dc7cf00beaf89d86b7ef3960a38373748966a"
     }
-  ]
+  ],
+  "frame_counts_by_direction": {
+    "n": 16,
+    "ne": 16,
+    "e": 32,
+    "se": 16,
+    "s": 16,
+    "sw": 16,
+    "w": 16,
+    "nw": 16
+  }
 }

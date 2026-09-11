@@ -1,0 +1,44 @@
+[
+  {
+    "fixture" : "minimum",
+    "font" : 15.174500000000002,
+    "height" : 27.032,
+    "state" : "start",
+    "width" : 313.42777451428572
+  },
+  {
+    "fixture" : "minimum",
+    "font" : 15.174500000000002,
+    "height" : 27.032,
+    "state" : "end",
+    "width" : 313.43419594285717
+  },
+  {
+    "fixture" : "minimum",
+    "font" : 15.174500000000002,
+    "height" : 27.032,
+    "state" : "wide",
+    "width" : 313.43419594285717
+  },
+  {
+    "fixture" : "phone",
+    "font" : 15.174500000000002,
+    "height" : 27.032,
+    "state" : "start",
+    "width" : 313.43419594285717
+  },
+  {
+    "fixture" : "phone",
+    "font" : 15.174500000000002,
+    "height" : 27.032,
+    "state" : "end",
+    "width" : 313.43419594285717
+  },
+  {
+    "fixture" : "phone",
+    "font" : 15.174500000000002,
+    "height" : 27.032,
+    "state" : "wide",
+    "width" : 313.43419594285717
+  }
+]

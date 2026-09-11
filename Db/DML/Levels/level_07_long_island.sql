@@ -16,20 +16,6 @@ INSERT INTO level_info (
     'level_007_long_island'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('4713be0d-9a81-5b7f-bba6-0c9eb18fd6f4', '99633efd-f135-44fc-8248-b8635a6db957', 1384.0, 1316.9),
-('25764831-8f4c-5e86-b0fe-2a1b636aaf8c', '99633efd-f135-44fc-8248-b8635a6db957', 1599.3, 1318.7),
-('ca7f4e60-7983-5e48-9f2e-604f28e4667d', '99633efd-f135-44fc-8248-b8635a6db957', 1447.8, 1172.3),
-('ab615221-8142-5352-93cc-d752e2307164', '99633efd-f135-44fc-8248-b8635a6db957', 972.4, 1100.0),
-('18eb6fed-71b0-5b88-83ba-0453fc414d38', '99633efd-f135-44fc-8248-b8635a6db957', 1051.6, 1034.6),
-('e06b00d3-c5b2-50af-8218-6da31be5c343', '99633efd-f135-44fc-8248-b8635a6db957', 996.5, 864.2),
-('a3d411df-9930-5ddf-8540-81e26f60c185', '99633efd-f135-44fc-8248-b8635a6db957', 1349.6, 864.2),
-('ed8bdb0b-bba2-5c66-887f-b007823d28ff', '99633efd-f135-44fc-8248-b8635a6db957', 1509.8, 890.0),
-('b65f217c-24f0-5a01-8912-4bf7c7b716e3', '99633efd-f135-44fc-8248-b8635a6db957', 1833.6, 981.2),
-('a3b8183d-c4a7-5fd4-b8d7-d4836c89e7b8', '99633efd-f135-44fc-8248-b8635a6db957', 1962.8, 910.7);
-
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

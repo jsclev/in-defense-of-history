@@ -1,0 +1,10 @@
+{
+  "iphone_build": "SUCCEEDED",
+  "bundled_config": {
+    "time_to_live_seconds": 20.0,
+    "cooldown_seconds": 20.0
+  },
+  "sqlite_integrity": "ok",
+  "source_schema_sha256": "d685038944e93e28095f92fffb78153fba45f04f3d8dde08bf880dad6e6f53f1",
+  "source_seed_sha256": "a7da9a5c66d90b283a0278d1b4aac666517a1abd235ca390dcf33a42686ffa1a"
+}

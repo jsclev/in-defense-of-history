@@ -1,0 +1,20 @@
+00:11:41  Acquired tunnel connection to device.
+00:11:42  Enabling developer disk image services.
+00:11:42  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.reinforcements-blue-probe
+• installationURL: file:///private/var/containers/Bundle/Application/FEC719BF-F537-4E33-9C21-0DB64677FCD0/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5128
+• options: 
+00:12:12  Acquired tunnel connection to device.
+00:12:12  Enabling developer disk image services.
+00:12:13  Acquired usage assertion.
+Launched application with com.zippyzen.reinforcements-blue-probe bundle identifier.
+00:12:21  Acquired tunnel connection to device.
+00:12:21  Enabling developer disk image services.
+00:12:21  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/reinforcements-blue-frame-2026-09-10/device-documents
+PASS: production reinforcement button and live HUD captured at minimum and device sizes.

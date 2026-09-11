@@ -1,0 +1,21 @@
+[
+  {
+    "AssetType": "Image",
+    "BitsPerComponent": 8,
+    "ColorModel": "RGB",
+    "Colorspace": "srgb",
+    "Compression": "deepmap2",
+    "Encoding": "ARGB",
+    "Idiom": "universal",
+    "Name": "hud_hero_george_washington_framed",
+    "NameIdentifier": 20462,
+    "Opaque": true,
+    "PixelHeight": 384,
+    "PixelWidth": 384,
+    "RenditionName": "hud_hero_george_washington_framed@3x.png",
+    "Scale": 3,
+    "SHA1Digest": "11E628C43A592CC02C6C1F0226A22B2AF7176E86168A07A17F12A0F9C9F157BE",
+    "SizeOnDisk": 204326,
+    "Template Mode": "automatic"
+  }
+]

@@ -1,0 +1,1664 @@
+{
+  "checks" : [
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2206.731414314122,
+            1108.5614489747068
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            2206.731414314122,
+            1108.5614489747068
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1120,
+            1150.5614489747068
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1120,
+            1150.5614489747068
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2035.9069017793026,
+            1420.2000000000003
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            2035.9069017793026,
+            1420.2000000000003
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2078.1999999999998,
+            674.66144897470679
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            2078.1999999999998,
+            674.66144897470679
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1053.3,
+            1208.3614489747069
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1053.3,
+            1208.3614489747069
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1284.2,
+            1208.3614489747069
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1284.2,
+            1208.3614489747069
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1773.3,
+            1181.8287124479516
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1773.3,
+            1181.8287124479516
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1501.2,
+            1237.6231971047255
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1237.6231971047255
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1366.5775638255634,
+            1242.9118221258855
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1366.5775638255634,
+            1242.9118221258855
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1337.5,
+            803.76144897470681
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1337.5,
+            803.76144897470681
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1647.5999999999999,
+            809.92871244795174
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1647.5999999999999,
+            809.92871244795174
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            958.59999999999991,
+            1238.5589882709646
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            958.59999999999991,
+            1238.5589882709646
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            2022.3660262846713,
+            1428.5276132921244
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2022.3660262846713,
+            1428.5276132921244
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1806,
+            812.56144897470676
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            812.56144897470676
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1671.3775638255634,
+            792
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1671.3775638255634,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1544.2,
+            1237.6231971047255
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1237.6231971047255
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1409.5775638255636,
+            1242.9118221258855
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1409.5775638255636,
+            1242.9118221258855
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            733.16830713434649,
+            1190
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            733.16830713434649,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            690.78717705794702,
+            930.72871244795169
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            690.78717705794702,
+            930.72871244795169
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1360,
+            555.56144897470676
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1360,
+            555.56144897470676
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            2025,
+            561.72871244795169
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2025,
+            561.72871244795169
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            660.39309822069731,
+            1216.0999999999999
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            660.39309822069731,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            557.63397371532858,
+            968.32871244795172
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            557.63397371532858,
+            968.32871244795172
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "George Washington",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2206.731414314122,
+            1108.5614489747068
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2206.731414314122,
+            1108.5614489747068
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1120,
+            1150.5614489747068
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1150.5614489747068
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2035.9069017793026,
+            1420.2000000000003
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2035.9069017793026,
+            1420.2000000000003
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2078.1999999999998,
+            674.66144897470679
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            674.66144897470679
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1053.3,
+            1208.3614489747069
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1208.3614489747069
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1284.2,
+            1208.3614489747069
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1208.3614489747069
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1501.2,
+            1237.6231971047255
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1237.6231971047255
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1337.5,
+            803.76144897470681
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            803.76144897470681
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            958.59999999999991,
+            1238.5589882709646
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            958.59999999999991,
+            1238.5589882709646
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1806,
+            812.56144897470676
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            812.56144897470676
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1544.2,
+            1237.6231971047255
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1237.6231971047255
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            733.16830713434649,
+            1190
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            733.16830713434649,
+            1190
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1360,
+            555.56144897470676
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            555.56144897470676
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            660.39309822069731,
+            1216.0999999999999
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            660.39309822069731,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2206.731414314122,
+            1108.5614489747068
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2206.731414314122,
+            1108.5614489747068
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1120,
+            1150.5614489747068
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1150.5614489747068
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2035.9069017793026,
+            1420.2000000000003
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2035.9069017793026,
+            1420.2000000000003
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            2078.1999999999998,
+            674.66144897470679
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            674.66144897470679
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1053.3,
+            1208.3614489747069
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1208.3614489747069
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1284.2,
+            1208.3614489747069
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1208.3614489747069
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1773.3,
+            1181.8287124479516
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1773.3,
+            1181.8287124479516
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1501.2,
+            1237.6231971047255
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1237.6231971047255
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1366.5775638255634,
+            1242.9118221258855
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1366.5775638255634,
+            1242.9118221258855
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1337.5,
+            803.76144897470681
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            803.76144897470681
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1647.5999999999999,
+            809.92871244795174
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1647.5999999999999,
+            809.92871244795174
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            958.59999999999991,
+            1238.5589882709646
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            958.59999999999991,
+            1238.5589882709646
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            2022.3660262846713,
+            1428.5276132921244
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            2022.3660262846713,
+            1428.5276132921244
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1806,
+            812.56144897470676
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            812.56144897470676
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1671.3775638255634,
+            792
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1671.3775638255634,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1544.2,
+            1237.6231971047255
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1237.6231971047255
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1409.5775638255636,
+            1242.9118221258855
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1409.5775638255636,
+            1242.9118221258855
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            733.16830713434649,
+            1190
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            733.16830713434649,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            690.78717705794702,
+            930.72871244795169
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            690.78717705794702,
+            930.72871244795169
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1360,
+            555.56144897470676
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            555.56144897470676
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            2025,
+            561.72871244795169
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            2025,
+            561.72871244795169
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            660.39309822069731,
+            1216.0999999999999
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            660.39309822069731,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            557.63397371532858,
+            968.32871244795172
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            557.63397371532858,
+            968.32871244795172
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "authoredPosition" : [
+            1520.25,
+            1100.75
+          ],
+          "featureID" : "gameplay.hero_spawn.primary",
+          "hero" : "Henry Knox",
+          "position" : [
+            1520.25,
+            1100.75
+          ],
+          "role" : "primary"
+        },
+        {
+          "authoredPosition" : [
+            1700.5,
+            900.125
+          ],
+          "featureID" : "gameplay.hero_spawn.secondary",
+          "hero" : "George Washington",
+          "position" : [
+            1700.5,
+            900.125
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    }
+  ],
+  "loads" : 54,
+  "passed" : true,
+  "runID" : "c8f247fc-2c43-4879-a45a-4293a7592e7f",
+  "waveChecks" : [
+    {
+      "enemies" : 16,
+      "startSeconds" : 0,
+      "wave" : 1
+    },
+    {
+      "enemies" : 20,
+      "startSeconds" : 32,
+      "wave" : 2
+    },
+    {
+      "enemies" : 20,
+      "startSeconds" : 66,
+      "wave" : 3
+    },
+    {
+      "enemies" : 23,
+      "startSeconds" : 100,
+      "wave" : 4
+    },
+    {
+      "enemies" : 26,
+      "startSeconds" : 135,
+      "wave" : 5
+    },
+    {
+      "enemies" : 28,
+      "startSeconds" : 171,
+      "wave" : 6
+    },
+    {
+      "enemies" : 24,
+      "startSeconds" : 208,
+      "wave" : 7
+    },
+    {
+      "enemies" : 28,
+      "startSeconds" : 246,
+      "wave" : 8
+    },
+    {
+      "enemies" : 26,
+      "startSeconds" : 285,
+      "wave" : 9
+    },
+    {
+      "enemies" : 32,
+      "startSeconds" : 325,
+      "wave" : 10
+    },
+    {
+      "enemies" : 29,
+      "startSeconds" : 366,
+      "wave" : 11
+    },
+    {
+      "enemies" : 32,
+      "startSeconds" : 408,
+      "wave" : 12
+    },
+    {
+      "enemies" : 34,
+      "startSeconds" : 451,
+      "wave" : 13
+    },
+    {
+      "enemies" : 36,
+      "startSeconds" : 495,
+      "wave" : 14
+    },
+    {
+      "enemies" : 50,
+      "startSeconds" : 540,
+      "wave" : 15
+    }
+  ]
+}

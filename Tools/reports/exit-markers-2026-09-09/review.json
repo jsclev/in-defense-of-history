@@ -1,0 +1,116 @@
+{
+  "date": "2026-09-09",
+  "asset": "path_exit_rounded_x",
+  "authoredExitFeatures": 26,
+  "levels": 15,
+  "minimumSourceBoxPoints": [
+    32,
+    32
+  ],
+  "verticalFraction": 0.7,
+  "minimumDisplayBoxPoints": [
+    32,
+    22.4
+  ],
+  "drawOrder": "Immediately after art.occlusion, the final map-art layer",
+  "results": {
+    "geojsonCoordinatesOnPhysicalIPhone": {
+      "status": "PASS",
+      "features": 26,
+      "evidence": "exit-markers.json"
+    },
+    "squareMarkerDeviceRasterBounds": {
+      "status": "PASS",
+      "checks": 52,
+      "scope": "Before perspective adjustment",
+      "evidence": "raster-checks.json"
+    },
+    "squareMarkerDeviceLayering": {
+      "status": "PASS",
+      "scope": "Battle Road, Trenton, Charleston; native-size familiar-agent inspection",
+      "evidence": "device-documents/"
+    },
+    "sourceArtLab": {
+      "status": "PASS",
+      "scope": "Square source asset, familiar-agent shape review",
+      "evidence": "lab/"
+    },
+    "finalPerspectiveMinimumShape": {
+      "status": "PASS",
+      "scope": "macOS SwiftUI host rendering; native 1x familiar-agent review; identifiable four-arm red X",
+      "evidence": "ground-plane@1x.png"
+    },
+    "finalPerspectiveHostRasterBounds": {
+      "status": "PASS",
+      "densities": [
+        1,
+        2,
+        3
+      ],
+      "evidence": "ground-plane-checks.json"
+    },
+    "independentPlayerInterpretation": {
+      "status": "NOT MEASURED"
+    },
+    "finalPerspectivePhysicalDeviceVisualReview": {
+      "status": "NOT MEASURED"
+    },
+    "existingHostTests": {
+      "status": "PASS",
+      "count": 17,
+      "evidence": "host-tests.log"
+    },
+    "finalIPhoneBuildInstallLaunch": {
+      "status": "PASS",
+      "device": "John\u2019s iPhone 15 Pro",
+      "evidence": [
+        "device-build.log",
+        "install.log",
+        "launch.log"
+      ]
+    }
+  },
+  "limitations": [
+    "Coincident authored exit features overlap.",
+    "Viewport-edge coordinates can partially clip at the smallest constructed layout.",
+    "Archived device and lab images precede the perspective adjustment; final host proof is separately identified."
+  ],
+  "sourceFiles": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "17c6939887e10be3da55b62d5cdd89d85f91ffe419586f5f69a83df5edae570e"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/LevelRunner.swift",
+      "sha256": "a305ca979013f152b1d68704876b1eb3adc3ecefe6d759012432d46ffb1ffd6c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "156589615120d4478f25cf8fd7b69c8ed07822043b18e7365c41c8002e3b437f"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/Contents.json",
+      "sha256": "7b39066f866a47adb78e571cc8ff6df1b0f0dcf0b36b202910c2dd3439de2de6"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x.png",
+      "sha256": "2d95f4d0760784fcfc987b8bb1b453afbd161291b014eddcf7245e08b4adf21a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@2x.png",
+      "sha256": "64f75ddb7e0e74296b3cb71949de3399690c8fc6b5a4457fefe4d4115907df9d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@3x.png",
+      "sha256": "434e0a9edb015e2f1d686f3c7d523bd1c051e6de46fe10bed775516673120908"
+    }
+  ]
+}

@@ -5,9 +5,12 @@ enum EditorLayer: String, CaseIterable, Identifiable {
     case mapGuide
     case path
     case slots
+    case callWaveButtons
     case exits
     case entrances
     case occlusion
+    case heroStarts
+    case grid
 
     var id: String { rawValue }
 
@@ -20,6 +23,9 @@ enum EditorLayer: String, CaseIterable, Identifiable {
         case .exits: "Exits"
         case .entrances: "Entrances"
         case .occlusion: "Occlusion"
+        case .callWaveButtons: "Call Wave Buttons"
+        case .grid: "Grid"
+        case .heroStarts: "Hero Starts"
         }
     }
 
@@ -32,6 +38,9 @@ enum EditorLayer: String, CaseIterable, Identifiable {
         case .exits: "flag.checkered"
         case .entrances: "arrow.right.circle"
         case .occlusion: "square.2.layers.3d.top.filled"
+        case .callWaveButtons: "megaphone.fill"
+        case .grid: "grid"
+        case .heroStarts: "person.crop.circle"
         }
     }
 
@@ -45,30 +54,45 @@ extension EditorTool {
         case .slot: .slots
         case .entrance: .entrances
         case .exitPoint: .exits
-        case .select, .zoomIn, .zoomOut: nil
+        case .callWaveButton: .callWaveButtons
+        case .primaryHero, .secondaryHero: .heroStarts
+        case .select, .pan, .zoomIn, .zoomOut: nil
         }
     }
 
     var title: String {
         switch self {
         case .select: "Select"
+        case .pan: "Pan"
         case .brush: "Path tool"
         case .paint: "Path painter"
         case .eraser: "Path eraser"
         case .slot: "Slot placer"
         case .entrance: "Entrance placer"
         case .exitPoint: "Exit placer"
+        case .callWaveButton: "Call wave button placer"
+        case .primaryHero: "Primary hero placer (1)"
+        case .secondaryHero: "Secondary hero placer (2)"
         case .zoomIn: "Zoom in"
         case .zoomOut: "Zoom out"
+        }
+    }
+
+    var heroRole: HeroSelection.Role? {
+        switch self {
+        case .primaryHero: .primary
+        case .secondaryHero: .secondary
+        default: nil
         }
     }
 }
 
 #if os(macOS)
+@MainActor
 extension EditorTool {
     private static let cursors: [EditorTool: NSCursor] = {
         var cursors: [EditorTool: NSCursor] = [
-            .select: .arrow, .zoomIn: .zoomIn, .zoomOut: .zoomOut,
+            .select: .arrow, .pan: .openHand, .zoomIn: .zoomIn, .zoomOut: .zoomOut,
         ]
         func symbolImage(_ name: String) -> NSImage? {
             NSImage(systemSymbolName: name, accessibilityDescription: nil)?
@@ -103,9 +127,15 @@ extension EditorTool {
         let symbols: [EditorTool: String] = [
             .brush: "scribble", .paint: "paintbrush.pointed", .eraser: "eraser",
             .entrance: "arrow.right.circle", .exitPoint: "flag.checkered",
+            .callWaveButton: "megaphone.fill",
         ]
         for (tool, name) in symbols {
             if let image = symbolImage(name) { cursors[tool] = haloed(image) }
+        }
+        for tool in [EditorTool.primaryHero, .secondaryHero] {
+            if let role = tool.heroRole, let icon = HeroPlacementIcon.platformImage(for: role) {
+                cursors[tool] = haloed(icon)
+            }
         }
         if let url = EditorResources.url("Images/tower_tool_icon.png"),
            let icon = NSImage(contentsOf: url) {

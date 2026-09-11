@@ -1,0 +1,5 @@
+{
+  "result": "PASS: exit boundary, removal without duplicate events, blocked enemies, multiple routes, burst losses, final-life event, and defeat shutdown",
+  "source_sha256": "4ce48e033d33f72a50ed0659f615c07f8bb64e9a593574ee9a24975210932ea1",
+  "limitation": "Production exit loop and life-loss method with fixture paths/clock; no physical haptic hardware."
+}

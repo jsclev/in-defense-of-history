@@ -1,0 +1,86 @@
+{
+  "reference_height": 340,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "battle-road",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "great-bridge",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png"
+    },
+    {
+      "id": "trenton",
+      "label": "trenton",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png"
+    }
+  ],
+  "assets": [
+    {
+      "id": "speed_up_icon_glyph",
+      "label": "speed_up_icon_glyph",
+      "animated": false,
+      "map_height": 51.41798941798942,
+      "states": {
+        "se": {
+          "idle": [
+            "speed_up_icon_glyph"
+          ],
+          "walk": [
+            "speed_up_icon_glyph"
+          ]
+        }
+      },
+      "files": {
+        "speed_up_icon_glyph": [
+          "speed_up_icon_glyph@1x.png",
+          "speed_up_icon_glyph@2x.png",
+          "speed_up_icon_glyph@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "pause_icon_glyph",
+      "label": "pause_icon_glyph",
+      "animated": false,
+      "map_height": 51.41798941798942,
+      "states": {
+        "se": {
+          "idle": [
+            "pause_icon_glyph"
+          ],
+          "walk": [
+            "pause_icon_glyph"
+          ]
+        }
+      },
+      "files": {
+        "pause_icon_glyph": [
+          "pause_icon_glyph@1x.png",
+          "pause_icon_glyph@2x.png",
+          "pause_icon_glyph@3x.png"
+        ]
+      }
+    }
+  ],
+  "sizing_sources": [
+    "Current production MasterControlsLayout: minimum 37.41798941798942pt buttons, 7pt proof padding. Glyphs remain 60% of the frame side."
+  ]
+}

@@ -1,0 +1,24 @@
+22:32:50  Acquired tunnel connection to device.
+22:32:50  Enabling developer disk image services.
+22:32:51  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.hammer-angle-probe
+• installationURL: file:///private/var/containers/Bundle/Application/EBB4E86B-B398-4D98-88D9-6DEC6A6810C5/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4948
+• options: 
+22:33:06  Acquired tunnel connection to device.
+22:33:06  Enabling developer disk image services.
+22:33:06  Acquired usage assertion.
+Launched application with com.zippyzen.hammer-angle-probe bundle identifier.
+22:33:16  Acquired tunnel connection to device.
+22:33:17  Enabling developer disk image services.
+22:33:17  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/tower-slot-front-angle-2026-09-10/device-documents
+22:33:19  Acquired tunnel connection to device.
+22:33:19  Enabling developer disk image services.
+22:33:19  Acquired usage assertion.
+App uninstalled.
+PASS: updated compiled hammer, availability transition, gameplay captures; temporary probe removed.

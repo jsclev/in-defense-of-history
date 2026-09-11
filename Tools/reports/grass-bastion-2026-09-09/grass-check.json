@@ -1,0 +1,42 @@
+{
+  "captures" : [
+    {
+      "density" : 1,
+      "file" : "battle-road-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "battle-road-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "battle-road-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "battle-road-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    }
+  ],
+  "device" : "iPhone",
+  "mapHeight" : 2064,
+  "mapWidth" : 2868,
+  "passed" : true,
+  "runID" : "7d322106-9e70-4a14-aadc-ecceed9d7576",
+  "systemVersion" : "26.6.1"
+}

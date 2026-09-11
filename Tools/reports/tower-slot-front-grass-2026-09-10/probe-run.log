@@ -1,0 +1,24 @@
+23:20:40  Acquired tunnel connection to device.
+23:20:40  Enabling developer disk image services.
+23:20:40  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.slot-front-grass-probe
+• installationURL: file:///private/var/containers/Bundle/Application/6DD440A7-A9C0-4F5C-B944-E3FB4398D569/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5064
+• options: 
+23:20:53  Acquired tunnel connection to device.
+23:20:54  Enabling developer disk image services.
+23:20:54  Acquired usage assertion.
+Launched application with com.zippyzen.slot-front-grass-probe bundle identifier.
+23:21:04  Acquired tunnel connection to device.
+23:21:04  Enabling developer disk image services.
+23:21:04  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/tower-slot-front-grass-2026-09-10/device-documents
+23:21:07  Acquired tunnel connection to device.
+23:21:07  Enabling developer disk image services.
+23:21:07  Acquired usage assertion.
+App uninstalled.
+PASS: updated front grass blend, availability transition, gameplay captures; temporary probe removed.

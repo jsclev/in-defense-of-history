@@ -1,0 +1,473 @@
+{
+  "generated_at": "2026-09-09T17:47:59.266800+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    "Production HeroBarLayout / RuntimeCanvas / bundled virtual_canvas: 44.9556pt buttons at 340pt playable height including HUD margins. Production HUD views compiled with fixture runner state and file-backed images; 7pt proof padding per edge."
+  ],
+  "assets": [
+    {
+      "id": "hero-0-ready",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.633,
+        44.633
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "hero-1-ready",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.633,
+        44.633
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "hero-0-hero-selected",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-placing",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-cooldown-20",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.633,
+        44.633
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-cooldown-10",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.633,
+        44.633
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-cooldown-1",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.633,
+        44.633
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-ready@1x.png",
+      "sha256": "201165b46db056b21be3061bf988fb2449ca0af6a203a4320f09d4d7f4cc10cb",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-ready@2x.png",
+      "sha256": "27fc376262d7f974ef92bd95fea39002f18d5d008935bdec9803123879050b58",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-ready@3x.png",
+      "sha256": "74f6061bcde006054074a1c6462628bebc3f2f3c59541a329895a315da2a1fc3",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-1-ready@1x.png",
+      "sha256": "4b88af8b04b7a082c94114d8d41c58a9359a64615f92cc4a9d6daa7946147153",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-1-ready@2x.png",
+      "sha256": "b73e4e09676c20ecd50988d207403b9902d275110b178040113229ea6d283f26",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-1-ready@3x.png",
+      "sha256": "b15f31d1c3e55c908e6677f251d1e6c12ac2a357e26db4af9dd85eef44ece908",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-hero-selected@1x.png",
+      "sha256": "1601baef45b0e05bc51115e798068987a355a8d8094393a6061a5911477c25a1",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-hero-selected@2x.png",
+      "sha256": "1d44e4548aaed77abf31870172293bb50b3f9b484f1a01eefe275609b1cfd7ba",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-hero-selected@3x.png",
+      "sha256": "74d2036d07470ac29d4237c597a0a97f2ecc065d6823ae7877f5830a6fea3c78",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-placing@1x.png",
+      "sha256": "867494843a5f8ebcbddc2c08fcf5c7b45b159a2abcb7ec9e5f896c120ca4259c",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-placing@2x.png",
+      "sha256": "f88429c3c71f694e5a6be897fc37919c5eee56f475446c19d846df384b361f75",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-placing@3x.png",
+      "sha256": "6791214f2acb52cfef75322bd75bad0cf0ce049902145a9a29379dc98e2de3cb",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-20@1x.png",
+      "sha256": "73afbfba1bc34c322cda87cb6eb8ea4aa7df3201fd0208af4c5c2b2b6f22ad93",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-20@2x.png",
+      "sha256": "ec3e9f05e31f5394f5644f78cce62e79282f85508a0a86da427b19ed8d6cf94b",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-20@3x.png",
+      "sha256": "12906f4eaaf6533076a7d24b1c73751abd9a30890b53c76375ca6bba76b0b91e",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-10@1x.png",
+      "sha256": "7f7bd0025631cccd1b2b7684ef0639ace09b89c8c2764e26e721e803ea2741ae",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-10@2x.png",
+      "sha256": "a4237a3ab7b7a9384d7a2205c3fccac35a36fe3133859752e8b4e440a6923d53",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-10@3x.png",
+      "sha256": "8e6a8c48070783d9bd5d580acebb40601ac9f056f60de652ac69f8e6fadc439c",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-1@1x.png",
+      "sha256": "dc9515b19f9f9533cdd2cdce6a2b0837676f6adc3ed18513f77a12b8483a333f",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-1@2x.png",
+      "sha256": "03d97fdd380d31e687269fa61fa79bda0e4a829540a339fbaeea4b4f46a4dca8",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-1@3x.png",
+      "sha256": "460cac7369a2e9ef5f46885dc54a018962ac36a8ba0e1145ae7101b602d40b3b",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png",
+      "sha256": "f2c51dbbabe573b2383595b222d7991cdfdc7395b0bfed51e996fcd4f0df52b9"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_overlay.png",
+      "sha256": "d0237f9729cd8f9b7e23f77f6fde9485eb0dab6f1660ade57e7384335f1e854c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png",
+      "sha256": "cc93bf4d9567eca1f9683cbb71d13a01f77043198890bf322e5ca5eb07f5bf4d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png",
+      "sha256": "e56a386b796ef34f9cedb76c9004108f406c95b8dc46258703b893da144c1b60"
+    }
+  ]
+}

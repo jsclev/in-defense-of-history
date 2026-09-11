@@ -1,0 +1,13 @@
+{
+  "result": "PASS: build/loss/defeat dispatch, preemption without mixed patterns, inactive suppression, final-life completion, stop cancellation, failure fallback, fresh player after recovery",
+  "production_blocks": [
+    "private func playHaptic(",
+    "private func playBuildHaptic()",
+    "func playEnemyEscapeHaptic(",
+    "func stop()",
+    "private func stopSimulation()",
+    "private func loseLife()"
+  ],
+  "source_sha256": "de9608dcb8d311ea46d33f174e8e6899f3cae028b419fb121a622635fa3e5a0a",
+  "limitation": "Real pattern construction and production dispatch with spy engine/players; physical sensation is not measured."
+}

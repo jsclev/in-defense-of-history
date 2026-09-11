@@ -6,9 +6,13 @@ struct TowerSlotImage {
 
     init(virtualCanvas: VirtualCanvas) {
         self.virtualCanvas = virtualCanvas
-        image = EditorResources.url("../in-defense-of-history-data/LibertyLineAssets.xcassets/"
-            + "tower_slot_field.imageset/tower_slot_field.png")
-            .flatMap { PlatformImageLoader.load(path: $0.path)?.image }
+        let name = "tower_slot_available"
+        let directory = "../in-defense-of-history-data/LibertyLineAssets.xcassets/\(name).imageset/"
+        image = ["\(name)@3x.png", "\(name)@2x.png", "\(name).png"]
+            .lazy
+            .compactMap { EditorResources.url(directory + $0) }
+            .compactMap { PlatformImageLoader.load(path: $0.path)?.image }
+            .first
     }
 
     func draw(_ ctx: inout GraphicsContext, at center: CGPoint,

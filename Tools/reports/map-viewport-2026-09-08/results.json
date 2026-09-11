@@ -1,0 +1,38 @@
+{
+  "reproduction": "Old shared ZStack versus production LevelViewport; fixed map markers, conditional full-screen wave-control wrapper, smaller centered parent proposal.",
+  "screen_sizes": [
+    [
+      852,
+      393
+    ],
+    [
+      1024,
+      768
+    ]
+  ],
+  "parent_proposal_reduction": [
+    118,
+    34
+  ],
+  "old_marker_delta_on_control_removal_pt": [
+    59,
+    17
+  ],
+  "fixed_marker_delta_pt": [
+    0,
+    0
+  ],
+  "automated_tests": {
+    "status": "PASS",
+    "rendered_position_states": 20,
+    "size_contract_cases": 12,
+    "checks": [
+      "two map marker bounds remain identical across control removal/reappearance",
+      "full and safe-area-sized parent proposals",
+      "oversized HUD and presentation content",
+      "unspecified, zero, smaller, and larger sizing proposals"
+    ]
+  },
+  "iphone_build": "PASS: unsigned Debug generic iOS build",
+  "limits": "Isolated SwiftUI layout reproduction and macOS ImageRenderer regression tests, plus iPhone compilation. Physical iPhone tap/recording not measured."
+}

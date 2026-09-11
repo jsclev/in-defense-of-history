@@ -1,0 +1,136 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "info",
+      "apps",
+      "--device",
+      "00008130-000161D93E82001C",
+      "--filter",
+      "bundleIdentifier == \"com.zippyzen.liberty-line\"",
+      "--json-output",
+      "Tools/reports/range-grass-contrast-2026-09-09/installed-app.json"
+    ],
+    "commandType" : "devicectl.device.info.apps",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.33"
+  },
+  "result" : {
+    "apps" : [
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.exit-marker-probe",
+        "bundleVersion" : "1",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Exit Marker Check",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/8EEF5E7E-B9BD-44E7-9699-F5165FA2A285/Liberty%20Line.app/",
+        "version" : "1.0"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.exit-size-probe",
+        "bundleVersion" : "1",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Exit Marker Check",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/3BA6B6DA-51D8-4627-9403-4056E182466C/Liberty%20Line.app/",
+        "version" : "1.0"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.exit-perspective-probe",
+        "bundleVersion" : "1",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Exit Marker Check",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/FA022CA7-8D34-49A8-B9A3-39518C451F31/Liberty%20Line.app/",
+        "version" : "1.0"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.hero-exit-probe",
+        "bundleVersion" : "1",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Hero Exit Check",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/DB129A02-204C-48A4-89B6-76FCCD5EB6CC/Liberty%20Line.app/",
+        "version" : "1.0"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.td.leveleditor",
+        "bundleVersion" : "159",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Level Editor",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/AECD519D-6290-45E9-BEA7-5A66A41B2BCB/LevelEditor.app/",
+        "version" : "1.0.159"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.liberty-line",
+        "bundleVersion" : "1",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Liberty Line",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/042BA9D7-DA43-4215-BAE6-AB7E5CC753B5/Liberty%20Line.app/",
+        "version" : "1.0"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.timothycleveland.Mammoth-Lifts",
+        "bundleVersion" : "12",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Mammoth Lifts",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/DA6F3174-B3DD-4EC6-BB72-EB446990B6A1/Mammoth%20Lifts.app/",
+        "version" : "1.0"
+      },
+      {
+        "appClip" : false,
+        "builtByDeveloper" : true,
+        "bundleIdentifier" : "com.zippyzen.StoneToSpace",
+        "bundleVersion" : "7",
+        "defaultApp" : false,
+        "hidden" : false,
+        "internalApp" : false,
+        "name" : "Stone to Space",
+        "removable" : true,
+        "url" : "file:///private/var/containers/Bundle/Application/D760901B-44D6-4EAE-A894-F5B0F20CE975/Stone%20to%20Space.app/",
+        "version" : "0.3"
+      }
+    ],
+    "defaultAppsIncluded" : false,
+    "deviceIdentifier" : "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+    "hiddenAppsIncluded" : false,
+    "internalAppsIncluded" : false,
+    "removableAppsIncluded" : true
+  }
+}

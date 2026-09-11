@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "renditions": [
+    {
+      "AssetType": "Image",
+      "BitsPerComponent": 8,
+      "ColorModel": "RGB",
+      "Colorspace": "srgb",
+      "Compression": "deepmap2",
+      "Encoding": "ARGB",
+      "Idiom": "universal",
+      "Name": "tower_menu_ranged_square",
+      "NameIdentifier": 51140,
+      "Opaque": false,
+      "PixelHeight": 384,
+      "PixelWidth": 384,
+      "RenditionName": "tower_menu_ranged_square@3x.png",
+      "Scale": 3,
+      "SHA1Digest": "1DDD50BFC91A32D074323EEAFD69F4257E18CE409D39429E4F6D0222DFD98A03",
+      "SizeOnDisk": 76097,
+      "Template Mode": "automatic"
+    }
+  ]
+}

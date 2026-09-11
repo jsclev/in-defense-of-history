@@ -6,6 +6,9 @@ import CoreGraphics
 
 @available(iOS 26.0, *)
 final class Renderer: NSObject, MTKViewDelegate {
+    /// Crop geometry is shared with SwiftUI campaign markers in logical points.
+    /// drawableSize below is used only for the raster viewport.
+    var canvasSize: CGSize
 
     private let device: any MTLDevice
     private let commandQueue: any MTL4CommandQueue
@@ -34,8 +37,10 @@ final class Renderer: NSObject, MTKViewDelegate {
 
     init(
         view: MTKView,
-        imageName: String
+        imageName: String,
+        canvasSize: CGSize
     ) throws {
+        self.canvasSize = canvasSize
         guard let device = view.device else {
             throw RendererError.noMetalDevice
         }
@@ -248,7 +253,7 @@ final class Renderer: NSObject, MTKViewDelegate {
             return
         }
 
-        let cropResult = makeCropUVRect(drawableSize: view.drawableSize)
+        let cropResult = makeCropUVRect()
 
         var cropUniforms = ImageCropUniforms(
             sourceUVRect: cropResult.uvRect,
@@ -325,16 +330,13 @@ final class Renderer: NSObject, MTKViewDelegate {
         var rotateToLandscape: Bool
     }
 
-    private func makeCropUVRect(drawableSize: CGSize) -> CropResult {
-        let imageSize = CGSize(
-            width: imageTexture.width,
-            height: imageTexture.height
-        )
+    private func makeCropUVRect() -> CropResult {
+        let imageSize = CampaignMapAsset.imageSize
 
         let crop = CampaignMapLayout.makeCrop(
             imageSize: imageSize,
             safeRect: CampaignMapAsset.safeRect,
-            viewSize: drawableSize
+            viewSize: canvasSize
         )
 
         let uvRect = SIMD4<Float>(

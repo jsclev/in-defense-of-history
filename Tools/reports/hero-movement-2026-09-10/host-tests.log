@@ -1,0 +1,55 @@
+[0/1] Planning build
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/7] Compiling LevelEditorFormats MapSpriteSizing.swift
+[4/7] Compiling LevelEditorFormats TowerKind.swift
+[5/9] Compiling LevelEditorFormats Store.swift
+[6/9] Compiling LevelEditorFormats TowerMenuLayout.swift
+[7/9] Emitting module LevelEditorFormats
+[8/9] Compiling LevelEditorFormats CallWaveButtonLayout.swift
+[9/12] Emitting module LevelEditorFormatsTests
+[10/12] Compiling LevelEditorFormatsTests BottomCenterOcclusionTests.swift
+[11/12] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[11/13] Write Objects.LinkFileList
+[12/13] Linking LevelEditorFormatsPackageTests
+Build complete! (2.40s)
+Test Suite 'Selected tests' started at 2026-09-09 22:56:24.476.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-09 22:56:24.477.
+Test Suite 'LevelViewportTests' started at 2026-09-09 22:56:24.477.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.045 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.243 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-09 22:56:25.765.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.288 (1.288) seconds
+Test Suite 'PresentationStackTests' started at 2026-09-09 22:56:25.765.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' passed (0.000 seconds).
+Test Suite 'PresentationStackTests' passed at 2026-09-09 22:56:25.766.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'RuntimeCanvasTests' started at 2026-09-09 22:56:25.766.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testAllGeometryFitsTheLiveSafeArea]' started.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testAllGeometryFitsTheLiveSafeArea]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testMenuContentCannotResizeTheRuntimeCanvas]' started.
+Test Case '-[LevelEditorFormatsTests.RuntimeCanvasTests testMenuContentCannotResizeTheRuntimeCanvas]' passed (0.001 seconds).
+Test Suite 'RuntimeCanvasTests' passed at 2026-09-09 22:56:25.768.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 0.002 (0.002) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-09 22:56:25.768.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 1.291 (1.292) seconds
+Test Suite 'Selected tests' passed at 2026-09-09 22:56:25.768.
+	 Executed 10 tests, with 0 failures (0 unexpected) in 1.291 (1.293) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

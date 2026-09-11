@@ -1,0 +1,249 @@
+{
+  "checks": [
+    {
+      "authored": [
+        2366,
+        1304
+      ],
+      "center": [
+        595.1916666666666,
+        84.43333333333334
+      ],
+      "density": 3,
+      "frame": [
+        583.3249999999999,
+        72.16666666666667,
+        23.733333333333334,
+        24.533333333333335
+      ],
+      "image": "minimum-exit-0.png",
+      "index": 0,
+      "kind": "exit",
+      "padding": 40,
+      "viewport": "minimum",
+      "renderedAlphaCenter": [
+        595.1666666666666,
+        84.5
+      ],
+      "centerErrorPoints": [
+        -0.024999999999977263,
+        0.06666666666666288
+      ]
+    },
+    {
+      "authored": [
+        1634,
+        552
+      ],
+      "center": [
+        364.9166666666667,
+        321
+      ],
+      "density": 3,
+      "frame": [
+        353.05,
+        308.73333333333335,
+        23.733333333333334,
+        24.533333333333335
+      ],
+      "image": "minimum-exit-1.png",
+      "index": 1,
+      "kind": "exit",
+      "padding": 40,
+      "viewport": "minimum",
+      "renderedAlphaCenter": [
+        364.8333333333333,
+        321.0
+      ],
+      "centerErrorPoints": [
+        -0.08333333333337123,
+        0.0
+      ]
+    },
+    {
+      "authored": [
+        538,
+        1280
+      ],
+      "center": [
+        20.133333333333326,
+        91.98333333333335
+      ],
+      "density": 3,
+      "frame": [
+        -1.8666666666666742,
+        69.98333333333335,
+        44,
+        44
+      ],
+      "image": "minimum-call-wave-0.png",
+      "index": 0,
+      "kind": "call-wave",
+      "padding": 40,
+      "viewport": "minimum",
+      "renderedAlphaCenter": [
+        20.0,
+        91.83333333333334
+      ],
+      "centerErrorPoints": [
+        -0.13333333333332575,
+        -0.15000000000000568
+      ]
+    },
+    {
+      "authored": [
+        1218,
+        1460
+      ],
+      "center": [
+        234.04999999999995,
+        35.35833333333335
+      ],
+      "density": 3,
+      "frame": [
+        212.04999999999995,
+        13.358333333333348,
+        44,
+        44
+      ],
+      "image": "minimum-call-wave-1.png",
+      "index": 1,
+      "kind": "call-wave",
+      "padding": 40,
+      "viewport": "minimum",
+      "renderedAlphaCenter": [
+        234.0,
+        35.16666666666667
+      ],
+      "centerErrorPoints": [
+        -0.049999999999954525,
+        -0.1916666666666771
+      ]
+    },
+    {
+      "authored": [
+        2366,
+        1304
+      ],
+      "center": [
+        747.8851851851853,
+        92.55925925925925
+      ],
+      "density": 3,
+      "frame": [
+        734.8667538126363,
+        79.10200435729847,
+        26.036862745098038,
+        26.91450980392157
+      ],
+      "image": "device-exit-0.png",
+      "index": 0,
+      "kind": "exit",
+      "padding": 40,
+      "viewport": "device",
+      "renderedAlphaCenter": [
+        748.0,
+        92.5
+      ],
+      "centerErrorPoints": [
+        0.11481481481473566,
+        -0.059259259259249575
+      ]
+    },
+    {
+      "authored": [
+        1634,
+        552
+      ],
+      "center": [
+        495.0740740740741,
+        352.2777777777778
+      ],
+      "density": 3,
+      "frame": [
+        482.0556427015251,
+        338.82052287581706,
+        26.036862745098038,
+        26.91450980392157
+      ],
+      "image": "device-exit-1.png",
+      "index": 1,
+      "kind": "exit",
+      "padding": 40,
+      "viewport": "device",
+      "renderedAlphaCenter": [
+        495.0,
+        352.1666666666667
+      ],
+      "centerErrorPoints": [
+        -0.07407407407407618,
+        -0.11111111111114269
+      ]
+    },
+    {
+      "authored": [
+        538,
+        1280
+      ],
+      "center": [
+        116.54814814814816,
+        100.84814814814814
+      ],
+      "density": 3,
+      "frame": [
+        94.54814814814816,
+        78.84814814814814,
+        44,
+        44
+      ],
+      "image": "device-call-wave-0.png",
+      "index": 0,
+      "kind": "call-wave",
+      "padding": 40,
+      "viewport": "device",
+      "renderedAlphaCenter": [
+        116.66666666666666,
+        100.83333333333334
+      ],
+      "centerErrorPoints": [
+        0.11851851851849915,
+        -0.014814814814798183
+      ]
+    },
+    {
+      "authored": [
+        1218,
+        1460
+      ],
+      "center": [
+        351.40000000000003,
+        38.681481481481484
+      ],
+      "density": 3,
+      "frame": [
+        329.40000000000003,
+        16.681481481481484,
+        44,
+        44
+      ],
+      "image": "device-call-wave-1.png",
+      "index": 1,
+      "kind": "call-wave",
+      "padding": 40,
+      "viewport": "device",
+      "renderedAlphaCenter": [
+        351.3333333333333,
+        38.5
+      ],
+      "centerErrorPoints": [
+        -0.06666666666671972,
+        -0.1814814814814838
+      ]
+    }
+  ],
+  "geoJSONSHA256": "d507c1daeff41f8748267a2ba2d964dbbd58c06c2760c1216e03fe3450a4772d",
+  "passed": true,
+  "pathFile": "level_15_charleston_path.png",
+  "pathSHA256": "bfa13cba8a81a0906513c17e8ab88d933b5ecefe8a2ae1d710aaa411d634e3c2",
+  "runID": "69b85dcc-a60d-4b5d-af7a-2d8a37202ef7"
+}

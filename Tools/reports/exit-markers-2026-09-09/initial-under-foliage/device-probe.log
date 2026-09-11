@@ -1,0 +1,20 @@
+17:49:55  Acquired tunnel connection to device.
+17:49:55  Enabling developer disk image services.
+17:49:55  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.exit-marker-probe
+• installationURL: file:///private/var/containers/Bundle/Application/DF4CCC48-3975-4DE6-82D4-3CF9C1082AC3/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4552
+• options: 
+17:50:16  Acquired tunnel connection to device.
+17:50:16  Enabling developer disk image services.
+17:50:16  Acquired usage assertion.
+Launched application with com.zippyzen.exit-marker-probe bundle identifier.
+17:50:44  Acquired tunnel connection to device.
+17:50:44  Enabling developer disk image services.
+17:50:44  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-markers-2026-09-09/device-documents
+PASS: 26 authored exits across 15 levels; physical-iPhone renders saved.

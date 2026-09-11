@@ -1,0 +1,25 @@
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/5] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[4/5] Emitting module LevelEditorFormatsTests
+[4/6] Write Objects.LinkFileList
+[5/6] Linking LevelEditorFormatsPackageTests
+Build complete! (1.27s)
+Test Suite 'Selected tests' started at 2026-09-08 11:23:28.357.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-08 11:23:28.357.
+Test Suite 'LevelViewportTests' started at 2026-09-08 11:23:28.357.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.044 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.236 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-08 11:23:29.637.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.280 (1.280) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-08 11:23:29.637.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.280 (1.280) seconds
+Test Suite 'Selected tests' passed at 2026-09-08 11:23:29.638.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.280 (1.281) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

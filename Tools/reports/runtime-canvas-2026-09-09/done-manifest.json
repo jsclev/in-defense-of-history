@@ -1,0 +1,67 @@
+{
+  "reference_height": 680.625,
+  "clamp": [
+    421.9875,
+    816.75
+  ],
+  "default_playable_height": 340,
+  "assets": [
+    {
+      "id": "done-button",
+      "label": "Done button",
+      "animated": false,
+      "map_height": 57.5,
+      "states": {
+        "se": {
+          "idle": [
+            "done"
+          ],
+          "walk": [
+            "done"
+          ]
+        }
+      },
+      "files": {
+        "done": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png"
+        ]
+      }
+    }
+  ],
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png"
+    }
+  ],
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HudSizing.swift",
+      "sha256": "601a9ee47d86df51138245ee1ec58cc175d5fbf5efbe712ca61498ab4beeed2d"
+    }
+  ],
+  "sizing_note": "Exact ScaledDimension(57.5) conversion: point height = 57.5 / 680.625 * clamp(playableHeight, 421.9875, 816.75). Reviewed at playable height 340."
+}

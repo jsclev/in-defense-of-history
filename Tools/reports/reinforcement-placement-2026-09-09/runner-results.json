@@ -1,0 +1,18 @@
+{
+  "source_sha256": "a305ca979013f152b1d68704876b1eb3adc3ecefe6d759012432d46ffb1ffd6c",
+  "production_blocks": [
+    "struct MilitiaSoldier:",
+    "private struct MilitiaGarrison {",
+    "private struct WalkPose {",
+    "var canCallReinforcements:",
+    "private var reinforcementStats:",
+    "private func garrisonMelee(",
+    "func callReinforcements(",
+    "func toggleReinforcementPlacement()",
+    "func placeReinforcements(",
+    "private func advanceReinforcements(",
+    "private func publishMilitia("
+  ],
+  "result": "PASS: HUD arm/cancel/place, invalid path, cooldown gating, runner deployment, repeated taps, expiry cleanup, dead groups, overlapping groups, tower/hero preservation, unavailable states",
+  "limitation": "Method harness with level/tower/hero/clock fixtures; not full game on a physical device."
+}

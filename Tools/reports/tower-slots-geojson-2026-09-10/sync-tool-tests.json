@@ -1,0 +1,22 @@
+[
+  {
+    "script": "sync_level_01_sql.py",
+    "passed": true,
+    "output": "synced /var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-slot-sync-r5hcg0sm/level_01_battle_road.sql\n  canvas scale x1   457 path points\n  entry (550.8, 816.0)  exit (2317.2, 1008.7)\n"
+  },
+  {
+    "script": "sync_level_02_sql.py",
+    "passed": true,
+    "output": "synced /var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-slot-sync-r5hcg0sm/level_02_bunker_hill.sql\n  9 GeoJSON slots (not written to SQL), 2 paths, 309 path points\n"
+  },
+  {
+    "script": "sync_level_12_sql.py",
+    "passed": true,
+    "output": "synced /var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-slot-sync-r5hcg0sm/level_12_kettle_creek.sql\n  12 GeoJSON slots (not written to SQL), 4 paths, 900 points [273, 251, 145, 231]\n"
+  },
+  {
+    "script": "sync_level_13_sql.py",
+    "passed": true,
+    "output": "synced /var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-slot-sync-r5hcg0sm/level_13_new_haven.sql\n  16 GeoJSON slots (not written to SQL), 4 paths, 788 points [209, 177, 225, 177]\n"
+  }
+]

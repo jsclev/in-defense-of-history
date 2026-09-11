@@ -1,0 +1,205 @@
+{
+  "generated_at": "2026-09-11T01:10:29.359432+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [],
+  "assets": [
+    {
+      "id": "previous",
+      "minimum_box_pt": 30.325,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              176,
+              96
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              352,
+              192
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              528,
+              288
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        23.27,
+        23.27
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "revised",
+      "minimum_box_pt": 30.325,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              176,
+              96
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              352,
+              192
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              528,
+              288
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        23.691,
+        23.691
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "occupied",
+      "minimum_box_pt": 29.346,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1006,
+              531
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1006,
+              531
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              1006,
+              531
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        29.346,
+        29.346
+      ],
+      "opaque_edge_touch_frames": [
+        "occupied"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available.png",
+      "sha256": "3abc90a0b4ea33d5218d514d50738a0e68badb914bc81de4d71baa7351e479ee",
+      "dimensions": [
+        176,
+        96
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available@2x.png",
+      "sha256": "d6af66356b6b7ec3751d89a55865a26fcd362d8c835a8462013f017a3dda367f",
+      "dimensions": [
+        352,
+        192
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available@3x.png",
+      "sha256": "c3f14c6a07e66395c0d97473410dc372908f4f16cc0de70a56c33c4fbb59ac97",
+      "dimensions": [
+        528,
+        288
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available.png",
+      "sha256": "a6bdc8ffdf381b394480517a3d933fbd607dc9405d70e7fb4b300561e56c275f",
+      "dimensions": [
+        176,
+        96
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available@2x.png",
+      "sha256": "195b7f212f4840813d96fb0aa84b5450580d259d323c96cfe4a4c4da343749f8",
+      "dimensions": [
+        352,
+        192
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available@3x.png",
+      "sha256": "4c0ea433efe1bd3aa21b73f44903ac32f90958b2ba1ae0a58458cce9c3b3f4c7",
+      "dimensions": [
+        528,
+        288
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png",
+      "sha256": "00e45ac3348bd32a55c7e5a5f5e701c923eee364ba3f70692ca26ecdc7b0dbd7",
+      "dimensions": [
+        1006,
+        531
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Levels/grass_bastion.png",
+      "sha256": "7992517c6e34a242c7ce24d82837a7e3c390c9134d0623aaa19ab9f2b58c773e"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/paths-bastion-grass-2026-09-10/final-layers/charleston.png",
+      "sha256": "aed1388adbd7b6c4398fbc1c37f9a7bf01644d667e1e9255877a7e4e101015ea"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/paths-bastion-grass-2026-09-10/final-layers/charleston_path.png",
+      "sha256": "26196cfeb4db829522fb3d65348b8e2f16ec0d6f0a2b095d0eb09ad6befd5d48"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/paths-bastion-grass-2026-09-10/final-layers/charleston_occlusion.png",
+      "sha256": "4d001d17dae3ab4ed214b533e5db5f6c7ddca54f9d9ef5264fee280bd3b339cd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V1/Review/Maps/level_008_trenton.png",
+      "sha256": "c4cc4f9b2ca316f402cc47f4c58c59a214de2223bb386d51ff90dbe62c86e517"
+    }
+  ]
+}

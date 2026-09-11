@@ -1,0 +1,20 @@
+[
+  {
+    "Name": "hud_misc_sack",
+    "Scale": 3,
+    "PixelWidth": 384,
+    "PixelHeight": 384
+  },
+  {
+    "Name": "hud_misc_sack_blue_frame",
+    "Scale": 3,
+    "PixelWidth": 384,
+    "PixelHeight": 384
+  },
+  {
+    "Name": "tower_menu_square_frame",
+    "Scale": 3,
+    "PixelWidth": 266,
+    "PixelHeight": 265
+  }
+]

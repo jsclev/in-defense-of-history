@@ -10,9 +10,7 @@ struct GeoJSONExport {
     let virtualCanvas: VirtualCanvas
 
     func data(for draft: MapDraft) throws -> Data {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-        return try encoder.encode(document(for: draft))
+        try document(for: draft).data()
     }
 
     func filename(for draft: MapDraft) -> String {
@@ -24,298 +22,101 @@ struct GeoJSONExport {
         return (base.isEmpty ? "untitled_map" : base) + ".geojson"
     }
 
-    func document(for draft: MapDraft) -> FeatureCollection {
-        var features: [Feature] = []
-        let roads = draft.roads.filter { $0.points.count >= 2 }
-
-        for (ri, road) in roads.enumerated() {
-            let isPrimary = ri == 0
-            features.append(Feature(
-                id: isPrimary ? "gameplay.road" : "gameplay.road.\(ri)",
-                name: road.name,
-                category: "gameplay",
-                kind: "enemy_path",
-                layer: 40,
-                geometry: .lineString(road.points),
-                extra: [
-                    "widthPx": .number(virtualCanvas.pathWidth),
-                    "pathIndex": .number(Double(ri)),
-                ]
-            ))
-
-            let edge = road.outerEdge(halfWidth: virtualCanvas.pathWidth / 2)
-            if edge.count >= 4 {
-                features.append(Feature(
-                    id: isPrimary ? "gameplay.road_edge" : "gameplay.road_edge.\(ri)",
-                    name: "\(road.name) outer edge",
-                    category: "gameplay",
-                    kind: "enemy_path_edge",
-                    layer: 39,
-                    geometry: .polygon(edge),
-                    extra: ["pathIndex": .number(Double(ri))]
-                ))
-            }
-
-            // Roads without hand-placed markers still describe their own
-            // endpoints, so a draft authored before the entrance and exit
-            // tools existed exports the same features it always did.
-            if draft.entrances.isEmpty, let spawn = road.points.first {
-                features.append(Feature(
-                    id: isPrimary ? "gameplay.entry" : "gameplay.entry.\(ri)",
-                    name: "Spawn",
-                    category: "gameplay",
-                    kind: "spawn_point",
-                    layer: 75,
-                    geometry: .point(spawn),
-                    extra: ["pathIndex": .number(Double(ri))]
-                ))
-            }
-            if draft.exits.isEmpty, let goal = road.points.last {
-                features.append(Feature(
-                    id: isPrimary ? "gameplay.exit" : "gameplay.exit.\(ri)",
-                    name: "Goal",
-                    category: "gameplay",
-                    kind: "goal_point",
-                    layer: 75,
-                    geometry: .point(goal),
-                    extra: ["pathIndex": .number(Double(ri))]
-                ))
+    func document(for source: MapDraft) throws -> LevelGeoJSON {
+        // Export a copy, including normalization of legacy eraser layers.
+        // The editable roads, names, wave assignments and paint stay intact.
+        var draft = source
+        draft.normalize(mapGeometry: MapGeometry(virtualCanvas: virtualCanvas))
+        guard !draft.entrances.isEmpty else {
+            throw LevelGeoJSON.ValidationError(message: "Place at least one entrance before exporting GeoJSON.")
+        }
+        guard !draft.exits.isEmpty else {
+            throw LevelGeoJSON.ValidationError(message: "Place at least one exit before exporting GeoJSON.")
+        }
+        guard !draft.callWaveButtons.isEmpty else {
+            throw LevelGeoJSON.ValidationError(message: "Place at least one call wave button before exporting GeoJSON.")
+        }
+        guard virtualCanvas.pathWidth.isFinite, virtualCanvas.pathWidth > 0 else {
+            throw LevelGeoJSON.ValidationError(message: "Path width must be finite and positive.")
+        }
+        for road in draft.roads {
+            if let cutout = road.erasedArea { try cutout.validate() }
+            guard road.points.count >= 2, Set(road.points).count >= 2,
+                  road.points.allSatisfy({ $0.x.isFinite && $0.y.isFinite }) else {
+                throw LevelGeoJSON.ValidationError(message: "Road \(road.name) needs at least two distinct, finite waypoints.")
             }
         }
-
-        // A marker sits at one END of its road, but roads may be drawn in
-        // either direction, so tag it to the road with the nearest endpoint of
-        // either kind — never start-only. The sync then orients each road so
-        // its first point is the entrance.
-        func nearestRoad(to p: Point) -> Int {
-            var best: (Int, Double)?
-            for (ri, road) in roads.enumerated() {
-                guard let a = road.points.first, let b = road.points.last else { continue }
-                let d = min(p.distance(to: a), p.distance(to: b))
-                if best == nil || d < best!.1 { best = (ri, d) }
-            }
-            return best?.0 ?? 0
-        }
-        for (i, marker) in draft.entrances.enumerated() {
-            features.append(Feature(
-                id: i == 0 ? "gameplay.entry" : "gameplay.entry.\(i)",
-                name: "Entrance \(i)",
-                category: "gameplay",
-                kind: "spawn_point",
-                layer: 75,
-                geometry: .point(marker),
-                extra: ["pathIndex": .number(Double(nearestRoad(to: marker)))]
-            ))
-        }
-        for (i, marker) in draft.exits.enumerated() {
-            features.append(Feature(
-                id: i == 0 ? "gameplay.exit" : "gameplay.exit.\(i)",
-                name: "Exit \(i)",
-                category: "gameplay",
-                kind: "goal_point",
-                layer: 75,
-                geometry: .point(marker),
-                extra: ["pathIndex": .number(Double(nearestRoad(to: marker)))]
-            ))
-        }
-
-        // Painted road is area the roads cannot describe — it has its own width
-        // and follows no waypoints — so the strokes travel as themselves. Eraser
-        // strokes are never here: they are merged into the waypoints on commit.
-        for (i, stroke) in draft.roadPaint.enumerated() where !stroke.points.isEmpty {
-            features.append(Feature(
-                id: "gameplay.road_paint.\(i)",
-                name: "Paint \(i)",
-                category: "gameplay",
-                kind: "road_paint",
-                layer: 41,
-                geometry: .lineString(stroke.points.count == 1
-                                      ? [stroke.points[0], stroke.points[0]]
-                                      : stroke.points),
-                extra: [
-                    "widthPx": .number(stroke.width),
-                    "strokeIndex": .number(Double(i)),
-                ]
-            ))
-        }
-
-        for (i, slot) in draft.slots.enumerated() {
-            features.append(Feature(
-                id: "gameplay.tower_slot.\(i + 1)",
-                name: "Tower slot \(i + 1)",
-                category: "gameplay",
-                kind: "tower_slot",
-                layer: 75,
-                geometry: .point(slot),
-                extra: [
-                    "slotIndex": .number(Double(i)),
-                    "slotNumber": .number(Double(i + 1)),
-                ]
-            ))
-        }
-
-        for i in features.indices {
-            let pts: [Point] = switch features[i].geometry {
-            case let .point(p): [p]
-            case let .lineString(ps): ps
-            case let .polygon(ps): ps
-            }
-            features[i].insidePlayArea = pts.allSatisfy {
-                virtualCanvas.playAreaRect.contains(CGPoint(x: $0.x, y: $0.y))
+        for stroke in draft.roadPaint {
+            if let cutout = stroke.erasedArea { try cutout.validate() }
+            guard !stroke.points.isEmpty, stroke.width.isFinite, stroke.width > 0,
+                  stroke.points.allSatisfy({ $0.x.isFinite && $0.y.isFinite }) else {
+                throw LevelGeoJSON.ValidationError(message: "Paint needs finite points and a positive width.")
             }
         }
-
-        return FeatureCollection(
-            name: SwiftExport.identifier(from: draft.name),
-            crs: CRS(virtualCanvas: virtualCanvas),
-            features: features,
+        if let base = draft.flattenedPath, base != .multiPolygon([]) { try base.validate() }
+        let area = BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint,
+                                         roadHalfWidth: virtualCanvas.pathWidth / 2,
+                                         base: draft.flattenedPath)
+        let path = try PathFlattening.geometry(from: area)
+        func feature(id: String, name: String, kind: LevelGeoJSON.Kind,
+                     geometry: LevelGeoJSON.Geometry, slot: Int? = nil,
+                     pathIndices: [Int]? = nil, heroRoles: [HeroSelection.Role]? = nil) -> LevelGeoJSON.Feature {
+            let inside = geometry.positions.allSatisfy {
+                virtualCanvas.playAreaRect.contains(CGPoint(x: $0[0], y: $0[1]))
+            }
+            return .init(id: id, geometry: geometry,
+                         properties: .init(id: id, name: name, kind: kind,
+                                           layer: kind == .callWaveButton ? 100 : (kind == .path ? 40 : 75),
+                                           insidePlayArea: inside,
+                                           pathIndex: [.towerSlot, .callWaveButton, .heroSpawn].contains(kind) ? nil : 0,
+                                           slotIndex: slot, slotNumber: slot.map { $0 + 1 },
+                                           pathIndices: pathIndices, heroRoles: heroRoles))
+        }
+        var features = [feature(id: "gameplay.road", name: "Path", kind: .path, geometry: path)]
+        for route in draft.enemyRoutes {
+            let id = "gameplay.enemy_route.\(route.index)"
+            features.append(.init(id: id,
+                geometry: .lineString(route.points.map { [$0.x, $0.y] }),
+                properties: .init(id: id, name: route.name, kind: .enemyRoute, layer: 45,
+                    insidePlayArea: route.points.allSatisfy { virtualCanvas.playAreaRect.contains(CGPoint(x: $0.x, y: $0.y)) },
+                    pathIndex: route.index, entranceID: route.entranceID, exitID: route.exitID)))
+        }
+        for (i, p) in draft.entrances.enumerated() {
+            features.append(feature(id: "gameplay.entry.\(i)", name: "Entrance \(i + 1)",
+                                    kind: .entrance, geometry: .point([p.x, p.y])))
+        }
+        for (i, p) in draft.exits.enumerated() {
+            features.append(feature(id: "gameplay.exit.\(i)", name: "Exit \(i + 1)",
+                                    kind: .exit, geometry: .point([p.x, p.y])))
+        }
+        for role in HeroSelection.Role.allCases where draft.hasHero(role) {
+            if let p = draft.heroPosition(role) {
+                features.append(feature(id: "gameplay.hero_spawn.\(role.rawValue)", name: role.title,
+                                        kind: .heroSpawn, geometry: .point([p.x, p.y]), heroRoles: [role]))
+            }
+        }
+        for (i, p) in draft.slots.enumerated() {
+            features.append(feature(id: "gameplay.tower_slot.\(i + 1)", name: "Tower slot \(i + 1)",
+                                    kind: .towerSlot, geometry: .point([p.x, p.y]), slot: i))
+        }
+        for (i, p) in draft.callWaveButtons.enumerated() {
+            features.append(feature(id: "gameplay.call_wave_button.\(i)", name: "Call wave button \(i + 1)",
+                                    kind: .callWaveButton, geometry: .point([p.x, p.y]),
+                                    pathIndices: p.pathIndices))
+        }
+        let rect = virtualCanvas.playAreaRect
+        return try LevelGeoJSON(collection: .init(
+            name: draft.name,
+            coordinateReferenceSystem: .init(
+                canvas: .init(width: virtualCanvas.size.width, height: virtualCanvas.size.height),
+                playArea: .init(x: rect.minX, y: rect.minY, width: rect.width, height: rect.height)),
+            startingGold: draft.startingGold, lives: draft.lives, features: features,
             waves: draft.waves.map { w in
-                Wave(breather: w.breather, lines: w.lines.map { l in
-                    SpawnLine(foe: l.foe, count: l.count, every: l.every,
-                              delay: l.delay, pathIndex: l.road)
-                })
-            }
-        )
-    }
-
-    struct SpawnLine: Encodable {
-        var foe: String
-        var count: Int
-        var every: Double
-        var delay: Double
-        var pathIndex: Int
-    }
-
-    struct Wave: Encodable {
-        var breather: Double
-        var lines: [SpawnLine]
-    }
-
-    struct FeatureCollection: Encodable {
-        var type = "FeatureCollection"
-        var name: String
-        var crs: CRS
-        var features: [Feature]
-        var waves: [Wave]
-
-        enum CodingKeys: String, CodingKey {
-            case type, name, features, waves
-            case crs = "coordinateReferenceSystem"
-        }
-    }
-
-    struct CRS: Encodable {
-        struct Size: Encodable {
-            var width: Double
-            var height: Double
-        }
-        struct Rect: Encodable {
-            var x: Double
-            var y: Double
-            var width: Double
-            var height: Double
-        }
-        var type = "local-cartesian"
-        var note = "NOT WGS84. [x, y] in canonical game units, origin LOWER-LEFT, +y UP. "
-            + "The same space the LevelEditor, Simulator and game all use; nothing rescales."
-        var canvas: Size
-        var playArea: Rect
-
-        init(virtualCanvas: VirtualCanvas) {
-            canvas = Size(width: virtualCanvas.size.width,
-                          height: virtualCanvas.size.height)
-            playArea = Rect(x: virtualCanvas.playAreaRect.minX,
-                            y: virtualCanvas.playAreaRect.minY,
-                            width: virtualCanvas.playAreaRect.width,
-                            height: virtualCanvas.playAreaRect.height)
-        }
-    }
-
-    enum Geometry {
-        case point(Point)
-        case lineString([Point])
-        case polygon([Point])
-    }
-
-    enum JSONValue: Encodable {
-        case number(Double)
-        case string(String)
-        case bool(Bool)
-
-        func encode(to encoder: Encoder) throws {
-            var c = encoder.singleValueContainer()
-            switch self {
-            case let .number(v): try c.encode(v)
-            case let .string(v): try c.encode(v)
-            case let .bool(v): try c.encode(v)
-            }
-        }
-    }
-
-    struct Feature: Encodable {
-        var type = "Feature"
-        var id: String
-        var name: String
-        var category: String
-        var kind: String
-        var layer: Int
-        var geometry: Geometry
-        var extra: [String: JSONValue] = [:]
-
-        enum CodingKeys: String, CodingKey {
-            case type, geometry, properties
-        }
-
-        enum PropertyKeys: String, CodingKey {
-            case id, name, category, kind, layer, playable, insidePlayArea
-        }
-
-        struct DynamicKey: CodingKey {
-            var stringValue: String
-            var intValue: Int? { nil }
-            init?(stringValue: String) { self.stringValue = stringValue }
-            init?(intValue: Int) { nil }
-        }
-
-        func encode(to encoder: Encoder) throws {
-            var c = encoder.container(keyedBy: CodingKeys.self)
-            try c.encode(type, forKey: .type)
-
-            var g = c.nestedContainer(keyedBy: DynamicKey.self, forKey: .geometry)
-            switch geometry {
-            case let .point(p):
-                try g.encode("Point", forKey: DynamicKey(stringValue: "type")!)
-                try g.encode(coords(p), forKey: DynamicKey(stringValue: "coordinates")!)
-            case let .lineString(pts):
-                try g.encode("LineString", forKey: DynamicKey(stringValue: "type")!)
-                try g.encode(pts.map(coords), forKey: DynamicKey(stringValue: "coordinates")!)
-            case let .polygon(ring):
-                try g.encode("Polygon", forKey: DynamicKey(stringValue: "type")!)
-                var closed = ring.map(coords)
-                if let first = closed.first, closed.last != first { closed.append(first) }
-                try g.encode([closed], forKey: DynamicKey(stringValue: "coordinates")!)
-            }
-
-            var p = c.nestedContainer(keyedBy: DynamicKey.self, forKey: .properties)
-            try p.encode(id, forKey: DynamicKey(stringValue: "id")!)
-            try p.encode(name, forKey: DynamicKey(stringValue: "name")!)
-            try p.encode(category, forKey: DynamicKey(stringValue: "category")!)
-            try p.encode(kind, forKey: DynamicKey(stringValue: "kind")!)
-            try p.encode(layer, forKey: DynamicKey(stringValue: "layer")!)
-            try p.encode(true, forKey: DynamicKey(stringValue: "playable")!)
-            try p.encode(insidePlayArea,
-                         forKey: DynamicKey(stringValue: "insidePlayArea")!)
-            for key in extra.keys.sorted() {
-                try p.encode(extra[key]!, forKey: DynamicKey(stringValue: key)!)
-            }
-        }
-
-        /// Filled by the exporter before encoding — a nested Encodable has
-        /// no route to the canvas.
-        var insidePlayArea = false
-
-        private func coords(_ p: Point) -> [Double] {
-            [round(p.x * 100) / 100, round(p.y * 100) / 100]
-        }
+                .init(breather: w.breather, lines: w.lines.map { l in
+                    .init(foe: l.foe, count: l.count, every: l.every, delay: l.delay,
+                          pathIndex: draft.enemyRoutes.isEmpty && draft.flattenedPath == nil ? 0 : l.road)
+                }, callButtonDelay: w.callButtonDelay, autoStartCountdown: w.autoStartCountdown,
+                      earlyCallBonus: w.earlyCallBonus)
+            }, heroCount: draft.heroCount))
     }
 }

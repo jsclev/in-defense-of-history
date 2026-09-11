@@ -1,0 +1,21 @@
+/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-ranged-probe-30rdam6z/build/Build/Products/Debug-iphoneos/Liberty Line.app: replacing existing signature
+13:47:17  Acquired tunnel connection to device.
+13:47:17  Enabling developer disk image services.
+13:47:18  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.hero-animation-probe
+• installationURL: file:///private/var/containers/Bundle/Application/6541878A-C6E2-4747-926B-2362E518BAA7/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 717E0170-E9D0-4AB4-988E-77A4FB6B7E28
+• databaseSequenceNumber: 2444
+• options: 
+13:47:42  Acquired tunnel connection to device.
+13:47:42  Enabling developer disk image services.
+13:47:42  Acquired usage assertion.
+Launched application with com.zippyzen.hero-animation-probe bundle identifier.
+13:47:49  Acquired tunnel connection to device.
+13:47:49  Enabling developer disk image services.
+13:47:49  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-animation-repair-2026-09-11/device-documents
+PASS: physical iPhone hero frame trace, compiled pixels, and minimum-size animation captured.

@@ -1,0 +1,69 @@
+{
+  "error" : {
+    "code" : 10002,
+    "domain" : "com.apple.dt.CoreDeviceError",
+    "userInfo" : {
+      "BundleIdentifier" : {
+        "string" : "com.zippyzen.liberty-line"
+      },
+      "NSLocalizedDescription" : {
+        "string" : "The application failed to launch."
+      },
+      "NSUnderlyingError" : {
+        "error" : {
+          "code" : 1,
+          "domain" : "FBSOpenApplicationServiceErrorDomain",
+          "userInfo" : {
+            "BSErrorCodeDescription" : {
+              "string" : "RequestDenied"
+            },
+            "FBSOpenApplicationRequestID" : {
+              "string" : "0x61c1"
+            },
+            "NSLocalizedDescription" : {
+              "string" : "The request to open \"com.zippyzen.liberty-line\" failed."
+            },
+            "NSLocalizedFailureReason" : {
+              "string" : "The request was denied by service delegate (SBMainWorkspace) for reason: Busy (\"Application failed preflight checks\")."
+            },
+            "NSUnderlyingError" : {
+              "error" : {
+                "code" : 6,
+                "domain" : "FBSOpenApplicationErrorDomain",
+                "userInfo" : {
+                  "BSErrorCodeDescription" : {
+                    "string" : "Busy"
+                  },
+                  "NSLocalizedFailureReason" : {
+                    "string" : "Application failed preflight checks"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "00008130-000161D93E82001C",
+      "--terminate-existing",
+      "com.zippyzen.liberty-line",
+      "--json-output",
+      "Tools/reports/range-grass-contrast-2026-09-09/launch-final.json"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "failed",
+    "version" : "518.33"
+  }
+}

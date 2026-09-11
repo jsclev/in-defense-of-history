@@ -1,0 +1,18 @@
+{
+  "source_size": [
+    288,
+    288
+  ],
+  "device_size": [
+    288,
+    288
+  ],
+  "premultiplied_max_channel_error": [
+    0,
+    1,
+    1,
+    0
+  ],
+  "source_sha256": "cbc573a2aec524759196d4e4e38b1375ab28a144e8e03a7e1408294d540c569d",
+  "device_png_sha256": "bedc4659eb08f63ef6726c3ca0822f5d4dd87a9a79f9e39db3e947665b12642f"
+}

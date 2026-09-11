@@ -31,6 +31,8 @@ struct LevelBriefingView: View {
 
     var body: some View {
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
+        let footer = DoneButtonLayout(runtimeCanvas: runtimeCanvas, aspect: DoneButton.aspect).frame
+        let contentRect = MenuContentLayout(runtimeCanvas: runtimeCanvas, footer: footer).frame
         ZStack(alignment: .topLeading) {
             ZStack {
                 Image("level_briefing_background")
@@ -55,29 +57,20 @@ struct LevelBriefingView: View {
                         levelPortrait(metrics: metrics)
                     }
 
-                    difficultyGrid(metrics: metrics)
+                    difficultyGrid(metrics: metrics, availableHeight: contentRect.height)
                 }
-                .padding(24 * metrics.scale)
+                .padding(.horizontal, 24 * metrics.scale)
+                .frame(width: contentRect.width, height: contentRect.height)
+                .position(x: contentRect.midX, y: contentRect.midY)
             }
             .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
 
-            VStack {
-                Spacer()
-                HStack {
-                    Spacer()
-                    DoneButton {
-                        if let selected {
-                            onStart(selected)
-                        }
-                    }
-                    .disabled(selected == nil)
-                    .frame(height: HudSizing.doneButton.resolved(at: metrics.scale))
+            DoneButton(runtimeCanvas: runtimeCanvas) {
+                if let selected {
+                    onStart(selected)
                 }
             }
-            .padding(.trailing, runtimeCanvas.physicalRect.maxX - runtimeCanvas.safeInsetsRect.maxX
-                                + metrics.hudMargin)
-            .padding(.bottom, runtimeCanvas.physicalRect.maxY - runtimeCanvas.safeInsetsRect.maxY
-                              + metrics.hudMargin)
+            .disabled(selected == nil)
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
@@ -89,8 +82,10 @@ struct LevelBriefingView: View {
     /// Cards get their own scale floor — at the phone HUD scale the fixed
     /// card cannot hold three lines of floor-size text, truncating every
     /// difficulty description mid-sentence.
-    private func difficultyGrid(metrics: HudMetrics) -> some View {
-        let cardMetrics = HudMetrics(scale: max(metrics.scale, 0.92))
+    private func difficultyGrid(metrics: HudMetrics, availableHeight: CGFloat) -> some View {
+        // The reference grid is 312pt high; 328 also leaves room for the
+        // selected card's 5% emphasis without entering the footer.
+        let cardMetrics = HudMetrics(scale: min(max(metrics.scale, 0.92), availableHeight / 328))
         let rows = stride(from: 0, to: difficulties.count, by: 2).map {
             Array(difficulties[$0..<min($0 + 2, difficulties.count)])
         }
@@ -158,7 +153,7 @@ private struct DifficultyCard: View {
 
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 6 * metrics.scale) {
+            VStack(spacing: 4 * metrics.scale) {
                 Text(difficulty.name)
                     .font(.custom("Baskerville-Bold",
                                   size: Typography.size(22 * metrics.scale)))
@@ -170,14 +165,14 @@ private struct DifficultyCard: View {
                     .font(.system(size: Typography.size(12 * metrics.scale)))
                     .foregroundStyle(Self.ink.opacity(0.75))
                     .multilineTextAlignment(.center)
-                    .lineLimit(3)
+                    .lineLimit(4)
 
                 Text("Enemy HP \(Self.percentText(difficulty.enemyHPMultiplier))")
                     .font(.system(size: Typography.size(12 * metrics.scale), weight: .bold))
                     .foregroundStyle(Self.ink.opacity(0.9))
                     .monospacedDigit()
             }
-            .padding(12 * metrics.scale)
+            .padding(10 * metrics.scale)
             .frame(width: 160 * metrics.scale, height: 150 * metrics.scale)
             .background(Self.parchment,
                         in: RoundedRectangle(cornerRadius: 10 * metrics.scale, style: .continuous))

@@ -1,0 +1,152 @@
+[
+  {
+    "file": "hero-minimum@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "ready-minimum@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "selected-minimum@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "cooldown-minimum@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "mode": "minimum",
+    "density": 1,
+    "portrait_warm_region_top_px": {
+      "knox-before": 7,
+      "knox-ready": 9
+    },
+    "added_clearance_pt": 2.0
+  },
+  {
+    "file": "hero-minimum@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "ready-minimum@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "selected-minimum@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "cooldown-minimum@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "mode": "minimum",
+    "density": 2,
+    "portrait_warm_region_top_px": {
+      "knox-before": 14,
+      "knox-ready": 18
+    },
+    "added_clearance_pt": 2.0
+  },
+  {
+    "file": "hero-minimum@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "ready-minimum@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "selected-minimum@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "cooldown-minimum@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "mode": "minimum",
+    "density": 3,
+    "portrait_warm_region_top_px": {
+      "knox-before": 22,
+      "knox-ready": 27
+    },
+    "added_clearance_pt": 1.6666666666666667
+  },
+  {
+    "file": "hero-device@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "ready-device@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "selected-device@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "cooldown-device@1x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "mode": "device",
+    "density": 1,
+    "portrait_warm_region_top_px": {
+      "knox-before": 9,
+      "knox-ready": 11
+    },
+    "added_clearance_pt": 2.0
+  },
+  {
+    "file": "hero-device@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "ready-device@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "selected-device@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "cooldown-device@2x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "mode": "device",
+    "density": 2,
+    "portrait_warm_region_top_px": {
+      "knox-before": 18,
+      "knox-ready": 23
+    },
+    "added_clearance_pt": 2.5
+  },
+  {
+    "file": "hero-device@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "ready-device@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "selected-device@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "file": "cooldown-device@3x.png",
+    "max_channel_delta": 0
+  },
+  {
+    "mode": "device",
+    "density": 3,
+    "portrait_warm_region_top_px": {
+      "knox-before": 27,
+      "knox-ready": 34
+    },
+    "added_clearance_pt": 2.3333333333333335
+  }
+]

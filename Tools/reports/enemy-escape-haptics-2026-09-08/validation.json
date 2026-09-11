@@ -1,0 +1,16 @@
+{
+  "sources": {
+    "Engine/Models/EnemyEscapeHapticPolicy.swift": "1fb57641a735c830b37f702d5d33d65fe5c123b115a99b5bc0dd1c71b66ed277",
+    "Engine/Core/Constants.swift": "99dffa4d0a96940ee5deb717393875118739136b0e627ac8f19f40e3e14864f3",
+    "Liberty Line/LevelRunner.swift": "4ce48e033d33f72a50ed0659f615c07f8bb64e9a593574ee9a24975210932ea1",
+    "Liberty Line/Level Views/LevelMapView.swift": "5ad1c9162219303004e0473168a0e79176101fd4af0f7bdd950b36c48ab3358d",
+    "Liberty Line/SettingsView.swift": "36bb9f54429184bff79bafbb4376bb3984245e10ee3e1f7619a830fbfce5c638",
+    "Tests/LevelEditorFormatsTests/EnemyEscapeHapticTests.swift": "4f261f0a6481d63dfb05d952aba8238c82260a0d8a92818e5b7335b94b0944e4"
+  },
+  "policy_tests": "5 passed",
+  "existing_viewport_and_presentation_tests": "8 passed",
+  "runner_crossing_probe": "PASS",
+  "iphone_build": "SUCCEEDED (unsigned)",
+  "settings_layout": "Checked live macOS SwiftUI snapshots at 340pt and 402pt height; options and Done remain within the frame. Native control drawing can differ from iOS. Version in fixture is 0.0.0.",
+  "physical_iphone_haptic_feel": "NOT MEASURED"
+}

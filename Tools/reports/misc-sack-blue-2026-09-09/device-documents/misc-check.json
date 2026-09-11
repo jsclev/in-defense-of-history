@@ -1,0 +1,103 @@
+{
+  "assetLogicalSize" : [
+    128,
+    128
+  ],
+  "captures" : [
+    {
+      "artworkBoxPoints" : 47.744,
+      "buttonFrame" : [
+        733.32000000000005,
+        313.31999999999999,
+        59.679999999999993,
+        59.679999999999993
+      ],
+      "buttonSizePoints" : 59.679999999999993,
+      "density" : 1,
+      "file" : "charleston-device@1x.png",
+      "heightPoints" : 393,
+      "playableHeight" : 373,
+      "widthPoints" : 852
+    },
+    {
+      "artworkBoxPoints" : 47.744,
+      "buttonFrame" : [
+        733.32000000000005,
+        313.31999999999999,
+        59.679999999999993,
+        59.679999999999993
+      ],
+      "buttonSizePoints" : 59.679999999999993,
+      "density" : 2,
+      "file" : "charleston-device@2x.png",
+      "heightPoints" : 393,
+      "playableHeight" : 373,
+      "widthPoints" : 852
+    },
+    {
+      "artworkBoxPoints" : 47.744,
+      "buttonFrame" : [
+        733.32000000000005,
+        313.31999999999999,
+        59.679999999999993,
+        59.679999999999993
+      ],
+      "buttonSizePoints" : 59.679999999999993,
+      "density" : 3,
+      "file" : "charleston-device@3x.png",
+      "heightPoints" : 393,
+      "playableHeight" : 373,
+      "widthPoints" : 852
+    },
+    {
+      "artworkBoxPoints" : 43.520000000000003,
+      "buttonFrame" : [
+        537.95555555555563,
+        285.60000000000002,
+        54.399999999999999,
+        54.399999999999999
+      ],
+      "buttonSizePoints" : 54.399999999999999,
+      "density" : 1,
+      "file" : "charleston-minimum@1x.png",
+      "heightPoints" : 340,
+      "playableHeight" : 340,
+      "widthPoints" : 604.44444444444446
+    },
+    {
+      "artworkBoxPoints" : 43.520000000000003,
+      "buttonFrame" : [
+        537.95555555555563,
+        285.60000000000002,
+        54.399999999999999,
+        54.399999999999999
+      ],
+      "buttonSizePoints" : 54.399999999999999,
+      "density" : 2,
+      "file" : "charleston-minimum@2x.png",
+      "heightPoints" : 340,
+      "playableHeight" : 340,
+      "widthPoints" : 604.44444444444446
+    },
+    {
+      "artworkBoxPoints" : 43.520000000000003,
+      "buttonFrame" : [
+        537.95555555555563,
+        285.60000000000002,
+        54.399999999999999,
+        54.399999999999999
+      ],
+      "buttonSizePoints" : 54.399999999999999,
+      "density" : 3,
+      "file" : "charleston-minimum@3x.png",
+      "heightPoints" : 340,
+      "playableHeight" : 340,
+      "widthPoints" : 604.44444444444446
+    }
+  ],
+  "device" : "iPhone",
+  "miscLocation" : "south_east",
+  "passed" : true,
+  "runID" : "e739a7db-dd10-404f-9f7e-953d4bd961d9",
+  "systemVersion" : "26.6.1"
+}

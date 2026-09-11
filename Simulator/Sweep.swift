@@ -33,7 +33,7 @@ struct SweepFixedInputs {
         guard let levelID = try db.levelInfoDao.getIdBy(levelName: levelName) else {
             throw DbError.Db(message: "No level named '\(levelName)' in the database")
         }
-        let level = try db.levelInfoDao.getBy(id: levelID)
+        let level = try db.levelLoader.load(id: levelID)
         var towerLevels: [String: [TowerLevel]] = [:]
         for (category, levels) in try db.towerTypeDao.getTowerLevels() {
             towerLevels[normalizeKind(category)] = levels
@@ -64,9 +64,9 @@ struct SweepFixedInputs {
     }
 
     func designLevel(db: Db) throws -> LevelInfo {
-        let level = try db.levelInfoDao.getBy(id: levelID)
+        let level = try db.levelLoader.load(id: levelID)
         guard !level.paths.isEmpty, !level.towerSlots.isEmpty else {
-            throw DbError.Db(message: "Level '\(levelName)' has no paths or tower slots in the database")
+            throw DbError.Db(message: "Level '\(levelName)' needs database paths and GeoJSON tower slots")
         }
         let paths = level.paths.map { Path(points: simplify($0.points, maxPoints: 16)) }
         return LevelInfo(

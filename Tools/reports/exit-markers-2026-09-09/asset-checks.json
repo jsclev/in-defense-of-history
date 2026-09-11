@@ -1,0 +1,31 @@
+{
+  "build": "1",
+  "bundleID": "com.zippyzen.liberty-line",
+  "compiledRenditions": [
+    {
+      "Name": "path_exit_rounded_x",
+      "Scale": 3,
+      "PixelWidth": 288,
+      "PixelHeight": 288,
+      "AssetType": "Image"
+    }
+  ],
+  "catalogFiles": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/Contents.json",
+      "sha256": "7b39066f866a47adb78e571cc8ff6df1b0f0dcf0b36b202910c2dd3439de2de6"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x.png",
+      "sha256": "2d95f4d0760784fcfc987b8bb1b453afbd161291b014eddcf7245e08b4adf21a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@2x.png",
+      "sha256": "64f75ddb7e0e74296b3cb71949de3399690c8fc6b5a4457fefe4d4115907df9d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@3x.png",
+      "sha256": "434e0a9edb015e2f1d686f3c7d523bd1c051e6de46fe10bed775516673120908"
+    }
+  ]
+}

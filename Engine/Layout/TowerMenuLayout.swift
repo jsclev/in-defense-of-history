@@ -53,8 +53,9 @@ public struct TowerMenuLayout {
         return CGSize(width: side, height: side)
     }
     
-    public func getTowerIconSize(towerButtonSize: CGFloat) -> CGFloat {
-        return towerButtonSize * towerIconScalingFactor
+    public func getTowerIconSize(towerButtonSize: CGFloat, for kind: TowerKind? = nil) -> CGFloat {
+        let fraction: CGFloat = kind == .ranged ? HudSizing.paintedButtonIconFraction : towerIconScalingFactor
+        return towerButtonSize * fraction
     }
 
     public func getCenterPoint(anchor: CGPoint, scale: CGFloat) -> CGPoint {
@@ -147,7 +148,7 @@ public struct TowerMenuLayout {
         shape.addRect(CGRect(x: left, y: bottom,
                              width: right - left, height: top - bottom))
         let standoff = CGMutablePath()
-        for corner in virtualCanvas.cornerOcclusionAreas {
+        for corner in virtualCanvas.occlusionAreas where !corner.isEmpty {
             standoff.addRect(CGRect(
                 x: corner.minX - slotSafeInset(.left),
                 y: corner.minY - slotSafeInset(.top),

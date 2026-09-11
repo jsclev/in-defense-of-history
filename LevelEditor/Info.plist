@@ -12,7 +12,7 @@
 	<array>
 		<dict>
 			<key>CFBundleTypeName</key>
-			<string>TD Map Blueprint</string>
+			<string>Level Editor Document</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSHandlerRank</key>
@@ -29,7 +29,7 @@
 			<key>UTTypeIdentifier</key>
 			<string>com.zippyzen.td.map</string>
 			<key>UTTypeDescription</key>
-			<string>TD Map Blueprint</string>
+			<string>Level Editor Document</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>public.json</string>

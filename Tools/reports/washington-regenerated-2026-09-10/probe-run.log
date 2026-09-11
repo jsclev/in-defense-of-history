@@ -1,0 +1,20 @@
+01:46:41  Acquired tunnel connection to device.
+01:46:41  Enabling developer disk image services.
+01:46:41  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.washington-framed-probe
+• installationURL: file:///private/var/containers/Bundle/Application/4071538D-6525-4CBD-B181-3FAE2639EBE2/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5352
+• options: 
+01:47:12  Acquired tunnel connection to device.
+01:47:12  Enabling developer disk image services.
+01:47:13  Acquired usage assertion.
+Launched application with com.zippyzen.washington-framed-probe bundle identifier.
+01:47:18  Acquired tunnel connection to device.
+01:47:18  Enabling developer disk image services.
+01:47:18  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/washington-regenerated-2026-09-10/device-documents
+PASS: production Washington button and live HUD captured at minimum and device sizes.

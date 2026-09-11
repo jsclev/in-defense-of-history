@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HudMiscView: View {
-    private let iconName = "hero_ability_icon_daniel_morgan"
+    private let iconName = "hud_misc_sack"
     private let buttonSize: CGFloat
     
     public init(runtimeCanvas: RuntimeCanvas) {
@@ -11,6 +11,7 @@ struct HudMiscView: View {
     }
 
     var body: some View {
-        HudButtonView(iconName: iconName, buttonSize: buttonSize) {}
+        HudButtonView(iconName: iconName, buttonSize: buttonSize,
+                      frameName: "hud_misc_sack_blue_frame") {}
     }
 }

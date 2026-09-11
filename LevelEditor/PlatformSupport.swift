@@ -72,6 +72,10 @@ enum PlatformImageLoader {
     /// the editor showed as a picked layer never appearing.
     static func load(url: URL) -> (image: PlatformImage, pixelSize: CGSize)? {
         guard let data = freshRead(url) else { return nil }
+        return load(data: data)
+    }
+
+    static func load(data: Data) -> (image: PlatformImage, pixelSize: CGSize)? {
         #if canImport(AppKit)
         guard let image = NSImage(data: data),
               let cg = image.cgImage(forProposedRect: nil, context: nil, hints: nil)
@@ -84,7 +88,7 @@ enum PlatformImageLoader {
         #endif
     }
 
-    private static func freshRead(_ url: URL) -> Data? {
+    static func freshRead(_ url: URL) -> Data? {
         let scoped = url.startAccessingSecurityScopedResource()
         defer { if scoped { url.stopAccessingSecurityScopedResource() } }
 
@@ -119,6 +123,7 @@ enum NudgeDirection {
 extension View {
     @ViewBuilder
     func platformEditingCommands(
+        canMove: @escaping () -> Bool,
         onDelete: @escaping () -> Void,
         onCancel: @escaping () -> Void,
         onMove: @escaping (NudgeDirection) -> Void
@@ -126,26 +131,101 @@ extension View {
         #if os(macOS)
         self.onDeleteCommand(perform: onDelete)
             .onExitCommand(perform: onCancel)
-            .onMoveCommand { direction in
-                switch direction {
-                case .up: onMove(.up)
-                case .down: onMove(.down)
-                case .left: onMove(.left)
-                case .right: onMove(.right)
-                @unknown default: break
-                }
+            .background {
+                EditorArrowKeyInput(canMove: canMove, onMove: onMove)
             }
         #else
         self.onKeyPress(.delete) { onDelete(); return .handled }
             .onKeyPress(.deleteForward) { onDelete(); return .handled }
             .onKeyPress(.escape) { onCancel(); return .handled }
-            .onKeyPress(.upArrow) { onMove(.up); return .handled }
-            .onKeyPress(.downArrow) { onMove(.down); return .handled }
-            .onKeyPress(.leftArrow) { onMove(.left); return .handled }
-            .onKeyPress(.rightArrow) { onMove(.right); return .handled }
+            .onKeyPress(.upArrow) { guard canMove() else { return .ignored }; onMove(.up); return .handled }
+            .onKeyPress(.downArrow) { guard canMove() else { return .ignored }; onMove(.down); return .handled }
+            .onKeyPress(.leftArrow) { guard canMove() else { return .ignored }; onMove(.left); return .handled }
+            .onKeyPress(.rightArrow) { guard canMove() else { return .ignored }; onMove(.right); return .handled }
         #endif
     }
 }
+
+#if os(macOS)
+/// A window-scoped route: ScrollView and toolbar focus can consume SwiftUI's
+/// onMoveCommand before it reaches the canvas. Text editing keeps its arrows.
+private struct EditorArrowKeyInput: NSViewRepresentable {
+    var canMove: () -> Bool
+    var onMove: (NudgeDirection) -> Void
+
+    func makeNSView(context: Context) -> EditorArrowKeyView {
+        let view = EditorArrowKeyView()
+        updateNSView(view, context: context)
+        return view
+    }
+
+    func updateNSView(_ view: EditorArrowKeyView, context: Context) {
+        view.canMove = canMove
+        view.onMove = onMove
+    }
+
+    static func dismantleNSView(_ view: EditorArrowKeyView, coordinator: ()) {
+        view.stopMonitoring()
+    }
+}
+
+@MainActor
+final class EditorArrowKeyView: NSView {
+    var canMove: () -> Bool = { false }
+    var onMove: (NudgeDirection) -> Void = { _ in }
+    private var monitor: Any?
+
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        stopMonitoring()
+        guard window != nil else { return }
+        monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            self?.handleArrowKey(event) == true ? nil : event
+        }
+    }
+
+    func stopMonitoring() {
+        if let monitor { NSEvent.removeMonitor(monitor) }
+        monitor = nil
+    }
+
+    deinit {
+        if let monitor { NSEvent.removeMonitor(monitor) }
+    }
+
+    /// Returns true only when this document consumed the key. Kept separate
+    /// from monitor installation so responder routing can be regression-tested.
+    @discardableResult
+    func handleArrowKey(_ event: NSEvent) -> Bool {
+        guard event.type == .keyDown,
+              let window, window.isKeyWindow, event.window === window,
+              window.attachedSheet == nil,
+              NSApp.modalWindow == nil,
+              !isHiddenOrHasHiddenAncestor,
+              event.modifierFlags.intersection([.command, .control, .option, .shift]).isEmpty,
+              canMove() else { return false }
+
+        // AppKit uses an NSTextView field editor for both native and SwiftUI
+        // text fields. Also respect custom controls with an active field editor.
+        if window.firstResponder is NSTextInputClient { return false }
+        if let control = window.firstResponder as? NSControl,
+           control.currentEditor() != nil { return false }
+
+        let direction: NudgeDirection
+        switch event.keyCode {
+        case 123: direction = .left
+        case 124: direction = .right
+        case 125: direction = .down
+        case 126: direction = .up
+        default: return false
+        }
+        onMove(direction)
+        return true
+    }
+}
+#endif
 
 struct EditorSplit<Sidebar: View, Detail: View>: View {
     var showSidebar = true

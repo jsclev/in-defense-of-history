@@ -1,0 +1,291 @@
+{
+  "reference_height": 655.0,
+  "clamp": [
+    340.0,
+    900.0
+  ],
+  "default_playable_height": 340.0,
+  "assets": [
+    {
+      "id": "path_exit_rounded_x",
+      "label": "Rounded red X exit",
+      "animated": false,
+      "map_height": 61.64705882352941,
+      "states": {
+        "n": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "e": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "se": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "s": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "w": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        }
+      },
+      "files": {
+        "exit": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/path_exit_rounded_x.imageset/path_exit_rounded_x@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "rally_flag_comparison",
+      "label": "Rally flag \u2014 equal-size comparison",
+      "animated": false,
+      "map_height": 61.64705882352941,
+      "states": {
+        "n": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "e": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "se": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "s": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "w": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "militia_soldier",
+      "label": "Militia soldier",
+      "map_height": 55.26,
+      "animated": false,
+      "states": {
+        "n": {
+          "idle": [
+            "militia_soldier_walk_n_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_n_16"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "militia_soldier_walk_ne_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_ne_16"
+          ]
+        },
+        "e": {
+          "idle": [
+            "militia_soldier_walk_e_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_e_16"
+          ]
+        },
+        "se": {
+          "idle": [
+            "militia_soldier_walk_se_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_se_16"
+          ]
+        },
+        "s": {
+          "idle": [
+            "militia_soldier_walk_s_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_s_16"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "militia_soldier_walk_sw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_sw_16"
+          ]
+        },
+        "w": {
+          "idle": [
+            "militia_soldier_walk_w_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_w_16"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "militia_soldier_walk_nw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_nw_16"
+          ]
+        }
+      }
+    }
+  ],
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_01_battle_road.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_003_great_bridge.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_008_trenton.png"
+    }
+  ],
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "a751360a0d668bc1e187466adcd4ff2315d28c2dd50b94bb29489918398c2a4a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Models/UnitFacing.swift",
+      "sha256": "d6e61bec08fb2b7ace2d10a223cf8fd1fc82e1b202f8d947315e858dd172b8ae"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HeroSpriteProfile.swift",
+      "sha256": "ffefa33dfff13c2527ad8fe41a53358f87ffe953776dff22aba94ad155e05d50"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "a751360a0d668bc1e187466adcd4ff2315d28c2dd50b94bb29489918398c2a4a"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "156589615120d4478f25cf8fd7b69c8ed07822043b18e7365c41c8002e3b437f"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/LevelRunner.swift",
+      "sha256": "a305ca979013f152b1d68704876b1eb3adc3ecefe6d759012432d46ffb1ffd6c"
+    }
+  ],
+  "sizing_note": "Production MapSpriteSizing.exitMarker = 32 points at the 340-point minimum, centered on all authored goal_point coordinates. The marker layer immediately follows art.occlusion, the final map-art layer, so endpoint foliage does not hide exit symbols."
+}

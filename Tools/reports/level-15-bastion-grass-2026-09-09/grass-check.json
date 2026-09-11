@@ -1,0 +1,42 @@
+{
+  "captures" : [
+    {
+      "density" : 1,
+      "file" : "charleston-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "charleston-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "charleston-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "charleston-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    }
+  ],
+  "device" : "iPhone",
+  "mapHeight" : 2064,
+  "mapWidth" : 2868,
+  "passed" : true,
+  "runID" : "cb2a231c-febb-4f2b-b9fd-f500a184d6e0",
+  "systemVersion" : "26.6.1"
+}

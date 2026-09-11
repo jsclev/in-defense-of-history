@@ -1,0 +1,13 @@
+{
+  "source": "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_available.imageset/tower_slot_available@3x.png",
+  "device_loaded": "/Users/john/projects/td/in-defense-of-history/Tools/reports/tower-slot-front-grass-2026-09-10/device-documents/loaded-slot.png",
+  "source_sha256": "4c0ea433efe1bd3aa21b73f44903ac32f90958b2ba1ae0a58458cce9c3b3f4c7",
+  "device_sha256": "039ede58506fb510a896561e757681909208a7161f7996437a84d2e9c252b94a",
+  "dimensions": [
+    528,
+    288
+  ],
+  "premultiplied_max_channel_error": 1.9921568627451052,
+  "premultiplied_mean_channel_error": 0.1449275550129564,
+  "pixels_over_3_levels": 0
+}

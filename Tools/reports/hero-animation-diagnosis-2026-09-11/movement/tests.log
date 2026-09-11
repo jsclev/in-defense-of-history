@@ -1,0 +1,87 @@
+Test Suite 'Selected tests' started at 2026-09-11 11:40:52.535.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-11 11:40:52.536.
+Test Suite 'EnemyRouteTests' started at 2026-09-11 11:40:52.536.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testExplicitRoutesAreSortedAndDoNotExpandHeroMovementArea]' started.
+Test Case '-[LevelEditorFormatsTests.EnemyRouteTests testExplicitRoutesAreSortedAndDoNotExpandHeroMovementArea]' passed (0.003 seconds).
+Test Suite 'EnemyRouteTests' passed at 2026-09-11 11:40:52.539.
+	 Executed 1 test, with 0 failures (0 unexpected) in 0.003 (0.003) seconds
+Test Suite 'HeroMovementIntegrationTests' started at 2026-09-11 11:40:52.539.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllAuthoredHeroStartsCanMoveAndRespawnInsideTheirLevelArea]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllAuthoredHeroStartsCanMoveAndRespawnInsideTheirLevelArea]' passed (2.729 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllLegacyLevelRoadsPermitMovementAlongWaypointsAndAcrossTheirWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllLegacyLevelRoadsPermitMovementAlongWaypointsAndAcrossTheirWidth]' passed (7.325 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testCharlestonPolygonAllowsAreaDestinationsAndPreservesItsHoles]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testCharlestonPolygonAllowsAreaDestinationsAndPreservesItsHoles]' passed (4.525 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints]' passed (0.005 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testRuntimeCanvasInputRoundTripAndResizeDoNotChangeMovement]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testRuntimeCanvasInputRoundTripAndResizeDoNotChangeMovement]' passed (1.027 seconds).
+Test Suite 'HeroMovementIntegrationTests' passed at 2026-09-11 11:41:08.152.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 15.612 (15.612) seconds
+Test Suite 'HeroMovementTests' started at 2026-09-11 11:41:08.152.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testAuthoredWidthAndPolygonOverrideDefaultWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testAuthoredWidthAndPolygonOverrideDefaultWidth]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testEnemyChaseReturnAndUnreachableEnemyUseSameArea]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testEnemyChaseReturnAndUnreachableEnemyUseSameArea]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMalformedAndMissingAreasFailInsteadOfUsingDatabaseRoads]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMalformedAndMissingAreasFailInsteadOfUsingDatabaseRoads]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMovesToExactOffCenterAndSubTwoUnitDestinations]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMovesToExactOffCenterAndSubTwoUnitDestinations]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNarrowBentPassageUsesBoundaryRouteInsteadOfBecomingUnreachable]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNarrowBentPassageUsesBoundaryRouteInsteadOfBecomingUnreachable]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNewCommandMidStepAndRespawnUseActualPosition]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNewCommandMidStepAndRespawnUseActualPosition]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testRejectedCommandsKeepExistingOrderAndCombatState]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testRejectedCommandsKeepExistingOrderAndCombatState]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testWalksAroundHoleAndDoesNotCrossThinExclusions]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testWalksAroundHoleAndDoesNotCrossThinExclusions]' passed (0.003 seconds).
+Test Suite 'HeroMovementTests' passed at 2026-09-11 11:41:08.160.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.008 (0.009) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-11 11:41:08.160.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 15.623 (15.624) seconds
+Test Suite 'Selected tests' passed at 2026-09-11 11:41:08.160.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 15.623 (15.625) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'in-defense-of-history': failed storing manifest for 'in-defense-of-history' in cache: attempt to write a readonly database
+[0/1] Planning build
+Building for debugging...
+[0/3] Write swift-version--58304C5D6DBC2206.txt
+[2/29] Compiling LevelEditorFormatsTests GameplayHapticPatternTests.swift
+[3/29] Compiling LevelEditorFormatsTests HapticAuditionTests.swift
+[4/31] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[5/31] Compiling LevelEditorFormatsTests MasterControlsLayoutTests.swift
+[6/31] Compiling LevelEditorFormatsTests HeroBarLayoutTests.swift
+[7/31] Compiling LevelEditorFormatsTests HeroExitConfigurationTests.swift
+[8/31] Compiling LevelEditorFormatsTests RuntimeCanvasTests.swift
+[9/31] Compiling LevelEditorFormatsTests TapAreaTests.swift
+[10/31] Compiling LevelEditorFormatsTests HeroMovementIntegrationTests.swift
+[11/31] Compiling LevelEditorFormatsTests HeroMovementTests.swift
+[12/31] Emitting module LevelEditorFormatsTests
+[13/31] Compiling LevelEditorFormatsTests PresentationStackTests.swift
+[14/31] Compiling LevelEditorFormatsTests ReinforcementTests.swift
+[15/31] Compiling LevelEditorFormatsTests BottomCenterOcclusionTests.swift
+[16/31] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[17/31] Compiling LevelEditorFormatsTests CharlestonWaveTests.swift
+[18/31] Compiling LevelEditorFormatsTests EditorArrowKeyTests.swift
+[19/31] Compiling LevelEditorFormatsTests EditorDocumentLifecycleTests.swift
+[20/31] Compiling LevelEditorFormatsTests EditorEraserIntegrationTests.swift
+[21/31] Compiling LevelEditorFormatsTests EditorEraserTests.swift
+[22/31] Compiling LevelEditorFormatsTests EnemyEscapeHapticTests.swift
+[23/31] Compiling LevelEditorFormatsTests EnemyRouteTests.swift
+[24/31] Compiling LevelEditorFormatsTests HeroRankingTests.swift
+[25/31] Compiling LevelEditorFormatsTests HeroStartingPositionTests.swift
+[26/31] Compiling LevelEditorFormatsTests LevelGeoJSONTests.swift
+[27/31] Compiling LevelEditorFormatsTests LevelMarkerPlacementTests.swift
+[28/31] Compiling LevelEditorFormatsTests TowerSlotLoadingTests.swift
+[29/31] Compiling LevelEditorFormatsTests WaveStartTimingTests.swift
+[30/33] Emitting module LevelEditorFormatsPackageTests
+[31/33] Compiling LevelEditorFormatsPackageTests runner.swift
+[31/33] Write Objects.LinkFileList
+[32/33] Linking LevelEditorFormatsPackageTests
+Build complete! (3.36s)

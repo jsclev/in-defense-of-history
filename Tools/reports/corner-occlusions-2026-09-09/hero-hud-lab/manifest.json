@@ -1,0 +1,470 @@
+{
+  "reference_height": 340,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    "Production HeroBarLayout / RuntimeCanvas / bundled virtual_canvas: 44.9556pt buttons at 340pt playable height including HUD margins. Production HUD views compiled with fixture runner state and file-backed images; 7pt proof padding per edge."
+  ],
+  "assets": [
+    {
+      "id": "hero-0-ready",
+      "label": "hero-0-ready",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "hero-0-ready": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-ready@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-ready@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-ready@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/hero-0-ready-1x.png",
+          "boxes": {
+            "hero-0-ready": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/hero-0-ready-2x.png",
+          "boxes": {
+            "hero-0-ready": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/hero-0-ready-3x.png",
+          "boxes": {
+            "hero-0-ready": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "hero-0-ready"
+          ],
+          "walk": [
+            "hero-0-ready"
+          ]
+        }
+      }
+    },
+    {
+      "id": "hero-1-ready",
+      "label": "hero-1-ready",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "hero-1-ready": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-1-ready@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-1-ready@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-1-ready@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/hero-1-ready-1x.png",
+          "boxes": {
+            "hero-1-ready": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/hero-1-ready-2x.png",
+          "boxes": {
+            "hero-1-ready": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/hero-1-ready-3x.png",
+          "boxes": {
+            "hero-1-ready": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "hero-1-ready"
+          ],
+          "walk": [
+            "hero-1-ready"
+          ]
+        }
+      }
+    },
+    {
+      "id": "hero-0-hero-selected",
+      "label": "hero-0-hero-selected",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "hero-0-hero-selected": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-hero-selected@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-hero-selected@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/hero-0-hero-selected@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/hero-0-hero-selected-1x.png",
+          "boxes": {
+            "hero-0-hero-selected": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/hero-0-hero-selected-2x.png",
+          "boxes": {
+            "hero-0-hero-selected": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/hero-0-hero-selected-3x.png",
+          "boxes": {
+            "hero-0-hero-selected": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "hero-0-hero-selected"
+          ],
+          "walk": [
+            "hero-0-hero-selected"
+          ]
+        }
+      }
+    },
+    {
+      "id": "reinforcement-placing",
+      "label": "reinforcement-placing",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "reinforcement-placing": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-placing@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-placing@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-placing@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/reinforcement-placing-1x.png",
+          "boxes": {
+            "reinforcement-placing": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/reinforcement-placing-2x.png",
+          "boxes": {
+            "reinforcement-placing": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/reinforcement-placing-3x.png",
+          "boxes": {
+            "reinforcement-placing": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "reinforcement-placing"
+          ],
+          "walk": [
+            "reinforcement-placing"
+          ]
+        }
+      }
+    },
+    {
+      "id": "reinforcement-cooldown-20",
+      "label": "reinforcement-cooldown-20",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "reinforcement-cooldown-20": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-20@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-20@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-20@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/reinforcement-cooldown-20-1x.png",
+          "boxes": {
+            "reinforcement-cooldown-20": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/reinforcement-cooldown-20-2x.png",
+          "boxes": {
+            "reinforcement-cooldown-20": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/reinforcement-cooldown-20-3x.png",
+          "boxes": {
+            "reinforcement-cooldown-20": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "reinforcement-cooldown-20"
+          ],
+          "walk": [
+            "reinforcement-cooldown-20"
+          ]
+        }
+      }
+    },
+    {
+      "id": "reinforcement-cooldown-10",
+      "label": "reinforcement-cooldown-10",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "reinforcement-cooldown-10": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-10@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-10@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-10@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/reinforcement-cooldown-10-1x.png",
+          "boxes": {
+            "reinforcement-cooldown-10": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/reinforcement-cooldown-10-2x.png",
+          "boxes": {
+            "reinforcement-cooldown-10": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/reinforcement-cooldown-10-3x.png",
+          "boxes": {
+            "reinforcement-cooldown-10": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "reinforcement-cooldown-10"
+          ],
+          "walk": [
+            "reinforcement-cooldown-10"
+          ]
+        }
+      }
+    },
+    {
+      "id": "reinforcement-cooldown-1",
+      "label": "reinforcement-cooldown-1",
+      "animated": false,
+      "map_height": 58.9555555556,
+      "files": {
+        "reinforcement-cooldown-1": [
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-1@1x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-1@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/hero-hud-2026-09-08/reinforcement-cooldown-1@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/reinforcement-cooldown-1-1x.png",
+          "boxes": {
+            "reinforcement-cooldown-1": [
+              1,
+              1,
+              59,
+              59
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/reinforcement-cooldown-1-2x.png",
+          "boxes": {
+            "reinforcement-cooldown-1": [
+              1,
+              1,
+              118,
+              118
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/reinforcement-cooldown-1-3x.png",
+          "boxes": {
+            "reinforcement-cooldown-1": [
+              1,
+              1,
+              177,
+              177
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "reinforcement-cooldown-1"
+          ],
+          "walk": [
+            "reinforcement-cooldown-1"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "battle-road",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "great-bridge",
+      "under": "great-bridge-under.jpg",
+      "over": "great-bridge-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "trenton",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

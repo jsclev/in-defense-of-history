@@ -1,0 +1,158 @@
+{
+  "generated_at": "2026-09-09T18:07:51.914234+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    "Current production MasterControlsLayout: minimum 37.41798941798942pt buttons, 7pt proof padding. Glyphs remain 60% of the frame side."
+  ],
+  "assets": [
+    {
+      "id": "speed_up_icon_glyph",
+      "minimum_box_pt": 51.418,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              52,
+              52
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              103,
+              103
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              155,
+              155
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        37.154,
+        37.154
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "pause_icon_glyph",
+      "minimum_box_pt": 51.418,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              52,
+              52
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              103,
+              103
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              155,
+              155
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        37.154,
+        37.154
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/speed_up_icon_glyph@1x.png",
+      "sha256": "22b3c028b409a09c97c1899c42bea32b53ed72f951267266790d122511246bc9",
+      "dimensions": [
+        52,
+        52
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/speed_up_icon_glyph@2x.png",
+      "sha256": "35b3d68b429181e32ff411173f2a4e34a35d7985bc758a0e337d0d60d535860d",
+      "dimensions": [
+        103,
+        103
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/speed_up_icon_glyph@3x.png",
+      "sha256": "4cb5eec8938e8f274bd926766ed608455cc662bba65603d8fb40a92ae24250bd",
+      "dimensions": [
+        155,
+        155
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/pause_icon_glyph@1x.png",
+      "sha256": "aa969ef32ec8f8d583fb7bb786aa195bdf2c0ca3f75278f62ae10572236f54ae",
+      "dimensions": [
+        52,
+        52
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/pause_icon_glyph@2x.png",
+      "sha256": "b20fc5b2cb8a033d596f67f4ec84864dd33d1a97b4fb941bb5a297d767cdc387",
+      "dimensions": [
+        103,
+        103
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-fit-2026-09-09/pause_icon_glyph@3x.png",
+      "sha256": "294494cc9552321a3e8d6f457adf858c2cb3f3afc546a1cdd502c58b21b66c44",
+      "dimensions": [
+        155,
+        155
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png",
+      "sha256": "f2c51dbbabe573b2383595b222d7991cdfdc7395b0bfed51e996fcd4f0df52b9"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_overlay.png",
+      "sha256": "d0237f9729cd8f9b7e23f77f6fde9485eb0dab6f1660ade57e7384335f1e854c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png",
+      "sha256": "cc93bf4d9567eca1f9683cbb71d13a01f77043198890bf322e5ca5eb07f5bf4d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png",
+      "sha256": "e56a386b796ef34f9cedb76c9004108f406c95b8dc46258703b893da144c1b60"
+    }
+  ]
+}

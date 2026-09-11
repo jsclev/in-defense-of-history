@@ -1,0 +1,54 @@
+{
+  "passed": true,
+  "renditions": [
+    {
+      "Name": "ranged_tower_level_1",
+      "Scale": 3,
+      "PixelWidth": 408,
+      "PixelHeight": 300,
+      "SHA1Digest": "EC8E97E57F2A1DA2A752A455A2A393BCB337824D6DE4ECC53008039854A9ACF8"
+    },
+    {
+      "Name": "ranged_tower_level_2",
+      "Scale": 3,
+      "PixelWidth": 408,
+      "PixelHeight": 300,
+      "SHA1Digest": "0C26289EE875413276F8D1734261526D892CF263F057A03DE9E5AE1D71629A48"
+    },
+    {
+      "Name": "ranged_tower_level_3",
+      "Scale": 3,
+      "PixelWidth": 408,
+      "PixelHeight": 300,
+      "SHA1Digest": "0521F1D254370922F52B929C9E0A1BFC8EAE077F43CD07B455D04E7AAA86AB0E"
+    },
+    {
+      "Name": "ranged_tower_level_4_branch_1",
+      "Scale": 3,
+      "PixelWidth": 408,
+      "PixelHeight": 300,
+      "SHA1Digest": "CAD51CB54E2B778F37AFD617D629FB54B909F67B2144F793EFB1668BBF612BF3"
+    },
+    {
+      "Name": "ranged_tower_level_4_branch_2",
+      "Scale": 3,
+      "PixelWidth": 408,
+      "PixelHeight": 300,
+      "SHA1Digest": "CD8DD598A5CEEFC7A5CA11D89C7587D16B733B57A3813F21C1C92F9C6F2A5287"
+    },
+    {
+      "Name": "ranged_tower_level_4_branch_3",
+      "Scale": 3,
+      "PixelWidth": 408,
+      "PixelHeight": 300,
+      "SHA1Digest": "B0C26FF083659588FD9A3C92E8EA8172E9CF68D0730DFA3D6530E4B7B1DCA536"
+    },
+    {
+      "Name": "tower_menu_ranged_square",
+      "Scale": 3,
+      "PixelWidth": 384,
+      "PixelHeight": 384,
+      "SHA1Digest": "2A271F8F185DB21C0D68480D4CCD08ACF0C82D1C0BE80DCFBAE5059ACEEF7F80"
+    }
+  ]
+}

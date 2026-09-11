@@ -1,0 +1,473 @@
+{
+  "generated_at": "2026-09-09T17:58:06.269250+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    "Current production HeroBarLayout and HUD views; unchanged 44.9556pt minimum buttons, 7pt proof padding. See layout.json for phone/tablet measurements."
+  ],
+  "assets": [
+    {
+      "id": "hero-0-ready",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "hero-1-ready",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "hero-0-hero-selected",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-placing",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-cooldown-20",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-cooldown-10",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "reinforcement-cooldown-1",
+      "minimum_box_pt": 58.956,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              59,
+              59
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              118,
+              118
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              177,
+              177
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        44.966,
+        44.966
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-0-ready@1x.png",
+      "sha256": "14540718c46009291f04f380a61a13310aa0bc6cdf3005075f5ffb9ec54aac2d",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-0-ready@2x.png",
+      "sha256": "6aa90ac6e29fb19aa315530628d8306ff6ef3dbbb67a67185caf9a1e2f8ec96a",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-0-ready@3x.png",
+      "sha256": "8172530f8b54ba3c590d4d54fe2154f882db514a5a8c3d08cb24b4068ae6ccc6",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-1-ready@1x.png",
+      "sha256": "ec47b6aa7ee3db49e3a3b18c56209272c8d8c0eda41cc48685af8c19c9259b2c",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-1-ready@2x.png",
+      "sha256": "3355efc822ec215e42df967ca39d61d9fed28bbf1066051a326a22a7afc60c37",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-1-ready@3x.png",
+      "sha256": "62e695e1e73430961f3a12b15c36c44e3301b1a1d88e3b1c60730c911558418c",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-0-hero-selected@1x.png",
+      "sha256": "5ddd87c84910b49dd74894d016556402d0f28cb05e25945431ec17113868b08c",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-0-hero-selected@2x.png",
+      "sha256": "1e4bcd77cc21d68163c190ce56e70e5b95aa5e387690d1d00b75e9da4f4e4130",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/hero-0-hero-selected@3x.png",
+      "sha256": "4ba31b1ed360a9ba283919b5022ba73305e248c3e8327527117851259425c425",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-placing@1x.png",
+      "sha256": "2c5632a3879ca2f227d5f22bfafafdcb2e759474b7e4a3344f4bab4399a4bd1b",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-placing@2x.png",
+      "sha256": "15e2cde1fec544126dc8a11eaff292dfadbcd064a43c3a419e2d60e697ceb235",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-placing@3x.png",
+      "sha256": "d726892b67f2683c777a6d60effaefb8ffdb4639897393bd771e553cbcdd8b3b",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-20@1x.png",
+      "sha256": "fab45845e1e041fa49e2e3a4a7cdc64032dbbeeaaf0a7b20b35d6650ed6080a9",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-20@2x.png",
+      "sha256": "6777222f9645fdc371428ead648b3a1987f862347d0fad6bfd99b5360d69e276",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-20@3x.png",
+      "sha256": "bce9c0dd2349ee87b22827af15ea166b6857b9e04210ff253215f54a5281769d",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-10@1x.png",
+      "sha256": "7057c3cf8985465789a85c4e5138e249a34b26183da79d72c3ba7ed61ce7607b",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-10@2x.png",
+      "sha256": "3c7dd34f0d2c03142c4ac9574f4d60fbf261dd8c5ce978eb5180cf2e0aecef62",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-10@3x.png",
+      "sha256": "87f17c6de7378db7e7b7c7387fa8c3b3bbe2fada6ef8b6198944cfecd25d5d3b",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-1@1x.png",
+      "sha256": "e71ecd049c2cd4d1db5afaf4c2fabb20789cd1a6f2ef4b0f15de8a85972f7261",
+      "dimensions": [
+        59,
+        59
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-1@2x.png",
+      "sha256": "9364c55096e0ce2ea5d35cc506139d0f99e241339fc52e441467f02983b006f3",
+      "dimensions": [
+        118,
+        118
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hero-bar-fit-2026-09-09/reinforcement-cooldown-1@3x.png",
+      "sha256": "6fba407595656fc0b666d792420d49220c62b26e796a92dc659142bdd6db8fab",
+      "dimensions": [
+        177,
+        177
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road.png",
+      "sha256": "f2c51dbbabe573b2383595b222d7991cdfdc7395b0bfed51e996fcd4f0df52b9"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_overlay.png",
+      "sha256": "d0237f9729cd8f9b7e23f77f6fde9485eb0dab6f1660ade57e7384335f1e854c"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_01_battle_road_forest_occlusion.png",
+      "sha256": "3a8853b95efd47b9cf9bdaa6bcf3ae5f9a6b03c8a7b92485ee9064d5619712bd"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_003_great_bridge.png",
+      "sha256": "cc93bf4d9567eca1f9683cbb71d13a01f77043198890bf322e5ca5eb07f5bf4d"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history-data/LevelMaps/level_008_trenton.png",
+      "sha256": "e56a386b796ef34f9cedb76c9004108f406c95b8dc46258703b893da144c1b60"
+    }
+  ]
+}

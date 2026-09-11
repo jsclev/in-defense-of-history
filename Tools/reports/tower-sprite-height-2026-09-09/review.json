@@ -1,0 +1,48 @@
+{
+  "task": "Make TowerKind.spriteHeight the single tower-size control",
+  "implementation": "One shared SwiftUI image sizing and positioning path for every tower family, level and branch. Removed the slot-canvas branch, slotTowerScale, slotTowerLift and usesSlotCanvasArt.",
+  "values_preserved": {
+    "ranged": 15,
+    "melee": 75,
+    "areaOfEffect": 75,
+    "special": 80
+  },
+  "validation": {
+    "ios_build": "PASS",
+    "engine_build": "PASS",
+    "swiftui_raster_checks": 84,
+    "old_ranged_bug_reproductions": 24,
+    "other_families_pixel_identical": "PASS",
+    "slot_size_independence": "PASS",
+    "alpha_bounds_doubling_tolerance": "4 raster pixels; both visible dimensions must increase"
+  },
+  "visual_review": {
+    "order": "Inspected lab/roster-minimum.png before native-size-proof.png and density examples.",
+    "minimum_playable_height_points": 340,
+    "ranged_image_height_points": 7.786259541984733,
+    "ranged_recognizability": "FAIL at current 15: tiny brown fort/figure marks, insufficient size to distinguish all upgrades. Preserved the user's size setting while repairing its behavior; this is not an art revision or a readability acceptance.",
+    "other_families": "Existing tent/building, cannon/wheels, and wooden foliage-topped tower cues remain visible; raster output unchanged.",
+    "backgrounds": [
+      "battle-road",
+      "great-bridge",
+      "trenton"
+    ],
+    "densities_rendered": [
+      1,
+      2,
+      3
+    ],
+    "densities_inspected": [
+      1,
+      2,
+      3
+    ],
+    "phone_validation": "NOT MEASURED; actual desktop SwiftUI output and constructed map crops, not a device capture."
+  },
+  "lesson": "A computed size is not proof the view uses it. Render the production view with two requested heights and changed slot dimensions; verify visible bounds respond only to the height.",
+  "current_source_hashes": {
+    "/Users/john/projects/td/in-defense-of-history/Engine/Models/TowerKind.swift": "61c11132ab7831b049106efa0c1dba0cf00a8c444085765c780a4618bc952020",
+    "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift": "6bf4d44f5416224004154586b7b3c806f1a61e2d28d8dd965cc7889c51509348",
+    "/Users/john/projects/td/in-defense-of-history/Tools/check_tower_sprite_height.py": "ee4863426872f132f7a86564d0398c10891622cdccddc23ea30c2586a4a50488"
+  }
+}

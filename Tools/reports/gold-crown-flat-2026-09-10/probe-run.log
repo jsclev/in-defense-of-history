@@ -1,0 +1,24 @@
+01:08:22  Acquired tunnel connection to device.
+01:08:22  Enabling developer disk image services.
+01:08:22  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.crown-flat-probe
+• installationURL: file:///private/var/containers/Bundle/Application/D4D0E7DA-5ED4-40A3-8B56-D8A41DE51AF4/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5216
+• options: 
+01:08:35  Acquired tunnel connection to device.
+01:08:35  Enabling developer disk image services.
+01:08:36  Acquired usage assertion.
+Launched application with com.zippyzen.crown-flat-probe bundle identifier.
+01:09:13  Acquired tunnel connection to device.
+01:09:13  Enabling developer disk image services.
+01:09:13  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/gold-crown-flat-2026-09-10/device-documents
+01:09:18  Acquired tunnel connection to device.
+01:09:18  Enabling developer disk image services.
+01:09:18  Acquired usage assertion.
+App uninstalled.
+PASS: 26 authored exits across 15 levels; physical-iPhone renders saved.

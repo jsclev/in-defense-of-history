@@ -16,20 +16,6 @@ INSERT INTO level_info (
     'level_011_saratoga'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('eb9bfa8e-2c29-52a5-8759-5d5e28dcb14c', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 962.0, 1275.6),
-('fced5880-e601-57c1-ab10-8e352bc323b9', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 875.9, 1213.7),
-('3c5349cf-4524-5288-ac0d-a972e3ba811d', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 886.2, 1044.9),
-('e5e15ee6-f56c-5587-b673-0c4ae129ba65', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 927.6, 914.0),
-('64c0dd14-cd4f-53e9-8540-cdd30cf33bd7', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 708.9, 791.8),
-('4a59fb83-c2cf-5586-9cc9-2bdb8da1ec51', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 1542.5, 941.6),
-('5251521e-510a-5870-bf42-b3e939e68f59', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 1297.9, 783.2),
-('40ba4ca0-6008-5f5e-95c6-b640ccffa5ed', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 1978.3, 1160.2),
-('43ddaa45-f4b8-5240-96a4-68b046991371', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 1923.2, 1000.2),
-('9d327910-3575-5733-ae37-9f7bf344aed5', '549a67d9-f721-4cdf-8ba7-8916ba71b040', 2178.1, 550.8);
-
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

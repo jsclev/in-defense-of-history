@@ -1,0 +1,4 @@
+clang: warning: using sysroot for 'MacOSX' but targeting 'iPhone' [-Wincompatible-sysroot]
+/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/td-canvas-screen-3g7vorys/CanvasScreenProbe.app: replacing existing signature
+com.zippyzen.canvas-screen-probe: 35590
+Captured 7 production screens at 1x and 3x: Tools/reports/runtime-canvas-2026-09-09/screens

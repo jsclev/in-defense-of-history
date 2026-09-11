@@ -1,0 +1,201 @@
+{
+  "generated_at": "2026-09-10T01:09:32.623048+00:00",
+  "recognition_status": "NOT_MEASURED",
+  "renderer": "Pillow Lanczos / browser Canvas2D, not UIKit",
+  "sizing_sources": [
+    "Production HudStatsView, minimum runtime canvas: {'fixture': 'minimum', 'font': 15.174500000000002, 'height': 59.020125, 'state': 'start', 'width': 197.4505745142857}. macOS SwiftUI renderer with explicit value fixtures; not device gameplay."
+  ],
+  "assets": [
+    {
+      "id": "minimum-start",
+      "minimum_box_pt": 59.02,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              198,
+              60
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              395,
+              119
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              593,
+              178
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        53.715,
+        53.715
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "minimum-end",
+      "minimum_box_pt": 59.02,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              198,
+              60
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              395,
+              119
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              593,
+              178
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        53.715,
+        53.715
+      ],
+      "opaque_edge_touch_frames": []
+    },
+    {
+      "id": "minimum-wide",
+      "minimum_box_pt": 59.02,
+      "densities": {
+        "1": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              198,
+              60
+            ]
+          ]
+        },
+        "2": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              395,
+              119
+            ]
+          ]
+        },
+        "3": {
+          "frame_count": 1,
+          "sizes": [
+            [
+              593,
+              178
+            ]
+          ]
+        }
+      },
+      "flags": [],
+      "minimum_visible_body_pt_range": [
+        53.715,
+        53.715
+      ],
+      "opaque_edge_touch_frames": []
+    }
+  ],
+  "inputs": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-start@1x.png",
+      "sha256": "8f7604b3207f96f9d71b2f8b1ccb189756deaf4891cf9093b074f9ddbfd7fd5f",
+      "dimensions": [
+        198,
+        60
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-start@2x.png",
+      "sha256": "7655ec4673c4863ecf2f9d885cef7db2b78b69cac468e7b37a7ba5ac9748fed1",
+      "dimensions": [
+        395,
+        119
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-start@3x.png",
+      "sha256": "fa7935f42ed7b8a85cc225c34222db17eebb0912abfcb44b549a3d196d0f59d2",
+      "dimensions": [
+        593,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-end@1x.png",
+      "sha256": "ebfb41a468442ca3589a5969146eae96bc74365fcc78737d9bbbf2f71ef71a3f",
+      "dimensions": [
+        198,
+        60
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-end@2x.png",
+      "sha256": "fe59efcd7ce1d6b58d632ad4594a902fcadffe1638607ee599dd6e0a6d5f0ae1",
+      "dimensions": [
+        395,
+        119
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-end@3x.png",
+      "sha256": "60df60d6fae3411cb9210498a3819f423c7fda31401b59ff618607380a325fb2",
+      "dimensions": [
+        593,
+        178
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-wide@1x.png",
+      "sha256": "e1d5c69ccb5c1a7d58be45f1c6d50b24bc386e09222976e7fd4b340a35ac5f9c",
+      "dimensions": [
+        198,
+        60
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-wide@2x.png",
+      "sha256": "1546d0207bccac1a78256bfafb9e24a1a5846ea1500c6e5ee4863d3ed7a56d0e",
+      "dimensions": [
+        395,
+        119
+      ]
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-2026-09-09/minimum-wide@3x.png",
+      "sha256": "ce3de06cf70954942eee83ee2f78a9a82aab4bc923437666dcd2bb3c399dc7e9",
+      "dimensions": [
+        593,
+        178
+      ]
+    }
+  ]
+}

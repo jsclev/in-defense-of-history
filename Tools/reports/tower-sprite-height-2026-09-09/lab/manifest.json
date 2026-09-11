@@ -1,0 +1,1335 @@
+{
+  "reference_height": 655.0,
+  "clamp": [
+    340.0,
+    900.0
+  ],
+  "default_playable_height": 340.0,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelMapView.swift",
+      "sha256": "6bf4d44f5416224004154586b7b3c806f1a61e2d28d8dd965cc7889c51509348"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Models/TowerKind.swift",
+      "sha256": "fe7dda816dd5bd49ba8693da440fe93b87256d5f35890f6145eb44e6e5f45d6b"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "d6e5f9fddcb8afff41f837bb6646594a8513a3806843790bec7d582e81fd6546"
+    }
+  ],
+  "assets": [
+    {
+      "id": "ranged_tower_level_1",
+      "label": "ranged tower level 1",
+      "animated": false,
+      "map_height": 15.0,
+      "files": {
+        "ranged_tower_level_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_1.imageset/ranged_tower_level_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_1.imageset/ranged_tower_level_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_1.imageset/ranged_tower_level_1.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/ranged_tower_level_1-1x.png",
+          "boxes": {
+            "ranged_tower_level_1": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/ranged_tower_level_1-2x.png",
+          "boxes": {
+            "ranged_tower_level_1": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/ranged_tower_level_1-3x.png",
+          "boxes": {
+            "ranged_tower_level_1": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "ranged_tower_level_1"
+          ],
+          "walk": [
+            "ranged_tower_level_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ranged_tower_level_2",
+      "label": "ranged tower level 2",
+      "animated": false,
+      "map_height": 15.0,
+      "files": {
+        "ranged_tower_level_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_2.imageset/ranged_tower_level_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_2.imageset/ranged_tower_level_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_2.imageset/ranged_tower_level_2.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/ranged_tower_level_2-1x.png",
+          "boxes": {
+            "ranged_tower_level_2": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/ranged_tower_level_2-2x.png",
+          "boxes": {
+            "ranged_tower_level_2": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/ranged_tower_level_2-3x.png",
+          "boxes": {
+            "ranged_tower_level_2": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "ranged_tower_level_2"
+          ],
+          "walk": [
+            "ranged_tower_level_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ranged_tower_level_3",
+      "label": "ranged tower level 3",
+      "animated": false,
+      "map_height": 15.0,
+      "files": {
+        "ranged_tower_level_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_3.imageset/ranged_tower_level_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_3.imageset/ranged_tower_level_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_3.imageset/ranged_tower_level_3.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/ranged_tower_level_3-1x.png",
+          "boxes": {
+            "ranged_tower_level_3": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/ranged_tower_level_3-2x.png",
+          "boxes": {
+            "ranged_tower_level_3": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/ranged_tower_level_3-3x.png",
+          "boxes": {
+            "ranged_tower_level_3": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "ranged_tower_level_3"
+          ],
+          "walk": [
+            "ranged_tower_level_3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ranged_tower_level_4_branch_1",
+      "label": "ranged tower level 4 branch 1",
+      "animated": false,
+      "map_height": 15.0,
+      "files": {
+        "ranged_tower_level_4_branch_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_1.imageset/ranged_tower_level_4_branch_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_1.imageset/ranged_tower_level_4_branch_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_1.imageset/ranged_tower_level_4_branch_1.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/ranged_tower_level_4_branch_1-1x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_1": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/ranged_tower_level_4_branch_1-2x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_1": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/ranged_tower_level_4_branch_1-3x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_1": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "ranged_tower_level_4_branch_1"
+          ],
+          "walk": [
+            "ranged_tower_level_4_branch_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ranged_tower_level_4_branch_2",
+      "label": "ranged tower level 4 branch 2",
+      "animated": false,
+      "map_height": 15.0,
+      "files": {
+        "ranged_tower_level_4_branch_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_2.imageset/ranged_tower_level_4_branch_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_2.imageset/ranged_tower_level_4_branch_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_2.imageset/ranged_tower_level_4_branch_2.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/ranged_tower_level_4_branch_2-1x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_2": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/ranged_tower_level_4_branch_2-2x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_2": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/ranged_tower_level_4_branch_2-3x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_2": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "ranged_tower_level_4_branch_2"
+          ],
+          "walk": [
+            "ranged_tower_level_4_branch_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "ranged_tower_level_4_branch_3",
+      "label": "ranged tower level 4 branch 3",
+      "animated": false,
+      "map_height": 15.0,
+      "files": {
+        "ranged_tower_level_4_branch_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_3.imageset/ranged_tower_level_4_branch_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_3.imageset/ranged_tower_level_4_branch_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/ranged_tower_level_4_branch_3.imageset/ranged_tower_level_4_branch_3.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/ranged_tower_level_4_branch_3-1x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_3": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/ranged_tower_level_4_branch_3-2x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_3": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/ranged_tower_level_4_branch_3-3x.png",
+          "boxes": {
+            "ranged_tower_level_4_branch_3": [
+              1,
+              1,
+              850,
+              625
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "ranged_tower_level_4_branch_3"
+          ],
+          "walk": [
+            "ranged_tower_level_4_branch_3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "melee_tower_level_1",
+      "label": "melee tower level 1",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "melee_tower_level_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_1.imageset/melee_tower_level_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_1.imageset/melee_tower_level_1@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_1.imageset/melee_tower_level_1@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/melee_tower_level_1-1x.png",
+          "boxes": {
+            "melee_tower_level_1": [
+              1,
+              1,
+              388,
+              309
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/melee_tower_level_1-2x.png",
+          "boxes": {
+            "melee_tower_level_1": [
+              1,
+              1,
+              776,
+              618
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/melee_tower_level_1-3x.png",
+          "boxes": {
+            "melee_tower_level_1": [
+              1,
+              1,
+              1164,
+              927
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "melee_tower_level_1"
+          ],
+          "walk": [
+            "melee_tower_level_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "melee_tower_level_2",
+      "label": "melee tower level 2",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "melee_tower_level_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_2.imageset/melee_tower_level_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_2.imageset/melee_tower_level_2@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_2.imageset/melee_tower_level_2@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/melee_tower_level_2-1x.png",
+          "boxes": {
+            "melee_tower_level_2": [
+              1,
+              1,
+              388,
+              309
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/melee_tower_level_2-2x.png",
+          "boxes": {
+            "melee_tower_level_2": [
+              1,
+              1,
+              776,
+              618
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/melee_tower_level_2-3x.png",
+          "boxes": {
+            "melee_tower_level_2": [
+              1,
+              1,
+              1164,
+              927
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "melee_tower_level_2"
+          ],
+          "walk": [
+            "melee_tower_level_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "melee_tower_level_3",
+      "label": "melee tower level 3",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "melee_tower_level_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_3.imageset/melee_tower_level_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_3.imageset/melee_tower_level_3@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_3.imageset/melee_tower_level_3@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/melee_tower_level_3-1x.png",
+          "boxes": {
+            "melee_tower_level_3": [
+              1,
+              1,
+              388,
+              309
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/melee_tower_level_3-2x.png",
+          "boxes": {
+            "melee_tower_level_3": [
+              1,
+              1,
+              776,
+              618
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/melee_tower_level_3-3x.png",
+          "boxes": {
+            "melee_tower_level_3": [
+              1,
+              1,
+              1164,
+              927
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "melee_tower_level_3"
+          ],
+          "walk": [
+            "melee_tower_level_3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "melee_tower_level_4_branch_1",
+      "label": "melee tower level 4 branch 1",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "melee_tower_level_4_branch_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_1.imageset/melee_tower_level_4_branch_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_1.imageset/melee_tower_level_4_branch_1@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_1.imageset/melee_tower_level_4_branch_1@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/melee_tower_level_4_branch_1-1x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_1": [
+              1,
+              1,
+              388,
+              309
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/melee_tower_level_4_branch_1-2x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_1": [
+              1,
+              1,
+              776,
+              618
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/melee_tower_level_4_branch_1-3x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_1": [
+              1,
+              1,
+              1164,
+              927
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "melee_tower_level_4_branch_1"
+          ],
+          "walk": [
+            "melee_tower_level_4_branch_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "melee_tower_level_4_branch_2",
+      "label": "melee tower level 4 branch 2",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "melee_tower_level_4_branch_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_2.imageset/melee_tower_level_4_branch_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_2.imageset/melee_tower_level_4_branch_2@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_2.imageset/melee_tower_level_4_branch_2@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/melee_tower_level_4_branch_2-1x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_2": [
+              1,
+              1,
+              388,
+              309
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/melee_tower_level_4_branch_2-2x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_2": [
+              1,
+              1,
+              776,
+              618
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/melee_tower_level_4_branch_2-3x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_2": [
+              1,
+              1,
+              1164,
+              927
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "melee_tower_level_4_branch_2"
+          ],
+          "walk": [
+            "melee_tower_level_4_branch_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "melee_tower_level_4_branch_3",
+      "label": "melee tower level 4 branch 3",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "melee_tower_level_4_branch_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_3.imageset/melee_tower_level_4_branch_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_3.imageset/melee_tower_level_4_branch_3@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/melee_tower_level_4_branch_3.imageset/melee_tower_level_4_branch_3@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/melee_tower_level_4_branch_3-1x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_3": [
+              1,
+              1,
+              388,
+              309
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/melee_tower_level_4_branch_3-2x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_3": [
+              1,
+              1,
+              776,
+              618
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/melee_tower_level_4_branch_3-3x.png",
+          "boxes": {
+            "melee_tower_level_4_branch_3": [
+              1,
+              1,
+              1164,
+              927
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "melee_tower_level_4_branch_3"
+          ],
+          "walk": [
+            "melee_tower_level_4_branch_3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "artillery_tower_level_1",
+      "label": "artillery tower level 1",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "artillery_tower_level_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_1.imageset/artillery_tower_level_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_1.imageset/artillery_tower_level_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_1.imageset/artillery_tower_level_1.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/artillery_tower_level_1-1x.png",
+          "boxes": {
+            "artillery_tower_level_1": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/artillery_tower_level_1-2x.png",
+          "boxes": {
+            "artillery_tower_level_1": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/artillery_tower_level_1-3x.png",
+          "boxes": {
+            "artillery_tower_level_1": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "artillery_tower_level_1"
+          ],
+          "walk": [
+            "artillery_tower_level_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "artillery_tower_level_2",
+      "label": "artillery tower level 2",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "artillery_tower_level_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_2.imageset/artillery_tower_level_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_2.imageset/artillery_tower_level_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_2.imageset/artillery_tower_level_2.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/artillery_tower_level_2-1x.png",
+          "boxes": {
+            "artillery_tower_level_2": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/artillery_tower_level_2-2x.png",
+          "boxes": {
+            "artillery_tower_level_2": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/artillery_tower_level_2-3x.png",
+          "boxes": {
+            "artillery_tower_level_2": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "artillery_tower_level_2"
+          ],
+          "walk": [
+            "artillery_tower_level_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "artillery_tower_level_3",
+      "label": "artillery tower level 3",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "artillery_tower_level_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_3.imageset/artillery_tower_level_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_3.imageset/artillery_tower_level_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_3.imageset/artillery_tower_level_3.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/artillery_tower_level_3-1x.png",
+          "boxes": {
+            "artillery_tower_level_3": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/artillery_tower_level_3-2x.png",
+          "boxes": {
+            "artillery_tower_level_3": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/artillery_tower_level_3-3x.png",
+          "boxes": {
+            "artillery_tower_level_3": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "artillery_tower_level_3"
+          ],
+          "walk": [
+            "artillery_tower_level_3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "artillery_tower_level_4_branch_1",
+      "label": "artillery tower level 4 branch 1",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "artillery_tower_level_4_branch_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_1.imageset/artillery_tower_level_4_branch_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_1.imageset/artillery_tower_level_4_branch_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_1.imageset/artillery_tower_level_4_branch_1.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/artillery_tower_level_4_branch_1-1x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_1": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/artillery_tower_level_4_branch_1-2x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_1": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/artillery_tower_level_4_branch_1-3x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_1": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "artillery_tower_level_4_branch_1"
+          ],
+          "walk": [
+            "artillery_tower_level_4_branch_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "artillery_tower_level_4_branch_2",
+      "label": "artillery tower level 4 branch 2",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "artillery_tower_level_4_branch_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_2.imageset/artillery_tower_level_4_branch_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_2.imageset/artillery_tower_level_4_branch_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_2.imageset/artillery_tower_level_4_branch_2.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/artillery_tower_level_4_branch_2-1x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_2": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/artillery_tower_level_4_branch_2-2x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_2": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/artillery_tower_level_4_branch_2-3x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_2": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "artillery_tower_level_4_branch_2"
+          ],
+          "walk": [
+            "artillery_tower_level_4_branch_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "artillery_tower_level_4_branch_3",
+      "label": "artillery tower level 4 branch 3",
+      "animated": false,
+      "map_height": 75.0,
+      "files": {
+        "artillery_tower_level_4_branch_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_3.imageset/artillery_tower_level_4_branch_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_3.imageset/artillery_tower_level_4_branch_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/artillery_tower_level_4_branch_3.imageset/artillery_tower_level_4_branch_3.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/artillery_tower_level_4_branch_3-1x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_3": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/artillery_tower_level_4_branch_3-2x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_3": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/artillery_tower_level_4_branch_3-3x.png",
+          "boxes": {
+            "artillery_tower_level_4_branch_3": [
+              1,
+              1,
+              901,
+              562
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "artillery_tower_level_4_branch_3"
+          ],
+          "walk": [
+            "artillery_tower_level_4_branch_3"
+          ]
+        }
+      }
+    },
+    {
+      "id": "special_tower_level_1",
+      "label": "special tower level 1",
+      "animated": false,
+      "map_height": 80.0,
+      "files": {
+        "special_tower_level_1": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_1.imageset/special_tower_level_1.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_1.imageset/special_tower_level_1@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_1.imageset/special_tower_level_1@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/special_tower_level_1-1x.png",
+          "boxes": {
+            "special_tower_level_1": [
+              1,
+              1,
+              273,
+              328
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/special_tower_level_1-2x.png",
+          "boxes": {
+            "special_tower_level_1": [
+              1,
+              1,
+              546,
+              656
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/special_tower_level_1-3x.png",
+          "boxes": {
+            "special_tower_level_1": [
+              1,
+              1,
+              819,
+              984
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "special_tower_level_1"
+          ],
+          "walk": [
+            "special_tower_level_1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "special_tower_level_2",
+      "label": "special tower level 2",
+      "animated": false,
+      "map_height": 80.0,
+      "files": {
+        "special_tower_level_2": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_2.imageset/special_tower_level_2.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_2.imageset/special_tower_level_2@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_2.imageset/special_tower_level_2@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/special_tower_level_2-1x.png",
+          "boxes": {
+            "special_tower_level_2": [
+              1,
+              1,
+              310,
+              436
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/special_tower_level_2-2x.png",
+          "boxes": {
+            "special_tower_level_2": [
+              1,
+              1,
+              620,
+              872
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/special_tower_level_2-3x.png",
+          "boxes": {
+            "special_tower_level_2": [
+              1,
+              1,
+              930,
+              1308
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "special_tower_level_2"
+          ],
+          "walk": [
+            "special_tower_level_2"
+          ]
+        }
+      }
+    },
+    {
+      "id": "special_tower_level_3",
+      "label": "special tower level 3",
+      "animated": false,
+      "map_height": 80.0,
+      "files": {
+        "special_tower_level_3": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_3.imageset/special_tower_level_3.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_3.imageset/special_tower_level_3@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/special_tower_level_3.imageset/special_tower_level_3@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/special_tower_level_3-1x.png",
+          "boxes": {
+            "special_tower_level_3": [
+              1,
+              1,
+              321,
+              422
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/special_tower_level_3-2x.png",
+          "boxes": {
+            "special_tower_level_3": [
+              1,
+              1,
+              642,
+              844
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/special_tower_level_3-3x.png",
+          "boxes": {
+            "special_tower_level_3": [
+              1,
+              1,
+              963,
+              1266
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "special_tower_level_3"
+          ],
+          "walk": [
+            "special_tower_level_3"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "under": "great-bridge-under.jpg",
+      "over": "great-bridge-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

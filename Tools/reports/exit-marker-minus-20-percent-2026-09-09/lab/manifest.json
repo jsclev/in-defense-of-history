@@ -1,0 +1,539 @@
+{
+  "reference_height": 655.0,
+  "clamp": [
+    340.0,
+    900.0
+  ],
+  "default_playable_height": 340.0,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "17c6939887e10be3da55b62d5cdd89d85f91ffe419586f5f69a83df5edae570e"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    }
+  ],
+  "sizing_note": "Exit marker 20% smaller in both dimensions: source box width 25.6pt at minimum, projected height 17.92pt; same 0.7 ground-plane ratio. Diagnostic view-transform PNG inputs are reused from the perspective review.",
+  "assets": [
+    {
+      "id": "exit_projected",
+      "label": "Exit X projected on ground",
+      "animated": false,
+      "map_height": 34.52235294117647,
+      "files": {
+        "exit": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/diagnostic-renders/projected-marker@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/diagnostic-renders/projected-marker@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/diagnostic-renders/projected-marker@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/exit_projected-1x.png",
+          "boxes": {
+            "exit": [
+              1,
+              1,
+              96,
+              67
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/exit_projected-2x.png",
+          "boxes": {
+            "exit": [
+              1,
+              1,
+              192,
+              134
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/exit_projected-3x.png",
+          "boxes": {
+            "exit": [
+              1,
+              1,
+              288,
+              202
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "e": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "se": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "s": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "w": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        }
+      }
+    },
+    {
+      "id": "rally_flag_comparison",
+      "label": "Rally flag \u2014 equal-size comparison",
+      "animated": false,
+      "map_height": 61.64705882352941,
+      "atlases": {
+        "1": {
+          "url": "atlases/rally_flag_comparison-1x.png",
+          "boxes": {
+            "rally_point_icon": [
+              1,
+              1,
+              96,
+              96
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/rally_flag_comparison-2x.png",
+          "boxes": {
+            "rally_point_icon": [
+              1,
+              1,
+              192,
+              192
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/rally_flag_comparison-3x.png",
+          "boxes": {
+            "rally_point_icon": [
+              1,
+              1,
+              288,
+              288
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "e": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "se": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "s": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "w": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "militia_soldier",
+      "label": "Militia soldier",
+      "map_height": 55.26,
+      "animated": false,
+      "atlases": {
+        "1": {
+          "url": "atlases/militia_soldier-1x.png",
+          "boxes": {
+            "militia_soldier_walk_n_16": [
+              1,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_ne_16": [
+              120,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_e_16": [
+              239,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_se_16": [
+              358,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_s_16": [
+              477,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_sw_16": [
+              596,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_w_16": [
+              715,
+              1,
+              117,
+              89
+            ],
+            "militia_soldier_walk_nw_16": [
+              834,
+              1,
+              117,
+              89
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/militia_soldier-2x.png",
+          "boxes": {
+            "militia_soldier_walk_n_16": [
+              1,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_ne_16": [
+              237,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_e_16": [
+              473,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_se_16": [
+              709,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_s_16": [
+              945,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_sw_16": [
+              1181,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_w_16": [
+              1417,
+              1,
+              234,
+              178
+            ],
+            "militia_soldier_walk_nw_16": [
+              1653,
+              1,
+              234,
+              178
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/militia_soldier-3x.png",
+          "boxes": {
+            "militia_soldier_walk_n_16": [
+              1,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_ne_16": [
+              354,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_e_16": [
+              707,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_se_16": [
+              1060,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_s_16": [
+              1413,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_sw_16": [
+              1766,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_w_16": [
+              2119,
+              1,
+              351,
+              267
+            ],
+            "militia_soldier_walk_nw_16": [
+              2472,
+              1,
+              351,
+              267
+            ]
+          }
+        }
+      },
+      "directions": [
+        "n",
+        "ne",
+        "e",
+        "se",
+        "s",
+        "sw",
+        "w",
+        "nw"
+      ],
+      "frames": {
+        "n": {
+          "idle": [
+            "militia_soldier_walk_n_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_n_16"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "militia_soldier_walk_ne_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_ne_16"
+          ]
+        },
+        "e": {
+          "idle": [
+            "militia_soldier_walk_e_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_e_16"
+          ]
+        },
+        "se": {
+          "idle": [
+            "militia_soldier_walk_se_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_se_16"
+          ]
+        },
+        "s": {
+          "idle": [
+            "militia_soldier_walk_s_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_s_16"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "militia_soldier_walk_sw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_sw_16"
+          ]
+        },
+        "w": {
+          "idle": [
+            "militia_soldier_walk_w_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_w_16"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "militia_soldier_walk_nw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_nw_16"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "under": "great-bridge-under.jpg",
+      "over": "great-bridge-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

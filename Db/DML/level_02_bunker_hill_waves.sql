@@ -9,15 +9,15 @@ DELETE FROM level_wave_enemy_spawn WHERE level_wave_id IN (
 );
 DELETE FROM level_wave WHERE level_info_id = '9d692af7-345d-419a-bc04-16112c3f0b74';
 
-INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time) VALUES
-('065cccea-1b0e-52ca-9d1c-124fb065f0e9', '9d692af7-345d-419a-bc04-16112c3f0b74', 1, 5.0),
-('58f1025c-dc63-50a8-a1dc-d7ab7851ced4', '9d692af7-345d-419a-bc04-16112c3f0b74', 2, 30.0),
-('11ccb1b1-8985-5b1d-ab03-ad987274f2df', '9d692af7-345d-419a-bc04-16112c3f0b74', 3, 55.0),
-('d8edaf80-94e0-51d7-9429-af9eb7123848', '9d692af7-345d-419a-bc04-16112c3f0b74', 4, 80.0),
-('7fc65ede-e8ad-5c4d-884d-8c0daceb4f00', '9d692af7-345d-419a-bc04-16112c3f0b74', 5, 105.0),
-('fc699725-9751-530b-a2e2-1b5e74ea3659', '9d692af7-345d-419a-bc04-16112c3f0b74', 6, 130.0),
-('b24d66ad-e3e5-586d-8aa3-16f7887635e5', '9d692af7-345d-419a-bc04-16112c3f0b74', 7, 155.0),
-('d7571939-420d-5a24-942d-65ea35d9f997', '9d692af7-345d-419a-bc04-16112c3f0b74', 8, 180.0);
+INSERT INTO level_wave (id, level_info_id, wave_index, spawn_time, call_button_delay, auto_start_countdown, early_call_bonus) VALUES
+('065cccea-1b0e-52ca-9d1c-124fb065f0e9', '9d692af7-345d-419a-bc04-16112c3f0b74', 1, 5.0, 0, 0, 0),
+('58f1025c-dc63-50a8-a1dc-d7ab7851ced4', '9d692af7-345d-419a-bc04-16112c3f0b74', 2, 30.0, 27.3, 13, 13),
+('11ccb1b1-8985-5b1d-ab03-ad987274f2df', '9d692af7-345d-419a-bc04-16112c3f0b74', 3, 55.0, 27.3, 13, 13),
+('d8edaf80-94e0-51d7-9429-af9eb7123848', '9d692af7-345d-419a-bc04-16112c3f0b74', 4, 80.0, 27.3, 13, 13),
+('7fc65ede-e8ad-5c4d-884d-8c0daceb4f00', '9d692af7-345d-419a-bc04-16112c3f0b74', 5, 105.0, 27.3, 13, 13),
+('fc699725-9751-530b-a2e2-1b5e74ea3659', '9d692af7-345d-419a-bc04-16112c3f0b74', 6, 130.0, 27.3, 13, 13),
+('b24d66ad-e3e5-586d-8aa3-16f7887635e5', '9d692af7-345d-419a-bc04-16112c3f0b74', 7, 155.0, 27.3, 13, 13),
+('d7571939-420d-5a24-942d-65ea35d9f997', '9d692af7-345d-419a-bc04-16112c3f0b74', 8, 180.0, 27.3, 13, 13);
 
 INSERT INTO level_wave_enemy_spawn (
     id, level_wave_id, enemy_type_id, spawn_index,

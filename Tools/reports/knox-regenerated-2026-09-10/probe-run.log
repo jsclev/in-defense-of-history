@@ -1,0 +1,20 @@
+01:28:24  Acquired tunnel connection to device.
+01:28:24  Enabling developer disk image services.
+01:28:24  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.knox-regenerated-probe
+• installationURL: file:///private/var/containers/Bundle/Application/0952B6B6-355C-4A9B-A25D-6B52F3563205/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5288
+• options: 
+01:28:47  Acquired tunnel connection to device.
+01:28:47  Enabling developer disk image services.
+01:28:48  Acquired usage assertion.
+Launched application with com.zippyzen.knox-regenerated-probe bundle identifier.
+01:28:56  Acquired tunnel connection to device.
+01:28:56  Enabling developer disk image services.
+01:28:56  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/knox-regenerated-2026-09-10/device-documents
+PASS: production reinforcement button and live HUD captured at minimum and device sizes.

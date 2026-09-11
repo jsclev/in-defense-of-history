@@ -1,0 +1,24 @@
+{
+  "captures" : [
+    {
+      "buttonSide" : 57.069000000000017,
+      "knoxImageSide" : 57.069000000000017,
+      "mode" : "device",
+      "playableHeight" : 373,
+      "reinforcementIconSide" : 36.524160000000009,
+      "washingtonImageSide" : 57.069000000000017
+    },
+    {
+      "buttonSide" : 44.955555555555563,
+      "knoxImageSide" : 44.955555555555563,
+      "mode" : "minimum",
+      "playableHeight" : 340,
+      "reinforcementIconSide" : 28.771555555555562,
+      "washingtonImageSide" : 44.955555555555563
+    }
+  ],
+  "device" : "iPhone",
+  "passed" : true,
+  "runID" : "27621176-6a08-4616-9ca6-3a3ed267decd",
+  "systemVersion" : "26.6.1"
+}

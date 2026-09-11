@@ -16,20 +16,6 @@ INSERT INTO level_info (
     'level_008_trenton'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('14613ea6-1aef-5171-9f6d-7ba7035c49bf', '537aba11-6201-4fe9-b789-36607de98e41', 898.3, 1249.8),
-('420e206d-4cf0-5078-aea5-633f3eed9cff', '537aba11-6201-4fe9-b789-36607de98e41', 1137.8, 1249.8),
-('33117bbe-06df-59a9-bcd4-ca0a2d38800e', '537aba11-6201-4fe9-b789-36607de98e41', 920.7, 1125.8),
-('e9e7ee25-e9ac-5813-b5d2-d30a70fb7e2a', '537aba11-6201-4fe9-b789-36607de98e41', 1067.1, 1007.0),
-('6e69b510-0346-5be1-8c37-f94131d65a52', '537aba11-6201-4fe9-b789-36607de98e41', 1151.5, 941.6),
-('7405c736-ae34-51eb-8b8e-3eb7534f8693', '537aba11-6201-4fe9-b789-36607de98e41', 1849.1, 1251.5),
-('97803440-d8a8-5756-b672-d175587ab37b', '537aba11-6201-4fe9-b789-36607de98e41', 2076.5, 1244.6),
-('699a1716-9edf-5459-8286-b5e45b8fc318', '537aba11-6201-4fe9-b789-36607de98e41', 2030.0, 1105.2),
-('64f1deb1-01d4-5fae-bd8d-d436e926ba3f', '537aba11-6201-4fe9-b789-36607de98e41', 1831.9, 929.5),
-('bda8a48c-50e1-50b7-b2ea-5be9f4576141', '537aba11-6201-4fe9-b789-36607de98e41', 1763.0, 855.5);
-
 
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,

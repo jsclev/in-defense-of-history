@@ -16,22 +16,6 @@ INSERT INTO level_info (
     'level_012_kettle_creek'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('a5062019-a153-5be2-9bc2-3e2084d3aa45', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1590.00, 1360.00),
-('dda94fa7-be2f-5a98-a0d6-49d4f4562aee', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 915.00, 1315.00),
-('c8e0595f-3e49-5d61-963e-f0873a938f03', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1990.00, 1160.00),
-('b54ed3f5-dc07-5759-b422-9c0a9bbe9b46', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1195.00, 1150.00),
-('7d7363f0-ffb3-5661-a9f7-0820ccce64ef', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1805.00, 1120.00),
-('41565b21-6295-5e55-8656-ceb8ff4b2887', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 695.00, 1065.00),
-('eb8f3d0b-06b5-5b60-bed4-200a64b1d357', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 875.00, 1045.00),
-('e75e8287-d5ee-5f65-bc28-98af56562538', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 775.00, 965.00),
-('5e5d8ba9-2d2b-5122-b619-dabf2ee129f1', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 975.00, 965.00),
-('786b1a8a-54c5-5ac4-b205-cf451fcad6f6', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1325.00, 905.00),
-('be55757b-9fef-5847-a49e-80b6643f3807', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 2040.00, 875.00),
-('f92ff299-9ac3-5f47-8a32-9d19d4397e6c', '33d900c6-c6ff-409a-973b-f09ddc8a6f6a', 1625.00, 690.00);
-
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,
     map_position_x, map_position_y

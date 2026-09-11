@@ -1,0 +1,200 @@
+{
+  "captures" : [
+    {
+      "density" : 1,
+      "file" : "range-clear-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-clear-device@2x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-clear-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-before-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-before-device@2x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-before-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-current-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-current-device@2x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-current-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-upgrade-device@1x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-upgrade-device@2x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-upgrade-device@3x.png",
+      "heightPoints" : 393,
+      "widthPoints" : 852,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-clear-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-clear-minimum@2x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-clear-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-before-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-before-minimum@2x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-before-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-current-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-current-minimum@2x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-current-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 1,
+      "file" : "range-upgrade-minimum@1x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 2,
+      "file" : "range-upgrade-minimum@2x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    },
+    {
+      "density" : 3,
+      "file" : "range-upgrade-minimum@3x.png",
+      "heightPoints" : 340,
+      "widthPoints" : 604,
+      "windowHeightPoints" : 393,
+      "windowWidthPoints" : 852
+    }
+  ],
+  "device" : "iPhone",
+  "passed" : true,
+  "runID" : "2c83fd70-7597-49df-a138-3906285dbb33",
+  "systemVersion" : "26.6.1"
+}

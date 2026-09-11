@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The layered map art for a level, resolved by the LevelMaps naming
+/// The layered map art for a level, resolved by the Levels naming
 /// convention. Above the base terrain image a level may ship road art
 /// ("<map>_path"), an overlay ("<map>_overlay"), and occlusion art drawn
 /// over everything that moves ("<map>_forest_occlusion", then
@@ -73,7 +73,7 @@ struct LevelMapArt {
         layer(forestOcclusionImage, in: projection)
     }
 
-    /// Tier 3 — the entrance/exit occlusion. Above every playable layer.
+    /// Tier 3 — entrance/exit occlusion, below exit markers and heroes.
     @ViewBuilder func occlusion(in projection: LevelMapProjection) -> some View {
         layer(occlusionImage, in: projection)
     }
@@ -104,12 +104,16 @@ struct LevelMapArt {
         }
     }
 
+    private static let mapFileExtensions = ["heic", "png"]
+
     private static func loaded(_ name: String) -> UIImage? {
-        guard !name.isEmpty,
-              let url = Bundle.main.url(forResource: name,
-                                        withExtension: "png",
-                                        subdirectory: "LevelMaps")
-        else { return nil }
+        guard !name.isEmpty else { return nil }
+        let url = mapFileExtensions.lazy.compactMap {
+            Bundle.main.url(forResource: name,
+                            withExtension: $0,
+                            subdirectory: "Levels")
+        }.first
+        guard let url else { return nil }
         return UIImage(contentsOfFile: url.path)
     }
 }

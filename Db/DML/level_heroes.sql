@@ -1,3 +1,5 @@
+-- Legacy fixed rosters retained for tools that inspect this table. Gameplay
+-- deploys ranked player choices using heroCount and exit heroRoles in GeoJSON.
 INSERT INTO level_hero (id, level_info_id, hero_id, enemy_path_index) VALUES
 (
     '7c1f9a20-0f4e-4a2e-9d55-2b6c0a51e001',

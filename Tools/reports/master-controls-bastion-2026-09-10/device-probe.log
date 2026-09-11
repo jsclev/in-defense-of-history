@@ -1,0 +1,20 @@
+12:20:03  Acquired tunnel connection to device.
+12:20:03  Enabling developer disk image services.
+12:20:03  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.master-controls-art-probe
+• installationURL: file:///private/var/containers/Bundle/Application/5D019127-7A5C-45E6-8820-8BA51DA11802/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: 717E0170-E9D0-4AB4-988E-77A4FB6B7E28
+• databaseSequenceNumber: 2068
+• options: 
+12:20:29  Acquired tunnel connection to device.
+12:20:29  Enabling developer disk image services.
+12:20:29  Acquired usage assertion.
+Launched application with com.zippyzen.master-controls-art-probe bundle identifier.
+12:20:37  Acquired tunnel connection to device.
+12:20:37  Enabling developer disk image services.
+12:20:37  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/master-controls-bastion-2026-09-10/device-documents
+PASS: production speed and home buttons and live HUD captured at minimum and device sizes.

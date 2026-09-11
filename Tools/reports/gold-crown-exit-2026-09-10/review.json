@@ -1,0 +1,19 @@
+{
+  "selected": "01 Gold Stamp, simplified isometric pass",
+  "user_accepted": true,
+  "source_box_pt": 25.6,
+  "extra_vertical_scale": 1,
+  "device": "iPhone 15 Pro",
+  "system": "26.6.1",
+  "minimum_playable_height_pt": 340,
+  "authored_exit_count": 26,
+  "level_count": 15,
+  "device_bound_checks": 52,
+  "observer": "familiar agent",
+  "visual_review": "PASS: gold cross/shoulders, red cap and dark edge remain legible at minimum size on the recorded grass and snow scenes",
+  "captures": "device-documents",
+  "not_measured": [
+    "independent player recognition",
+    "player comprehension of crown as enemy exit"
+  ]
+}

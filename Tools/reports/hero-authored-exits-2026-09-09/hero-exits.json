@@ -1,0 +1,5187 @@
+{
+  "checks" : [
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit",
+          "exitPosition" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2317.1999999999998,
+            1008.71
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 1,
+      "name" : "Battle Road",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1120,
+            1130
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1120,
+            1130
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 2,
+      "name" : "Bunker Hill",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2164.3000000000002,
+            1420.2
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 3,
+      "name" : "Great Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2078.1999999999998,
+            654.10000000000002
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 4,
+      "name" : "Moore's Creek Bridge",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 1,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1053.3,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1053.3,
+            1187.8
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 5,
+      "name" : "Dorchester Heights",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1284.2,
+            1187.8
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1284.2,
+            1187.8
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1773.3,
+            1155.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 6,
+      "name" : "Sullivan's Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1501.2,
+            1403
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1501.2,
+            1403
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 7,
+      "name" : "Long Island",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1337.5,
+            783.20000000000005
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1647.5999999999999,
+            783.20000000000005
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 8,
+      "name" : "Trenton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            958.60000000000002,
+            1532.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2233.1999999999998,
+            1532.0999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 9,
+      "name" : "Princeton",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1806,
+            792
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1806,
+            792
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 10,
+      "name" : "Fort Ann",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1544.2,
+            1411.5999999999999
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 11,
+      "name" : "Saratoga",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            544,
+            1190
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            544,
+            1190
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            544,
+            850
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            544,
+            850
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 12,
+      "name" : "Kettle Creek",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            1360,
+            535
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1360,
+            535
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            2025,
+            535
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2025,
+            535
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 13,
+      "name" : "New Haven",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            590.29999999999995,
+            1216.0999999999999
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            523.39999999999998,
+            941.60000000000002
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 14,
+      "name" : "Savannah",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    }
+  ],
+  "loads" : 180,
+  "passed" : true,
+  "runID" : "253809d5-b18b-4f85-b45e-489e7ad6011f"
+}

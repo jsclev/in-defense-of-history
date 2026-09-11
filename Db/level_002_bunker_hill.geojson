@@ -1591,29 +1591,29 @@
       }
     },
     {
-      "type": "Feature",
-      "id": "gameplay.exit.0",
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          1120.0,
-          1130.0
-        ]
-      },
-      "properties": {
-        "id": "gameplay.exit.0",
-        "name": "Breed's Hill redoubt exit",
-        "category": "gameplay",
-        "kind": "goal_point",
-        "layer": 75,
-        "playable": true,
-        "insidePlayArea": true,
-        "pathIndexes": [
-          0,
-          1
-        ]
-      }
-    },
+  "type": "Feature",
+  "id": "gameplay.exit.0",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      1120.0,
+      1130.0
+    ]
+  },
+  "properties": {
+    "id": "gameplay.exit.0",
+    "name": "Breed's Hill redoubt exit",
+    "category": "gameplay",
+    "kind": "goal_point",
+    "layer": 75,
+    "playable": true,
+    "insidePlayArea": true,
+    "pathIndexes": [
+      0,
+      1
+    ]
+  }
+},
     {
       "type": "Feature",
       "id": "gameplay.tower_slot.1",
@@ -1971,6 +1971,76 @@
           "url": "https://www.nps.gov/articles/000/the-battle-of-bunker-hill.htm"
         }
       }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.0",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2254,
+          820.0
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.0",
+        "name": "Call wave button 1",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          0
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.call_wave_button.1",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2030.0,
+          1432
+        ]
+      },
+      "properties": {
+        "id": "gameplay.call_wave_button.1",
+        "name": "Call wave button 2",
+        "category": "gameplay",
+        "kind": "call_wave_button",
+        "layer": 100,
+        "playable": true,
+        "insidePlayArea": true,
+        "pathIndices": [
+          1
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "gameplay.hero_spawn.primary",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          1120,
+          1150.5614489747068
+        ]
+      },
+      "properties": {
+        "id": "gameplay.hero_spawn.primary",
+        "name": "Primary hero start",
+        "category": "gameplay",
+        "kind": "hero_spawn",
+        "layer": 75,
+        "playable": true,
+        "insidePlayArea": true,
+        "heroRoles": [
+          "primary"
+        ]
+      }
     }
-  ]
+  ],
+  "heroCount": 1
 }

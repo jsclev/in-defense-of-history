@@ -1,0 +1,38 @@
+[
+  {
+    "file": "fixed-1024-false.png",
+    "marker_bounds": [
+      35,
+      77,
+      46,
+      88
+    ]
+  },
+  {
+    "file": "fixed-1024-true.png",
+    "marker_bounds": [
+      35,
+      77,
+      46,
+      88
+    ]
+  },
+  {
+    "file": "fixed-852-false.png",
+    "marker_bounds": [
+      35,
+      77,
+      46,
+      88
+    ]
+  },
+  {
+    "file": "fixed-852-true.png",
+    "marker_bounds": [
+      35,
+      77,
+      46,
+      88
+    ]
+  }
+]

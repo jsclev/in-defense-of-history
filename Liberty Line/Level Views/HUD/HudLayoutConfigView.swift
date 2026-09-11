@@ -5,6 +5,7 @@ struct HudLayoutConfigView: View {
     private let db: Db
     private let onSave: (HudLayoutConfig) -> Void
     private let onExit: () -> Void
+    private let runtimeCanvas: RuntimeCanvas
 
     private let metrics: HudMetrics
     private let boardSize: CGSize
@@ -39,6 +40,7 @@ struct HudLayoutConfigView: View {
         self.db = db
         self.onSave = onSave
         self.onExit = onExit
+        self.runtimeCanvas = runtimeCanvas
         _hudLayoutConfig = State(initialValue: hudLayoutConfig)
 
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
@@ -71,6 +73,8 @@ struct HudLayoutConfigView: View {
 
     var body: some View {
         board
+            .position(x: runtimeCanvas.playAreaRect.midX, y: runtimeCanvas.playAreaRect.midY)
+            .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
             .background {
                 ZStack {
                     Image("hero_screen_background")

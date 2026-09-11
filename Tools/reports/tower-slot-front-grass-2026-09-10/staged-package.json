@@ -1,0 +1,6 @@
+{
+  "app": "/private/tmp/td-slot-front-grass-final-product/Liberty Line.app",
+  "catalog_sha256": "4463bdca3e4cf54c361d990b15e0a80608d3af0b85d91db55f0438c73fb3fcfd",
+  "matches_device_tested_catalog": true,
+  "signature_verification": "codesign --verify --deep --strict passed"
+}

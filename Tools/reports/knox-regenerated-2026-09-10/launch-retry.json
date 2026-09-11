@@ -1,0 +1,69 @@
+{
+  "error" : {
+    "code" : 10002,
+    "domain" : "com.apple.dt.CoreDeviceError",
+    "userInfo" : {
+      "BundleIdentifier" : {
+        "string" : "com.zippyzen.liberty-line"
+      },
+      "NSLocalizedDescription" : {
+        "string" : "The application failed to launch."
+      },
+      "NSUnderlyingError" : {
+        "error" : {
+          "code" : 1,
+          "domain" : "FBSOpenApplicationServiceErrorDomain",
+          "userInfo" : {
+            "BSErrorCodeDescription" : {
+              "string" : "RequestDenied"
+            },
+            "FBSOpenApplicationRequestID" : {
+              "string" : "0xfbfc"
+            },
+            "NSLocalizedDescription" : {
+              "string" : "The request to open \"com.zippyzen.liberty-line\" failed."
+            },
+            "NSLocalizedFailureReason" : {
+              "string" : "The request was denied by service delegate (SBMainWorkspace) for reason: LaunchServicesDataMismatch (\"LaunchServices GUID and sequence number do not match expected values\")."
+            },
+            "NSUnderlyingError" : {
+              "error" : {
+                "code" : 9,
+                "domain" : "FBSOpenApplicationErrorDomain",
+                "userInfo" : {
+                  "BSErrorCodeDescription" : {
+                    "string" : "LaunchServicesDataMismatch"
+                  },
+                  "NSLocalizedFailureReason" : {
+                    "string" : "LaunchServices GUID and sequence number do not match expected values."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "00008130-000161D93E82001C",
+      "--terminate-existing",
+      "com.zippyzen.liberty-line",
+      "--json-output",
+      "Tools/reports/knox-regenerated-2026-09-10/launch-retry.json"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "failed",
+    "version" : "518.33"
+  }
+}

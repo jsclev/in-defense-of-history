@@ -15,6 +15,8 @@ struct EditorCanvas: View {
     @State private var dragMoved = false
     @State private var pinchBase: Double?
     @State private var scrollPosition = ScrollPosition()
+    @State private var scrollOffset: CGPoint = .zero
+    @State private var panOrigin: CGPoint?
     @State private var viewportSize: CGSize = .zero
     @State private var zoomFocusPoint: Point?
 
@@ -23,6 +25,8 @@ struct EditorCanvas: View {
         case waypoint(road: Int, point: Int)
         case entrance(Int)
         case exitPoint(Int)
+        case callWaveButton(Int)
+        case hero(HeroSelection.Role)
     }
 
     var body: some View {
@@ -31,26 +35,75 @@ struct EditorCanvas: View {
                                  geo.size.height / virtualCanvas.size.height))
             let s = CGFloat(state.zoom ?? fit)
             let t = DesignTransform(scale: s, space: virtualCanvas.size)
-            Group {
-                if state.zoom == nil {
-                    canvasContent(t)
-                } else {
-                    ScrollView([.horizontal, .vertical]) {
-                        canvasContent(t)
-                    }
-                    .defaultScrollAnchor(.center)
-                    .scrollPosition($scrollPosition)
-                    .scrollDisabled(state.tool == .brush || state.tool == .paint || state.tool == .eraser)
-                }
+            ScrollView([.horizontal, .vertical]) {
+                canvasContent(t)
+                    // Leave room to pan even when the whole map fits on screen.
+                    .padding(.horizontal, geo.size.width)
+                    .padding(.vertical, geo.size.height)
             }
+            .defaultScrollAnchor(.center)
+            .scrollPosition($scrollPosition)
+            .onScrollGeometryChange(for: CGPoint.self) { $0.contentOffset } action: { _, offset in
+                scrollOffset = offset
+            }
+            .scrollDisabled(state.tool == .pan || state.tool == .brush || state.tool == .paint || state.tool == .eraser)
+            .overlay { panInputOverlay }
+            .simultaneousGesture(
+                MagnifyGesture()
+                    .onChanged { v in
+                        if pinchBase == nil { pinchBase = state.currentScale }
+                        state.setZoom(pinchBase! * v.magnification)
+                    }
+                    .onEnded { _ in pinchBase = nil }
+            )
             .onChange(of: geo.size, initial: true) { _, _ in
                 state.fitScale = fit
                 viewportSize = geo.size
+                if state.zoom == nil { centerMap() }
             }
             .onChange(of: state.zoom) { _, _ in
                 scrollToZoomFocus()
             }
+            .onChange(of: state.fitRequest) { _, _ in
+                centerMap()
+            }
         }
+    }
+
+    @ViewBuilder
+    private var panInputOverlay: some View {
+        if state.tool == .pan {
+            Color.clear
+                .contentShape(Rectangle())
+                .gesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            if panOrigin == nil { panOrigin = scrollOffset }
+                            guard let origin = panOrigin else { return }
+                            scrollPosition.scrollTo(point: CGPoint(
+                                x: origin.x - value.translation.width,
+                                y: origin.y - value.translation.height))
+                            #if os(macOS)
+                            NSCursor.closedHand.set()
+                            #endif
+                        }
+                        .onEnded { _ in
+                            panOrigin = nil
+                            applyToolCursor()
+                        }
+                )
+                .onHover { inside in
+                    if inside { applyToolCursor() } else { restoreArrowCursor() }
+                }
+                .onDisappear { panOrigin = nil; restoreArrowCursor() }
+        }
+    }
+
+    private func centerMap() {
+        zoomFocusPoint = nil
+        scrollPosition.scrollTo(point: CGPoint(
+            x: (virtualCanvas.size.width * state.currentScale + viewportSize.width) / 2,
+            y: (virtualCanvas.size.height * state.currentScale + viewportSize.height) / 2))
     }
 
     private func canvasContent(_ t: DesignTransform) -> some View {
@@ -64,14 +117,6 @@ struct EditorCanvas: View {
         .focused($focused)
         .overlay { brushInputOverlay(t) }
         .gesture(dragGesture(t))
-        .simultaneousGesture(
-            MagnifyGesture()
-                .onChanged { v in
-                    if pinchBase == nil { pinchBase = state.currentScale }
-                    state.setZoom(pinchBase! * v.magnification)
-                }
-                .onEnded { _ in pinchBase = nil }
-        )
         .onContinuousHover { phase in
             switch phase {
             case let .active(p):
@@ -85,7 +130,9 @@ struct EditorCanvas: View {
         .onChange(of: state.tool) { _, _ in
             if state.cursor != nil { applyToolCursor() }
         }
+        .onChange(of: state.canvasFocusRequest) { _, _ in focused = true }
         .platformEditingCommands(
+            canMove: { canNudgeSelection },
             onDelete: { deleteSelection() },
             onCancel: { state.selection = .none },
             onMove: { nudge($0) }
@@ -135,9 +182,9 @@ struct EditorCanvas: View {
                 onBegan: { p, _ in beginPaint(at: p, t) },
                 onMoved: { p, _ in extendPaint(to: p, t) },
                 onEnded: { commitPaint() },
-                onCancelled: { state.paintStroke = BrushStroke() },
+                onCancelled: { state.paintGesture.cancel() },
                 onPinchBegan: {
-                    state.paintStroke = BrushStroke()
+                    state.paintGesture.cancel()
                     state.pinchBase = state.currentScale
                 },
                 onPinchChanged: { magnification in
@@ -153,27 +200,21 @@ struct EditorCanvas: View {
     }
 
     private func beginPaint(at p: CGPoint, _ t: DesignTransform) {
-        state.paintStroke = BrushStroke()
-        extendPaint(to: p, t)
+        state.paintGesture.begin(at: p, transform: t, width: state.paintWidth,
+                                 erases: state.tool == .eraser)
+        if let cursor = state.paintGesture.cursor { state.cursor = cursor }
     }
 
     private func extendPaint(to p: CGPoint, _ t: DesignTransform) {
-        state.paintStroke.add(clampToCanvas(t.design(p)),
-                              minSpacing: max(0.5, 1 / max(t.scale, 0.05)))
+        state.paintGesture.append(p)
+        if let cursor = state.paintGesture.cursor { state.cursor = cursor }
     }
 
-    private func commitPaint() {
-        defer { state.paintStroke = BrushStroke() }
-        let points = state.paintStroke.points
-        guard !points.isEmpty else { return }
-        let stroke = MapDraft.PaintStroke(points: points, width: state.paintWidth,
-                                          erases: state.tool == .eraser)
-        if stroke.erases {
-            document.edit(undoManager) { $0.applyErase(stroke, mapGeometry: state.mapGeometry) }
-            // A split renumbers the roads, and selection is held by index.
+    private func commitPaint(at finalLocation: CGPoint? = nil) {
+        let stroke = state.paintGesture.commit(at: finalLocation, to: document,
+            mapGeometry: state.mapGeometry, undoManager: undoManager)
+        if stroke?.erases == true {
             state.selection = .none
-        } else {
-            document.edit(undoManager) { $0.roadPaint.append(stroke) }
         }
     }
 
@@ -216,8 +257,8 @@ struct EditorCanvas: View {
         let scale = state.currentScale
         let contentPoint = CGPoint(x: focusPoint.x * scale,
                                    y: (virtualCanvas.size.height - focusPoint.y) * scale)
-        scrollPosition.scrollTo(point: CGPoint(x: contentPoint.x - viewportSize.width / 2,
-                                               y: contentPoint.y - viewportSize.height / 2))
+        scrollPosition.scrollTo(point: CGPoint(x: contentPoint.x + viewportSize.width / 2,
+                                               y: contentPoint.y + viewportSize.height / 2))
     }
 
     private func clampToCanvas(_ p: Point) -> Point {
@@ -237,7 +278,7 @@ struct EditorCanvas: View {
                     return
                 }
                 if state.tool == .paint || state.tool == .eraser {
-                    if state.paintStroke.isEmpty {
+                    if !state.paintGesture.isActive {
                         beginPaint(at: v.startLocation, t)
                     }
                     extendPaint(to: v.location, t)
@@ -254,6 +295,9 @@ struct EditorCanvas: View {
                     case .slot: slotTarget(at: v.startLocation, t)
                     case .entrance: markerTarget(at: v.startLocation, t, exits: false)
                     case .exitPoint: markerTarget(at: v.startLocation, t, entrances: false)
+                    case .callWaveButton: callWaveButtonTarget(at: v.startLocation, t)
+                    case .primaryHero: heroTarget(at: v.startLocation, t, role: .primary)
+                    case .secondaryHero: heroTarget(at: v.startLocation, t, role: .secondary)
                     default: nil
                     }
                 }
@@ -264,6 +308,20 @@ struct EditorCanvas: View {
                 state.selection = selection(for: target)
                 let p = snap(t.design(v.location))
                 switch target {
+                case let .hero(role):
+                    if let original = preDrag?.heroMarkerPosition(role) {
+                        // The badge is offset from the foot anchor. Preserve that
+                        // grab offset, including separated badges at shared starts.
+                        let start = t.design(v.startLocation)
+                        let current = t.design(v.location)
+                        document.draft.placeHero(role, at: snap(Point(
+                            original.x + current.x - start.x,
+                            original.y + current.y - start.y)))
+                    }
+                case let .callWaveButton(i):
+                    if document.draft.callWaveButtons.indices.contains(i) {
+                        document.draft.callWaveButtons[i].position = p
+                    }
                 case let .slot(i):
                     if document.draft.slots.indices.contains(i) {
                         document.draft.slots[i] = p
@@ -291,7 +349,7 @@ struct EditorCanvas: View {
                     return
                 }
                 if state.tool == .paint || state.tool == .eraser {
-                    commitPaint()
+                    commitPaint(at: v.location)
                     return
                 }
                 #endif
@@ -340,6 +398,14 @@ struct EditorCanvas: View {
                 state.selection = .entrance(document.draft.entrances.count - 1)
             }
 
+        case .callWaveButton:
+            if let existing = callWaveButtonTarget(at: p, t) {
+                state.selection = selection(for: existing)
+            } else {
+                document.edit(undoManager) { $0.callWaveButtons.append(.init(position: dp)) }
+                state.selection = .callWaveButton(document.draft.callWaveButtons.count - 1)
+            }
+
         case .exitPoint:
             if let existing = markerTarget(at: p, t, entrances: false) {
                 state.selection = selection(for: existing)
@@ -352,11 +418,18 @@ struct EditorCanvas: View {
             zoomFocusPoint = t.design(p)
             state.zoomIn()
 
+        case .primaryHero, .secondaryHero:
+            guard let role = state.tool.heroRole else { return }
+            if heroTarget(at: p, t, role: role) == nil {
+                document.edit(undoManager) { $0.placeHero(role, at: dp) }
+            }
+            state.selection = .hero(role)
+
         case .zoomOut:
             zoomFocusPoint = t.design(p)
             state.zoomOut()
 
-        case .brush, .paint, .eraser:
+        case .pan, .brush, .paint, .eraser:
             break
         }
     }
@@ -367,11 +440,18 @@ struct EditorCanvas: View {
         case let .waypoint(r, i): .waypoint(road: r, point: i)
         case let .entrance(i): .entrance(i)
         case let .exitPoint(i): .exitPoint(i)
+        case let .callWaveButton(i): .callWaveButton(i)
+        case let .hero(role): .hero(role)
         }
     }
 
     private func deleteSelection() {
         switch state.selection {
+        case let .hero(role):
+            document.edit(undoManager) { $0.removeHeroStart(role) }
+            state.flash("\(role.title) starting point removed")
+        case let .callWaveButton(i):
+            document.deleteCallWaveButton(i, undoManager)
         case let .slot(i):
             document.deleteSlot(i, undoManager)
         case let .waypoint(r, i):
@@ -388,26 +468,46 @@ struct EditorCanvas: View {
         state.selection = .none
     }
 
-    private func nudge(_ direction: NudgeDirection) {
-        let step = 1.0
-        let (dx, dy): (Double, Double) = switch direction {
-        case .up: (0, -step)
-        case .down: (0, step)
-        case .left: (-step, 0)
-        case .right: (step, 0)
+    private var canNudgeSelection: Bool {
+        let draft = document.draft
+        switch state.selection {
+        case let .hero(role): return draft.heroMarkerPosition(role) != nil
+        case let .slot(i): return draft.slots.indices.contains(i)
+        case let .waypoint(r, i):
+            return draft.roads.indices.contains(r) && draft.roads[r].points.indices.contains(i)
+        case let .entrance(i): return draft.entrances.indices.contains(i)
+        case let .exitPoint(i): return draft.exits.indices.contains(i)
+        case let .callWaveButton(i): return draft.callWaveButtons.indices.contains(i)
+        case .none, .road: return false
         }
+    }
+
+    private func nudge(_ direction: NudgeDirection) {
+        // Map coordinates are y-up; DesignTransform flips them for display.
+        let (dx, dy): (Double, Double) = switch direction {
+        case .up: (0, 1)
+        case .down: (0, -1)
+        case .left: (-1, 0)
+        case .right: (1, 0)
+        }
+        let moved: (Point) -> Point = state.snapToGrid
+            ? { state.grid.step($0, dx: dx, dy: dy) }
+            : { Point($0.x + dx, $0.y + dy) }
         document.edit(undoManager) { d in
             switch state.selection {
+            case let .hero(role):
+                if let p = d.heroMarkerPosition(role) { d.placeHero(role, at: moved(p)) }
+            case let .callWaveButton(i) where d.callWaveButtons.indices.contains(i):
+                d.callWaveButtons[i].position = moved(d.callWaveButtons[i].position)
             case let .slot(i) where d.slots.indices.contains(i):
-                d.slots[i] = Point(d.slots[i].x + dx, d.slots[i].y + dy)
+                d.slots[i] = moved(d.slots[i])
             case let .waypoint(r, i)
                 where d.roads.indices.contains(r) && d.roads[r].points.indices.contains(i):
-                let p = d.roads[r].points[i]
-                d.roads[r].points[i] = Point(p.x + dx, p.y + dy)
+                d.roads[r].points[i] = moved(d.roads[r].points[i])
             case let .entrance(i) where d.entrances.indices.contains(i):
-                d.entrances[i] = Point(d.entrances[i].x + dx, d.entrances[i].y + dy)
+                d.entrances[i] = moved(d.entrances[i])
             case let .exitPoint(i) where d.exits.indices.contains(i):
-                d.exits[i] = Point(d.exits[i].x + dx, d.exits[i].y + dy)
+                d.exits[i] = moved(d.exits[i])
             default:
                 break
             }
@@ -415,16 +515,15 @@ struct EditorCanvas: View {
     }
 
     private func snap(_ p: Point) -> Point {
-        var out = p
-        if state.snapToGrid {
-            out = Point((p.x / 3).rounded() * 3, (p.y / 3).rounded() * 3)
-        }
+        var out = state.snapped(p)
         out.x = min(max(out.x, 0), virtualCanvas.size.width)
         out.y = min(max(out.y, 0), virtualCanvas.size.height)
         return out
     }
 
     private func hitHandle(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
+        // Hero badges sit above the map and must win over underlying road handles.
+        if let hero = heroTarget(at: p, t) { return hero }
         var best: (DragTarget, CGFloat)?
         if state.isVisible(.path) {
             let wpRadius = max(10, 7 * t.scale)
@@ -442,6 +541,8 @@ struct EditorCanvas: View {
 
         if let marker = markerTarget(at: p, t) { return marker }
 
+        if let button = callWaveButtonTarget(at: p, t) { return button }
+
         return slotTarget(at: p, t)
     }
 
@@ -457,6 +558,20 @@ struct EditorCanvas: View {
             if best == nil || d < best!.1 { best = (.slot(i), d) }
         }
         return best?.0
+    }
+
+    private func callWaveButtonLayout(at point: Point, _ t: DesignTransform) -> CallWaveButtonLayout {
+        CallWaveButtonLayout(position: point, runtimeCanvas: RuntimeCanvas(
+            virtualCanvas: virtualCanvas, physicalRect: t.frame,
+            safeInsetsRect: t.view(virtualCanvas.playAreaRect)))
+    }
+
+    private func callWaveButtonTarget(at p: CGPoint, _ t: DesignTransform) -> DragTarget? {
+        guard state.isVisible(.callWaveButtons) else { return nil }
+        return document.draft.callWaveButtons.enumerated().reversed().first { _, point in
+            let frame = callWaveButtonLayout(at: point.position, t).frame
+            return hypot(p.x - frame.midX, p.y - frame.midY) <= frame.width / 2
+        }.map { .callWaveButton($0.offset) }
     }
 
     private func markerTarget(at p: CGPoint, _ t: DesignTransform,
@@ -478,6 +593,32 @@ struct EditorCanvas: View {
             }
         }
         return best?.0
+    }
+
+    private func heroMarkerFrame(_ role: HeroSelection.Role, _ t: DesignTransform) -> CGRect? {
+        guard let point = document.draft.heroMarkerPosition(role) else { return nil }
+        let anchor = t.view(point)
+        let other: HeroSelection.Role = role == .primary ? .secondary : .primary
+        var centerX = anchor.x
+        if let otherPoint = document.draft.heroMarkerPosition(other) {
+            let otherAnchor = t.view(otherPoint)
+            if hypot(anchor.x - otherAnchor.x, anchor.y - otherAnchor.y) < 44 {
+                // Keep both roles selectable even when they share a start or exit.
+                let groupCenter = min(max((anchor.x + otherAnchor.x) / 2, 42), t.frame.maxX - 42)
+                centerX = groupCenter + (role == .primary ? -23 : 23)
+            }
+        }
+        return CGRect(x: min(max(centerX - 19, 0), t.frame.maxX - 38),
+                      y: min(max(anchor.y - 46, 0), t.frame.maxY - 32), width: 38, height: 32)
+    }
+
+    private func heroTarget(at point: CGPoint, _ t: DesignTransform,
+                            role: HeroSelection.Role? = nil) -> DragTarget? {
+        guard state.isVisible(.heroStarts) else { return nil }
+        return HeroSelection.Role.allCases.first { candidate in
+            (role == nil || role == candidate)
+                && heroMarkerFrame(candidate, t)?.insetBy(dx: -3, dy: -3).contains(point) == true
+        }.map { .hero($0) }
     }
 
     private func hitRoad(at p: Point, tolerance: Double) -> (Int, Double)? {
@@ -510,7 +651,6 @@ struct EditorCanvas: View {
                 : virtualCanvas.playAreaRect
             layer.draw(Image(platformImage: guide), in: t.view(rect))
         }
-        if state.showGrid { drawGrid(&ctx, t, frame) }
         if state.isVisible(.path) {
             var layer = ctx
             drawRoads(&layer, t)
@@ -519,6 +659,7 @@ struct EditorCanvas: View {
             var layer = ctx
             drawSlots(&layer, t)
         }
+        if state.isVisible(.callWaveButtons) { drawCallWaveButtons(&ctx, t) }
         if state.isVisible(.exits) {
             var layer = ctx
             drawMarkers(&layer, t, points: draft.exits, isEntrance: false)
@@ -538,9 +679,55 @@ struct EditorCanvas: View {
             layer.draw(Image(platformImage: overlay),
                        in: t.view(canvasRect(for: state.overlayPixelSize)))
         }
+        if state.isVisible(.grid) { drawGrid(&ctx, t, frame) }
         if state.showPlayArea { drawPlayAreaOverlay(&ctx, t) }
         drawMenuPreview(&ctx, t)
+        if state.isVisible(.heroStarts) { drawHeroStarts(&ctx, t) }
         ctx.stroke(SwiftUI.Path(frame), with: .color(.white.opacity(0.2)), lineWidth: 1)
+    }
+
+    private func drawHeroStarts(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        for role in HeroSelection.Role.allCases {
+            guard let position = document.draft.heroMarkerPosition(role),
+                  let frame = heroMarkerFrame(role, t) else { continue }
+            let anchor = t.view(position)
+            let color = HeroPlacementIcon.color(for: role)
+            let selected = state.selection == .hero(role)
+            var leader = SwiftUI.Path()
+            leader.move(to: anchor)
+            leader.addLine(to: CGPoint(x: frame.midX, y: frame.maxY))
+            ctx.stroke(leader, with: .color(.black.opacity(0.8)), lineWidth: 4)
+            ctx.stroke(leader, with: .color(color), lineWidth: 2)
+            let marker = SwiftUI.Path(roundedRect: frame, cornerRadius: 9)
+            ctx.fill(marker, with: .color(color))
+            ctx.stroke(marker, with: .color(selected ? .white : .black.opacity(0.85)), lineWidth: selected ? 3 : 2)
+            var icon = ctx.resolve(HeroPlacementIcon.image(for: role))
+            icon.shading = .color(.black)
+            ctx.draw(icon, in: CGRect(x: frame.midX - 13.5, y: frame.midY - 9.5, width: 27, height: 19))
+            let foot = SwiftUI.Path(ellipseIn: CGRect(x: anchor.x - 3, y: anchor.y - 3, width: 6, height: 6))
+            ctx.fill(foot, with: .color(color))
+            ctx.stroke(foot, with: .color(.black), lineWidth: 1)
+        }
+    }
+
+    private func drawCallWaveButtons(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
+        let button = menuArt(CallWaveButtonLayout.imageName)
+        for (i, point) in document.draft.callWaveButtons.enumerated() {
+            let layout = callWaveButtonLayout(at: point.position, t)
+            let frame = layout.frame
+            if let button {
+                ctx.draw(Image(platformImage: button), in: frame)
+            } else {
+                ctx.fill(SwiftUI.Path(ellipseIn: frame), with: .color(.orange))
+                ctx.draw(Text(Image(systemName: "megaphone.fill")).foregroundStyle(.black),
+                         at: CGPoint(x: frame.midX, y: frame.midY))
+            }
+            if state.selection == .callWaveButton(i) {
+                ctx.stroke(SwiftUI.Path(ellipseIn: frame), with: .color(.yellow), lineWidth: 3)
+            }
+            ctx.draw(Text("\(i)").font(.system(size: layout.countdownFontSize, weight: .bold))
+                .foregroundStyle(.white), at: CGPoint(x: frame.midX, y: frame.maxY + 8))
+        }
     }
 
     private func drawMarkers(_ ctx: inout GraphicsContext, _ t: DesignTransform,
@@ -582,7 +769,7 @@ struct EditorCanvas: View {
 
     private func drawPaintCursor(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         guard state.tool == .paint || state.tool == .eraser, let cursor = state.cursor else { return }
-        let d = state.paintWidth * t.scale
+        let d = (state.paintGesture.preview?.width ?? state.paintWidth) * t.scale
         let c = t.view(cursor)
         let rect = CGRect(x: c.x - d / 2, y: c.y - d / 2, width: d, height: d)
         let tint: Color = state.tool == .eraser ? .red : PathArtist.fillColor
@@ -673,10 +860,13 @@ struct EditorCanvas: View {
             safeInsetsRect: t.view(virtualCanvas.playAreaRect))
         ctx.stroke(SwiftUI.Path(runtimeCanvas.runtimePlayArea),
                    with: .color(Color(red: 1.0, green: 0.0, blue: 1.0)),
-                   style: StrokeStyle(lineWidth: 1.5, dash: [6, 10]))
+                   style: StrokeStyle(lineWidth: 1.5, dash: [7.935, 10]))
+        ctx.stroke(SwiftUI.Path(runtimeCanvas.runtimeTapArea),
+                   with: .color(Color(red: 0.0, green: 1.0, blue: 1.0)),
+                   style: StrokeStyle(lineWidth: 1.5, dash: [7.2, 4.8]))
         ctx.stroke(SwiftUI.Path(runtimeCanvas.towerSlotValidArea),
                    with: .color(.blue.opacity(0.85)),
-                   style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+                   style: StrokeStyle(lineWidth: 3, dash: [5, 4]))
     }
 
     private func drawMenuPreview(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
@@ -698,15 +888,15 @@ struct EditorCanvas: View {
         }
         let buttonSide = state.towerMenuLayout
             .getTowerButtonSize(playAreaScalingFactor: t.scale).width
-        let iconSide = state.towerMenuLayout.getTowerIconSize(towerButtonSize: buttonSide)
         for kind in TowerKind.allCases {
+            let iconSide = state.towerMenuLayout.getTowerIconSize(towerButtonSize: buttonSide, for: kind)
             let buttonCenter = state.towerMenuLayout.getTowerButtonCenterPoint(
                 towerKind: kind, menuCenterPoint: c,
                 playAreaScalingFactor: t.scale, towerButtonSize: buttonSide)
             let frameRect = CGRect(x: buttonCenter.x - buttonSide / 2,
                                    y: buttonCenter.y - buttonSide / 2,
                                    width: buttonSide, height: buttonSide)
-            if let frame = menuArt("tower_menu_square_frame") {
+            if let frame = menuArt(kind.menuFrameName) {
                 ctx.draw(Image(platformImage: frame), in: frameRect)
             } else {
                 ctx.stroke(SwiftUI.Path(frameRect), with: .color(.white.opacity(0.85)),
@@ -730,43 +920,41 @@ struct EditorCanvas: View {
     }
 
     private func drawGrid(_ ctx: inout GraphicsContext, _ t: DesignTransform, _ frame: CGRect) {
+        let grid = state.grid
+        let spacing = grid.lineSpacing(scale: t.scale, minimumPixels: 6)
         var minor = SwiftUI.Path()
         var major = SwiftUI.Path()
-        var x = 0.0
-        while x <= virtualCanvas.size.width {
-            let vx = t.view(Point(x, 0)).x
+        for line in grid.verticalLines(canvasWidth: virtualCanvas.size.width, spacing: spacing) {
+            let vx = t.view(Point(line.position, 0)).x
             var p = SwiftUI.Path()
             p.move(to: CGPoint(x: vx, y: frame.minY))
             p.addLine(to: CGPoint(x: vx, y: frame.maxY))
-            if x.truncatingRemainder(dividingBy: 120) == 0 { major.addPath(p) } else { minor.addPath(p) }
-            x += 15
+            if line.isMajor { major.addPath(p) } else { minor.addPath(p) }
         }
-        var y = 0.0
-        while y <= virtualCanvas.size.height {
-            let vy = t.view(Point(0, y)).y
+        for line in grid.horizontalLines(canvasHeight: virtualCanvas.size.height, spacing: spacing) {
+            let vy = t.view(Point(0, line.position)).y
             var p = SwiftUI.Path()
             p.move(to: CGPoint(x: frame.minX, y: vy))
             p.addLine(to: CGPoint(x: frame.maxX, y: vy))
-            if y.truncatingRemainder(dividingBy: 120) == 0 { major.addPath(p) } else { minor.addPath(p) }
-            y += 15
+            if line.isMajor { major.addPath(p) } else { minor.addPath(p) }
         }
-        ctx.stroke(minor, with: .color(.white.opacity(0.04)), lineWidth: 1)
-        ctx.stroke(major, with: .color(.white.opacity(0.08)), lineWidth: 1)
+        ctx.stroke(minor, with: .color(.white.opacity(0.18)), lineWidth: 1)
+        ctx.stroke(major, with: .color(.black.opacity(0.35)), lineWidth: 2)
+        ctx.stroke(major, with: .color(.white.opacity(0.55)), lineWidth: 1)
     }
 
     private func drawRoads(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let draft = document.draft
-        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint, roadHalfWidth: state.mapGeometry.roadHalfWidth))
+        let area = SwiftUI.Path(BrushGeometry.roadArea(roads: draft.roads, paint: draft.roadPaint,
+            roadHalfWidth: state.mapGeometry.roadHalfWidth, base: draft.flattenedPath,
+            preview: state.paintGesture.preview))
             .applying(t.viewTransform)
         PathArtist.drawArea(&ctx, area, t)
-        if !state.paintStroke.isEmpty {
-            let wet = SwiftUI.Path(BrushGeometry.strokeArea(points: state.paintStroke.points,
-                                                            width: state.paintWidth))
-                .applying(t.viewTransform)
-            let tint: Color = state.tool == .eraser ? .red : PathArtist.fillColor
-            ctx.fill(wet, with: .color(tint.opacity(0.45)))
-        }
+        // Keep route guides from redrawing a line through an erased hole.
+        let savedContext = ctx
+        ctx.clip(to: area)
+        defer { ctx = savedContext }
         for (ri, road) in draft.roads.enumerated() {
             let pts = road.points.map { t.view($0) }
             let isSelected: Bool = switch state.selection {
@@ -891,12 +1079,12 @@ struct EditorCanvas: View {
                     let rangeRect = TowerRangeOverlay.rect(center: c, range: ring.range,
                                                            runtimeCanvas: runtimeCanvas)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
-                               with: .color(.cyan.opacity(0.4)),
-                               style: StrokeStyle(lineWidth: 1.5, dash: [6, 5]))
+                               with: .color(Color(red: 0, green: 1, blue: 0)),
+                               style: StrokeStyle(lineWidth: 3, dash: [6, 5]))
                     ctx.draw(
                         Text(label)
                             .font(.system(size: max(9, 10 * s)))
-                            .foregroundStyle(.cyan.opacity(0.7)),
+                            .foregroundStyle(Color(red: 0, green: 1, blue: 0)),
                         at: CGPoint(x: c.x, y: rangeRect.minY - 8)
                     )
                 }

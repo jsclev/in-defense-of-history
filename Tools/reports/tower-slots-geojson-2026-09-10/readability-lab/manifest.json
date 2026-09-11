@@ -1,0 +1,224 @@
+{
+  "reference_height": 1080.0,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_note": "Production scaledToFit, unchanged slot 176.6 x 96.55 map units. Recomputed from SQLite and actual exports.",
+  "assets": [
+    {
+      "id": "previous",
+      "label": "Previous / hard front edge",
+      "animated": false,
+      "map_height": 96.32727272727273,
+      "files": {
+        "previous": [
+          "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available.png",
+          "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Review/before/tower_slot_available@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/previous-1x.png",
+          "boxes": {
+            "previous": [
+              1,
+              1,
+              176,
+              96
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/previous-2x.png",
+          "boxes": {
+            "previous": [
+              1,
+              1,
+              352,
+              192
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/previous-3x.png",
+          "boxes": {
+            "previous": [
+              1,
+              1,
+              528,
+              288
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "previous"
+          ],
+          "walk": [
+            "previous"
+          ]
+        }
+      }
+    },
+    {
+      "id": "revised",
+      "label": "Revised / grass blended front",
+      "animated": false,
+      "map_height": 96.32727272727273,
+      "files": {
+        "revised": [
+          "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available.png",
+          "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available@2x.png",
+          "/Users/john/projects/td/in-defense-of-history-data/Towers/Available Tower Slot Bastion V3/Final/tower_slot_available@3x.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/revised-1x.png",
+          "boxes": {
+            "revised": [
+              1,
+              1,
+              176,
+              96
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/revised-2x.png",
+          "boxes": {
+            "revised": [
+              1,
+              1,
+              352,
+              192
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/revised-3x.png",
+          "boxes": {
+            "revised": [
+              1,
+              1,
+              528,
+              288
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "revised"
+          ],
+          "walk": [
+            "revised"
+          ]
+        }
+      }
+    },
+    {
+      "id": "occupied",
+      "label": "Occupied site / unchanged ground",
+      "animated": false,
+      "map_height": 93.21530815109344,
+      "files": {
+        "occupied": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/tower_slot_field.imageset/tower_slot_field.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/occupied-1x.png",
+          "boxes": {
+            "occupied": [
+              1,
+              1,
+              1006,
+              531
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/occupied-2x.png",
+          "boxes": {
+            "occupied": [
+              1,
+              1,
+              1006,
+              531
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/occupied-3x.png",
+          "boxes": {
+            "occupied": [
+              1,
+              1,
+              1006,
+              531
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "occupied"
+          ],
+          "walk": [
+            "occupied"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "grass",
+      "label": "Current Bastion grass",
+      "under": "grass-under.jpg",
+      "over": "grass-over.png"
+    },
+    {
+      "id": "charleston",
+      "label": "Current Charleston with painted paths",
+      "under": "charleston-under.jpg",
+      "over": "charleston-over.png"
+    },
+    {
+      "id": "snow",
+      "label": "Trenton / bright busy terrain",
+      "under": "snow-under.jpg",
+      "over": "snow-over.png"
+    }
+  ]
+}

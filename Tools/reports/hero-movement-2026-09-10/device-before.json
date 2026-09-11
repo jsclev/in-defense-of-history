@@ -1,0 +1,48 @@
+{
+  "checks" : [
+    {
+      "after" : [
+        1251.5859470558837,
+        843.73647049443741
+      ],
+      "before" : [
+        1587,
+        549
+      ],
+      "commandAccepted" : true,
+      "destination" : [
+        636.54996190658926,
+        922.30007618682157
+      ],
+      "distanceMoved" : 446.5111129097649,
+      "hero" : "George Washington",
+      "routeNodesRemaining" : 14,
+      "selected" : true
+    },
+    {
+      "after" : [
+        2370,
+        1235
+      ],
+      "before" : [
+        2370,
+        1235
+      ],
+      "commandAccepted" : true,
+      "destination" : [
+        1450.550518250235,
+        1302.6154201848747
+      ],
+      "distanceMoved" : 0,
+      "hero" : "Henry Knox",
+      "routeNodesRemaining" : 0,
+      "selected" : true
+    }
+  ],
+  "device" : "iPhone",
+  "passed" : false,
+  "ready" : true,
+  "status" : "Charleston  •  wave 1\/15 waiting  •  double-tap an entrance to start",
+  "systemVersion" : "26.6.1",
+  "timestamp" : "2026-09-10 03:03:43 +0000"
+}

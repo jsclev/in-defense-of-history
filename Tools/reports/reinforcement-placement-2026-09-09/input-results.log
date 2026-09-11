@@ -1,0 +1,4 @@
+ready true; button (219.80420000000007, 352.777); road (1210.5, 784.3), screen (357.9472222222222, 278.61240740740743)
+after HUD tap: selected=true
+after road tap: selected=false, soldiers=2, cooldown=ReinforcementCooldown(remainingSeconds: 20.0, remainingFraction: 1.0)
+PASS actual HUD pointer → production destination catcher → database road → two soldiers

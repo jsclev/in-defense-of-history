@@ -1,0 +1,464 @@
+{
+  "checks" : [
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "pair",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "solo",
+      "viewport" : "device"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "minimum"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "phone"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "tablet"
+    },
+    {
+      "capacity" : 2,
+      "heroes" : [
+        {
+          "exitID" : "gameplay.exit.1",
+          "exitPosition" : [
+            1587,
+            549
+          ],
+          "hero" : "Henry Knox",
+          "position" : [
+            1587,
+            549
+          ],
+          "role" : "primary"
+        },
+        {
+          "exitID" : "gameplay.exit.0",
+          "exitPosition" : [
+            2370,
+            1235
+          ],
+          "hero" : "George Washington",
+          "position" : [
+            2370,
+            1235
+          ],
+          "role" : "secondary"
+        }
+      ],
+      "level" : 15,
+      "name" : "Charleston",
+      "ready" : true,
+      "scenario" : "ranking-changed",
+      "viewport" : "device"
+    }
+  ],
+  "loads" : 12,
+  "passed" : true,
+  "runID" : "4febd440-2cb9-49b2-b537-d40bcdeb2885",
+  "waveChecks" : [
+    {
+      "enemies" : 16,
+      "startSeconds" : 0,
+      "wave" : 1
+    },
+    {
+      "enemies" : 20,
+      "startSeconds" : 32,
+      "wave" : 2
+    },
+    {
+      "enemies" : 20,
+      "startSeconds" : 66,
+      "wave" : 3
+    },
+    {
+      "enemies" : 23,
+      "startSeconds" : 100,
+      "wave" : 4
+    },
+    {
+      "enemies" : 26,
+      "startSeconds" : 135,
+      "wave" : 5
+    },
+    {
+      "enemies" : 28,
+      "startSeconds" : 171,
+      "wave" : 6
+    },
+    {
+      "enemies" : 24,
+      "startSeconds" : 208,
+      "wave" : 7
+    },
+    {
+      "enemies" : 28,
+      "startSeconds" : 246,
+      "wave" : 8
+    },
+    {
+      "enemies" : 26,
+      "startSeconds" : 285,
+      "wave" : 9
+    },
+    {
+      "enemies" : 32,
+      "startSeconds" : 325,
+      "wave" : 10
+    },
+    {
+      "enemies" : 29,
+      "startSeconds" : 366,
+      "wave" : 11
+    },
+    {
+      "enemies" : 32,
+      "startSeconds" : 408,
+      "wave" : 12
+    },
+    {
+      "enemies" : 34,
+      "startSeconds" : 451,
+      "wave" : 13
+    },
+    {
+      "enemies" : 36,
+      "startSeconds" : 495,
+      "wave" : 14
+    },
+    {
+      "enemies" : 50,
+      "startSeconds" : 540,
+      "wave" : 15
+    }
+  ]
+}

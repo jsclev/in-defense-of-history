@@ -1,0 +1,12 @@
+[
+  {
+    "source": "/Users/john/projects/td/in-defense-of-history/Db/level_15_charleston.geojson",
+    "bundled": "/tmp/hero-placement-game-build/Build/Products/Debug-iphoneos/Liberty Line.app/level_15_charleston.geojson",
+    "sha256": "d507c1daeff41f8748267a2ba2d964dbbd58c06c2760c1216e03fe3450a4772d"
+  },
+  {
+    "source": "/Users/john/projects/td/in-defense-of-history-data/Levels/level_15_charleston_path.png",
+    "bundled": "/tmp/hero-placement-game-build/Build/Products/Debug-iphoneos/Liberty Line.app/Levels/level_15_charleston_path.png",
+    "sha256": "bfa13cba8a81a0906513c17e8ab88d933b5ecefe8a2ae1d710aaa411d634e3c2"
+  }
+]

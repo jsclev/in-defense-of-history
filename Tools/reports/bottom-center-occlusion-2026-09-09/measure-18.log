@@ -1,0 +1,12 @@
+clang: warning: using sysroot for 'MacOSX' but targeting 'iPhone' [-Wincompatible-sysroot]
+/Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/HomeIndicatorProbe.app: replacing existing signature
+Measuring iPad mini (6th generation) 65E5D969-CBE1-46E0-8CCF-C70600CDA25F
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 0CA5F83F-3774-4704-BD23-5971CBC86F9F (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-mini-(6th-generation)-iOS-18.6.png
+{"model": "iPad mini (6th generation)", "runtime": "18.6", "geometry": {"window": [1133, 744], "screen": [1133, 744], "safeInsets": [0, 0, 25, 0], "scale": 2, "interfaceOrientation": 3}, "screenshot": "iPad-mini-(6th-generation)-iOS-18.6.png", "normalizedScreenshotSize": [2266, 1488], "rotationDegrees": 90, "threshold": 230, "indicatorPixelBounds": [818, 1462, 1448, 1473], "indicatorWidthPoints": 315.0, "screenWidthFraction": 0.2780229479258605}
+Measuring iPad Pro (11-inch) (4th generation) 3DC6B951-59ED-4AC4-99F3-0BBBD28D080A
+Detected file type from extension: PNG
+Note: No display specified. Defaulting to display: 6098B213-30C0-453B-8D04-B1F50B9EC143 (screenID: 1, name: LCD)
+Wrote screenshot to: /Users/john/projects/td/in-defense-of-history/Tools/reports/bottom-center-occlusion-2026-09-09/iPad-Pro-(11-inch)-(4th-generation)-iOS-18.6.png
+{"model": "iPad Pro (11-inch) (4th generation)", "runtime": "18.6", "geometry": {"interfaceOrientation": 3, "window": [1194, 834], "screen": [1194, 834], "scale": 2, "safeInsets": [0, 0, 25, 0]}, "screenshot": "iPad-Pro-(11-inch)-(4th-generation)-iOS-18.6.png", "normalizedScreenshotSize": [2388, 1668], "rotationDegrees": 90, "threshold": 230, "indicatorPixelBounds": [879, 1642, 1509, 1653], "indicatorWidthPoints": 315.0, "screenWidthFraction": 0.2638190954773869}

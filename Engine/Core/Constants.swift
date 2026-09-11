@@ -17,6 +17,7 @@ public struct Constants {
     
     public static let debugModeKey = "debugMode"
     public static let showDebugLayoutGuidesKey = "showSafeAreaOverlay"
+    public static let enemyEscapeHapticsEnabledKey = "enemyEscapeHapticsEnabled"
     public static let rubberBandClampCoefficient: CGFloat = 0.3
     public static let mapMomentumPanDecelerationConstant: CGFloat = 0.996
     public static let mapMomentumPanSpringMass: CGFloat = 22

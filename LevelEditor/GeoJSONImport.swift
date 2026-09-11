@@ -26,6 +26,7 @@ enum GeoJSONImport {
             let slotNumber: Int?
             let widthPx: Double?
             let erases: Bool?
+            let pathIndices: [Int]?
         }
         let id: String?
         let geometry: Geometry
@@ -57,13 +58,14 @@ enum GeoJSONImport {
     /// the numbering the level was authored and balanced against.
     static func geometry(from data: Data) throws
         -> (roads: [MapDraft.Road], slots: [Point],
-            entrances: [Point], exits: [Point]) {
+            entrances: [Point], exits: [Point], callWaveButtons: [CallWaveButtonPosition]) {
         let collection = try JSONDecoder().decode(Collection.self, from: data)
 
         var roads: [MapDraft.Road] = []
         var numberedSlots: [(number: Int, point: Point)] = []
         var entrances: [Point] = []
         var exits: [Point] = []
+        var callWaveButtons: [CallWaveButtonPosition] = []
 
         for feature in collection.features {
             let props = feature.properties
@@ -88,18 +90,56 @@ enum GeoJSONImport {
             case let ("goal_point", .point(xy)) where xy.count >= 2:
                 exits.append(Point(xy[0], xy[1]))
 
+            case let ("call_wave_button", .point(xy)) where xy.count >= 2:
+                callWaveButtons.append(.init(position: Point(xy[0], xy[1]), pathIndices: props.pathIndices))
+
             default:
                 continue
             }
         }
 
         numberedSlots.sort { $0.number < $1.number }
-        return (roads, numberedSlots.map(\.point), entrances, exits)
+        return (roads, numberedSlots.map(\.point), entrances, exits, callWaveButtons)
     }
 
     /// A full draft from a GeoJSON, for opening one directly in the editor.
     static func draft(from data: Data) throws -> MapDraft {
-        let (roads, slots, entrances, exits) = try geometry(from: data)
+        let data = try migrateHeroExits(in: data)
+        let root = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        if root?["formatVersion"] != nil {
+            let collection = try LevelGeoJSON(data: data).collection
+            var draft = MapDraft.starter
+            draft.name = collection.name
+            draft.startingGold = collection.startingGold
+            draft.lives = collection.lives
+            draft.enemyRoutes = try LevelGeoJSONDAO.enemyRoutes(from: data) ?? []
+            draft.flattenedPath = collection.features.first { $0.properties.kind == .path }?.geometry
+            func points(_ kind: LevelGeoJSON.Kind) -> [Point] {
+                var features = collection.features.filter { $0.properties.kind == kind }
+                if kind == .towerSlot { features.sort { ($0.properties.slotIndex ?? 0) < ($1.properties.slotIndex ?? 0) } }
+                return features.compactMap {
+                        guard case let .point(p) = $0.geometry else { return nil }
+                        return Point(p[0], p[1])
+                    }
+            }
+            draft.entrances = points(.entrance)
+            draft.exits = points(.exit)
+            try applyHeroConfiguration(from: data, to: &draft)
+            draft.callWaveButtons = collection.features.compactMap {
+                guard $0.properties.kind == .callWaveButton,
+                      case let .point(p) = $0.geometry else { return nil }
+                return CallWaveButtonPosition(position: Point(p[0], p[1]), pathIndices: $0.properties.pathIndices)
+            }
+            draft.slots = points(.towerSlot)
+            draft.waves = collection.waves.map { w in
+                .init(breather: w.breather, lines: w.lines.map {
+                    .init(foe: $0.foe, count: $0.count, every: $0.every, delay: $0.delay, road: $0.pathIndex)
+                }, callButtonDelay: w.callButtonDelay, autoStartCountdown: w.autoStartCountdown,
+                      earlyCallBonus: w.earlyCallBonus)
+            }
+            return draft
+        }
+        let (roads, slots, entrances, exits, callWaveButtons) = try geometry(from: data)
         guard !roads.isEmpty else {
             throw DbError.Db(message: "GeoJSON has no gameplay road to edit")
         }
@@ -110,6 +150,8 @@ enum GeoJSONImport {
         draft.slots = slots
         draft.entrances = entrances
         draft.exits = exits
+        try applyHeroConfiguration(from: data, to: &draft)
+        draft.callWaveButtons = callWaveButtons
 
         draft.roadPaint = collection.features.compactMap { f in
             guard f.properties.kind == "road_paint", f.properties.erases != true,
@@ -131,5 +173,47 @@ enum GeoJSONImport {
         }
         draft.coordinateSpace = MapDraft.canvasSpace
         return draft
+    }
+
+    private static func applyHeroConfiguration(from data: Data, to draft: inout MapDraft) throws {
+        guard let root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              root["heroCount"] != nil else { return } // Old editor files remain importable.
+        let configuration = try LevelGeoJSONDAO.heroConfiguration(from: data)
+        draft.heroCount = configuration.heroCount
+        for spawn in configuration.spawns {
+            if spawn.role == .primary { draft.primaryHeroPosition = spawn.position }
+            else { draft.secondaryHeroPosition = spawn.position }
+        }
+    }
+
+    /// Editor-only compatibility: preserve old authored exit coordinates as
+    /// independent points. The game accepts only explicit hero_spawn features.
+    private static func migrateHeroExits(in data: Data) throws -> Data {
+        guard var root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              var features = root["features"] as? [[String: Any]] else { return data }
+        var starts: [[String: Any]] = []
+        for i in features.indices {
+            guard var properties = features[i]["properties"] as? [String: Any],
+                  properties["kind"] as? String == "goal_point",
+                  let roles = properties["heroRoles"] as? [String], !roles.isEmpty,
+                  let id = features[i]["id"] as? String else { continue }
+            for role in roles {
+                let spawnID = "\(id).hero.\(role)"
+                var spawn = features[i]
+                var spawnProperties = properties
+                spawn["id"] = spawnID
+                spawnProperties["id"] = spawnID
+                spawnProperties["kind"] = "hero_spawn"
+                spawnProperties["heroRoles"] = [role]
+                spawnProperties.removeValue(forKey: "pathIndex")
+                spawn["properties"] = spawnProperties
+                starts.append(spawn)
+            }
+            properties.removeValue(forKey: "heroRoles")
+            features[i]["properties"] = properties
+        }
+        guard !starts.isEmpty else { return data }
+        root["features"] = features + starts
+        return try JSONSerialization.data(withJSONObject: root)
     }
 }

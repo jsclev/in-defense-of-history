@@ -1,0 +1,45 @@
+[0/1] Planning build
+Building for debugging...
+[0/2] Write swift-version--58304C5D6DBC2206.txt
+Build complete! (0.46s)
+Test Suite 'Selected tests' started at 2026-09-08 16:08:40.521.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-08 16:08:40.521.
+Test Suite 'HeroBarLayoutTests' started at 2026-09-08 16:08:40.521.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testHudMarginConsumesTheAvailableOcclusionWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testHudMarginConsumesTheAvailableOcclusionWidth]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testRowStaysInsideLowerLeftOcclusionAcrossScreenAndSafeAreaSizes]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testRowStaysInsideLowerLeftOcclusionAcrossScreenAndSafeAreaSizes]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testShortOcclusionLimitsHeightInsteadOfClippingTheButtons]' started.
+Test Case '-[LevelEditorFormatsTests.HeroBarLayoutTests testShortOcclusionLimitsHeightInsteadOfClippingTheButtons]' passed (0.000 seconds).
+Test Suite 'HeroBarLayoutTests' passed at 2026-09-08 16:08:40.523.
+	 Executed 3 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'LevelViewportTests' started at 2026-09-08 16:08:40.523.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testPresentationsAndOversizedHudCannotResizeViewport]' passed (0.045 seconds).
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' started.
+Test Case '-[LevelEditorFormatsTests.LevelViewportTests testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear]' passed (1.226 seconds).
+Test Suite 'LevelViewportTests' passed at 2026-09-08 16:08:41.794.
+	 Executed 2 tests, with 0 failures (0 unexpected) in 1.271 (1.271) seconds
+Test Suite 'PresentationStackTests' started at 2026-09-08 16:08:41.794.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testClosingAndReopeningCreatesFreshLayerAndViewIdentity]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testDismissingTopPresentationRevealsExistingLayer]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testLeavingLevelRemovesEveryPresentation]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testNewPresentationIsAboveExistingLayersRegardlessOfCategoryOrder]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testRefreshingActiveContentDoesNotRecreateOrRaiseExistingLayers]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' started.
+Test Case '-[LevelEditorFormatsTests.PresentationStackTests testReplacingMenuWithPlacementRemovesOldLayer]' passed (0.000 seconds).
+Test Suite 'PresentationStackTests' passed at 2026-09-08 16:08:41.795.
+	 Executed 6 tests, with 0 failures (0 unexpected) in 0.001 (0.001) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-08 16:08:41.795.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 1.272 (1.274) seconds
+Test Suite 'Selected tests' passed at 2026-09-08 16:08:41.795.
+	 Executed 11 tests, with 0 failures (0 unexpected) in 1.272 (1.274) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

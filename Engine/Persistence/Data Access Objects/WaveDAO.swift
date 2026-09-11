@@ -17,7 +17,10 @@ public class WaveDAO: BaseDAO {
                 s.num_enemies,
                 s.spawn_time_since_previous_spawn,
                 s.spawn_interval,
-                s.path_index
+                s.path_index,
+                lw.call_button_delay,
+                lw.auto_start_countdown,
+                lw.early_call_bonus
             FROM
                 level_wave lw
             LEFT JOIN
@@ -29,23 +32,39 @@ public class WaveDAO: BaseDAO {
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
+        defer { sqlite3_finalize(stmt) }
 
         guard sqlite3_bind_text(stmt, 1, levelInfoId.uuidString.lowercased(),
                                 -1, SQLITE_TRANSIENT) == SQLITE_OK else {
             throw DbError.Db(message: "Unable to bind level info id")
         }
 
-        var startTimes: [Int: Double] = [:]
-        var spawnsByWave: [Int: [SpawnEntry]] = [:]
+        var wavesByIndex: [Int: Wave] = [:]
         var cumulativeDelay: [Int: Double] = [:]
         var lastSpawnIndex: [Int: Int] = [:]
 
-        while sqlite3_step(stmt) == SQLITE_ROW {
+        var result = sqlite3_step(stmt)
+        while result == SQLITE_ROW {
+            defer { result = sqlite3_step(stmt) }
             let waveIndex = getInt(stmt: stmt, colIndex: 0)
-            startTimes[waveIndex] = getDouble(stmt: stmt, colIndex: 1)
+            if wavesByIndex[waveIndex] == nil {
+                let delay = getDouble(stmt: stmt, colIndex: 8)
+                let countdown = getDouble(stmt: stmt, colIndex: 9)
+                let numericTypes = [SQLITE_INTEGER, SQLITE_FLOAT]
+                guard numericTypes.contains(sqlite3_column_type(stmt, 8)), delay.isFinite, delay >= 0,
+                      numericTypes.contains(sqlite3_column_type(stmt, 9)), countdown.isFinite, countdown >= 0 else {
+                    throw DbError.Db(message: "Wave \(waveIndex) is missing valid database start timing.")
+                }
+                let bonus = getInt(stmt: stmt, colIndex: 10)
+                guard sqlite3_column_type(stmt, 10) == SQLITE_INTEGER, bonus >= 0 else {
+                    throw DbError.Db(message: "Wave \(waveIndex) is missing a valid database early-call bonus.")
+                }
+                wavesByIndex[waveIndex] = Wave(startTime: getDouble(stmt: stmt, colIndex: 1),
+                                               spawns: [], callButtonDelay: delay,
+                                               autoStartCountdown: countdown, earlyCallBonus: bonus)
+            }
 
             guard sqlite3_column_type(stmt, 3) != SQLITE_NULL else {
-                spawnsByWave[waveIndex] = spawnsByWave[waveIndex] ?? []
                 continue
             }
 
@@ -61,7 +80,7 @@ public class WaveDAO: BaseDAO {
                 lastSpawnIndex[waveIndex] = spawnIndex
             }
 
-            spawnsByWave[waveIndex, default: []].append(
+            wavesByIndex[waveIndex]?.spawns.append(
                 SpawnEntry(enemyTypeID: enemyTypeID,
                            count: count,
                            interval: interval,
@@ -70,11 +89,10 @@ public class WaveDAO: BaseDAO {
             )
         }
 
-        sqlite3_finalize(stmt)
-        stmt = nil
-
-        return startTimes.keys.sorted().map { index in
-            Wave(startTime: startTimes[index] ?? 0, spawns: spawnsByWave[index] ?? [])
+        guard result == SQLITE_DONE else {
+            throw DbError.Db(message: "Unable to load waves: \(String(cString: sqlite3_errmsg(conn)))")
         }
+
+        return wavesByIndex.sorted { $0.key < $1.key }.map(\.value)
     }
 }

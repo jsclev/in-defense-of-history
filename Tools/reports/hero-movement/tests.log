@@ -1,0 +1,199 @@
+Test Suite 'Selected tests' started at 2026-09-10 21:52:56.717.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 21:52:56.717.
+Test Suite 'HeroMovementIntegrationTests' started at 2026-09-10 21:52:56.718.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllAuthoredHeroStartsCanMoveAndRespawnInsideTheirLevelArea]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllAuthoredHeroStartsCanMoveAndRespawnInsideTheirLevelArea]' passed (2.784 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllLegacyLevelRoadsPermitMovementAlongWaypointsAndAcrossTheirWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testAllLegacyLevelRoadsPermitMovementAlongWaypointsAndAcrossTheirWidth]' passed (7.468 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testCharlestonPolygonAllowsAreaDestinationsAndPreservesItsHoles]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testCharlestonPolygonAllowsAreaDestinationsAndPreservesItsHoles]' passed (4.485 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints]' passed (0.005 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testRuntimeCanvasInputRoundTripAndResizeDoNotChangeMovement]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementIntegrationTests testRuntimeCanvasInputRoundTripAndResizeDoNotChangeMovement]' passed (1.063 seconds).
+Test Suite 'HeroMovementIntegrationTests' passed at 2026-09-10 21:53:12.523.
+	 Executed 5 tests, with 0 failures (0 unexpected) in 15.805 (15.806) seconds
+Test Suite 'HeroMovementTests' started at 2026-09-10 21:53:12.523.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testAuthoredWidthAndPolygonOverrideDefaultWidth]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testAuthoredWidthAndPolygonOverrideDefaultWidth]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testEnemyChaseReturnAndUnreachableEnemyUseSameArea]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testEnemyChaseReturnAndUnreachableEnemyUseSameArea]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMalformedAndMissingAreasFailInsteadOfUsingDatabaseRoads]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMalformedAndMissingAreasFailInsteadOfUsingDatabaseRoads]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMovesToExactOffCenterAndSubTwoUnitDestinations]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testMovesToExactOffCenterAndSubTwoUnitDestinations]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNarrowBentPassageUsesBoundaryRouteInsteadOfBecomingUnreachable]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNarrowBentPassageUsesBoundaryRouteInsteadOfBecomingUnreachable]' passed (0.001 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNewCommandMidStepAndRespawnUseActualPosition]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testNewCommandMidStepAndRespawnUseActualPosition]' passed (0.002 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testRejectedCommandsKeepExistingOrderAndCombatState]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testRejectedCommandsKeepExistingOrderAndCombatState]' passed (0.000 seconds).
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testWalksAroundHoleAndDoesNotCrossThinExclusions]' started.
+Test Case '-[LevelEditorFormatsTests.HeroMovementTests testWalksAroundHoleAndDoesNotCrossThinExclusions]' passed (0.004 seconds).
+Test Suite 'HeroMovementTests' passed at 2026-09-10 21:53:12.532.
+	 Executed 8 tests, with 0 failures (0 unexpected) in 0.009 (0.009) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' passed at 2026-09-10 21:53:12.532.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 15.814 (15.815) seconds
+Test Suite 'Selected tests' passed at 2026-09-10 21:53:12.532.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 15.814 (15.816) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'in-defense-of-history': failed storing manifest for 'in-defense-of-history' in cache: attempt to write a readonly database
+[0/1] Planning build
+Building for debugging...
+[0/4] Write sources
+[1/4] Write swift-version--58304C5D6DBC2206.txt
+[3/112] Compiling LevelEditorFormats DesignArsenal.swift
+[4/112] Compiling LevelEditorFormats DesignRoster.swift
+[5/112] Compiling LevelEditorFormats LevelBlueprint.swift
+[6/112] Compiling LevelEditorFormats VirtualCanvas.swift
+[7/112] Compiling LevelEditorFormats CallWaveButtonLayout.swift
+[8/112] Compiling LevelEditorFormats ExitMarkerLayout.swift
+[9/112] Compiling LevelEditorFormats HeroBarLayout.swift
+[10/112] Compiling LevelEditorFormats HeroSpriteFootprint.swift
+[11/112] Compiling LevelEditorFormats HeroSpriteProfile.swift
+[12/112] Compiling LevelEditorFormats HudElementLayouts.swift
+[13/121] Compiling LevelEditorFormats Traits.swift
+[14/121] Compiling LevelEditorFormats UnitFacing.swift
+[15/121] Compiling LevelEditorFormats Wave.swift
+[16/121] Compiling LevelEditorFormats WaveStartSchedule.swift
+[17/121] Compiling LevelEditorFormats BaseDAO.swift
+[18/121] Compiling LevelEditorFormats CampaignDAO.swift
+[19/121] Compiling LevelEditorFormats DifficultyDAO.swift
+[20/121] Compiling LevelEditorFormats EnemyTypeDAO.swift
+[21/121] Compiling LevelEditorFormats HeroDAO.swift
+[22/121] Compiling LevelEditorFormats HudLayoutDAO.swift
+[23/121] Compiling LevelEditorFormats SimulatorRunDAO.swift
+[24/121] Compiling LevelEditorFormats TowerTypeDAO.swift
+[25/121] Compiling LevelEditorFormats TowerUnlockDAO.swift
+[26/121] Compiling LevelEditorFormats VirtualCanvasDAO.swift
+[27/121] Compiling LevelEditorFormats WaveDAO.swift
+[28/121] Compiling LevelEditorFormats Db.swift
+[29/121] Compiling LevelEditorFormats DbError.swift
+[30/121] Compiling LevelEditorFormats HeroSelectionStore.swift
+[31/121] Compiling LevelEditorFormats LevelLoader.swift
+[32/121] Compiling LevelEditorFormats LevelGeoJSONDAO.swift
+[33/121] Compiling LevelEditorFormats LevelHeroDAO.swift
+[34/121] Compiling LevelEditorFormats LevelInfoDAO.swift
+[35/121] Compiling LevelEditorFormats MeleeUnitDAO.swift
+[36/121] Compiling LevelEditorFormats PathDAO.swift
+[37/121] Compiling LevelEditorFormats ReinforcementConfigDAO.swift
+[38/121] Compiling LevelEditorFormats SimBoundsDAO.swift
+[39/121] Compiling LevelEditorFormats SimEnemyTypeDAO.swift
+[40/121] Compiling LevelEditorFormats SimMeleeUnitDAO.swift
+[41/121] Compiling LevelEditorFormats Path.swift
+[42/121] Compiling LevelEditorFormats ReinforcementConfig.swift
+[43/121] Compiling LevelEditorFormats ReinforcementSchedule.swift
+[44/121] Compiling LevelEditorFormats Report.swift
+[45/121] Compiling LevelEditorFormats Simulation.swift
+[46/121] Compiling LevelEditorFormats SpawnEntry.swift
+[47/121] Compiling LevelEditorFormats Stats.swift
+[48/121] Compiling LevelEditorFormats Tower.swift
+[49/121] Compiling LevelEditorFormats TowerKind.swift
+[50/121] Compiling LevelEditorFormats TowerSlot.swift
+[51/121] Compiling LevelEditorFormats TargetCommand.swift
+[52/121] Compiling LevelEditorFormats Constants.swift
+[53/121] Compiling LevelEditorFormats Enums.swift
+[54/121] Compiling LevelEditorFormats GameError.swift
+[55/121] Compiling LevelEditorFormats GameIdentity.swift
+[56/121] Compiling LevelEditorFormats RuntimeCanvas.swift
+[57/121] Compiling LevelEditorFormats Store.swift
+[58/121] Compiling LevelEditorFormats Timer.swift
+[59/121] Compiling LevelEditorFormats HapticAuditionPlayer.swift
+[60/121] Compiling LevelEditorFormats Blueprints.swift
+[61/121] Compiling LevelEditorFormats Repositories.swift
+[62/121] Compiling LevelEditorFormats SQLite.swift
+[63/121] Compiling LevelEditorFormats SQLiteError.swift
+[64/121] Compiling LevelEditorFormats SeedContent.swift
+[65/121] Compiling LevelEditorFormats FileUtil.swift
+[66/121] Compiling LevelEditorFormats BrushStroke.swift
+[67/121] Compiling LevelEditorFormats EditorDocumentLifecycle.swift
+[68/121] Compiling LevelEditorFormats EditorPaintGesture.swift
+[69/121] Compiling LevelEditorFormats GeoJSONExport.swift
+[70/121] Compiling LevelEditorFormats RuntimeCanvasView.swift
+[71/121] Compiling LevelEditorFormats ScreenCanvas.swift
+[72/121] Compiling LevelEditorFormats StackLayout.swift
+[73/121] Compiling LevelEditorFormats TowerMenuLayout.swift
+[74/121] Compiling LevelEditorFormats TowerRangeOverlay.swift
+[75/121] Compiling LevelEditorFormats LogCategory.swift
+[76/121] Compiling LevelEditorFormats LogUtility.swift
+[77/121] Compiling LevelEditorFormats CallWaveButtonPosition.swift
+[78/121] Compiling LevelEditorFormats Campaign.swift
+[79/121] Compiling LevelEditorFormats CampaignLevel.swift
+[80/121] Compiling LevelEditorFormats CommanderPolicy.swift
+[81/121] Compiling LevelEditorFormats ContentCatalog.swift
+[82/121] Compiling LevelEditorFormats Core.swift
+[83/121] Compiling LevelEditorFormats Difficulty.swift
+[84/121] Compiling LevelEditorFormats Enemy.swift
+[85/121] Compiling LevelEditorFormats EnemyEscapeHapticPolicy.swift
+[86/121] Compiling LevelEditorFormats EnemyType.swift
+[87/121] Compiling LevelEditorFormats Engine.swift
+[88/121] Compiling LevelEditorFormats GameplayHapticPattern.swift
+[89/121] Compiling LevelEditorFormats HapticAuditionSample.swift
+[90/121] Compiling LevelEditorFormats HudLayoutConfig.swift
+[91/121] Compiling LevelEditorFormats HudPlacementSolver.swift
+[92/121] Compiling LevelEditorFormats HudSizing.swift
+[93/121] Compiling LevelEditorFormats LevelMapProjection.swift
+[94/121] Compiling LevelEditorFormats LevelViewport.swift
+[95/121] Compiling LevelEditorFormats MapDestinationInput.swift
+[96/121] Compiling LevelEditorFormats MapSpriteSizing.swift
+[97/121] Compiling LevelEditorFormats MasterControlsLayout.swift
+[98/121] Compiling LevelEditorFormats MenuContentLayout.swift
+[99/121] Compiling LevelEditorFormats PresentationStack.swift
+[100/121] Emitting module LevelEditorFormats
+[101/121] Compiling LevelEditorFormats Hero.swift
+[102/121] Compiling LevelEditorFormats HeroMovement.swift
+[103/121] Compiling LevelEditorFormats HeroMovementArea.swift
+[104/121] Compiling LevelEditorFormats HeroSelection.swift
+[105/121] Compiling LevelEditorFormats LevelHero.swift
+[106/121] Compiling LevelEditorFormats LevelHeroConfiguration.swift
+[107/121] Compiling LevelEditorFormats LevelInfo.swift
+[108/121] Compiling LevelEditorFormats MeleeFormation.swift
+[109/121] Compiling LevelEditorFormats MilitiaAI.swift
+[110/121] Compiling LevelEditorFormats Outcome.swift
+[111/121] Compiling LevelEditorFormats GeoJSONFile.swift
+[112/121] Compiling LevelEditorFormats GeoJSONImport.swift
+[113/121] Compiling LevelEditorFormats LevelGeoJSON.swift
+[114/121] Compiling LevelEditorFormats MapDocument.swift
+[115/121] Compiling LevelEditorFormats NativeMapFile.swift
+[116/121] Compiling LevelEditorFormats Palette.swift
+[117/121] Compiling LevelEditorFormats PathFlattening.swift
+[118/121] Compiling LevelEditorFormats PlatformSupport.swift
+[119/121] Compiling LevelEditorFormats SwiftExport.swift
+[120/146] Compiling LevelEditorFormatsTests LevelViewportTests.swift
+[121/146] Compiling LevelEditorFormatsTests MasterControlsLayoutTests.swift
+[122/148] Compiling LevelEditorFormatsTests RuntimeCanvasTests.swift
+[123/148] Compiling LevelEditorFormatsTests TapAreaTests.swift
+[124/148] Compiling LevelEditorFormatsTests PresentationStackTests.swift
+[125/148] Compiling LevelEditorFormatsTests ReinforcementTests.swift
+[126/148] Compiling LevelEditorFormatsTests GameplayHapticPatternTests.swift
+[127/148] Compiling LevelEditorFormatsTests HapticAuditionTests.swift
+[128/148] Compiling LevelEditorFormatsTests EditorEraserTests.swift
+[129/148] Compiling LevelEditorFormatsTests EnemyEscapeHapticTests.swift
+[130/148] Emitting module LevelEditorFormatsTests
+[131/148] Compiling LevelEditorFormatsTests HeroRankingTests.swift
+[132/148] Compiling LevelEditorFormatsTests HeroStartingPositionTests.swift
+[133/148] Compiling LevelEditorFormatsTests BottomCenterOcclusionTests.swift
+[134/148] Compiling LevelEditorFormatsTests CallWaveButtonTests.swift
+[135/148] Compiling LevelEditorFormatsTests CharlestonWaveTests.swift
+[136/148] Compiling LevelEditorFormatsTests HeroMovementIntegrationTests.swift
+[137/148] Compiling LevelEditorFormatsTests HeroMovementTests.swift
+[138/148] Compiling LevelEditorFormatsTests HeroBarLayoutTests.swift
+[139/148] Compiling LevelEditorFormatsTests HeroExitConfigurationTests.swift
+[140/148] Compiling LevelEditorFormatsTests EditorArrowKeyTests.swift
+[141/148] Compiling LevelEditorFormatsTests EditorDocumentLifecycleTests.swift
+[142/148] Compiling LevelEditorFormatsTests EditorEraserIntegrationTests.swift
+[143/148] Compiling LevelEditorFormatsTests LevelGeoJSONTests.swift
+[144/148] Compiling LevelEditorFormatsTests LevelMarkerPlacementTests.swift
+[145/148] Compiling LevelEditorFormatsTests TowerSlotLoadingTests.swift
+[146/148] Compiling LevelEditorFormatsTests WaveStartTimingTests.swift
+[147/150] Emitting module LevelEditorFormatsPackageTests
+[148/150] Compiling LevelEditorFormatsPackageTests runner.swift
+[148/150] Write Objects.LinkFileList
+[149/150] Linking LevelEditorFormatsPackageTests
+Build complete! (15.75s)

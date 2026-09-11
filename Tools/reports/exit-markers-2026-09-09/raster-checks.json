@@ -1,0 +1,1149 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "map": "level_01_battle_road",
+      "density": 1,
+      "center": [
+        579.8399999999999,
+        177.32664583333332
+      ],
+      "actualBounds": [
+        566,
+        163,
+        594,
+        191
+      ],
+      "expectedBounds": [
+        565.2844444444444,
+        162.77109027777777,
+        594.3955555555555,
+        191.65997916666666
+      ],
+      "maxRasterError": 0.7155555555556248,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_01_battle_road",
+      "density": 3,
+      "center": [
+        579.8399999999999,
+        177.32664583333332
+      ],
+      "actualBounds": [
+        1696,
+        488,
+        1784,
+        575
+      ],
+      "expectedBounds": [
+        1695.853333333333,
+        488.3132708333333,
+        1783.1866666666665,
+        574.9799375
+      ],
+      "maxRasterError": 0.8133333333335031,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_002_bunker_hill",
+      "density": 1,
+      "center": [
+        203.2208333333333,
+        139.17083333333335
+      ],
+      "actualBounds": [
+        189,
+        125,
+        217,
+        153
+      ],
+      "expectedBounds": [
+        188.66527777777776,
+        124.61527777777779,
+        217.77638888888885,
+        153.5041666666667
+      ],
+      "maxRasterError": 0.7763888888888459,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_002_bunker_hill",
+      "density": 3,
+      "center": [
+        203.2208333333333,
+        139.17083333333335
+      ],
+      "actualBounds": [
+        566,
+        374,
+        654,
+        461
+      ],
+      "expectedBounds": [
+        565.9958333333333,
+        373.84583333333336,
+        653.3291666666665,
+        460.51250000000005
+      ],
+      "maxRasterError": 0.6708333333334622,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_003_great_bridge",
+      "density": 1,
+      "center": [
+        531.7402083333334,
+        47.87875
+      ],
+      "actualBounds": [
+        518,
+        34,
+        546,
+        62
+      ],
+      "expectedBounds": [
+        517.1846527777778,
+        33.32319444444444,
+        546.2957638888889,
+        62.212083333333325
+      ],
+      "maxRasterError": 0.815347222222158,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_003_great_bridge",
+      "density": 3,
+      "center": [
+        531.7402083333334,
+        47.87875
+      ],
+      "actualBounds": [
+        1551,
+        100,
+        1639,
+        187
+      ],
+      "expectedBounds": [
+        1551.5539583333334,
+        99.96958333333333,
+        1638.887291666667,
+        186.63625
+      ],
+      "maxRasterError": 0.5539583333334122,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_004_moores_creek_bridge",
+      "density": 1,
+      "center": [
+        504.6545833333333,
+        288.8810416666667
+      ],
+      "actualBounds": [
+        491,
+        275,
+        519,
+        303
+      ],
+      "expectedBounds": [
+        490.09902777777774,
+        274.32548611111116,
+        519.2101388888889,
+        303.214375
+      ],
+      "maxRasterError": 0.9009722222222649,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_004_moores_creek_bridge",
+      "density": 3,
+      "center": [
+        504.6545833333333,
+        288.8810416666667
+      ],
+      "actualBounds": [
+        1470,
+        823,
+        1558,
+        910
+      ],
+      "expectedBounds": [
+        1470.2970833333331,
+        822.9764583333334,
+        1557.6304166666666,
+        909.643125
+      ],
+      "maxRasterError": 0.3695833333333667,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_005_dorchester_heights",
+      "density": 1,
+      "center": [
+        182.23812499999997,
+        120.9879166666667
+      ],
+      "actualBounds": [
+        168,
+        107,
+        196,
+        135
+      ],
+      "expectedBounds": [
+        167.68256944444443,
+        106.43236111111115,
+        196.7936805555555,
+        135.32125000000005
+      ],
+      "maxRasterError": 0.7936805555555111,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_005_dorchester_heights",
+      "density": 1,
+      "center": [
+        458.5995833333333,
+        120.9879166666667
+      ],
+      "actualBounds": [
+        445,
+        107,
+        473,
+        135
+      ],
+      "expectedBounds": [
+        444.0440277777778,
+        106.43236111111115,
+        473.15513888888887,
+        135.32125000000005
+      ],
+      "maxRasterError": 0.9559722222222149,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_005_dorchester_heights",
+      "density": 3,
+      "center": [
+        182.23812499999997,
+        120.9879166666667
+      ],
+      "actualBounds": [
+        503,
+        319,
+        591,
+        406
+      ],
+      "expectedBounds": [
+        503.0477083333332,
+        319.29708333333343,
+        590.3810416666665,
+        405.9637500000001
+      ],
+      "maxRasterError": 0.6189583333334667,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_005_dorchester_heights",
+      "density": 3,
+      "center": [
+        458.5995833333333,
+        120.9879166666667
+      ],
+      "actualBounds": [
+        1332,
+        319,
+        1420,
+        406
+      ],
+      "expectedBounds": [
+        1332.1320833333332,
+        319.29708333333343,
+        1419.4654166666667,
+        405.9637500000001
+      ],
+      "maxRasterError": 0.5345833333333303,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_006_sullivans_island",
+      "density": 1,
+      "center": [
+        254.87541666666664,
+        120.9879166666667
+      ],
+      "actualBounds": [
+        241,
+        107,
+        269,
+        135
+      ],
+      "expectedBounds": [
+        240.3198611111111,
+        106.43236111111115,
+        269.4309722222222,
+        135.32125000000005
+      ],
+      "maxRasterError": 0.6801388888889051,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_006_sullivans_island",
+      "density": 1,
+      "center": [
+        408.7381249999999,
+        131.27479166666672
+      ],
+      "actualBounds": [
+        395,
+        117,
+        423,
+        145
+      ],
+      "expectedBounds": [
+        394.18256944444437,
+        116.71923611111116,
+        423.29368055555545,
+        145.60812500000006
+      ],
+      "maxRasterError": 0.8174305555556316,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_006_sullivans_island",
+      "density": 3,
+      "center": [
+        254.87541666666664,
+        120.9879166666667
+      ],
+      "actualBounds": [
+        721,
+        319,
+        809,
+        406
+      ],
+      "expectedBounds": [
+        720.9595833333333,
+        319.29708333333343,
+        808.2929166666665,
+        405.9637500000001
+      ],
+      "maxRasterError": 0.7070833333334576,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_006_sullivans_island",
+      "density": 3,
+      "center": [
+        408.7381249999999,
+        131.27479166666672
+      ],
+      "actualBounds": [
+        1182,
+        350,
+        1270,
+        437
+      ],
+      "expectedBounds": [
+        1182.547708333333,
+        350.15770833333346,
+        1269.8810416666665,
+        436.82437500000015
+      ],
+      "maxRasterError": 0.5477083333330484,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_007_long_island",
+      "density": 1,
+      "center": [
+        323.14,
+        53.289583333333354
+      ],
+      "actualBounds": [
+        309,
+        39,
+        337,
+        67
+      ],
+      "expectedBounds": [
+        308.58444444444444,
+        38.7340277777778,
+        337.69555555555553,
+        67.62291666666668
+      ],
+      "maxRasterError": 0.6955555555555293,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_007_long_island",
+      "density": 3,
+      "center": [
+        323.14,
+        53.289583333333354
+      ],
+      "actualBounds": [
+        925,
+        116,
+        1013,
+        203
+      ],
+      "expectedBounds": [
+        925.7533333333333,
+        116.2020833333334,
+        1013.0866666666666,
+        202.86875000000006
+      ],
+      "maxRasterError": 0.7533333333333303,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_008_trenton",
+      "density": 1,
+      "center": [
+        271.6427083333333,
+        248.26833333333332
+      ],
+      "actualBounds": [
+        258,
+        234,
+        286,
+        262
+      ],
+      "expectedBounds": [
+        257.08715277777776,
+        233.71277777777777,
+        286.19826388888885,
+        262.60166666666663
+      ],
+      "maxRasterError": 0.9128472222222399,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_008_trenton",
+      "density": 1,
+      "center": [
+        369.195,
+        248.26833333333332
+      ],
+      "actualBounds": [
+        355,
+        234,
+        383,
+        262
+      ],
+      "expectedBounds": [
+        354.63944444444445,
+        233.71277777777777,
+        383.75055555555554,
+        262.60166666666663
+      ],
+      "maxRasterError": 0.7505555555555361,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_008_trenton",
+      "density": 3,
+      "center": [
+        271.6427083333333,
+        248.26833333333332
+      ],
+      "actualBounds": [
+        771,
+        701,
+        859,
+        788
+      ],
+      "expectedBounds": [
+        771.2614583333333,
+        701.1383333333333,
+        858.5947916666665,
+        787.805
+      ],
+      "maxRasterError": 0.4052083333334622,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_008_trenton",
+      "density": 3,
+      "center": [
+        369.195,
+        248.26833333333332
+      ],
+      "actualBounds": [
+        1064,
+        701,
+        1152,
+        788
+      ],
+      "expectedBounds": [
+        1063.9183333333333,
+        701.1383333333333,
+        1151.2516666666668,
+        787.805
+      ],
+      "maxRasterError": 0.7483333333332212,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_009_princeton",
+      "density": 1,
+      "center": [
+        152.4470833333333,
+        12.676875000000052
+      ],
+      "actualBounds": [
+        138,
+        0,
+        166,
+        27
+      ],
+      "expectedBounds": [
+        137.89152777777775,
+        0,
+        167.00263888888884,
+        27.010208333333384
+      ],
+      "maxRasterError": 1.0026388888888391,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_009_princeton",
+      "density": 1,
+      "center": [
+        553.415,
+        12.676875000000052
+      ],
+      "actualBounds": [
+        539,
+        0,
+        567,
+        27
+      ],
+      "expectedBounds": [
+        538.8594444444444,
+        0,
+        567.9705555555555,
+        27.010208333333384
+      ],
+      "maxRasterError": 0.9705555555555065,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_009_princeton",
+      "density": 3,
+      "center": [
+        152.4470833333333,
+        12.676875000000052
+      ],
+      "actualBounds": [
+        413,
+        0,
+        501,
+        81
+      ],
+      "expectedBounds": [
+        413.6745833333332,
+        0,
+        501.0079166666666,
+        81.03062500000016
+      ],
+      "maxRasterError": 0.674583333333203,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_009_princeton",
+      "density": 3,
+      "center": [
+        553.415,
+        12.676875000000052
+      ],
+      "actualBounds": [
+        1616,
+        0,
+        1704,
+        81
+      ],
+      "expectedBounds": [
+        1616.5783333333331,
+        0,
+        1703.9116666666666,
+        81.03062500000016
+      ],
+      "maxRasterError": 0.5783333333331484,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_010_fort_ann",
+      "density": 1,
+      "center": [
+        419.0249999999999,
+        245.5
+      ],
+      "actualBounds": [
+        405,
+        232,
+        433,
+        260
+      ],
+      "expectedBounds": [
+        404.4694444444444,
+        230.94444444444446,
+        433.58055555555546,
+        259.8333333333333
+      ],
+      "maxRasterError": 1.055555555555543,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_010_fort_ann",
+      "density": 3,
+      "center": [
+        419.0249999999999,
+        245.5
+      ],
+      "actualBounds": [
+        1213,
+        693,
+        1301,
+        780
+      ],
+      "expectedBounds": [
+        1213.408333333333,
+        692.8333333333334,
+        1300.7416666666666,
+        779.5
+      ],
+      "maxRasterError": 0.5,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_011_saratoga",
+      "density": 1,
+      "center": [
+        336.6670833333333,
+        50.584166666666704
+      ],
+      "actualBounds": [
+        323,
+        37,
+        351,
+        65
+      ],
+      "expectedBounds": [
+        322.1115277777778,
+        36.02861111111115,
+        351.22263888888887,
+        64.91750000000003
+      ],
+      "maxRasterError": 0.9713888888888533,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_011_saratoga",
+      "density": 3,
+      "center": [
+        336.6670833333333,
+        50.584166666666704
+      ],
+      "actualBounds": [
+        966,
+        108,
+        1054,
+        195
+      ],
+      "expectedBounds": [
+        966.3345833333334,
+        108.08583333333345,
+        1053.6679166666668,
+        194.7525000000001
+      ],
+      "maxRasterError": 0.3345833333333985,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_012_kettle_creek",
+      "density": 1,
+      "center": [
+        22.020833333333314,
+        120.29583333333335
+      ],
+      "actualBounds": [
+        8,
+        106,
+        36,
+        134
+      ],
+      "expectedBounds": [
+        7.465277777777759,
+        105.74027777777779,
+        36.57638888888887,
+        134.6291666666667
+      ],
+      "maxRasterError": 0.6291666666666913,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_012_kettle_creek",
+      "density": 1,
+      "center": [
+        22.020833333333314,
+        227.25416666666666
+      ],
+      "actualBounds": [
+        8,
+        213,
+        36,
+        241
+      ],
+      "expectedBounds": [
+        7.465277777777759,
+        212.69861111111112,
+        36.57638888888887,
+        241.5875
+      ],
+      "maxRasterError": 0.5875000000000057,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_012_kettle_creek",
+      "density": 3,
+      "center": [
+        22.020833333333314,
+        120.29583333333335
+      ],
+      "actualBounds": [
+        22,
+        317,
+        110,
+        404
+      ],
+      "expectedBounds": [
+        22.39583333333328,
+        317.22083333333336,
+        109.72916666666661,
+        403.88750000000005
+      ],
+      "maxRasterError": 0.39583333333327886,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_012_kettle_creek",
+      "density": 3,
+      "center": [
+        22.020833333333314,
+        227.25416666666666
+      ],
+      "actualBounds": [
+        22,
+        638,
+        110,
+        725
+      ],
+      "expectedBounds": [
+        22.39583333333328,
+        638.0958333333334,
+        109.72916666666661,
+        724.7625
+      ],
+      "maxRasterError": 0.39583333333327886,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 1,
+      "center": [
+        278.7208333333333,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        264,
+        311,
+        294,
+        340
+      ],
+      "expectedBounds": [
+        264.16527777777776,
+        311.7923611111111,
+        293.27638888888885,
+        340
+      ],
+      "maxRasterError": 0.79236111111112,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 1,
+      "center": [
+        487.91875,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        473,
+        311,
+        503,
+        340
+      ],
+      "expectedBounds": [
+        473.36319444444445,
+        311.7923611111111,
+        502.47430555555553,
+        340
+      ],
+      "maxRasterError": 0.79236111111112,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 1,
+      "center": [
+        278.7208333333333,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        264,
+        311,
+        294,
+        340
+      ],
+      "expectedBounds": [
+        264.16527777777776,
+        311.7923611111111,
+        293.27638888888885,
+        340
+      ],
+      "maxRasterError": 0.79236111111112,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 1,
+      "center": [
+        487.91875,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        473,
+        311,
+        503,
+        340
+      ],
+      "expectedBounds": [
+        473.36319444444445,
+        311.7923611111111,
+        502.47430555555553,
+        340
+      ],
+      "maxRasterError": 0.79236111111112,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 3,
+      "center": [
+        278.7208333333333,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        792,
+        935,
+        880,
+        1020
+      ],
+      "expectedBounds": [
+        792.4958333333333,
+        935.3770833333334,
+        879.8291666666665,
+        1020
+      ],
+      "maxRasterError": 0.4958333333332803,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 3,
+      "center": [
+        487.91875,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        1420,
+        935,
+        1508,
+        1020
+      ],
+      "expectedBounds": [
+        1420.0895833333332,
+        935.3770833333334,
+        1507.4229166666667,
+        1020
+      ],
+      "maxRasterError": 0.5770833333333485,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 3,
+      "center": [
+        278.7208333333333,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        792,
+        935,
+        880,
+        1020
+      ],
+      "expectedBounds": [
+        792.4958333333333,
+        935.3770833333334,
+        879.8291666666665,
+        1020
+      ],
+      "maxRasterError": 0.4958333333332803,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_013_new_haven",
+      "density": 3,
+      "center": [
+        487.91875,
+        326.34791666666666
+      ],
+      "actualBounds": [
+        1420,
+        935,
+        1508,
+        1020
+      ],
+      "expectedBounds": [
+        1420.0895833333332,
+        935.3770833333334,
+        1507.4229166666667,
+        1020
+      ],
+      "maxRasterError": 0.5770833333333485,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_014_savannah_bastion_v7",
+      "density": 1,
+      "center": [
+        36.58604166666663,
+        112.08520833333336
+      ],
+      "actualBounds": [
+        23,
+        98,
+        51,
+        126
+      ],
+      "expectedBounds": [
+        22.030486111111074,
+        97.5296527777778,
+        51.14159722222219,
+        126.41854166666668
+      ],
+      "maxRasterError": 0.9695138888889261,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_014_savannah_bastion_v7",
+      "density": 1,
+      "center": [
+        15.540416666666658,
+        198.4383333333334
+      ],
+      "actualBounds": [
+        2,
+        184,
+        30,
+        212
+      ],
+      "expectedBounds": [
+        0.984861111111103,
+        183.88277777777785,
+        30.095972222222215,
+        212.77166666666673
+      ],
+      "maxRasterError": 1.015138888888897,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_014_savannah_bastion_v7",
+      "density": 1,
+      "center": [
+        26.078958333333304,
+        263.74583333333334
+      ],
+      "actualBounds": [
+        12,
+        250,
+        40,
+        278
+      ],
+      "expectedBounds": [
+        11.523402777777749,
+        249.1902777777778,
+        40.63451388888886,
+        278.07916666666665
+      ],
+      "maxRasterError": 0.8097222222222058,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_014_savannah_bastion_v7",
+      "density": 3,
+      "center": [
+        36.58604166666663,
+        112.08520833333336
+      ],
+      "actualBounds": [
+        66,
+        292,
+        154,
+        379
+      ],
+      "expectedBounds": [
+        66.09145833333324,
+        292.5889583333334,
+        153.42479166666658,
+        379.25562500000007
+      ],
+      "maxRasterError": 0.5889583333333803,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_014_savannah_bastion_v7",
+      "density": 3,
+      "center": [
+        15.540416666666658,
+        198.4383333333334
+      ],
+      "actualBounds": [
+        3,
+        551,
+        91,
+        638
+      ],
+      "expectedBounds": [
+        2.9545833333333107,
+        551.6483333333335,
+        90.28791666666665,
+        638.3150000000002
+      ],
+      "maxRasterError": 0.7120833333333536,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_014_savannah_bastion_v7",
+      "density": 3,
+      "center": [
+        26.078958333333304,
+        263.74583333333334
+      ],
+      "actualBounds": [
+        34,
+        747,
+        122,
+        834
+      ],
+      "expectedBounds": [
+        34.57020833333325,
+        747.5708333333333,
+        121.90354166666658,
+        834.2375
+      ],
+      "maxRasterError": 0.5708333333333258,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_15_charleston",
+      "density": 1,
+      "center": [
+        596.45,
+        106.13958333333335
+      ],
+      "actualBounds": [
+        582,
+        92,
+        604,
+        120
+      ],
+      "expectedBounds": [
+        581.8944444444445,
+        91.58402777777779,
+        604,
+        120.47291666666668
+      ],
+      "maxRasterError": 0.4729166666666771,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_15_charleston",
+      "density": 1,
+      "center": [
+        350.13124999999997,
+        321.94375
+      ],
+      "actualBounds": [
+        336,
+        308,
+        364,
+        336
+      ],
+      "expectedBounds": [
+        335.5756944444444,
+        307.3881944444445,
+        364.6868055555555,
+        336.27708333333334
+      ],
+      "maxRasterError": 0.6868055555555088,
+      "clippedAtViewport": false
+    },
+    {
+      "map": "level_15_charleston",
+      "density": 3,
+      "center": [
+        596.45,
+        106.13958333333335
+      ],
+      "actualBounds": [
+        1745,
+        274,
+        1812,
+        361
+      ],
+      "expectedBounds": [
+        1745.6833333333334,
+        274.75208333333336,
+        1812,
+        361.41875000000005
+      ],
+      "maxRasterError": 0.7520833333333599,
+      "clippedAtViewport": true
+    },
+    {
+      "map": "level_15_charleston",
+      "density": 3,
+      "center": [
+        350.13124999999997,
+        321.94375
+      ],
+      "actualBounds": [
+        1006,
+        922,
+        1094,
+        1009
+      ],
+      "expectedBounds": [
+        1006.7270833333333,
+        922.1645833333334,
+        1094.0604166666667,
+        1008.8312500000001
+      ],
+      "maxRasterError": 0.7270833333333258,
+      "clippedAtViewport": false
+    }
+  ]
+}

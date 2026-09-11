@@ -1,0 +1,407 @@
+[
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 1,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-current-1x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 2,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-current-2x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 3,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-current-3x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 1,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-before-1x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 2,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-before-2x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 3,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-before-3x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 113,
+    "box_width" : 158,
+    "density" : 1,
+    "ellipse_height" : 104.50074687499999,
+    "ellipse_width" : 149.28678124999999,
+    "file" : "221-upgrade-1x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 113,
+    "box_width" : 158,
+    "density" : 2,
+    "ellipse_height" : 104.50074687499999,
+    "ellipse_width" : 149.28678124999999,
+    "file" : "221-upgrade-2x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 113,
+    "box_width" : 158,
+    "density" : 3,
+    "ellipse_height" : 104.50074687499999,
+    "ellipse_width" : 149.28678124999999,
+    "file" : "221-upgrade-3x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 1,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-equal-1x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 2,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-equal-2x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 100,
+    "box_width" : 139,
+    "density" : 3,
+    "ellipse_height" : 91.436362499999987,
+    "ellipse_width" : 130.62337499999998,
+    "file" : "221-equal-3x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 162,
+    "box_width" : 228,
+    "density" : 1,
+    "ellipse_height" : 153.48574062499998,
+    "ellipse_width" : 219.26534375,
+    "file" : "221-maximum-1x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 162,
+    "box_width" : 228,
+    "density" : 2,
+    "ellipse_height" : 153.48574062499998,
+    "ellipse_width" : 219.26534375,
+    "file" : "221-maximum-2x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 162,
+    "box_width" : 228,
+    "density" : 3,
+    "ellipse_height" : 153.48574062499998,
+    "ellipse_width" : 219.26534375,
+    "file" : "221-maximum-3x.png",
+    "playable_height" : 221.0625
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 1,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-current-1x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 2,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-current-2x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 3,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-current-3x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 1,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-before-1x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 2,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-before-2x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 3,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-before-3x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 169,
+    "box_width" : 238,
+    "density" : 1,
+    "ellipse_height" : 160.72492592592593,
+    "ellipse_width" : 229.60703703703706,
+    "file" : "340-upgrade-1x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 169,
+    "box_width" : 238,
+    "density" : 2,
+    "ellipse_height" : 160.72492592592593,
+    "ellipse_width" : 229.60703703703706,
+    "file" : "340-upgrade-2x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 169,
+    "box_width" : 238,
+    "density" : 3,
+    "ellipse_height" : 160.72492592592593,
+    "ellipse_width" : 229.60703703703706,
+    "file" : "340-upgrade-3x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 1,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-equal-1x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 2,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-equal-2x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 149,
+    "box_width" : 209,
+    "density" : 3,
+    "ellipse_height" : 140.63155555555554,
+    "ellipse_width" : 200.90222222222221,
+    "file" : "340-equal-3x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 245,
+    "box_width" : 346,
+    "density" : 1,
+    "ellipse_height" : 236.06514814814813,
+    "ellipse_width" : 337.23592592592593,
+    "file" : "340-maximum-1x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 245,
+    "box_width" : 346,
+    "density" : 2,
+    "ellipse_height" : 236.06514814814813,
+    "ellipse_width" : 337.23592592592593,
+    "file" : "340-maximum-2x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 245,
+    "box_width" : 346,
+    "density" : 3,
+    "ellipse_height" : 236.06514814814813,
+    "ellipse_width" : 337.23592592592593,
+    "file" : "340-maximum-3x.png",
+    "playable_height" : 340
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 1,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-current-1x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 2,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-current-2x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 3,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-current-3x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 1,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-before-1x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 2,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-before-2x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 3,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-before-3x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 434,
+    "box_width" : 616,
+    "density" : 1,
+    "ellipse_height" : 425.44833333333338,
+    "ellipse_width" : 607.78333333333342,
+    "file" : "900-upgrade-1x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 434,
+    "box_width" : 616,
+    "density" : 2,
+    "ellipse_height" : 425.44833333333338,
+    "ellipse_width" : 607.78333333333342,
+    "file" : "900-upgrade-2x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 434,
+    "box_width" : 616,
+    "density" : 3,
+    "ellipse_height" : 425.44833333333338,
+    "ellipse_width" : 607.78333333333342,
+    "file" : "900-upgrade-3x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 1,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-equal-1x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 2,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-equal-2x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 381,
+    "box_width" : 540,
+    "density" : 3,
+    "ellipse_height" : 372.25999999999993,
+    "ellipse_width" : 531.79999999999995,
+    "file" : "900-equal-3x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 633,
+    "box_width" : 901,
+    "density" : 1,
+    "ellipse_height" : 624.87833333333333,
+    "ellipse_width" : 892.68333333333339,
+    "file" : "900-maximum-1x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 633,
+    "box_width" : 901,
+    "density" : 2,
+    "ellipse_height" : 624.87833333333333,
+    "ellipse_width" : 892.68333333333339,
+    "file" : "900-maximum-2x.png",
+    "playable_height" : 900
+  },
+  {
+    "box_height" : 633,
+    "box_width" : 901,
+    "density" : 3,
+    "ellipse_height" : 624.87833333333333,
+    "ellipse_width" : 892.68333333333339,
+    "file" : "900-maximum-3x.png",
+    "playable_height" : 900
+  }
+]

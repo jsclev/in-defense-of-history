@@ -1,0 +1,108 @@
+{
+  "reference_height": 680.625,
+  "clamp": [
+    421.9875,
+    816.75
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/HudSizing.swift",
+      "sha256": "601a9ee47d86df51138245ee1ec58cc175d5fbf5efbe712ca61498ab4beeed2d"
+    }
+  ],
+  "sizing_note": "Exact ScaledDimension(57.5) conversion: point height = 57.5 / 680.625 * clamp(playableHeight, 421.9875, 816.75). Reviewed at playable height 340.",
+  "assets": [
+    {
+      "id": "done-button",
+      "label": "Done button",
+      "animated": false,
+      "map_height": 57.5,
+      "files": {
+        "done": [
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png",
+          "/Users/john/projects/td/in-defense-of-history-data/LibertyLineAssets.xcassets/done_button_20.imageset/done_button_20.png"
+        ]
+      },
+      "atlases": {
+        "1": {
+          "url": "atlases/done-button-1x.png",
+          "boxes": {
+            "done": [
+              1,
+              1,
+              974,
+              387
+            ]
+          }
+        },
+        "2": {
+          "url": "atlases/done-button-2x.png",
+          "boxes": {
+            "done": [
+              1,
+              1,
+              974,
+              387
+            ]
+          }
+        },
+        "3": {
+          "url": "atlases/done-button-3x.png",
+          "boxes": {
+            "done": [
+              1,
+              1,
+              974,
+              387
+            ]
+          }
+        }
+      },
+      "directions": [
+        "se"
+      ],
+      "frames": {
+        "se": {
+          "idle": [
+            "done"
+          ],
+          "walk": [
+            "done"
+          ]
+        }
+      }
+    }
+  ],
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "under": "battle-road-under.jpg",
+      "over": "battle-road-over.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "under": "great-bridge-under.jpg",
+      "over": "great-bridge-over.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "under": "trenton-under.jpg",
+      "over": "trenton-over.png"
+    }
+  ]
+}

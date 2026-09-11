@@ -1,0 +1,20 @@
+19:17:11  Acquired tunnel connection to device.
+19:17:11  Enabling developer disk image services.
+19:17:11  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.grass-bastion-probe
+• installationURL: file:///private/var/containers/Bundle/Application/087C2A59-C37B-41BB-9324-D2EA6D434127/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4640
+• options: 
+19:18:03  Acquired tunnel connection to device.
+19:18:03  Enabling developer disk image services.
+19:18:03  Acquired usage assertion.
+Launched application with com.zippyzen.grass-bastion-probe bundle identifier.
+19:18:07  Acquired tunnel connection to device.
+19:18:07  Enabling developer disk image services.
+19:18:07  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/grass-bastion-2026-09-09/device-documents
+PASS: physical-iPhone map and grass dimensions; production gameplay captures saved.

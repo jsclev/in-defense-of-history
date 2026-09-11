@@ -1,0 +1,24 @@
+20:33:57  Acquired tunnel connection to device.
+20:33:57  Enabling developer disk image services.
+20:33:58  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.charleston-path-probe
+• installationURL: file:///private/var/containers/Bundle/Application/828FE1D4-DC70-49FD-9628-10D41CD33D86/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4716
+• options: 
+20:34:42  Acquired tunnel connection to device.
+20:34:42  Enabling developer disk image services.
+20:34:43  Acquired usage assertion.
+Launched application with com.zippyzen.charleston-path-probe bundle identifier.
+20:34:49  Acquired tunnel connection to device.
+20:34:49  Enabling developer disk image services.
+20:34:50  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/painted-paths-2026-09-10/device-documents
+20:34:54  Acquired tunnel connection to device.
+20:34:54  Enabling developer disk image services.
+20:34:56  Acquired usage assertion.
+App uninstalled.
+PASS: physical-iPhone production map captures and exact path hash; temporary probe removed.

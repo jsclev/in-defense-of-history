@@ -1,0 +1,20 @@
+21:51:56  Acquired tunnel connection to device.
+21:51:56  Enabling developer disk image services.
+21:51:56  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.hud-stats-probe
+• installationURL: file:///private/var/containers/Bundle/Application/13411F9F-2F56-4685-BB9A-962D71931CD6/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 4852
+• options: 
+21:52:15  Acquired tunnel connection to device.
+21:52:15  Enabling developer disk image services.
+21:52:15  Acquired usage assertion.
+Launched application with com.zippyzen.hud-stats-probe bundle identifier.
+21:52:35  Acquired tunnel connection to device.
+21:52:35  Enabling developer disk image services.
+21:52:35  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/hud-stats-tight-2026-09-09/device-documents
+PASS: device HUD captures saved

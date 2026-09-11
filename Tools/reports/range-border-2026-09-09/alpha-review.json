@@ -1,0 +1,56 @@
+[
+  {
+    "file": "221-current-1x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 250,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "221-current-2x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "221-current-3x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "340-current-1x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 250,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "340-current-2x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "340-current-3x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "900-current-1x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "900-current-2x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  },
+  {
+    "file": "900-current-3x.png",
+    "maximum_interior_alpha": 0,
+    "peak_alpha": 251,
+    "same_range_duplicate_matches": true
+  }
+]

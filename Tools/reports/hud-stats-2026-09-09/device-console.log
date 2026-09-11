@@ -1,0 +1,7 @@
+21:11:45  Acquired tunnel connection to device.
+21:11:45  Enabling developer disk image services.
+21:11:46  Acquired usage assertion.
+Launched application with com.zippyzen.hud-stats-probe bundle identifier.
+Waiting for the application to terminate…
+Liberty_Line/LevelRunner.swift:1870: Precondition failed
+App terminated due to signal 5.

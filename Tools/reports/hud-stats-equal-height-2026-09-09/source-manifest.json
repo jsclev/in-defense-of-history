@@ -1,0 +1,93 @@
+{
+  "reference_height": 340,
+  "clamp": [
+    340,
+    900
+  ],
+  "default_playable_height": 340,
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "maps": [],
+  "assets": [
+    {
+      "id": "minimum-start",
+      "label": "minimum-start",
+      "animated": false,
+      "map_height": 33.232,
+      "states": {
+        "se": {
+          "idle": [
+            "minimum-start"
+          ],
+          "walk": [
+            "minimum-start"
+          ]
+        }
+      },
+      "files": {
+        "minimum-start": [
+          "minimum-start@1x.png",
+          "minimum-start@2x.png",
+          "minimum-start@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "minimum-end",
+      "label": "minimum-end",
+      "animated": false,
+      "map_height": 33.232,
+      "states": {
+        "se": {
+          "idle": [
+            "minimum-end"
+          ],
+          "walk": [
+            "minimum-end"
+          ]
+        }
+      },
+      "files": {
+        "minimum-end": [
+          "minimum-end@1x.png",
+          "minimum-end@2x.png",
+          "minimum-end@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "minimum-wide",
+      "label": "minimum-wide",
+      "animated": false,
+      "map_height": 33.232,
+      "states": {
+        "se": {
+          "idle": [
+            "minimum-wide"
+          ],
+          "walk": [
+            "minimum-wide"
+          ]
+        }
+      },
+      "files": {
+        "minimum-wide": [
+          "minimum-wide@1x.png",
+          "minimum-wide@2x.png",
+          "minimum-wide@3x.png"
+        ]
+      }
+    }
+  ],
+  "sizing_sources": [
+    "Production HudStatsView, minimum runtime canvas: {'fixture': 'minimum', 'font': 19.484740000000002, 'height': 33.232, 'state': 'start', 'width': 337.5651185142857}. macOS SwiftUI renderer with explicit value fixtures; not device gameplay."
+  ]
+}

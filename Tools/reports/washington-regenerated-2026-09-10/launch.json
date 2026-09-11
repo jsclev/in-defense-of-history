@@ -1,0 +1,56 @@
+{
+  "info" : {
+    "arguments" : [
+      "devicectl",
+      "device",
+      "process",
+      "launch",
+      "--device",
+      "00008130-000161D93E82001C",
+      "/private/var/containers/Bundle/Application/A3D133F6-22AB-4626-8726-61F81E1087A4/Liberty Line.app",
+      "--json-output",
+      "Tools/reports/washington-regenerated-2026-09-10/launch.json"
+    ],
+    "commandType" : "devicectl.device.process.launch",
+    "environment" : {
+      "TERM" : "dumb"
+    },
+    "jsonVersion" : 3,
+    "outcome" : "success",
+    "version" : "518.33"
+  },
+  "result" : {
+    "deviceIdentifier" : "360E6205-8810-54D7-AA21-4E0D7DAA7BE0",
+    "launchOptions" : {
+      "activatedWhenStarted" : true,
+      "arguments" : [
+
+      ],
+      "environmentVariables" : {
+        "TERM" : "dumb"
+      },
+      "platformSpecificOptions" : {
+
+      },
+      "startStopped" : false,
+      "terminateExistingInstances" : false,
+      "user" : {
+        "active" : true
+      }
+    },
+    "process" : {
+      "auditToken" : [
+        4294967295,
+        501,
+        501,
+        501,
+        501,
+        12023,
+        0,
+        35307
+      ],
+      "executable" : "file:///private/var/containers/Bundle/Application/A3D133F6-22AB-4626-8726-61F81E1087A4/Liberty%20Line.app/Liberty%20Line",
+      "processIdentifier" : 12023
+    }
+  }
+}

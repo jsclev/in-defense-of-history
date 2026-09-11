@@ -1,0 +1,20 @@
+00:44:18  Acquired tunnel connection to device.
+00:44:18  Enabling developer disk image services.
+00:44:18  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.knox-hud-probe
+• installationURL: file:///private/var/containers/Bundle/Application/82FA01B7-04EB-4C87-9E5C-7FA901B35336/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5168
+• options: 
+00:44:36  Acquired tunnel connection to device.
+00:44:36  Enabling developer disk image services.
+00:44:36  Acquired usage assertion.
+Launched application with com.zippyzen.knox-hud-probe bundle identifier.
+00:44:44  Acquired tunnel connection to device.
+00:44:44  Enabling developer disk image services.
+00:44:44  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/knox-hud-blue-frame-2026-09-10/device-documents
+PASS: production reinforcement button and live HUD captured at minimum and device sizes.

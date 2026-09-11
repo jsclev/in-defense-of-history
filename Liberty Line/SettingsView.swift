@@ -5,6 +5,7 @@ struct SettingsView: View {
     @AppStorage("debugMode") private var debugMode = true
     @AppStorage("showDebugInfo") private var showDebugInfo = false
     @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
+    @AppStorage(Constants.enemyEscapeHapticsEnabledKey) private var enemyEscapeHapticsEnabled = true
 
     private let runtimeCanvas: RuntimeCanvas
     private let onConfigureHudLayout: () -> Void
@@ -37,44 +38,26 @@ struct SettingsView: View {
                 .font(.custom("Baskerville-Bold", size: 40 * metrics.scale))
                 .foregroundStyle(.white)
 
-            toggle("Debug mode",
-                   detail: "Firing range ring under each tower you place, "
-                         + "coloured and labelled by range.",
-                   isOn: $debugMode)
+            ScrollView {
+                VStack(alignment: .leading, spacing: 18 * metrics.scale) {
+                    toggle("Life-loss haptics",
+                           detail: "Feel feedback when an enemy escapes and you lose a life.",
+                           isOn: $enemyEscapeHapticsEnabled)
 
-            toggle("Layout guides",
-                   detail: "Physical runtimeCanvas edge in green, safe area in red, play area in orange.",
-                   isOn: $showDebugLayoutGuides)
-
-            toggle("Simulation readout",
-                   detail: "Wave and spawn state, top-left of the level map.",
-                   isOn: $showDebugInfo)
-
-            Button(action: onConfigureHudLayout) {
-                VStack(alignment: .leading, spacing: 3 * metrics.scale) {
-                    Text("HUD layout")
-                        .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
-                        .foregroundStyle(Color(red: 0.87, green: 0.72, blue: 0.35))
-                    Text("Drag the hero bar, stats, misc button, and master controls "
-                         + "to any edge or corner of the screen.")
-                        .font(.system(size: Typography.size(13 * metrics.scale)))
-                        .foregroundStyle(.white.opacity(0.65))
+                    options
                 }
+                .frame(width: runtimeCanvas.safeInsetsRect.width - 56 * metrics.scale,
+                       alignment: .leading)
             }
-
-            Spacer()
 
             Text("Version \(GameIdentity.version)")
                 .font(.system(size: Typography.size(12 * metrics.scale)))
                 .foregroundStyle(.white.opacity(0.5))
 
-            HStack {
-                Spacer()
-                DoneButton(action: onExit)
-                    .frame(height: doneButtonHeight)
-            }
+            Color.clear.frame(height: doneButtonHeight)
         }
         .padding(contentInsets)
+        .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
         .background {
             ZStack {
                 Image("hero_screen_background")
@@ -85,7 +68,39 @@ struct SettingsView: View {
             .clipped()
             .ignoresSafeArea()
         }
+        .overlay(alignment: .topLeading) {
+            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit)
+        }
         .persistentSystemOverlays(.hidden)
+    }
+
+    @ViewBuilder
+    private var options: some View {
+        toggle("Debug mode",
+               detail: "Firing range ring under each tower you place, "
+                     + "coloured and labelled by range.",
+               isOn: $debugMode)
+
+        toggle("Layout guides",
+               detail: "Screen edge in red, safe area in green, HUD in yellow, play area in purple, tap area in cyan.",
+               isOn: $showDebugLayoutGuides)
+
+        toggle("Simulation readout",
+               detail: "Wave and spawn state, top-left of the level map.",
+               isOn: $showDebugInfo)
+
+        Button(action: onConfigureHudLayout) {
+            VStack(alignment: .leading, spacing: 3 * metrics.scale) {
+                Text("HUD layout")
+                    .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
+                    .foregroundStyle(Color(red: 0.87, green: 0.72, blue: 0.35))
+                Text("Drag the hero bar, stats, misc button, and master controls "
+                     + "to any edge or corner of the screen.")
+                    .font(.system(size: Typography.size(13 * metrics.scale)))
+                    .foregroundStyle(.white.opacity(0.65))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
     }
 
     private func toggle(_ title: String, detail: String,

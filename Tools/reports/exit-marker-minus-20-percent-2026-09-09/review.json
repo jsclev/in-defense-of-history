@@ -1,0 +1,28 @@
+{
+  "change": "20% smaller exit marker in both dimensions",
+  "minimumSourceWidthPoints": 25.6,
+  "minimumProjectedHeightPoints": 17.92,
+  "relativeScale": 0.8,
+  "verticalFraction": 0.7,
+  "renderer": "Production SwiftUI on physical iPhone, iOS 26.6.1",
+  "selfReview": "PASS",
+  "cues": [
+    "Four rounded arms and central crossing remain distinct at minimum size.",
+    "Saturated red silhouette remains identifiable on grass and snow with nearby heroes."
+  ],
+  "conditions": [
+    "Existing lab native-size color, grayscale, silhouette and three-value views",
+    "2x and 3x source families on Battle Road, Great Bridge, Trenton with nearby troops",
+    "Actual iPhone minimum-size Charleston and Trenton captures"
+  ],
+  "technicalChecks": "All 26 authored centers preserved; exact 0.8 source-box ratio; 52 raster-bound checks passed at 1x and 3x within two pixels.",
+  "limitations": [
+    "Familiar-agent review, not an independent human recognition study.",
+    "Grayscale contrast is weaker on dark water; color and silhouette checks remain clear."
+  ],
+  "sourceHashes": {
+    "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift": "17c6939887e10be3da55b62d5cdd89d85f91ffe419586f5f69a83df5edae570e",
+    "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987",
+    "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-minus-20-percent-2026-09-09/comparison-minimum.png": "ef77f579504de9b0ddf7f30a56218444d44954452d812ecfd011248876c51a1f"
+  }
+}

@@ -16,19 +16,6 @@ INSERT INTO level_info (
     'level_002_bunker_hill'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('c1667647-fc97-5b2f-b964-116f0fbae72e', '9d692af7-345d-419a-bc04-16112c3f0b74', 2160.0, 1050.0),
-('9028107a-d24f-53fb-84dc-6b239db5626b', '9d692af7-345d-419a-bc04-16112c3f0b74', 1980.0, 1170.0),
-('7e4d3224-e7f6-55aa-bbb2-b5c4c0d0930a', '9d692af7-345d-419a-bc04-16112c3f0b74', 1620.0, 1320.0),
-('ada44a55-5d63-58d2-8fb5-c92f59fb42fb', '9d692af7-345d-419a-bc04-16112c3f0b74', 1400.0, 1290.0),
-('a99b56c3-2476-5012-a5a2-032832102279', '9d692af7-345d-419a-bc04-16112c3f0b74', 1200.0, 1300.0),
-('dbd28dd9-fd1b-5334-a5e7-1067f82a5eb9', '9d692af7-345d-419a-bc04-16112c3f0b74', 1190.0, 900.0),
-('75238a64-c6f4-5165-827d-8cb6183da04b', '9d692af7-345d-419a-bc04-16112c3f0b74', 1450.0, 880.0),
-('82f1c5fd-1dea-5505-90a2-0396d9b2bf16', '9d692af7-345d-419a-bc04-16112c3f0b74', 1700.0, 720.0),
-('cd00a126-b143-54f9-b649-c63792f0795e', '9d692af7-345d-419a-bc04-16112c3f0b74', 1940.0, 700.0);
-
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,
     map_position_x, map_position_y

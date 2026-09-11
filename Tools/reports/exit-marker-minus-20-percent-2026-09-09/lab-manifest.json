@@ -1,0 +1,275 @@
+{
+  "reference_height": 655.0,
+  "clamp": [
+    340.0,
+    900.0
+  ],
+  "default_playable_height": 340.0,
+  "assets": [
+    {
+      "id": "exit_projected",
+      "label": "Exit X projected on ground",
+      "animated": false,
+      "map_height": 34.52235294117647,
+      "states": {
+        "n": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "e": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "se": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "s": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "w": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "exit"
+          ],
+          "walk": [
+            "exit"
+          ]
+        }
+      },
+      "files": {
+        "exit": [
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/diagnostic-renders/projected-marker@1x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/diagnostic-renders/projected-marker@2x.png",
+          "/Users/john/projects/td/in-defense-of-history/Tools/reports/exit-marker-perspective-2026-09-09/diagnostic-renders/projected-marker@3x.png"
+        ]
+      }
+    },
+    {
+      "id": "rally_flag_comparison",
+      "label": "Rally flag \u2014 equal-size comparison",
+      "animated": false,
+      "map_height": 61.64705882352941,
+      "states": {
+        "n": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "e": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "se": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "s": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "w": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "rally_point_icon"
+          ],
+          "walk": [
+            "rally_point_icon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "militia_soldier",
+      "label": "Militia soldier",
+      "map_height": 55.26,
+      "animated": false,
+      "states": {
+        "n": {
+          "idle": [
+            "militia_soldier_walk_n_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_n_16"
+          ]
+        },
+        "ne": {
+          "idle": [
+            "militia_soldier_walk_ne_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_ne_16"
+          ]
+        },
+        "e": {
+          "idle": [
+            "militia_soldier_walk_e_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_e_16"
+          ]
+        },
+        "se": {
+          "idle": [
+            "militia_soldier_walk_se_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_se_16"
+          ]
+        },
+        "s": {
+          "idle": [
+            "militia_soldier_walk_s_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_s_16"
+          ]
+        },
+        "sw": {
+          "idle": [
+            "militia_soldier_walk_sw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_sw_16"
+          ]
+        },
+        "w": {
+          "idle": [
+            "militia_soldier_walk_w_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_w_16"
+          ]
+        },
+        "nw": {
+          "idle": [
+            "militia_soldier_walk_nw_16"
+          ],
+          "walk": [
+            "militia_soldier_walk_nw_16"
+          ]
+        }
+      }
+    }
+  ],
+  "canvas": {
+    "width": 2868.0,
+    "height": 2064.0,
+    "play_rect": [
+      474.0,
+      492.0,
+      1920.0,
+      1080.0
+    ]
+  },
+  "maps": [
+    {
+      "id": "battle-road",
+      "label": "Battle Road",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_01_battle_road.png"
+    },
+    {
+      "id": "great-bridge",
+      "label": "Great Bridge",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_003_great_bridge.png"
+    },
+    {
+      "id": "trenton",
+      "label": "Trenton / snow",
+      "base": "/Users/john/projects/td/in-defense-of-history-data/ArtReadability/reports/path-exit-rounded-x-2026-09-09/source-maps/level_008_trenton.png"
+    }
+  ],
+  "sizing_sources": [
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/MapSpriteSizing.swift",
+      "sha256": "17c6939887e10be3da55b62d5cdd89d85f91ffe419586f5f69a83df5edae570e"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Engine/Layout/TowerRangeOverlay.swift",
+      "sha256": "777fa1bd238db4be8544456baa23b6b28e13afcbc974d3baab4b4e70a75972be"
+    },
+    {
+      "path": "/Users/john/projects/td/in-defense-of-history/Liberty Line/Level Views/LevelExitMarkersView.swift",
+      "sha256": "4372ad02d5b7e48be6e31f3eac42a37f65184dac9e6642aba9e8d96cb6272987"
+    }
+  ],
+  "sizing_note": "Exit marker 20% smaller in both dimensions: source box width 25.6pt at minimum, projected height 17.92pt; same 0.7 ground-plane ratio. Diagnostic view-transform PNG inputs are reused from the perspective review."
+}

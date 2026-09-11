@@ -1,0 +1,24 @@
+01:24:07  Acquired tunnel connection to device.
+01:24:07  Enabling developer disk image services.
+01:24:07  Acquired usage assertion.
+App installed:
+• bundleID: com.zippyzen.crown-contrast-probe
+• installationURL: file:///private/var/containers/Bundle/Application/A2878ED8-5F3A-4AB4-85C5-7604360C9D83/Liberty%20Line.app/
+• launchServicesIdentifier: unknown
+• databaseUUID: CE2E26A6-BAAA-4347-8415-22A50C08CB00
+• databaseSequenceNumber: 5280
+• options: 
+01:24:32  Acquired tunnel connection to device.
+01:24:32  Enabling developer disk image services.
+01:24:32  Acquired usage assertion.
+Launched application with com.zippyzen.crown-contrast-probe bundle identifier.
+01:25:10  Acquired tunnel connection to device.
+01:25:10  Enabling developer disk image services.
+01:25:10  Acquired usage assertion.
+File received from Device
+/Users/john/projects/td/in-defense-of-history/Tools/reports/gold-crown-contrast-2026-09-10/device-documents
+01:25:18  Acquired tunnel connection to device.
+01:25:18  Enabling developer disk image services.
+01:25:18  Acquired usage assertion.
+App uninstalled.
+PASS: 26 authored exits across 15 levels; physical-iPhone renders saved.

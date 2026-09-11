@@ -61,6 +61,17 @@ public struct ScaledDimension: Equatable {
 
 public enum HudSizing {
 
+    /// Keeps recent painted emblems clear of their decorative frame's inner edge.
+    public static let paintedButtonIconFraction: CGFloat = 0.64
+
+    /// Speed/pause glyph box relative to its decorative frame. Material's
+    /// 24-in-40 icon-button proportion leaves 20% padding on each side.
+    /// See Tools/button_icon_spacing.md for sources and gameplay-size review.
+    public static let masterControlIconFraction: CGFloat = 0.60
+
+    public static let callWaveButton = ScaledDimension(70, atLeast: TouchTarget.minimum,
+                                                       atMost: 84)
+
     public static let cornerButton = ScaledDimension(81.29, atLeast: TouchTarget.minimum,
                                                      atMost: 81.29 * 1.2)
     public static let cornerButtonSpacing = ScaledDimension(16.8)

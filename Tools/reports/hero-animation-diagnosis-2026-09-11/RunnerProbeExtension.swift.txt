@@ -1,0 +1,24 @@
+extension LevelRunner {
+    func probeAnimationFrames(facing: UnitFacing) -> [[HeroSoldier]] {
+        let angle = Double(facing.rawValue) * Double.pi / 4
+        let dx = sin(angle), dy = cos(angle)
+        heroPoses = [:]
+        for i in heroPosts.indices {
+            heroPosts[i].unit.position = Point(1200, 1000)
+        }
+        var frames: [[HeroSoldier]] = []
+        for tick in 0..<63 {
+            heroPrevPositions = heroPositionsById()
+            for i in heroPosts.indices {
+                heroPosts[i].unit.position = Point(1200 + dx * Double(tick + 1) * 6,
+                                                  1000 + dy * Double(tick + 1) * 6)
+            }
+            updateHeroPoses()
+            for alpha in [0.0, 0.5] {
+                publishHeroes(alpha: alpha)
+                frames.append(heroes)
+            }
+        }
+        return frames
+    }
+}

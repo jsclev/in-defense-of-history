@@ -1,0 +1,16 @@
+{
+  "density": 3,
+  "scanlineY": 50,
+  "transparentGapRuns": [
+    [
+      231,
+      253,
+      23
+    ],
+    [
+      606,
+      629,
+      24
+    ]
+  ]
+}

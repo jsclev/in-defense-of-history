@@ -1,0 +1,1407 @@
+{
+  "checks": [
+    {
+      "fraction": 0.1,
+      "level": "Battle Road",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 37,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Battle Road",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 31,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Battle Road",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 22,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Battle Road",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Battle Road",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Bunker Hill",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 22,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Bunker Hill",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 19,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Bunker Hill",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Bunker Hill",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Bunker Hill",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Bunker Hill",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Bunker Hill",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 17,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Bunker Hill",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Bunker Hill",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 7,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Bunker Hill",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Great Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 26,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Great Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 22,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Great Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Great Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Great Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Moore's Creek Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 27,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Moore's Creek Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 22,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Moore's Creek Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Moore's Creek Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Moore's Creek Bridge",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Dorchester Heights",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Dorchester Heights",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Dorchester Heights",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Dorchester Heights",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Dorchester Heights",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Dorchester Heights",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Dorchester Heights",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Dorchester Heights",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Dorchester Heights",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Dorchester Heights",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 2,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Sullivan's Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 13,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Sullivan's Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Sullivan's Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Sullivan's Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Sullivan's Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 2,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Sullivan's Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 10,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Sullivan's Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Sullivan's Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Sullivan's Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Sullivan's Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 2,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Long Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Long Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 17,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Long Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Long Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Long Island",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Long Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Long Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 13,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Long Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 9,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Long Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Long Island",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Long Island",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 18,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Long Island",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Long Island",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Long Island",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Long Island",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Trenton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Trenton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Trenton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 9,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Trenton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Trenton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Trenton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Trenton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Trenton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Trenton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Trenton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 2,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Princeton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 31,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Princeton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 25,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Princeton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 16,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Princeton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 9,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Princeton",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Princeton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Princeton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 17,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Princeton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Princeton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Princeton",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 2,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Fort Ann",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 24,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Fort Ann",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Fort Ann",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Fort Ann",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Fort Ann",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Fort Ann",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Fort Ann",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Fort Ann",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Fort Ann",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Fort Ann",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Saratoga",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 24,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Saratoga",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Saratoga",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 14,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Saratoga",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Saratoga",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Saratoga",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 18,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Saratoga",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Saratoga",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Saratoga",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Saratoga",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Saratoga",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 18,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Saratoga",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 15,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Saratoga",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Saratoga",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Saratoga",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Kettle Creek",
+      "path": 0,
+      "reachable": false,
+      "routeNodes": 0,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Kettle Creek",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 31,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Kettle Creek",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 22,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Kettle Creek",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Kettle Creek",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Kettle Creek",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 35,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Kettle Creek",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 30,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Kettle Creek",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 21,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Kettle Creek",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Kettle Creek",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Kettle Creek",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Kettle Creek",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 17,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Kettle Creek",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Kettle Creek",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 7,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Kettle Creek",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Kettle Creek",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 32,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Kettle Creek",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 27,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Kettle Creek",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 19,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Kettle Creek",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Kettle Creek",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "New Haven",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 34,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "New Haven",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 29,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "New Haven",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 19,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "New Haven",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 10,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "New Haven",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "New Haven",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 36,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "New Haven",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 31,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "New Haven",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 21,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "New Haven",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "New Haven",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "New Haven",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 34,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "New Haven",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 28,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "New Haven",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 18,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "New Haven",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "New Haven",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 4,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "New Haven",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 25,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "New Haven",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "New Haven",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "New Haven",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "New Haven",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Savannah",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 19,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Savannah",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 17,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Savannah",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 12,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Savannah",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Savannah",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Savannah",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 41,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Savannah",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 35,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Savannah",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 25,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Savannah",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 13,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Savannah",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Savannah",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 41,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Savannah",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 34,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Savannah",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 24,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Savannah",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 13,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Savannah",
+      "path": 2,
+      "reachable": true,
+      "routeNodes": 6,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Savannah",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 20,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Savannah",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 17,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Savannah",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Savannah",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 7,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Savannah",
+      "path": 3,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Charleston",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 36,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Charleston",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 30,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Charleston",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 21,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Charleston",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 11,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Charleston",
+      "path": 0,
+      "reachable": true,
+      "routeNodes": 5,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.1,
+      "level": "Charleston",
+      "path": 1,
+      "reachable": false,
+      "routeNodes": 0,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.25,
+      "level": "Charleston",
+      "path": 1,
+      "reachable": false,
+      "routeNodes": 0,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.5,
+      "level": "Charleston",
+      "path": 1,
+      "reachable": false,
+      "routeNodes": 0,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.75,
+      "level": "Charleston",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 8,
+      "validEdges": true
+    },
+    {
+      "fraction": 0.9,
+      "level": "Charleston",
+      "path": 1,
+      "reachable": true,
+      "routeNodes": 3,
+      "validEdges": true
+    }
+  ],
+  "passed": false,
+  "runnerSHA256": "e119d06e3bba22ee0c78a644699ea8536dac17bd5fb27eee34f944dc468d343d",
+  "limitation": "Host-side production route code and campaign data; not iOS touch delivery."
+}

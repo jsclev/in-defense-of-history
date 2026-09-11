@@ -3,6 +3,7 @@ import MetalKit
 
 @available(iOS 26.0, *)
 struct CampaignMapMetalView: UIViewRepresentable {
+    let canvasSize: CGSize
     final class Coordinator {
         var renderer: Renderer?
     }
@@ -37,7 +38,8 @@ struct CampaignMapMetalView: UIViewRepresentable {
         do {
             let renderer = try Renderer(
                 view: metalView,
-                imageName: CampaignMapAsset.imageName
+                imageName: CampaignMapAsset.imageName,
+                canvasSize: canvasSize
             )
 
             metalView.delegate = renderer
@@ -55,5 +57,9 @@ struct CampaignMapMetalView: UIViewRepresentable {
     }
 
     func updateUIView(_ metalView: MTKView, context: Context) {
+        if context.coordinator.renderer?.canvasSize != canvasSize {
+            context.coordinator.renderer?.canvasSize = canvasSize
+            metalView.setNeedsDisplay()
+        }
     }
 }

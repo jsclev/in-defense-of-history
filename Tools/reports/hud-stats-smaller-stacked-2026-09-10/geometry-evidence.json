@@ -1,0 +1,64 @@
+{
+  "density": 3,
+  "requested_scale": 0.88,
+  "old_plate_horizontal_spans_px": [
+    [
+      0,
+      249
+    ],
+    [
+      273,
+      644
+    ],
+    [
+      667,
+      1013
+    ]
+  ],
+  "new_top_plate_horizontal_spans_px": [
+    [
+      0,
+      220
+    ],
+    [
+      240,
+      566
+    ]
+  ],
+  "new_wave_plate_horizontal_span_px": [
+    [
+      131,
+      435
+    ]
+  ],
+  "rendered_plate_width_ratios": [
+    0.8835341365461847,
+    0.8787061994609164,
+    0.8786127167630058
+  ],
+  "new_plate_vertical_spans_px": [
+    [
+      [
+        0,
+        87
+      ]
+    ],
+    [
+      [
+        0,
+        87
+      ],
+      [
+        109,
+        196
+      ]
+    ]
+  ],
+  "centers_px": {
+    "top_row": 283.0,
+    "wave": 283.0
+  },
+  "font_pt": 17.1465712,
+  "plate_height_pt": 29.24416,
+  "gap_pt": 6.82
+}

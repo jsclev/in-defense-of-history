@@ -1,0 +1,77 @@
+[
+  {
+    "file": "level_002_bunker_hill.geojson",
+    "sha256": "923281994de2f6006ae1b6a8e8171b6b8d4b26ccfa97ef7c0ff918e0024e26b2",
+    "matchesSource": true
+  },
+  {
+    "file": "level_003_great_bridge.geojson",
+    "sha256": "19b44f8e5043dbbd614d4e13fe2d59e4241593da3f833047ec0585177c96cc5e",
+    "matchesSource": true
+  },
+  {
+    "file": "level_004_moores_creek_bridge.geojson",
+    "sha256": "92edd73edb36870e40c58b23459ea3e7a1ac8de5f66917aa0a15aae79a4415cc",
+    "matchesSource": true
+  },
+  {
+    "file": "level_005_dorchester_heights.geojson",
+    "sha256": "46b023e09788795049ca0d37ba8d7184c3247a65b480e4e793fe27426ab5d6e0",
+    "matchesSource": true
+  },
+  {
+    "file": "level_006_sullivans_island.geojson",
+    "sha256": "8ebb2c8f0b99ddce266364e58c6839b7f910f372d8ce71e9ba29e70b0f7c329b",
+    "matchesSource": true
+  },
+  {
+    "file": "level_007_long_island.geojson",
+    "sha256": "3d769dd07d142d9b9fc3507472e06957903874fac5d27424717097116c37de7c",
+    "matchesSource": true
+  },
+  {
+    "file": "level_008_trenton.geojson",
+    "sha256": "b8d3d0f973b3541a0c301dc4aabf55bd9d7ea98e8078421c2b9a806e9f9c8fb8",
+    "matchesSource": true
+  },
+  {
+    "file": "level_009_princeton.geojson",
+    "sha256": "515d2f4c521d27c375f46420443e9a1832cdb969ab083cbeda85ddcdd169c193",
+    "matchesSource": true
+  },
+  {
+    "file": "level_010_fort_ann.geojson",
+    "sha256": "6f482e2ea028ace3f4db7f81267bd639cffaa16aa0346892c92e4155460d23b4",
+    "matchesSource": true
+  },
+  {
+    "file": "level_011_saratoga.geojson",
+    "sha256": "6e8268233a8a2280334c0dc2a3409c1d3d3956674c372414eb317ef4b1796b27",
+    "matchesSource": true
+  },
+  {
+    "file": "level_012_kettle_creek.geojson",
+    "sha256": "e89fc35bfdd6ad0143aa1dd6234a4759c10b2332d7f04f1bc221cb0a8264467d",
+    "matchesSource": true
+  },
+  {
+    "file": "level_013_new_haven.geojson",
+    "sha256": "47c2345bda99921cf727c3628d77dcc317740ddced54d0bdff094ca31a12d212",
+    "matchesSource": true
+  },
+  {
+    "file": "level_014_savannah_bastion_v7.geojson",
+    "sha256": "48f38d93e7143c039faea2835cd3f9bd6c4e5975f702a847d1972a21c652b499",
+    "matchesSource": true
+  },
+  {
+    "file": "level_01_battle_road.geojson",
+    "sha256": "75d55468fb45a4153df213aaf6cdae468dd23cb6255bd591f34df23cf88f279a",
+    "matchesSource": true
+  },
+  {
+    "file": "level_15_charleston.geojson",
+    "sha256": "a27cfb227a8e3bb64ff1089e14a8dc43d341d5cf5ffde3e501e59c7cfc90fadb",
+    "matchesSource": true
+  }
+]

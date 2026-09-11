@@ -1,0 +1,79 @@
+{
+  "assets" : [
+    {
+      "name" : "ranged_tower_level_1",
+      "points" : [
+        136,
+        100
+      ],
+      "scale" : 3
+    },
+    {
+      "name" : "ranged_tower_level_2",
+      "points" : [
+        136,
+        100
+      ],
+      "scale" : 3
+    },
+    {
+      "name" : "ranged_tower_level_3",
+      "points" : [
+        136,
+        100
+      ],
+      "scale" : 3
+    },
+    {
+      "name" : "ranged_tower_level_4_branch_1",
+      "points" : [
+        136,
+        100
+      ],
+      "scale" : 3
+    },
+    {
+      "name" : "ranged_tower_level_4_branch_2",
+      "points" : [
+        136,
+        100
+      ],
+      "scale" : 3
+    },
+    {
+      "name" : "ranged_tower_level_4_branch_3",
+      "points" : [
+        136,
+        100
+      ],
+      "scale" : 3
+    }
+  ],
+  "captures" : [
+    {
+      "allBuildAndUpgradeConfirmationsPassed" : true,
+      "branchArtHeight" : 25.451764705882347,
+      "mapTowerHeight" : 39.862595419847324,
+      "menuButtonSide" : 54.084999999999994,
+      "menuIconSide" : 34.614399999999996,
+      "mode" : "device",
+      "placedCount" : 6,
+      "playableHeight" : 373
+    },
+    {
+      "allBuildAndUpgradeConfirmationsPassed" : true,
+      "branchArtHeight" : 23.199999999999999,
+      "mapTowerHeight" : 36.335877862595417,
+      "menuButtonSide" : 49.299999999999997,
+      "menuIconSide" : 31.552,
+      "mode" : "minimum",
+      "placedCount" : 6,
+      "playableHeight" : 340
+    }
+  ],
+  "device" : "iPhone",
+  "fixture" : "Temporary app only grants money and ranged unlock level4. Actual build\/upgrade actions and production views are used. No physical tap automation.",
+  "passed" : true,
+  "runID" : "a3119d5b-584f-4356-8c4d-c496245171d1",
+  "systemVersion" : "26.6.1"
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "AssetType": "Image",
+    "BitsPerComponent": 8,
+    "ColorModel": "RGB",
+    "Colorspace": "srgb",
+    "Compression": "deepmap2",
+    "Encoding": "ARGB",
+    "Idiom": "universal",
+    "Name": "tower_slot_available",
+    "NameIdentifier": 7634,
+    "Opaque": false,
+    "PixelHeight": 288,
+    "PixelWidth": 528,
+    "RenditionName": "tower_slot_available@3x.png",
+    "Scale": 3,
+    "SHA1Digest": "5400306496AD15221BD6882B3AFC521BEA13D18123BA7893E241C5F20570B7E1",
+    "SizeOnDisk": 154801,
+    "Template Mode": "automatic"
+  }
+]

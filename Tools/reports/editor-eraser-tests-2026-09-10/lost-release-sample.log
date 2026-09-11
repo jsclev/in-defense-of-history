@@ -1,0 +1,42 @@
+warning: /Users/john/Library/org.swift.swiftpm/configuration is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/org.swift.swiftpm/security is not accessible or not writable, disabling user-level cache features.
+warning: /Users/john/Library/Caches/org.swift.swiftpm is not accessible or not writable, disabling user-level cache features.
+warning: 'editor-eraser-mutations-j8m_s32_': failed storing manifest for 'editor-eraser-mutations-j8m_s32_' in cache: attempt to write a readonly database
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Simulator': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/AGENTS.md': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Images': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/build': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/in_defense_of_history.sqlite': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Tools': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Versioning': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/InDefenseOfHistory.xcodeproj': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/GameName.xcconfig': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Db': File not found.
+warning: 'editor-eraser-mutations-j8m_s32_': Invalid Exclude '/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Liberty Line': File not found.
+[0/1] Planning build
+Building for debugging...
+[0/3] Write sources
+[1/3] Write swift-version--58304C5D6DBC2206.txt
+[3/6] Compiling LevelEditorFormats EditorPaintGesture.swift
+[4/6] Emitting module LevelEditorFormats
+[5/6] Compiling LevelEditorFormats BrushStroke.swift
+[5/7] Write Objects.LinkFileList
+[6/7] Linking LevelEditorFormatsPackageTests
+Build complete! (1.56s)
+Test Suite 'Selected tests' started at 2026-09-10 15:11:54.815.
+Test Suite 'LevelEditorFormatsPackageTests.xctest' started at 2026-09-10 15:11:54.816.
+Test Suite 'EditorEraserIntegrationTests' started at 2026-09-10 15:11:54.816.
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance]' started.
+/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Tests/LevelEditorFormatsTests/EditorEraserIntegrationTests.swift:104: error: -[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance] : XCTAssertEqual failed: ("Optional(LevelEditorFormats.Point(x: 300.0, y: 200.0))") is not equal to ("Optional(LevelEditorFormats.Point(x: 306.0, y: 200.0))")
+/private/var/folders/w6/vfnfmw994w98chd23cc06sc40000gn/T/editor-eraser-mutations-j8m_s32_/Tests/LevelEditorFormatsTests/EditorEraserIntegrationTests.swift:105: error: -[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance] : XCTAssertFalse failed
+Test Case '-[LevelEditorFormatsTests.EditorEraserIntegrationTests testMouseUpIncludesFinalSampleEvenBelowPreviewSamplingDistance]' failed (0.040 seconds).
+Test Suite 'EditorEraserIntegrationTests' failed at 2026-09-10 15:11:54.857.
+	 Executed 1 test, with 2 failures (0 unexpected) in 0.040 (0.041) seconds
+Test Suite 'LevelEditorFormatsPackageTests.xctest' failed at 2026-09-10 15:11:54.857.
+	 Executed 1 test, with 2 failures (0 unexpected) in 0.040 (0.041) seconds
+Test Suite 'Selected tests' failed at 2026-09-10 15:11:54.857.
+	 Executed 1 test, with 2 failures (0 unexpected) in 0.040 (0.041) seconds
+◇ Test run started.
+↳ Testing Library Version: 1902
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

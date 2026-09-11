@@ -3,16 +3,21 @@ import CoreGraphics
 import SQLite3
 
 public class LevelInfoDAO: BaseDAO {
-    private let towerSlotDao: TowerSlotDAO
-    private let pathDao: PathDAO
-    private let waveDao: WaveDAO
+    /// Database metadata only. LevelLoader assembles the playable level.
+    public struct Record {
+        public let id: UUID
+        public let name: String
+        public let campaign: Campaign
+        public let startedAt: Date
+        public let endedAt: Date
+        public let startingMoney: Int
+        public let numStartingLives: Int
+        public let numWaves: Int
+        public let playArea: CGRect
+        public let mapImageName: String
+    }
 
-    init(conn: OpaquePointer?, towerSlotDao: TowerSlotDAO, pathDao: PathDAO,
-         waveDao: WaveDAO) {
-        self.towerSlotDao = towerSlotDao
-        self.pathDao = pathDao
-        self.waveDao = waveDao
-
+    init(conn: OpaquePointer?) {
         super.init(conn: conn, table: "level_info", loggerName: LevelInfoDAO.self)
     }
 
@@ -95,7 +100,7 @@ public class LevelInfoDAO: BaseDAO {
         return levels
     }
 
-    public func getBy(id: UUID) throws -> LevelInfo {
+    public func getBy(id: UUID) throws -> Record {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""
             SELECT
@@ -153,11 +158,7 @@ public class LevelInfoDAO: BaseDAO {
                 sqlite3_finalize(stmt)
                 stmt = nil
 
-                let towerSlots = try towerSlotDao.getTowerSlotsFor(levelInfoId: id)
-                let paths = try pathDao.getPathsFor(levelInfoId: id)
-                let waves = try waveDao.getWavesFor(levelInfoId: id)
-
-                return LevelInfo(id: levelInfoId,
+                return Record(id: levelInfoId,
                                  name: levelName,
                                  campaign: Campaign(id: campaignId, name: campaignName),
                                  startedAt: startedAt,
@@ -166,10 +167,7 @@ public class LevelInfoDAO: BaseDAO {
                                  numStartingLives: numStartingLives,
                                  numWaves: numWaves,
                                  playArea: playArea,
-                                 mapImageName: mapImageName,
-                                 paths: paths,
-                                 towerSlots: towerSlots,
-                                 waves: waves)
+                                 mapImageName: mapImageName)
             }
         }
         

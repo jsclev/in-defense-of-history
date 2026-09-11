@@ -11,6 +11,10 @@ public struct RuntimeCanvas {
     public let safeInsetsRect: CGRect
     public let playAreaRect: CGRect
     public let runtimePlayArea: CGPath
+    /// Screen-coordinate placement region for tappable map elements.
+    public let runtimeTapArea: CGPath
+    public let occlusionAreas: [CGRect]
+    public let bottomCenterOcclusionArea: CGRect
     public let towerSlotValidArea: CGPath
     public let scaleFactor: CGFloat
     public let maxY: CGFloat
@@ -58,10 +62,17 @@ public struct RuntimeCanvas {
             tx: playAreaRect.minX - virtualPlayArea.minX * scaleFactor,
             ty: playAreaRect.minY + virtualPlayArea.maxY * scaleFactor)
         
-        runtimePlayArea = virtualCanvas.playAreaShape.copy(using: &transform)
-            ?? virtualCanvas.playAreaShape
+        let screenWidthInMapUnits = scaleFactor > 0 ? physicalRect.width / scaleFactor : 0
+        let playShape = virtualCanvas.playAreaShape(forScreenWidth: screenWidthInMapUnits)
+        runtimePlayArea = playShape.copy(using: &transform) ?? playShape
+        let tapShape = virtualCanvas.tapAreaShape(forScreenWidth: screenWidthInMapUnits)
+        runtimeTapArea = tapShape.copy(using: &transform) ?? tapShape
+        occlusionAreas = virtualCanvas.occlusionAreas(forScreenWidth: screenWidthInMapUnits)
+            .map { $0.applying(transform) }
+        bottomCenterOcclusionArea = virtualCanvas.bottomCenterOcclusionArea(forScreenWidth: screenWidthInMapUnits)
+            .applying(transform)
 
-        let validShape = virtualCanvas.towerSlotValidFootprint
+        let validShape = virtualCanvas.towerSlotValidFootprint(forScreenWidth: screenWidthInMapUnits)
         towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
         
         var safeMargin = playAreaRect.height * marginScaleFactor

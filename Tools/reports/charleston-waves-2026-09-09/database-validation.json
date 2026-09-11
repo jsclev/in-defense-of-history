@@ -1,0 +1,13 @@
+{
+  "seedFiles": 82,
+  "integrity": "ok",
+  "foreignKeyViolations": 0,
+  "bundledCharlestonMatchesFreshSeed": true,
+  "rowCounts": {
+    "level": 1,
+    "routes": 1364,
+    "slots": 16,
+    "waves": 15,
+    "spawns": 80
+  }
+}

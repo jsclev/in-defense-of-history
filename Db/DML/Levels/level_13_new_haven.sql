@@ -16,26 +16,6 @@ INSERT INTO level_info (
     'level_013_new_haven'
 );
 
-INSERT INTO tower_slot (
-    id, level_info_id, map_position_x, map_position_y
-) VALUES
-('1fbc8644-b985-5ceb-a774-88ae6815e396', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1468.0, 1360.0),
-('fae104ca-127a-536d-a3d0-42c24b1805eb', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1876.0, 1348.0),
-('a76d3a0b-5527-5efc-8f69-48a871b7482e', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1216.0, 1324.0),
-('c4a47be6-245b-56d8-9804-8a7c30563f4f', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 988.0, 1288.0),
-('f4f1e72e-5497-5520-b999-398c15693c50', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1612.0, 1204.0),
-('dc496eb1-1e89-5982-a223-4a3efbe9ef62', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 772.0, 1144.0),
-('19ad7ff5-5d7f-5080-9928-1278b1a389a3', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 2092.0, 1144.0),
-('d33d0260-824b-5cac-9318-b6a75df56e72', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1792.0, 1048.0),
-('46baec3e-e104-5a1f-8cfd-1da1a1d0fc9e', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1360.0, 1036.0),
-('01559e0f-cdc3-5ae8-8f88-1a179aa6f25a', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1036.0, 976.0),
-('40e66866-22c3-55b8-a31e-e050d329201f', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1648.0, 904.0),
-('5b901635-a3d2-5a51-8113-2e9513516ddb', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1960.0, 892.0),
-('7aabf2fc-4340-5316-9751-792178c8ab9c', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 856.0, 880.0),
-('3c9826a0-07de-5a03-bf3e-5a8ac84063c4', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 2164.0, 880.0),
-('66246200-3410-5bab-a1af-c22fe4bdcdfb', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1528.0, 700.0),
-('55902bdd-cdc3-50d8-a37f-0b993f7aac45', '96170d0e-6983-47e0-bf80-93cd4c91ad3a', 1792.0, 700.0);
-
 INSERT INTO level_path_point (
     id, level_info_id, path_index, point_index,
     map_position_x, map_position_y
