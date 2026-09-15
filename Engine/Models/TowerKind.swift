@@ -51,6 +51,12 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    public func directionalAssetName(atLevel level: Int, branch: Int = 1) -> String? {
+        guard self == .areaOfEffect,
+              let base = assetName(atLevel: level, branch: branch) else { return nil }
+        return "\(base)_directions_32"
+    }
+
     public var menuFrameName: String {
         "tower_menu_square_frame"
     }

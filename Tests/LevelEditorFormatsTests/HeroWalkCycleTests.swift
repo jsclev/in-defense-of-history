@@ -51,9 +51,10 @@ final class HeroWalkCycleTests: XCTestCase {
     }
 
     func testWashingtonUsesRigFramesInEastAndExistingFramesElsewhere() {
+        let cycleDistance = HeroWalkCycle.cycleDistance(for: HeroWalkCycle.georgeWashingtonAssetName)
         for facing in UnitFacing.allCases {
             let count = facing == .east ? 32 : 16
-            let pitch = HeroWalkCycle.cycleDistance / Double(count)
+            let pitch = cycleDistance / Double(count)
             for frame in 0..<count {
                 XCTAssertEqual(HeroWalkCycle.assetName(
                     baseAssetName: "hero_unit_george_washington", facing: facing,
@@ -62,16 +63,17 @@ final class HeroWalkCycleTests: XCTestCase {
             }
             XCTAssertEqual(HeroWalkCycle.assetName(
                 baseAssetName: "hero_unit_george_washington", facing: facing,
-                walkPhase: HeroWalkCycle.cycleDistance, isWalking: true),
+                walkPhase: cycleDistance, isWalking: true),
                 "hero_unit_george_washington_walk_\(facing.assetSuffix)_0")
         }
     }
 
     func testWashingtonTurningAndStoppingPreservePhaseAndArrivalPose() {
+        let cycleDistance = HeroWalkCycle.cycleDistance(for: HeroWalkCycle.georgeWashingtonAssetName)
         for (facing, frame) in [(UnitFacing.east, 24), (.southEast, 12), (.west, 12)] {
             XCTAssertEqual(HeroWalkCycle.assetName(
                 baseAssetName: "hero_unit_george_washington", facing: facing,
-                walkPhase: HeroWalkCycle.cycleDistance * 0.76, isWalking: true),
+                walkPhase: cycleDistance * 0.76, isWalking: true),
                 "hero_unit_george_washington_walk_\(facing.assetSuffix)_\(frame)")
         }
         for (facing, suffix) in zip(UnitFacing.allCases, ["e", "e", "e", "se", "s", "sw", "w", "w"]) {

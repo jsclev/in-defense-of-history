@@ -104,11 +104,6 @@ private struct DoneButtonStyle: ButtonStyle {
                 ? .easeOut(duration: 0.09)
                 : .spring(response: 0.28, dampingFraction: 0.55),
                 value: configuration.isPressed)
-            .onChange(of: configuration.isPressed) { _, pressed in
-                if pressed {
-                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
-                }
-            }
     }
 }
 

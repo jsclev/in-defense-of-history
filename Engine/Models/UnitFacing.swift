@@ -58,6 +58,12 @@ public enum MeleeWalkCycle {
 
 public enum HeroWalkCycle {
     public static let cycleDistance: Double = 75.6
+    /// A full left/right cycle, not a single footfall. At the shipped 180 map
+    /// units/second, Washington takes 0.84 seconds per cycle (2.38 steps/second).
+    /// Keep the same phase when changing between his 16- and 32-frame facings.
+    public static func cycleDistance(for baseAssetName: String) -> Double {
+        baseAssetName == georgeWashingtonAssetName ? 151.2 : cycleDistance
+    }
     public static let henryKnoxAssetName = "hero_unit_henry_knox"
     // The other catalog frames are optical-flow blends of these four drawings.
     // They contain doubled limbs, so playback must use the source poses only.
@@ -115,6 +121,7 @@ public enum HeroWalkCycle {
                                  walkPhase: Double,
                                  isWalking: Bool) -> String {
         guard animatedAssetNames.contains(baseAssetName) else { return baseAssetName }
+        let cycleDistance = cycleDistance(for: baseAssetName)
         let facing = isWalking ? facing : idleFacing(from: facing)
         if baseAssetName == henryKnoxAssetName {
             let pitch = cycleDistance / Double(henryKnoxFrameIndices.count)

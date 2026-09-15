@@ -11,6 +11,8 @@ struct PlacedTower: Identifiable {
     let position: CGPoint
     var level: Int = 1
     var branch: Int = 1
+    var artilleryAim = ArtilleryAim()
+    var artilleryFacing: ArtilleryFacing { artilleryAim.facing }
 
     var id: Int { slotIndex }
 }
@@ -240,6 +242,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         /// keeps the tuning it was fired with, even if the tower upgrades.
         let speed: CGFloat
         let splashRadius: CGFloat
+        var grapeshot: GrapeshotFlight? = nil
     }
 
     struct Walker: Identifiable {
@@ -307,6 +310,7 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     @Published private(set) var projectiles: [Projectile] = []
     private var nextProjectileID = 0
+    private var grapeshotHits: [Int: Set<Int>] = [:]
     private var nextFireTickBySlot: [Int: Int64] = [:]
     private var lastStepGameTicks: Double = 0
 
@@ -372,11 +376,10 @@ public final class LevelRunner: NSObject, ObservableObject {
     /// Build choice awaiting its confirming second tap: the first tap on a
     /// tower button arms it (checkmark + range preview), the second builds.
     @Published private(set) var armedBuildKind: TowerKind?
-    private let buildFeedback = UINotificationFeedbackGenerator()
+    private let enemyEscapeFeedback = UINotificationFeedbackGenerator()
     private var hapticEngine: CHHapticEngine?
     private var activeHapticPlayer: (any CHHapticPatternPlayer)?
     private var hapticsActive = false
-    private var lossHapticProtectedUntil: TimeInterval = 0
 
     /// Upgrade branch awaiting its confirming second tap, same flow as
     /// armedBuildKind: the range preview shows the upgraded tier's range.
@@ -418,9 +421,8 @@ public final class LevelRunner: NSObject, ObservableObject {
     func hudHeroIndex(for heroID: UUID) -> Int? {
         heroPosts.firstIndex { $0.hero.id == heroID && $0.unit.state != .dead }
     }
-    private var heroPrevPositions: [Int: CGPoint] = [:]
     private var heroRespawnedIDs: Set<Int> = []
-    private var heroPoses: [Int: WalkPose] = [:]
+    private var heroPoses: [Int: HeroWalkPose] = [:]
 
     private struct ScheduledSpawn {
         let tick: Int64
@@ -592,7 +594,7 @@ public final class LevelRunner: NSObject, ObservableObject {
             waveSchedule = try WaveStartSchedule(waves: waves)
             isReady = true
             refreshWaveStartState()
-            status = "\(levelName)  •  wave 1/\(waves.count) waiting  •  double-tap an entrance to start"
+            status = "\(levelName)  •  wave 1/\(waves.count) waiting  •  tap an entrance, then tap to confirm"
         } catch {
             status = "Database load failed: \(error)"
         }
@@ -660,7 +662,6 @@ public final class LevelRunner: NSObject, ObservableObject {
             armedBuildKind = nil
         } else {
             armedBuildKind = kind
-            buildFeedback.prepare()
         }
     }
 
@@ -691,7 +692,6 @@ public final class LevelRunner: NSObject, ObservableObject {
         } else {
             armedUpgradeBranch = branch
             isPlacingRallyPoint = false
-            buildFeedback.prepare()
         }
     }
 
@@ -744,7 +744,6 @@ public final class LevelRunner: NSObject, ObservableObject {
                 })
             publishMilitia()
         }
-        playBuildHaptic()
         selectedSlotIndex = nil
         armedBuildKind = nil
     }
@@ -779,7 +778,6 @@ public final class LevelRunner: NSObject, ObservableObject {
             garrisonsBySlot[slotIndex] = g
             publishMilitia()
         }
-        playBuildHaptic()
         selectedTowerSlotIndex = nil
         armedUpgradeBranch = nil
     }
@@ -858,7 +856,6 @@ public final class LevelRunner: NSObject, ObservableObject {
         hapticsActive = false
         try? activeHapticPlayer?.stop(atTime: CHHapticTimeImmediate)
         activeHapticPlayer = nil
-        lossHapticProtectedUntil = 0
         hapticEngine?.stop()
         hapticEngine = nil
     }
@@ -887,38 +884,24 @@ public final class LevelRunner: NSObject, ObservableObject {
         hapticEngine = engine
     }
 
-    private func playBuildHaptic() {
-        playHaptic(.build)
-    }
-
     func playEnemyEscapeHaptic(_ cue: EnemyEscapeHapticPolicy.Cue) {
-        playHaptic(cue == .defeat ? .defeat : .lifeLoss)
-    }
-
-    private func playHaptic(_ cue: GameplayHapticPattern) {
         guard hapticsActive else { return }
-        let now = ProcessInfo.processInfo.systemUptime
-        // Damage feedback takes priority; a build must not mix into its rhythm.
-        guard cue != .build || now >= lossHapticProtectedUntil else { return }
-        if cue != .build {
-            lossHapticProtectedUntil = now + max(EnemyEscapeHapticPolicy.minimumInterval,
-                                                 cue.duration + 0.05)
-        }
+        let pattern: GameplayHapticPattern = cue == .defeat ? .defeat : .lifeLoss
         try? activeHapticPlayer?.stop(atTime: CHHapticTimeImmediate)
         activeHapticPlayer = nil
         startHapticEngine()
         do {
             guard let engine = hapticEngine else {
-                buildFeedback.notificationOccurred(cue == .build ? .success : .error)
+                enemyEscapeFeedback.notificationOccurred(.error)
                 return
             }
             try engine.start()
-            let player = try engine.makePlayer(with: cue.makePattern())
+            let player = try engine.makePlayer(with: pattern.makePattern())
             try player.start(atTime: CHHapticTimeImmediate)
             activeHapticPlayer = player
         } catch {
             // System feedback remains a fallback when custom playback fails.
-            buildFeedback.notificationOccurred(cue == .build ? .success : .error)
+            enemyEscapeFeedback.notificationOccurred(.error)
         }
     }
 
@@ -1032,27 +1015,26 @@ public final class LevelRunner: NSObject, ObservableObject {
             blockedWalkerIDs.removeAll()
             return
         }
-        militiaPrevPositions = militiaPositionsById()
-        heroPrevPositions = heroPositionsById()
-        militiaRespawnedIDs.removeAll()
-        heroRespawnedIDs.removeAll()
+        for (id, post) in heroPosts.enumerated() where post.unit.state != .dead && heroPoses[id] == nil {
+            heroPoses[id] = HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
+        }
         for _ in 0..<dueTicks {
+            // alpha covers only the final simulation tick, not the whole batch.
+            // Keep poses current at every tick so delayed frames cannot replay
+            // several ticks' movement and leg motion within one tick interval.
+            militiaPrevPositions = militiaPositionsById()
+            militiaRespawnedIDs.removeAll()
+            heroRespawnedIDs.removeAll()
             stepMilitiaTick()
-        }
-        if !militiaRespawnedIDs.isEmpty {
-            let now = militiaPositionsById()
-            for id in militiaRespawnedIDs {
-                militiaPrevPositions[id] = now[id]
+            if !militiaRespawnedIDs.isEmpty {
+                let now = militiaPositionsById()
+                for id in militiaRespawnedIDs {
+                    militiaPrevPositions[id] = now[id]
+                }
             }
+            updateMilitiaPoses()
+            updateHeroPoses()
         }
-        if !heroRespawnedIDs.isEmpty {
-            let now = heroPositionsById()
-            for id in heroRespawnedIDs {
-                heroPrevPositions[id] = now[id]
-            }
-        }
-        updateMilitiaPoses()
-        updateHeroPoses()
     }
 
     private func updateMilitiaPoses() {
@@ -1078,33 +1060,15 @@ public final class LevelRunner: NSObject, ObservableObject {
     }
 
     private func updateHeroPoses() {
-        let now = heroPositionsById()
-        var poses: [Int: WalkPose] = [:]
-        poses.reserveCapacity(now.count)
-        for (id, cur) in now {
-            let prev = heroPrevPositions[id] ?? cur
-            let dx = Double(cur.x - prev.x)
-            let dy = Double(cur.y - prev.y)
-            let moved = (dx * dx + dy * dy).squareRoot()
-            var pose = heroPoses[id]
-                ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
-            pose.isWalking = moved > MeleeWalkCycle.walkingThreshold
-            if pose.isWalking {
-                pose.facing = UnitFacing(dx: dx, dy: dy)
-                pose.walkPhase = (pose.walkPhase + moved)
-                    .truncatingRemainder(dividingBy: HeroWalkCycle.cycleDistance)
-            }
+        var poses: [Int: HeroWalkPose] = [:]
+        poses.reserveCapacity(heroPosts.count)
+        for (id, post) in heroPosts.enumerated() where post.unit.state != .dead {
+            var pose = (heroRespawnedIDs.contains(id) ? nil : heroPoses[id])
+                ?? HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
+            pose.advance(to: post.unit.position)
             poses[id] = pose
         }
         heroPoses = poses
-    }
-
-    private func heroPositionsById() -> [Int: CGPoint] {
-        var out: [Int: CGPoint] = [:]
-        for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
-            out[i] = CGPoint(x: post.unit.position.x, y: post.unit.position.y)
-        }
-        return out
     }
 
     private var reinforcementStats: MeleeUnitStats? {
@@ -1495,28 +1459,15 @@ public final class LevelRunner: NSObject, ObservableObject {
     private func publishHeroes(alpha: Double = 1) {
         var out: [HeroSoldier] = []
         for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
-            let cur = CGPoint(x: post.unit.position.x, y: post.unit.position.y)
-            let prev = heroPrevPositions[i] ?? cur
             let pose = heroPoses[i]
-                ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
-            let stepDistance = hypot(Double(cur.x - prev.x),
-                                     Double(cur.y - prev.y))
-            let renderedPhase = MeleeWalkCycle.interpolatedPhase(
-                currentPhase: pose.walkPhase,
-                stepDistance: stepDistance,
-                alpha: alpha,
-                cycleDistance: HeroWalkCycle.cycleDistance)
+                ?? HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
+            let sample = pose.sample(alpha: alpha)
             out.append(HeroSoldier(
                 id: i,
-                assetName: HeroWalkCycle.assetName(
-                    baseAssetName: post.assetName,
-                    facing: pose.facing,
-                    walkPhase: renderedPhase,
-                    isWalking: pose.isWalking),
+                assetName: sample.assetName,
                 baseAssetName: post.assetName,
                 imageAspectRatio: heroImageAspectRatios[post.hero.id]!,
-                position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
-                                  y: prev.y + (cur.y - prev.y) * alpha),
+                position: CGPoint(x: sample.position.x, y: sample.position.y),
                 hp: post.unit.hp,
                 maxHP: post.combat.hp,
                 isSelected: selectedHeroIndex == i))
@@ -1606,12 +1557,15 @@ public final class LevelRunner: NSObject, ObservableObject {
     private func updateCombat(gameDt: Double) {
         guard !walkers.isEmpty else {
             if !projectiles.isEmpty { projectiles.removeAll() }
+            grapeshotHits.removeAll()
             return
         }
 
         let candidates = targetCandidates()
 
-        for tower in placedTowers where tower.kind.projectileAssetName != nil {
+        for towerIndex in placedTowers.indices {
+            let tower = placedTowers[towerIndex]
+            guard tower.kind.projectileAssetName != nil else { continue }
             guard let tuning = towerLevel(for: tower) else { continue }
             let origin = tower.position
             let solution = RangedTargetCommand(
@@ -1629,17 +1583,45 @@ public final class LevelRunner: NSObject, ObservableObject {
             // Engaged this tick, whether or not the gun is off cooldown.
             targetingSecondsBySlot[tower.slotIndex, default: 0] += gameDt
 
-            guard timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
-
             let target = bodyPoint(leader)
+            var heading = atan2(target.y - origin.y, target.x - origin.x)
+            var aligned = true
+            if tower.kind == .areaOfEffect {
+                var aim = tower.artilleryAim
+                aligned = aim.track(from: origin, to: target,
+                                    radiansPerSecond: ArtilleryHandling.turnRate(
+                                        level: tower.level, branch: tower.branch),
+                                    deltaTime: gameDt)
+                placedTowers[towerIndex].artilleryAim = aim
+                heading = CGFloat(aim.heading)
+            }
+            // Tracking above runs even while reloading. A ready gun holds its
+            // shot until it is laid on target, without consuming its cooldown.
+            guard aligned,
+                  timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
             nextFireTickBySlot[tower.slotIndex] = timer.tick + fireCooldownTicks(for: tower)
             let minDamage = tuning.shotMinDamage
             let maxDamage = max(minDamage, tuning.shotMaxDamage)
+            if tower.kind == .areaOfEffect,
+               ArtilleryHandling.isSwivel(level: tower.level, branch: tower.branch) {
+                let volleyID = nextProjectileID
+                let damage = Double.random(in: minDamage...maxDamage)
+                for offset in GrapeshotFlight.spread {
+                    projectiles.append(Projectile(
+                        id: nextProjectileID, kind: tower.kind, position: origin,
+                        heading: heading + CGFloat(offset), damage: damage,
+                        targetID: leader.id, slotIndex: tower.slotIndex,
+                        speed: CGFloat(tuning.projectileSpeed), splashRadius: 0,
+                        grapeshot: GrapeshotFlight(volleyID: volleyID, range: CGFloat(tuning.range))))
+                    nextProjectileID += 1
+                }
+                continue
+            }
             projectiles.append(Projectile(
                 id: nextProjectileID,
                 kind: tower.kind,
                 position: origin,
-                heading: atan2(target.y - origin.y, target.x - origin.x),
+                heading: heading,
                 damage: Double.random(in: minDamage...maxDamage),
                 targetID: leader.id,
                 slotIndex: tower.slotIndex,
@@ -1651,7 +1633,28 @@ public final class LevelRunner: NSObject, ObservableObject {
 
         var survivors: [Projectile] = []
         for var projectile in projectiles {
-                guard let target = walkers.first(where: { $0.id == projectile.targetID })
+            if var flight = projectile.grapeshot {
+                let distance = min(flight.remainingDistance, projectile.speed * CGFloat(gameDt))
+                let end = CGPoint(x: projectile.position.x + cos(projectile.heading) * distance,
+                                  y: projectile.position.y + sin(projectile.heading) * distance)
+                let hit = walkers.compactMap { walker -> (id: Int, fraction: CGFloat)? in
+                    guard !grapeshotHits[flight.volleyID, default: []].contains(walker.id),
+                          let fraction = GrapeshotFlight.hitFraction(
+                            from: projectile.position, to: end, target: bodyPoint(walker)) else { return nil }
+                    return (walker.id, fraction)
+                }.min { $0.fraction < $1.fraction }
+                if let hit {
+                    grapeshotHits[flight.volleyID, default: []].insert(hit.id)
+                    damageWalker(id: hit.id, damage: projectile.damage, slotIndex: projectile.slotIndex)
+                } else if flight.remainingDistance > distance {
+                    flight.remainingDistance -= distance
+                    projectile.position = end
+                    projectile.grapeshot = flight
+                    survivors.append(projectile)
+                }
+                continue
+            }
+            guard let target = walkers.first(where: { $0.id == projectile.targetID })
             else { continue }
 
             let stepLength = projectile.speed * CGFloat(gameDt)
@@ -1669,6 +1672,18 @@ public final class LevelRunner: NSObject, ObservableObject {
             survivors.append(projectile)
         }
         projectiles = survivors
+        let liveVolleys = Set(survivors.compactMap { $0.grapeshot?.volleyID })
+        grapeshotHits = grapeshotHits.filter { liveVolleys.contains($0.key) }
+    }
+
+    private func damageWalker(id: Int, damage: Double, slotIndex: Int) {
+        guard let index = walkers.firstIndex(where: { $0.id == id }) else { return }
+        damageTotalBySlot[slotIndex, default: 0] += min(walkers[index].hp, damage)
+        walkers[index].hp -= damage
+        if walkers[index].hp <= 0 {
+            money += walkers[index].bounty
+            walkers.remove(at: index)
+        }
     }
 
     private func distanceFrom(_ point: CGPoint, to walker: Walker) -> CGFloat {

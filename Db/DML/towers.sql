@@ -168,15 +168,16 @@ INSERT INTO tower (
     27.0, 53.0, 99.0, 0.5, 320.0
 );
 
--- Area of Effect Level 4 (Mobile Field Battery)
+-- Area of Effect Level 4 (Swivel-Gun Emplacement)
+-- Short-range, fast-handling grapeshot specialist. Damage is per enemy per volley.
 INSERT INTO tower (
     id, tower_type_id, tower_name,
     tower_level, branch, cost, tower_range, fire_interval,
     shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
 ) VALUES (
-    '01b02f93-d2ff-4754-9072-35a1aa65cd6d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Mobile Field Battery',
-    4, 2, 300, 410.25, 2.4,
-    27.0, 53.0, 99.0, 0.5, 320.0
+    '01b02f93-d2ff-4754-9072-35a1aa65cd6d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Swivel-Gun Emplacement',
+    4, 2, 300, 320.0, 1.2,
+    14.0, 22.0, 0.0, 0.0, 640.0
 );
 
 -- Area of Effect Level 4 (Knox's Siege Guns)

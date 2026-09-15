@@ -1,25 +1,15 @@
 import CoreHaptics
 import Foundation
 
-/// Patterns selected from the on-device audition: a build thuds; a loss rumbles.
+/// Feedback only for an enemy crossing an exit, including the final life.
 public enum GameplayHapticPattern: CaseIterable {
-    case build
     case lifeLoss
     case defeat
 
     public var events: [CHHapticEvent] {
         switch self {
-        case .build:
-            // Audition #3, "Heavy thud", with a slightly firmer attack. Intensity
-            // is already at its maximum; sharpness adds definition to the impact.
-            return [
-                CHHapticEvent(eventType: .hapticTransient, parameters: [
-                    .init(parameterID: .hapticIntensity, value: 1),
-                    .init(parameterID: .hapticSharpness, value: 0.35),
-                ], relativeTime: 0, duration: 0.08),
-            ]
         case .lifeLoss:
-            // Audition #9, "Long low rumble", shortened from 450 to 400 ms.
+            // Preserve the selected 400 ms low rumble.
             return [CHHapticEvent(eventType: .hapticContinuous, parameters: [
                 .init(parameterID: .hapticIntensity, value: 0.85),
                 .init(parameterID: .hapticSharpness, value: 0.08),

@@ -4,6 +4,7 @@ import CoreGraphics
 /// avoid other UI; the level editor owns placement and the view owns rendering.
 public final class CallWaveButtonLayout {
     public static let imageName = "hud_call_wave"
+    public static let confirmationImageName = "hud_call_wave_confirm"
     public let frame: CGRect
     public let countdownFontSize: CGFloat
     public let countdownHorizontalPadding: CGFloat

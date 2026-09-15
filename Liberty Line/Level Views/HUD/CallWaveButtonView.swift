@@ -4,18 +4,20 @@ struct CallWaveButtonView: View {
     let layout: CallWaveButtonLayout
     let waveNumber: Int
     let countdownSeconds: Int?
+    var isSelected = false
     let action: () -> Void
 
     @State private var isPulsing = false
 
     var body: some View {
         icon
-        .onTapGesture(count: 2, perform: action)
+        .onTapGesture(perform: action)
         .accessibilityElement(children: .ignore)
         .accessibilityAddTraits(.isButton)
-        .accessibilityLabel("Call wave \(waveNumber)")
+        .accessibilityLabel(isSelected ? "Confirm call wave \(waveNumber)" : "Select wave \(waveNumber)")
         .accessibilityValue(countdownSeconds.map { "Starts automatically in \($0) seconds" }
                             ?? "Waiting for you to start")
+        .accessibilityHint(isSelected ? "Activate to start this wave now" : "Activate to select, then activate again to call this wave")
         .accessibilityAction { action() }
         .onAppear {
             withAnimation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true)) {
@@ -26,8 +28,8 @@ struct CallWaveButtonView: View {
     }
 
     private var icon: some View {
-        CallWaveArtwork(side: layout.frame.width)
-        .scaleEffect(isPulsing ? 1.08 : 0.94)
+        CallWaveArtwork(side: layout.frame.width, isSelected: isSelected)
+        .scaleEffect(isSelected ? 1 : (isPulsing ? 1.08 : 0.94))
         .overlay(alignment: .bottomTrailing) {
             if let countdownSeconds {
                 Text("\(countdownSeconds)s")
@@ -48,6 +50,7 @@ struct CallWaveButtonView: View {
 /// display layers so adding interior space does not resize the outer frame.
 struct CallWaveArtwork: View {
     let side: CGFloat
+    var isSelected = false
 
     private var source: some View {
         Image(CallWaveButtonLayout.imageName)
@@ -58,6 +61,19 @@ struct CallWaveArtwork: View {
     }
 
     var body: some View {
+        if isSelected {
+            Image(CallWaveButtonLayout.confirmationImageName)
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+                .frame(width: side, height: side)
+                .clipShape(Circle().inset(by: side * 0.006))
+        } else {
+            horn
+        }
+    }
+
+    private var horn: some View {
         ZStack {
             Circle()
                 .fill(LinearGradient(

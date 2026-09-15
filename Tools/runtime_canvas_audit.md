@@ -23,7 +23,7 @@ The inventory covers 168 Swift, Metal, header, and plist files across Engine, Li
 | Encyclopedia and shop/upgrades placeholders | Authored composition frames or scaled metrics derive from RuntimeCanvas. Done is explicitly sized and positioned. |
 | Level briefing | Shared projected map preview and canvas-scaled cards. The content rectangle reserves the footer; the card scale also accounts for available height. Descriptions have room for four lines. |
 | Settings/HUD layout configuration | Settings content uses the safe rectangle and scales its insets. The configuration board is explicitly centered in the playable rectangle. Done has a defined canvas frame. |
-| Debug guides/readouts/haptic audition | Guides draw RuntimeCanvas rectangles/paths. Readout and audition text/padding now use canvas metrics; the stats readout is an overlay and cannot resize the counter strip. Fine strokes and native controls retain optical/platform sizing policies. |
+| Debug guides/readouts | Guides draw RuntimeCanvas rectangles/paths. Readout text/padding use canvas metrics; the stats readout is an overlay and cannot resize the counter strip. Fine strokes and native controls retain optical/platform sizing policies. |
 
 The concrete corrections include the startup-only window measurement, selection of an arbitrary connected scene, unbounded menu Done buttons, implicit HUD section placement, the top-left configuration board origin, duplicate sprite-fit inputs, and the Metal crop's independent geometry input. `WindowReader.swift` is now included in the Xcode app target. A nearly transparent asset-preload group is hidden instead of drawing a faint pixel.
 

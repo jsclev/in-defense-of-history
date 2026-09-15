@@ -27,7 +27,7 @@ and the relative KR progression without depending on either game's resolution.
 | 6-pounder | 240 | 364.67 | Artillery 320 |
 | Howitzer | 270 | 410.25 | Howitzer 360 |
 | Mortar Battery | 300 | 455.83 | Adapted 400; longer bombardment reach |
-| Mobile Field Battery | 300 | 410.25 | Big Bertha 360; field support |
+| Swivel-Gun Emplacement | 300 | 320.00 | Short-range grapeshot; fast turning |
 | Knox's Siege Guns | 300 | 501.42 | Adapted 440; longest artillery reach |
 | Engineer Post | 210 | 319.08 | Mage-tier coverage 280 |
 | Field Engineers | 240 | 364.67 | Mage-tier coverage 320 |

@@ -77,12 +77,15 @@ enum TowerRangeCheck {
         precondition(byName["Morgan's Sharpshooters"]! > byName["Whitcomb's Rangers"]!)
         precondition(byName["Whitcomb's Rangers"]! > byName["Knowlton's Rangers"]!)
         precondition(byName["Knox's Siege Guns"]! > byName["Mortar Battery"]!)
-        precondition(byName["Mortar Battery"]! > byName["Mobile Field Battery"]!)
+        precondition(byName["Mortar Battery"]! > byName["Swivel-Gun Emplacement"]!)
         for group in Dictionary(grouping: towers, by: { $0["category"]! }).values {
             for tower in group {
                 let tier = Int(tower["tower_level"]!)!
                 let radius = Double(tower["tower_range"]!)!
-                if tier > 1 {
+                // The swivel branch trades reach for rapid handling/grapeshot.
+                if tower["tower_name"] == "Swivel-Gun Emplacement" {
+                    near(radius, 320)
+                } else if tier > 1 {
                     let previous = group.first { Int($0["tower_level"]!)! == tier - 1 }!
                     precondition(radius >= Double(previous["tower_range"]!)!)
                 }

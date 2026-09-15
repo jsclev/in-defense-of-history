@@ -1,3 +1,9 @@
+# Standard build process — explicit authorization required
+
+Standing user instruction (September 11, 2026): Keep a standard, native Xcode compilation process. Never introduce compiler or build-system workarounds, wrappers, shims, toolchain substitutions or patches, or process-killing/retry automation to get a build through an error or hang unless the user explicitly authorizes that specific workaround in advance. A general request to fix a build or make the workspace compile is not authorization for any such change.
+
+Investigate the root cause, report the evidence and propose a normal fix. Do not silently bypass failures or change compiler/build-system behavior. If a build requires manual intervention, disclose it; do not present that result as an ordinary successful build.
+
 # Game art and rendering reviews
 
 Standing art direction: all game art uses **Bastion (2011)** as its overall color and illustrated/painterly style guide, with American Revolutionary War subject matter and Kingdom Rush-like clarity at small sizes. Use broad vivid color masses and distinctive silhouettes; simplify details that disappear at gameplay size. Apply this throughout the game. The persistent brief is `../in-defense-of-history-data/ArtReadability/ART_DIRECTION.md`.

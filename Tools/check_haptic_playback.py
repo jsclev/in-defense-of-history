@@ -14,11 +14,13 @@ ROOT = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--build-path', type=Path,
+                        default=Path('/tmp/td-presentation-tests/arm64-apple-macosx/debug'),
+                        help='SwiftPM debug directory containing Modules and LevelEditorFormats.build')
     args = parser.parse_args()
     source_path = ROOT / 'Liberty Line/LevelRunner.swift'
     source = source_path.read_text()
-    signatures = ['private func playHaptic(', 'private func playBuildHaptic()',
-                  'func playEnemyEscapeHaptic(', 'func stop()',
+    signatures = ['func playEnemyEscapeHaptic(', 'func stop()',
                   'private func stopSimulation()', 'private func loseLife()']
     harness = r'''
 import Foundation
@@ -44,7 +46,7 @@ final class SpyEngine {
     func stop() { stops += 1 }
 }
 final class SpyFeedback {
-    enum Kind { case success, error }
+    enum Kind { case error }
     var calls: [Kind] = []
     func notificationOccurred(_ kind: Kind) { calls.append(kind) }
 }
@@ -56,8 +58,7 @@ final class Probe {
     var hapticEngine: SpyEngine? = SpyEngine()
     var activeHapticPlayer: SpyPlayer?
     var hapticsActive = true
-    var lossHapticProtectedUntil: TimeInterval = 0
-    var buildFeedback = SpyFeedback()
+    var enemyEscapeFeedback = SpyFeedback()
     var displayLink: SpyDisplayLink? = SpyDisplayLink()
     var lives = 1, escapedEnemyCount = 0
     var isDefeated = false
@@ -66,22 +67,17 @@ final class Probe {
     func refreshWaveStartState() {}
     // PRODUCTION
     static func run() {
-        let mixed = Probe(), engine = mixed.hapticEngine!
-        mixed.playBuildHaptic()
-        let build = engine.players[0]
-        precondition(build.duration == GameplayHapticPattern.build.duration && build.starts == 1)
-        mixed.playEnemyEscapeHaptic(.lifeLoss)
-        let loss = engine.players[1]
-        precondition(build.stops == 1 && loss.duration == GameplayHapticPattern.lifeLoss.duration)
-        mixed.playBuildHaptic()
-        precondition(engine.players.count == 2 && loss.stops == 0 && mixed.buildFeedback.calls.isEmpty)
-        mixed.playEnemyEscapeHaptic(.defeat)
-        let defeat = engine.players[2]
+        let exits = Probe(), engine = exits.hapticEngine!
+        exits.playEnemyEscapeHaptic(.lifeLoss)
+        let loss = engine.players[0]
+        precondition(loss.duration == GameplayHapticPattern.lifeLoss.duration && loss.starts == 1)
+        exits.playEnemyEscapeHaptic(.defeat)
+        let defeat = engine.players[1]
         precondition(loss.stops == 1 && defeat.duration == GameplayHapticPattern.defeat.duration)
-        mixed.stop()
-        precondition(defeat.stops == 1 && engine.stops == 1 && !mixed.hapticsActive)
-        mixed.playBuildHaptic(); mixed.playEnemyEscapeHaptic(.lifeLoss)
-        precondition(engine.players.count == 3 && mixed.buildFeedback.calls.isEmpty)
+        exits.stop()
+        precondition(defeat.stops == 1 && engine.stops == 1 && !exits.hapticsActive)
+        exits.playEnemyEscapeHaptic(.lifeLoss)
+        precondition(engine.players.count == 2 && exits.enemyEscapeFeedback.calls.isEmpty)
 
         let finalLife = Probe(), finalEngine = finalLife.hapticEngine!, link = finalLife.displayLink!
         finalLife.loseLife()
@@ -94,19 +90,21 @@ final class Probe {
 
         let fallback = Probe()
         fallback.hapticEngine = nil
-        fallback.playBuildHaptic(); fallback.playEnemyEscapeHaptic(.lifeLoss)
-        precondition(fallback.buildFeedback.calls == [.success, .error])
-        fallback.playBuildHaptic()
-        precondition(fallback.buildFeedback.calls.count == 2)
+        fallback.playEnemyEscapeHaptic(.lifeLoss)
+        fallback.playEnemyEscapeHaptic(.defeat)
+        precondition(fallback.enemyEscapeFeedback.calls == [.error, .error])
+        fallback.stop()
+        fallback.playEnemyEscapeHaptic(.lifeLoss)
+        precondition(fallback.enemyEscapeFeedback.calls.count == 2)
 
         let failure = Probe(), failedEngine = failure.hapticEngine!
         failedEngine.shouldFail = true
         failure.playEnemyEscapeHaptic(.lifeLoss)
-        precondition(failure.buildFeedback.calls == [.error] && failedEngine.players.isEmpty)
+        precondition(failure.enemyEscapeFeedback.calls == [.error] && failedEngine.players.isEmpty)
         failedEngine.shouldFail = false
         failure.playEnemyEscapeHaptic(.defeat)
         precondition(failedEngine.players.count == 1 && failedEngine.players[0].starts == 1)
-        print("PASS: build/loss/defeat dispatch, preemption without mixed patterns, inactive suppression, final-life completion, stop cancellation, failure fallback, fresh player after recovery")
+        print("PASS: escape/final-life dispatch, final-life preemption, inactive suppression, final-life completion, stop cancellation, failure fallback, fresh player after recovery")
     }
 }
 @main struct Main { static func main() { Probe.run() } }
@@ -115,10 +113,10 @@ final class Probe {
     args.output.mkdir(parents=True, exist_ok=True)
     swift_path = args.output / 'haptic-playback-probe.swift'
     swift_path.write_text(harness)
-    build = Path('/tmp/td-presentation-tests/arm64-apple-macosx/debug')
+    build = args.build_path.resolve()
     with tempfile.TemporaryDirectory(prefix='td-haptic-playback-') as tmp:
         executable = Path(tmp) / 'probe'
-        subprocess.run(['swiftc', '-parse-as-library', '-module-cache-path', '/tmp/td-tower-swift-cache',
+        subprocess.run(['swiftc', '-parse-as-library',
                         '-I', str(build / 'Modules'), str(swift_path)]
                        + [str(p) for p in (build / 'LevelEditorFormats.build').glob('*.swift.o')]
                        + ['-o', str(executable)], check=True)

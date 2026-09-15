@@ -14,10 +14,11 @@ enum WashingtonAnimationCheck {
         let manifest = try JSONDecoder().decode(Manifest.self, from:
             Data(contentsOf: URL(fileURLWithPath: "Tools/washington_asset_manifest.json")))
         let names = Set(manifest.assets.map(\.name))
+        let cycleDistance = HeroWalkCycle.cycleDistance(for: HeroWalkCycle.georgeWashingtonAssetName)
         var selected: Set<String> = []
         for facing in UnitFacing.allCases {
             let count = manifest.frame_counts_by_direction[facing.assetSuffix]!
-            let pitch = HeroWalkCycle.cycleDistance / Double(count)
+            let pitch = cycleDistance / Double(count)
             for frame in 0..<count {
                 let name = HeroWalkCycle.assetName(
                     baseAssetName: HeroWalkCycle.georgeWashingtonAssetName,
@@ -28,7 +29,7 @@ enum WashingtonAnimationCheck {
             }
             let looped = HeroWalkCycle.assetName(
                 baseAssetName: HeroWalkCycle.georgeWashingtonAssetName,
-                facing: facing, walkPhase: HeroWalkCycle.cycleDistance + pitch * 0.5, isWalking: true)
+                facing: facing, walkPhase: cycleDistance + pitch * 0.5, isWalking: true)
             precondition(looped == "hero_unit_george_washington_walk_\(facing.assetSuffix)_0")
         }
         precondition(selected.count == 144)

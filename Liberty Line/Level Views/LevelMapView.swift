@@ -70,7 +70,7 @@ struct LevelMapView: View {
             ?? debugRangeBands[debugRangeBands.count - 1].tint
     }
 
-    private static let rallyButtonScale: CGFloat = 0.495
+    private static let rallyButtonScale: CGFloat = 0.693
 
     /// Visual ground-anchor correction shared by all tower artwork, in virtual units.
     private static let towerArtworkLift: CGFloat = 12
@@ -220,9 +220,16 @@ struct LevelMapView: View {
                         y: tower.position.y + Self.towerArtworkLift))
 
                     // All tower families share the same sizing and placement.
-                    Image(assetName)
-                        .resizable()
-                        .scaledToFit()
+                    Group {
+                        if let sheetName = tower.kind.directionalAssetName(
+                            atLevel: tower.level, branch: tower.branch) {
+                            ArtilleryTowerSprite(sheetName: sheetName,
+                                                 fallbackName: assetName,
+                                                 facing: tower.artilleryFacing)
+                        } else {
+                            Image(assetName).resizable().scaledToFit()
+                        }
+                    }
                         .frame(height: towerHeight)
                         .position(
                             x: basePoint.x,
@@ -295,7 +302,8 @@ struct LevelMapView: View {
                         Image(assetName)
                             .resizable()
                             .scaledToFit()
-                            .frame(height: sprites.points(projectile.kind.projectileHeight))
+                            .frame(height: sprites.points(projectile.kind.projectileHeight)
+                                   * (projectile.grapeshot == nil ? 1 : 0.45))
                             .rotationEffect(.radians(projectile.heading))
                             .position(projection.viewPoint(projectile.position))
                     }
