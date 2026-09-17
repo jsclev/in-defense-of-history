@@ -2,10 +2,11 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct CampaignMapView: View {
+    @EnvironmentObject private var settings: PlayerSettingsStore
+    private var showDebugLayoutGuides: Bool { settings.values.showDebugLayoutGuides }
     var onSelectNode: (CampaignNode) -> Void
     var onSelectMenu: (MenuScreen) -> Void
 
-    @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
 
     @State private var nodes: [CampaignNode] = []
     

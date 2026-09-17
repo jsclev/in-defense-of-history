@@ -4,7 +4,6 @@ import UIKit
 @main
 struct LibertyLineApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
-    @AppStorage(Constants.debugModeKey) private var debugMode = false
 
     // The composition root: SwiftUI makes exactly one App instance per
     // process, so this is the game's single Db/VirtualCanvas.
@@ -12,12 +11,62 @@ struct LibertyLineApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { runtimeCanvas in
-                RootView(store: store, runtimeCanvas: runtimeCanvas)
+            Group {
+                #if DEBUG
+                if CommandLine.arguments.contains("--tower-label-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        TowerLabelDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--engineer-review") {
+                    EngineerDeviceReview(store: store)
+                        .statusBarHidden(true)
+                        .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--sapper-playground") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { runtimeCanvas in
+                        SapperPlaygroundView(store: store, runtimeCanvas: runtimeCanvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--demolition-haptics-review") {
+                    DemolitionHapticsDeviceReview(store: store)
+                        .statusBarHidden(true)
+                        .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--demolition-review")
+                            || CommandLine.arguments.contains("--demolition-ui-review")
+                            || CommandLine.arguments.contains("--artillery-menu-review")
+                            || CommandLine.arguments.contains("--demolition-interaction-review")
+                            || CommandLine.arguments.contains("--demolition-auto-review")
+                            || CommandLine.arguments.contains("--demolition-ready-review") {
+                    DemolitionDeviceReview(store: store)
+                        .statusBarHidden(true)
+                        .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--combat-review") {
+                    CombatDeviceReview(store: store)
+                        .statusBarHidden(true)
+                        .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--morale-review") {
+                    MoraleDeviceReview(store: store)
+                        .statusBarHidden(true)
+                        .persistentSystemOverlays(.hidden)
+                } else {
+                    gameRoot
+                }
+                #else
+                gameRoot
+                #endif
             }
-            .statusBarHidden(true)
-            .persistentSystemOverlays(.hidden)
+            .environmentObject(store.settings)
         }
+    }
+
+    private var gameRoot: some View {
+        ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { runtimeCanvas in
+            RootView(store: store, runtimeCanvas: runtimeCanvas)
+        }
+        .statusBarHidden(true)
+        .persistentSystemOverlays(.hidden)
     }
 
 }

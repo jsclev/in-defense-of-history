@@ -7,6 +7,7 @@ struct HeroesView: View {
     let onExit: () -> Void
 
     @State private var heroes: [Hero] = []
+    @State private var heroSelection: HeroSelection?
     @State private var selectedHero: Hero?
     @State private var selectionError: String?
 
@@ -15,7 +16,7 @@ struct HeroesView: View {
 
     var body: some View {
         if let selectedHero {
-            HeroDetailsView(db: db, runtimeCanvas: runtimeCanvas, hero: selectedHero) {
+            HeroDetailsView(db: db, runtimeCanvas: runtimeCanvas, hero: selectedHero, selection: $heroSelection) {
                 self.selectedHero = nil
             }
         } else {
@@ -49,6 +50,7 @@ struct HeroesView: View {
                                 let index = row * Self.columns + column
                                 HeroSlot(
                                     hero: index < heroes.count ? heroes[index] : nil,
+                                    selection: heroSelection,
                                     width: cellWidth,
                                     height: cellHeight,
                                     unlockFontSize: Self.unlockFontSize(
@@ -111,7 +113,7 @@ struct HeroesView: View {
         heroes = (try? db.heroDao.getAll()) ?? []
 
         do {
-            try HeroSelectionStore(dao: db.heroDao).load()
+            heroSelection = try HeroSelectionStore(dao: db.heroDao).load()
         } catch {
             selectionError = error.localizedDescription
         }
@@ -132,12 +134,11 @@ fileprivate func heroUnlockMessage(_ hero: Hero) -> String? {
 @available(iOS 26.0, *)
 private struct HeroSlot: View {
     let hero: Hero?
+    let selection: HeroSelection?
     let width: CGFloat
     let height: CGFloat
     let unlockFontSize: CGFloat
     let onSelect: (Hero) -> Void
-
-    @AppStorage("selectedHeroIDs") private var selectedIDs = ""
 
     private var hasArt: Bool {
         guard let hero else { return false }
@@ -149,19 +150,11 @@ private struct HeroSlot: View {
         return !hero.unlocked || !hasArt
     }
 
-    private var heroID: UUID? { hero?.id }
-
     private var selectionRole: HeroSelection.Role? {
-        let ids = selectedIDs.split(separator: ",").compactMap { UUID(uuidString: String($0)) }
-        guard let index = ids.firstIndex(where: { $0 == heroID }) else { return nil }
-        return index == 0 ? .primary : .secondary
+        hero.flatMap { selection?.role(for: $0.id) }
     }
 
-    private var isSelected: Bool {
-        guard let hero else { return false }
-        return selectedIDs.split(separator: ",").map(String.init)
-            .contains(hero.id.uuidString)
-    }
+    private var isSelected: Bool { selectionRole != nil }
 
     var body: some View {
         Group {
@@ -370,21 +363,14 @@ struct HeroDetailsView: View {
     let db: Db
     let runtimeCanvas: RuntimeCanvas
     let hero: Hero
+    @Binding var selection: HeroSelection?
     let onExit: () -> Void
-
-    @AppStorage("selectedHeroIDs") private var selectedIDs = ""
 
     @State private var selectionError: String?
 
-    private var selectionRole: HeroSelection.Role? {
-        let ids = selectedIDs.split(separator: ",").compactMap { UUID(uuidString: String($0)) }
-        guard let index = ids.firstIndex(of: hero.id) else { return nil }
-        return index == 0 ? .primary : .secondary
-    }
+    private var selectionRole: HeroSelection.Role? { selection?.role(for: hero.id) }
 
-    private var isOnlyChoice: Bool {
-        isSelected && selectedIDs.split(separator: ",").count == 1
-    }
+    private var isOnlyChoice: Bool { isSelected && selection?.secondary == nil }
 
     private var selectionButtonTitle: String {
         if isOnlyChoice { return "Primary hero" }
@@ -392,10 +378,7 @@ struct HeroDetailsView: View {
         return "Select Hero"
     }
 
-    private var isSelected: Bool {
-        selectedIDs.split(separator: ",").map(String.init)
-            .contains(hero.id.uuidString)
-    }
+    private var isSelected: Bool { selectionRole != nil }
 
     var body: some View {
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
@@ -440,7 +423,7 @@ struct HeroDetailsView: View {
                         if hero.unlocked || isSelected {
                             Button {
                                 do {
-                                    try HeroSelectionStore(dao: db.heroDao).toggle(hero)
+                                    selection = try HeroSelectionStore(dao: db.heroDao).toggle(hero)
                                 } catch {
                                     selectionError = error.localizedDescription
                                 }
@@ -477,7 +460,7 @@ struct HeroDetailsView: View {
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear {
-            do { try HeroSelectionStore(dao: db.heroDao).load() }
+            do { selection = try HeroSelectionStore(dao: db.heroDao).load() }
             catch { selectionError = error.localizedDescription }
         }
         .alert("Unable to save hero choices", isPresented: Binding(

@@ -1,10 +1,10 @@
 import Foundation
 
 public enum Emplacement: String, CaseIterable, Sendable {
-    case minutemanPost = "Minuteman Post"
-    case longRifles = "Long Rifle Perch"
-    case fieldBattery = "Field Battery"
-    case libertyPole = "Liberty Pole"
+    case minutemanPost
+    case longRifles
+    case fieldBattery
+    case libertyPole
 
     public var id: UUID {
         switch self {
@@ -16,44 +16,49 @@ public enum Emplacement: String, CaseIterable, Sendable {
     }
 }
 
-/// The design lab's tower arsenal: the emplacements a blueprint solution can
-/// place, with designed stats independent of the database.
 public struct DesignArsenal: Sendable {
     public let towerTypes: [TowerType]
+    private let labels: [Emplacement: Labels]
 
-    public init() {
-        towerTypes = [
-            TowerType(id: Emplacement.minutemanPost.id, name: Emplacement.minutemanPost.rawValue, levels: [
-                TowerLevel(cost: 70, range: 140, fireInterval: 0.9, shotMinDamage: 16, shotMaxDamage: 22),
-                TowerLevel(cost: 110, range: 150, fireInterval: 0.8, shotMinDamage: 26, shotMaxDamage: 36),
-                TowerLevel(cost: 160, range: 160, fireInterval: 0.7, shotMinDamage: 40, shotMaxDamage: 55),
-            ]),
-            TowerType(id: Emplacement.longRifles.id, name: Emplacement.longRifles.rawValue, levels: [
-                TowerLevel(cost: 100, range: 220, fireInterval: 2.2, shotMinDamage: 45, shotMaxDamage: 65, targeting: .strongest),
-                TowerLevel(cost: 150, range: 240, fireInterval: 2.0, shotMinDamage: 75, shotMaxDamage: 105, targeting: .strongest),
-                TowerLevel(cost: 210, range: 260, fireInterval: 1.8, shotMinDamage: 115, shotMaxDamage: 160, targeting: .strongest),
-            ]),
-            TowerType(id: Emplacement.fieldBattery.id, name: Emplacement.fieldBattery.rawValue, levels: [
-                TowerLevel(cost: 125, range: 170, fireInterval: 3.0, shotMinDamage: 20, shotMaxDamage: 40,
-                           aoeRadius: 95, splashCoverPierce: 0.5),
-                TowerLevel(cost: 165, range: 180, fireInterval: 2.8, shotMinDamage: 31, shotMaxDamage: 62,
-                           aoeRadius: 95, splashCoverPierce: 0.5),
-                TowerLevel(cost: 230, range: 190, fireInterval: 2.6, shotMinDamage: 45, shotMaxDamage: 90,
-                           aoeRadius: 99, splashCoverPierce: 0.5),
-            ]),
-            TowerType(id: Emplacement.libertyPole.id, name: Emplacement.libertyPole.rawValue, levels: [
-                TowerLevel(cost: 90, range: 170, fireInterval: 1.2, terrorMin: 22, terrorMax: 32, targeting: .shakiest),
-                TowerLevel(cost: 130, range: 180, fireInterval: 1.1, terrorMin: 33, terrorMax: 46, targeting: .shakiest),
-                TowerLevel(cost: 180, range: 190, fireInterval: 1.0, terrorMin: 46, terrorMax: 64, targeting: .shakiest),
-            ]),
-        ]
+    public struct Labels: Sendable {
+        public let name: String
+        public let shortName: String
+
+        public init(name: String, shortName: String) {
+            self.name = name
+            self.shortName = shortName
+        }
+    }
+
+    public init(labels: [Emplacement: Labels], levels: [Emplacement: [TowerLevel]]) throws {
+        for emplacement in Emplacement.allCases {
+            guard let label = labels[emplacement],
+                  !label.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                  !label.shortName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            else { throw DbError.Db(message: "Missing authored tower text for \(emplacement.rawValue)") }
+            guard levels[emplacement]?.isEmpty == false else {
+                throw DbError.Db(message: "Missing authored tower levels for \(emplacement.rawValue)")
+            }
+        }
+        self.labels = labels
+        towerTypes = Emplacement.allCases.map {
+            TowerType(id: $0.id, name: labels[$0]!.name, levels: levels[$0]!)
+        }
     }
 
     public func type(_ e: Emplacement) -> TowerType {
         towerTypes.first { $0.id == e.id }!
     }
 
-    /// The design lab's full content: this arsenal against the given roster.
+    public func shortName(_ e: Emplacement) -> String {
+        labels[e]!.shortName
+    }
+
+    public func emplacement(for persistedValue: String) -> Emplacement? {
+        Emplacement(rawValue: persistedValue)
+            ?? Emplacement.allCases.first { labels[$0]?.name == persistedValue }
+    }
+
     public func catalog(roster: DesignRoster) -> ContentCatalog {
         ContentCatalog(enemyTypes: roster.enemyTypes, towerTypes: towerTypes)
     }

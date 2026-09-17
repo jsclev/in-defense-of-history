@@ -56,4 +56,28 @@ final class RuntimeCanvasTests: XCTestCase {
             }
         }
     }
+
+    func testRangeOverlayAndTargetingShareTheBoundaryAtEveryCanvasScale() {
+        let origin = Point(500, 400)
+        for size in [CGSize(width: 740, height: 360), CGSize(width: 874, height: 402),
+                     CGSize(width: 1600, height: 900)] {
+            let runtime = canvas(CGRect(origin: .zero, size: size))
+            for radius in [300.0, 330, 350, 370, 390] {
+                let ring = TowerRangeOverlay.size(range: radius, runtimeCanvas: runtime)
+                for degrees in stride(from: 0, to: 360, by: 5) {
+                    let angle = Double(degrees) * .pi / 180
+                    for factor in [0.999, 1.001] {
+                        let candidate = TargetCandidate(id: 0, position: Point(
+                            origin.x + cos(angle) * ring.width / (2 * runtime.scaleFactor) * factor,
+                            origin.y + sin(angle) * ring.height / (2 * runtime.scaleFactor) * factor),
+                            pathIndex: 0, pathDistance: 0, hp: 100, morale: 100, isBroken: false)
+                        let command = RangedTargetCommand(tower: TowerTargetingContext(
+                            slotIndex: 0, position: origin, range: radius, targeting: .first),
+                            enemies: [candidate], paths: [])
+                        XCTAssertEqual(command.execute() != nil, factor < 1)
+                    }
+                }
+            }
+        }
+    }
 }

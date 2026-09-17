@@ -16,11 +16,11 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--build-path', type=Path,
                         default=Path('/tmp/td-presentation-tests/arm64-apple-macosx/debug'),
-                        help='SwiftPM debug directory containing Modules and LevelEditorFormats.build')
+                        help='SwiftPM debug products directory (native Xcode or legacy SwiftPM layout)')
     args = parser.parse_args()
     source_path = ROOT / 'Liberty Line/LevelRunner.swift'
     source = source_path.read_text()
-    signatures = ['func playEnemyEscapeHaptic(', 'func stop()',
+    signatures = ['func playEnemyEscapeHaptic(', 'private func playGameplayHaptic(', 'func stop()',
                   'private func stopSimulation()', 'private func loseLife()']
     harness = r'''
 import Foundation
@@ -43,12 +43,17 @@ final class SpyEngine {
     func makePlayer(with pattern: CHHapticPattern) throws -> SpyPlayer {
         let player = SpyPlayer(pattern); players.append(player); return player
     }
+    func makeAdvancedPlayer(with pattern: CHHapticPattern) throws -> SpyPlayer {
+        try makePlayer(with: pattern)
+    }
     func stop() { stops += 1 }
 }
 final class SpyFeedback {
     enum Kind { case error }
     var calls: [Kind] = []
+    var impacts = 0
     func notificationOccurred(_ kind: Kind) { calls.append(kind) }
+    func impactOccurred(intensity: CGFloat) { impacts += 1 }
 }
 final class SpyDisplayLink {
     var stopped = false
@@ -57,8 +62,12 @@ final class SpyDisplayLink {
 final class Probe {
     var hapticEngine: SpyEngine? = SpyEngine()
     var activeHapticPlayer: SpyPlayer?
+    var demolitionHapticPlayer: SpyPlayer?
+    private enum HapticPlayback { case inactive, coreHaptics, fallback }
     var hapticsActive = true
     var enemyEscapeFeedback = SpyFeedback()
+    var demolitionFeedback = SpyFeedback()
+    var artilleryImpacts: [Int] = []
     var displayLink: SpyDisplayLink? = SpyDisplayLink()
     var lives = 1, escapedEnemyCount = 0
     var isDefeated = false
@@ -104,7 +113,31 @@ final class Probe {
         failedEngine.shouldFail = false
         failure.playEnemyEscapeHaptic(.defeat)
         precondition(failedEngine.players.count == 1 && failedEngine.players[0].starts == 1)
-        print("PASS: escape/final-life dispatch, final-life preemption, inactive suppression, final-life completion, stop cancellation, failure fallback, fresh player after recovery")
+
+        let blast = Probe(), blastEngine = blast.hapticEngine!
+        precondition(blast.playGameplayHaptic(.demolitionExplosion) == .coreHaptics)
+        let explosion = blast.demolitionHapticPlayer!
+        blast.playEnemyEscapeHaptic(.lifeLoss)
+        let escape = blast.activeHapticPlayer!
+        precondition(explosion.stops == 0 && blast.demolitionHapticPlayer === explosion,
+                     "Life loss cancelled the explosion")
+        blast.playEnemyEscapeHaptic(.defeat)
+        precondition(explosion.stops == 0 && escape.stops == 1,
+                     "Defeat must replace life loss without cancelling the explosion")
+        let defeatCue = blast.activeHapticPlayer!
+        precondition(blast.playGameplayHaptic(.demolitionExplosion) == .coreHaptics)
+        let secondBlast = blast.demolitionHapticPlayer!
+        precondition(explosion.stops == 1 && defeatCue.stops == 0 && secondBlast.starts == 1)
+        blast.stop()
+        precondition(secondBlast.stops == 1 && defeatCue.stops == 1 && blastEngine.stops == 1)
+        precondition(blast.demolitionHapticPlayer == nil && blast.activeHapticPlayer == nil)
+        precondition(blast.playGameplayHaptic(.demolitionExplosion) == .inactive)
+
+        let blastFallback = Probe()
+        blastFallback.hapticEngine = nil
+        precondition(blastFallback.playGameplayHaptic(.demolitionExplosion) == .fallback)
+        precondition(blastFallback.demolitionFeedback.impacts == 1)
+        print("PASS: escape/final-life dispatch, preemption, inactive suppression, completion, stop cancellation, failure fallback, recovery, independent explosion playback, explosion fallback")
     }
 }
 @main struct Main { static func main() { Probe.run() } }
@@ -114,11 +147,19 @@ final class Probe {
     swift_path = args.output / 'haptic-playback-probe.swift'
     swift_path.write_text(harness)
     build = args.build_path.resolve()
+    if (build / 'LevelEditorFormats.o').exists():
+        modules = build
+        objects = [build / 'LevelEditorFormats.o']
+    else:
+        modules = build / 'Modules'
+        objects = list((build / 'LevelEditorFormats.build').glob('*.swift.o'))
+    if not modules.exists() or not objects:
+        parser.error(f'No compiled LevelEditorFormats module/objects in {build}; run swift test first')
     with tempfile.TemporaryDirectory(prefix='td-haptic-playback-') as tmp:
         executable = Path(tmp) / 'probe'
         subprocess.run(['swiftc', '-parse-as-library',
-                        '-I', str(build / 'Modules'), str(swift_path)]
-                       + [str(p) for p in (build / 'LevelEditorFormats.build').glob('*.swift.o')]
+                        '-I', str(modules), str(swift_path)]
+                       + [str(p) for p in objects]
                        + ['-o', str(executable)], check=True)
         result = subprocess.run([str(executable)], capture_output=True, text=True, timeout=30, check=True)
     (args.output / 'playback-results.json').write_text(json.dumps(dict(

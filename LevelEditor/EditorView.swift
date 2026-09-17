@@ -570,8 +570,15 @@ struct EditorView: View {
                 .help("Replace the document with a starter template or an existing blueprint")
 
                 Button {
-                    PlatformPasteboard.copy(SwiftExport.code(for: document.draft))
-                    state.flash("Swift blueprint copied to clipboard")
+                    do {
+                        guard let arsenal = state.content.arsenal else {
+                            throw DbError.Db(message: state.content.towerTextError ?? "Tower text is unavailable.")
+                        }
+                        PlatformPasteboard.copy(try SwiftExport.code(for: document.draft, arsenal: arsenal))
+                        state.flash("Swift blueprint copied to clipboard")
+                    } catch {
+                        state.flash("Unable to export: \(error)")
+                    }
                 } label: {
                     Label("Export Swift", systemImage: "curlybraces")
                 }
@@ -594,7 +601,20 @@ struct EditorView: View {
                 state.flash("Add a road (2+ points) and a wave before playtesting")
                 return
             }
-            session = SimSession(blueprint: document.draft.makeBlueprint(virtualCanvas: state.virtualCanvas))
+            do {
+                if let error = state.content.enemyRosterError {
+                    throw DbError.Db(message: error)
+                }
+                let roster = try DesignRoster(enemyTypes: state.content.enemyTypes)
+                guard let arsenal = state.content.arsenal else {
+                    throw DbError.Db(message: state.content.towerTextError ?? "Tower text is unavailable.")
+                }
+                session = SimSession(blueprint: try document.draft.makeBlueprint(
+                    virtualCanvas: state.virtualCanvas, arsenal: arsenal), roster: roster, arsenal: arsenal)
+            } catch {
+                state.flash("Unable to start playtest: \(error)")
+                return
+            }
         } else {
             session = nil
         }

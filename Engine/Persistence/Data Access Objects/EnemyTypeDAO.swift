@@ -25,7 +25,14 @@ public class EnemyTypeDAO: BaseDAO {
                 et.lives_cost,
                 et.break_band_lo,
                 et.break_band_hi,
-                et.traits
+                et.traits,
+                et.morale_speed_threshold,
+                et.morale_attack_threshold,
+                et.morale_speed_multiplier,
+                et.morale_attack_multiplier,
+                et.enemy_type_key,
+                et.enemy_type_description,
+                et.image_name
             FROM
                 enemy_type et
             ORDER BY
@@ -33,12 +40,18 @@ public class EnemyTypeDAO: BaseDAO {
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
+        defer { sqlite3_finalize(stmt) }
 
-        while sqlite3_step(stmt) == SQLITE_ROW {
+        var result = sqlite3_step(stmt)
+        while result == SQLITE_ROW {
             let id = try getUUID(stmt: stmt, colIndex: 0, msg: "enemy type id")
 
-            guard let name = try getString(stmt: stmt, colIndex: 1) else {
-                throw DbError.Db(message: "enemy_type row \(id.uuidString.lowercased()) has a null name.")
+            guard let name = try getString(stmt: stmt, colIndex: 1),
+                  let key = try getString(stmt: stmt, colIndex: 18),
+                  let description = try getString(stmt: stmt, colIndex: 19),
+                  let imageName = try getString(stmt: stmt, colIndex: 20),
+                  [name, key, description, imageName].allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
+                throw DbError.Db(message: "enemy_type row \(id.uuidString.lowercased()) is missing required identity, display copy or artwork.")
             }
 
             let breakBandLo = getDouble(stmt: stmt, colIndex: 11)
@@ -57,16 +70,24 @@ public class EnemyTypeDAO: BaseDAO {
                 damageMax: getDouble(stmt: stmt, colIndex: 8),
                 gold: getInt(stmt: stmt, colIndex: 9),
                 livesCost: getInt(stmt: stmt, colIndex: 10),
-                breakBand: breakBandLo...breakBandHi
+                breakBand: breakBandLo...breakBandHi,
+                moraleResponse: EnemyMoraleResponse(
+                    speedThreshold: getDouble(stmt: stmt, colIndex: 14),
+                    attackThreshold: getDouble(stmt: stmt, colIndex: 15),
+                    speedMultiplier: getDouble(stmt: stmt, colIndex: 16),
+                    attackMultiplier: getDouble(stmt: stmt, colIndex: 17))
             )
 
             let traits = try decodeTraits(stmt: stmt, colIndex: 13, name: name)
 
-            enemyTypes.append(EnemyType(id: id, name: name, stats: stats, traits: traits))
+            enemyTypes.append(EnemyType(id: id, key: key, name: name, description: description,
+                                       imageName: imageName, stats: stats, traits: traits))
+            result = sqlite3_step(stmt)
         }
 
-        sqlite3_finalize(stmt)
-        stmt = nil
+        guard result == SQLITE_DONE else {
+            throw DbError.Db(message: "Unable to read the enemy roster: \(String(cString: sqlite3_errmsg(conn)))")
+        }
 
         return enemyTypes
     }

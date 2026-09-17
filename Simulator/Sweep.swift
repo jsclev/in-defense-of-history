@@ -8,6 +8,7 @@ struct SweepFixedInputs {
     var numWaves: Int
     var unlocks: [String: Int]
     var towerLevels: [String: [TowerLevel]]
+    var towerNames: [String: String]
     var roster: [EnemyType]
     var bounds: [String: [String: SimStatBounds]]
     var speedBounds: [UUID: ClosedRange<Double>]
@@ -38,6 +39,12 @@ struct SweepFixedInputs {
         for (category, levels) in try db.towerTypeDao.getTowerLevels() {
             towerLevels[normalizeKind(category)] = levels
         }
+        let towerNames = Dictionary(uniqueKeysWithValues: try db.towerTypeDao.getDisplayNames().map {
+            (normalizeKind($0.key), $0.value)
+        })
+        guard towerLevels.keys.allSatisfy({ towerNames[$0]?.isEmpty == false }) else {
+            throw DbError.Db(message: "Missing authored simulator tower names")
+        }
         var meleeBrackets: [String: [Int: SimMeleeBrackets]] = [:]
         for (category, byLevel) in try db.simMeleeUnitDao.getBrackets() {
             meleeBrackets[normalizeKind(category)] = byLevel
@@ -51,8 +58,21 @@ struct SweepFixedInputs {
         self.levelName = levelName
         self.lives = level.numStartingLives
         self.numWaves = level.numWaves > 0 ? level.numWaves : level.waves.count
-        self.unlocks = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelID)
+        self.unlocks = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelID).filter { $0.value > 0 }
+        for (kind, count) in self.unlocks {
+            guard let levels = towerLevels[kind], !levels.isEmpty, count > 0 else {
+                throw DbError.Db(message: "Missing authored tower levels for simulator kind '\(kind)'")
+            }
+            if fieldMelee {
+                for (index, tuning) in levels.prefix(count).enumerated() where tuning.meleeUnit != nil {
+                    guard meleeBrackets[kind]?[index + 1] != nil else {
+                        throw DbError.Db(message: "Missing sim_melee_unit for '\(kind)', tier \(index + 1)")
+                    }
+                }
+            }
+        }
         self.towerLevels = towerLevels
+        self.towerNames = towerNames
         self.roster = try db.enemyTypeDao.getAll()
         self.bounds = try db.simBoundsDao.getBoundsFor(levelInfoId: levelID)
         self.speedBounds = try db.simEnemyTypeDao.getSpeedBounds()
@@ -61,6 +81,13 @@ struct SweepFixedInputs {
         self.meleeBrackets = meleeBrackets
         self.towerRanges = towerRanges
         self.fieldMelee = fieldMelee
+    }
+
+    func requiredLevels(for kind: String) -> [TowerLevel] {
+        guard let levels = towerLevels[kind], !levels.isEmpty else {
+            fatalError("Missing authored tower levels for simulator kind '\(kind)'")
+        }
+        return levels
     }
 
     func designLevel(db: Db) throws -> LevelInfo {
@@ -120,23 +147,22 @@ struct SweepFocus {
 }
 
 struct SweepGrids {
-    var upgradeGrowth: [Double] = [1.3, 1.5, 1.7, 1.9, 2.1]
-    var rofGrids: [String: [Double]] = [
-        "ranged": [0.5, 0.65, 0.8, 1.0, 1.2],
-        "special": [0.8, 1.0, 1.2, 1.5, 1.8],
-        "areaOfEffect": [1.6, 2.0, 2.4, 2.8, 3.2],
-    ]
-    var defaultRofGrid: [Double] = [0.5, 0.65, 0.8, 1.0, 1.2]
-    var splashGrids: [String: [Double]] = [
-        "areaOfEffect": [70, 85, 100, 115, 130],
-    ]
-    var defaultSplashGrid: [Double] = [70, 85, 100, 115, 130]
-    var falloffGrid: [Double] = [0.5, 1.0, 3.0]
-    var projSpeedGrids: [String: [Double]] = [
-        "ranged": [300, 425, 550, 800, 1100],
-        "areaOfEffect": [80, 160, 320, 640, 1280],
-    ]
-    var defaultProjSpeedGrid: [Double] = [275, 550, 1100]
+    var upgradeGrowth: [Double]
+    var rofGrids: [String: [Double]]
+    var splashGrids: [String: [Double]]
+    var falloffGrid: [Double]
+    var projSpeedGrids: [String: [Double]]
+    var rangeModes: [String: String]
+
+    init(dao: SimTowerSweepDAO, profile: String) throws {
+        let tuning = try dao.get(profile: profile)
+        upgradeGrowth = tuning.upgradeGrowth
+        rofGrids = tuning.rof
+        splashGrids = tuning.splash
+        falloffGrid = tuning.falloff
+        projSpeedGrids = tuning.projectileSpeed
+        rangeModes = tuning.rangeModes
+    }
     var fixedRange: [String: Double] = [:]
     var fixedRof: [String: Double] = [:]
     var fixedGrowth: [String: Double] = [:]
@@ -195,21 +221,22 @@ struct SweepSpace {
         self.hpBounds = fixed.hpBounds
         self.bountyBounds = fixed.bountyBounds
         self.combatKinds = fixed.unlocks.keys.sorted().filter { kind in
-            guard let base = fixed.towerLevels[kind], !base.isEmpty else { return false }
-            let capped = base.prefix(fixed.unlocks[kind] ?? 0)
+            let base = fixed.requiredLevels(for: kind)
+            guard let count = fixed.unlocks[kind] else { fatalError("Missing tower unlock for '\(kind)'") }
+            let capped = base.prefix(count)
             let ranged = capped.contains { $0.shotMaxDamage > 0 || $0.terrorMax > 0 || $0.contagionChance > 0 }
             let melee = fixed.fieldMelee && capped.contains { $0.meleeUnit != nil }
             return ranged || melee
         }
         self.meleeFielded = fixed.fieldMelee && combatKinds.contains { kind in
-            fixed.towerLevels[kind]?.first.map { $0.meleeUnit != nil } ?? false
+            fixed.requiredLevels(for: kind)[0].meleeUnit != nil
         }
         self.aoeKinds = combatKinds.filter { kind in
-            fixed.towerLevels[kind]?.contains { $0.aoeRadius > 0 } ?? false
+            fixed.requiredLevels(for: kind).contains { $0.aoeRadius > 0 }
         }
-        let cheapest = combatKinds
-            .compactMap { fixed.towerLevels[$0]?.first?.cost }
-            .min() ?? 70
+        guard let cheapest = combatKinds.map({ fixed.requiredLevels(for: $0)[0].cost }).min() else {
+            fatalError("The simulator requires an authored, unlocked combat tower")
+        }
         let minMoney = 3 * cheapest
         let maxMoney = cheapest * (slotCount / 2 + 1)
         if let pinned = grids.fixedMoney {
@@ -263,7 +290,7 @@ struct SweepSpace {
     }
 
     private func isMeleeKind(_ kind: String) -> Bool {
-        fixedInputs.towerLevels[kind]?.first?.meleeUnit != nil
+        fixedInputs.requiredLevels(for: kind)[0].meleeUnit != nil
     }
 
     /// Every range the sweep tries for `kind`, as whole numbers.
@@ -273,20 +300,17 @@ struct SweepSpace {
     /// the search is an edit to that table.
     func rangeGrid(for kind: String) -> [Double] {
         if isMeleeKind(kind) {
-            return [fixedInputs.towerLevels[kind]?.first?.range.rounded() ?? 0]
+            return [fixedInputs.requiredLevels(for: kind)[0].range.rounded()]
         }
         if let override = grids.rangeGridOverride[kind] { return override }
         if let pinned = grids.fixedRange[kind] { return [pinned.rounded()] }
         if let b = bounds[kind]?["range"] {
             return gridFromBounds(b.minValue, b.maxValue, step: grids.boundsStep)
         }
-        // Level 1 is the anchor: the sweep picks one range per kind and scales
-        // the higher tiers from it in the same proportion the tower table has.
-        // A kind with no level-1 row is not swept over range at all - it keeps
-        // its own tower_range, which is what confines the search to the tower
-        // levels sim_tower_range actually describes.
+        guard let mode = grids.rangeModes[kind] else { fatalError("Missing simulator range mode for '\(kind)'") }
+        if mode == "authored" { return [fixedInputs.requiredLevels(for: kind)[0].range.rounded()] }
         guard let r = fixedInputs.towerRanges[kind]?[1] else {
-            return [fixedInputs.towerLevels[kind]?.first?.range.rounded() ?? 0]
+            fatalError("Missing sim_tower_range for '\(kind)', tier 1")
         }
         return r.values.map(Double.init)
     }
@@ -302,19 +326,25 @@ struct SweepSpace {
 
     func rofGrid(for kind: String) -> [Double] {
         if isMeleeKind(kind) {
-            return [fixedInputs.towerLevels[kind]?.first?.fireInterval ?? 0]
+            return [fixedInputs.requiredLevels(for: kind)[0].fireInterval]
         }
-        return grids.fixedRof[kind].map { [$0] } ?? grids.rofGrids[kind] ?? grids.defaultRofGrid
+        if let fixed = grids.fixedRof[kind] { return [fixed] }
+        guard let values = grids.rofGrids[kind] else { fatalError("Missing simulator rate of fire grid for '\(kind)'") }
+        return values
     }
 
     func splashGrid(for kind: String) -> [Double] {
-        grids.fixedSplash[kind].map { [$0] } ?? grids.splashGrids[kind] ?? grids.defaultSplashGrid
+        if let fixed = grids.fixedSplash[kind] { return [fixed] }
+        guard let values = grids.splashGrids[kind] else { fatalError("Missing simulator splash grid for '\(kind)'") }
+        return values
     }
 
     func projSpeedGrid(for kind: String, fixed: SweepFixedInputs) -> [Double] {
-        guard let base = fixed.towerLevels[kind]?.first, base.projectileSpeed > 0 else { return [0] }
-        return grids.fixedProjSpeed[kind].map { [$0] }
-            ?? grids.projSpeedGrids[kind] ?? grids.defaultProjSpeedGrid
+        let base = fixed.requiredLevels(for: kind)[0]
+        if base.projectileSpeed == 0 { return [base.projectileSpeed] }
+        if let pinned = grids.fixedProjSpeed[kind] { return [pinned] }
+        guard let values = grids.projSpeedGrids[kind] else { fatalError("Missing simulator projectile speed grid for '\(kind)'") }
+        return values
     }
 
     func falloffGrid(for kind: String) -> [Double] {
@@ -496,59 +526,64 @@ struct SweepCatalog {
         }
         var towers: [TowerType] = []
         for (kind, maxLevel) in fixed.unlocks {
-            guard let id = kindIDs[kind],
-                  let baseLevels = fixed.towerLevels[kind], !baseLevels.isEmpty
-            else { continue }
+            guard let id = kindIDs[kind] else { fatalError("Unsupported simulator tower kind '\(kind)'") }
+            let baseLevels = fixed.requiredLevels(for: kind)
             let isMelee = baseLevels[0].meleeUnit != nil
             if isMelee {
                 guard fixed.fieldMelee else { continue }
+                guard let growth = perm.upgradeGrowth[kind] else { fatalError("Missing simulator growth for '\(kind)'") }
                 let levels = baseLevels.prefix(maxLevel).enumerated().map { n, base -> TowerLevel in
                     var l = base
-                    if let growth = perm.upgradeGrowth[kind], n > 0 {
+                    if n > 0 {
                         let raw = Double(baseLevels[0].cost) * pow(growth, Double(n))
                         l.cost = Int((raw / 5).rounded()) * 5
                     }
-                    if let b = fixed.meleeBrackets[kind]?[n + 1] {
-                        l.meleeUnit?.hp = b.hp.lowerBound
-                            + perm.meleeHpBracketPosition * (b.hp.upperBound - b.hp.lowerBound)
-                        l.meleeUnit?.attackRating = b.averageDamage.lowerBound
-                            + perm.meleeDamageBracketPosition
-                            * (b.averageDamage.upperBound - b.averageDamage.lowerBound)
-                    }
+                    guard let b = fixed.meleeBrackets[kind]?[n + 1] else { fatalError("Missing simulator melee attributes for '\(kind)' tier \(n + 1)") }
+                    l.meleeUnit?.hp = b.hp.lowerBound
+                        + perm.meleeHpBracketPosition * (b.hp.upperBound - b.hp.lowerBound)
+                    l.meleeUnit?.attackRating = b.averageDamage.lowerBound
+                        + perm.meleeDamageBracketPosition
+                        * (b.averageDamage.upperBound - b.averageDamage.lowerBound)
                     return l
                 }
-                towers.append(TowerType(id: id, name: kind, levels: Array(levels)))
+                towers.append(TowerType(id: id, name: fixed.towerNames[kind]!, levels: Array(levels)))
                 continue
             }
+            guard baseLevels.prefix(maxLevel).contains(where: {
+                $0.shotMaxDamage > 0 || $0.terrorMax > 0 || $0.contagionChance > 0
+            }) else { continue }
             guard let growth = perm.upgradeGrowth[kind],
-                  let l1Range = perm.rangeByKind[kind]
-            else { continue }
+                  let l1Range = perm.rangeByKind[kind],
+                  let l1Rof = perm.rofByKind[kind],
+                  let speed = perm.projSpeedByKind[kind]
+            else { fatalError("Missing simulator tower attributes for '\(kind)'") }
             let baseCost = baseLevels[0].cost
             let dbL1Range = baseLevels[0].range
             let dbL1Rof = baseLevels[0].fireInterval
-            let dbL1Splash = baseLevels.first { $0.aoeRadius > 0 }?.aoeRadius ?? 0
+            let dbL1Splash = baseLevels.first { $0.aoeRadius > 0 }?.aoeRadius
             let levels = baseLevels.prefix(maxLevel).enumerated().map { n, base in
                 var l = base
                 if n > 0 {
                     let raw = Double(baseCost) * pow(growth, Double(n))
                     l.cost = Int((raw / 5).rounded()) * 5
                 }
-                l.range = dbL1Range > 0 ? l1Range * (base.range / dbL1Range) : l1Range
-                if let l1Rof = perm.rofByKind[kind], dbL1Rof > 0 {
+                l.range = l1Range * (base.range / dbL1Range)
+                if dbL1Rof > 0 {
                     l.fireInterval = l1Rof * (base.fireInterval / dbL1Rof)
                 }
-                if let speed = perm.projSpeedByKind[kind], base.projectileSpeed > 0 {
+                if base.projectileSpeed > 0 {
                     l.projectileSpeed = speed
                 }
-                if let l1Splash = perm.splashByKind[kind], dbL1Splash > 0, base.aoeRadius > 0 {
+                if let dbL1Splash, base.aoeRadius > 0 {
+                    guard let l1Splash = perm.splashByKind[kind], let falloff = perm.falloffByKind[kind] else {
+                        fatalError("Missing simulator splash attributes for '\(kind)'")
+                    }
                     l.aoeRadius = l1Splash * (base.aoeRadius / dbL1Splash)
-                }
-                if let falloff = perm.falloffByKind[kind] {
                     l.aoeFalloffExponent = falloff
                 }
                 return l
             }
-            towers.append(TowerType(id: id, name: kind, levels: Array(levels)))
+            towers.append(TowerType(id: id, name: fixed.towerNames[kind]!, levels: Array(levels)))
         }
         return ContentCatalog(enemyTypes: roster, towerTypes: towers)
     }
@@ -564,12 +599,12 @@ struct SweepWaves {
         "standard": [1.0, 1.3, 1.7, 2.1, 2.6, 3.2],
         "steep": [0.7, 1.0, 1.5, 2.2, 3.2, 4.6],
     ]
-    let mixFractions: [String: [(name: String, frac: Double)]] = [
-        "swarm": [("Loyalist Militia", 0.7), ("Redcoat Regular", 0.3)],
-        "balanced": [("Loyalist Militia", 0.4), ("Redcoat Regular", 0.4), ("Light Infantry", 0.2)],
-        "elite": [("Redcoat Regular", 0.5), ("Light Infantry", 0.5)],
-        "combined": [("Loyalist Militia", 0.3), ("Redcoat Regular", 0.4),
-                     ("Light Infantry", 0.2), ("Regimental Drummer", 0.1)],
+    let mixFractions: [String: [(key: String, frac: Double)]] = [
+        "swarm": [(Foe.loyalistMilitia.rawValue, 0.7), (Foe.redcoatRegular.rawValue, 0.3)],
+        "balanced": [(Foe.loyalistMilitia.rawValue, 0.4), (Foe.redcoatRegular.rawValue, 0.4), (Foe.lightInfantry.rawValue, 0.2)],
+        "elite": [(Foe.redcoatRegular.rawValue, 0.5), (Foe.lightInfantry.rawValue, 0.5)],
+        "combined": [(Foe.loyalistMilitia.rawValue, 0.3), (Foe.redcoatRegular.rawValue, 0.4),
+                     (Foe.lightInfantry.rawValue, 0.2), (Foe.regimentalDrummer.rawValue, 0.1)],
     ]
     let budgetPerWave = 110.0
 
@@ -590,8 +625,8 @@ struct SweepWaves {
         let weightSum = weights.reduce(0, +)
         let mix = mixFractions[perm.mix] ?? mixFractions["balanced"]!
 
-        var byName: [String: EnemyType] = [:]
-        for e in fixed.roster { byName[e.name] = e }
+        var byKey: [String: EnemyType] = [:]
+        for e in fixed.roster { byKey[e.key] = e }
 
         var waves: [Wave] = []
         var start = 10.0
@@ -600,9 +635,9 @@ struct SweepWaves {
             var lines: [SpawnEntry] = []
             var delay = 0.0
             for (li, entry) in mix.enumerated() {
-                let (name, frac) = entry
-                guard let type = byName[name] else { continue }
-                let isDrummer = name == "Regimental Drummer"
+                let (key, frac) = entry
+                guard let type = byKey[key] else { continue }
+                let isDrummer = key == Foe.regimentalDrummer.rawValue
                 if isDrummer && w < 2 { continue }
                 var count = Int((budget * frac / Double(type.stats.gold)).rounded())
                 if isDrummer { count = min(count, 1) }
@@ -614,7 +649,7 @@ struct SweepWaves {
                 ))
                 delay += 2.0
             }
-            if lines.isEmpty, let militia = byName["Loyalist Militia"] {
+            if lines.isEmpty, let militia = byKey[Foe.loyalistMilitia.rawValue] {
                 lines = [SpawnEntry(enemyTypeID: militia.id, count: 1, interval: interval)]
             }
             waves.append(Wave(startTime: start, spawns: lines))
@@ -647,7 +682,9 @@ struct GreedyCommander: CommanderPolicy {
         }
         plan = order
 
-        let range = ranked.first?.levels.first?.range ?? 150
+        guard let range = ranked.first?.levels.first?.range else {
+            fatalError("The simulator commander requires an authored tower range")
+        }
         var scores: [(Int, Double)] = []
         for (i, slot) in level.towerSlots.enumerated() {
             var covered = 0.0
@@ -786,7 +823,7 @@ struct Sweep {
     func bench(levelName: String, sims: Int) throws {
         let fixed = try SweepFixedInputs(db: db, levelName: levelName)
         let base = try fixed.designLevel(db: db)
-        let space = SweepSpace(grids: SweepGrids(), fixed: fixed, slotCount: base.towerSlots.count)
+        let space = SweepSpace(grids: try SweepGrids(dao: db.simTowerSweepDao, profile: "coarse"), fixed: fixed, slotCount: base.towerSlots.count)
         let perm = space.permutation(at: space.permutationCount / 2)
         let catalog = SweepCatalog(fixed: fixed).make(perm: perm)
         let waves = SweepWaves(fixed: fixed, pathCount: base.paths.count).make(perm: perm)
@@ -933,9 +970,6 @@ struct Sweep {
         var done = 0
         let t0 = Date()
 
-        // Status is recorded in its own database so it survives create_db.sh and
-        // never blocks a content rebuild. A failure to record must not take the
-        // sweep down with it, hence the optional.
         let runID = try? runs?.begin(levelName: levelName,
                                      focus: grids.focus?.label ?? "",
                                      totalIterations: indices.count,
@@ -947,7 +981,7 @@ struct Sweep {
             if let runs, let id = runID ?? nil { runs.progress(id: id, completed: completed,
                                                                iterationsPerSecond: rate) }
         }
-        let store = try? SweepResultStore(diskPath: outPath, runID: runID ?? nil)
+        let store = try SweepResultStore(databasePath: db.path, runID: runID ?? nil)
 
         func conclude(_ status: SimulatorRunStatus, report reportPath: String? = nil, error: String? = nil) {
             if let runs, let id = runID ?? nil {
@@ -1108,17 +1142,21 @@ struct Sweep {
         for kind in space.combatKinds {
             let grid = space.rangeGrid(for: kind)
             guard grid.count >= 3 else { continue }
-            let dbRof = fixed.towerLevels[kind]?.first?.fireInterval ?? 0
+            let dbRof = fixed.requiredLevels(for: kind)[0].fireInterval
             let gGrid = space.growthGrid(for: kind)
             let midGrowth = gGrid[gGrid.count / 2]
-            let slice = rows.filter {
-                abs(($0.perm.rofByKind[kind] ?? dbRof) - dbRof) < 0.001
-                    && abs(($0.perm.upgradeGrowth[kind] ?? midGrowth) - midGrowth) < 0.001
+            let slice = try rows.filter {
+                guard let rof = $0.perm.rofByKind[kind], let growth = $0.perm.upgradeGrowth[kind] else {
+                    throw DbError.Db(message: "Missing simulator result attributes for '\(kind)'")
+                }
+                return abs(rof - dbRof) < 0.001 && abs(growth - midGrowth) < 0.001
             }
             let use = slice.isEmpty ? rows : slice
             var byRange: [Double: (win: Double, naive: Double, n: Int)] = [:]
             for r in use {
-                guard let rv = r.perm.rangeByKind[kind] else { continue }
+                guard let rv = r.perm.rangeByKind[kind] else {
+                    throw DbError.Db(message: "Missing simulator result range for '\(kind)'")
+                }
                 var e = byRange[rv] ?? (0, 0, 0)
                 e.win += r.winRate
                 e.naive += r.w1NaiveClear
@@ -1160,8 +1198,7 @@ struct Sweep {
         rows.sort { $0.perm.index < $1.perm.index }
         // The CPU path accumulates rows in memory and writes them here; the GPU
         // path has already streamed each batch into the store as it went.
-        if let store, store.rowCount == 0 { store.insert(rows) }
-        store?.finish()
+        if let store, store.rowCount == 0 { try store.insert(rows) }
 
         let elapsed = Date().timeIntervalSince(t0)
         let actualSims = rows.reduce(0) { $0 + $1.seedsUsed * 2 }

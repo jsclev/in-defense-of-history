@@ -36,13 +36,17 @@ final class ArtilleryFacingTests: XCTestCase {
                        previous: .initial), .initial)
     }
 
-    func testAllSixArtilleryTiersUseTheirOwnSheet() {
-        let configurations = [(1, 1), (2, 1), (3, 1), (4, 1), (4, 2), (4, 3)]
+    func testSixGunTiersUseSheetsWhileSappersUseTheirStationaryArt() {
+        let configurations = [(1, 1), (2, 1), (3, 1), (4, 1), (4, 2), (4, 4)]
         let names = configurations.compactMap { level, branch in
             TowerKind.areaOfEffect.directionalAssetName(atLevel: level, branch: branch)
         }
         XCTAssertEqual(Set(names).count, 6)
         XCTAssertTrue(names.allSatisfy { $0.hasSuffix("_directions_32") })
+        XCTAssertNil(TowerKind.special.directionalAssetName(atLevel: 4, branch: 3))
+        XCTAssertEqual(TowerKind.special.assetName(atLevel: 4, branch: 3), "special_tower_level_4_branch_3")
+        XCTAssertEqual(TowerKind.special.specializationMenuIconName(atLevel: 4, branch: 3), "tower_menu_engineer_sapper")
+        XCTAssertEqual(TowerKind.areaOfEffect.specializationMenuIconName(atLevel: 4, branch: 4), "tower_menu_artillery_siege")
         for kind in [TowerKind.ranged, .melee, .special] {
             XCTAssertNil(kind.directionalAssetName(atLevel: 4, branch: 2))
         }

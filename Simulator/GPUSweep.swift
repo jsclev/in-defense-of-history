@@ -415,7 +415,7 @@ struct GPUHarness {
     ) throws -> (fixed: SweepFixedInputs, space: SweepSpace, base: LevelInfo) {
         let fixed = try SweepFixedInputs(db: db, levelName: levelName, fieldMelee: fieldMelee)
         let base = try fixed.designLevel(db: db)
-        let space = SweepSpace(grids: SweepGrids(), fixed: fixed, slotCount: base.towerSlots.count)
+        let space = SweepSpace(grids: try SweepGrids(dao: db.simTowerSweepDao, profile: "coarse"), fixed: fixed, slotCount: base.towerSlots.count)
         return (fixed, space, base)
     }
 
@@ -691,14 +691,15 @@ struct GPUHarness {
         let (level, _) = levelFor(perm: midPerm, fixed: fixed, base: base)
         let catalog = ContentCatalog(
             enemyTypes: fixed.roster,
-            towerTypes: [TowerType(id: kindIDs["melee"]!, name: "melee",
+            towerTypes: [TowerType(id: kindIDs["melee"]!, name: fixed.towerNames["melee"]!,
                                    levels: Array(meleeLevels.prefix(2)))]
         )
-        guard let walker = fixed.roster.first(where: { $0.name == "Loyalist Militia" })
+        guard let walker = fixed.roster.first(where: { $0.id == Foe.loyalistMilitia.id })
             ?? fixed.roster.first else { return 0 }
-        let regular = fixed.roster.first { $0.name == "Redcoat Regular" } ?? walker
+        let regular = fixed.roster.first { $0.id == Foe.redcoatRegular.id } ?? walker
         let c1 = meleeLevels[0].cost
-        let c2 = meleeLevels.count > 1 ? meleeLevels[1].cost : 0
+        guard meleeLevels.count > 1 else { throw DbError.Db(message: "Missing authored melee upgrade cost for GPU validation") }
+        let c2 = meleeLevels[1].cost
         let scenarios: [(name: String, money: Int, waves: [Wave])] = [
             ("6v1g", c1, [Wave(startTime: 5, spawns: [
                 SpawnEntry(enemyTypeID: walker.id, count: 6, interval: 2)])]),
@@ -719,7 +720,7 @@ struct GPUHarness {
             ("4g + upgrades", 4 * c1 + c2 + 40, [Wave(startTime: 5, spawns: [
                 SpawnEntry(enemyTypeID: walker.id, count: 8, interval: 1.4)])]),
         ]
-        let rangedBase = Array((fixed.towerLevels["ranged"] ?? []).prefix(2))
+        let rangedBase = Array(fixed.requiredLevels(for: "ranged").prefix(2))
         var rangedMeleeScenarios: [(name: String, money: Int, waves: [Wave],
                                     catalog: ContentCatalog)] = []
         if !rangedBase.isEmpty {
@@ -743,9 +744,9 @@ struct GPUHarness {
                     ContentCatalog(
                         enemyTypes: fixed.roster,
                         towerTypes: [
-                            TowerType(id: kindIDs["ranged"]!, name: "ranged",
+                            TowerType(id: kindIDs["ranged"]!, name: fixed.towerNames["ranged"]!,
                                       levels: levels),
-                            TowerType(id: kindIDs["melee"]!, name: "melee",
+                            TowerType(id: kindIDs["melee"]!, name: fixed.towerNames["melee"]!,
                                       levels: Array(meleeLevels.prefix(2))),
                         ])))
             }
@@ -807,13 +808,13 @@ struct GPUHarness {
         if let aoeLevels = fixed.towerLevels["areaOfEffect"], !aoeLevels.isEmpty {
             let midPerm = space.permutation(at: space.permutationCount / 2)
             let (level, _) = levelFor(perm: midPerm, fixed: fixed, base: base)
-            let rangedLevels = Array((fixed.towerLevels["ranged"] ?? []).prefix(2))
+            let rangedLevels = Array(fixed.requiredLevels(for: "ranged").prefix(2))
             var towers: [TowerType] = [
-                TowerType(id: kindIDs["areaOfEffect"]!, name: "areaOfEffect",
+                TowerType(id: kindIDs["areaOfEffect"]!, name: fixed.towerNames["areaOfEffect"]!,
                           levels: Array(aoeLevels.prefix(3))),
             ]
             if !rangedLevels.isEmpty {
-                towers.append(TowerType(id: kindIDs["ranged"]!, name: "ranged",
+                towers.append(TowerType(id: kindIDs["ranged"]!, name: fixed.towerNames["ranged"]!,
                                         levels: rangedLevels))
             }
             let catalog = ContentCatalog(enemyTypes: fixed.roster, towerTypes: towers)
@@ -934,7 +935,7 @@ struct GPUHarness {
                 batchRows.append(makeRow(perm: perm, fixed: fixed, greedy: greedy, naive: naive))
             }
             rows += batchRows
-            store?.insert(batchRows)
+            try store?.insert(batchRows)
 
             batchStart += permBatchSize
             let rate = Double(rows.count) / max(0.001, Date().timeIntervalSince(t0))

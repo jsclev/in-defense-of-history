@@ -30,10 +30,7 @@ final class CharlestonWaveTests: XCTestCase {
     }
 
     func testDatabaseRoutesSpawnsAndAutomaticStartsMatchAuthoredWaves() throws {
-        let copy = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".sqlite")
-        try FileManager.default.copyItem(at: root.appendingPathComponent("Db/in_defense_of_history.sqlite"), to: copy)
-        defer { try? FileManager.default.removeItem(at: copy) }
-        let db = Db(dbPath: copy.path, fullRefresh: false,
+        let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false,
                     levelGeoJSONDao: LevelGeoJSONDAO(directory: root.appendingPathComponent("Db")))
         defer { db.close() }
         let level = try db.levelLoader.load(id: levelID)
@@ -41,7 +38,7 @@ final class CharlestonWaveTests: XCTestCase {
         XCTAssertEqual(try db.pathDao.getPathsFor(levelInfoId: levelID), level.paths)
         let geo = try LevelGeoJSON(data: Data(contentsOf: root.appendingPathComponent("Db/level_15_charleston.geojson")))
         let draft = try GeoJSONImport.draft(from: geo.data())
-        let enemies = Dictionary(uniqueKeysWithValues: try db.enemyTypeDao.getAll().map { ($0.id, $0.name) })
+        let enemies = Dictionary(uniqueKeysWithValues: try db.enemyTypeDao.getAll().map { ($0.id, $0.key) })
         XCTAssertEqual(level.numWaves, 15)
         XCTAssertEqual(level.paths.count, 4)
         XCTAssertEqual(level.paths[0].points.first, draft.entrances[0])

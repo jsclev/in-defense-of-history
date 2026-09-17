@@ -46,4 +46,36 @@ final class GameplayHapticPatternTests: XCTestCase {
             }
         }
     }
+
+    func testDemolitionHasImmediateCrackDeeperThumpAndFiniteRumble() throws {
+        let cue = GameplayHapticPattern.demolitionExplosion
+        let hits = cue.events.filter { $0.type == .hapticTransient }
+        let rumble = try XCTUnwrap(cue.events.first { $0.type == .hapticContinuous })
+        XCTAssertEqual(hits.count, 2)
+        XCTAssertEqual(hits[0].relativeTime, 0)
+        XCTAssertEqual(try parameter(.hapticIntensity, in: hits[0]), 1)
+        XCTAssertLessThan(try parameter(.hapticSharpness, in: hits[1]),
+                          try parameter(.hapticSharpness, in: hits[0]))
+        XCTAssertLessThanOrEqual(hits[1].relativeTime, DemolitionExplosion.frameEnds[2])
+        XCTAssertLessThan(rumble.relativeTime, 0.02)
+        XCTAssertLessThan(try parameter(.hapticSharpness, in: rumble), 0.15)
+        XCTAssertEqual(cue.duration, 0.58, accuracy: 0.00001)
+        XCTAssertLessThan(cue.duration, DemolitionExplosion.duration)
+
+        let data = try JSONSerialization.data(withJSONObject: cue.makePattern().exportDictionary())
+        let dictionary = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+        let entries = try XCTUnwrap(dictionary["Pattern"] as? [[String: Any]])
+        let curve = try XCTUnwrap(entries.compactMap { $0["ParameterCurve"] as? [String: Any] }.first)
+        XCTAssertEqual(curve["ParameterID"] as? String, "HapticIntensityControl")
+        let points = try XCTUnwrap(curve["ParameterCurveControlPoints"] as? [[String: Double]])
+        XCTAssertEqual(points.first?["ParameterValue"], 1)
+        XCTAssertEqual(points.last?["ParameterValue"], 0)
+        XCTAssertEqual(try XCTUnwrap(points.last?["Time"]), cue.duration, accuracy: 0.00001)
+        let tail = points.filter { ($0["Time"] ?? 0) >= 0.1 }
+        XCTAssertGreaterThanOrEqual(tail.count, 3)
+        for (first, next) in zip(tail, tail.dropFirst()) {
+            XCTAssertGreaterThan(try XCTUnwrap(first["ParameterValue"]), try XCTUnwrap(next["ParameterValue"]),
+                                 "The rumble should decay rather than buzz at full strength")
+        }
+    }
 }

@@ -165,7 +165,7 @@ struct PlaytestView: View {
                                 Circle()
                                     .fill(Palette.towerColors[e] ?? .white)
                                     .frame(width: 12, height: 12)
-                                Text(shortName(e)).font(.caption2)
+                                Text(session.arsenal.shortName(e)).font(.caption2)
                                 Text("$\(cost)").font(.caption2).monospacedDigit()
                             }
                         }
@@ -178,15 +178,6 @@ struct PlaytestView: View {
             Text("Click a slot to build")
                 .font(.callout)
                 .foregroundStyle(.secondary)
-        }
-    }
-
-    private func shortName(_ e: Emplacement) -> String {
-        switch e {
-        case .minutemanPost: return "Minute"
-        case .longRifles: return "Rifle"
-        case .fieldBattery: return "Cannon"
-        case .libertyPole: return "Liberty"
         }
     }
 

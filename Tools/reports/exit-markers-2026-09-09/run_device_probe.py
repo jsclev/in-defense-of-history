@@ -59,7 +59,5 @@ with tempfile.TemporaryDirectory(prefix='td-exit-probe-') as temp_name:
     assert result.exists() and not json.loads(result.read_text()).get('pending'), 'Physical-device probe timed out'
     data = json.loads(result.read_text())
     assert data['passed'], data
-    run('xcrun', 'devicectl', 'device', 'copy', 'from', '--device', DEVICE,
-        '--domain-type', 'appDataContainer', '--domain-identifier', BUNDLE_ID,
-        '--source', 'Documents', '--destination', str(REPORT / 'device-documents'))
+    run('python3', str(GAME / 'Tools/capture_device_artifacts.py'), '--device', DEVICE, '--bundle-id', BUNDLE_ID, '--output', str(REPORT / 'device-documents'))
     print(f"PASS: {sum(x['count'] for x in data['levels'])} authored exits across {len(data['levels'])} levels; physical-iPhone renders saved.")

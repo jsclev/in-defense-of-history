@@ -57,10 +57,13 @@ enum TowerRangeCheck {
             LEFT JOIN melee_unit m ON m.tower_id = t.id
             ORDER BY category, tower_level, branch
             """, db: db)
-        precondition(towers.count == 24)
-        let byName = Dictionary(uniqueKeysWithValues: towers.map {
-            ($0["tower_name"]!, Double($0["tower_range"]!)!)
-        })
+        precondition(towers.count == 23)
+        func range(_ category: String, _ level: Int, _ branch: Int = 1) -> Double {
+            let row = towers.first {
+                $0["category"] == category && $0["tower_level"] == String(level) && $0["branch"] == String(branch)
+            }!
+            return Double(row["tower_range"]!)!
+        }
         for row in rows("""
             SELECT t.tower_range, s.min_range, s.max_range
             FROM sim_tower_range s JOIN tower t ON t.id = s.tower_id
@@ -69,21 +72,23 @@ enum TowerRangeCheck {
             precondition(radius >= Double(row["min_range"]!)!)
             precondition(radius <= Double(row["max_range"]!)!)
         }
-        let rally = byName["Militia"]!
+        let rally = range("Melee", 1)
         near(rally, 330.48)
-        // Independent KR proportions catch accidentally reverting the seeds.
-        near(byName["Musketmen"]! / rally, 280.0 / 290, tolerance: 0.00002)
-        near(byName["Morgan's Sharpshooters"]! / rally, 470.0 / 290, tolerance: 0.00002)
-        precondition(byName["Morgan's Sharpshooters"]! > byName["Whitcomb's Rangers"]!)
-        precondition(byName["Whitcomb's Rangers"]! > byName["Knowlton's Rangers"]!)
-        precondition(byName["Knox's Siege Guns"]! > byName["Mortar Battery"]!)
-        precondition(byName["Mortar Battery"]! > byName["Swivel-Gun Emplacement"]!)
+
+        near(range("Ranged", 1) / rally, 280.0 / 290, tolerance: 0.00002)
+        near(range("Ranged", 4, 1) / rally, 470.0 / 290, tolerance: 0.00002)
+        precondition(range("Ranged", 4, 1) > range("Ranged", 4, 3))
+        precondition(range("Ranged", 4, 3) > range("Ranged", 4, 2))
+        let artilleryChoices = towers.filter { $0["category"] == "Area of Effect" && $0["tower_level"] == "4" }
+        precondition(Set(artilleryChoices.map { Int($0["branch"]!)! }) == [1, 2, 4])
+        near(range("Special", 4, 3), 410.25)
+        precondition(range("Area of Effect", 4, 1) > range("Area of Effect", 4, 2))
         for group in Dictionary(grouping: towers, by: { $0["category"]! }).values {
             for tower in group {
                 let tier = Int(tower["tower_level"]!)!
                 let radius = Double(tower["tower_range"]!)!
-                // The swivel branch trades reach for rapid handling/grapeshot.
-                if tower["tower_name"] == "Swivel-Gun Emplacement" {
+
+                if tower["category"] == "Area of Effect" && tier == 4 && tower["branch"] == "2" {
                     near(radius, 320)
                 } else if tier > 1 {
                     let previous = group.first { Int($0["tower_level"]!)! == tier - 1 }!
@@ -119,8 +124,7 @@ enum TowerRangeCheck {
                 near(ring.midY, center.y)
                 near(ring.width / 2, screenRadius)
                 near(ring.height / ring.width, 0.7)
-                // A map-space decision and the same decision after runtime
-                // projection must agree, including near the boundary.
+
                 for fraction in [0.999, 1.0, 1.001] {
                     let enemy = TargetCandidate(id: 1, position: Point(radius * fraction, 0),
                                                 pathIndex: 0, pathDistance: 0, hp: 1,
@@ -135,6 +139,6 @@ enum TowerRangeCheck {
                 }
             }
         }
-        print("PASS: 24 tower rows, upgrade / branch roles, militia rally parity, combat boundaries, and 6 RuntimeCanvas layouts.")
+        print("PASS: 23 tower rows, three artillery upgrade choices, militia rally parity, combat boundaries, and 6 RuntimeCanvas layouts.")
     }
 }

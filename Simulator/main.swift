@@ -1,17 +1,13 @@
 import Foundation
 
 struct Options {
-    var dbPath = "revwar.sqlite"
-    var inMemory = false
     var levelID = UUID(uuidString: "")
     var seeds = 200
     var baseSeed: UInt64 = 1776
-    var reset = false
     var blueprint: String?
     var idle = false
     var trace = false
     var sweep: String?
-    var sweepOut = "sweeps/sweep.sqlite"
     var sweepStride = 1
     var sweepSeeds = 40
     var limit: Int?
@@ -41,19 +37,15 @@ func printUsage(blueprints: Blueprints) {
     revsim \(BuildVersion.version) — headless balance simulator
 
     USAGE: revsim [options]
-      --db <path>      Content database path (default: revwar.sqlite)
-      --memory         Use an in-memory database (seeds fresh every run)
       --level <id>     Level id to simulate (default: concord_road)
       --seeds <n>      Number of seeds to run (default: 200)
       --seed <n>       Base seed; runs use base, base+1, ... (default: 1776)
-      --reset          Delete the database file first
-      --blueprint <name>  Batch-run a design blueprint (no DB, no art)
+      --blueprint <name>  Batch-run a design blueprint
       --idle           With --blueprint: run the no-towers baseline instead
       --sweep <name>   Permutation sweep of a level. Fixed inputs (tower
                        unlocks, base stats + L1 costs, lives, wave count,
                        enemy roster) are read from the DB; starting money,
                        upgrade costs, and wave compositions are swept.
-      --sweep-out <p>  SQLite output path (default: sweeps/sweep.sqlite)
       --sweep-stride <n>  Sample every nth permutation (default 1 = all)
       --sweep-seeds <n>   Seeds per permutation (default 40)
       --limit <n>      Run at most n permutations, then stop and write the
@@ -77,8 +69,8 @@ func printUsage(blueprints: Blueprints) {
       --focus <stat>:<kind>  Single-variable focus study. The sweep becomes a
                        paired design: every value of the focus variable runs
                        against the identical sample of permutations of every
-                       other variable, then the run emits <sweep-out>.focus.csv
-                       (per-value aggregates) and <sweep-out>.focus.html
+                       other variable, then the run emits a focus CSV
+                       (per-value aggregates) and a focus HTML report
                        (charts: mean win rate with a 95% band, margin of
                        victory, and the same curve split by the hardest,
                        middle and easiest third of the other variables).
@@ -114,11 +106,6 @@ func parseOptions() throws -> Options? {
     var args = ArraySlice(CommandLine.arguments.dropFirst())
     while let arg = args.popFirst() {
         switch arg {
-        case "--db":
-            guard let v = args.popFirst() else { return nil }
-            opts.dbPath = v
-        case "--memory":
-            opts.inMemory = true
         case "--level":
             guard let v = args.popFirst() else { return nil }
             guard let uuid = UUID(uuidString: v) else {
@@ -132,8 +119,6 @@ func parseOptions() throws -> Options? {
         case "--seed":
             guard let v = args.popFirst(), let n = UInt64(v) else { return nil }
             opts.baseSeed = n
-        case "--reset":
-            opts.reset = true
         case "--blueprint":
             guard let v = args.popFirst() else { return nil }
             opts.blueprint = v
@@ -144,9 +129,6 @@ func parseOptions() throws -> Options? {
         case "--sweep":
             guard let v = args.popFirst() else { return nil }
             opts.sweep = v
-        case "--sweep-out":
-            guard let v = args.popFirst() else { return nil }
-            opts.sweepOut = v
         case "--sweep-stride":
             guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
             opts.sweepStride = n
@@ -305,7 +287,7 @@ if let levelName = opts.meleeDemo {
     do {
         let fixed = try SweepFixedInputs(db: store.db, levelName: levelName)
         var base = try fixed.designLevel(db: store.db)
-        let space = SweepSpace(grids: SweepGrids(), fixed: fixed, slotCount: base.towerSlots.count)
+        let space = SweepSpace(grids: try SweepGrids(dao: store.db.simTowerSweepDao, profile: "coarse"), fixed: fixed, slotCount: base.towerSlots.count)
         let perm = space.permutation(at: space.permutationCount / 2)
         base.waves = SweepWaves(fixed: fixed, pathCount: base.paths.count).make(perm: perm)
 
@@ -314,10 +296,10 @@ if let levelName = opts.meleeDemo {
         let meleeID = kindIDs["melee"]!
         var towers: [TowerType] = []
         if let r = fixed.towerLevels["ranged"] {
-            towers.append(TowerType(id: rangedID, name: "ranged", levels: Array(r.prefix(2))))
+            towers.append(TowerType(id: rangedID, name: fixed.towerNames["ranged"]!, levels: Array(r.prefix(2))))
         }
         if let m = fixed.towerLevels["melee"] {
-            towers.append(TowerType(id: meleeID, name: "melee", levels: Array(m.prefix(2))))
+            towers.append(TowerType(id: meleeID, name: fixed.towerNames["melee"]!, levels: Array(m.prefix(2))))
         }
         let catalog = ContentCatalog(enemyTypes: fixed.roster, towerTypes: towers)
         let order = GreedyCommander(level: base, catalog: catalog).slotOrder
@@ -400,20 +382,10 @@ if let benchLevel = opts.bench {
 
 if let sweepLevel = opts.sweep {
     do {
-        var grids = SweepGrids()
+        var grids = try SweepGrids(dao: store.db.simTowerSweepDao, profile: opts.fineGrids ? "fine" : "coarse")
         grids.seedsPerPermutation = opts.sweepSeeds
         grids.baseSeed = opts.baseSeed
         if opts.fineGrids {
-            grids.upgradeGrowth = Array(stride(from: 1.2, through: 2.2, by: 0.1)).map { ($0 * 10).rounded() / 10 }
-            // Range is deliberately absent: it always walks every integer in
-            // sim_tower_range, so there is no coarse version of it to refine.
-            grids.rofGrids = [
-                "ranged": Array(stride(from: 0.5, through: 1.2, by: 0.05)).map { ($0 * 100).rounded() / 100 },
-                "special": Array(stride(from: 0.8, through: 1.8, by: 0.1)).map { ($0 * 10).rounded() / 10 },
-                "areaOfEffect": Array(stride(from: 1.6, through: 3.2, by: 0.1)).map { ($0 * 10).rounded() / 10 },
-            ]
-            grids.splashGrids = ["areaOfEffect": Array(stride(from: 70.0, through: 130, by: 5))]
-            grids.falloffGrid = [0.5, 0.75, 1.0, 1.5, 2.0, 3.0]
             grids.boundsStep = 10
             grids.enemySpeedGrid = Array(stride(from: 0.0, through: 1.0, by: 0.125))
             grids.enemyHpGrid = Array(stride(from: 0.0, through: 1.0, by: 0.125))
@@ -483,7 +455,7 @@ if let sweepLevel = opts.sweep {
         grids.budgetHours = opts.budgetHours
         try Sweep(db: store.db, runs: store.runs).run(
             levelName: sweepLevel, grids: grids,
-            stride: opts.sweepStride, outPath: opts.sweepOut,
+            stride: opts.sweepStride, outPath: store.db.path,
             useGPU: opts.gpu, storeBounds: opts.storeBounds,
             fieldMelee: opts.melee)
         exit(0)
@@ -570,24 +542,13 @@ if let bpName = opts.blueprint {
 }
 
 do {
-    if opts.reset && !opts.inMemory {
-        try? FileManager.default.removeItem(atPath: opts.dbPath)
-    }
-
     guard let levelInfoId = UUID(uuidString: "be3cf809-f71e-4209-bc4d-8b25b0b5f2a0") else {
         throw DbError.Db(message: "Unable to get level info id")
     }
 
     let levelInfo = try store.db.levelLoader.load(id: levelInfoId)
 
-    let minutemanPost = TowerType(
-        id: UUID(),
-        name: "Minuteman Post",
-        levels: [
-            TowerLevel(cost: 70, range: 140, fireInterval: 0.9, shotMinDamage: 4, shotMaxDamage: 7),
-            TowerLevel(cost: 90, range: 150, fireInterval: 0.85, shotMinDamage: 7, shotMaxDamage: 11),
-        ]
-    )
+    let minutemanPost = store.arsenal.type(.minutemanPost)
     let enemyTypes = try store.db.enemyTypeDao.getAll()
     let catalog = ContentCatalog(enemyTypes: enemyTypes, towerTypes: [minutemanPost])
 
@@ -626,7 +587,7 @@ do {
     guard let path = levelInfo.paths.first else {
         throw DbError.Db(message: "Level '\(levelInfo.name)' has no path to walk. Seed level_path_point first.")
     }
-    let walker = enemyTypes.first(where: { $0.name == "Redcoat Regular" }) ?? enemyTypes[0]
+    let walker = enemyTypes.first(where: { $0.id == Foe.redcoatRegular.id }) ?? enemyTypes[0]
     let speed = walker.stats.speed
     let timer = Timer(tickDuration: .zero)
     let ticksPerSecond = Int64(SimClock.ticksPerSecond)

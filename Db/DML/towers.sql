@@ -1,246 +1,53 @@
--- Kingdom Rush base-range proportions, calibrated to our 330.48-unit militia
--- rally radius. These are canonical map radii, never screen points. RuntimeCanvas
--- resolves on-screen reach at runtime. See Tools/tower_range_tuning.md.
-
--- Ranged Level 1 (Musketmen)
 INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, projectile_speed
-) VALUES (
-    '0a4b1c62-8f3e-4d97-b120-6e5a9c8d7f01', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Musketmen',
-    1, 1, 70, 319.08, 0.8,
-    12.0, 12.0, 550.0
-);
+    id, tower_type_id, tower_name, tower_description, tower_level, branch, cost, tower_range, fire_interval, shot_min_damage, shot_max_damage, terror_min, terror_max, aoe_radius, aoe_falloff_exponent, splash_cover_pierce, contagion_chance, targeting, projectile_speed, demolition_prepare_seconds, obstacle_radius, obstacle_slow_fraction, has_melee_unit, has_demolition_charge, has_engineer_obstacles
+) VALUES
+('0a4b1c62-8f3e-4d97-b120-6e5a9c8d7f01', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Musketmen', 'Musket fire picks off individual enemies at medium range.', 1, 1, 70, 319.08, 0.8, 12.0, 12.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 550.0, NULL, NULL, NULL, 0, 0, 0),
+('1b5c2d73-9a4f-4ea8-8c31-7f6b0d9e8a02', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Marksmen', 'Trained marksmen deal more damage and fire farther than musketmen.', 2, 1, 90, 364.67, 0.8, 20.0, 20.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 550.0, NULL, NULL, NULL, 0, 0, 0),
+('2c6d3e84-0b5a-4fb9-9d42-8a7c1e0f9b03', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Riflemen', 'Riflemen deliver powerful shots at long range.', 3, 1, 130, 410.25, 0.8, 30.0, 30.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 550.0, NULL, NULL, NULL, 0, 0, 0),
+('1008b722-563a-44a0-8b31-c9cca93b9927', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Morgan''s Sharpshooters', 'Expert sharpshooters cover the greatest distance of any rifle unit.', 4, 1, 300, 535.61, 0.8, 30.0, 30.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 550.0, NULL, NULL, NULL, 0, 0, 0),
+('72788425-7677-418a-a06c-6b3120f94631', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Knowlton''s Rangers', 'Elite rangers pick off individual enemies with long-range rifle fire.', 4, 2, 300, 455.83, 0.8, 30.0, 30.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 550.0, NULL, NULL, NULL, 0, 0, 0),
+('c5cc2d7b-b08c-4ba7-a532-52ba070589a5', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Whitcomb''s Rangers', 'Long-range rangers reach farther than Knowlton’s Rangers.', 4, 3, 300, 490.02, 0.8, 30.0, 30.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 550.0, NULL, NULL, NULL, 0, 0, 0),
+('3d7e4f95-1c6b-4ac0-ae53-9b8d2f1a0c04', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Militia', 'Three militia soldiers block enemies and fight at your rally point.', 1, 1, 70, 330.48, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, NULL, NULL, 1, 0, 0),
+('4e8f5a06-2d7c-4bd1-bf64-0c9e3a2b1d05', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Minutemen', 'Three trained soldiers hold the line with better damage and protection.', 2, 1, 120, 330.48, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, NULL, NULL, 1, 0, 0),
+('5f9a6b17-3e8d-4ce2-c075-1d0f4b3c2e06', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Line', 'Three Continental soldiers block enemies with stronger attacks and armor.', 3, 1, 170, 330.48, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, NULL, NULL, 1, 0, 0),
+('9c1aa74b-b783-4fc1-b9c3-daeaf5284146', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Regulars', 'Three veteran soldiers hold your rally point with heavy damage and strong defenses.', 4, 1, 300, 330.48, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, NULL, NULL, 1, 0, 0),
+('634b9957-dce1-4b53-8665-1017904ad89d', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Light Infantry', 'Three elite infantry defend your rally point with veteran strength and armor.', 4, 2, 300, 330.48, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, NULL, NULL, 1, 0, 0),
+('550638ec-0f26-4329-9719-2d3f2e697238', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Maryland Line', 'Three resilient veterans block enemies and fight at your rally point.', 4, 3, 300, 330.48, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, NULL, NULL, 1, 0, 0),
+('6a0b7c28-4f9e-4df3-d186-2e1a5c4d3f07', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '4-pounder', 'Light cannon fire damages nearby enemies and shakes their morale.', 1, 1, 125, 364.67, 2.4, 6.0, 12.0, 48.0, 88.0, 128.25, 1.0, 0.5, 0.0, 'first', 320.0, NULL, NULL, NULL, 0, 0, 0),
+('7b1c8d39-5a0f-4ea4-e297-3f2b6d5e4a08', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '6-pounder', 'A stronger field gun blasts groups of enemies and lowers their morale.', 2, 1, 160, 364.67, 2.4, 9.5, 18.5, 56.0, 104.0, 128.25, 1.0, 0.5, 0.0, 'first', 320.0, NULL, NULL, NULL, 0, 0, 0),
+('8c2d9e40-6b1a-4fb5-f3a8-4a3c7e6f5b09', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Howitzer', 'Explosive shells damage groups and spread morale shock over a wider area.', 3, 1, 240, 410.25, 2.4, 13.5, 26.5, 64.0, 124.0, 133.65, 1.0, 0.5, 0.0, 'first', 320.0, NULL, NULL, NULL, 0, 0, 0),
+('f614aea2-b5cb-4cd3-a30d-e33a02c27c90', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Mortar Battery', 'Long-range mortar shells blast large groups and break enemy morale.', 4, 1, 300, 455.83, 2.4, 13.5, 26.5, 76.0, 140.0, 133.65, 1.0, 0.5, 0.0, 'first', 320.0, NULL, NULL, NULL, 0, 0, 0),
+('01b02f93-d2ff-4754-9072-35a1aa65cd6d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Swivel-Gun Emplacement', 'Rapid, short-range grapeshot damages clustered enemies and shakes their morale.', 4, 2, 300, 320.0, 1.2, 7.0, 11.0, 40.0, 64.0, 0.0, 1.0, 0.0, 0.0, 'first', 640.0, NULL, NULL, NULL, 0, 0, 0),
+('fa950e72-3c9c-420a-ab60-b40cb41407cf', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '18-Pounder Siege Battery', 'Slow, long-range solid shot pierces enemies in a straight line and shakes their morale.', 4, 4, 300, 478.63, 4.8, 45.0, 65.0, 90.0, 150.0, 0.0, 1.0, 0.0, 0.0, 'first', 520.0, NULL, NULL, NULL, 0, 0, 0),
+('9d3e0f51-7c2b-4ac6-a4b9-5b4d8f7a6c10', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Engineer Post', 'Place movable timber obstacles on a nearby path to slow passing enemies.', 1, 1, 100, 319.08, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, 90.0, 0.2, 0, 0, 1),
+('0e4f1a62-8d3c-4bd7-b5c0-6c5e9a8b7d11', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Field Engineers', 'A larger obstacle field slows enemies more strongly and can be placed farther away.', 2, 1, 150, 364.67, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, 115.0, 0.3, 0, 0, 1),
+('1f5a2b73-9e4d-4ce8-c6d1-7d6f0b9c8e12', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Sappers', 'Engineers maintain a broad obstacle field that slows enemies without dealing damage.', 3, 1, 220, 410.25, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, 140.0, 0.4, 0, 0, 1),
+('01b5f5d5-5472-4dbd-be95-9089af603422', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Fieldworks Corp', 'Maintains the Sappers’ broad obstacle field to slow enemies along a path.', 4, 2, 300, 478.63, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 'first', 0.0, NULL, 140.0, 0.4, 0, 0, 1),
+('44c58827-2c6c-4ec4-a2f2-43473908aee8', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Demolition Sappers', 'Plant a powder charge that explodes as an enemy leaves its blast area. Prepares a new charge after detonation.', 4, 3, 300, 410.25, 0.0, 55.0, 75.0, 100.0, 180.0, 180.0, 1.0, 0.0, 0.0, 'first', 0.0, 8.0, NULL, NULL, 0, 1, 0);
 
--- Ranged Level 2 (Marksmen)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, projectile_speed
-) VALUES (
-    '1b5c2d73-9a4f-4ea8-8c31-7f6b0d9e8a02', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Marksmen',
-    2, 1, 90, 364.67, 0.8,
-    20.0, 20.0, 550.0
-);
+INSERT INTO design_emplacement (emplacement_key, tower_name, short_name, level_count) VALUES
+('minutemanPost', 'Minuteman Post', 'Minute', 3),
+('longRifles', 'Long Rifle Perch', 'Rifle', 3),
+('fieldBattery', 'Field Battery', 'Cannon', 3),
+('libertyPole', 'Liberty Pole', 'Liberty', 3);
 
--- Ranged Level 3 (Riflemen)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, projectile_speed
-) VALUES (
-    '2c6d3e84-0b5a-4fb9-9d42-8a7c1e0f9b03', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Riflemen',
-    3, 1, 130, 410.25, 0.8,
-    30.0, 30.0, 550.0
-);
-
--- Ranged Level 4 (Morgan's Sharpshooters)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, projectile_speed
-) VALUES (
-    '1008b722-563a-44a0-8b31-c9cca93b9927', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Morgan''s Sharpshooters',
-    4, 1, 300, 535.61, 0.8,
-    30.0, 30.0, 550.0
-);
-
--- Ranged Level 4 (Knowlton's Rangers)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, projectile_speed
-) VALUES (
-    '72788425-7677-418a-a06c-6b3120f94631', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Knowlton''s Rangers',
-    4, 2, 300, 455.83, 0.8,
-    30.0, 30.0, 550.0
-);
-
--- Ranged Level 4 (Whitcomb's Rangers)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, projectile_speed
-) VALUES (
-    'c5cc2d7b-b08c-4ba7-a532-52ba070589a5', '7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Whitcomb''s Rangers',
-    4, 3, 300, 490.02, 0.8,
-    30.0, 30.0, 550.0
-);
-
--- Melee soldier stats live in melee_unit (melee_units.sql), keyed by tower id.
-
--- Melee Level 1 (Militia)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '3d7e4f95-1c6b-4ac0-ae53-9b8d2f1a0c04', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Militia',
-    1, 1, 70, 330.48, 0.0
-);
-
--- Melee Level 2 (Minutemen)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '4e8f5a06-2d7c-4bd1-bf64-0c9e3a2b1d05', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Minutemen',
-    2, 1, 120, 330.48, 0.0
-);
-
--- Melee Level 3 (Continental Line)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '5f9a6b17-3e8d-4ce2-c075-1d0f4b3c2e06', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Line',
-    3, 1, 170, 330.48, 0.0
-);
-
--- Melee Level 4 (Continental Regulars)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '9c1aa74b-b783-4fc1-b9c3-daeaf5284146', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Regulars',
-    4, 1, 300, 330.48, 0.0
-);
-
--- Melee Level 4 (Continental Light Infantry)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '634b9957-dce1-4b53-8665-1017904ad89d', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Continental Light Infantry',
-    4, 2, 300, 330.48, 0.0
-);
-
--- Melee Level 4 (Maryland Line)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '550638ec-0f26-4329-9719-2d3f2e697238', '2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Maryland Line',
-    4, 3, 300, 330.48, 0.0
-);
-
--- Area of Effect Level 1 (4-pounder)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
-) VALUES (
-    '6a0b7c28-4f9e-4df3-d186-2e1a5c4d3f07', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '4-pounder',
-    1, 1, 125, 364.67, 2.4,
-    12.0, 24.0, 95.0, 0.5, 320.0
-);
-
--- Area of Effect Level 2 (6-pounder)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
-) VALUES (
-    '7b1c8d39-5a0f-4ea4-e297-3f2b6d5e4a08', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', '6-pounder',
-    2, 1, 160, 364.67, 2.4,
-    19.0, 37.0, 95.0, 0.5, 320.0
-);
-
--- Area of Effect Level 3 (Howitzer)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
-) VALUES (
-    '8c2d9e40-6b1a-4fb5-f3a8-4a3c7e6f5b09', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Howitzer',
-    3, 1, 240, 410.25, 2.4,
-    27.0, 53.0, 99.0, 0.5, 320.0
-);
-
--- Area of Effect Level 4 (Mortar Battery)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
-) VALUES (
-    'f614aea2-b5cb-4cd3-a30d-e33a02c27c90', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Mortar Battery',
-    4, 1, 300, 455.83, 2.4,
-    27.0, 53.0, 99.0, 0.5, 320.0
-);
-
--- Area of Effect Level 4 (Swivel-Gun Emplacement)
--- Short-range, fast-handling grapeshot specialist. Damage is per enemy per volley.
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
-) VALUES (
-    '01b02f93-d2ff-4754-9072-35a1aa65cd6d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Swivel-Gun Emplacement',
-    4, 2, 300, 320.0, 1.2,
-    14.0, 22.0, 0.0, 0.0, 640.0
-);
-
--- Area of Effect Level 4 (Knox's Siege Guns)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval,
-    shot_min_damage, shot_max_damage, aoe_radius, splash_cover_pierce, projectile_speed
-) VALUES (
-    '0a0648b8-9771-45f5-b947-46c5a478062d', 'c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Knox''s Siege Guns',
-    4, 3, 300, 501.42, 2.4,
-    27.0, 53.0, 99.0, 0.5, 320.0
-);
-
--- Special Level 1 (Engineer Post)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '9d3e0f51-7c2b-4ac6-a4b9-5b4d8f7a6c10', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Engineer Post',
-    1, 1, 100, 319.08, 1.2
-);
-
--- Special Level 2 (Field Engineers)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '0e4f1a62-8d3c-4bd7-b5c0-6c5e9a8b7d11', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Field Engineers',
-    2, 1, 150, 364.67, 1.2
-);
-
--- Special Level 3 (Sappers)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '1f5a2b73-9e4d-4ce8-c6d1-7d6f0b9c8e12', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Sappers',
-    3, 1, 220, 410.25, 1.2
-);
-
--- Special Level 4 (Demolition Sappers)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    'fa950e72-3c9c-420a-ab60-b40cb41407cf', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Demolition Sappers',
-    4, 1, 300, 455.83, 1.2
-);
-
--- Special Level 4 (Fieldworks Corp)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '01b5f5d5-5472-4dbd-be95-9089af603422', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Fieldworks Corp',
-    4, 2, 300, 478.63, 1.2
-);
-
--- Special Level 4 (Corps of Miners)
-INSERT INTO tower (
-    id, tower_type_id, tower_name,
-    tower_level, branch, cost, tower_range, fire_interval
-) VALUES (
-    '44c58827-2c6c-4ec4-a2f2-43473908aee8', '5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Corps of Miners',
-    4, 3, 300, 410.25, 1.2
-);
+INSERT INTO design_emplacement_level (
+    emplacement_key, tower_level, cost, tower_range, fire_interval,
+    shot_min_damage, shot_max_damage, terror_min, terror_max,
+    aoe_radius, aoe_falloff_exponent, splash_cover_pierce,
+    contagion_chance, targeting, projectile_speed,
+    demolition_prepare_seconds, obstacle_radius, obstacle_slow_fraction,
+    has_melee_unit, has_demolition_charge, has_engineer_obstacles
+) VALUES
+('minutemanPost', 1, 70, 140, 0.9, 16, 22, 0, 0, 0, 1, 0, 0, 'first', 0, NULL, NULL, NULL, 0, 0, 0),
+('minutemanPost', 2, 110, 150, 0.8, 26, 36, 0, 0, 0, 1, 0, 0, 'first', 0, NULL, NULL, NULL, 0, 0, 0),
+('minutemanPost', 3, 160, 160, 0.7, 40, 55, 0, 0, 0, 1, 0, 0, 'first', 0, NULL, NULL, NULL, 0, 0, 0),
+('longRifles', 1, 100, 220, 2.2, 45, 65, 0, 0, 0, 1, 0, 0, 'strongest', 0, NULL, NULL, NULL, 0, 0, 0),
+('longRifles', 2, 150, 240, 2.0, 75, 105, 0, 0, 0, 1, 0, 0, 'strongest', 0, NULL, NULL, NULL, 0, 0, 0),
+('longRifles', 3, 210, 260, 1.8, 115, 160, 0, 0, 0, 1, 0, 0, 'strongest', 0, NULL, NULL, NULL, 0, 0, 0),
+('fieldBattery', 1, 125, 170, 3.0, 20, 40, 0, 0, 128.25, 1, 0.5, 0, 'first', 0, NULL, NULL, NULL, 0, 0, 0),
+('fieldBattery', 2, 165, 180, 2.8, 31, 62, 0, 0, 128.25, 1, 0.5, 0, 'first', 0, NULL, NULL, NULL, 0, 0, 0),
+('fieldBattery', 3, 230, 190, 2.6, 45, 90, 0, 0, 133.65, 1, 0.5, 0, 'first', 0, NULL, NULL, NULL, 0, 0, 0),
+('libertyPole', 1, 90, 170, 1.2, 0, 0, 22, 32, 0, 1, 0, 0, 'shakiest', 0, NULL, NULL, NULL, 0, 0, 0),
+('libertyPole', 2, 130, 180, 1.1, 0, 0, 33, 46, 0, 1, 0, 0, 'shakiest', 0, NULL, NULL, NULL, 0, 0, 0),
+('libertyPole', 3, 180, 190, 1.0, 0, 0, 46, 64, 0, 1, 0, 0, 'shakiest', 0, NULL, NULL, NULL, 0, 0, 0);

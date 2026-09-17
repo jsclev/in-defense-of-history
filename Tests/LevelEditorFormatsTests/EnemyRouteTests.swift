@@ -66,17 +66,12 @@ final class EnemyRouteTests: XCTestCase {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: folder) }
-        let database = folder.appendingPathComponent("level.sqlite")
-        try FileManager.default.copyItem(at: root.appendingPathComponent("Db/in_defense_of_history.sqlite"), to: database)
         let geo = folder.appendingPathComponent("level_15_charleston.geojson")
         try FileManager.default.copyItem(at: root.appendingPathComponent("Db/level_15_charleston.geojson"), to: geo)
         let levelID = UUID(uuidString: "4ca73a47-98f6-41b6-815d-c2c797aa746e")!
-        var connection: OpaquePointer?
-        XCTAssertEqual(sqlite3_open(database.path, &connection), SQLITE_OK)
-        XCTAssertEqual(sqlite3_exec(connection, "UPDATE level_path_point SET map_position_x = -999 WHERE level_info_id = '\(levelID.uuidString.lowercased())'", nil, nil, nil), SQLITE_OK)
-        sqlite3_close(connection)
-        let db = Db(dbPath: database.path, fullRefresh: false, levelGeoJSONDao: LevelGeoJSONDAO(directory: folder))
-        defer { db.close() }
+        let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: folder))
+        let db = fixture.db
+        XCTAssertEqual(sqlite3_exec(fixture.connection, "UPDATE level_path_point SET map_position_x = -999 WHERE level_info_id = '\(levelID.uuidString.lowercased())'", nil, nil, nil), SQLITE_OK)
         let loaded = try db.levelLoader.load(id: levelID)
         let routes = try XCTUnwrap(try LevelGeoJSONDAO.enemyRoutes(from: Data(contentsOf: geo)))
         XCTAssertEqual(loaded.paths, routes.map(\.path))

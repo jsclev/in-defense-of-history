@@ -24,6 +24,7 @@ private struct MarkerProbeScreen: View {
                 LevelMapView(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
                     towerMenuLayout: store.towerMenuLayout, node: node, difficulty: difficulty,
                     hudLayoutConfig: .standard, onExit: {})
+                    .environmentObject(store.settings)
                     .frame(width: canvas.physicalRect.width, height: canvas.physicalRect.height)
                     .task {
                         guard !captured else { return }

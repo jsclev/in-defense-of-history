@@ -14,7 +14,7 @@ struct RootView: View {
     init(store: Store, runtimeCanvas: RuntimeCanvas) {
         self.store = store
         self.runtimeCanvas = runtimeCanvas
-        _hudLayoutConfig = State(initialValue: (try? store.db.hudLayoutDao.get()) ?? .standard)
+        _hudLayoutConfig = State(initialValue: store.hudLayoutConfig)
     }
 
     var body: some View {

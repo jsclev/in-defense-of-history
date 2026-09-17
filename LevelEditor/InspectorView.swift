@@ -711,8 +711,9 @@ struct InspectorView: View {
                     get: { line()?.foe ?? Foe.loyalistMilitia.rawValue },
                     set: { nv in with { $0.foe = nv } }
                 )) {
-                    ForEach(Foe.allCases, id: \.rawValue) { f in
-                        Text(f.rawValue).tag(f.rawValue)
+                    ForEach(state.content.enemyTypes) { enemy in
+                        Text(enemy.name).tag(enemy.key)
+                            .help(enemy.description)
                     }
                 }
                 .labelsHidden()
@@ -845,11 +846,16 @@ struct InspectorView: View {
             .fixedSize()
             if step()?.kind == "place" {
                 Picker("", selection: Binding(
-                    get: { step()?.emplacement ?? Emplacement.minutemanPost.rawValue },
+                    get: {
+                        guard let value = step()?.emplacement else { return Emplacement.minutemanPost.rawValue }
+                        return state.content.arsenal?.emplacement(for: value)?.rawValue ?? value
+                    },
                     set: { nv in with { $0.emplacement = nv } }
                 )) {
                     ForEach(Emplacement.allCases, id: \.rawValue) { e in
-                        Text(e.rawValue).tag(e.rawValue)
+                        if let arsenal = state.content.arsenal {
+                            Text(arsenal.type(e).name).tag(e.rawValue)
+                        }
                     }
                 }
                 .labelsHidden()

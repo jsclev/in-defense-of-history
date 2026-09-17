@@ -48,6 +48,6 @@ extension LevelRunner {
         if copied.returncode == 0 and result.exists(): break
         time.sleep(5)
     assert result.exists(),'Device check did not finish'
-    run('xcrun','devicectl','device','copy','from','--device',DEVICE,'--domain-type','appDataContainer','--domain-identifier',BUNDLE,'--source','Documents','--destination',str(OUT/'device-documents'))
+    run('python3', str(GAME / 'Tools/capture_device_artifacts.py'), '--device', DEVICE, '--bundle-id', BUNDLE, '--output', str(OUT/'device-documents'))
     data = json.loads(result.read_text()); assert data['passed'],data
     print(f"PASS: HUD wave progression across {len(data['levels'])} levels, plus device captures")

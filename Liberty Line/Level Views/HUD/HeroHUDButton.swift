@@ -1,43 +1,35 @@
 import SwiftUI
 
 struct HeroHUDButton: View {
-    let iconName: String
+    /// The hero's one canonical portrait. Nil means this slot has no hero.
+    let iconName: String?
     let name: String
     let buttonSize: CGFloat
     let isAvailable: Bool
     let isSelected: Bool
     let action: () -> Void
 
-    private var framedIconName: String? {
-        switch iconName {
-        case "hero_icon_henry_knox": "hud_hero_henry_knox_framed"
-        case "hero_icon_george_washington": "hud_hero_george_washington_framed"
-        default: nil
-        }
-    }
-
     var body: some View {
         Button(action: action) {
             ZStack {
-                if let framedIconName {
-                    // The portrait, headroom, background and rim are painted
-                    // together so padding cannot expose a second backdrop.
-                    Image(framedIconName)
+                if let iconName {
+                    // Render the authored icon directly. Missing artwork must
+                    // never select another portrait or a legacy frame.
+                    Image(iconName)
                         .resizable()
                         .interpolation(.high)
                         .frame(width: buttonSize, height: buttonSize)
                         .clipShape(PaintedHeroHUDFrameOutline())
                         .grayscale(isAvailable ? 0 : 1)
                 } else {
-                    Image("tower_menu_square_frame")
-                        .resizable()
-                        .interpolation(.high)
-                        .scaledToFit()
-                    Image(iconName)
+                    // An empty selection is a separate state, not missing art.
+                    PaintedHUDButtonFrame(buttonSize: CGSize(width: buttonSize, height: buttonSize))
+                    Image("tower_locked_icon")
                         .resizable()
                         .scaledToFit()
-                        .frame(width: buttonSize * 0.75, height: buttonSize * 0.75)
-                        .grayscale(isAvailable ? 0 : 1)
+                        .frame(width: buttonSize * HudSizing.paintedButtonIconFraction,
+                               height: buttonSize * HudSizing.paintedButtonIconFraction)
+                        .grayscale(1)
                 }
             }
             .frame(width: buttonSize, height: buttonSize)

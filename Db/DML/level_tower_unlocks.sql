@@ -99,7 +99,7 @@ INSERT INTO level_tower_unlock (
 ) VALUES
 ('3dde588a-3d5b-5b98-9b42-3dfe52502406', '42e95fce-6da1-416d-bf69-24f70bb4dc52', 'ranged', 3),
 ('8eb91d2c-4dc8-53f9-ae4c-b6ab41c04b60', '42e95fce-6da1-416d-bf69-24f70bb4dc52', 'melee', 2),
-('4e0acc7d-c94b-5a00-a65f-974108ab0883', '42e95fce-6da1-416d-bf69-24f70bb4dc52', 'artillery', 1);
+('4e0acc7d-c94b-5a00-a65f-974108ab0883', '42e95fce-6da1-416d-bf69-24f70bb4dc52', 'areaOfEffect', 1);
 
 INSERT INTO level_tower_unlock (
     id, level_info_id, tower_kind, max_tower_level
@@ -115,4 +115,14 @@ INSERT INTO level_tower_unlock (
 ('b641a732-fb67-58ec-9970-b8d8e6fbc5e6', (
     SELECT id FROM level_info
     WHERE level_name = 'Kettle Creek'
-), 'artillery', 1);
+), 'areaOfEffect', 1);
+
+INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level)
+SELECT lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' ||
+       substr(lower(hex(randomblob(2))), 2) || '-8' || substr(lower(hex(randomblob(2))), 2) ||
+       '-' || lower(hex(randomblob(6))), level.id, kind.key, 0
+FROM level_info AS level
+CROSS JOIN (SELECT 'ranged' AS key UNION ALL SELECT 'melee'
+            UNION ALL SELECT 'areaOfEffect' UNION ALL SELECT 'special') AS kind
+WHERE NOT EXISTS (SELECT 1 FROM level_tower_unlock existing
+                  WHERE existing.level_info_id = level.id AND existing.tower_kind = kind.key);

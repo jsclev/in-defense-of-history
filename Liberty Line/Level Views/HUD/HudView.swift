@@ -9,7 +9,6 @@ struct HudView: View {
     private let onSpeedUp: () -> Void
     private let onExit: () -> Void
 
-    @AppStorage(Constants.debugModeKey) private var debugMode = false
 
     public init(runtimeCanvas: RuntimeCanvas, db: Db, runner: LevelRunner,
                 hudLayoutConfig: HudLayoutConfig,

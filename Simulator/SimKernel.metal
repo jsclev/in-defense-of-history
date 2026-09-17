@@ -1,15 +1,6 @@
-// SimKernel.metal
-// One GPU thread = one complete simulation run, executed in bounded tick
-// slices so the display GPU's watchdog never fires: per-sim state persists in
-// a device buffer between dispatches. Mirrors the tick order of
-// Engine/Models/Simulation.swift; the integer RNG is bit-identical to the CPU
-// engine, float math is fp32 (CPU uses Double), so agreement is statistical —
-// the --gpu-validate harness checks it.
 #include <metal_stdlib>
 #include "SimGPUTypes.h"
 using namespace metal;
-
-// MARK: - RNG (bit-identical port of Engine/Models/Core.swift)
 
 struct SplitMix64 {
     ulong state;
@@ -60,8 +51,6 @@ struct Xoshiro {
     }
 };
 
-// MARK: - Path
-
 static float2 pathPoint(constant LevelGPU& lvl, uint path, float d) {
     uint n = lvl.pathPointCount[path];
     if (d <= 0) return lvl.pathPoints[path][0];
@@ -83,15 +72,6 @@ static inline float dist2(float2 a, float2 b) {
     return dot(v, v);
 }
 
-// Live index of the enemy with this spawnID; -1 if gone. Claims are unique
-// (one unit per enemy), so a live scan matches the CPU engine's
-// built-once-per-militia-step spawnID index observably.
-//
-// spawnID[] is always ascending - enemies are appended with a monotonic id and
-// the compaction pass preserves order - so this binary searches instead of
-// scanning. That is ~7 probes against an average of n/2 for a linear walk, with
-// no extra state: a spawnID-indexed lookup table measured 6-7% SLOWER, because
-// the kernel is bound by per-thread memory traffic rather than by instructions.
 static int findEnemy(device SimStateGPU& S, uint n, int spawnID) {
     if (spawnID < 0 || n == 0) return -1;
     uint lo = 0, hi = n;
@@ -104,7 +84,6 @@ static int findEnemy(device SimStateGPU& S, uint n, int spawnID) {
     return -1;
 }
 
-// Command-aura holders shock their own side when they fall (CPU: remove()).
 static void commandDeathShock(device SimStateGPU& S, constant LevelGPU& lvl,
                               uint n, uint i, thread float2* positions,
                               thread float* discBonus) {
@@ -120,7 +99,6 @@ static void commandDeathShock(device SimStateGPU& S, constant LevelGPU& lvl,
     }
 }
 
-// Garrison creation at build time (CPU: Simulation.build).
 static void spawnGarrison(device SimStateGPU& S, constant LevelGPU& lvl,
                           constant PermGPU& perm, uint slot, uint kind) {
     constant TowerLevelGPU& t0 = perm.towers[kind][0];
@@ -140,18 +118,10 @@ static void spawnGarrison(device SimStateGPU& S, constant LevelGPU& lvl,
     }
 }
 
-// MARK: - Removal & economy
-
 static void removeEnemy(device SimStateGPU& S, constant LevelGPU& lvl,
                         constant PermGPU& perm,
                         uint i, uint fate, device SimResultGPU* result);
 
-// Militia garrisons: MilitiaAI decides, engine executes — a tick-for-tick
-// mirror of Simulation.stepMilitia, including the rngCombat draw order
-// (strikes, then return blows, per unit). Also called with n == 0 so garrison
-// upkeep (respawn, heal, walk to rally) continues on an empty field; that
-// path draws no RNG. Returns whether any garrison exists (movement reads it
-// alongside muBlocked).
 static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                         constant PermGPU& perm, uint n, float dt,
                         thread float2* positions, thread float* discBonus,
@@ -184,9 +154,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
         constant TowerLevelGPU& ms = perm.towers[kind][tl];
         float2 towerPos = lvl.slots[slot];
         float2 rally = perm.rallyPoints[slot];
-        // Free enemies near this post: alive, steady/shaken,
-        // blockable, unclaimed. Snapshot per slot, like the CPU:
-        // a disengage frees the enemy for LATER slots only.
+
         for (uint i = 0; i < n; i++) {
             muFree[i] = !S.removed[i] && S.state[i] != 2 && !muClaimed[i]
                 && !(lvl.enemyTypes[S.typeIndex[i]].flags & SIM_TRAIT_RIDE_DOWN);
@@ -224,15 +192,14 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
             } else if (st == SIM_MU_RETURNING) {
                 float d = distance(pos, post);
                 if (d <= 2.0f) {
-                    S.muState[m] = SIM_MU_HOLDING;   // arrival
+                    S.muState[m] = SIM_MU_HOLDING;
                 } else {
                     float step = lvl.militiaMoveSpeed * dt;
                     float2 np = d <= step ? post : mix(pos, post, step / d);
                     S.muX[m] = np.x; S.muY[m] = np.y;
                 }
             } else if (st == SIM_MU_HOLDING) {
-                // Nearest free enemy inside the scan radius of the
-                // POST (soldiers defend their ground).
+
                 int best = -1;
                 float bestDist = ms.meleeEngageScanRadius;
                 for (uint i = 0; i < n; i++) {
@@ -259,7 +226,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                     || distance(targetPos, post) > ms.meleeLeashRadius) {
                     doDisengage = true;
                 } else if (distance(pos, targetPos) <= lvl.militiaMeleeReach) {
-                    doStrike = true;   // first blow starts the fight
+                    doStrike = true;
                 } else {
                     float d = distance(pos, targetPos);
                     float step = lvl.militiaMoveSpeed * dt;
@@ -305,7 +272,6 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                 S.muEnemySwingTicks[m] = 0;
             }
 
-            // Fights hold the enemy in place and draw return blows.
             if (S.muState[m] == SIM_MU_FIGHTING && S.muTarget[m] >= 0) {
                 int fi = findEnemy(S, n, S.muTarget[m]);
                 if (fi >= 0) {
@@ -337,7 +303,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
 static void removeEnemy(device SimStateGPU& S, constant LevelGPU& lvl,
                         constant PermGPU& perm,
                         uint i, uint fate, device SimResultGPU* result) {
-    // fate: 0 killed, 1 routed, 2 captured, 3 leaked
+
     if (S.removed[i]) return;
     S.removed[i] = 1;
     float base = float(perm.enemyGold[S.typeIndex[i]]);
@@ -353,8 +319,6 @@ static void removeEnemy(device SimStateGPU& S, constant LevelGPU& lvl,
     S.gold += earned;
     S.goldEarned += uint(earned);
 }
-
-// MARK: - Kernel
 
 kernel void simulate(
     constant LevelGPU& lvl [[buffer(0)]],
@@ -372,9 +336,8 @@ kernel void simulate(
     device SimResultGPU* result = &results[tid];
     device SimStateGPU& S = states[tid];
 
-    if (S.outcome != 0) return;   // finished in an earlier slice
+    if (S.outcome != 0) return;
 
-    // First slice: initialize.
     if (S.initialized == 0) {
         S.initialized = 1;
         Xoshiro root;
@@ -430,7 +393,6 @@ kernel void simulate(
     while (outcome == 0 && S.tick < sliceEnd) {
         float time = float(S.tick) * dt;
 
-        // 1. Policy.
         if (S.tick >= S.nextCheckTick) {
             S.nextCheckTick = S.tick + checkEvery;
             if (S.buildsDone < perm.planLen && S.buildsDone < lvl.slotCount) {
@@ -461,7 +423,7 @@ kernel void simulate(
                     if (S.gold >= cost + 40) {
                         S.gold -= cost;
                         S.towerLevel[slot] = char(lvlNow + 1);
-                        // Upgrading re-equips the garrison (CPU: Simulation.upgrade).
+
                         constant TowerLevelGPU& nt = perm.towers[kind][lvlNow + 1];
                         if (nt.meleeUnitCount > 0) {
                             for (uint u = 0; u < uint(SIM_MAX_MELEE_UNITS_PER); u++) {
@@ -495,7 +457,6 @@ kernel void simulate(
             }
         }
 
-        // 2. Spawns.
         while (S.scheduleCursor < perm.spawnCount
                && perm.spawns[S.scheduleCursor].time <= time) {
             constant SpawnGPU& sp = perm.spawns[S.scheduleCursor];
@@ -518,12 +479,11 @@ kernel void simulate(
 
         uint n = S.n;
         if (n > 0) {
-            // 3. Position cache.
+
             for (uint i = 0; i < n; i++) {
                 positions[i] = pathPoint(lvl, S.pathIndex[i], S.distance[i]);
             }
 
-            // 4. Auras.
             for (uint i = 0; i < n; i++) {
                 moraleRegen[i] = lvl.baseMoraleRegen;
                 discBonus[i] = 0;
@@ -551,13 +511,12 @@ kernel void simulate(
                 }
             }
 
-            // 5. Towers fire.
             for (uint slot = 0; slot < lvl.slotCount; slot++) {
                 int tl = S.towerLevel[slot];
                 if (tl < 0) continue;
                 constant TowerLevelGPU& tw = perm.towers[S.towerKind[slot]][tl];
                 if (!(tw.shotMaxDamage > 0 || tw.terrorMax > 0 || tw.contagionChance > 0)) {
-                    continue;   // melee garrisons fight in their own step
+                    continue;
                 }
                 S.towerCooldown[slot] -= 1;
                 if (S.towerCooldown[slot] > 0) continue;
@@ -580,8 +539,7 @@ kernel void simulate(
                 if (best < 0) continue;
 
                 if (tw.projectileSpeed > 0) {
-                    // Launch: homing round at the enemy, or a ballistic shell
-                    // at its current position. Damage happens at impact.
+
                     if (S.projCount < SIM_MAX_PROJECTILES) {
                         uint pj = S.projCount++;
                         float2 o = lvl.slots[slot];
@@ -609,8 +567,7 @@ kernel void simulate(
                     if (isBlast) {
                         float d2 = dist2(positions[i], center);
                         if (d2 > aoe2) continue;
-                        // KR blast model: max damage at the impact center
-                        // falling to min at the edge; distance is the roll.
+
                         blastT = pow(min(1.0f, sqrt(d2) / tw.aoeRadius), tw.aoeFalloffExponent);
                     } else if (!isPrimary) {
                         continue;
@@ -649,8 +606,6 @@ kernel void simulate(
                 S.towerCooldown[slot] = tw.fireTicks;
             }
 
-            // 5b. Projectiles fly; collision applies damage at impact.
-            // Keep the volley math in lockstep with the tower-fire loop above.
             for (uint pj = 0; pj < S.projCount; pj++) {
                 if (S.projRemoved[pj]) continue;
                 constant TowerLevelGPU& tw = perm.towers[S.projKind[pj]][S.projLevel[pj]];
@@ -695,8 +650,7 @@ kernel void simulate(
                             commandDeathShock(S, lvl, n, i, positions, discBonus);
                         }
                     } else {
-                        // Ballistic blast where the shell lands, against
-                        // enemies there NOW; no primary, so no contagion.
+
                         float aoe2 = tw.aoeRadius * tw.aoeRadius;
                         for (uint i = 0; i < n; i++) {
                             if (S.removed[i]) continue;
@@ -730,7 +684,7 @@ kernel void simulate(
                 }
             }
             {
-                // Order-preserving projectile compaction (RNG order parity).
+
                 uint w = 0;
                 for (uint pj = 0; pj < S.projCount; pj++) {
                     if (S.projRemoved[pj]) continue;
@@ -747,14 +701,11 @@ kernel void simulate(
                 S.projCount = w;
             }
 
-            // 5c. Militia garrisons (tick-for-tick mirror of
-            // Simulation.stepMilitia; body lives in militiaStep above).
             bool hasMilitia = militiaStep(S, lvl, perm, n, dt,
                                           positions, discBonus,
                                           muClaimed, muFree, muBlocked,
                                           rngCombat, result);
 
-            // 6. Contagion.
             S.contagionAcc += dt;
             if (S.contagionAcc >= lvl.contagionTickInterval) {
                 S.contagionAcc -= lvl.contagionTickInterval;
@@ -786,7 +737,6 @@ kernel void simulate(
                 }
             }
 
-            // 7. Morale: regen, transitions, break cascades.
             for (uint i = 0; i < n; i++) {
                 if (S.removed[i]) continue;
                 if (S.state[i] != 2) {
@@ -825,11 +775,10 @@ kernel void simulate(
                 }
             }
 
-            // 8. Movement & exits.
             for (uint i = 0; i < n; i++) {
                 if (S.removed[i]) continue;
                 if (hasMilitia && muBlocked[i] && S.state[i] != 2) {
-                    continue;   // held in melee: stands and fights
+                    continue;
                 }
                 constant EnemyTypeGPU& type = lvl.enemyTypes[S.typeIndex[i]];
                 float total = lvl.pathTotalLength[S.pathIndex[i]];
@@ -854,7 +803,6 @@ kernel void simulate(
                 }
             }
 
-            // 9. Compaction (order-preserving, like the CPU engine).
             uint w = 0;
             for (uint i = 0; i < n; i++) {
                 if (S.removed[i]) continue;
@@ -875,14 +823,11 @@ kernel void simulate(
             }
             S.n = w;
         } else {
-            // Empty field: garrison upkeep still runs — soldiers respawn,
-            // heal, and walk to the rally point between spawns (mirrors
-            // Simulation.step's else branch); draws no RNG.
+
             militiaStep(S, lvl, perm, 0, dt, positions, discBonus,
                         muClaimed, muFree, muBlocked, rngCombat, result);
         }
 
-        // 10. End conditions.
         if (S.lives <= 0) {
             outcome = SIM_OUTCOME_DEFEAT;
         } else if (S.scheduleCursor == perm.spawnCount && S.n == 0) {

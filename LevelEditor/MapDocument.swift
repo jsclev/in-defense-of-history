@@ -305,7 +305,7 @@ extension MapDraft {
         )
     }
 
-    func makeBlueprint(virtualCanvas: VirtualCanvas) -> LevelBlueprint {
+    func makeBlueprint(virtualCanvas: VirtualCanvas, arsenal: DesignArsenal) throws -> LevelBlueprint {
         let routes = roads.filter { $0.points.count >= 2 }
         return LevelBlueprint(
             virtualCanvas: virtualCanvas,
@@ -314,19 +314,24 @@ extension MapDraft {
             lives: lives,
             roads: routes.map { LevelBlueprint.Road($0.name, $0.points) },
             slots: slots,
-            waves: waves.map { w in
-                LevelBlueprint.WaveSketch(breather: w.breather, lines: w.lines.map { l in
-                    LevelBlueprint.SpawnLine(
-                        Foe(rawValue: l.foe) ?? .loyalistMilitia,
+            waves: try waves.map { w in
+                LevelBlueprint.WaveSketch(breather: w.breather, lines: try w.lines.map { l in
+                    guard let foe = Foe(rawValue: l.foe) else {
+                        throw DbError.Db(message: "Unknown enemy key \(l.foe); reselect the enemy in the wave editor.")
+                    }
+                    return LevelBlueprint.SpawnLine(
+                        foe,
                         count: l.count, every: l.every, delay: l.delay,
                         road: min(l.road, max(0, routes.count - 1))
                     )
                 })
             },
-            intendedSolution: intendedSolution.compactMap { s in
+            intendedSolution: try intendedSolution.compactMap { s in
                 guard slots.indices.contains(s.slot) else { return nil }
                 if s.kind == "place" {
-                    let e = s.emplacement.flatMap(Emplacement.init(rawValue:)) ?? .minutemanPost
+                    guard let value = s.emplacement, let e = arsenal.emplacement(for: value) else {
+                        throw DbError.Db(message: "Unknown tower key in the intended solution; reselect the tower.")
+                    }
                     return LevelBlueprint.BuildStep(at: s.at, .place(e, slot: s.slot))
                 }
                 return LevelBlueprint.BuildStep(at: s.at, .upgrade(slot: s.slot))

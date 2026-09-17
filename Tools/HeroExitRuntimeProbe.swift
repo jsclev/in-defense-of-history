@@ -24,6 +24,7 @@ private struct HeroExitProbeScreen: View {
                 LevelMapView(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
                     towerMenuLayout: store.towerMenuLayout, node: node, difficulty: difficulty,
                     hudLayoutConfig: .standard, onExit: {})
+                    .environmentObject(store.settings)
                     .frame(width: canvas.physicalRect.width, height: canvas.physicalRect.height)
                     .task {
                         let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]

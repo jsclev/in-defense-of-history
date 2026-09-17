@@ -6,7 +6,7 @@ public class Db {
     private let logger = LogUtility.getLogger(LogCategory.Db, Db.self)
 
     let dbExtension = "sqlite"
-    private var conn: OpaquePointer?
+    private(set) var conn: OpaquePointer?
     public let fullRefresh: Bool
     
     public let virtualCanvasDao: VirtualCanvasDAO
@@ -22,69 +22,37 @@ public class Db {
     public let simBoundsDao: SimBoundsDAO
     public let simEnemyTypeDao: SimEnemyTypeDAO
     public let simMeleeUnitDao: SimMeleeUnitDAO
+    public let simTowerSweepDao: SimTowerSweepDAO
     public let heroDao: HeroDAO
     public let levelGeoJSONDao: LevelGeoJSONDAO
     public let waveDao: WaveDAO
     public let difficultyDao: DifficultyDAO
     public let hudLayoutDao: HudLayoutDAO
     public let reinforcementConfigDao: ReinforcementConfigDAO
+    public let playerSettingsDao: PlayerSettingsDAO
+    public let simulatorRunDao: SimulatorRunDAO
+    public let path: String
     
-    public static func getAbsolutePathToDb(dbFilename: String, fullRefresh: Bool) -> String {
-        let logger = LogUtility.getLogger(LogCategory.Db, Db.self)
-        let dbExtension = "sqlite"
-        let fileManager = FileManager.default
-        let documentsDirectory = FileUtil.getDocumentsURL()
-        
-        if let dbBundleUrl = Bundle.main.url(forResource: dbFilename, withExtension: dbExtension) {
-            let targetDbPath = documentsDirectory.appendingPathComponent("\(dbFilename).\(dbExtension)").path
+    public static var authoredDatabaseURL: URL {
+        URL(fileURLWithPath: #filePath).deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+            .appendingPathComponent("Db/in_defense_of_history.sqlite")
+    }
 
-            if fullRefresh {
-                do {
-                    if fileManager.fileExists(atPath: targetDbPath) {
-                        do {
-                            try fileManager.removeItem(atPath: targetDbPath)
-                        }
-                        catch let error {
-                            logger.error("error occurred, here are the details: \(error)")
-                        }
-                    }
-                    
-                    try fileManager.copyItem(atPath: dbBundleUrl.path, toPath: targetDbPath)
-                }
-                catch {
-                    logger.error("Unable to copy \(dbFilename).\(dbExtension): \(error)")
-                }
-            } else {
-                if !fileManager.fileExists(atPath: targetDbPath) {
-                    do {
-                        try fileManager.copyItem(atPath: dbBundleUrl.path, toPath: targetDbPath)
-                    }
-                    catch let error {
-                        logger.error("error occurred, here are the details: \(error)")
-                    }
-                }
+    public static func getAbsolutePathToDb(dbFilename: String) -> String {
+        let destination = FileUtil.getDocumentsURL().appendingPathComponent("\(dbFilename).sqlite")
+        do {
+            guard let source = Bundle.main.url(forResource: dbFilename, withExtension: "sqlite") else {
+                throw DbError.Db(message: "Missing bundled database \(dbFilename).sqlite")
             }
+            return try BundledDatabase.prepare(source: source, destination: destination).path
+        } catch {
+            fatalError("Unable to prepare the authored database: \(error)")
         }
-        else {
-            logger.warning("Unable to find the database file inside the bundle.")
-        }
-        
-        #if os(tvOS)
-        #else
-            let docDirUrls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        #endif
-        
-        if docDirUrls.count == 0 {
-            logger.error("Unable to find the \"Documents\" directory.")
-        }
-        
-        let documentsUrl = docDirUrls[0]
-        let dbPath = documentsUrl.appendingPathComponent("\(dbFilename).\(dbExtension)").path
-        
-        return dbPath
     }
     
     public init(dbPath: String, fullRefresh: Bool, levelGeoJSONDao: LevelGeoJSONDAO = LevelGeoJSONDAO()) {
+        self.path = dbPath
         var rc: Int32
         rc = sqlite3_open_v2(dbPath, &conn, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, nil)
         
@@ -131,10 +99,13 @@ public class Db {
         simBoundsDao = SimBoundsDAO(conn: conn)
         simEnemyTypeDao = SimEnemyTypeDAO(conn: conn)
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)
+        simTowerSweepDao = SimTowerSweepDAO(conn: conn)
         heroDao = HeroDAO(conn: conn)
         difficultyDao = DifficultyDAO(conn: conn)
         hudLayoutDao = HudLayoutDAO(conn: conn)
         reinforcementConfigDao = ReinforcementConfigDAO(conn: conn)
+        playerSettingsDao = PlayerSettingsDAO(conn: conn)
+        simulatorRunDao = SimulatorRunDAO(conn: conn)
     }
 
     public func close() {

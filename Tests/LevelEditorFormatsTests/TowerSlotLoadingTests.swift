@@ -70,15 +70,10 @@ final class TowerSlotLoadingTests: XCTestCase {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
-        let database = directory.appendingPathComponent("test.sqlite")
-        try FileManager.default.copyItem(at: root.appendingPathComponent("Db/in_defense_of_history.sqlite"), to: database)
-        var connection: OpaquePointer?
-        XCTAssertEqual(sqlite3_open(database.path, &connection), SQLITE_OK)
-        XCTAssertEqual(sqlite3_exec(connection, "DROP TABLE IF EXISTS tower_slot", nil, nil, nil), SQLITE_OK)
-        sqlite3_close(connection)
+        let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: directory))
+        let db = fixture.db
+        XCTAssertEqual(sqlite3_exec(fixture.connection, "DROP TABLE IF EXISTS tower_slot", nil, nil, nil), SQLITE_OK)
         let file = directory.appendingPathComponent(mapName + ".geojson")
-        let db = Db(dbPath: database.path, fullRefresh: false, levelGeoJSONDao: LevelGeoJSONDAO(directory: directory))
-        defer { db.close() }
 
         // A missing export must fail even though the rest of the level is in SQLite.
         XCTAssertThrowsError(try db.levelLoader.load(id: levelID))

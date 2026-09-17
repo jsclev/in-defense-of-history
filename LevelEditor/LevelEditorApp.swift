@@ -46,7 +46,7 @@ struct LevelEditorApp: App {
         guard let virtualCanvas = content.virtualCanvas else {
             fatalError("LevelEditor could not load the virtual_canvas table. "
                 + "On the Mac, run Db/create_db.sh to refresh "
-                + "~/Documents/in_defense_of_history.sqlite; on iPad, "
+                + "Db/in_defense_of_history.sqlite; on iPad, "
                 + "reinstall so the bundled database is current.")
         }
         self.content = content

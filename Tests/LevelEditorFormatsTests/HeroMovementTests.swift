@@ -151,4 +151,21 @@ final class HeroMovementTests: XCTestCase {
         unit.state = .returning; unit.targetSpawnID = -1
         walk(&movement, &unit, to: movement.spawn)
     }
+
+    func testMeleeStanceChoosesTheOpenSideAtAPathEdge() throws {
+        let ground = try area(["type": "Polygon", "coordinates": [box(0, 0, 100, 100)]])
+        var movement = try HeroMovement(area: ground, spawn: Point(90, 50))
+        var unit = MilitiaUnit(position: movement.spawn, hp: 100)
+        unit.state = .fighting; unit.targetSpawnID = 7; unit.combatSide = 1
+        var combat = context; combat.targetPosition = Point(95, 50)
+        for _ in 0..<60 {
+            let previous = unit.position
+            _ = movement.update(&unit, context: combat, moveSpeed: 73, deltaTime: SimClock.dt)
+            XCTAssertTrue(ground.contains(unit.position))
+            XCTAssertLessThanOrEqual(previous.distance(to: unit.position), 73 * SimClock.dt + 1e-8)
+        }
+        XCTAssertEqual(unit.combatSide, -1)
+        XCTAssertLessThan(unit.position.x, 20)
+        XCTAssertEqual(unit.targetSpawnID, 7)
+    }
 }

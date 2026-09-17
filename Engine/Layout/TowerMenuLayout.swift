@@ -7,7 +7,8 @@ public struct TowerMenuLayout {
     
     private let bgScalingFactor: CGFloat = 0.41
     private let towerButtonScalingFactor: CGFloat = 0.145
-    private let towerIconScalingFactor: CGFloat = 0.66
+    /// One inset for every tower-menu foreground, including upgrade and rally icons.
+    public static let iconInsetFraction: CGFloat = 0.17
     private let towerButtonOffsetFactor: CGFloat = 4.0
     private let buttonAngleDegrees: [TowerKind: CGFloat] = [
         TowerKind.ranged: 140,
@@ -53,9 +54,8 @@ public struct TowerMenuLayout {
         return CGSize(width: side, height: side)
     }
     
-    public func getTowerIconSize(towerButtonSize: CGFloat, for kind: TowerKind? = nil) -> CGFloat {
-        let fraction: CGFloat = kind == .ranged ? HudSizing.paintedButtonIconFraction : towerIconScalingFactor
-        return towerButtonSize * fraction
+    public func getTowerIconSize(towerButtonSize: CGFloat) -> CGFloat {
+        towerButtonSize * (1 - 2 * Self.iconInsetFraction)
     }
 
     public func getCenterPoint(anchor: CGPoint, scale: CGFloat) -> CGPoint {
@@ -94,8 +94,6 @@ public struct TowerMenuLayout {
         return CGPoint(x: menuCenterPoint.x + distanceFromCenter * cos(radians),
                        y: menuCenterPoint.y - distanceFromCenter * sin(radians))
     }
-
-    private static let towerIconFraction: CGFloat = 0.625
 
     public var menuAnchorLift: CGFloat {
         virtualCanvas.towerSlotSize.height / 2

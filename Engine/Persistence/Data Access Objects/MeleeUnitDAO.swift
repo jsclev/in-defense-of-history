@@ -7,43 +7,28 @@ public class MeleeUnitDAO: BaseDAO {
     }
 
     public func getStatsByTowerId() throws -> [UUID: MeleeUnitStats] {
-        var out: [UUID: MeleeUnitStats] = [:]
-
-        var stmt: OpaquePointer?
-        let sql = getCleanedSql("""
-            SELECT
-                m.tower_id,
-                m.soldier_count,
-                m.attack_rating,
-                m.defense_rating,
-                m.hp,
-                m.rally_point_radius,
-                m.attack_interval,
-                m.respawn_seconds,
-                m.heal_per_second
-            FROM
-                melee_unit m
-        """)
-
-        try prepare(conn: conn, stmt: &stmt, sql: sql)
-
-        while sqlite3_step(stmt) == SQLITE_ROW {
-            let towerId = try getUUID(stmt: stmt, colIndex: 0, msg: "melee_unit tower_id")
-            out[towerId] = MeleeUnitStats(
-                soldierCount: getInt(stmt: stmt, colIndex: 1),
-                attackRating: getDouble(stmt: stmt, colIndex: 2),
-                defenseRating: getDouble(stmt: stmt, colIndex: 3),
-                hp: getDouble(stmt: stmt, colIndex: 4),
-                rallyPointRadius: getDouble(stmt: stmt, colIndex: 5),
-                attackInterval: getDouble(stmt: stmt, colIndex: 6),
-                respawnSeconds: getDouble(stmt: stmt, colIndex: 7),
-                healPerSecond: getDouble(stmt: stmt, colIndex: 8)
-            )
+        let rows = try authoredRows("SELECT * FROM melee_unit", entity: "melee_unit") { row in
+            let id = try row.uuid("tower_id")
+            let row = AuthoredRow(statement: row.statement, entity: "tower[\(id)] melee_unit")
+            let soldiers = try row.integer("soldier_count", minimum: 1)
+            guard soldiers <= 4 else { throw row.invalid("soldier_count", "exceeds the engine limit") }
+            let defense = try row.number("defense_rating", minimum: 0, maximum: 1)
+            guard defense < 1 else { throw row.invalid("defense_rating", "must be less than 1") }
+            return (id, MeleeUnitStats(soldierCount: soldiers,
+                attackRating: try row.number("attack_rating", minimum: 0, strictlyGreater: true),
+                defenseRating: defense,
+                hp: try row.number("hp", minimum: 0, strictlyGreater: true),
+                rallyPointRadius: try row.number("rally_point_radius", minimum: 0, strictlyGreater: true),
+                attackInterval: try row.number("attack_interval", minimum: 0, strictlyGreater: true),
+                respawnSeconds: try row.number("respawn_seconds", minimum: 0, strictlyGreater: true),
+                healPerSecond: try row.number("heal_per_second", minimum: 0)))
         }
-
-        sqlite3_finalize(stmt)
-        stmt = nil
-
-        return out
+        var result: [UUID: MeleeUnitStats] = [:]
+        for (id, stats) in rows {
+            guard result.updateValue(stats, forKey: id) == nil else {
+                throw DbError.Db(message: "tower[\(id)]: duplicate melee_unit")
+            }
+        }
+        return result
     }
 }

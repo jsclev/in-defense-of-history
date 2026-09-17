@@ -40,7 +40,7 @@ start and awards the existing fixed 13 coins. Wave 1 awards no early-call bonus.
 | 6 | 2:51 | 8 | 8 | 4 | 8 | Infiltration |
 | 7 | 3:28 | 12 | 6 | 0 | 6 | Cavalry screen |
 | 8 | 4:06 | 11 | 11 | 6 | 0 | Highland assault |
-| 9 | 4:45 | 12 | 4 | 0 | 10 | Grenadiers and riders |
+| 9 | 4:45 | 12 | 4 | 0 | 10 | Heavy infantry and riders |
 | 10 | 5:25 | 10 | 14 | 8 | 0 | Officer-led columns |
 | 11 | 6:06 | 11 | 12 | 0 | 6 | Siege train |
 | 12 | 6:48 | 5 | 9 | 10 | 8 | The guards arrive |
@@ -60,7 +60,7 @@ Edit `PLAN`, `STARTS`, and the route variants in
 
 ```sh
 python3 Tools/generate_charleston_waves.py
-sh Db/create_db.sh --bundle-only
+sh Db/create_db.sh
 ```
 
 The generator uses [the Swift authoring tool](GenerateCharlestonRoutes.swift)
@@ -71,11 +71,9 @@ and writes the [path SQL](../Db/DML/Levels/level_15_charleston.sql),
 for hero unlock references. SQL paths are generated copies of the GeoJSON
 routes, never independently maintained geometry.
 
-`create_db.sh` builds a temporary database, checks integrity and foreign keys,
-then replaces the bundled database. Its default invocation also updates the
-desktop Documents copy; `--bundle-only` allows phone builds while the editor
-has its Documents database open. The wave generator alone does not rebuild
-the database.
+`create_db.sh` creates `Db/in_defense_of_history.sqlite` from the SQL scripts
+and checks integrity and foreign keys. Close tools using it before rebuilding.
+The wave generator alone does not rebuild the database.
 
 Verification on September 10, 2026:
 
@@ -90,11 +88,6 @@ Verification on September 10, 2026:
   GeoJSON, validated all route segments, and checked every automatic wave
   deadline, entrance button count, and all 424 queued enemies.
   [Device evidence](reports/charleston-enemy-routes/device/hero-exits.json).
-- The game was installed and launched on John's iPhone. Its live Documents
-  database was copied back and its Level 15 record, paths, waves, and spawns
-  exactly matched the rebuilt database; integrity and foreign-key checks
-  passed. The signed app's GeoJSON and database also matched the source files.
-  [Deployment verification](reports/charleston-enemy-routes/verification.json).
-  [Route diagram](reports/charleston-enemy-routes/routes.png).
+- The game was installed and launched on John's iPhone.
 - These are model, persistence, and device runtime checks, not a full combat
   playthrough or an interactive Level Editor UI review.

@@ -19,8 +19,6 @@ let package = Package(
                     "Tools",
                     "Versioning",
                     "GameName.xcconfig",
-                    "in_defense_of_history.sqlite",
-                    "build",
                     "Engine/Debug/DebugLayoutGuidesView.swift",
                     "LevelEditor/PlaytestView.swift",
                     "LevelEditor/PathArtist.swift",

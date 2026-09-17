@@ -35,10 +35,9 @@ final class SimSession {
     private var accumulator = 0.0
     private var lastDate: Date?
 
-    init(blueprint: LevelBlueprint) {
+    init(blueprint: LevelBlueprint, roster: DesignRoster, arsenal: DesignArsenal) {
         let level = blueprint.makeLevel()
-        let arsenal = DesignArsenal()
-        let catalog = arsenal.catalog(roster: DesignRoster())
+        let catalog = arsenal.catalog(roster: roster)
         self.blueprint = blueprint
         self.level = level
         self.virtualCanvas = blueprint.virtualCanvas

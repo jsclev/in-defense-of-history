@@ -24728,14 +24728,14 @@
       "earlyCallBonus": 0,
       "lines": [
         {
-          "foe": "Loyalist Militia",
+          "foe": "loyalist_militia",
           "count": 10,
           "pathIndex": 0,
           "delay": 0,
           "every": 0.9
         },
         {
-          "foe": "Redcoat Regular",
+          "foe": "redcoat_regular",
           "count": 6,
           "pathIndex": 0,
           "delay": 6,
@@ -24750,21 +24750,21 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Redcoat Regular",
+          "foe": "redcoat_regular",
           "count": 8,
           "pathIndex": 1,
           "delay": 0,
           "every": 0.95
         },
         {
-          "foe": "Loyalist Militia",
+          "foe": "loyalist_militia",
           "count": 8,
           "pathIndex": 1,
           "delay": 5,
           "every": 0.7
         },
         {
-          "foe": "Light Infantry",
+          "foe": "light_infantry",
           "count": 4,
           "pathIndex": 0,
           "delay": 9,
@@ -24779,21 +24779,21 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Redcoat Regular",
+          "foe": "redcoat_regular",
           "count": 8,
           "pathIndex": 0,
           "delay": 0,
           "every": 0.9
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 6,
           "pathIndex": 1,
           "delay": 0,
           "every": 1.1
         },
         {
-          "foe": "Light Infantry",
+          "foe": "light_infantry",
           "count": 6,
           "pathIndex": 1,
           "delay": 8,
@@ -24808,28 +24808,28 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Native Warrior",
+          "foe": "native_warrior",
           "count": 8,
           "pathIndex": 2,
           "delay": 0,
           "every": 0.7
         },
         {
-          "foe": "Light Infantry",
+          "foe": "light_infantry",
           "count": 8,
           "pathIndex": 1,
           "delay": 0,
           "every": 0.7
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 1,
           "delay": 2,
           "every": 1
         },
         {
-          "foe": "Hessian Jäger",
+          "foe": "hessian_jager",
           "count": 6,
           "pathIndex": 0,
           "delay": 7,
@@ -24844,35 +24844,35 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 0,
           "delay": 0,
           "every": 1
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 1,
           "delay": 0,
           "every": 1
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 10,
           "pathIndex": 0,
           "delay": 2,
           "every": 0.9
         },
         {
-          "foe": "Redcoat Regular",
+          "foe": "redcoat_regular",
           "count": 8,
           "pathIndex": 1,
           "delay": 2,
           "every": 0.85
         },
         {
-          "foe": "Highlander",
+          "foe": "highlander",
           "count": 6,
           "pathIndex": 0,
           "delay": 10,
@@ -24887,28 +24887,28 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Native Warrior",
+          "foe": "native_warrior",
           "count": 8,
           "pathIndex": 3,
           "delay": 0,
           "every": 0.65
         },
         {
-          "foe": "Light Infantry",
+          "foe": "light_infantry",
           "count": 8,
           "pathIndex": 0,
           "delay": 0,
           "every": 0.7
         },
         {
-          "foe": "Spy",
+          "foe": "spy",
           "count": 4,
           "pathIndex": 2,
           "delay": 7,
           "every": 1.4
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 8,
           "pathIndex": 1,
           "delay": 8,
@@ -24923,28 +24923,28 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 6,
           "pathIndex": 3,
           "delay": 0,
           "every": 1.1
         },
         {
-          "foe": "Redcoat Regular",
+          "foe": "redcoat_regular",
           "count": 10,
           "pathIndex": 0,
           "delay": 0,
           "every": 0.8
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 2,
           "pathIndex": 0,
           "delay": 2,
           "every": 3
         },
         {
-          "foe": "Hessian Jäger",
+          "foe": "hessian_jager",
           "count": 6,
           "pathIndex": 1,
           "delay": 7,
@@ -24959,35 +24959,35 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Highlander",
+          "foe": "highlander",
           "count": 10,
           "pathIndex": 0,
           "delay": 0,
           "every": 1
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 10,
           "pathIndex": 1,
           "delay": 0,
           "every": 0.9
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 0,
           "delay": 2,
           "every": 1
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 1,
           "delay": 2,
           "every": 1
         },
         {
-          "foe": "Native Warrior",
+          "foe": "native_warrior",
           "count": 6,
           "pathIndex": 2,
           "delay": 10,
@@ -25002,28 +25002,28 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Grenadier",
+          "foe": "grenadier",
           "count": 6,
           "pathIndex": 0,
           "delay": 0,
           "every": 1.4
         },
         {
-          "foe": "Light Infantry",
+          "foe": "light_infantry",
           "count": 10,
           "pathIndex": 3,
           "delay": 0,
           "every": 0.7
         },
         {
-          "foe": "Spy",
+          "foe": "spy",
           "count": 4,
           "pathIndex": 1,
           "delay": 8,
           "every": 1.2
         },
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 6,
           "pathIndex": 0,
           "delay": 9,
@@ -25038,49 +25038,49 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Mounted Officer",
+          "foe": "mounted_officer",
           "count": 1,
           "pathIndex": 0,
           "delay": 0,
           "every": 1
         },
         {
-          "foe": "Mounted Officer",
+          "foe": "mounted_officer",
           "count": 1,
           "pathIndex": 1,
           "delay": 0,
           "every": 1
         },
         {
-          "foe": "Grenadier",
+          "foe": "grenadier",
           "count": 8,
           "pathIndex": 0,
           "delay": 2,
           "every": 1.3
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 12,
           "pathIndex": 1,
           "delay": 2,
           "every": 0.8
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 0,
           "delay": 5,
           "every": 1
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 1,
           "delay": 5,
           "every": 1
         },
         {
-          "foe": "Native Warrior",
+          "foe": "native_warrior",
           "count": 8,
           "pathIndex": 2,
           "delay": 12,
@@ -25095,28 +25095,28 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Royal Artillery",
+          "foe": "royal_artillery",
           "count": 3,
           "pathIndex": 0,
           "delay": 0,
           "every": 3
         },
         {
-          "foe": "Redcoat Regular",
+          "foe": "redcoat_regular",
           "count": 12,
           "pathIndex": 1,
           "delay": 0,
           "every": 0.7
         },
         {
-          "foe": "Highlander",
+          "foe": "highlander",
           "count": 8,
           "pathIndex": 0,
           "delay": 3,
           "every": 1
         },
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 6,
           "pathIndex": 3,
           "delay": 11,
@@ -25131,42 +25131,42 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Foot Guards",
+          "foe": "foot_guards",
           "count": 4,
           "pathIndex": 0,
           "delay": 0,
           "every": 2.1
         },
         {
-          "foe": "Grenadier",
+          "foe": "grenadier",
           "count": 8,
           "pathIndex": 1,
           "delay": 0,
           "every": 1.2
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 0,
           "delay": 3,
           "every": 1
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 1,
           "delay": 3,
           "every": 1
         },
         {
-          "foe": "Light Infantry",
+          "foe": "light_infantry",
           "count": 10,
           "pathIndex": 2,
           "delay": 7,
           "every": 0.7
         },
         {
-          "foe": "Native Warrior",
+          "foe": "native_warrior",
           "count": 8,
           "pathIndex": 3,
           "delay": 10,
@@ -25181,42 +25181,42 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Foot Guards",
+          "foe": "foot_guards",
           "count": 4,
           "pathIndex": 1,
           "delay": 0,
           "every": 2
         },
         {
-          "foe": "Grenadier",
+          "foe": "grenadier",
           "count": 8,
           "pathIndex": 0,
           "delay": 0,
           "every": 1.2
         },
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 10,
           "pathIndex": 3,
           "delay": 8,
           "every": 0.85
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 8,
           "pathIndex": 2,
           "delay": 8,
           "every": 0.8
         },
         {
-          "foe": "Spy",
+          "foe": "spy",
           "count": 2,
           "pathIndex": 0,
           "delay": 15,
           "every": 1.2
         },
         {
-          "foe": "Spy",
+          "foe": "spy",
           "count": 2,
           "pathIndex": 1,
           "delay": 15,
@@ -25231,63 +25231,63 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Foot Guards",
+          "foe": "foot_guards",
           "count": 3,
           "pathIndex": 0,
           "delay": 0,
           "every": 2
         },
         {
-          "foe": "Foot Guards",
+          "foe": "foot_guards",
           "count": 3,
           "pathIndex": 1,
           "delay": 0,
           "every": 2
         },
         {
-          "foe": "Mounted Officer",
+          "foe": "mounted_officer",
           "count": 2,
           "pathIndex": 0,
           "delay": 4,
           "every": 2
         },
         {
-          "foe": "Mounted Officer",
+          "foe": "mounted_officer",
           "count": 2,
           "pathIndex": 1,
           "delay": 4,
           "every": 2
         },
         {
-          "foe": "Highlander",
+          "foe": "highlander",
           "count": 5,
           "pathIndex": 2,
           "delay": 8,
           "every": 0.9
         },
         {
-          "foe": "Highlander",
+          "foe": "highlander",
           "count": 5,
           "pathIndex": 3,
           "delay": 8,
           "every": 0.9
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 5,
           "pathIndex": 0,
           "delay": 12,
           "every": 0.7
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 5,
           "pathIndex": 1,
           "delay": 12,
           "every": 0.7
         },
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 6,
           "pathIndex": 1,
           "delay": 17,
@@ -25302,98 +25302,98 @@
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "Foot Guards",
+          "foe": "foot_guards",
           "count": 4,
           "pathIndex": 0,
           "delay": 0,
           "every": 2
         },
         {
-          "foe": "Foot Guards",
+          "foe": "foot_guards",
           "count": 4,
           "pathIndex": 1,
           "delay": 0,
           "every": 2
         },
         {
-          "foe": "Royal Artillery",
+          "foe": "royal_artillery",
           "count": 2,
           "pathIndex": 0,
           "delay": 4,
           "every": 3
         },
         {
-          "foe": "Royal Artillery",
+          "foe": "royal_artillery",
           "count": 2,
           "pathIndex": 1,
           "delay": 4,
           "every": 3
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 0,
           "delay": 6,
           "every": 1
         },
         {
-          "foe": "Regimental Drummer",
+          "foe": "regimental_drummer",
           "count": 1,
           "pathIndex": 1,
           "delay": 6,
           "every": 1
         },
         {
-          "foe": "Grenadier",
+          "foe": "grenadier",
           "count": 6,
           "pathIndex": 0,
           "delay": 8,
           "every": 0.9
         },
         {
-          "foe": "Grenadier",
+          "foe": "grenadier",
           "count": 6,
           "pathIndex": 1,
           "delay": 8,
           "every": 0.9
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 6,
           "pathIndex": 2,
           "delay": 12,
           "every": 0.6
         },
         {
-          "foe": "Hessian Fusilier",
+          "foe": "hessian_fusilier",
           "count": 6,
           "pathIndex": 3,
           "delay": 12,
           "every": 0.6
         },
         {
-          "foe": "Mounted Officer",
+          "foe": "mounted_officer",
           "count": 1,
           "pathIndex": 0,
           "delay": 12,
           "every": 1
         },
         {
-          "foe": "Mounted Officer",
+          "foe": "mounted_officer",
           "count": 1,
           "pathIndex": 1,
           "delay": 12,
           "every": 1
         },
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 5,
           "pathIndex": 2,
           "delay": 18,
           "every": 0.6
         },
         {
-          "foe": "Light Dragoon",
+          "foe": "light_dragoon",
           "count": 5,
           "pathIndex": 3,
           "delay": 18,

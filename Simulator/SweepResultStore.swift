@@ -1,23 +1,11 @@
 import Foundation
 import SQLite3
 
-/// Sweep results, written to SQLite instead of a CSV.
-///
-/// The working database is `:memory:` so inserts never touch the disk on the
-/// hot path. A disk file is ATTACHed alongside it and topped up incrementally
-/// every few batches — copying only the rows added since the last flush, not
-/// re-dumping the whole table — so a killed run still leaves everything it had
-/// finished, the way the old `.partial` CSV checkpoint did.
-///
-/// SQLite takes one writer at a time, so all inserts happen on the thread that
-/// owns this object, in batches wrapped in a single transaction.
 final class SweepResultStore {
     private var conn: OpaquePointer?
     private var insertStmt: OpaquePointer?
     private let runID: UUID?
-    private var lastFlushedRowID: Int64 = 0
-    private var pendingSinceFlush = 0
-    private let flushEvery: Int
+    private(set) var rowCount = 0
     private let transient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
     private let columns = """
@@ -31,68 +19,12 @@ final class SweepResultStore {
         w1_greedy_clear, w1_greedy_leaks, w1_naive_clear, w1_naive_leaks
         """
 
-    private func schema(_ prefix: String) -> String {
-        """
-        CREATE TABLE IF NOT EXISTS \(prefix)sweep_row (
-            id                            INTEGER PRIMARY KEY,
-            run_id                        TEXT,
-            perm                          INTEGER NOT NULL,
-            money                         INTEGER NOT NULL,
-            starting_lives                INTEGER NOT NULL,
-            upgrade_growth                TEXT NOT NULL,
-            tower_range                   TEXT NOT NULL,
-            tower_rof                     TEXT NOT NULL,
-            tower_projectile_speed        TEXT NOT NULL,
-            tower_splash                  TEXT NOT NULL,
-            tower_falloff                 TEXT NOT NULL,
-            enemy_speed_bracket_position  REAL NOT NULL,
-            enemy_hp_bracket_position     REAL NOT NULL,
-            enemy_bounty_bracket_position REAL NOT NULL,
-            melee_hp_bracket_position     REAL NOT NULL,
-            melee_damage_bracket_position REAL NOT NULL,
-            comp_curve                    TEXT NOT NULL,
-            comp_mix                      TEXT NOT NULL,
-            comp_spacing                  TEXT NOT NULL,
-            seeds                         INTEGER NOT NULL,
-            win_rate                      REAL NOT NULL,
-            lives_p10                     REAL NOT NULL,
-            lives_p50                     REAL NOT NULL,
-            lives_p90                     REAL NOT NULL,
-            mean_leaked                   REAL NOT NULL,
-            rout_share                    REAL NOT NULL,
-            tension_mean                  REAL NOT NULL,
-            tension_peak                  REAL NOT NULL,
-            tension_final                 REAL NOT NULL,
-            mean_seconds                  REAL NOT NULL,
-            w1_greedy_clear               REAL NOT NULL,
-            w1_greedy_leaks               REAL NOT NULL,
-            w1_naive_clear                REAL NOT NULL,
-            w1_naive_leaks                REAL NOT NULL
-        );
-        """
-    }
-
-    init(diskPath: String, runID: UUID?, flushEveryRows: Int = 100_000) throws {
+    init(databasePath: String, runID: UUID?) throws {
         self.runID = runID
-        self.flushEvery = flushEveryRows
-
-        guard sqlite3_open(":memory:", &conn) == SQLITE_OK else {
-            throw DbError.Db(message: "Unable to open in-memory sweep database")
+        guard sqlite3_open_v2(databasePath, &conn, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, nil) == SQLITE_OK else {
+            throw DbError.Db(message: "Unable to open the authored database for sweep results")
         }
-        exec("PRAGMA journal_mode=OFF;")
-        exec("PRAGMA synchronous=OFF;")
-        exec("PRAGMA temp_store=MEMORY;")
-        exec(schema(""))
-
-        try? FileManager.default.removeItem(atPath: diskPath)
-        try? FileManager.default.createDirectory(
-            atPath: (diskPath as NSString).deletingLastPathComponent,
-            withIntermediateDirectories: true)
-        let escaped = diskPath.replacingOccurrences(of: "'", with: "''")
-        exec("ATTACH DATABASE '\(escaped)' AS disk;")
-        exec("PRAGMA disk.journal_mode=OFF;")
-        exec("PRAGMA disk.synchronous=OFF;")
-        exec(schema("disk."))
+        sqlite3_busy_timeout(conn, 5_000)
 
         let placeholders = Array(repeating: "?", count: 33).joined(separator: ",")
         let sql = "INSERT INTO sweep_row (\(columns)) VALUES (\(placeholders));"
@@ -107,18 +39,21 @@ final class SweepResultStore {
         sqlite3_close_v2(conn)
     }
 
-    private func exec(_ sql: String) {
+    private func exec(_ sql: String) throws {
         var err: UnsafeMutablePointer<CChar>?
-        if sqlite3_exec(conn, sql, nil, nil, &err) != SQLITE_OK, let err {
-            FileHandle.standardError.write(Data("  sweep db: \(String(cString: err))\n".utf8))
+        if sqlite3_exec(conn, sql, nil, nil, &err) != SQLITE_OK {
+            let message = err.map { String(cString: $0) } ?? "Unable to write sweep results"
             sqlite3_free(err)
+            throw DbError.Db(message: message)
         }
     }
 
     /// Insert a batch. One transaction, one reused prepared statement.
-    func insert(_ rows: [SweepRow]) {
+    func insert(_ rows: [SweepRow]) throws {
         guard !rows.isEmpty else { return }
-        exec("BEGIN;")
+        try exec("BEGIN;")
+        var committed = false
+        defer { if !committed { try? exec("ROLLBACK;") } }
         for row in rows {
             let p = row.perm
             var i: Int32 = 0
@@ -143,50 +78,15 @@ final class SweepResultStore {
             real(row.w1NaiveClear); real(row.w1NaiveLeaks)
 
             if sqlite3_step(insertStmt) != SQLITE_DONE {
-                FileHandle.standardError.write(Data(
-                    "  sweep db insert: \(String(cString: sqlite3_errmsg(conn)))\n".utf8))
+                let message = String(cString: sqlite3_errmsg(conn))
+                sqlite3_reset(insertStmt)
+                throw DbError.Db(message: "Unable to write sweep result: \(message)")
             }
             sqlite3_reset(insertStmt)
         }
-        exec("COMMIT;")
+        try exec("COMMIT;")
+        committed = true
 
-        pendingSinceFlush += rows.count
-        if pendingSinceFlush >= flushEvery { flushToDisk() }
-    }
-
-    /// Copy rows added since the last flush into the attached disk database.
-    func flushToDisk() {
-        guard pendingSinceFlush > 0 else { return }
-        exec("""
-        INSERT INTO disk.sweep_row SELECT * FROM main.sweep_row WHERE id > \(lastFlushedRowID);
-        """)
-        lastFlushedRowID = sqlite3_last_insert_rowid(conn)
-        var stmt: OpaquePointer?
-        if sqlite3_prepare_v2(conn, "SELECT COALESCE(MAX(id), 0) FROM main.sweep_row;",
-                              -1, &stmt, nil) == SQLITE_OK {
-            if sqlite3_step(stmt) == SQLITE_ROW { lastFlushedRowID = sqlite3_column_int64(stmt, 0) }
-            sqlite3_finalize(stmt)
-        }
-        pendingSinceFlush = 0
-    }
-
-    /// Final flush plus the indexes that make the results worth querying.
-    func finish() {
-        flushToDisk()
-        // The schema qualifier goes on the INDEX name in SQLite, not the table.
-        exec("CREATE INDEX IF NOT EXISTS disk.idx_sweep_row_run ON sweep_row (run_id);")
-        exec("CREATE INDEX IF NOT EXISTS disk.idx_sweep_row_range ON sweep_row (tower_range);")
-        exec("CREATE INDEX IF NOT EXISTS disk.idx_sweep_row_win ON sweep_row (win_rate);")
-        exec("DETACH DATABASE disk;")
-    }
-
-    var rowCount: Int {
-        var stmt: OpaquePointer?
-        var n = 0
-        if sqlite3_prepare_v2(conn, "SELECT COUNT(*) FROM main.sweep_row;", -1, &stmt, nil) == SQLITE_OK {
-            if sqlite3_step(stmt) == SQLITE_ROW { n = Int(sqlite3_column_int64(stmt, 0)) }
-            sqlite3_finalize(stmt)
-        }
-        return n
+        rowCount += rows.count
     }
 }

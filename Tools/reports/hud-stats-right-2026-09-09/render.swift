@@ -200,7 +200,7 @@ struct HudIcon: View {
     }
     @MainActor static func main() throws {
         let out = URL(fileURLWithPath: CommandLine.arguments[1])
-        let db = Db(dbPath: out.appendingPathComponent("fixture.sqlite").path, fullRefresh: false)
+        let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
         let vc = try db.virtualCanvasDao.get()
         let minimum = CGRect(x: 0, y: 0, width: 340 * 16.0 / 9, height: 340)
         let fixtures: [(String, CGRect, CGRect)] = [

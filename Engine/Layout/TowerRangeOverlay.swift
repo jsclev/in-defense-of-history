@@ -2,13 +2,10 @@ import Foundation
 import CoreGraphics
 
 public enum TowerRangeOverlay {
-    /// A ground-plane circle foreshortened to Kingdom Rush's range-ring
-    /// proportions: 7 units tall for every 10 wide.
-    public static let verticalFraction: CGFloat = 0.7
-
     public static func size(range: CGFloat, runtimeCanvas: RuntimeCanvas) -> CGSize {
-        let width = runtimeCanvas.rangeRadius(forMapRadius: range) * 2
-        return CGSize(width: width, height: width * verticalFraction)
+        let size = TowerAttackRange(Double(range)).size
+        return CGSize(width: size.width * runtimeCanvas.scaleFactor,
+                      height: size.height * runtimeCanvas.scaleFactor)
     }
 
     public static func rect(center: CGPoint, range: CGFloat,

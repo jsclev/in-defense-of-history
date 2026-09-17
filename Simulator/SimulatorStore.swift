@@ -7,8 +7,6 @@ final class SimulatorStore {
     let arsenal: DesignArsenal
     let blueprints: Blueprints
 
-    /// Sweep progress lives in its own database; a failure to open it must
-    /// not keep the simulator from running, so it is optional.
     let runs: SimulatorRunDAO?
 
     init() throws {
@@ -18,12 +16,14 @@ final class SimulatorStore {
             .map { URL(fileURLWithPath: $0, isDirectory: true) }
             ?? URL(fileURLWithPath: #filePath).deletingLastPathComponent()
                 .deletingLastPathComponent().appendingPathComponent("Db", isDirectory: true)
-        db = Db(dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history", fullRefresh: false),
+        let databaseURL = Db.authoredDatabaseURL
+        db = Db(dbPath: databaseURL.path,
                 fullRefresh: false, levelGeoJSONDao: LevelGeoJSONDAO(directory: levelDirectory))
+        try db.towerTypeDao.validateAuthoredContent()
         virtualCanvas = try db.virtualCanvasDao.get()
-        roster = DesignRoster()
-        arsenal = DesignArsenal()
+        roster = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll())
+        arsenal = try db.towerTypeDao.getDesignArsenal()
         blueprints = Blueprints(virtualCanvas: virtualCanvas)
-        runs = try? SimulatorRunDAO()
+        runs = db.simulatorRunDao
     }
 }

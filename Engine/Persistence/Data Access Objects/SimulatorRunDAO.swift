@@ -2,17 +2,6 @@ import Foundation
 import SQLite3
 import os
 
-/// Progress and status for simulator sweeps.
-///
-/// This lives in its own database file, **not** in `in_defense_of_history.sqlite`.
-/// `create_db.sh` deletes and rebuilds the content database from the DML on
-/// every run, which would destroy run history — and the content database is
-/// meant to be reproducible from its `.sql` files, which runtime status is not.
-/// Keeping it separate also means a long sweep holding this file open never
-/// blocks a content rebuild.
-///
-/// The schema is created on demand with `IF NOT EXISTS`, so nothing has to be
-/// set up before the first sweep.
 public struct SimulatorRun: Sendable {
     public let id: UUID
     public let levelName: String
@@ -83,51 +72,8 @@ public final class SimulatorRunDAO {
         return nil
     }
 
-    /// The runs database lives beside the HTML reports by default, so
-    /// everything about a sweep is in one place.
-    public init(path: String = ("~/projects/td/in-defense-of-history-data/SimulatorRuns/simulator_runs.sqlite"
-                                    as NSString).expandingTildeInPath) throws {
-        let dir = (path as NSString).deletingLastPathComponent
-        try? FileManager.default.createDirectory(atPath: dir,
-                                                 withIntermediateDirectories: true)
-        guard sqlite3_open(path, &conn) == SQLITE_OK else {
-            throw DbError.Db(message: "Unable to open simulator runs db at \(path)")
-        }
-        // A sweep writes from one process while a status query reads from
-        // another; WAL lets those coexist without blocking each other.
-        exec("PRAGMA journal_mode=WAL;")
-        exec("""
-        CREATE TABLE IF NOT EXISTS simulator_run (
-            id                   TEXT PRIMARY KEY NOT NULL,
-            level_name           TEXT NOT NULL,
-            focus                TEXT NOT NULL DEFAULT '',
-            status               TEXT NOT NULL,
-            total_iterations     INTEGER NOT NULL DEFAULT 0,
-            completed_iterations INTEGER NOT NULL DEFAULT 0,
-            iterations_per_second REAL NOT NULL DEFAULT 0,
-            started_at           TEXT NOT NULL,
-            updated_at           TEXT NOT NULL,
-            finished_at          TEXT,
-            process_id           INTEGER NOT NULL DEFAULT 0,
-            output_path          TEXT NOT NULL DEFAULT '',
-            report_path          TEXT,
-            error_message        TEXT
-        );
-        """)
-        exec("""
-        CREATE INDEX IF NOT EXISTS idx_simulator_run_status
-            ON simulator_run (status, started_at DESC);
-        """)
-    }
-
-    deinit { sqlite3_close_v2(conn) }
-
-    private func exec(_ sql: String) {
-        var err: UnsafeMutablePointer<CChar>?
-        if sqlite3_exec(conn, sql, nil, nil, &err) != SQLITE_OK, let err {
-            logger.error("simulator_run: \(String(cString: err), privacy: .public)")
-            sqlite3_free(err)
-        }
+    init(conn: OpaquePointer?) {
+        self.conn = conn
     }
 
     private func bindText(_ stmt: OpaquePointer?, _ i: Int32, _ s: String?) {

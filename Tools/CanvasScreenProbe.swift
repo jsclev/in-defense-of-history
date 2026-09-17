@@ -9,7 +9,7 @@ import UIKit
 @main struct CanvasScreenProbe: App {
     @UIApplicationDelegateAdaptor(CaptureDelegate.self) private var delegate
     private let store = Store()
-    var body: some Scene { WindowGroup { CaptureRoot(store: store) } }
+    var body: some Scene { WindowGroup { CaptureRoot(store: store).environmentObject(store.settings) } }
 }
 struct CaptureRoot: View {
     let store: Store
@@ -31,7 +31,7 @@ struct CaptureRoot: View {
         .statusBarHidden(true)
         .persistentSystemOverlays(.hidden)
         .task {
-            UserDefaults.standard.set(false, forKey: Constants.debugModeKey)
+            try! store.settings.set(\.debugMode, to: false)
             let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             for small in [false, true] {
               minimum = small
@@ -57,7 +57,7 @@ struct CaptureRoot: View {
         let node = CampaignNode.load(db: store.db)[0]
         switch index {
         case 0: HeroesView(db: store.db, runtimeCanvas: canvas, onExit: {})
-        case 1: HeroDetailsView(db: store.db, runtimeCanvas: canvas, hero: try! store.db.heroDao.getAll()[0], onExit: {})
+        case 1: HeroDetailsView(db: store.db, runtimeCanvas: canvas, hero: try! store.db.heroDao.getAll()[0], selection: .constant(try! store.db.heroDao.getSelectedHeroes()), onExit: {})
         case 2: EncyclopediaView(runtimeCanvas: canvas, onExit: {})
         case 3: SettingsView(runtimeCanvas: canvas, onConfigureHudLayout: {}, onExit: {})
         case 4: HudLayoutConfigView(db: store.db, runtimeCanvas: canvas, hudLayoutConfig: .standard, onSave: { _ in }, onExit: {})

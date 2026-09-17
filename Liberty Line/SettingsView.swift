@@ -2,10 +2,8 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct SettingsView: View {
-    @AppStorage("debugMode") private var debugMode = true
-    @AppStorage("showDebugInfo") private var showDebugInfo = false
-    @AppStorage(Constants.showDebugLayoutGuidesKey) private var showDebugLayoutGuides = false
-    @AppStorage(Constants.enemyEscapeHapticsEnabledKey) private var enemyEscapeHapticsEnabled = true
+    @EnvironmentObject private var settings: PlayerSettingsStore
+    @State private var settingsError: String?
 
     private let runtimeCanvas: RuntimeCanvas
     private let onConfigureHudLayout: () -> Void
@@ -42,7 +40,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 18 * metrics.scale) {
                     toggle("Life-loss haptics",
                            detail: "Feel feedback when an enemy escapes and you lose a life.",
-                           isOn: $enemyEscapeHapticsEnabled)
+                           isOn: setting(\.enemyEscapeHapticsEnabled))
 
                     options
                 }
@@ -72,6 +70,18 @@ struct SettingsView: View {
             DoneButton(runtimeCanvas: runtimeCanvas, action: onExit)
         }
         .persistentSystemOverlays(.hidden)
+        .alert("Unable to save settings", isPresented: Binding(
+            get: { settingsError != nil }, set: { if !$0 { settingsError = nil } }
+        )) { Button("OK", role: .cancel) { settingsError = nil } } message: {
+            Text(settingsError ?? "")
+        }
+    }
+
+    private func setting(_ keyPath: WritableKeyPath<PlayerSettings, Bool>) -> Binding<Bool> {
+        Binding(get: { settings.values[keyPath: keyPath] }, set: { value in
+            do { try settings.set(keyPath, to: value) }
+            catch { settingsError = error.localizedDescription }
+        })
     }
 
     @ViewBuilder
@@ -79,15 +89,15 @@ struct SettingsView: View {
         toggle("Debug mode",
                detail: "Firing range ring under each tower you place, "
                      + "coloured and labelled by range.",
-               isOn: $debugMode)
+               isOn: setting(\.debugMode))
 
         toggle("Layout guides",
                detail: "Screen edge in red, safe area in green, HUD in yellow, play area in purple, tap area in cyan.",
-               isOn: $showDebugLayoutGuides)
+               isOn: setting(\.showDebugLayoutGuides))
 
         toggle("Simulation readout",
                detail: "Wave and spawn state, top-left of the level map.",
-               isOn: $showDebugInfo)
+               isOn: setting(\.showDebugInfo))
 
         Button(action: onConfigureHudLayout) {
             VStack(alignment: .leading, spacing: 3 * metrics.scale) {

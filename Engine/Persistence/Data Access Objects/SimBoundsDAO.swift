@@ -19,7 +19,7 @@ public struct SimTowerRange: Sendable {
     public var maxRange: Int
 
     /// Every value the sweep will try: whole numbers, step 1, min through max.
-    public var values: [Int] { Array(minRange...Swift.max(minRange, maxRange)) }
+    public var values: [Int] { Array(minRange...maxRange) }
 }
 
 public class SimBoundsDAO: BaseDAO {
@@ -48,26 +48,32 @@ public class SimBoundsDAO: BaseDAO {
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
+        defer { sqlite3_finalize(stmt) }
 
         guard sqlite3_bind_text(stmt, 1, levelInfoId.uuidString.lowercased(), -1, SQLITE_TRANSIENT) == SQLITE_OK else {
             throw DbError.Db(message: "Unable to bind level info id")
         }
 
-        while sqlite3_step(stmt) == SQLITE_ROW {
-            guard let kind = try getString(stmt: stmt, colIndex: 0),
-                  let stat = try getString(stmt: stmt, colIndex: 1) else { continue }
+        var step = sqlite3_step(stmt)
+        while step == SQLITE_ROW {
+            let row = AuthoredRow(statement: stmt!, entity: "sim_stat_bounds")
+            let kind = try row.text("tower_kind")
+            let stat = try row.text("stat")
+            let minimum = try row.number("min_value", minimum: 0)
+            guard let source = try getString(stmt: stmt, colIndex: 4) else {
+                throw row.invalid("derived_from", "is missing")
+            }
             let bounds = SimStatBounds(
                 towerKind: kind,
                 stat: stat,
-                minValue: getDouble(stmt: stmt, colIndex: 2),
-                maxValue: getDouble(stmt: stmt, colIndex: 3),
-                derivedFrom: (try getString(stmt: stmt, colIndex: 4)) ?? ""
+                minValue: minimum,
+                maxValue: try row.number("max_value", minimum: minimum),
+                derivedFrom: source
             )
             out[kind, default: [:]][stat] = bounds
+            step = sqlite3_step(stmt)
         }
-
-        sqlite3_finalize(stmt)
-        stmt = nil
+        guard step == SQLITE_DONE else { throw DbError.Db(message: "Unable to read sim_stat_bounds") }
 
         return out
     }
@@ -92,30 +98,36 @@ public class SimBoundsDAO: BaseDAO {
                 r.max_range
             FROM
                 sim_tower_range r
-            INNER JOIN
+            LEFT JOIN
                 tower t ON t.id = r.tower_id
-            INNER JOIN
+            LEFT JOIN
                 tower_type tt ON tt.id = t.tower_type_id
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
+        defer { sqlite3_finalize(stmt) }
 
-        while sqlite3_step(stmt) == SQLITE_ROW {
-            guard let category = try getString(stmt: stmt, colIndex: 1) else { continue }
-            let towerID = try getUUID(stmt: stmt, colIndex: 0, msg: "sim_tower_range tower_id")
-            let level = getInt(stmt: stmt, colIndex: 2)
-            out[category, default: [:]][level] = SimTowerRange(
+        var step = sqlite3_step(stmt)
+        while step == SQLITE_ROW {
+            let row = AuthoredRow(statement: stmt!, entity: "sim_tower_range")
+            let category = try row.text("tower_type_category")
+            let towerID = try row.uuid("tower_id")
+            let level = try row.integer("tower_level", minimum: 1)
+            let minimum = try row.integer("min_range", minimum: 1)
+            let value = SimTowerRange(
                 towerID: towerID,
                 towerKind: category,
                 towerLevel: level,
-                branch: getInt(stmt: stmt, colIndex: 3),
-                minRange: getInt(stmt: stmt, colIndex: 4),
-                maxRange: getInt(stmt: stmt, colIndex: 5)
+                branch: try row.integer("branch", minimum: 1),
+                minRange: minimum,
+                maxRange: try row.integer("max_range", minimum: minimum)
             )
+            guard out[category, default: [:]].updateValue(value, forKey: level) == nil else {
+                throw row.invalid("tower_level", "duplicates a category/tier")
+            }
+            step = sqlite3_step(stmt)
         }
-
-        sqlite3_finalize(stmt)
-        stmt = nil
+        guard step == SQLITE_DONE else { throw DbError.Db(message: "Unable to read sim_tower_range") }
 
         return out
     }

@@ -11,7 +11,7 @@ struct HudHeroesBarView: View {
                 let hero = heroes.indices.contains(index) ? heroes[index] : nil
                 let unitIndex = hero.flatMap { runner.hudHeroIndex(for: $0.id) }
                 let role: HeroSelection.Role = index == 0 ? .primary : .secondary
-                HeroHUDButton(iconName: hero?.iconImageName ?? "tower_locked_icon",
+                HeroHUDButton(iconName: hero?.iconImageName,
                               name: hero.map { "\(role.title), \($0.shortName), ranking \($0.ranking)" }
                                 ?? "No \(role.title.lowercased()) chosen",
                               buttonSize: layout.buttonSize,

@@ -79,7 +79,5 @@ with tempfile.TemporaryDirectory(prefix='td-ranged-probe-') as temp_name:
     assert result.exists(), 'Physical-device probe timed out'
     data = json.loads(result.read_text())
     assert data.get('runID') == RUN_ID and data['passed'], data
-    run('xcrun', 'devicectl', 'device', 'copy', 'from', '--device', DEVICE,
-        '--domain-type', 'appDataContainer', '--domain-identifier', BUNDLE_ID,
-        '--source', 'Documents', '--destination', str(REPORT / 'device-documents'))
+    run('python3', str(GAME / 'Tools/capture_device_artifacts.py'), '--device', DEVICE, '--bundle-id', BUNDLE_ID, '--output', str(REPORT / 'device-documents'))
     print("PASS: all seven ranged assets, real build/upgrade confirmations and production map/menu renders at minimum and device sizes.")

@@ -69,9 +69,7 @@ with tempfile.TemporaryDirectory(prefix='td-path-probe-') as temp_name:
     assert result.exists(), 'Physical-device probe timed out'
     data = json.loads(result.read_text())
     assert data.get('runID') == RUN_ID and data['passed'], data
-    run('xcrun', 'devicectl', 'device', 'copy', 'from', '--device', DEVICE,
-        '--domain-type', 'appDataContainer', '--domain-identifier', BUNDLE_ID,
-        '--source', 'Documents', '--destination', str(REPORT / 'device-documents'))
+    run('python3', str(GAME / 'Tools/capture_device_artifacts.py'), '--device', DEVICE, '--bundle-id', BUNDLE_ID, '--output', str(REPORT / 'device-documents'))
     assert data['pathHash'] == (REPORT / 'tested-path-sha256.txt').read_text().strip()
     run('xcrun', 'devicectl', 'device', 'uninstall', 'app', '--device', DEVICE, BUNDLE_ID)
     print('PASS: physical-iPhone production map captures and exact path hash; temporary probe removed.')

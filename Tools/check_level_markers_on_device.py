@@ -65,9 +65,7 @@ def main():
             time.sleep(3)
         assert ready.exists() and ready.read_text() == run_id, 'Physical-device captures did not finish'
         documents = output / 'device-documents'
-        run('xcrun', 'devicectl', 'device', 'copy', 'from', '--device', args.device,
-            '--domain-type', 'appDataContainer', '--domain-identifier', BUNDLE_ID,
-            '--source', 'Documents', '--destination', str(documents))
+        run('python3', str(GAME / 'Tools/capture_device_artifacts.py'), '--device', args.device, '--bundle-id', BUNDLE_ID, '--output', str(documents))
         data = json.loads((documents / 'marker-placement.json').read_text())
         assert data['passed'] and data['runID'] == run_id, data
         geo = GAME / 'Db/level_15_charleston.geojson'

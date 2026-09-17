@@ -2,7 +2,8 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct HudStatsView: View {
-    @AppStorage("showDebugInfo") private var showDebugInfo = false
+    @EnvironmentObject private var settings: PlayerSettingsStore
+    private var showDebugInfo: Bool { settings.values.showDebugInfo }
     @ObservedObject private var runner: LevelRunner
     private let runtimeCanvas: RuntimeCanvas
     private let metrics: HudMetrics

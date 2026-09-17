@@ -6,7 +6,10 @@ CREATE TABLE campaign (
 
 CREATE TABLE enemy_type (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    enemy_type_name TEXT NOT NULL,
+    enemy_type_key TEXT NOT NULL UNIQUE CHECK (LENGTH(TRIM(enemy_type_key)) > 0),
+    enemy_type_name TEXT NOT NULL UNIQUE CHECK (LENGTH(TRIM(enemy_type_name)) > 0),
+    enemy_type_description TEXT NOT NULL CHECK (LENGTH(TRIM(enemy_type_description)) > 0),
+    image_name TEXT NOT NULL CHECK (LENGTH(TRIM(image_name)) > 0),
     max_hp REAL NOT NULL,
     speed REAL NOT NULL,
     cover REAL NOT NULL,
@@ -18,34 +21,87 @@ CREATE TABLE enemy_type (
     lives_cost INTEGER NOT NULL DEFAULT 1,
     break_band_lo REAL NOT NULL,
     break_band_hi REAL NOT NULL,
-    traits TEXT NOT NULL DEFAULT '[]'
+    traits TEXT NOT NULL DEFAULT '[]',
+    morale_speed_threshold REAL NOT NULL DEFAULT 0.4 CHECK (morale_speed_threshold BETWEEN 0 AND 1),
+    morale_attack_threshold REAL NOT NULL DEFAULT 0.4 CHECK (morale_attack_threshold BETWEEN 0 AND 1),
+    morale_speed_multiplier REAL NOT NULL DEFAULT (2.0 / 3.0) CHECK (morale_speed_multiplier BETWEEN 0 AND 1),
+    morale_attack_multiplier REAL NOT NULL DEFAULT (2.0 / 3.0) CHECK (morale_attack_multiplier BETWEEN 0 AND 1)
+);
+
+CREATE TABLE design_emplacement (
+    emplacement_key TEXT PRIMARY KEY,
+    tower_name TEXT NOT NULL CHECK (length(trim(tower_name)) > 0),
+    short_name TEXT NOT NULL CHECK (length(trim(short_name)) > 0),
+    level_count INTEGER NOT NULL CHECK (level_count > 0)
+);
+
+CREATE TABLE design_emplacement_level (
+    has_melee_unit INTEGER NOT NULL CHECK (has_melee_unit IN (0, 1)),
+    has_demolition_charge INTEGER NOT NULL CHECK (has_demolition_charge IN (0, 1)),
+    has_engineer_obstacles INTEGER NOT NULL CHECK (has_engineer_obstacles IN (0, 1)),
+    emplacement_key TEXT NOT NULL REFERENCES design_emplacement (emplacement_key),
+    tower_level INTEGER NOT NULL CHECK (tower_level > 0),
+    cost INTEGER NOT NULL CHECK (cost >= 0),
+    tower_range REAL NOT NULL CHECK (tower_range > 0),
+    fire_interval REAL NOT NULL CHECK (fire_interval >= 0),
+    shot_min_damage REAL NOT NULL CHECK (shot_min_damage >= 0),
+    shot_max_damage REAL NOT NULL CHECK (shot_max_damage >= shot_min_damage),
+    terror_min REAL NOT NULL CHECK (terror_min >= 0),
+    terror_max REAL NOT NULL CHECK (terror_max >= terror_min),
+    aoe_radius REAL NOT NULL CHECK (aoe_radius >= 0),
+    aoe_falloff_exponent REAL NOT NULL CHECK (aoe_falloff_exponent > 0),
+    splash_cover_pierce REAL NOT NULL CHECK (splash_cover_pierce BETWEEN 0 AND 1),
+    contagion_chance REAL NOT NULL CHECK (contagion_chance BETWEEN 0 AND 1),
+    targeting TEXT NOT NULL CHECK (targeting IN ('first', 'last', 'strongest', 'shakiest')),
+    projectile_speed REAL NOT NULL CHECK (projectile_speed >= 0),
+    demolition_prepare_seconds REAL CHECK (demolition_prepare_seconds IS NULL OR demolition_prepare_seconds > 0),
+    obstacle_radius REAL CHECK (obstacle_radius IS NULL OR obstacle_radius > 0),
+    obstacle_slow_fraction REAL CHECK (obstacle_slow_fraction IS NULL OR
+        (obstacle_slow_fraction > 0 AND obstacle_slow_fraction < 1)),
+    PRIMARY KEY (emplacement_key, tower_level),
+    CHECK ((obstacle_radius IS NULL) = (obstacle_slow_fraction IS NULL)),
+    CHECK ((demolition_prepare_seconds IS NOT NULL) = has_demolition_charge),
+    CHECK ((obstacle_radius IS NOT NULL) = has_engineer_obstacles)
 );
 
 CREATE TABLE tower_type (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     tower_type_category TEXT NOT NULL,
-    tower_type_name TEXT NOT NULL
+    tower_type_name TEXT NOT NULL,
+    level_layout TEXT NOT NULL CHECK (json_valid(level_layout))
 );
 
 CREATE TABLE tower (
+    has_melee_unit INTEGER NOT NULL CHECK (has_melee_unit IN (0, 1)),
+    has_demolition_charge INTEGER NOT NULL CHECK (has_demolition_charge IN (0, 1)),
+    has_engineer_obstacles INTEGER NOT NULL CHECK (has_engineer_obstacles IN (0, 1)),
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     tower_type_id TEXT NOT NULL REFERENCES tower_type (id),
     tower_name TEXT NOT NULL,
+    tower_description TEXT NOT NULL CHECK (LENGTH(TRIM(tower_description)) > 0),
     tower_level INTEGER NOT NULL,
-    branch INTEGER NOT NULL DEFAULT 1 CHECK (branch BETWEEN 1 AND 3),
+    branch INTEGER NOT NULL CHECK (branch BETWEEN 1 AND 4),
     cost INTEGER NOT NULL,
     tower_range REAL NOT NULL,
     fire_interval REAL NOT NULL,
-    shot_min_damage REAL NOT NULL DEFAULT 0,
-    shot_max_damage REAL NOT NULL DEFAULT 0,
-    terror_min REAL NOT NULL DEFAULT 0,
-    terror_max REAL NOT NULL DEFAULT 0,
-    aoe_radius REAL NOT NULL DEFAULT 0,
-    aoe_falloff_exponent REAL NOT NULL DEFAULT 1.0 CHECK (aoe_falloff_exponent > 0),
-    splash_cover_pierce REAL NOT NULL DEFAULT 0.0 CHECK (splash_cover_pierce BETWEEN 0.0 AND 1.0),
-    contagion_chance REAL NOT NULL DEFAULT 0,
-    targeting TEXT NOT NULL DEFAULT 'first',
-    projectile_speed REAL NOT NULL DEFAULT 0 CHECK (projectile_speed >= 0)
+    shot_min_damage REAL NOT NULL,
+    shot_max_damage REAL NOT NULL,
+    terror_min REAL NOT NULL,
+    terror_max REAL NOT NULL,
+    aoe_radius REAL NOT NULL,
+    aoe_falloff_exponent REAL NOT NULL CHECK (aoe_falloff_exponent > 0),
+    splash_cover_pierce REAL NOT NULL CHECK (splash_cover_pierce BETWEEN 0.0 AND 1.0),
+    contagion_chance REAL NOT NULL,
+    targeting TEXT NOT NULL,
+    projectile_speed REAL NOT NULL CHECK (projectile_speed >= 0),
+    demolition_prepare_seconds REAL
+        CHECK (demolition_prepare_seconds IS NULL OR demolition_prepare_seconds > 0),
+    obstacle_radius REAL CHECK (obstacle_radius IS NULL OR obstacle_radius > 0),
+    obstacle_slow_fraction REAL CHECK (obstacle_slow_fraction IS NULL OR
+        (obstacle_slow_fraction > 0 AND obstacle_slow_fraction < 1)),
+    CHECK ((obstacle_radius IS NULL) = (obstacle_slow_fraction IS NULL)),
+    CHECK ((demolition_prepare_seconds IS NOT NULL) = has_demolition_charge),
+    CHECK ((obstacle_radius IS NOT NULL) = has_engineer_obstacles)
 );
 
 -- attack_rating is the soldier's average swing damage; the engine rolls a
@@ -63,7 +119,7 @@ CREATE TABLE melee_unit (
     rally_point_radius REAL NOT NULL CHECK (rally_point_radius > 0),
     attack_interval REAL NOT NULL CHECK (attack_interval > 0),
     respawn_seconds REAL NOT NULL CHECK (respawn_seconds > 0),
-    heal_per_second REAL NOT NULL DEFAULT 0 CHECK (heal_per_second >= 0)
+    heal_per_second REAL NOT NULL CHECK (heal_per_second >= 0)
 );
 
 -- A single shared configuration, measured in game seconds. Lifetime and
@@ -88,6 +144,14 @@ CREATE TABLE player_selected_difficulty (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     difficulty_id TEXT NOT NULL REFERENCES difficulty (id),
     selection_slot INTEGER NOT NULL UNIQUE CHECK (selection_slot = 1)
+);
+
+CREATE TABLE player_settings (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    debug_mode INTEGER NOT NULL CHECK (debug_mode IN (0, 1)),
+    show_debug_info INTEGER NOT NULL CHECK (show_debug_info IN (0, 1)),
+    show_debug_layout_guides INTEGER NOT NULL CHECK (show_debug_layout_guides IN (0, 1)),
+    enemy_escape_haptics_enabled INTEGER NOT NULL CHECK (enemy_escape_haptics_enabled IN (0, 1))
 );
 
 CREATE TABLE player_selected_hero (
@@ -170,7 +234,7 @@ CREATE TABLE level_tower_unlock (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     level_info_id TEXT NOT NULL REFERENCES level_info (id),
     tower_kind TEXT NOT NULL,
-    max_tower_level INTEGER NOT NULL CHECK (max_tower_level >= 1),
+    max_tower_level INTEGER NOT NULL CHECK (max_tower_level >= 0),
     UNIQUE (level_info_id, tower_kind)
 );
 
@@ -280,6 +344,11 @@ CREATE TABLE sim_tower_range (
     max_range INTEGER NOT NULL CHECK (max_range >= min_range)
 );
 
+CREATE TABLE sim_tower_sweep (
+    profile TEXT PRIMARY KEY NOT NULL,
+    tuning TEXT NOT NULL CHECK(json_valid(tuning))
+);
+
 CREATE TABLE sim_stat_bounds (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     level_info_id TEXT REFERENCES level_info (id),
@@ -290,3 +359,61 @@ CREATE TABLE sim_stat_bounds (
     derived_from TEXT NOT NULL DEFAULT '',
     UNIQUE (level_info_id, tower_kind, stat)
 );
+
+CREATE TABLE simulator_run (
+    id                   TEXT PRIMARY KEY NOT NULL,
+    level_name           TEXT NOT NULL,
+    focus                TEXT NOT NULL DEFAULT '',
+    status               TEXT NOT NULL,
+    total_iterations     INTEGER NOT NULL DEFAULT 0,
+    completed_iterations INTEGER NOT NULL DEFAULT 0,
+    iterations_per_second REAL NOT NULL DEFAULT 0,
+    started_at           TEXT NOT NULL,
+    updated_at           TEXT NOT NULL,
+    finished_at          TEXT,
+    process_id           INTEGER NOT NULL DEFAULT 0,
+    output_path          TEXT NOT NULL DEFAULT '',
+    report_path          TEXT,
+    error_message        TEXT
+);
+CREATE INDEX idx_simulator_run_status ON simulator_run (status, started_at DESC);
+
+CREATE TABLE sweep_row (
+    id                            INTEGER PRIMARY KEY,
+    run_id                        TEXT,
+    perm                          INTEGER NOT NULL,
+    money                         INTEGER NOT NULL,
+    starting_lives                INTEGER NOT NULL,
+    upgrade_growth                TEXT NOT NULL,
+    tower_range                   TEXT NOT NULL,
+    tower_rof                     TEXT NOT NULL,
+    tower_projectile_speed        TEXT NOT NULL,
+    tower_splash                  TEXT NOT NULL,
+    tower_falloff                 TEXT NOT NULL,
+    enemy_speed_bracket_position  REAL NOT NULL,
+    enemy_hp_bracket_position     REAL NOT NULL,
+    enemy_bounty_bracket_position REAL NOT NULL,
+    melee_hp_bracket_position     REAL NOT NULL,
+    melee_damage_bracket_position REAL NOT NULL,
+    comp_curve                    TEXT NOT NULL,
+    comp_mix                      TEXT NOT NULL,
+    comp_spacing                  TEXT NOT NULL,
+    seeds                         INTEGER NOT NULL,
+    win_rate                      REAL NOT NULL,
+    lives_p10                     REAL NOT NULL,
+    lives_p50                     REAL NOT NULL,
+    lives_p90                     REAL NOT NULL,
+    mean_leaked                   REAL NOT NULL,
+    rout_share                    REAL NOT NULL,
+    tension_mean                  REAL NOT NULL,
+    tension_peak                  REAL NOT NULL,
+    tension_final                 REAL NOT NULL,
+    mean_seconds                  REAL NOT NULL,
+    w1_greedy_clear               REAL NOT NULL,
+    w1_greedy_leaks               REAL NOT NULL,
+    w1_naive_clear                REAL NOT NULL,
+    w1_naive_leaks                REAL NOT NULL
+);
+CREATE INDEX idx_sweep_row_run ON sweep_row (run_id);
+CREATE INDEX idx_sweep_row_range ON sweep_row (tower_range);
+CREATE INDEX idx_sweep_row_win ON sweep_row (win_rate);

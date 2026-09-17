@@ -11,6 +11,26 @@ public final class Simulation {
     public private(set) var lives: Int
     public private(set) var enemies: ContiguousArray<Enemy> = []
     public private(set) var towers: [Tower?]
+    public private(set) var engineerObstaclePositions: [Int: CGPoint] = [:]
+
+    public var engineerObstacleFields: [EngineerObstacleField] {
+        engineerObstaclePositions.keys.sorted().compactMap { slot in
+            guard let tower = towers[slot], let position = engineerObstaclePositions[slot],
+                  let stats = catalog.towerTypes[tower.typeIndex].levels[tower.level].engineerObstacles
+            else { return nil }
+            return EngineerObstacleField(position: position, stats: stats)
+        }
+    }
+
+    public func setEngineerObstacles(slot: Int, to point: CGPoint) {
+        guard towers.indices.contains(slot), let tower = towers[slot] else { return }
+        let tuning = catalog.towerTypes[tower.typeIndex].levels[tower.level]
+        let origin = CGPoint(x: level.towerSlots[slot].position.x, y: level.towerSlots[slot].position.y)
+        guard tuning.engineerObstacles != nil, tuning.attackRange.contains(point, from: origin),
+              let site = tuning.attackRange.nearestPathPoint(to: point, from: origin, paths: level.paths)
+        else { return }
+        engineerObstaclePositions[slot] = site
+    }
     public private(set) var outcome: Outcome?
 
     public private(set) var killed = 0
@@ -145,6 +165,8 @@ public final class Simulation {
         guard gold >= first.cost else { return .needGold }
         gold -= first.cost
         towers[slot] = Tower(typeIndex: typeIndex, slotIndex: slot)
+        let position = level.towerSlots[slot].position
+        setEngineerObstacles(slot: slot, to: CGPoint(x: position.x, y: position.y))
         if let melee = first.meleeUnit {
             let towerPos = level.towerSlots[slot].position
             let rally = defaultRallyPoint(towerPosition: towerPos,
@@ -231,6 +253,12 @@ public final class Simulation {
         gold -= cost
         tower.level = nextLevel
         towers[slot] = tower
+        if type.levels[nextLevel].engineerObstacles == nil {
+            engineerObstaclePositions[slot] = nil
+        } else if engineerObstaclePositions[slot] == nil {
+            let position = level.towerSlots[slot].position
+            setEngineerObstacles(slot: slot, to: CGPoint(x: position.x, y: position.y))
+        }
         if let melee = type.levels[nextLevel].meleeUnit, var g = garrisons[slot] {
             // Upgrading re-equips the garrison: living soldiers come back at
             // the new tier's full hp; the dead keep their respawn timers.
@@ -323,6 +351,8 @@ public final class Simulation {
             for slot in 0..<towers.count {
                 guard var tower = towers[slot] else { continue }
                 let ranged = catalog.towerTypes[tower.typeIndex].levels[tower.level]
+                // Planted charges use their own trigger rather than ranged targeting.
+                guard ranged.demolitionPreparationSeconds == nil else { continue }
                 guard ranged.shotMaxDamage > 0 || ranged.terrorMax > 0 || ranged.contagionChance > 0 else {
                     continue
                 }
@@ -357,6 +387,7 @@ public final class Simulation {
 
             resolveMorale(dt: dt)
 
+            let obstacleFields = engineerObstacleFields
             for i in 0..<enemies.count where !enemies[i].removed {
                 var e = enemies[i]
                 let stats = catalog.enemyTypes[e.typeIndex].stats
@@ -372,8 +403,11 @@ public final class Simulation {
                         remove(&e, fate: .routed)
                     }
                 case .shaken, .steady:
-                    let mult = (e.state == .shaken) ? Tunables.shakenSpeedMultiplier : 1.0
-                    e.distance += stats.speed * mult * dt
+                    let mult = stats.moraleResponse.movementMultiplier(morale: e.morale)
+                    let slow = EngineerObstacleField.movementMultiplier(
+                        at: CGPoint(x: positions[i].x, y: positions[i].y),
+                        retreating: false, fields: obstacleFields)
+                    e.distance += stats.speed * mult * slow * dt
                     let progress = e.distance / path.totalLength
                     if progress > waveMaxProgress[e.waveIndex] {
                         waveMaxProgress[e.waveIndex] = min(progress, 1.0)
@@ -479,6 +513,7 @@ public final class Simulation {
                     free.removeAll { $0.spawnID == targetSpawnID }
                 case let .strike(targetSpawnID):
                     if unit.state == .engaging {
+                        unit.combatSide = unit.position.x < (targetPos?.x ?? unit.position.x) ? -1 : 1
                         unit.state = .fighting
                         g.enemySwingTicks[targetSpawnID] =
                             Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
@@ -515,6 +550,7 @@ public final class Simulation {
                     if swing <= 0 {
                         let es = catalog.enemyTypes[enemies[ei].typeIndex].stats
                         unit.hp -= rngCombat.double(in: es.damageMin...es.damageMax)
+                            * es.moraleResponse.damageMultiplier(morale: enemies[ei].morale)
                             * (1.0 - melee.defenseRating)
                         swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
                         if unit.hp <= 0 {

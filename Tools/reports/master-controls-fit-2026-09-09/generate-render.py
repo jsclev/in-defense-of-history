@@ -15,7 +15,6 @@ inputs = [GAME / 'Liberty Line/Level Views/HUD' / name for name in
 views = '\n'.join(p.read_text() for p in inputs)
 views += (OUT / 'before-HudMasterControlsView.swift').read_text().replace('HudMasterControlsView', 'BeforeHudMasterControlsView')
 views = re.sub(r'\bImage\(([^)\n]+)\)', r'Image(nsImage: Proof.art(\1))', views)
-shutil.copy2(GAME / 'Db/in_defense_of_history.sqlite', OUT / 'fixture.sqlite')
 main = r'''
 @main struct Proof {
     @MainActor static var density = 1
@@ -29,7 +28,7 @@ main = r'''
     static func values(_ r: CGRect) -> [CGFloat] { [r.minX, r.minY, r.width, r.height] }
     @MainActor static func main() throws {
         let out = URL(fileURLWithPath: CommandLine.arguments[1])
-        let db = Db(dbPath: out.appendingPathComponent("fixture.sqlite").path, fullRefresh: false)
+        let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
         let vc = try db.virtualCanvasDao.get()
         let minimum = CGRect(x: 0, y: 0, width: 340 * 16.0 / 9, height: 340)
         let fixtures: [(String, CGRect, CGRect)] = [

@@ -168,29 +168,47 @@ final class HeroRankingTests: XCTestCase {
         XCTAssertEqual(try storedSelectionIDs(), original)
     }
 
-    func testPreferencesRestoreOneHeroAndNormalizeOldOrder() throws {
-        let suite = "HeroSelectionTests.\(UUID().uuidString)"
-        let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
-        defer { defaults.removePersistentDomain(forName: suite) }
+    func testDatabaseRefreshReplacesSelectionDespiteLegacyPreferences() throws {
+        let defaults = UserDefaults.standard
+        let previous = defaults.volatileDomain(forName: UserDefaults.argumentDomain)
+        defer { defaults.setVolatileDomain(previous, forName: UserDefaults.argumentDomain) }
         let dao = HeroDAO(conn: conn)
         let seeded = try dao.getSelectedHeroes()
-        let store = HeroSelectionStore(dao: dao, defaults: defaults)
-        defaults.set(seeded.ids.reversed().map(\.uuidString).joined(separator: ","), forKey: HeroSelectionStore.key)
-        XCTAssertEqual(try store.load(), seeded)
-        XCTAssertEqual(defaults.string(forKey: HeroSelectionStore.key), seeded.ids.map(\.uuidString).joined(separator: ","))
         let one = try HeroSelection(heroes: [XCTUnwrap(seeded.secondary)])
+        var legacy = previous
+        legacy["selectedHeroIDs"] = one.primary.id.uuidString
+        defaults.setVolatileDomain(legacy, forName: UserDefaults.argumentDomain)
+        XCTAssertEqual(defaults.string(forKey: "selectedHeroIDs"), one.primary.id.uuidString)
+
+        let store = HeroSelectionStore(dao: dao)
+        XCTAssertEqual(try store.load(), seeded, "Legacy preferences cannot override the DB")
         try store.save(one)
-        // Simulate the bundled database restoring its default pair at startup.
+        XCTAssertEqual(try store.load(), one, "An in-session change is stored in SQLite")
+        // Simulate the new bundled database restoring its authored pair.
         try dao.setSelectedHeroes(seeded.ids)
-        XCTAssertEqual(try store.load(), one)
-        XCTAssertEqual(try dao.getSelectedHeroes(), one)
-        defaults.set("invalid,\(one.primary.id.uuidString.lowercased()),\(one.primary.id.uuidString)", forKey: HeroSelectionStore.key)
-        XCTAssertEqual(try store.load(), one, "Old preferences are normalized and deduplicated")
-        defaults.set("", forKey: HeroSelectionStore.key)
+        XCTAssertEqual(try store.load(), seeded)
+        XCTAssertEqual(try dao.getSelectedHeroes(), seeded)
+    }
+
+    func testMissingDatabaseSelectionDoesNotInventAFallback() throws {
         try execute("DELETE FROM player_selected_hero")
-        let fallback = try store.load()
-        XCTAssertEqual(fallback.primary.shortName, "Israel Putnam")
-        XCTAssertNil(fallback.secondary)
+        XCTAssertThrowsError(try HeroSelectionStore(dao: HeroDAO(conn: conn)).load())
+        XCTAssertEqual(try storedSelectionIDs(), [])
+    }
+
+    func testSettingsReadAndWriteOnlyAuthoredDatabaseRow() throws {
+        let dao = PlayerSettingsDAO(conn: conn)
+        let authored = try dao.get()
+        XCTAssertEqual(authored, PlayerSettings(debugMode: false, showDebugInfo: false,
+            showDebugLayoutGuides: false, enemyEscapeHapticsEnabled: true))
+        var changed = authored
+        changed.debugMode = true
+        changed.enemyEscapeHapticsEnabled = false
+        try dao.set(changed)
+        XCTAssertEqual(try dao.get(), changed)
+        try execute("DELETE FROM player_settings")
+        XCTAssertThrowsError(try dao.get(), "No hardcoded preference fallback")
+        XCTAssertThrowsError(try dao.set(authored), "Do not invent a missing seed row")
     }
 
     private func storedSelectionIDs() throws -> [UUID] {

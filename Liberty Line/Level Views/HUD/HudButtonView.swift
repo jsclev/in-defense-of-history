@@ -32,7 +32,7 @@ struct HudButtonView: View {
     private let action: () -> Void
     
     public init(iconName: String, buttonSize: CGFloat, iconScale: CGFloat = HudSizing.paintedButtonIconFraction,
-                frameName: String = "tower_menu_square_frame",
+                frameName: String,
                 action: @escaping () -> Void) {
         self.iconName = iconName
         self.buttonSize = buttonSize

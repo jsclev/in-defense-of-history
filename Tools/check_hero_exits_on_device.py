@@ -159,9 +159,7 @@ extension LevelRunner {
                     break
                 time.sleep(2)
             assert ready.exists() and ready.read_text() == run_id, 'Overlap captures did not finish'
-        run('xcrun', 'devicectl', 'device', 'copy', 'from', '--device', args.device,
-            '--domain-type', 'appDataContainer', '--domain-identifier', BUNDLE_ID,
-            '--source', 'Documents', '--destination', str(args.output / 'device-documents'))
+        run('python3', str(GAME / 'Tools/capture_device_artifacts.py'), '--device', args.device, '--bundle-id', BUNDLE_ID, '--output', str(args.output / 'device-documents'))
         data = json.loads(result.read_text())
         assert data['passed'], f"After {len(data.get('checks', []))} loads: {data.get('error')}"
         print(f"Passed {data['loads']} LevelRunner loads on physical iPhone. {args.output}")

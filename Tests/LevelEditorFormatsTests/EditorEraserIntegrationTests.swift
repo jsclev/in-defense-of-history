@@ -2,8 +2,6 @@ import CoreGraphics
 import XCTest
 @testable import LevelEditorFormats
 
-/// Exercises the gesture handler used by EditorCanvas, real document edits and
-/// UndoManager, and the native/GeoJSON persistence code. No user files or UI.
 @MainActor
 final class EditorEraserIntegrationTests: XCTestCase {
     private var canvas: VirtualCanvas {
@@ -96,7 +94,7 @@ final class EditorEraserIntegrationTests: XCTestCase {
         var gesture = EditorPaintGesture()
         let t = DesignTransform(scale: 0.125, space: canvas.size)
         gesture.begin(at: CGPoint(x: 37.5, y: 75), transform: t, width: 60, erases: true)
-        // Six canonical units is less than the eight-unit preview spacing.
+
         gesture.append(CGPoint(x: 38.25, y: 75))
         XCTAssertEqual(gesture.preview?.points.count, 1)
         let stroke = try XCTUnwrap(gesture.commit(at: CGPoint(x: 38.25, y: 75), to: document,
@@ -111,7 +109,7 @@ final class EditorEraserIntegrationTests: XCTestCase {
         var gesture = EditorPaintGesture()
         gesture.begin(at: CGPoint(x: 400, y: 540), transform: transform, width: 60, erases: true)
         gesture.append(CGPoint(x: 600, y: 540))
-        gesture.cancel() // Same handler called for cancelled touch/pinch input.
+        gesture.cancel()
         gesture.append(CGPoint(x: 800, y: 540))
         XCTAssertNil(gesture.commit(at: CGPoint(x: 850, y: 540), to: document,
                                     mapGeometry: geometry, undoManager: undo))
@@ -166,7 +164,7 @@ final class EditorEraserIntegrationTests: XCTestCase {
         document.draft.placeHero(.primary, at: Point(500, 260))
         document.draft.placeHero(.secondary, at: Point(520, 260))
         document.draft.callWaveButtons = [.init(position: Point(500, 260), pathIndices: [0])]
-        document.draft.intendedSolution = [.init(at: 3, kind: "place", emplacement: "Minuteman Post", slot: 0)]
+        document.draft.intendedSolution = [.init(at: 3, kind: "place", emplacement: Emplacement.minutemanPost.rawValue, slot: 0)]
         document.draft.backgroundImagePath = "map.png"
         document.draft.backgroundImageData = Data([1, 2, 3])
         document.draft.overlayImagePath = "trees.png"

@@ -103,9 +103,9 @@ public enum MapSpriteSizing {
     public static let cannonball = SpriteHeight(mapPixels: 20.8)
     public static let musketBall = SpriteHeight(mapPixels: 13.66)
 
-    public static let healthBarWidth = SpriteHeight(mapPixels: 30)
-    public static let healthBarHeight = SpriteHeight(mapPixels: 4)
+    public static let healthBarWidth = SpriteHeight(mapPixels: 44)
+    public static let healthBarHeight = SpriteHeight(mapPixels: 8)
 
     public static let towerBaseLift = SpriteHeight(mapPixels: 14)
-    public static let walkerLabelLift = SpriteHeight(mapPixels: 3.5)
+    public static let walkerLabelLift = SpriteHeight(mapPixels: 7)
 }

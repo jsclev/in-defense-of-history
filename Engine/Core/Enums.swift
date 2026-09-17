@@ -1019,7 +1019,6 @@ public enum UnitType: CustomStringConvertible {
     case Siege2
     case Siege3
     case Siege4
-    case Spy
     case Submarine
     case Trade1
     case Trade2
@@ -1073,7 +1072,6 @@ public enum UnitType: CustomStringConvertible {
         case .Siege2: return "Themes/Default/Skins/\(skinName)/Units/Siege/siege-2"
         case .Siege3: return "Themes/Default/Skins/\(skinName)/Units/Siege/siege-3"
         case .Siege4: return "Themes/Default/Skins/\(skinName)/Units/Siege/siege-4"
-        case .Spy: return "Themes/Default/Skins/\(skinName)/Units/Misc/spy"
         case .Submarine: return "Themes/Default/Skins/\(skinName)/Units/Naval/submarine"
         case .Trade1: return "Themes/Default/Skins/\(skinName)/Units/Naval/trade-1"
         case .Trade2: return "Themes/Default/Skins/\(skinName)/Units/Naval/trade-2"
@@ -1129,7 +1127,6 @@ public enum UnitType: CustomStringConvertible {
         case .Siege2: return "Siege2"
         case .Siege3: return "Siege3"
         case .Siege4: return "Siege4"
-        case .Spy: return "Spy"
         case .Submarine: return "Submarine"
         case .Trade1: return "Trade1"
         case .Trade2: return "Trade2"

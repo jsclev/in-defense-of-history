@@ -15,6 +15,8 @@ public struct MilitiaUnit: Sendable {
     public var targetSpawnID: Int = -1
     public var respawnTicksLeft: Int = 0
     public var swingTicksLeft: Int = 0
+    /// Keep the same side of an opponent throughout a fight.
+    public var combatSide: Double = 1
 
     public init(position: Point, hp: Double) {
         self.position = position
@@ -28,6 +30,9 @@ public enum MilitiaTunables {
     public static let moveSpeed: Double = 70
     public static let engageScanRadiusFraction: Double = 0.3
     public static let meleeReach: Double = 26
+    /// Once contact blocks an enemy, fighters spread sideways so neither
+    /// sprite hides the other. This is separate from acquisition/attack reach.
+    public static let combatSpacing: Double = 80
     public static let leashRadiusFraction: Double = 0.5
     public static let enemySwingInterval: Double = 1.2
     public static let heroEngageScanRadius: Double = 80
@@ -52,6 +57,7 @@ public struct MilitiaContext {
     public var towerPosition: Point
     public var leashRadius: Double
     public var engageScanRadius: Double
+    public var combatPosition: Point? = nil
 
     public init(freeEnemies: [(spawnID: Int, position: Point)],
                 targetPosition: Point?, rallyPoint: Point, towerPosition: Point,
@@ -66,6 +72,10 @@ public struct MilitiaContext {
 }
 
 public enum MilitiaAI {
+    public static func combatPosition(for unit: MilitiaUnit, target: Point) -> Point {
+        Point(target.x + unit.combatSide * MilitiaTunables.combatSpacing, target.y)
+    }
+
     public static func decide(_ unit: MilitiaUnit, context: MilitiaContext) -> MilitiaDecision {
         switch unit.state {
         case .dead:
@@ -101,6 +111,8 @@ public enum MilitiaAI {
             if targetPos.distance(to: context.rallyPoint) > context.leashRadius {
                 return .disengage
             }
+            let position = context.combatPosition ?? combatPosition(for: unit, target: targetPos)
+            if unit.position.distance(to: position) > 2 { return .move(toward: position) }
             if unit.swingTicksLeft > 0 { return .idle }
             return .strike(targetSpawnID: unit.targetSpawnID)
         }

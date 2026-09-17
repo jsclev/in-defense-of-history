@@ -35,6 +35,9 @@ public struct ArtilleryAim: Equatable, Sendable {
 
 /// Initial gameplay balance, in degrees/second; not historical measurements.
 public enum ArtilleryHandling {
+    public static func isSiege(level: Int, branch: Int) -> Bool {
+        level == 4 && branch == 4
+    }
     public static func isSwivel(level: Int, branch: Int) -> Bool {
         level == 4 && branch == 2
     }
@@ -43,7 +46,7 @@ public enum ArtilleryHandling {
         let degrees: Double
         switch (level, branch) {
         case (4, 2): degrees = 240
-        case (4, 3): degrees = 35
+        case (4, 3), (4, 4): degrees = 35
         case (4, _): degrees = 45
         case (3, _): degrees = 65
         case (2, _): degrees = 85

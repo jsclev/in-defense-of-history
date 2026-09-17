@@ -32,6 +32,19 @@ public struct HeroMovement {
                                 moveSpeed: Double, deltaTime: Double) -> MilitiaDecision {
         var context = context
         context.rallyPoint = station; context.towerPosition = station
+        if unit.state == .fighting, let target = context.targetPosition {
+            // Keep the combat stance on navigable ground, including narrow
+            // paths. Reposition physically rather than offsetting the artwork.
+            var preferred = MilitiaAI.combatPosition(for: unit, target: target)
+            if !area.contains(preferred) {
+                let opposite = Point(target.x - unit.combatSide * MilitiaTunables.combatSpacing, target.y)
+                if area.contains(opposite) {
+                    unit.combatSide *= -1
+                    preferred = opposite
+                }
+            }
+            context.combatPosition = area.nearestPoint(to: preferred) ?? unit.position
+        }
         let decision = MilitiaAI.decide(unit, context: context)
         switch decision {
         case .idle where unit.state == .returning:

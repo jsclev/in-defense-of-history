@@ -1,7 +1,7 @@
 import Foundation
 
 enum SwiftExport {
-    static func code(for d: MapDraft) -> String {
+    static func code(for d: MapDraft, arsenal: DesignArsenal) throws -> String {
         var out = "    public static let \(identifier(from: d.name)) = LevelBlueprint(\n"
         out += "        name: \"\(d.name)\",\n"
         out += "        startingGold: \(d.startingGold),\n"
@@ -37,7 +37,7 @@ enum SwiftExport {
         for w in d.waves {
             out += "            .init(breather: \(num(w.breather)), lines: [\n"
             for l in w.lines {
-                var args = "\(foeCase(l.foe)), count: \(l.count), every: \(num(l.every))"
+                var args = "\(try foeCase(l.foe)), count: \(l.count), every: \(num(l.every))"
                 if l.delay != 0 { args += ", delay: \(num(l.delay))" }
                 if l.road != 0 { args += ", road: \(l.road)" }
                 out += "                .init(\(args)),\n"
@@ -51,7 +51,7 @@ enum SwiftExport {
             for s in d.intendedSolution.sorted(by: { $0.at < $1.at }) {
                 let order: String
                 if s.kind == "place" {
-                    order = ".place(\(emplacementCase(s.emplacement)), slot: \(s.slot))"
+                    order = ".place(\(try emplacementCase(s.emplacement, arsenal: arsenal)), slot: \(s.slot))"
                 } else {
                     order = ".upgrade(slot: \(s.slot))"
                 }
@@ -77,14 +77,16 @@ enum SwiftExport {
         return s
     }
 
-    static func foeCase(_ raw: String) -> String {
+    static func foeCase(_ raw: String) throws -> String {
         if let foe = Foe(rawValue: raw) { return ".\(foe)" }
-        return ".loyalistMilitia /* unknown foe: \(raw) */"
+        throw DbError.Db(message: "Unknown enemy key \(raw); reselect the enemy before exporting.")
     }
 
-    static func emplacementCase(_ raw: String?) -> String {
-        if let raw, let e = Emplacement(rawValue: raw) { return ".\(e)" }
-        return ".minutemanPost /* unknown emplacement */"
+    static func emplacementCase(_ raw: String?, arsenal: DesignArsenal) throws -> String {
+        guard let raw, let e = arsenal.emplacement(for: raw) else {
+            throw DbError.Db(message: "Unknown tower key in the intended solution; reselect the tower.")
+        }
+        return ".\(e)"
     }
 
     static func identifier(from name: String) -> String {

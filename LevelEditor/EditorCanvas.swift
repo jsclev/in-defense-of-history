@@ -889,7 +889,7 @@ struct EditorCanvas: View {
         let buttonSide = state.towerMenuLayout
             .getTowerButtonSize(playAreaScalingFactor: t.scale).width
         for kind in TowerKind.allCases {
-            let iconSide = state.towerMenuLayout.getTowerIconSize(towerButtonSize: buttonSide, for: kind)
+            let iconSide = state.towerMenuLayout.getTowerIconSize(towerButtonSize: buttonSide)
             let buttonCenter = state.towerMenuLayout.getTowerButtonCenterPoint(
                 towerKind: kind, menuCenterPoint: c,
                 playAreaScalingFactor: t.scale, towerButtonSize: buttonSide)
@@ -1052,7 +1052,8 @@ struct EditorCanvas: View {
         let warnings = state.mapGeometry.warnings(for: draft, maxTowerRange: content.maxTowerRange)
         var planned: [Int: Emplacement] = [:]
         for step in draft.intendedSolution where step.kind == "place" {
-            if planned[step.slot] == nil, let e = step.emplacement.flatMap(Emplacement.init(rawValue:)) {
+            if planned[step.slot] == nil,
+               let value = step.emplacement, let e = content.arsenal?.emplacement(for: value) {
                 planned[step.slot] = e
             }
         }

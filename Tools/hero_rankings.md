@@ -75,12 +75,13 @@ in slot 2. Invalid input or a failed insert leaves the previous choice intact.
 record order when saved; editing a ranking takes effect on the next DAO read
 without requiring slot edits.
 
-`HeroSelectionStore` keeps the existing `selectedHeroIDs` preference and database
-selection synchronized, restoring the player's choices after a content refresh.
-It normalizes old ordering, invalid IDs, and duplicates. If neither preferences
-nor database contain valid choices, it chooses the first unlocked roster hero.
-Existing explicit SQL/saved choices are retained even when their unlock flag is
-off; selecting an additional hero through the menu still requires it to be unlocked.
+`HeroSelectionStore` reads and writes only `player_selected_hero` in SQLite.
+Hero screens keep an in-memory view of that database selection. They do not use
+`UserDefaults` or `AppStorage`, and loading never invents a fallback hero when
+selection rows are missing. A database refresh replaces choices with the authored
+rows. Startup discards legacy app preferences rather than importing them.
+Existing explicit SQL choices remain usable even when their unlock flag is off;
+selecting an additional hero through the menu still requires it to be unlocked.
 
 `LevelRunner` deploys the player's choices using the level's GeoJSON capacity
 and role assignments on exits. Levels 1–5 deploy only the chosen primary; levels

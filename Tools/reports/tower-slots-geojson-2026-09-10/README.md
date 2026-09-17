@@ -8,7 +8,7 @@ Missing/malformed GeoJSON fails loading; no SQL fallback exists.
 
 Removed the SQL table, all 15 level seed blocks, and slot SQL generation/validation
 from asset-workspace tools. The bundled database was migrated with every other
-table verified unchanged; `before.sqlite` is the pre-migration backup.
+table verified unchanged.
 A complete fresh database build passes integrity and foreign-key checks.
 
 Verification: all 15 maps matched their exact authored positions on physical

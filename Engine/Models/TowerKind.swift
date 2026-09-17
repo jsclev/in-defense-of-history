@@ -13,11 +13,13 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         case .ranged: return "Ranged"
         case .melee: return "Melee"
         case .areaOfEffect: return "Area of Effect"
-        case .special: return "Special"
+        case .special: return "Engineers"
         }
     }
 
     public init?(categoryName: String) {
+
+        if categoryName == "Special" { self = .special; return }
         guard let kind = Self.allCases.first(where: { $0.categoryName == categoryName })
         else { return nil }
         self = kind
@@ -35,6 +37,8 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
     public var assetName: String? { assetName(atLevel: 1) }
 
     public func assetName(atLevel level: Int, branch: Int = 1) -> String? {
+
+        if self == .special && level >= 4 && branch == 2 { return "special_tower_level_3" }
         if level >= 4 {
             return "\(assetFamilyName)_tower_level_4_branch_\(branch)"
         }
@@ -51,6 +55,20 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         }
     }
 
+    public func specializationMenuIconName(atLevel level: Int, branch: Int) -> String? {
+        guard level == 4 else { return nil }
+        if self == .special {
+            return branch == 3 ? "tower_menu_engineer_sapper" : menuIconName
+        }
+        guard self == .areaOfEffect else { return nil }
+        switch branch {
+        case 1: return "tower_menu_artillery_mortar"
+        case 2: return "tower_menu_artillery_swivel"
+        case 4: return "tower_menu_artillery_siege"
+        default: return nil
+        }
+    }
+
     public func directionalAssetName(atLevel level: Int, branch: Int = 1) -> String? {
         guard self == .areaOfEffect,
               let base = assetName(atLevel: level, branch: branch) else { return nil }
@@ -61,8 +79,6 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         "tower_menu_square_frame"
     }
 
-    /// Full image height for every tower level and branch, including transparent
-    /// padding. This is the single size setting used by the map renderer.
     public var spriteHeight: SpriteHeight {
         switch self {
         case .ranged: return MapSpriteSizing.tower(mapPixels: 70.0)

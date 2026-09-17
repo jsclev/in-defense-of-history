@@ -7,7 +7,6 @@ import subprocess
 out = Path(__file__).resolve().parent
 game = out.parents[2]
 build = Path('/tmp/td-bottom-center-tests/arm64-apple-macosx/debug')
-shutil.copy2(game / 'Db/in_defense_of_history.sqlite', out / 'fixture.sqlite')
 binary = '/tmp/td-bottom-center-render'
 subprocess.run(['swiftc', '-parse-as-library', '-module-cache-path', '/tmp/td-bottom-center-swift-cache',
                 '-I', str(build / 'Modules'), str(out / 'render.swift')]

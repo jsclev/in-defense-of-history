@@ -234,7 +234,7 @@ public struct BeforeHeroBarLayout: Equatable {
     static func values(_ r: CGRect) -> [CGFloat] { [r.minX, r.minY, r.width, r.height] }
     @MainActor static func main() throws {
         let out = URL(fileURLWithPath: CommandLine.arguments[1])
-        let db = Db(dbPath: out.appendingPathComponent("fixture.sqlite").path, fullRefresh: false)
+        let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
         let vc = try db.virtualCanvasDao.get()
         let heroes = try db.heroDao.getAll()
         let pair = ["Henry Knox", "George Washington"].map { name in heroes.first { $0.shortName == name }! }

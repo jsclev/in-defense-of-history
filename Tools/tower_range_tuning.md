@@ -14,27 +14,10 @@ decimals in `Db/DML/towers.sql`. This makes the basic gun radius 16.62% of the
 1920-unit playable width, up from 10.31%. It preserves existing militia reach
 and the relative KR progression without depending on either game's resolution.
 
-| Family / tower | Previous radius | New map radius | Reference / role |
-| --- | ---: | ---: | --- |
-| Musketmen | 198 | 319.08 | Archer 280 |
-| Marksmen | 231 | 364.67 | Marksmen 320 |
-| Riflemen | 264 | 410.25 | Sharpshooter 360 |
-| Morgan's Sharpshooters | 275 | 535.61 | Musketeer 470; longest rifle reach |
-| Knowlton's Rangers | 275 | 455.83 | Rangers 400 |
-| Whitcomb's Rangers | 275 | 490.02 | Adapted 430; between Rangers and sharpshooters |
-| All six militia / continental towers | 330.48 | 330.48 | Barracks 290; rally placement, not shooting |
-| 4-pounder | 240 | 364.67 | Bombard 320 |
-| 6-pounder | 240 | 364.67 | Artillery 320 |
-| Howitzer | 270 | 410.25 | Howitzer 360 |
-| Mortar Battery | 300 | 455.83 | Adapted 400; longer bombardment reach |
-| Swivel-Gun Emplacement | 300 | 320.00 | Short-range grapeshot; fast turning |
-| Knox's Siege Guns | 300 | 501.42 | Adapted 440; longest artillery reach |
-| Engineer Post | 210 | 319.08 | Mage-tier coverage 280 |
-| Field Engineers | 240 | 364.67 | Mage-tier coverage 320 |
-| Sappers | 270 | 410.25 | Mage-tier coverage 360 |
-| Demolition Sappers | 300 | 455.83 | Mage-tier coverage 400 |
-| Fieldworks Corp | 300 | 478.63 | Adapted 420; broad support coverage |
-| Corps of Miners | 300 | 410.25 | Adapted 360; local work area |
+Tower identities, names and ranges are authored in `Db/DML/towers.sql`.
+Refer to rows by `tower_type_id`, `tower_level` and `branch`; display names are
+read from SQLite and are not lookup keys. The range checker below verifies the
+relative ordering and special branch behavior against those stable keys.
 
 The adapted branches and the engineer-to-mage analogy are Liberty Line design
 choices, not claims about historical weapon distances or additional KR towers.
@@ -43,8 +26,8 @@ Engineer towers currently have no projectile / damage implementation in
 new attack. Damage, fire rate, splash radius, costs, troop leashes and rally
 placement behavior are unchanged. Increased coverage will make levels easier;
 campaign difficulty should be assessed separately before further stat tuning.
-The focused simulator sweeps now bracket Musketmen at 280–360 and Marksmen at
-320–410; the previous 100–275 intervals excluded the new defaults.
+The focused simulator sweeps now bracket ranged levels 1 and 2 at 280–360 and
+320–410 respectively; the previous 100–275 intervals excluded the new defaults.
 
 ## Runtime units
 
@@ -57,9 +40,9 @@ require that canvas; there is no caller-supplied range scale. Safe areas,
 orientation and window resizing consequently change the displayed distance
 in the same proportion as the map.
 
-The existing ring artwork has a 0.7 height/width ratio. That presentation
-convention remains; combat and rally checks still use circular map distances.
-The displayed horizontal radius is the actual scaled combat radius.
+The existing ring artwork has a 0.7 height/width ratio. `TowerAttackRange` uses
+that same ellipse for attack targeting and charge placement. Blast radii remain
+independent circles centered on impact; rally placement retains its own geometry.
 
 ## Verification
 
@@ -70,12 +53,14 @@ swiftc -module-cache-path /tmp/td-range-module-cache \
   Engine/Design/VirtualCanvas.swift Engine/Core/RuntimeCanvas.swift \
   Engine/Layout/TowerRangeOverlay.swift Engine/Models/Core.swift \
   Engine/Models/Path.swift Engine/Models/Tower.swift Engine/Models/MilitiaAI.swift \
-  Engine/Combat/TargetCommand.swift Tools/check_tower_ranges.swift \
+  Engine/Combat/TowerAttackRange.swift Engine/Combat/TargetCommand.swift \
+  Engine/Combat/EngineerObstacles.swift \
+  Tools/check_tower_ranges.swift \
   -o /tmp/td-check-tower-ranges
 /tmp/td-check-tower-ranges Db/in_defense_of_history.sqlite
 ```
 
-The check reads all 24 database rows and the real virtual canvas. It verifies
+The check reads all 23 database rows and the real virtual canvas. It verifies
 upgrade progression, role ordering, unchanged rally radii, targets at / beyond
 the attack boundary, and range projection on phones, tablets, portrait and
 resized views. The bundled SQLite database must be refreshed when SQL changes;

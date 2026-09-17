@@ -9,7 +9,6 @@ source = GAME / 'Liberty Line/Level Views/HUD/HudStatsView.swift'
 views = source.read_text() + (GAME / 'Liberty Line/HudMetrics.swift').read_text()
 views = views.replace('UIImage(named: name)', 'Optional(Proof.art(name))')
 views = re.sub(r'\bImage\(([^)\n]+)\)', r'Image(nsImage: Proof.art(\1))', views)
-shutil.copy2(GAME / 'Db/in_defense_of_history.sqlite', OUT / 'fixture.sqlite')
 main = r'''
 @MainActor final class LevelRunner: ObservableObject {
     @Published var lives = 20
@@ -35,7 +34,7 @@ main = r'''
     }
     @MainActor static func main() throws {
         let out = URL(fileURLWithPath: CommandLine.arguments[1])
-        let db = Db(dbPath: out.appendingPathComponent("fixture.sqlite").path, fullRefresh: false)
+        let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
         let vc = try db.virtualCanvasDao.get()
         let minimum = CGRect(x: 0, y: 0, width: 340 * 16.0 / 9, height: 340)
         let fixtures: [(String, CGRect, CGRect)] = [

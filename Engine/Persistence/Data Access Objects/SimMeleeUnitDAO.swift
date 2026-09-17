@@ -14,8 +14,7 @@ public class SimMeleeUnitDAO: BaseDAO {
     public func getBrackets() throws -> [String: [Int: SimMeleeBrackets]] {
         var out: [String: [Int: SimMeleeBrackets]] = [:]
 
-        var stmt: OpaquePointer?
-        let sql = getCleanedSql("""
+        let rows = try authoredRows("""
             SELECT
                 tt.tower_type_category,
                 t.tower_level,
@@ -25,27 +24,26 @@ public class SimMeleeUnitDAO: BaseDAO {
                 m.max_damage
             FROM
                 sim_melee_unit m
-            INNER JOIN
+            LEFT JOIN
                 tower t ON t.id = m.tower_id
-            INNER JOIN
+            LEFT JOIN
                 tower_type tt ON tt.id = t.tower_type_id
-            WHERE
-                t.branch = 1
-        """)
-
-        try prepare(conn: conn, stmt: &stmt, sql: sql)
-
-        while sqlite3_step(stmt) == SQLITE_ROW {
-            guard let category = try getString(stmt: stmt, colIndex: 0) else { continue }
+        """, entity: "sim_melee_unit") { row in
+            let category = try row.text("tower_type_category")
+            let level = try row.integer("tower_level", minimum: 1)
+            let minHP = try row.number("min_hp", minimum: 0, strictlyGreater: true)
+            let minDamage = try row.number("min_damage", minimum: 0, strictlyGreater: true)
             let brackets = SimMeleeBrackets(
-                hp: getDouble(stmt: stmt, colIndex: 2)...getDouble(stmt: stmt, colIndex: 3),
-                averageDamage: getDouble(stmt: stmt, colIndex: 4)...getDouble(stmt: stmt, colIndex: 5)
+                hp: minHP...(try row.number("max_hp", minimum: minHP)),
+                averageDamage: minDamage...(try row.number("max_damage", minimum: minDamage))
             )
-            out[category, default: [:]][getInt(stmt: stmt, colIndex: 1)] = brackets
+            return (category, level, brackets)
         }
-
-        sqlite3_finalize(stmt)
-        stmt = nil
+        for (category, level, brackets) in rows {
+            guard out[category, default: [:]].updateValue(brackets, forKey: level) == nil else {
+                throw DbError.Db(message: "sim_melee_unit: duplicate category/tier \(category)/\(level)")
+            }
+        }
 
         return out
     }

@@ -1,4 +1,3 @@
-
 import Foundation
 import LevelEditorFormats
 
@@ -32,9 +31,7 @@ final class Probe {
         let pathIndex: Int
         var position: CGPoint = .zero
         var pathDistance: Double = 0
-        /// Ticks spent standing still while a militia soldier blocked the way;
-        /// subtracted from the analytic march so the walker resumes where it
-        /// stopped instead of teleporting ahead.
+
         var haltedTicks: Double = 0
     }
 private func loseLife() {
@@ -45,8 +42,7 @@ private func loseLife() {
         isDefeated = true
         pendingSpawns.removeAll()
         refreshWaveStartState()
-        // Defeat still needs its complete haptic while the game-over view is
-        // visible. Leaving/backgrounding the level calls stop() to end both.
+
         stopSimulation()
     }
     func march(to tick: Int64) {

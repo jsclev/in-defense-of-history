@@ -10,7 +10,7 @@ INSERT INTO level_info (
     1413.0,
     julianday('1780-03-29T08:00:00-05:00'),
     julianday('1780-05-12T14:00:00-05:00'),
-    500,
+    3000, -- Keep at 3000 for sapper experimentation until the user explicitly restores it.
     20,
     15,
     'level_15_charleston'

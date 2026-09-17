@@ -1,4 +1,5 @@
 import Foundation
+import CoreGraphics
 
 public protocol TargetCommand {
     associatedtype Solution
@@ -36,6 +37,7 @@ public struct TowerTargetingContext: Sendable, Equatable {
     public let position: Point
     public let range: Double
     public let targeting: Targeting
+    public var attackRange: TowerAttackRange { TowerAttackRange(range) }
 
     public init(slotIndex: Int, position: Point, range: Double, targeting: Targeting) {
         self.slotIndex = slotIndex
@@ -58,11 +60,10 @@ public struct RangedTargetCommand: TargetCommand {
 
     public func execute() -> TargetCandidate? {
         guard tower.range > 0 else { return nil }
-        let squaredRange = tower.range * tower.range
         var best: TargetCandidate?
         var bestKey = -Double.infinity
         for enemy in enemies {
-            guard enemy.position.squaredDistance(to: tower.position) <= squaredRange else {
+            guard isInRange(enemy) else {
                 continue
             }
             let key = priority(of: enemy)
@@ -75,7 +76,8 @@ public struct RangedTargetCommand: TargetCommand {
     }
 
     public func isInRange(_ enemy: TargetCandidate) -> Bool {
-        enemy.position.squaredDistance(to: tower.position) <= tower.range * tower.range
+        tower.attackRange.contains(CGPoint(x: enemy.position.x, y: enemy.position.y),
+                                   from: CGPoint(x: tower.position.x, y: tower.position.y))
     }
 
     public func distanceToGoal(of enemy: TargetCandidate) -> Double {

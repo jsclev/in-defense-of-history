@@ -30,6 +30,11 @@ public struct HeroWalkPose {
         }
     }
 
+    public mutating func face(toward target: Point) {
+        guard !isWalking, position.distance(to: target) > 0 else { return }
+        facing = UnitFacing(dx: target.x - position.x, dy: target.y - position.y)
+    }
+
     public struct Sample {
         public let position: Point
         public let walkPhase: Double

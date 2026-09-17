@@ -36,14 +36,7 @@ struct HeroMapLayer: View {
                     let fraction = CGFloat(max(0, hero.hp / hero.maxHP))
                     let barWidth = sprites.points(MapSpriteSizing.healthBarWidth)
                     let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
-                    ZStack(alignment: .leading) {
-                        Capsule()
-                            .fill(Color.red)
-                        Capsule()
-                            .fill(Color.green)
-                            .frame(width: barWidth * fraction, height: barHeight)
-                    }
-                    .frame(width: barWidth, height: barHeight)
+                    UnitHealthBar(fraction: fraction, width: barWidth, height: barHeight)
                     .position(x: footPoint.x,
                               y: footPoint.y - spriteHeight - sprites.points(MapSpriteSizing.walkerLabelLift))
                     .allowsHitTesting(false)
