@@ -2,6 +2,7 @@ import Foundation
 import CoreGraphics
 
 struct SweepFixedInputs {
+    let combatRules: CombatRules
     var levelID: UUID
     var levelName: String
     var lives: Int
@@ -9,6 +10,7 @@ struct SweepFixedInputs {
     var unlocks: [String: Int]
     var towerLevels: [String: [TowerLevel]]
     var towerNames: [String: String]
+    var towerIDs: [String: UUID]
     var roster: [EnemyType]
     var bounds: [String: [String: SimStatBounds]]
     var speedBounds: [UUID: ClosedRange<Double>]
@@ -35,16 +37,10 @@ struct SweepFixedInputs {
             throw DbError.Db(message: "No level named '\(levelName)' in the database")
         }
         let level = try db.levelLoader.load(id: levelID)
-        var towerLevels: [String: [TowerLevel]] = [:]
-        for (category, levels) in try db.towerTypeDao.getTowerLevels() {
-            towerLevels[normalizeKind(category)] = levels
-        }
-        let towerNames = Dictionary(uniqueKeysWithValues: try db.towerTypeDao.getDisplayNames().map {
-            (normalizeKind($0.key), $0.value)
-        })
-        guard towerLevels.keys.allSatisfy({ towerNames[$0]?.isEmpty == false }) else {
-            throw DbError.Db(message: "Missing authored simulator tower names")
-        }
+        let arsenal = try db.towerTypeDao.getDesignArsenal()
+        let towerLevels = Dictionary(uniqueKeysWithValues: arsenal.towers.map { ($0.kind.rawValue, $0.type.levels) })
+        let towerNames = Dictionary(uniqueKeysWithValues: arsenal.towers.map { ($0.kind.rawValue, $0.name) })
+        self.towerIDs = Dictionary(uniqueKeysWithValues: arsenal.towers.map { ($0.kind.rawValue, $0.id) })
         var meleeBrackets: [String: [Int: SimMeleeBrackets]] = [:]
         for (category, byLevel) in try db.simMeleeUnitDao.getBrackets() {
             meleeBrackets[normalizeKind(category)] = byLevel
@@ -54,6 +50,7 @@ struct SweepFixedInputs {
             towerRanges[normalizeKind(category)] = byLevel
         }
 
+        self.combatRules = arsenal.combatRules
         self.levelID = levelID
         self.levelName = levelName
         self.lives = level.numStartingLives
@@ -499,12 +496,7 @@ struct SweepPermutation {
 /// and tower levels, bent by the permutation's swept values.
 struct SweepCatalog {
     let fixed: SweepFixedInputs
-    let kindIDs: [String: UUID] = [
-        "ranged": UUID(uuidString: "5e0e91a1-0001-4000-8000-000000000001")!,
-        "areaOfEffect": UUID(uuidString: "5e0e91a1-0002-4000-8000-000000000002")!,
-        "special": UUID(uuidString: "5e0e91a1-0003-4000-8000-000000000003")!,
-        "melee": UUID(uuidString: "5e0e91a1-0004-4000-8000-000000000004")!,
-    ]
+    var kindIDs: [String: UUID] { fixed.towerIDs }
 
     init(fixed: SweepFixedInputs) {
         self.fixed = fixed
@@ -585,7 +577,7 @@ struct SweepCatalog {
             }
             towers.append(TowerType(id: id, name: fixed.towerNames[kind]!, levels: Array(levels)))
         }
-        return ContentCatalog(enemyTypes: roster, towerTypes: towers)
+        return ContentCatalog(combatRules: fixed.combatRules, enemyTypes: roster, towerTypes: towers)
     }
 }
 

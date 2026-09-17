@@ -4,7 +4,9 @@ public struct MeleeFormation: Sendable {
     public let postSpread: Double
     public let spawnSpread: Double
 
-    public init(postSpread: Double = 45.36, spawnSpread: Double = 0) {
+    public init(rules: CombatRules) {
+        let postSpread = rules.meleePostSpread
+        let spawnSpread = rules.meleeSpawnSpread
         self.postSpread = postSpread
         self.spawnSpread = spawnSpread
     }

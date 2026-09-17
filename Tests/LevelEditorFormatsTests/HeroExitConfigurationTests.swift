@@ -6,10 +6,10 @@ final class HeroExitConfigurationTests: XCTestCase {
     private func hero(_ id: Int, ranking: Int) -> Hero {
         Hero(id: UUID(uuidString: String(format: "00000000-0000-0000-0000-%012d", id))!,
              shortName: "Hero \(id)", longName: "Hero \(id)", ranking: ranking, nickname: nil,
-             unlockedAtLevelId: nil, unlockedAtLevelName: nil, unlockedAtCampaignName: nil,
+             unlockedAtLevelId: UUID(), unlockedAtLevelName: "Test level", unlockedAtCampaignName: "Test campaign",
              unlockedAtWave: 1, unlocked: true, fromMiniCampaign: false,
              generalDescription: "", historicalDescription: "", historicalText: "",
-             primaryImageName: "", detailsImageName: "", iconImageName: "",
+             primaryImageName: "", iconImageName: "",
              abilityIconImageName: "", unitImageName: "hero_unit")
     }
 

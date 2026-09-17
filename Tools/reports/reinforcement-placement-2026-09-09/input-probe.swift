@@ -37,8 +37,7 @@ final class LevelRunner: ObservableObject {
         towerLevels = Dictionary(uniqueKeysWithValues: try db.towerTypeDao.getTowerLevelsByBranch().compactMap { k,v in TowerKind(categoryName: k).map { ($0,v) } })
         reinforcementSchedule = ReinforcementSchedule(config: try db.reinforcementConfigDao.get())
     }
-    private let meleeFormation = MeleeFormation()
-    private static let reinforcementCount = 2
+    private var meleeFormation: MeleeFormation { MeleeFormation(rules: combatRules) }
     private var nextReinforcementSlot = -1
     private var reinforcementSchedule: ReinforcementSchedule?
     @Published var reinforcementCooldown: ReinforcementCooldown = .ready
@@ -55,11 +54,18 @@ final class LevelRunner: ObservableObject {
     struct TowerFixture { var position: CGPoint = .zero }
     func placedTower(atSlot slot: Int) -> TowerFixture? { slot >= 0 ? TowerFixture() : nil }
     func towerLevel(for tower: TowerFixture) -> TowerLevel? { towerLevels[.melee]?[1]?[1] }
-    var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] = [.melee: [1: [1:
-        TowerLevel(cost: 100, range: 100, fireInterval: 1,
-            meleeUnit: MeleeUnitStats(soldierCount: 2, attackRating: 5,
-                defenseRating: 0, hp: 50, rallyPointRadius: 100, attackInterval: 1,
-                respawnSeconds: 5, healPerSecond: 0))]]]
+    private let authoredDB = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
+    private var combatRules: CombatRules {
+        do { return try authoredDB.combatRulesDao.get() }
+        catch { fatalError("Invalid authored combat rules: \(error)") }
+    }
+    var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] {
+        do {
+            let rows = try authoredDB.towerTypeDao.getTowerLevelsByBranch()
+            guard let melee = rows["Melee"] else { fatalError("Missing authored melee tiers") }
+            return [.melee: melee]
+        } catch { fatalError("Invalid authored tower data: \(error)") }
+    }
 
     init(lifetime: Double = 20, cooldown: Double = 20) throws {
         reinforcementSchedule = ReinforcementSchedule(config:
@@ -119,9 +125,9 @@ func callReinforcements(at point: CGPoint) -> Bool {
         let anchor = Point(Double(point.x), Double(point.y))
         garrisonsBySlot[nextReinforcementSlot] = MilitiaGarrison(
             rallyPoint: anchor,
-            units: (0..<Self.reinforcementCount).map { index in
+            units: (0..<combatRules.reinforcementSoldierCount).map { index in
                 MilitiaUnit(position: meleeFormation.spawnPoint(
-                    index: index, of: Self.reinforcementCount, building: anchor),
+                    index: index, of: combatRules.reinforcementSoldierCount, building: anchor),
                             hp: melee.hp)
             },
             stats: melee,

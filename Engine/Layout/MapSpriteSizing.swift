@@ -79,7 +79,7 @@ public enum SlotTapTarget {
 
 public enum MapSpriteSizing {
     public static func heroGroundInset(baseAssetName: String, spriteHeight: CGFloat) -> CGFloat {
-        spriteHeight * (HeroSpriteProfile.all[baseAssetName]?.groundInsetFraction ?? 0)
+        spriteHeight * HeroSpriteProfile.require(baseAssetName: baseAssetName).groundInsetFraction
     }
 
     public static func tower(mapPixels: CGFloat) -> SpriteHeight {
@@ -87,7 +87,7 @@ public enum MapSpriteSizing {
     }
 
     public static func hero(baseAssetName: String) -> SpriteHeight {
-        HeroSpriteProfile.all[baseAssetName]?.imageHeight ?? hero
+        HeroSpriteProfile.require(baseAssetName: baseAssetName).imageHeight
     }
 
     public static let walker = SpriteHeight(mapPixels: 58.04)
@@ -97,9 +97,6 @@ public enum MapSpriteSizing {
     // crown is centered on the authored exit point.
     public static let exitMarker = SpriteHeight(
         mapPixels: 25.6 * SpriteHeight.referenceMapHeight / SpriteHeight.smallestPlayableHeight)
-    public static let heroMapHeight: CGFloat = 87.06
-    // Fallback for future assets; the current roster uses HeroSpriteProfile.
-    public static let hero = SpriteHeight(mapPixels: heroMapHeight)
     public static let cannonball = SpriteHeight(mapPixels: 20.8)
     public static let musketBall = SpriteHeight(mapPixels: 13.66)
 

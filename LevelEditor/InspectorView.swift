@@ -778,7 +778,7 @@ struct InspectorView: View {
                             d.intendedSolution.append(.init(
                                 at: (d.intendedSolution.last?.at ?? 0) + 10,
                                 kind: "place",
-                                emplacement: Emplacement.minutemanPost.rawValue,
+                                emplacement: TowerKind.melee.rawValue,
                                 slot: 0
                             ))
                         }
@@ -836,7 +836,7 @@ struct InspectorView: View {
                 set: { nv in with {
                     $0.kind = nv
                     $0.emplacement = nv == "place"
-                        ? ($0.emplacement ?? Emplacement.minutemanPost.rawValue) : nil
+                        ? ($0.emplacement ?? TowerKind.melee.rawValue) : nil
                 } }
             )) {
                 Text("Place").tag("place")
@@ -847,12 +847,12 @@ struct InspectorView: View {
             if step()?.kind == "place" {
                 Picker("", selection: Binding(
                     get: {
-                        guard let value = step()?.emplacement else { return Emplacement.minutemanPost.rawValue }
+                        guard let value = step()?.emplacement else { return TowerKind.melee.rawValue }
                         return state.content.arsenal?.emplacement(for: value)?.rawValue ?? value
                     },
                     set: { nv in with { $0.emplacement = nv } }
                 )) {
-                    ForEach(Emplacement.allCases, id: \.rawValue) { e in
+                    ForEach(TowerKind.allCases, id: \.rawValue) { e in
                         if let arsenal = state.content.arsenal {
                             Text(arsenal.type(e).name).tag(e.rawValue)
                         }

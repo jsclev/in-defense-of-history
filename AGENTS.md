@@ -18,6 +18,12 @@ Regression tests must prove both that database edits propagate and that missing
 or invalid data fails; constructor defaults and test-only production fallbacks
 are not acceptable fixes.
 
+This requirement covers all combat attributes, including shared combat rules,
+enemy and hero stats, morale, movement, targeting, projectile collision and
+reinforcement counts. Author shared rules in `Db/DML/combat_rules.sql` and load
+them through `CombatRulesDAO`. Pass the resulting rules into combat models;
+never introduce a parallel Swift tuning catalog or a mutable global registry.
+
 # Standard build process — explicit authorization required
 
 Standing user instruction (September 11, 2026): Keep a standard, native Xcode compilation process. Never introduce compiler or build-system workarounds, wrappers, shims, toolchain substitutions or patches, or process-killing/retry automation to get a build through an error or hang unless the user explicitly authorizes that specific workaround in advance. A general request to fix a build or make the workspace compile is not authorization for any such change.

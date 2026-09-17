@@ -18,50 +18,14 @@ CREATE TABLE enemy_type (
     damage_min REAL NOT NULL,
     damage_max REAL NOT NULL,
     bounty INTEGER NOT NULL,
-    lives_cost INTEGER NOT NULL DEFAULT 1,
+    lives_cost INTEGER NOT NULL,
     break_band_lo REAL NOT NULL,
     break_band_hi REAL NOT NULL,
-    traits TEXT NOT NULL DEFAULT '[]',
-    morale_speed_threshold REAL NOT NULL DEFAULT 0.4 CHECK (morale_speed_threshold BETWEEN 0 AND 1),
-    morale_attack_threshold REAL NOT NULL DEFAULT 0.4 CHECK (morale_attack_threshold BETWEEN 0 AND 1),
-    morale_speed_multiplier REAL NOT NULL DEFAULT (2.0 / 3.0) CHECK (morale_speed_multiplier BETWEEN 0 AND 1),
-    morale_attack_multiplier REAL NOT NULL DEFAULT (2.0 / 3.0) CHECK (morale_attack_multiplier BETWEEN 0 AND 1)
-);
-
-CREATE TABLE design_emplacement (
-    emplacement_key TEXT PRIMARY KEY,
-    tower_name TEXT NOT NULL CHECK (length(trim(tower_name)) > 0),
-    short_name TEXT NOT NULL CHECK (length(trim(short_name)) > 0),
-    level_count INTEGER NOT NULL CHECK (level_count > 0)
-);
-
-CREATE TABLE design_emplacement_level (
-    has_melee_unit INTEGER NOT NULL CHECK (has_melee_unit IN (0, 1)),
-    has_demolition_charge INTEGER NOT NULL CHECK (has_demolition_charge IN (0, 1)),
-    has_engineer_obstacles INTEGER NOT NULL CHECK (has_engineer_obstacles IN (0, 1)),
-    emplacement_key TEXT NOT NULL REFERENCES design_emplacement (emplacement_key),
-    tower_level INTEGER NOT NULL CHECK (tower_level > 0),
-    cost INTEGER NOT NULL CHECK (cost >= 0),
-    tower_range REAL NOT NULL CHECK (tower_range > 0),
-    fire_interval REAL NOT NULL CHECK (fire_interval >= 0),
-    shot_min_damage REAL NOT NULL CHECK (shot_min_damage >= 0),
-    shot_max_damage REAL NOT NULL CHECK (shot_max_damage >= shot_min_damage),
-    terror_min REAL NOT NULL CHECK (terror_min >= 0),
-    terror_max REAL NOT NULL CHECK (terror_max >= terror_min),
-    aoe_radius REAL NOT NULL CHECK (aoe_radius >= 0),
-    aoe_falloff_exponent REAL NOT NULL CHECK (aoe_falloff_exponent > 0),
-    splash_cover_pierce REAL NOT NULL CHECK (splash_cover_pierce BETWEEN 0 AND 1),
-    contagion_chance REAL NOT NULL CHECK (contagion_chance BETWEEN 0 AND 1),
-    targeting TEXT NOT NULL CHECK (targeting IN ('first', 'last', 'strongest', 'shakiest')),
-    projectile_speed REAL NOT NULL CHECK (projectile_speed >= 0),
-    demolition_prepare_seconds REAL CHECK (demolition_prepare_seconds IS NULL OR demolition_prepare_seconds > 0),
-    obstacle_radius REAL CHECK (obstacle_radius IS NULL OR obstacle_radius > 0),
-    obstacle_slow_fraction REAL CHECK (obstacle_slow_fraction IS NULL OR
-        (obstacle_slow_fraction > 0 AND obstacle_slow_fraction < 1)),
-    PRIMARY KEY (emplacement_key, tower_level),
-    CHECK ((obstacle_radius IS NULL) = (obstacle_slow_fraction IS NULL)),
-    CHECK ((demolition_prepare_seconds IS NOT NULL) = has_demolition_charge),
-    CHECK ((obstacle_radius IS NOT NULL) = has_engineer_obstacles)
+    traits TEXT NOT NULL,
+    morale_speed_threshold REAL NOT NULL CHECK (morale_speed_threshold BETWEEN 0 AND 1),
+    morale_attack_threshold REAL NOT NULL CHECK (morale_attack_threshold BETWEEN 0 AND 1),
+    morale_speed_multiplier REAL NOT NULL CHECK (morale_speed_multiplier BETWEEN 0 AND 1),
+    morale_attack_multiplier REAL NOT NULL CHECK (morale_attack_multiplier BETWEEN 0 AND 1)
 );
 
 CREATE TABLE tower_type (
@@ -72,6 +36,8 @@ CREATE TABLE tower_type (
 );
 
 CREATE TABLE tower (
+    attack_mode TEXT NOT NULL CHECK (attack_mode IN ('direct', 'shell', 'grapeshot', 'solidShot', 'melee', 'obstacles', 'demolition')),
+    turn_rate_degrees REAL NOT NULL CHECK (turn_rate_degrees >= 0),
     has_melee_unit INTEGER NOT NULL CHECK (has_melee_unit IN (0, 1)),
     has_demolition_charge INTEGER NOT NULL CHECK (has_demolition_charge IN (0, 1)),
     has_engineer_obstacles INTEGER NOT NULL CHECK (has_engineer_obstacles IN (0, 1)),
@@ -286,10 +252,9 @@ CREATE TABLE hero (
     historical_description TEXT NOT NULL,
     historical_text TEXT NOT NULL,
     primary_image_name TEXT NOT NULL,
-    details_image_name TEXT NOT NULL,
     icon_image_name TEXT NOT NULL,
     ability_icon_image_name TEXT NOT NULL,
-    unit_image_name TEXT
+    unit_image_name TEXT NOT NULL CHECK (LENGTH(TRIM(unit_image_name)) > 0)
 );
 
 CREATE TABLE hero_combat (
@@ -300,7 +265,7 @@ CREATE TABLE hero_combat (
     hp REAL NOT NULL CHECK (hp > 0),
     attack_interval REAL NOT NULL CHECK (attack_interval > 0),
     respawn_seconds REAL NOT NULL CHECK (respawn_seconds > 0),
-    heal_per_second REAL NOT NULL DEFAULT 0 CHECK (heal_per_second >= 0),
+    heal_per_second REAL NOT NULL CHECK (heal_per_second >= 0),
     move_speed REAL NOT NULL CHECK (move_speed > 0)
 );
 

@@ -28,6 +28,27 @@ public struct HeroSpriteProfile: Equatable {
 
     // One calibration per hero, shared by all frames, facings and export densities.
     // Provisional values are drawing choices, not claimed historical measurements.
+    public struct ContentError: Error, CustomStringConvertible {
+        public let description: String
+    }
+
+    public static func load(baseAssetName: String) throws -> HeroSpriteProfile {
+        guard let profile = all[baseAssetName] else {
+            throw ContentError(description: "Missing hero sprite profile for '\(baseAssetName)'")
+        }
+        guard profile.statureInches.isFinite, profile.statureInches > 0,
+              profile.standingBodyFraction.isFinite, profile.standingBodyFraction > 0,
+              profile.groundInsetFraction.isFinite, (0..<1).contains(profile.groundInsetFraction) else {
+            throw ContentError(description: "Invalid hero sprite profile for '\(baseAssetName)'")
+        }
+        return profile
+    }
+
+    public static func require(baseAssetName: String) -> HeroSpriteProfile {
+        do { return try load(baseAssetName: baseAssetName) }
+        catch { fatalError(String(describing: error)) }
+    }
+
     public static let all: [String: HeroSpriteProfile] = [
         "hero_unit_baron_von_steuben": .init(statureInches: 69, evidence: .provisional, standingBodyFraction: 224.0 / 270, groundInsetFraction: 10.0 / 270),
         "hero_unit_benedict_arnold": .init(statureInches: 68, evidence: .provisional, standingBodyFraction: 275.0 / 270, groundInsetFraction: 2.0 / 270),

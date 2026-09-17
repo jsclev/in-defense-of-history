@@ -6,12 +6,12 @@ struct TowerRangeOverlayView: View {
     let upgradeSize: CGSize?
 
     init(center: CGPoint, range: CGFloat, upgradeRange: CGFloat? = nil,
-         runtimeCanvas: RuntimeCanvas) {
+         verticalFraction: Double, runtimeCanvas: RuntimeCanvas) {
         self.center = center
-        self.size = TowerRangeOverlay.size(range: range, runtimeCanvas: runtimeCanvas)
+        self.size = TowerRangeOverlay.size(range: range, verticalFraction: verticalFraction, runtimeCanvas: runtimeCanvas)
         // Equal ranges share a boundary; avoid darkening it with a duplicate.
         self.upgradeSize = upgradeRange.flatMap { upgraded in
-            upgraded == range ? nil : TowerRangeOverlay.size(range: upgraded, runtimeCanvas: runtimeCanvas)
+            upgraded == range ? nil : TowerRangeOverlay.size(range: upgraded, verticalFraction: verticalFraction, runtimeCanvas: runtimeCanvas)
         }
     }
 

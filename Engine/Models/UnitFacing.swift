@@ -62,7 +62,8 @@ public enum HeroWalkCycle {
     /// units/second, Washington takes 0.84 seconds per cycle (2.38 steps/second).
     /// Keep the same phase when changing between his 16- and 32-frame facings.
     public static func cycleDistance(for baseAssetName: String) -> Double {
-        baseAssetName == georgeWashingtonAssetName ? 151.2 : cycleDistance
+        _ = HeroSpriteProfile.require(baseAssetName: baseAssetName)
+        return baseAssetName == georgeWashingtonAssetName ? 151.2 : cycleDistance
     }
     public static let henryKnoxAssetName = "hero_unit_henry_knox"
     // The other catalog frames are optical-flow blends of these four drawings.
@@ -120,6 +121,7 @@ public enum HeroWalkCycle {
                                  facing: UnitFacing,
                                  walkPhase: Double,
                                  isWalking: Bool) -> String {
+        _ = HeroSpriteProfile.require(baseAssetName: baseAssetName)
         guard animatedAssetNames.contains(baseAssetName) else { return baseAssetName }
         let cycleDistance = cycleDistance(for: baseAssetName)
         let facing = isWalking ? facing : idleFacing(from: facing)
@@ -138,10 +140,6 @@ public enum HeroWalkCycle {
             let frame = Int(walkPhase / pitch) % frameCount
             return "\(baseAssetName)_walk_\(facing.assetSuffix)_\(frame)"
         }
-        let pitch = cycleDistance / Double(MeleeWalkCycle.frameCount)
-        let frame = isWalking
-            ? Int(walkPhase / pitch) % MeleeWalkCycle.frameCount
-            : MeleeWalkCycle.standingFrame
-        return "\(baseAssetName)_walk_\(facing.assetSuffix)_\(frame)"
+        fatalError("Missing hero animation metadata for '\(baseAssetName)'")
     }
 }

@@ -52,7 +52,8 @@ struct DemolitionDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                 safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                levelInfoID: level.id, mapImageName: level.mapImageName)
+                levelInfoID: level.id, mapImageName: level.mapImageName,
+                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
             record["checks"] = try runner.verifyDemolitionOnDevice()
             record["displayScale"] = window.screen.scale
             let sapperSlotWidth = runner.slotSize.width * canvas.scaleFactor

@@ -1,16 +1,6 @@
 import Foundation
 import Combine
 
-/// The editor's shared content, loaded once at launch and injected into
-/// every view that needs it: the one database connection, the coordinate
-/// system from virtual_canvas, and the tower stats the canvas draws with.
-///
-/// The editor draws range rings so a designer can see what a slot will cover,
-/// and rejects slots that no tower could reach. Those are database numbers —
-/// hardcoded copies drifted from the tower table before, so nothing here
-/// falls back to invented values: if the database cannot be opened the rings
-/// simply do not draw and `virtualCanvas` is nil, and the app decides
-/// whether that is fatal.
 @MainActor
 final class EditorContent: ObservableObject {
     let db: Db?
@@ -53,7 +43,10 @@ final class EditorContent: ObservableObject {
             guard let db else {
                 throw DbError.Db(message: "The authored tower database is unavailable.")
             }
-            arsenal = try db.towerTypeDao.getDesignArsenal()
+            let loaded = try db.towerTypeDao.getDesignArsenal()
+            arsenal = loaded
+            ringsByName = loaded.rangeRings
+            maxTowerRange = loaded.maximumRange
             towerTextError = nil
         } catch {
             fatalError("Invalid authored tower data: \(error)")
@@ -68,19 +61,5 @@ final class EditorContent: ObservableObject {
             enemyTypes = []
             enemyRosterError = String(describing: error)
         }
-        guard let db, let byCategory = try? db.towerTypeDao.getTowerTypes() else {
-            ringsByName = []
-            maxTowerRange = nil
-            return
-        }
-        ringsByName = byCategory.values
-            .compactMap { type in
-                guard let first = type.levels.first, first.range > 0 else { return nil }
-                return (type.name, first.range)
-            }
-            .sorted { $0.range < $1.range }
-        maxTowerRange = byCategory.values
-            .flatMap { $0.levels.map(\.range) }
-            .max()
     }
 }

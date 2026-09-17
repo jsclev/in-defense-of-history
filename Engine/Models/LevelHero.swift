@@ -27,8 +27,8 @@ public struct HeroCombatStats: Sendable, Equatable {
         self.moveSpeed = moveSpeed
     }
 
-    public var damageRange: ClosedRange<Double> {
-        let spread = attackRating * MilitiaTunables.attackSpread
+    public func damageRange(attackSpread: Double) -> ClosedRange<Double> {
+        let spread = attackRating * attackSpread
         return (attackRating - spread)...(attackRating + spread)
     }
 }

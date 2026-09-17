@@ -43,7 +43,7 @@ public struct LevelBlueprint: Sendable {
 
     public struct BuildStep: Sendable {
         public enum Order: Sendable {
-            case place(Emplacement, slot: Int)
+            case place(TowerKind, slot: Int)
             case upgrade(slot: Int)
         }
         public var at: Double
@@ -133,11 +133,11 @@ public struct LevelBlueprint: Sendable {
         )
     }
 
-    public func scriptedSolution() -> ScriptedBuildOrder {
+    public func scriptedSolution(arsenal: DesignArsenal) -> ScriptedBuildOrder {
         ScriptedBuildOrder(steps: intendedSolution.map { step in
             switch step.order {
             case let .place(e, slot):
-                return ScriptedBuildOrder.Step(time: step.at, action: .build(slot: slot, towerID: e.id))
+                return ScriptedBuildOrder.Step(time: step.at, action: .build(slot: slot, towerID: arsenal.type(e).id))
             case let .upgrade(slot):
                 return ScriptedBuildOrder.Step(time: step.at, action: .upgrade(slot: slot))
             }

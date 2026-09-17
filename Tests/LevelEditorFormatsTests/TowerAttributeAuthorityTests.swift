@@ -22,17 +22,20 @@ final class TowerAttributeAuthorityTests: XCTestCase {
         try execute("SAVEPOINT corruption", in: fixture)
         defer { try? execute("ROLLBACK TO corruption; RELEASE corruption", in: fixture) }
         try execute(change, in: fixture)
+        XCTAssertThrowsError(try fixture.db.towerTypeDao.getDesignArsenal(), file: file, line: line) {
+            XCTAssertTrue(String(describing: $0).contains(field), "\($0)", file: file, line: line)
+        }
         XCTAssertThrowsError(try fixture.db.towerTypeDao.validateAuthoredContent(), file: file, line: line) {
             XCTAssertTrue(String(describing: $0).contains(field), "\($0)", file: file, line: line)
         }
     }
 
-    func testMissingAndMalformedScalarAttributesFailForBothCatalogs() throws {
+    func testMissingAndMalformedScalarAttributesFailForCanonicalCatalog() throws {
         let numeric = ["cost", "tower_range", "fire_interval", "shot_min_damage", "shot_max_damage",
                        "terror_min", "terror_max", "aoe_radius", "aoe_falloff_exponent",
                        "splash_cover_pierce", "contagion_chance", "projectile_speed",
-                       "has_melee_unit", "has_demolition_charge", "has_engineer_obstacles"]
-        for table in ["tower", "design_emplacement_level"] {
+                       "has_melee_unit", "has_demolition_charge", "has_engineer_obstacles", "turn_rate_degrees"]
+        for table in ["tower"] {
             let fixture = try AuthoredDatabaseFixture()
             try relaxConstraints(table, in: fixture)
             for field in numeric {
@@ -54,13 +57,13 @@ final class TowerAttributeAuthorityTests: XCTestCase {
         }
     }
 
-    func testDeletingAnyAuthoredTowerOrDesignTierFails() throws {
+    func testDeletingAnyAuthoredTowerTierFails() throws {
         let fixture = try AuthoredDatabaseFixture()
-        for table in ["tower", "design_emplacement_level"] {
-            let count = table == "tower" ? 23 : 12
+        for table in ["tower"] {
+            let count = try fixture.db.towerTypeDao.getDesignArsenal().towers.flatMap(\.tiers).count
             for offset in 0..<count {
                 try rejects("DELETE FROM \(table) WHERE rowid = (SELECT rowid FROM \(table) LIMIT 1 OFFSET \(offset))",
-                            field: table == "tower" ? "tower" : "level", in: fixture)
+                            field: "tower", in: fixture)
             }
         }
         try rejects("DELETE FROM tower_type", field: "tower_type", in: fixture)
@@ -128,10 +131,10 @@ final class TowerAttributeAuthorityTests: XCTestCase {
                     XCTAssertEqual(value.projectileSpeed, 876)
                     if let charge = value.demolitionPreparationSeconds { XCTAssertEqual(charge, 9) }
                     if let obstacles = value.engineerObstacles {
-                        XCTAssertEqual(obstacles, .init(radius: 123, slowFraction: 0.27))
+                        XCTAssertEqual(obstacles, .init(radius: 123, slowFraction: 0.27, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction))
                     }
                     if let melee = value.meleeUnit {
-                        XCTAssertEqual(melee, MeleeUnitStats(soldierCount: 2, attackRating: 42,
+                        XCTAssertEqual(melee, MeleeUnitStats(combatRules: AuthoredDatabaseFixture.combatRules, soldierCount: 2, attackRating: 42,
                             defenseRating: 0.23, hp: 345, rallyPointRadius: 456,
                             attackInterval: 1.7, respawnSeconds: 11, healPerSecond: 3.4))
                     }
@@ -146,7 +149,7 @@ final class TowerAttributeAuthorityTests: XCTestCase {
         let tuning = try AuthoredDatabaseFixture.tower("Ranged", level: 1, branch: 1)
         let encoded = try JSONEncoder().encode(tuning)
         let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
-        XCTAssertEqual(fields.count, 16)
+        XCTAssertEqual(fields.count, 19)
         for field in fields.keys {
             var incomplete = fields
             incomplete.removeValue(forKey: field)
@@ -227,7 +230,7 @@ final class TowerAttributeAuthorityTests: XCTestCase {
 
     func testTowerSchemaDoesNotSupplyAttributeDefaults() throws {
         let fixture = try AuthoredDatabaseFixture()
-        for table in ["tower", "tower_type", "melee_unit", "design_emplacement", "design_emplacement_level", "level_tower_unlock"] {
+        for table in ["tower", "tower_type", "melee_unit", "level_tower_unlock"] {
             let rows = try fixture.db.towerTypeDao.authoredRows("PRAGMA table_info(\(table))", entity: table) { row in
                 try row.requireNull("dflt_value")
             }

@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#endif
 
 @MainActor
 public final class Store {
@@ -18,6 +21,15 @@ public final class Store {
                 fullRefresh: true
             )
             try db.towerTypeDao.validateAuthoredContent()
+            let heroes = try db.heroDao.validateAuthoredContent()
+            #if canImport(UIKit)
+            for hero in heroes {
+                try hero.validateArtwork { name in
+                    guard let image = UIImage(named: name) else { return false }
+                    return image.size.width > 0 && image.size.height > 0
+                }
+            }
+            #endif
             virtualCanvas = try db.virtualCanvasDao.get()
             towerMenuLayout = TowerMenuLayout(virtualCanvas: virtualCanvas)
             settings = try PlayerSettingsStore(dao: db.playerSettingsDao)

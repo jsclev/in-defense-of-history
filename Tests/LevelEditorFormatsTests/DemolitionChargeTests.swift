@@ -111,7 +111,7 @@ final class DemolitionChargeTests: XCTestCase {
     }
 
     func testPathPlacementClipsLongSegmentsAtTheRealRangeBoundary() throws {
-        let reach = TowerAttackRange(300)
+        let reach = TowerAttackRange(300, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction)
         let path = Path(points: [Point(-1000, 0), Point(1000, 0)])
         let point = try XCTUnwrap(reach.nearestPathPoint(to: CGPoint(x: 400, y: 50), from: .zero, paths: [path]))
         XCTAssertEqual(point.x, 300, accuracy: 1e-8)
@@ -122,13 +122,13 @@ final class DemolitionChargeTests: XCTestCase {
     }
 
     func testPlacementChoosesNearestReachableLaneAndHandlesDegenerateSegments() throws {
-        let reach = TowerAttackRange(300)
+        let reach = TowerAttackRange(300, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction)
         let near = Path(points: [Point(0, 30), Point(0, 30), Point(100, 30)])
         let far = Path(points: [Point(0, 130), Point(100, 130)])
         XCTAssertEqual(reach.nearestPathPoint(to: CGPoint(x: 50, y: 40), from: .zero,
             paths: [far, near]), CGPoint(x: 50, y: 30))
         XCTAssertNil(reach.nearestPathPoint(to: .zero, from: .zero, paths: []))
-        XCTAssertNil(TowerAttackRange(0).nearestPathPoint(to: .zero, from: .zero, paths: [near]))
+        XCTAssertNil(TowerAttackRange(0, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction).nearestPathPoint(to: .zero, from: .zero, paths: [near]))
     }
 
     func testSappersMoveToEngineersWhileThreeArtilleryChoicesRemain() throws {

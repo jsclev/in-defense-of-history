@@ -8,6 +8,7 @@ public enum Targeting: String, Codable, Sendable, CaseIterable {
 }
 
 public struct MeleeUnitStats: Codable, Sendable, Equatable {
+    public let combatRules: CombatRules
     public var soldierCount: Int
     public var attackRating: Double
     public var defenseRating: Double
@@ -18,6 +19,7 @@ public struct MeleeUnitStats: Codable, Sendable, Equatable {
     public var healPerSecond: Double
 
     public init(
+        combatRules: CombatRules,
         soldierCount: Int,
         attackRating: Double,
         defenseRating: Double,
@@ -27,6 +29,7 @@ public struct MeleeUnitStats: Codable, Sendable, Equatable {
         respawnSeconds: Double,
         healPerSecond: Double
     ) {
+        self.combatRules = combatRules
         self.soldierCount = soldierCount
         self.attackRating = attackRating
         self.defenseRating = defenseRating
@@ -38,23 +41,33 @@ public struct MeleeUnitStats: Codable, Sendable, Equatable {
     }
 
     public var damageRange: ClosedRange<Double> {
-        let spread = attackRating * MilitiaTunables.attackSpread
+        let spread = attackRating * combatRules.meleeAttackSpread
         return (attackRating - spread)...(attackRating + spread)
     }
 
     public var leashRadius: Double {
-        rallyPointRadius * MilitiaTunables.leashRadiusFraction
+        rallyPointRadius * combatRules.meleeLeashRadiusFraction
     }
 
     public var engageScanRadius: Double {
-        rallyPointRadius * MilitiaTunables.engageScanRadiusFraction
+        rallyPointRadius * combatRules.meleeEngageScanRadiusFraction
     }
 }
 
+public enum TowerAttackMode: String, Codable, Sendable {
+    case direct, shell, grapeshot, solidShot, melee, obstacles, demolition
+    public var requiresAim: Bool { self == .shell || self == .grapeshot || self == .solidShot }
+    public var firesProjectiles: Bool { self == .direct || requiresAim }
+}
+
 public struct TowerLevel: Codable, Sendable, Equatable {
+    public let combatRules: CombatRules
+    public var attackMode: TowerAttackMode
+    public var turnRateDegrees: Double
+    public var turnRate: Double { turnRateDegrees * .pi / 180 }
     public var cost: Int
     public var range: Double
-    public var attackRange: TowerAttackRange { TowerAttackRange(range) }
+    public var attackRange: TowerAttackRange { TowerAttackRange(range, verticalFraction: combatRules.rangeVerticalFraction) }
     public var fireInterval: Double
     public var shotMinDamage: Double
     public var shotMaxDamage: Double
@@ -72,6 +85,9 @@ public struct TowerLevel: Codable, Sendable, Equatable {
     public var engineerObstacles: EngineerObstacleStats?
 
     public init(
+        combatRules: CombatRules,
+        attackMode: TowerAttackMode,
+        turnRateDegrees: Double,
         cost: Int,
         range: Double,
         fireInterval: Double,
@@ -89,6 +105,9 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         demolitionPreparationSeconds: Double?,
         engineerObstacles: EngineerObstacleStats?
     ) {
+        self.combatRules = combatRules
+        self.attackMode = attackMode
+        self.turnRateDegrees = turnRateDegrees
         self.cost = cost
         self.range = range
         self.fireInterval = fireInterval
@@ -108,6 +127,7 @@ public struct TowerLevel: Codable, Sendable, Equatable {
     }
 
     private enum CodingKeys: String, CodingKey, CaseIterable {
+        case combatRules, attackMode, turnRateDegrees
         case cost, range, fireInterval, shotMinDamage, shotMaxDamage, terrorMin, terrorMax
         case aoeRadius, aoeFalloffExponent, splashCoverPierce, contagionChance, targeting
         case projectileSpeed, meleeUnit, demolitionPreparationSeconds, engineerObstacles
@@ -115,6 +135,9 @@ public struct TowerLevel: Codable, Sendable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
+        combatRules = try values.decode(CombatRules.self, forKey: .combatRules)
+        attackMode = try values.decode(TowerAttackMode.self, forKey: .attackMode)
+        turnRateDegrees = try values.decode(Double.self, forKey: .turnRateDegrees)
         cost = try values.decode(Int.self, forKey: .cost)
         range = try values.decode(Double.self, forKey: .range)
         fireInterval = try values.decode(Double.self, forKey: .fireInterval)
@@ -135,6 +158,9 @@ public struct TowerLevel: Codable, Sendable, Equatable {
 
     public func encode(to encoder: Encoder) throws {
         var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(combatRules, forKey: .combatRules)
+        try values.encode(attackMode, forKey: .attackMode)
+        try values.encode(turnRateDegrees, forKey: .turnRateDegrees)
         try values.encode(cost, forKey: .cost)
         try values.encode(range, forKey: .range)
         try values.encode(fireInterval, forKey: .fireInterval)

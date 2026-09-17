@@ -215,6 +215,7 @@ struct LevelMapView: View {
                 if let position = tower.engineerObstaclePosition,
                    let stats = runner.towerLevel(for: tower)?.engineerObstacles {
                     EngineerObstacleView(radius: CGFloat(stats.radius) * projection.scale,
+                        verticalFraction: stats.verticalFraction,
                         selected: runner.selectedTowerSlotIndex == tower.slotIndex)
                         .accessibilityValue("\(Int(stats.slowFraction * 100)) percent slowdown")
                         .position(projection.viewPoint(position))
@@ -364,7 +365,7 @@ struct LevelMapView: View {
                 if let radius = runner.armedBuildKind.flatMap({ runner.buildPreviewRadius(for: $0) }) {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
-                        range: radius, runtimeCanvas: runtimeCanvas)
+                        range: radius, verticalFraction: runner.combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
                 }
                 dismissCatcher()
                 towerMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
@@ -379,7 +380,7 @@ struct LevelMapView: View {
                 if let radius = runner.rangeOverlayRadius(for: tower) {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[upgradeSlot]),
-                        range: radius, upgradeRange: previewRadius, runtimeCanvas: runtimeCanvas)
+                        range: radius, upgradeRange: previewRadius, verticalFraction: runner.combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
                 }
                 if case .rallyPlacement = presentation {
                     rallyPlacementCatcher(projection: projection)
@@ -434,7 +435,7 @@ struct LevelMapView: View {
                                    projection: LevelMapProjection,
                                    safe: CGRect,
                                    metrics: HudMetrics) -> DebugRingGeometry {
-        let size = TowerRangeOverlay.size(range: range, runtimeCanvas: runtimeCanvas)
+        let size = TowerRangeOverlay.size(range: range, verticalFraction: runner.combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
         let center = projection.viewPoint(tower.position)
         let gap = 6 * metrics.scale
 

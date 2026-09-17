@@ -14,7 +14,7 @@ final class HeroMovementTests: XCTestCase {
         [[x,y],[x+w,y],[x+w,y+h],[x,y+h],[x,y]]
     }
     private var context: MilitiaContext {
-        MilitiaContext(freeEnemies: [], targetPosition: nil, rallyPoint: .zero,
+        MilitiaContext(rules: AuthoredDatabaseFixture.combatRules, freeEnemies: [], targetPosition: nil, rallyPoint: .zero,
                        towerPosition: .zero, leashRadius: 130, engageScanRadius: 80)
     }
     private func walk(_ movement: inout HeroMovement, _ unit: inout MilitiaUnit,

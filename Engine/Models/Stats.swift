@@ -35,7 +35,7 @@ public struct EnemyStats: Codable, Sendable, Equatable {
         gold: Int,
         livesCost: Int,
         breakBand: ClosedRange<Double>,
-        moraleResponse: EnemyMoraleResponse = EnemyMoraleResponse()
+        moraleResponse: EnemyMoraleResponse
     ) {
         self.maxHP = maxHP
         self.speed = speed
@@ -67,7 +67,6 @@ public struct EnemyStats: Codable, Sendable, Equatable {
                   gold: try values.decode(Int.self, forKey: .gold),
                   livesCost: try values.decode(Int.self, forKey: .livesCost),
                   breakBand: try values.decode(ClosedRange<Double>.self, forKey: .breakBand),
-                  moraleResponse: try values.decodeIfPresent(EnemyMoraleResponse.self, forKey: .moraleResponse)
-                    ?? EnemyMoraleResponse())
+                  moraleResponse: try values.decode(EnemyMoraleResponse.self, forKey: .moraleResponse))
     }
 }

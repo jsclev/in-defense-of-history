@@ -24,6 +24,7 @@ public class DifficultyDAO: BaseDAO {
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
+        defer { sqlite3_finalize(stmt) }
 
         while sqlite3_step(stmt) == SQLITE_ROW {
             let id = try getUUID(stmt: stmt, colIndex: 0, msg: "difficulty id")
@@ -37,12 +38,9 @@ public class DifficultyDAO: BaseDAO {
                 level: getInt(stmt: stmt, colIndex: 1),
                 name: name,
                 detail: (try getString(stmt: stmt, colIndex: 3)) ?? "",
-                enemyHPMultiplier: getDouble(stmt: stmt, colIndex: 4)
+                enemyHPMultiplier: try AuthoredRow(statement: stmt!, entity: "difficulty \(id)").number("enemy_hp_multiplier", minimum: 0, strictlyGreater: true)
             ))
         }
-
-        sqlite3_finalize(stmt)
-        stmt = nil
 
         return difficulties
     }
@@ -65,6 +63,7 @@ public class DifficultyDAO: BaseDAO {
         """)
 
         try prepare(conn: conn, stmt: &stmt, sql: sql)
+        defer { sqlite3_finalize(stmt) }
 
         var selected: Difficulty?
         if sqlite3_step(stmt) == SQLITE_ROW {
@@ -79,14 +78,18 @@ public class DifficultyDAO: BaseDAO {
                 level: getInt(stmt: stmt, colIndex: 1),
                 name: name,
                 detail: (try getString(stmt: stmt, colIndex: 3)) ?? "",
-                enemyHPMultiplier: getDouble(stmt: stmt, colIndex: 4)
+                enemyHPMultiplier: try AuthoredRow(statement: stmt!, entity: "difficulty \(id)").number("enemy_hp_multiplier", minimum: 0, strictlyGreater: true)
             )
         }
 
-        sqlite3_finalize(stmt)
-        stmt = nil
-
         return selected
+    }
+
+    public func requireSelected() throws -> Difficulty {
+        guard let value = try getSelected() else {
+            throw DbError.Db(message: "Missing authored selected difficulty")
+        }
+        return value
     }
 
     public func setSelected(difficultyID: UUID) throws {

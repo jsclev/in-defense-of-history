@@ -1,13 +1,15 @@
 import Foundation
 
 public struct ContentCatalog: Sendable {
+    public let combatRules: CombatRules
     public let enemyTypes: [EnemyType]
     public let towerTypes: [TowerType]
 
     private let enemyIndexByID: [UUID: Int]
     private let towerIndexByID: [UUID: Int]
 
-    public init(enemyTypes: [EnemyType], towerTypes: [TowerType]) {
+    public init(combatRules: CombatRules, enemyTypes: [EnemyType], towerTypes: [TowerType]) {
+        self.combatRules = combatRules
         let enemies = enemyTypes.sorted { $0.id < $1.id }
         let towers = towerTypes.sorted { $0.id < $1.id }
         self.enemyTypes = enemies

@@ -15,7 +15,7 @@ final class ArtilleryMoraleTests: XCTestCase {
     }
 
     func testVisibilityIsStrictlyBelowNinetyAndRecovers() {
-        var morale = EnemyMorale()
+        var morale = EnemyMorale(rules: AuthoredDatabaseFixture.combatRules)
         XCTAssertFalse(morale.isVisible)
         morale.apply(loss: 10, direction: 1)
         XCTAssertFalse(morale.isVisible)
@@ -29,7 +29,7 @@ final class ArtilleryMoraleTests: XCTestCase {
     }
 
     func testConsecutiveHitsRestartAnimationWithoutLosingMoraleDamage() {
-        var morale = EnemyMorale()
+        var morale = EnemyMorale(rules: AuthoredDatabaseFixture.combatRules)
         morale.apply(loss: 25, direction: -1)
         morale.advance(seconds: 0.1)
         let currentVisual = morale.displayedValue
@@ -44,7 +44,7 @@ final class ArtilleryMoraleTests: XCTestCase {
     }
 
     func testPauseRecoveryFrameRateAndClamping() {
-        var once = EnemyMorale()
+        var once = EnemyMorale(rules: AuthoredDatabaseFixture.combatRules)
         once.apply(loss: 500, direction: 1)
         var many = once
         once.advance(seconds: 0)
@@ -63,7 +63,7 @@ final class ArtilleryMoraleTests: XCTestCase {
         let strike = ArtilleryMoraleStrike(tuning: tuning)
         tuning.terrorMax = 100
         XCTAssertEqual(strike.loss(distance: 0, discipline: 0.6), 12.8, accuracy: 1e-8)
-        var morale = EnemyMorale()
+        var morale = EnemyMorale(rules: AuthoredDatabaseFixture.combatRules)
         XCTAssertFalse(morale.apply(loss: 0, direction: 1))
         XCTAssertFalse(morale.isVisible)
     }
@@ -74,7 +74,7 @@ final class ArtilleryMoraleTests: XCTestCase {
         tuning.terrorMax = 44
         tuning.aoeRadius = 95
         let strike = ArtilleryMoraleStrike(tuning: tuning)
-        var morale = EnemyMorale()
+        var morale = EnemyMorale(rules: AuthoredDatabaseFixture.combatRules)
         for remaining in [0.824, 0.648, 0.472, 0.296, 0.12, 0.0] {
             let before = morale.displayedFraction
             morale.apply(loss: strike.loss(distance: 0, discipline: 0.6), direction: 1)
@@ -96,9 +96,9 @@ final class ArtilleryMoraleTests: XCTestCase {
     }
 
     func testEmptyMeterOnlyRefillsWhenMoraleActuallyRecovers() {
-        var morale = EnemyMorale()
+        var morale = EnemyMorale(rules: AuthoredDatabaseFixture.combatRules)
         morale.apply(loss: 100, direction: 1)
-        morale.advance(seconds: EnemyMorale.recoveryDelay)
+        morale.advance(seconds: AuthoredDatabaseFixture.combatRules.moraleRecoveryDelay)
         XCTAssertEqual(morale.displayedFraction, 0)
         morale.advance(seconds: 2)
         XCTAssertEqual(morale.remainingFraction, 0.01, accuracy: 1e-8)

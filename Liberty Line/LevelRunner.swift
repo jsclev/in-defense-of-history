@@ -11,10 +11,21 @@ struct PlacedTower: Identifiable {
     let position: CGPoint
     var level: Int = 1
     var branch: Int = 1
-    var artilleryAim = ArtilleryAim()
+    var artilleryAim: ArtilleryAim
     var artilleryFacing: ArtilleryFacing { artilleryAim.facing }
     var demolitionCharge: DemolitionCharge?
     var engineerObstaclePosition: CGPoint?
+
+    init(combatRules: CombatRules, slotIndex: Int, kind: TowerKind, position: CGPoint,
+         level: Int = 1, branch: Int = 1) {
+        self.slotIndex = slotIndex
+        self.kind = kind
+        self.position = position
+        self.level = level
+        self.branch = branch
+        self.artilleryAim = ArtilleryAim(heading: combatRules.initialHeading,
+                                         firingTolerance: combatRules.firingTolerance)
+    }
 
     var id: Int { slotIndex }
 }
@@ -89,7 +100,7 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     private(set) var exitPositions: [CGPoint] = []
 
-    private static let projectileHitRadiusInImagePixels: CGFloat = 10
+    private var projectileHitRadiusInImagePixels: CGFloat { combatRules.projectileHitRadius }
 
     private(set) var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] = [:]
 
@@ -185,7 +196,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         for (slot, c) in slotPositions.enumerated() {
             var byRange: [Int: Double] = [:]
             for r in ranges {
-                let reach = TowerAttackRange(Double(r))
+                let reach = TowerAttackRange(Double(r), verticalFraction: combatRules.rangeVerticalFraction)
                 let key = Self.rangeKey(r)
                 let gx0 = max(0, Int((c.x - r) / cell)), gx1 = min(cols - 1, Int((c.x + r) / cell))
                 let gy0 = max(0, Int((c.y - r) / cell)), gy1 = min(rows - 1, Int((c.y + r) / cell))
@@ -225,6 +236,15 @@ public final class LevelRunner: NSObject, ObservableObject {
         var solidShot: SolidShotFlight? = nil
     }
 
+    #if DEBUG
+    private var reviewEnemyStats: EnemyStats {
+        guard let enemy = enemyTypesByID.values.first(where: { $0.key == "redcoat_regular" }) else {
+            fatalError("Missing authored review enemy")
+        }
+        return enemy.stats
+    }
+    #endif
+
     struct Walker: Identifiable {
         let id: Int
         let assetName: String
@@ -232,19 +252,20 @@ public final class LevelRunner: NSObject, ObservableObject {
         let maxHP: Double
         var hp: Double
         let bounty: Int
+        let livesCost: Int
         let damageMin: Double
         let damageMax: Double
         let cover: Double
         let blockImmune: Bool
         let spawnTick: Int64
         let pathIndex: Int
-        var discipline: Double = 0
-        var moraleResponse = EnemyMoraleResponse()
-        var morale = EnemyMorale()
+        var discipline: Double
+        var moraleResponse: EnemyMoraleResponse
+        var morale: EnemyMorale
         var position: CGPoint = .zero
         var pathDistance: Double = 0
         var meleeDamageRange: ClosedRange<Double> {
-            let multiplier = moraleResponse.damageMultiplier(morale: morale.value)
+            let multiplier = moraleResponse.damageMultiplier(morale: morale.value, maximum: morale.rules.moraleMax)
             return (damageMin * multiplier)...(damageMax * multiplier)
         }
     }
@@ -427,7 +448,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                     response: walker.moraleResponse, blocked: blockedWalkerIDs.contains(walker.id))
                 let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
                 return charge.willEnemyExitBlast(on: path, from: walker.pathDistance,
-                    advancingBy: travel, radius: tuning.aoeRadius, targetOffset: Self.enemyBodyOffset)
+                    advancingBy: travel, radius: tuning.aoeRadius, targetOffset: enemyBodyOffset)
             }
             if enemyAboutToExit { detonateDemolition(atSlot: tower.slotIndex) }
         }
@@ -452,7 +473,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 let distance = walker.pathDistance + travel
                 let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
                 if path.totalLength > 0, distance >= path.totalLength {
-                    loseLife()
+                    loseLife(cost: walker.livesCost)
                     continue
                 }
                 let p = path.point(atDistance: distance)
@@ -542,8 +563,8 @@ public final class LevelRunner: NSObject, ObservableObject {
     private var militiaPrevPositions: [Int: CGPoint] = [:]
     private var militiaRespawnedIDs: Set<Int> = []
     private var militiaPoses: [Int: WalkPose] = [:]
-    private let meleeFormation = MeleeFormation()
-    private static let reinforcementCount = 2
+    let combatRules: CombatRules
+    private let meleeFormation: MeleeFormation
     private var nextReinforcementSlot = -1
     private var reinforcementSchedule: ReinforcementSchedule?
     @Published private(set) var reinforcementCooldown: ReinforcementCooldown = .ready
@@ -619,7 +640,10 @@ public final class LevelRunner: NSObject, ObservableObject {
          hudLayoutConfig: HudLayoutConfig = .standard,
          levelInfoID: UUID?,
          mapImageName: String,
-         enemyHPMultiplier: Double = 1.0) {
+         enemyHPMultiplier: Double) {
+        do { self.combatRules = try db.combatRulesDao.get() }
+        catch { fatalError("Invalid authored combat rules: \(error)") }
+        self.meleeFormation = MeleeFormation(rules: combatRules)
         self.db = db
         self.virtualCanvas = virtualCanvas
         self.runtimeCanvas = runtimeCanvas
@@ -655,7 +679,8 @@ public final class LevelRunner: NSObject, ObservableObject {
             let heroConfiguration = try db.levelGeoJSONDao.getHeroConfiguration(mapImageName: level.mapImageName)
             let deployments = heroConfiguration.deployments(for: chosen)
             heroImageAspectRatios = try Dictionary(uniqueKeysWithValues: deployments.map { deployment in
-                guard let name = deployment.hero.unitImageName, let image = UIImage(named: name),
+                let name = deployment.hero.unitImageName
+                guard let image = UIImage(named: name),
                       image.size.width > 0, image.size.height > 0 else {
                     throw DbError.Db(message: "Missing sprite dimensions for \(deployment.hero.shortName)")
                 }
@@ -725,9 +750,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 mapImageName: level.mapImageName, defaultPathWidth: virtualCanvas.pathWidth)
             heroPosts = try deployments.map { deployment in
                 let hero = deployment.hero
-                guard let assetName = hero.unitImageName else {
-                    throw DbError.Db(message: "Missing unit image for \(hero.shortName)")
-                }
+                let assetName = hero.unitImageName
                 let combat = try db.heroDao.getCombatStats(heroID: hero.id)
                 let position = deployment.spawn.position
                 let movement = try HeroMovement(area: movementArea, spawn: position)
@@ -735,6 +758,9 @@ public final class LevelRunner: NSObject, ObservableObject {
                     unit: MilitiaUnit(position: position, hp: combat.hp),
                     movement: movement)
             }
+            heroPoses = Dictionary(uniqueKeysWithValues: heroPosts.enumerated().map { index, post in
+                (index, HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position))
+            })
             publishHeroes()
             precomputeLaneCoverage()
             waveSchedule = try WaveStartSchedule(waves: waves)
@@ -865,7 +891,7 @@ public final class LevelRunner: NSObject, ObservableObject {
               money >= cost
         else { return }
         money -= cost
-        var tower = PlacedTower(
+        var tower = PlacedTower(combatRules: combatRules,
             slotIndex: slotIndex,
             kind: kind,
             position: slotPositions[slotIndex]
@@ -1099,9 +1125,9 @@ public final class LevelRunner: NSObject, ObservableObject {
         }
     }
 
-    private func loseLife() {
+    private func loseLife(cost: Int) {
         guard !isDefeated else { return }
-        lives = max(0, lives - 1)
+        lives = max(0, lives - cost)
         escapedEnemyCount += 1
         guard lives == 0 else { return }
         isDefeated = true
@@ -1151,7 +1177,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 speed: stats.speed,
                 maxHP: maxHP,
                 hp: maxHP,
-                bounty: stats.gold,
+                bounty: stats.gold, livesCost: stats.livesCost,
                 damageMin: stats.damageMin,
                 damageMax: stats.damageMax,
                 cover: stats.cover,
@@ -1160,6 +1186,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 pathIndex: next.pathIndex,
                 discipline: stats.discipline,
                 moraleResponse: stats.moraleResponse,
+                morale: EnemyMorale(rules: combatRules),
                 position: {
                     let point = paths[min(max(next.pathIndex, 0), paths.count - 1)].point(atDistance: 0)
                     return CGPoint(x: point.x, y: point.y)
@@ -1258,8 +1285,15 @@ public final class LevelRunner: NSObject, ObservableObject {
         var poses: [Int: HeroWalkPose] = [:]
         poses.reserveCapacity(heroPosts.count)
         for (id, post) in heroPosts.enumerated() where post.unit.state != .dead {
-            var pose = (heroRespawnedIDs.contains(id) ? nil : heroPoses[id])
-                ?? HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
+            var pose: HeroWalkPose
+            if heroRespawnedIDs.contains(id) {
+                pose = HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
+            } else {
+                guard let existing = heroPoses[id] else {
+                    fatalError("hero[\(post.hero.id)]: missing animation pose")
+                }
+                pose = existing
+            }
             pose.advance(to: post.unit.position)
             if post.unit.state == .fighting,
                let target = walkers.first(where: { $0.id == post.unit.targetSpawnID }) {
@@ -1300,9 +1334,9 @@ public final class LevelRunner: NSObject, ObservableObject {
         let anchor = Point(Double(point.x), Double(point.y))
         garrisonsBySlot[nextReinforcementSlot] = MilitiaGarrison(
             rallyPoint: anchor,
-            units: (0..<Self.reinforcementCount).map { index in
+            units: (0..<combatRules.reinforcementSoldierCount).map { index in
                 MilitiaUnit(position: meleeFormation.spawnPoint(
-                    index: index, of: Self.reinforcementCount, building: anchor),
+                    index: index, of: combatRules.reinforcementSoldierCount, building: anchor),
                             hp: melee.hp)
             },
             stats: melee,
@@ -1430,7 +1464,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                     targetPos = Point(Double(walkers[wi].position.x),
                                       Double(walkers[wi].position.y))
                 }
-                let context = MilitiaContext(
+                let context = MilitiaContext(rules: combatRules,
                     freeEnemies: free,
                     targetPosition: targetPos,
                     rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
@@ -1461,7 +1495,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                         waypoint = toward
                     }
                     let d = unit.position.distance(to: waypoint)
-                    let step = MilitiaTunables.moveSpeed * dt
+                    let step = combatRules.meleeMoveSpeed * dt
                     unit.position = d <= step ? waypoint
                         : Point.lerp(unit.position, waypoint, step / d)
                 case let .engage(targetSpawnID):
@@ -1474,7 +1508,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                         unit.combatSide = unit.position.x < (targetPos?.x ?? unit.position.x) ? -1 : 1
                         unit.state = .fighting
                         g.enemySwingTicks[targetSpawnID] =
-                            Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                            Simulation.fireTicks(combatRules.enemySwingInterval)
                     }
                     if !killedIDs.contains(targetSpawnID),
                        let wi = indexByWalkerID[targetSpawnID] {
@@ -1485,7 +1519,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                         damageTotalBySlot[slot, default: 0] += dealt
                         walkers[wi] = w
                         if w.hp <= 0 {
-                            money += w.bounty
+                            money += Int((Double(w.bounty) * combatRules.killBountyMultiplier).rounded())
                             killedIDs.insert(targetSpawnID)
                             unit.state = .holding
                             unit.targetSpawnID = -1
@@ -1507,13 +1541,13 @@ public final class LevelRunner: NSObject, ObservableObject {
                    let wi = indexByWalkerID[unit.targetSpawnID] {
                     blockedWalkerIDs.insert(unit.targetSpawnID)
                     var swing = g.enemySwingTicks[unit.targetSpawnID]
-                        ?? Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                        ?? Simulation.fireTicks(combatRules.enemySwingInterval)
                     swing -= 1
                     if swing <= 0 {
                         let w = walkers[wi]
                         unit.hp -= Double.random(in: w.meleeDamageRange)
                             * (1.0 - melee.defenseRating)
-                        swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                        swing = Simulation.fireTicks(combatRules.enemySwingInterval)
                         if unit.hp <= 0 {
                             claimed.remove(unit.targetSpawnID)
                             blockedWalkerIDs.remove(unit.targetSpawnID)
@@ -1569,12 +1603,12 @@ public final class LevelRunner: NSObject, ObservableObject {
                                   Double(walkers[wi].position.y))
             }
 
-            let context = MilitiaContext(freeEnemies: free,
+            let context = MilitiaContext(rules: combatRules, freeEnemies: free,
                                          targetPosition: targetPos,
                                          rallyPoint: station,
                                          towerPosition: station,
-                                         leashRadius: MilitiaTunables.heroLeashRadius,
-                                         engageScanRadius: MilitiaTunables.heroEngageScanRadius)
+                                         leashRadius: combatRules.heroLeashRadius,
+                                         engageScanRadius: combatRules.heroEngageScanRadius)
             if post.unit.swingTicksLeft > 0 { post.unit.swingTicksLeft -= 1 }
 
             switch post.movement.update(&post.unit, context: context,
@@ -1600,16 +1634,16 @@ public final class LevelRunner: NSObject, ObservableObject {
                     post.unit.combatSide = post.unit.position.x < (targetPos?.x ?? post.unit.position.x) ? -1 : 1
                     post.unit.state = .fighting
                     post.enemySwingTicks[targetSpawnID] =
-                        Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                        Simulation.fireTicks(combatRules.enemySwingInterval)
                 }
                 if !killedIDs.contains(targetSpawnID),
                    let wi = indexByWalkerID[targetSpawnID] {
                     var w = walkers[wi]
-                    let roll = Double.random(in: post.combat.damageRange)
+                    let roll = Double.random(in: post.combat.damageRange(attackSpread: combatRules.meleeAttackSpread))
                     w.hp -= roll * (1.0 - w.cover)
                     walkers[wi] = w
                     if w.hp <= 0 {
-                        money += w.bounty
+                        money += Int((Double(w.bounty) * combatRules.killBountyMultiplier).rounded())
                         killedIDs.insert(targetSpawnID)
                         post.unit.state = .holding
                         post.unit.targetSpawnID = -1
@@ -1631,13 +1665,13 @@ public final class LevelRunner: NSObject, ObservableObject {
                let wi = indexByWalkerID[post.unit.targetSpawnID] {
                 blockedWalkerIDs.insert(post.unit.targetSpawnID)
                 var swing = post.enemySwingTicks[post.unit.targetSpawnID]
-                    ?? Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                    ?? Simulation.fireTicks(combatRules.enemySwingInterval)
                 swing -= 1
                 if swing <= 0 {
                     let w = walkers[wi]
                     post.unit.hp -= Double.random(in: w.meleeDamageRange)
                         * (1.0 - post.combat.defenseRating)
-                    swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                    swing = Simulation.fireTicks(combatRules.enemySwingInterval)
                     if post.unit.hp <= 0 {
                         claimed.remove(post.unit.targetSpawnID)
                         blockedWalkerIDs.remove(post.unit.targetSpawnID)
@@ -1661,9 +1695,13 @@ public final class LevelRunner: NSObject, ObservableObject {
     private func publishHeroes(alpha: Double = 1) {
         var out: [HeroSoldier] = []
         for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
-            let pose = heroPoses[i]
-                ?? HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
+            guard let pose = heroPoses[i] else {
+                fatalError("hero[\(post.hero.id)]: missing animation pose")
+            }
             let sample = pose.sample(alpha: alpha)
+            guard UIImage(named: sample.assetName) != nil else {
+                fatalError("hero[\(post.hero.id)]: missing animation image '\(sample.assetName)'")
+            }
             out.append(HeroSoldier(
                 id: i,
                 assetName: sample.assetName,
@@ -1750,11 +1788,11 @@ public final class LevelRunner: NSObject, ObservableObject {
         militia = out
     }
 
-    private static let enemyBodyOffset = CGPoint(x: 0, y: -12)
+    private var enemyBodyOffset: CGPoint { CGPoint(x: combatRules.enemyBodyOffsetX, y: combatRules.enemyBodyOffsetY) }
 
     private func bodyPoint(_ walker: Walker) -> CGPoint {
-        CGPoint(x: walker.position.x + Self.enemyBodyOffset.x,
-                y: walker.position.y + Self.enemyBodyOffset.y)
+        CGPoint(x: walker.position.x + enemyBodyOffset.x,
+                y: walker.position.y + enemyBodyOffset.y)
     }
 
     private func updateCombat(gameDt: Double) {
@@ -1767,15 +1805,14 @@ public final class LevelRunner: NSObject, ObservableObject {
 
         for towerIndex in placedTowers.indices {
             let tower = placedTowers[towerIndex]
-            guard tower.kind.projectileAssetName != nil else { continue }
             guard let tuning = towerLevel(for: tower) else { continue }
-            guard tuning.demolitionPreparationSeconds == nil else { continue }
+            guard tuning.attackMode.firesProjectiles else { continue }
             let origin = tower.position
             let solution = RangedTargetCommand(
                 tower: TowerTargetingContext(
                     slotIndex: tower.slotIndex,
                     position: Point(Double(origin.x), Double(origin.y)),
-                    range: tuning.range,
+                    range: tuning.range, verticalFraction: combatRules.rangeVerticalFraction,
                     targeting: tuning.targeting),
                 enemies: candidates,
                 paths: paths
@@ -1785,16 +1822,15 @@ public final class LevelRunner: NSObject, ObservableObject {
 
             targetingSecondsBySlot[tower.slotIndex, default: 0] += gameDt
 
-            let target = tower.kind == .areaOfEffect
+            let target = tuning.attackMode.requiresAim
                 ? tuning.attackRange.clamped(bodyPoint(leader), from: origin)
                 : bodyPoint(leader)
             var heading = atan2(target.y - origin.y, target.x - origin.x)
             var aligned = true
-            if tower.kind == .areaOfEffect {
+            if tuning.attackMode.requiresAim {
                 var aim = tower.artilleryAim
                 aligned = aim.track(from: origin, to: target,
-                                    radiansPerSecond: ArtilleryHandling.turnRate(
-                                        level: tower.level, branch: tower.branch),
+                                    radiansPerSecond: tuning.turnRate,
                                     deltaTime: gameDt)
                 placedTowers[towerIndex].artilleryAim = aim
                 heading = CGFloat(aim.heading)
@@ -1804,12 +1840,11 @@ public final class LevelRunner: NSObject, ObservableObject {
                   timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
             nextFireTickBySlot[tower.slotIndex] = timer.tick + fireCooldownTicks(for: tower)
             let minDamage = tuning.shotMinDamage
-            let maxDamage = max(minDamage, tuning.shotMaxDamage)
-            if tower.kind == .areaOfEffect,
-               ArtilleryHandling.isSwivel(level: tower.level, branch: tower.branch) {
+            let maxDamage = tuning.shotMaxDamage
+            if tuning.attackMode == .grapeshot {
                 let volleyID = nextProjectileID
                 let damage = Double.random(in: minDamage...maxDamage)
-                for offset in GrapeshotFlight.spread {
+                for offset in combatRules.grapeshotSpread {
                     let pelletHeading = heading + CGFloat(offset)
                     projectiles.append(Projectile(
                         id: nextProjectileID, kind: tower.kind, position: origin,
@@ -1824,8 +1859,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 }
                 continue
             }
-            if tower.kind == .areaOfEffect,
-               ArtilleryHandling.isSiege(level: tower.level, branch: tower.branch) {
+            if tuning.attackMode == .solidShot {
                 projectiles.append(Projectile(
                     id: nextProjectileID, kind: tower.kind, position: origin,
                     heading: heading, damage: Double.random(in: minDamage...maxDamage),
@@ -1833,7 +1867,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                     speed: CGFloat(tuning.projectileSpeed), splashRadius: 0,
                     firingBoundary: tuning.attackRange, firingOrigin: origin,
                     moraleStrike: ArtilleryMoraleStrike(tuning: tuning),
-                    solidShot: SolidShotFlight(range: tuning.attackRange.travelDistance(heading: heading))))
+                    solidShot: SolidShotFlight(range: tuning.attackRange.travelDistance(heading: heading), hitRadius: combatRules.solidShotHitRadius)))
                 nextProjectileID += 1
                 continue
             }
@@ -1847,8 +1881,8 @@ public final class LevelRunner: NSObject, ObservableObject {
                 slotIndex: tower.slotIndex,
                 speed: CGFloat(tuning.projectileSpeed),
                 splashRadius: CGFloat(tuning.aoeRadius),
-                impactPoint: tower.kind == .areaOfEffect ? target : nil,
-                moraleStrike: tower.kind == .areaOfEffect ? ArtilleryMoraleStrike(tuning: tuning) : nil
+                impactPoint: tuning.attackMode == .shell ? target : nil,
+                moraleStrike: tuning.attackMode.requiresAim ? ArtilleryMoraleStrike(tuning: tuning) : nil
             ))
             nextProjectileID += 1
         }
@@ -1891,7 +1925,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                        !boundary.contains(walker.position, from: origin) { return nil }
                     guard !grapeshotHits[flight.volleyID, default: []].contains(walker.id),
                           let fraction = GrapeshotFlight.hitFraction(
-                            from: projectile.position, to: end, target: bodyPoint(walker)) else { return nil }
+                            from: projectile.position, to: end, target: bodyPoint(walker), radius: combatRules.grapeshotHitRadius) else { return nil }
                     return (walker.id, fraction)
                 }.min { $0.fraction < $1.fraction }
                 if let hit {
@@ -1930,7 +1964,7 @@ public final class LevelRunner: NSObject, ObservableObject {
             let dx = aim.x - projectile.position.x
             let dy = aim.y - projectile.position.y
             let distance = hypot(dx, dy)
-            if distance <= Self.projectileHitRadiusInImagePixels || distance <= stepLength {
+            if distance <= projectileHitRadiusInImagePixels || distance <= stepLength {
                 applyImpact(projectile, at: aim)
                 continue
             }
@@ -1949,7 +1983,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         damageTotalBySlot[slotIndex, default: 0] += min(walkers[index].hp, damage)
         walkers[index].hp -= damage
         if walkers[index].hp <= 0 {
-            money += walkers[index].bounty
+            money += Int((Double(walkers[index].bounty) * combatRules.killBountyMultiplier).rounded())
             walkers.remove(at: index)
         }
     }
@@ -1982,7 +2016,7 @@ public final class LevelRunner: NSObject, ObservableObject {
     }
 
     private func applyImpact(_ projectile: Projectile, at point: CGPoint, isDemolition: Bool = false) {
-        if projectile.kind == .areaOfEffect {
+        if projectile.moraleStrike != nil {
             artilleryImpacts.append(ArtilleryImpact(id: projectile.id, position: point,
                                                   radius: max(24, projectile.splashRadius),
                                                   isDemolition: isDemolition))
@@ -1990,7 +2024,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         var remaining: [Walker] = []
         for var walker in walkers {
             let isHit: Bool
-            if projectile.kind == .areaOfEffect {
+            if projectile.moraleStrike != nil {
                 isHit = distanceFrom(point, to: walker) <= projectile.splashRadius
             } else {
                 isHit = walker.id == projectile.targetID
@@ -2003,7 +2037,7 @@ public final class LevelRunner: NSObject, ObservableObject {
                 walker.hp -= projectile.damage
                 damageTotalBySlot[projectile.slotIndex, default: 0] += dealt
                 if walker.hp <= 0 {
-                    money += walker.bounty
+                    money += Int((Double(walker.bounty) * combatRules.killBountyMultiplier).rounded())
                     continue
                 }
             }
@@ -2039,16 +2073,15 @@ extension LevelRunner {
               let heroTemplate = heroPosts.first else {
             throw NSError(domain: "MoraleCombatReview", code: 2)
         }
-        try require(enemyTypesByID.values.allSatisfy { $0.stats.moraleResponse == EnemyMoraleResponse() },
+        try require(enemyTypesByID.values.allSatisfy { $0.stats.moraleResponse == redcoat.stats.moraleResponse },
                     "Enemy threshold data did not reach the runner")
         let origin = Point(Double(playArea.midX), Double(playArea.midY))
         melee.hp = 1000
         func enemy(_ id: Int, at point: Point, morale: Double, fixedDamage: Double = 12) -> Walker {
             var w = Walker(id: id, assetName: "redcoat_regular", speed: redcoat.stats.speed,
-                maxHP: 90, hp: 90, bounty: 0, damageMin: fixedDamage, damageMax: fixedDamage,
+                maxHP: 90, hp: 90, bounty: 0, livesCost: reviewEnemyStats.livesCost, damageMin: fixedDamage, damageMax: fixedDamage,
                 cover: 0, blockImmune: false, spawnTick: 0, pathIndex: 0,
-                discipline: redcoat.stats.discipline, moraleResponse: redcoat.stats.moraleResponse,
-                position: CGPoint(x: point.x, y: point.y))
+                discipline: redcoat.stats.discipline, moraleResponse: redcoat.stats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: point.x, y: point.y))
             w.morale.apply(loss: 100 - morale, direction: 1)
             return w
         }
@@ -2122,7 +2155,7 @@ extension LevelRunner {
                  "militiaDamageAboveAndAtThreshold": militiaDamage,
                  "heroDamageAboveAndAtThreshold": heroDamage,
                  "livingMeleeEnemies": walkers.count, "blockedMeleeEnemies": blockedWalkerIDs.count,
-                 "militiaCannotClaimHeroOpponent": true, "meleeSpacing": MilitiaTunables.combatSpacing], frames)
+                 "militiaCannotClaimHeroOpponent": true, "meleeSpacing": combatRules.meleeCombatSpacing], frames)
     }
 
     func verifyDemolitionHapticsOnDevice() async throws -> [String: Any] {
@@ -2201,15 +2234,14 @@ extension LevelRunner {
             let nearest = path.nearestDistance(to: Point(position.x, position.y))
             if let exit = stride(from: nearest, to: path.totalLength, by: 1).first(where: {
                 charge.willEnemyExitBlast(on: path, from: $0, advancingBy: 2,
-                    radius: tuning.aoeRadius, targetOffset: Self.enemyBodyOffset)
+                    radius: tuning.aoeRadius, targetOffset: enemyBodyOffset)
             }) {
                 walkers = [18.0, 60.0, 90.0].enumerated().map { index, gap in
                     let distance = max(0, exit - gap)
                     let p = path.point(atDistance: distance)
                     return Walker(id: index, assetName: "redcoat_regular", speed: 60,
-                        maxHP: 5000, hp: 5000, bounty: 5, damageMin: 4, damageMax: 7,
-                        cover: 0, blockImmune: false, spawnTick: -10000, pathIndex: pathIndex,
-                        position: CGPoint(x: p.x, y: p.y), pathDistance: distance)
+                        maxHP: 5000, hp: 5000, bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7,
+                        cover: 0, blockImmune: false, spawnTick: -10000, pathIndex: pathIndex, discipline: reviewEnemyStats.discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: p.x, y: p.y), pathDistance: distance)
                 }
                 blockedWalkerIDs = []
                 start(); stopSimulation()
@@ -2241,8 +2273,8 @@ extension LevelRunner {
         func enemy(_ id: Int, distance: Double, lane: Int = 0, hp: Double = 5000, speed: Double = 60) -> Walker {
             let point = paths[lane].point(atDistance: distance)
             return Walker(id: id, assetName: "redcoat_regular", speed: speed, maxHP: hp, hp: hp,
-                bounty: 5, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                spawnTick: -10000, pathIndex: lane, position: CGPoint(x: point.x, y: point.y),
+                bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                spawnTick: -10000, pathIndex: lane, discipline: reviewEnemyStats.discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: point.x, y: point.y),
                 pathDistance: distance)
         }
         func move(_ seconds: Double) { advanceWalkers(seconds: seconds, nowTicks: 10000) }
@@ -2342,8 +2374,8 @@ extension LevelRunner {
         func enemy(_ id: Int, lane: Int = 0) -> Walker {
             let point = paths[lane].point(atDistance: 500)
             return Walker(id: id, assetName: "redcoat_regular", speed: 60, maxHP: 100, hp: 100,
-                bounty: 5, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                spawnTick: -10000, pathIndex: lane, position: CGPoint(x: point.x, y: point.y), pathDistance: 500)
+                bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                spawnTick: -10000, pathIndex: lane, discipline: reviewEnemyStats.discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: point.x, y: point.y), pathDistance: 500)
         }
         var travelByLevel: [Double] = []
         for tier in 1...3 {
@@ -2403,9 +2435,8 @@ extension LevelRunner {
                 let distance = max(0, center + offset)
                 let point = paths[lane].point(atDistance: distance)
                 return Walker(id: index, assetName: "redcoat_regular", speed: 60, maxHP: 100, hp: 100,
-                    bounty: 5, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                    spawnTick: -10000, pathIndex: lane,
-                    position: CGPoint(x: point.x, y: point.y), pathDistance: distance)
+                    bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                    spawnTick: -10000, pathIndex: lane, discipline: reviewEnemyStats.discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: point.x, y: point.y), pathDistance: distance)
             }
         }
         dismissMenu()
@@ -2447,9 +2478,8 @@ extension LevelRunner {
         }
         for i in 0..<(includeEnemies ? 6 : 0) {
             walkers.append(Walker(id: i, assetName: "redcoat_regular", speed: 60,
-                maxHP: 180, hp: 180, bounty: 5, damageMin: 4, damageMax: 7,
-                cover: 0, blockImmune: false, spawnTick: 0, pathIndex: 0, discipline: 0.6,
-                position: CGPoint(x: chargePosition.x + Double(i % 3 - 1) * 65,
+                maxHP: 180, hp: 180, bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7,
+                cover: 0, blockImmune: false, spawnTick: 0, pathIndex: 0, discipline: 0.6, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: chargePosition.x + Double(i % 3 - 1) * 65,
                                   y: chargePosition.y + Double(i / 3) * 65 + 12)))
         }
         if stage == "preparing" { return slot }
@@ -2544,9 +2574,8 @@ extension LevelRunner {
         try require(rallyFlagFlash == nil, "Placement marker covered the armed first charge")
         func enemy(_ id: Int, offset: Double, hp: Double = 1000) -> Walker {
             Walker(id: id, assetName: "redcoat_regular", speed: 60, maxHP: hp, hp: hp,
-                bounty: 5, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                spawnTick: 0, pathIndex: 0, discipline: 0.6,
-                position: CGPoint(x: position.x + offset, y: position.y + 12))
+                bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                spawnTick: 0, pathIndex: 0, discipline: 0.6, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: position.x + offset, y: position.y + 12))
         }
         walkers = [enemy(0, offset: 0), enemy(1, offset: tuning.aoeRadius - 1),
                    enemy(2, offset: tuning.aoeRadius + 1), enemy(3, offset: 20, hp: 1)]
@@ -2628,12 +2657,11 @@ extension LevelRunner {
         func enemy(_ id: Int, x: Double, y: Double = 0, hp: Double = 1000,
                    discipline: Double = 0.6) -> Walker {
             Walker(id: id, assetName: "redcoat_regular", speed: 60, maxHP: hp, hp: hp,
-                bounty: 5, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                spawnTick: 0, pathIndex: 0, discipline: discipline,
-                position: CGPoint(x: origin.x + x, y: origin.y + y + 12),
+                bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                spawnTick: 0, pathIndex: 0, discipline: discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: origin.x + x, y: origin.y + y + 12),
                 pathDistance: Double(100 - id))
         }
-        placedTowers[0].artilleryAim = ArtilleryAim(heading: 0)
+        placedTowers[0].artilleryAim = ArtilleryAim(heading: 0, firingTolerance: combatRules.firingTolerance)
         walkers = [enemy(0, x: 60, hp: 1), enemy(1, x: 140),
                    enemy(2, x: 220, discipline: 1), enemy(3, x: 140, y: 60),
                    enemy(4, x: tuning.range + 1)]
@@ -2669,7 +2697,7 @@ extension LevelRunner {
                     "Penetration damage was attributed incorrectly")
 
         walkers = [enemy(0, x: 80)]
-        placedTowers[0].artilleryAim = ArtilleryAim(heading: 0)
+        placedTowers[0].artilleryAim = ArtilleryAim(heading: 0, firingTolerance: combatRules.firingTolerance)
         nextFireTickBySlot = [:]
         updateCombat(gameDt: 0.00001)
         walkers[0].position.y += 90
@@ -2693,8 +2721,8 @@ extension LevelRunner {
         let origin = CGPoint(x: playArea.midX, y: playArea.midY)
         func enemy(_ id: Int, at point: CGPoint) -> Walker {
             Walker(id: id, assetName: "redcoat_regular", speed: 60, maxHP: 1000, hp: 1000,
-                bounty: 0, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                spawnTick: 0, pathIndex: 0, discipline: 0.6, position: point)
+                bounty: 0, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                spawnTick: 0, pathIndex: 0, discipline: 0.6, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: point)
         }
         guard let levels = towerLevels[.areaOfEffect] else {
             throw NSError(domain: "ArtilleryRangeReview", code: 2)
@@ -2711,9 +2739,9 @@ extension LevelRunner {
         for level in levels.keys.sorted() {
             for branch in levels[level]!.keys.sorted() {
                 let tuning = levels[level]![branch]!
-                guard tuning.demolitionPreparationSeconds == nil else { continue }
-                let swivel = ArtilleryHandling.isSwivel(level: level, branch: branch)
-                let tower = PlacedTower(slotIndex: 0, kind: .areaOfEffect,
+                guard tuning.attackMode.firesProjectiles else { continue }
+                let swivel = tuning.attackMode == .grapeshot
+                let tower = PlacedTower(combatRules: combatRules, slotIndex: 0, kind: .areaOfEffect,
                                         position: origin, level: level, branch: branch)
                 let overlayRadius = try { () throws -> CGFloat in
                     guard let radius = rangeOverlayRadius(for: tower) else {
@@ -2721,7 +2749,7 @@ extension LevelRunner {
                     }
                     return radius
                 }()
-                let ring = TowerRangeOverlay.size(range: overlayRadius, runtimeCanvas: runtimeCanvas)
+                let ring = TowerRangeOverlay.size(range: overlayRadius, verticalFraction: combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
                 let rx = ring.width / (2 * runtimeCanvas.scaleFactor)
                 let ry = ring.height / (2 * runtimeCanvas.scaleFactor)
                 func insideRing(_ point: CGPoint) -> Bool {
@@ -2731,7 +2759,7 @@ extension LevelRunner {
                     walkers = [enemy(0, at: point)]
                     var aimed = tower
                     let target = tuning.attackRange.clamped(bodyPoint(walkers[0]), from: origin)
-                    aimed.artilleryAim = ArtilleryAim(heading: atan2(target.y - origin.y, target.x - origin.x))
+                    aimed.artilleryAim = ArtilleryAim(heading: atan2(target.y - origin.y, target.x - origin.x), firingTolerance: combatRules.firingTolerance)
                     placedTowers = [aimed]
                     projectiles = []
                     artilleryImpacts = []
@@ -2761,7 +2789,7 @@ extension LevelRunner {
                 prepareShot(at: CGPoint(x: origin.x + rx * 0.98, y: origin.y + 12))
                 updateCombat(gameDt: 0.00001)
                 try require(!projectiles.isEmpty, "Missing moving-target test shot")
-                if swivel || ArtilleryHandling.isSiege(level: level, branch: branch) {
+                if swivel || tuning.attackMode == .solidShot {
 
                     walkers = [enemy(1, at: CGPoint(x: origin.x + rx + 1, y: origin.y + 12))]
                     for _ in 0..<200 {
@@ -2812,9 +2840,8 @@ extension LevelRunner {
         let center = CGPoint(x: playArea.midX, y: playArea.midY)
         func enemy(_ id: Int, x: Double, y: Double = 0, discipline: Double = 0.6) -> Walker {
             Walker(id: id, assetName: "redcoat_regular", speed: 60, maxHP: 1000, hp: 1000,
-                bounty: 0, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
-                spawnTick: 0, pathIndex: 0, discipline: discipline,
-                position: CGPoint(x: center.x + x, y: center.y + y + 12))
+                bounty: 0, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
+                spawnTick: 0, pathIndex: 0, discipline: discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: center.x + x, y: center.y + y + 12))
         }
         var checks: [[String: Any]] = []
         placedTowers = []
@@ -2824,8 +2851,8 @@ extension LevelRunner {
         for level in levels.keys.sorted() {
             for branch in levels[level]!.keys.sorted() {
                 let tuning = levels[level]![branch]!
-                guard tuning.demolitionPreparationSeconds == nil else { continue }
-                if ArtilleryHandling.isSiege(level: level, branch: branch) {
+                guard tuning.attackMode.firesProjectiles else { continue }
+                if tuning.attackMode == .solidShot {
                     let result = try verifySiegeOnDevice()
                     checks.append(result)
                     placedTowers = []
@@ -2844,7 +2871,7 @@ extension LevelRunner {
                     damage: 12, targetID: 0, slotIndex: 0, speed: 640,
                     splashRadius: CGFloat(tuning.aoeRadius),
                     moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
-                if ArtilleryHandling.isSwivel(level: level, branch: branch) {
+                if tuning.attackMode == .grapeshot {
                     grapeshotHits = [:]
                     projectiles = (0..<3).map { index in
                         var pellet = shot

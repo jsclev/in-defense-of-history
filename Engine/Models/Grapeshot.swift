@@ -4,8 +4,6 @@ import CoreGraphics
 /// A short-lived, straight shot. A volley can hit several enemies, but each
 /// enemy takes at most one pellet's damage from that volley.
 public struct GrapeshotFlight: Sendable {
-    public static let spread: [Double] = [-12, -6, 0, 6, 12].map { $0 * .pi / 180 }
-    public static let hitRadius: CGFloat = 12
     public let volleyID: Int
     public var remainingDistance: CGFloat
 
@@ -17,7 +15,7 @@ public struct GrapeshotFlight: Sendable {
     /// Swept collision prevents fast pellets from tunnelling between ticks.
     /// The returned fraction orders hits along the flight segment.
     public static func hitFraction(from start: CGPoint, to end: CGPoint,
-                                   target: CGPoint, radius: CGFloat = hitRadius) -> CGFloat? {
+                                   target: CGPoint, radius: CGFloat) -> CGFloat? {
         let dx = end.x - start.x, dy = end.y - start.y
         let lengthSquared = dx * dx + dy * dy
         let fraction: CGFloat = lengthSquared > 0

@@ -6,18 +6,21 @@ import Foundation
 /// Blast radius is a separate circle around impact and never enters this type.
 public struct TowerAttackRange: Equatable, Sendable {
     public let radius: CGFloat
-    public static let verticalFraction: CGFloat = 0.7
+    public let verticalFraction: CGFloat
 
-    public init(_ radius: Double) {
-        self.radius = radius.isFinite ? max(0, radius) : 0
+    public init(_ radius: Double, verticalFraction: Double) {
+        precondition(radius.isFinite && radius >= 0, "Invalid combat range")
+        precondition(verticalFraction.isFinite && verticalFraction > 0 && verticalFraction <= 1, "Invalid combat range geometry")
+        self.radius = radius
+        self.verticalFraction = verticalFraction
     }
 
     public var size: CGSize {
-        CGSize(width: radius * 2, height: radius * 2 * Self.verticalFraction)
+        CGSize(width: radius * 2, height: radius * 2 * verticalFraction)
     }
 
     private func distance(_ point: CGPoint, from origin: CGPoint) -> CGFloat {
-        hypot(point.x - origin.x, (point.y - origin.y) / Self.verticalFraction)
+        hypot(point.x - origin.x, (point.y - origin.y) / verticalFraction)
     }
 
     public func contains(_ point: CGPoint, from origin: CGPoint) -> Bool {
@@ -38,7 +41,7 @@ public struct TowerAttackRange: Equatable, Sendable {
     /// Each grapeshot pellet uses its own direction, including spread.
     public func travelDistance(heading: CGFloat) -> CGFloat {
         guard heading.isFinite else { return 0 }
-        return radius / hypot(cos(heading), sin(heading) / Self.verticalFraction)
+        return radius / hypot(cos(heading), sin(heading) / verticalFraction)
     }
 
     /// Closest point on a lane's centerline inside this exact firing boundary.
@@ -53,8 +56,8 @@ public struct TowerAttackRange: Equatable, Sendable {
             for (start, end) in zip(path.points, path.points.dropFirst()) {
                 let a = CGPoint(x: start.x, y: start.y)
                 let dx = CGFloat(end.x - start.x), dy = CGFloat(end.y - start.y)
-                let x = a.x - origin.x, y = (a.y - origin.y) / Self.verticalFraction
-                let scaledDY = dy / Self.verticalFraction
+                let x = a.x - origin.x, y = (a.y - origin.y) / verticalFraction
+                let scaledDY = dy / verticalFraction
                 let aa = dx * dx + scaledDY * scaledDY
                 let bb = 2 * (x * dx + y * scaledDY)
                 let cc = x * x + y * y - radius * radius

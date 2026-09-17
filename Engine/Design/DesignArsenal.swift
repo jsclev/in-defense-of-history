@@ -1,65 +1,76 @@
 import Foundation
 
-public enum Emplacement: String, CaseIterable, Sendable {
-    case minutemanPost
-    case longRifles
-    case fieldBattery
-    case libertyPole
-
-    public var id: UUID {
-        switch self {
-        case .minutemanPost: return UUID(uuidString: "a1000000-0000-4000-8000-000000000001")!
-        case .longRifles: return UUID(uuidString: "a1000000-0000-4000-8000-000000000002")!
-        case .fieldBattery: return UUID(uuidString: "a1000000-0000-4000-8000-000000000003")!
-        case .libertyPole: return UUID(uuidString: "a1000000-0000-4000-8000-000000000004")!
-        }
-    }
-}
-
 public struct DesignArsenal: Sendable {
-    public let towerTypes: [TowerType]
-    private let labels: [Emplacement: Labels]
+    public struct Tier: Sendable {
+        public let id: UUID
+        public let level: Int
+        public let branch: Int
+        public let details: TowerMenuDetails
+        public let tuning: TowerLevel
+    }
 
-    public struct Labels: Sendable {
+    public struct Definition: Sendable {
+        public let id: UUID
+        public let kind: TowerKind
+        public let category: String
         public let name: String
-        public let shortName: String
+        public let tiers: [Tier]
 
-        public init(name: String, shortName: String) {
-            self.name = name
-            self.shortName = shortName
+        public var type: TowerType {
+            TowerType(id: id, name: name,
+                      levels: tiers.filter { $0.branch == 1 }.map(\.tuning))
         }
     }
 
-    public init(labels: [Emplacement: Labels], levels: [Emplacement: [TowerLevel]]) throws {
-        for emplacement in Emplacement.allCases {
-            guard let label = labels[emplacement],
-                  !label.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                  !label.shortName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            else { throw DbError.Db(message: "Missing authored tower text for \(emplacement.rawValue)") }
-            guard levels[emplacement]?.isEmpty == false else {
-                throw DbError.Db(message: "Missing authored tower levels for \(emplacement.rawValue)")
+    public let combatRules: CombatRules
+    public let towers: [Definition]
+
+    init(towers: [Definition], combatRules: CombatRules) throws {
+        guard Set(towers.map(\.kind)) == Set(TowerKind.allCases),
+              Set(towers.map(\.kind)).count == towers.count,
+              Set(towers.map(\.id)).count == towers.count else {
+            throw DbError.Db(message: "tower_type: missing or duplicate tower identity")
+        }
+        for tower in towers {
+            guard tower.tiers.contains(where: { $0.level == 1 && $0.branch == 1 }) else {
+                throw DbError.Db(message: "tower_type[\(tower.id)]: missing first tower tier")
             }
         }
-        self.labels = labels
-        towerTypes = Emplacement.allCases.map {
-            TowerType(id: $0.id, name: labels[$0]!.name, levels: levels[$0]!)
+        self.towers = towers.sorted { $0.kind.rawValue < $1.kind.rawValue }
+        self.combatRules = combatRules
+    }
+
+    public var kinds: [TowerKind] { towers.map(\.kind) }
+    public var towerTypes: [TowerType] { towers.map(\.type) }
+
+    public func type(_ kind: TowerKind) -> TowerType {
+        guard let tower = towers.first(where: { $0.kind == kind }) else {
+            fatalError("tower_type: missing authored tower kind \(kind.rawValue)")
         }
+        return tower.type
     }
 
-    public func type(_ e: Emplacement) -> TowerType {
-        towerTypes.first { $0.id == e.id }!
+    public func kind(forTowerID id: UUID) -> TowerKind {
+        guard let tower = towers.first(where: { $0.id == id }) else {
+            fatalError("tower_type[\(id)]: unknown tower ID")
+        }
+        return tower.kind
     }
 
-    public func shortName(_ e: Emplacement) -> String {
-        labels[e]!.shortName
+    public func emplacement(for persistedValue: String) -> TowerKind? {
+        guard let kind = TowerKind(rawValue: persistedValue), kinds.contains(kind) else { return nil }
+        return kind
     }
 
-    public func emplacement(for persistedValue: String) -> Emplacement? {
-        Emplacement(rawValue: persistedValue)
-            ?? Emplacement.allCases.first { labels[$0]?.name == persistedValue }
+    public var rangeRings: [(name: String, range: Double)] {
+        towerTypes.map { (name: $0.name, range: $0.levels[0].range) }.sorted { $0.range < $1.range }
+    }
+
+    public var maximumRange: Double {
+        towers.flatMap(\.tiers).map { $0.tuning.range }.max()!
     }
 
     public func catalog(roster: DesignRoster) -> ContentCatalog {
-        ContentCatalog(enemyTypes: roster.enemyTypes, towerTypes: towerTypes)
+        ContentCatalog(combatRules: combatRules, enemyTypes: roster.enemyTypes, towerTypes: towerTypes)
     }
 }

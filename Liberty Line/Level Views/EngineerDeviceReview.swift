@@ -38,7 +38,8 @@ struct EngineerDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                 safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                                     levelInfoID: level.id, mapImageName: level.mapImageName)
+                                     levelInfoID: level.id, mapImageName: level.mapImageName,
+                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
             result["checks"] = try runner.verifyEngineerObstaclesOnDevice()
             result["sapperChecks"] = try runner.verifyDemolitionAutomationOnDevice()
             result["displayScale"] = window.screen.scale
@@ -65,7 +66,7 @@ struct EngineerDeviceReview: View {
                 }
                 let radius = CGFloat(stats.radius) * 340 / store.virtualCanvas.playAreaRect.height
                 for density in 1...3 {
-                    let renderer = ImageRenderer(content: EngineerObstacleView(radius: radius))
+                    let renderer = ImageRenderer(content: EngineerObstacleView(radius: radius, verticalFraction: runner.combatRules.rangeVerticalFraction))
                     renderer.scale = CGFloat(density)
                     guard let image = renderer.uiImage, let png = image.pngData() else {
                         throw NSError(domain: "EngineerReview", code: 6)

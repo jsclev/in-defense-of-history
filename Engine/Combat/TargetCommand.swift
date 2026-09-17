@@ -36,13 +36,15 @@ public struct TowerTargetingContext: Sendable, Equatable {
     public let slotIndex: Int
     public let position: Point
     public let range: Double
+    public let verticalFraction: Double
     public let targeting: Targeting
-    public var attackRange: TowerAttackRange { TowerAttackRange(range) }
+    public var attackRange: TowerAttackRange { TowerAttackRange(range, verticalFraction: verticalFraction) }
 
-    public init(slotIndex: Int, position: Point, range: Double, targeting: Targeting) {
+    public init(slotIndex: Int, position: Point, range: Double, verticalFraction: Double, targeting: Targeting) {
         self.slotIndex = slotIndex
         self.position = position
         self.range = range
+        self.verticalFraction = verticalFraction
         self.targeting = targeting
     }
 }

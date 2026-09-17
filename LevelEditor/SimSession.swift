@@ -43,21 +43,21 @@ final class SimSession {
         self.virtualCanvas = blueprint.virtualCanvas
         self.arsenal = arsenal
         self.catalog = catalog
-        self.sim = Self.freshSim(level: level, catalog: catalog, blueprint: blueprint,
+        self.sim = Self.freshSim(level: level, catalog: catalog, blueprint: blueprint, arsenal: arsenal,
                                  seed: 1776, autopilot: false)
         attachObserver()
     }
 
     private static func freshSim(
-        level: LevelInfo, catalog: ContentCatalog, blueprint: LevelBlueprint,
+        level: LevelInfo, catalog: ContentCatalog, blueprint: LevelBlueprint, arsenal: DesignArsenal,
         seed: UInt64, autopilot: Bool
     ) -> Simulation {
-        let policy: any CommanderPolicy = autopilot ? blueprint.scriptedSolution() : IdleCommander()
+        let policy: any CommanderPolicy = autopilot ? blueprint.scriptedSolution(arsenal: arsenal) : IdleCommander()
         return try! Simulation(level: level, catalog: catalog, policy: policy, seed: seed)
     }
 
     func restart() {
-        sim = Self.freshSim(level: level, catalog: catalog, blueprint: blueprint,
+        sim = Self.freshSim(level: level, catalog: catalog, blueprint: blueprint, arsenal: arsenal,
                             seed: seed, autopilot: autopilot)
         attachObserver()
         accumulator = 0
@@ -97,8 +97,8 @@ final class SimSession {
         }
     }
 
-    func build(_ e: Emplacement, at slot: Int) {
-        let result = sim.build(slot: slot, towerID: e.id)
+    func build(_ e: TowerKind, at slot: Int) {
+        let result = sim.build(slot: slot, towerID: arsenal.type(e).id)
         if result == .needGold { deniedUntil = sim.time + 0.7 }
         if result == .ok {
             recording.append(.init(at: recordTime, kind: "place",
@@ -136,7 +136,7 @@ final class SimSession {
         let report = try? Batch(baseSeed: seed, count: 100).run(
             level: level, catalog: catalog
         ) { _ -> any CommanderPolicy in
-            blueprint.scriptedSolution()
+            blueprint.scriptedSolution(arsenal: arsenal)
         }
         guard let r = report else { return }
         batchSummary = String(

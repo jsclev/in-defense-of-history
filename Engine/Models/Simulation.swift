@@ -3,7 +3,8 @@ import Foundation
 public final class Simulation {
     public let catalog: ContentCatalog
     public let level: LevelInfo
-    public let meleeFormation = MeleeFormation()
+    public let meleeFormation: MeleeFormation
+    public var combatRules: CombatRules { catalog.combatRules }
 
     public private(set) var time: Double = 0
     public private(set) var tick: Int = 0
@@ -97,6 +98,7 @@ public final class Simulation {
     ) throws {
         self.level = level
         self.catalog = catalog
+        self.meleeFormation = MeleeFormation(rules: catalog.combatRules)
         self.policy = policy
         self.gold = level.startingMoney
         self.lives = level.numStartingLives
@@ -293,7 +295,7 @@ public final class Simulation {
                 emit(.waveStarted(index: s.waveIndex))
             }
             let type = catalog.enemyTypes[s.enemyTypeIndex]
-            let threshold = Tunables.moraleMax
+            let threshold = combatRules.moraleMax
                 * rngMorale.double(in: type.stats.breakBand)
             let enemy = Enemy(
                 spawnID: nextSpawnID,
@@ -301,7 +303,7 @@ public final class Simulation {
                 waveIndex: s.waveIndex,
                 pathIndex: s.pathIndex,
                 type: type,
-                shakenThreshold: threshold
+                shakenThreshold: threshold, moraleMax: combatRules.moraleMax
             )
             nextSpawnID += 1
             enemies.append(enemy)
@@ -320,7 +322,7 @@ public final class Simulation {
             moraleRegen.removeAll(keepingCapacity: true)
             disciplineBonus.removeAll(keepingCapacity: true)
             for _ in 0..<n {
-                moraleRegen.append(Tunables.baseMoraleRegenPerSecond)
+                moraleRegen.append(combatRules.baseMoraleRegenPerSecond)
                 disciplineBonus.append(0)
             }
             for i in 0..<n where !enemies[i].removed {
@@ -380,9 +382,9 @@ public final class Simulation {
             stepMilitia(dt: dt)
 
             contagionAccumulator += dt
-            if contagionAccumulator >= Tunables.contagionTickInterval {
-                contagionAccumulator -= Tunables.contagionTickInterval
-                contagionTick(interval: Tunables.contagionTickInterval)
+            if contagionAccumulator >= combatRules.contagionTickInterval {
+                contagionAccumulator -= combatRules.contagionTickInterval
+                contagionTick(interval: combatRules.contagionTickInterval)
             }
 
             resolveMorale(dt: dt)
@@ -398,12 +400,12 @@ public final class Simulation {
                 }
                 switch e.state {
                 case .broken:
-                    e.distance -= stats.speed * Tunables.routSpeedMultiplier * dt
+                    e.distance -= stats.speed * combatRules.routSpeedMultiplier * dt
                     if e.distance <= 0 {
                         remove(&e, fate: .routed)
                     }
                 case .shaken, .steady:
-                    let mult = stats.moraleResponse.movementMultiplier(morale: e.morale)
+                    let mult = stats.moraleResponse.movementMultiplier(morale: e.morale, maximum: combatRules.moraleMax)
                     let slow = EngineerObstacleField.movementMultiplier(
                         at: CGPoint(x: positions[i].x, y: positions[i].y),
                         retreating: false, fields: obstacleFields)
@@ -480,7 +482,7 @@ public final class Simulation {
                    enemies[ei].state != .broken {
                     targetPos = positions[ei]
                 }
-                let context = MilitiaContext(
+                let context = MilitiaContext(rules: combatRules,
                     freeEnemies: free,
                     targetPosition: targetPos,
                     rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
@@ -504,7 +506,7 @@ public final class Simulation {
                     unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
                 case let .move(toward):
                     let d = unit.position.distance(to: toward)
-                    let step = MilitiaTunables.moveSpeed * dt
+                    let step = combatRules.meleeMoveSpeed * dt
                     unit.position = d <= step ? toward : Point.lerp(unit.position, toward, step / d)
                 case let .engage(targetSpawnID):
                     unit.state = .engaging
@@ -516,7 +518,7 @@ public final class Simulation {
                         unit.combatSide = unit.position.x < (targetPos?.x ?? unit.position.x) ? -1 : 1
                         unit.state = .fighting
                         g.enemySwingTicks[targetSpawnID] =
-                            Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                            Simulation.fireTicks(combatRules.enemySwingInterval)
                     }
                     if let ei = bySpawnID[targetSpawnID] {
                         var e = enemies[ei]
@@ -545,14 +547,14 @@ public final class Simulation {
                    let ei = bySpawnID[unit.targetSpawnID], !enemies[ei].removed {
                     blockedSpawnIDs.insert(unit.targetSpawnID)
                     var swing = g.enemySwingTicks[unit.targetSpawnID]
-                        ?? Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                        ?? Simulation.fireTicks(combatRules.enemySwingInterval)
                     swing -= 1
                     if swing <= 0 {
                         let es = catalog.enemyTypes[enemies[ei].typeIndex].stats
                         unit.hp -= rngCombat.double(in: es.damageMin...es.damageMax)
-                            * es.moraleResponse.damageMultiplier(morale: enemies[ei].morale)
+                            * es.moraleResponse.damageMultiplier(morale: enemies[ei].morale, maximum: combatRules.moraleMax)
                             * (1.0 - melee.defenseRating)
-                        swing = Simulation.fireTicks(MilitiaTunables.enemySwingInterval)
+                        swing = Simulation.fireTicks(combatRules.enemySwingInterval)
                         if unit.hp <= 0 {
                             militiaDeaths += 1
                             claimed.remove(unit.targetSpawnID)
@@ -665,7 +667,7 @@ public final class Simulation {
         RangedTargetCommand(
             tower: TowerTargetingContext(slotIndex: slot,
                                          position: level.towerSlots[slot].position,
-                                         range: lvl.range,
+                                         range: lvl.range, verticalFraction: combatRules.rangeVerticalFraction,
                                          targeting: lvl.targeting),
             enemies: candidates,
             paths: level.paths
@@ -738,23 +740,23 @@ public final class Simulation {
         for i in 0..<n where !enemies[i].removed && enemies[i].infected {
             var e = enemies[i]
             let stats = catalog.enemyTypes[e.typeIndex].stats
-            let floor = stats.maxHP * Tunables.diseaseHPFloorFraction
+            let floor = stats.maxHP * combatRules.diseaseHPFloorFraction
             if e.hp > floor {
-                e.hp = max(floor, e.hp - Tunables.diseaseHPPerSecond * interval)
+                e.hp = max(floor, e.hp - combatRules.diseaseHPPerSecond * interval)
             } else {
                 let effDiscipline = min(1.0, stats.discipline + disciplineBonus[i])
                 if effDiscipline < 1.0 {
-                    e.morale -= Tunables.diseaseMoralePerSecond * interval * (1.0 - effDiscipline)
+                    e.morale -= combatRules.diseaseMoralePerSecond * interval * (1.0 - effDiscipline)
                 }
             }
             enemies[i] = e
         }
-        let r2 = Tunables.contagionSpreadRadius * Tunables.contagionSpreadRadius
+        let r2 = combatRules.contagionSpreadRadius * combatRules.contagionSpreadRadius
         for i in 0..<n where !enemies[i].removed && enemies[i].infected {
             for j in 0..<n where j != i && !enemies[j].removed && !enemies[j].infected {
                 guard positions[i].squaredDistance(to: positions[j]) <= r2 else { continue }
                 let hardiness = catalog.enemyTypes[enemies[j].typeIndex].stats.hardiness
-                if rngContagion.chance(Tunables.contagionSpreadChance * (1.0 - hardiness)) {
+                if rngContagion.chance(combatRules.contagionSpreadChance * (1.0 - hardiness)) {
                     enemies[j].infected = true
                 }
             }
@@ -767,10 +769,10 @@ public final class Simulation {
         for i in 0..<n where !enemies[i].removed {
             var e = enemies[i]
             if e.state != .broken {
-                e.morale = min(Tunables.moraleMax, e.morale + moraleRegen[i] * dt)
+                e.morale = min(combatRules.moraleMax, e.morale + moraleRegen[i] * dt)
                 let stats = catalog.enemyTypes[e.typeIndex].stats
                 let steadyGate = e.isSteadyAdvance
-                    && e.hp > stats.maxHP * Tunables.steadyAdvanceHPGate
+                    && e.hp > stats.maxHP * combatRules.steadyAdvanceHPGate
                 if e.state == .steady, e.morale <= e.shakenThreshold, !steadyGate {
                     e.state = .shaken
                 } else if e.state == .shaken, e.morale > e.shakenThreshold {
@@ -789,9 +791,9 @@ public final class Simulation {
                 anyBroke = true
                 e.state = .broken
 
-                let mult = e.isWavering ? Tunables.waveringSplashMultiplier : 1.0
-                let splash = Tunables.breakMoraleSplash * mult
-                let r2 = Tunables.breakSplashRadius * Tunables.breakSplashRadius
+                let mult = e.isWavering ? combatRules.waveringSplashMultiplier : 1.0
+                let splash = combatRules.breakMoraleSplash * mult
+                let r2 = combatRules.breakSplashRadius * combatRules.breakSplashRadius
                 for j in 0..<n where j != i && !enemies[j].removed && enemies[j].state != .broken {
                     guard positions[i].squaredDistance(to: positions[j]) <= r2 else { continue }
                     let stats = catalog.enemyTypes[enemies[j].typeIndex].stats
@@ -820,13 +822,13 @@ public final class Simulation {
         switch fate {
         case .killed:
             killed += 1
-            earned = Int((base * Tunables.killBountyMultiplier).rounded())
+            earned = Int((base * combatRules.killBountyMultiplier).rounded())
         case .routed:
             routed += 1
-            earned = Int((base * Tunables.routBountyMultiplier).rounded())
+            earned = Int((base * combatRules.routBountyMultiplier).rounded())
         case .captured:
             captured += 1
-            earned = Int((base * Tunables.captureBountyMultiplier).rounded())
+            earned = Int((base * combatRules.captureBountyMultiplier).rounded())
         case .leaked:
             leaked += 1
             if e.waveIndex < leaksByWave.count {

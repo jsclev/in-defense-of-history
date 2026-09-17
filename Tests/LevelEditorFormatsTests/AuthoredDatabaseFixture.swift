@@ -4,6 +4,15 @@ import XCTest
 @testable import LevelEditorFormats
 
 final class AuthoredDatabaseFixture {
+    static let combatRules: CombatRules = {
+        let fixture = try! AuthoredDatabaseFixture()
+        return try! withExtendedLifetime(fixture) { try fixture.db.combatRulesDao.get() }
+    }()
+    static let moraleResponse: EnemyMoraleResponse = {
+        let fixture = try! AuthoredDatabaseFixture()
+        return try! withExtendedLifetime(fixture) { try fixture.db.enemyTypeDao.getAll()[0].stats.moraleResponse }
+    }()
+
     let db: Db
     var connection: OpaquePointer { db.conn! }
 

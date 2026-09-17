@@ -25,7 +25,7 @@ final class HeroWalkPoseTests: XCTestCase {
         var unit = MilitiaUnit(position: .zero, hp: 100)
         var pose = HeroWalkPose(baseAssetName: washington, position: unit.position)
         XCTAssertTrue(movement.command(to: Point(900, 0), unit: &unit))
-        let context = MilitiaContext(freeEnemies: [], targetPosition: nil, rallyPoint: .zero,
+        let context = MilitiaContext(rules: AuthoredDatabaseFixture.combatRules, freeEnemies: [], targetPosition: nil, rallyPoint: .zero,
                                     towerPosition: .zero, leashRadius: 130, engageScanRadius: 80)
         // Variable display delivery, including a late frame and game speed-up.
         // The simulation still takes ordinary fixed ticks in each batch.

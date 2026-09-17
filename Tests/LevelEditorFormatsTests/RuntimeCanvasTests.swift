@@ -29,8 +29,8 @@ final class RuntimeCanvasTests: XCTestCase {
                 XCTAssertEqual(sprites.projectionScale, runtime.scaleFactor)
                 XCTAssertEqual(sprites.playableHeightOnScreen, runtime.playAreaRect.height)
                 XCTAssertEqual(sprites.mapUnits(100), runtime.rangeRadius(forMapRadius: 100))
-                XCTAssertEqual(sprites.points(MapSpriteSizing.hero),
-                    MapSpriteSizing.hero.resolved(playableHeightOnScreen: runtime.playAreaRect.height))
+                XCTAssertEqual(sprites.points(MapSpriteSizing.hero(baseAssetName: HeroWalkCycle.georgeWashingtonAssetName)),
+                    MapSpriteSizing.hero(baseAssetName: HeroWalkCycle.georgeWashingtonAssetName).resolved(playableHeightOnScreen: runtime.playAreaRect.height))
                 let done = DoneButtonLayout(runtimeCanvas: runtime, aspect: 2.5).frame
                 XCTAssertTrue(safe.contains(done), "Done button escapes safe area: \(done), \(safe)")
                 let content = MenuContentLayout(runtimeCanvas: runtime, footer: done).frame
@@ -63,7 +63,7 @@ final class RuntimeCanvasTests: XCTestCase {
                      CGSize(width: 1600, height: 900)] {
             let runtime = canvas(CGRect(origin: .zero, size: size))
             for radius in [300.0, 330, 350, 370, 390] {
-                let ring = TowerRangeOverlay.size(range: radius, runtimeCanvas: runtime)
+                let ring = TowerRangeOverlay.size(range: radius, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction, runtimeCanvas: runtime)
                 for degrees in stride(from: 0, to: 360, by: 5) {
                     let angle = Double(degrees) * .pi / 180
                     for factor in [0.999, 1.001] {
@@ -72,7 +72,7 @@ final class RuntimeCanvasTests: XCTestCase {
                             origin.y + sin(angle) * ring.height / (2 * runtime.scaleFactor) * factor),
                             pathIndex: 0, pathDistance: 0, hp: 100, morale: 100, isBroken: false)
                         let command = RangedTargetCommand(tower: TowerTargetingContext(
-                            slotIndex: 0, position: origin, range: radius, targeting: .first),
+                            slotIndex: 0, position: origin, range: radius, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction, targeting: .first),
                             enemies: [candidate], paths: [])
                         XCTAssertEqual(command.execute() != nil, factor < 1)
                     }

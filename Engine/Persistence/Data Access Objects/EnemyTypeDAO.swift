@@ -1,5 +1,4 @@
 import Foundation
-import SQLite3
 
 public class EnemyTypeDAO: BaseDAO {
     init(conn: OpaquePointer?) {
@@ -7,104 +6,53 @@ public class EnemyTypeDAO: BaseDAO {
     }
 
     public func getAll() throws -> [EnemyType] {
-        var enemyTypes: [EnemyType] = []
-
-        var stmt: OpaquePointer?
-        let sql = getCleanedSql("""
-            SELECT
-                et.id,
-                et.enemy_type_name,
-                et.max_hp,
-                et.speed,
-                et.cover,
-                et.discipline,
-                et.hardiness,
-                et.damage_min,
-                et.damage_max,
-                et.bounty,
-                et.lives_cost,
-                et.break_band_lo,
-                et.break_band_hi,
-                et.traits,
-                et.morale_speed_threshold,
-                et.morale_attack_threshold,
-                et.morale_speed_multiplier,
-                et.morale_attack_multiplier,
-                et.enemy_type_key,
-                et.enemy_type_description,
-                et.image_name
-            FROM
-                enemy_type et
-            ORDER BY
-                et.enemy_type_name
-        """)
-
-        try prepare(conn: conn, stmt: &stmt, sql: sql)
-        defer { sqlite3_finalize(stmt) }
-
-        var result = sqlite3_step(stmt)
-        while result == SQLITE_ROW {
-            let id = try getUUID(stmt: stmt, colIndex: 0, msg: "enemy type id")
-
-            guard let name = try getString(stmt: stmt, colIndex: 1),
-                  let key = try getString(stmt: stmt, colIndex: 18),
-                  let description = try getString(stmt: stmt, colIndex: 19),
-                  let imageName = try getString(stmt: stmt, colIndex: 20),
-                  [name, key, description, imageName].allSatisfy({ !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) else {
-                throw DbError.Db(message: "enemy_type row \(id.uuidString.lowercased()) is missing required identity, display copy or artwork.")
+        let roster = try authoredRows("SELECT * FROM enemy_type ORDER BY enemy_type_name", entity: "enemy_type") { row in
+            let id = try row.uuid("id")
+            let record = AuthoredRow(statement: row.statement, entity: "enemy_type \(id)")
+            let minimum = try record.number("damage_min", minimum: 0)
+            let maximum = try record.number("damage_max", minimum: minimum)
+            let bandLo = try record.number("break_band_lo", minimum: 0, maximum: 1)
+            let bandHi = try record.number("break_band_hi", minimum: bandLo, maximum: 1)
+            let traits: [Trait]
+            do {
+                traits = try JSONDecoder().decode([Trait].self, from: Data(record.text("traits").utf8))
+            } catch {
+                throw record.invalid("traits", "must contain valid, complete authored traits: \(error)")
             }
-
-            let breakBandLo = getDouble(stmt: stmt, colIndex: 11)
-            let breakBandHi = getDouble(stmt: stmt, colIndex: 12)
-            guard breakBandLo <= breakBandHi else {
-                throw DbError.Db(message: "enemy_type '\(name)' has break_band_lo (\(breakBandLo)) > break_band_hi (\(breakBandHi)).")
+            for trait in traits {
+                switch trait {
+                case let .rallyBeat(radius, rate):
+                    guard radius.isFinite, radius > 0, rate.isFinite, rate >= 0 else {
+                        throw record.invalid("traits.rallyBeat", "has invalid radius or moralePerSecond")
+                    }
+                case let .commandAura(radius, bonus, shock):
+                    guard radius.isFinite, radius > 0, bonus.isFinite, (0...1).contains(bonus),
+                          shock.isFinite, shock >= 0 else {
+                        throw record.invalid("traits.commandAura", "has invalid radius, disciplineBonus or deathShock")
+                    }
+                default: break
+                }
             }
-
-            let stats = EnemyStats(
-                maxHP: getDouble(stmt: stmt, colIndex: 2),
-                speed: getDouble(stmt: stmt, colIndex: 3),
-                cover: getDouble(stmt: stmt, colIndex: 4),
-                discipline: getDouble(stmt: stmt, colIndex: 5),
-                hardiness: getDouble(stmt: stmt, colIndex: 6),
-                damageMin: getDouble(stmt: stmt, colIndex: 7),
-                damageMax: getDouble(stmt: stmt, colIndex: 8),
-                gold: getInt(stmt: stmt, colIndex: 9),
-                livesCost: getInt(stmt: stmt, colIndex: 10),
-                breakBand: breakBandLo...breakBandHi,
-                moraleResponse: EnemyMoraleResponse(
-                    speedThreshold: getDouble(stmt: stmt, colIndex: 14),
-                    attackThreshold: getDouble(stmt: stmt, colIndex: 15),
-                    speedMultiplier: getDouble(stmt: stmt, colIndex: 16),
-                    attackMultiplier: getDouble(stmt: stmt, colIndex: 17))
-            )
-
-            let traits = try decodeTraits(stmt: stmt, colIndex: 13, name: name)
-
-            enemyTypes.append(EnemyType(id: id, key: key, name: name, description: description,
-                                       imageName: imageName, stats: stats, traits: traits))
-            result = sqlite3_step(stmt)
+            return EnemyType(id: id, key: try record.text("enemy_type_key"),
+                name: try record.text("enemy_type_name"), description: try record.text("enemy_type_description"),
+                imageName: try record.text("image_name"),
+                stats: EnemyStats(
+                    maxHP: try record.number("max_hp", minimum: 0, strictlyGreater: true),
+                    speed: try record.number("speed", minimum: 0),
+                    cover: try record.number("cover", minimum: 0, maximum: 1),
+                    discipline: try record.number("discipline", minimum: 0, maximum: 1),
+                    hardiness: try record.number("hardiness", minimum: 0, maximum: 1),
+                    damageMin: minimum, damageMax: maximum,
+                    gold: try record.integer("bounty", minimum: 0),
+                    livesCost: try record.integer("lives_cost", minimum: 0), breakBand: bandLo...bandHi,
+                    moraleResponse: EnemyMoraleResponse(
+                        speedThreshold: try record.number("morale_speed_threshold", minimum: 0, maximum: 1),
+                        attackThreshold: try record.number("morale_attack_threshold", minimum: 0, maximum: 1),
+                        speedMultiplier: try record.number("morale_speed_multiplier", minimum: 0, maximum: 1),
+                        attackMultiplier: try record.number("morale_attack_multiplier", minimum: 0, maximum: 1))),
+                traits: traits)
         }
-
-        guard result == SQLITE_DONE else {
-            throw DbError.Db(message: "Unable to read the enemy roster: \(String(cString: sqlite3_errmsg(conn)))")
-        }
-
-        return enemyTypes
-    }
-
-    private func decodeTraits(stmt: OpaquePointer?, colIndex: Int, name: String) throws -> [Trait] {
-        guard let json = try getString(stmt: stmt, colIndex: colIndex), !json.isEmpty else {
-            return []
-        }
-
-        guard let data = json.data(using: .utf8) else {
-            throw DbError.Db(message: "enemy_type '\(name)' traits column is not valid UTF-8.")
-        }
-
-        do {
-            return try JSONDecoder().decode([Trait].self, from: data)
-        } catch {
-            throw DbError.Db(message: "Unable to decode traits for enemy_type '\(name)': \(error)")
-        }
+        guard !roster.isEmpty else { throw DbError.Db(message: "enemy_type: missing authored roster") }
+        return roster
     }
 }

@@ -6,7 +6,6 @@ final class GPUEngine {
     let queue: MTLCommandQueue
     let pipeline: MTLComputePipelineState
     var threadTickBudget = 16_000_000
-    let meleeFormation = MeleeFormation()
     private var pool: [String: MTLBuffer] = [:]
 
     private func pooledBuffer(_ name: String, minLength: Int) throws -> MTLBuffer {
@@ -62,6 +61,7 @@ private func loadSimulationLibrary(device: MTLDevice) throws -> MTLLibrary {
 /// Encoding a level and a permutation for the kernel.
 extension GPUEngine {
     func levelGPU(level: LevelInfo, catalog: ContentCatalog) throws -> LevelGPU {
+        let rules = catalog.combatRules
         guard level.paths.count <= Int(SIM_MAX_PATHS),
               level.paths.allSatisfy({ $0.points.count <= Int(SIM_MAX_PATH_POINTS) }),
               level.towerSlots.count <= Int(SIM_MAX_SLOTS),
@@ -129,29 +129,31 @@ extension GPUEngine {
             }
         }
 
-        lvl.moraleMax = Float(Tunables.moraleMax)
-        lvl.baseMoraleRegen = Float(Tunables.baseMoraleRegenPerSecond)
-        lvl.breakSplash = Float(Tunables.breakMoraleSplash)
-        lvl.breakSplashRadius = Float(Tunables.breakSplashRadius)
-        lvl.waveringSplashMult = Float(Tunables.waveringSplashMultiplier)
-        lvl.shakenSpeedMult = Float(Tunables.shakenSpeedMultiplier)
-        lvl.routSpeedMult = Float(Tunables.routSpeedMultiplier)
-        lvl.steadyAdvanceHPGate = Float(Tunables.steadyAdvanceHPGate)
-        lvl.contagionTickInterval = Float(Tunables.contagionTickInterval)
-        lvl.diseaseHPPerSecond = Float(Tunables.diseaseHPPerSecond)
-        lvl.diseaseHPFloorFraction = Float(Tunables.diseaseHPFloorFraction)
-        lvl.diseaseMoralePerSecond = Float(Tunables.diseaseMoralePerSecond)
-        lvl.contagionSpreadRadius = Float(Tunables.contagionSpreadRadius)
-        lvl.contagionSpreadChance = Float(Tunables.contagionSpreadChance)
-        lvl.killBountyMult = Float(Tunables.killBountyMultiplier)
-        lvl.routBountyMult = Float(Tunables.routBountyMultiplier)
-        lvl.captureBountyMult = Float(Tunables.captureBountyMultiplier)
+        lvl.arrivalRadius = Float(rules.arrivalRadius)
+        lvl.rangeVerticalFraction = Float(rules.rangeVerticalFraction)
+        lvl.moraleMax = Float(rules.moraleMax)
+        lvl.baseMoraleRegen = Float(rules.baseMoraleRegenPerSecond)
+        lvl.breakSplash = Float(rules.breakMoraleSplash)
+        lvl.breakSplashRadius = Float(rules.breakSplashRadius)
+        lvl.waveringSplashMult = Float(rules.waveringSplashMultiplier)
+        lvl.shakenSpeedMult = Float(rules.shakenSpeedMultiplier)
+        lvl.routSpeedMult = Float(rules.routSpeedMultiplier)
+        lvl.steadyAdvanceHPGate = Float(rules.steadyAdvanceHPGate)
+        lvl.contagionTickInterval = Float(rules.contagionTickInterval)
+        lvl.diseaseHPPerSecond = Float(rules.diseaseHPPerSecond)
+        lvl.diseaseHPFloorFraction = Float(rules.diseaseHPFloorFraction)
+        lvl.diseaseMoralePerSecond = Float(rules.diseaseMoralePerSecond)
+        lvl.contagionSpreadRadius = Float(rules.contagionSpreadRadius)
+        lvl.contagionSpreadChance = Float(rules.contagionSpreadChance)
+        lvl.killBountyMult = Float(rules.killBountyMultiplier)
+        lvl.routBountyMult = Float(rules.routBountyMultiplier)
+        lvl.captureBountyMult = Float(rules.captureBountyMultiplier)
         lvl.dt = Float(SimClock.dt)
         lvl.ticksPerSecond = Int32(SimClock.ticksPerSecond)
-        lvl.militiaMoveSpeed = Float(MilitiaTunables.moveSpeed)
-        lvl.militiaMeleeReach = Float(MilitiaTunables.meleeReach)
-        lvl.militiaRallySpread = Float(meleeFormation.postSpread)
-        lvl.militiaEnemySwingTicks = Int32(Simulation.fireTicks(MilitiaTunables.enemySwingInterval))
+        lvl.militiaMoveSpeed = Float(rules.meleeMoveSpeed)
+        lvl.militiaMeleeReach = Float(rules.meleeReach)
+        lvl.militiaRallySpread = Float(rules.meleePostSpread)
+        lvl.militiaEnemySwingTicks = Int32(Simulation.fireTicks(rules.enemySwingInterval))
         return lvl
     }
 
@@ -689,7 +691,7 @@ struct GPUHarness {
         }
         let midPerm = space.permutation(at: space.permutationCount / 2)
         let (level, _) = levelFor(perm: midPerm, fixed: fixed, base: base)
-        let catalog = ContentCatalog(
+        let catalog = ContentCatalog(combatRules: fixed.combatRules,
             enemyTypes: fixed.roster,
             towerTypes: [TowerType(id: kindIDs["melee"]!, name: fixed.towerNames["melee"]!,
                                    levels: Array(meleeLevels.prefix(2)))]
@@ -736,12 +738,15 @@ struct GPUHarness {
             }
             var projectile = rangedBase
             if projectile[0].projectileSpeed <= 0 {
-                for i in projectile.indices { projectile[i].projectileSpeed = 425 }
+                guard let speed = space.projSpeedGrid(for: "ranged", fixed: fixed).first(where: { $0 > 0 }) else {
+                    throw DbError.Db(message: "GPU projectile probe requires an authored positive projectile speed")
+                }
+                for i in projectile.indices { projectile[i].projectileSpeed = speed }
             }
             for (name, levels) in [("r+m hitscan", hitscan), ("r+m projectile", projectile)] {
                 rangedMeleeScenarios.append((
                     name, money, bigWave,
-                    ContentCatalog(
+                    ContentCatalog(combatRules: fixed.combatRules,
                         enemyTypes: fixed.roster,
                         towerTypes: [
                             TowerType(id: kindIDs["ranged"]!, name: fixed.towerNames["ranged"]!,
@@ -817,7 +822,7 @@ struct GPUHarness {
                 towers.append(TowerType(id: kindIDs["ranged"]!, name: fixed.towerNames["ranged"]!,
                                         levels: rangedLevels))
             }
-            let catalog = ContentCatalog(enemyTypes: fixed.roster, towerTypes: towers)
+            let catalog = ContentCatalog(combatRules: fixed.combatRules, enemyTypes: fixed.roster, towerTypes: towers)
             let proto = GreedyCommander(level: level, catalog: catalog)
             var cpuWins = 0
             var cpuLives = 0.0

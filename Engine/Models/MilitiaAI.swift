@@ -24,21 +24,6 @@ public struct MilitiaUnit: Sendable {
     }
 }
 
-public enum MilitiaTunables {
-    /// Swing damage rolls uniformly within ±this fraction of attack_rating.
-    public static let attackSpread: Double = 0.25
-    public static let moveSpeed: Double = 70
-    public static let engageScanRadiusFraction: Double = 0.3
-    public static let meleeReach: Double = 26
-    /// Once contact blocks an enemy, fighters spread sideways so neither
-    /// sprite hides the other. This is separate from acquisition/attack reach.
-    public static let combatSpacing: Double = 80
-    public static let leashRadiusFraction: Double = 0.5
-    public static let enemySwingInterval: Double = 1.2
-    public static let heroEngageScanRadius: Double = 80
-    public static let heroLeashRadius: Double = 130
-}
-
 public enum MilitiaDecision: Sendable, Equatable {
     case idle
     case countdownRespawn
@@ -51,6 +36,7 @@ public enum MilitiaDecision: Sendable, Equatable {
 }
 
 public struct MilitiaContext {
+    public let rules: CombatRules
     public var freeEnemies: [(spawnID: Int, position: Point)]
     public var targetPosition: Point?
     public var rallyPoint: Point
@@ -59,9 +45,10 @@ public struct MilitiaContext {
     public var engageScanRadius: Double
     public var combatPosition: Point? = nil
 
-    public init(freeEnemies: [(spawnID: Int, position: Point)],
+    public init(rules: CombatRules, freeEnemies: [(spawnID: Int, position: Point)],
                 targetPosition: Point?, rallyPoint: Point, towerPosition: Point,
                 leashRadius: Double, engageScanRadius: Double) {
+        self.rules = rules
         self.freeEnemies = freeEnemies
         self.targetPosition = targetPosition
         self.rallyPoint = rallyPoint
@@ -72,8 +59,8 @@ public struct MilitiaContext {
 }
 
 public enum MilitiaAI {
-    public static func combatPosition(for unit: MilitiaUnit, target: Point) -> Point {
-        Point(target.x + unit.combatSide * MilitiaTunables.combatSpacing, target.y)
+    public static func combatPosition(for unit: MilitiaUnit, target: Point, rules: CombatRules) -> Point {
+        Point(target.x + unit.combatSide * rules.meleeCombatSpacing, target.y)
     }
 
     public static func decide(_ unit: MilitiaUnit, context: MilitiaContext) -> MilitiaDecision {
@@ -82,7 +69,7 @@ public enum MilitiaAI {
             return unit.respawnTicksLeft > 0 ? .countdownRespawn : .respawn
 
         case .returning:
-            if unit.position.distance(to: context.rallyPoint) <= 2 {
+            if unit.position.distance(to: context.rallyPoint) <= context.rules.arrivalRadius {
                 return .idle
             }
             return .move(toward: context.rallyPoint)
@@ -91,7 +78,7 @@ public enum MilitiaAI {
             if let target = nearestFreeEnemy(in: context) {
                 return .engage(targetSpawnID: target)
             }
-            if unit.position.distance(to: context.rallyPoint) > 2 {
+            if unit.position.distance(to: context.rallyPoint) > context.rules.arrivalRadius {
                 return .move(toward: context.rallyPoint)
             }
             return .heal
@@ -101,7 +88,7 @@ public enum MilitiaAI {
             if targetPos.distance(to: context.rallyPoint) > context.leashRadius {
                 return .disengage
             }
-            if unit.position.distance(to: targetPos) <= MilitiaTunables.meleeReach {
+            if unit.position.distance(to: targetPos) <= context.rules.meleeReach {
                 return .strike(targetSpawnID: unit.targetSpawnID)
             }
             return .move(toward: targetPos)
@@ -111,8 +98,8 @@ public enum MilitiaAI {
             if targetPos.distance(to: context.rallyPoint) > context.leashRadius {
                 return .disengage
             }
-            let position = context.combatPosition ?? combatPosition(for: unit, target: targetPos)
-            if unit.position.distance(to: position) > 2 { return .move(toward: position) }
+            let position = context.combatPosition ?? combatPosition(for: unit, target: targetPos, rules: context.rules)
+            if unit.position.distance(to: position) > context.rules.arrivalRadius { return .move(toward: position) }
             if unit.swingTicksLeft > 0 { return .idle }
             return .strike(targetSpawnID: unit.targetSpawnID)
         }

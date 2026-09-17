@@ -9,7 +9,6 @@ struct HeroesView: View {
     @State private var heroes: [Hero] = []
     @State private var heroSelection: HeroSelection?
     @State private var selectedHero: Hero?
-    @State private var selectionError: String?
 
     private static let columns = 5
     private static let rows = 3
@@ -75,22 +74,18 @@ struct HeroesView: View {
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear(perform: loadHeroes)
-        .alert("Unable to load hero choices", isPresented: Binding(
-            get: { selectionError != nil }, set: { if !$0 { selectionError = nil } }
-        )) { Button("OK", role: .cancel) { selectionError = nil } } message: {
-            Text(selectionError ?? "")
-        }
     }
 
     static func unlockFontSize(heroes: [Hero], cellWidth: CGFloat,
                                cellHeight: CGFloat) -> CGFloat {
         let wrapWidth = cellWidth * (1 - 2 * 0.04) - 1
-        let messages = heroes.compactMap(heroUnlockMessage)
+        let messages = heroes.map(heroUnlockMessage)
         var size = cellHeight * 0.098
         let minSize = size * 0.75
         while size > minSize {
-            let font = UIFont(name: "Cochin-Bold", size: size)
-                ?? UIFont.systemFont(ofSize: size)
+            guard let font = UIFont(name: "Cochin-Bold", size: size) else {
+                fatalError("Missing required hero font 'Cochin-Bold'")
+            }
             let fits = messages.allSatisfy { message in
                 (message as NSString).boundingRect(
                     with: CGSize(width: wrapWidth, height: .greatestFiniteMagnitude),
@@ -107,28 +102,36 @@ struct HeroesView: View {
 
     private func loadHeroes() {
         guard heroes.isEmpty else { return }
-        guard Bundle.main.url(forResource: "in_defense_of_history", withExtension: "sqlite") != nil else {
-            return
-        }
-        heroes = (try? db.heroDao.getAll()) ?? []
-
         do {
+            heroes = try db.heroDao.getAll()
+            for hero in heroes {
+                try hero.validateArtwork { name in
+                    guard let image = UIImage(named: name) else { return false }
+                    return image.size.width > 0 && image.size.height > 0
+                }
+            }
             heroSelection = try HeroSelectionStore(dao: db.heroDao).load()
         } catch {
-            selectionError = error.localizedDescription
+            fatalError("Invalid authored hero content: \(error)")
         }
     }
 }
 
-fileprivate func heroUnlockMessage(_ hero: Hero) -> String? {
+fileprivate func heroUnlockMessage(_ hero: Hero) -> String {
     if hero.fromMiniCampaign {
-        return hero.unlockedAtCampaignName.map {
-            $0.hasPrefix("The ")
-                ? "Unlocked at the\n" + $0.dropFirst(4)
-                : "Unlocked at\n" + $0
-        }
+        let campaign = hero.unlockedAtCampaignName
+        return campaign.hasPrefix("The ")
+            ? "Unlocked at the\n" + campaign.dropFirst(4)
+            : "Unlocked at\n" + campaign
     }
-    return hero.unlockedAtLevelName.map { "Unlocked at\n\($0)" }
+    return "Unlocked at\n\(hero.unlockedAtLevelName)"
+}
+
+fileprivate func heroPortrait(_ hero: Hero) -> UIImage {
+    guard let image = UIImage(named: hero.primaryImageName), image.size.width > 0, image.size.height > 0 else {
+        fatalError("hero[\(hero.id)]: attribute 'primary_image_name' references missing image '\(hero.primaryImageName)'")
+    }
+    return image
 }
 
 @available(iOS 26.0, *)
@@ -140,14 +143,9 @@ private struct HeroSlot: View {
     let unlockFontSize: CGFloat
     let onSelect: (Hero) -> Void
 
-    private var hasArt: Bool {
-        guard let hero else { return false }
-        return UIImage(named: hero.primaryImageName) != nil
-    }
-
     private var isLocked: Bool {
         guard let hero else { return true }
-        return !hero.unlocked || !hasArt
+        return !hero.unlocked
     }
 
     private var selectionRole: HeroSelection.Role? {
@@ -173,25 +171,18 @@ private struct HeroSlot: View {
     private var slotContent: some View {
         ZStack {
             if let hero {
-                Group {
-                    if hasArt {
-                        Image(hero.primaryImageName)
-                            .resizable()
-                            .frame(width: width, height: width * 15 / 16)
-                    } else {
-                        lockedPanel
-                            .frame(width: width, height: height)
-                    }
-                }
-                .frame(width: width, height: height, alignment: .top)
-                .clipped()
+                Image(uiImage: heroPortrait(hero))
+                    .resizable()
+                    .frame(width: width, height: width * 15 / 16)
+                    .frame(width: width, height: height, alignment: .top)
+                    .clipped()
 
                 VStack {
                     Spacer()
                     nameBar(hero.shortName)
                 }
 
-                if isLocked, hasArt {
+                if isLocked {
                     Rectangle().fill(.black.opacity(0.468))
                     Image("tower_locked_icon")
                         .resizable()
@@ -261,8 +252,7 @@ private struct HeroSlot: View {
 
     private func unlockRibbon(_ hero: Hero) -> some View {
         Group {
-            if let message = heroUnlockMessage(hero) {
-                Text(message)
+            Text(heroUnlockMessage(hero))
                     .font(.custom("Cochin-Bold", size: unlockFontSize))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
@@ -271,7 +261,6 @@ private struct HeroSlot: View {
                     .shadow(color: .black.opacity(0.8), radius: 1.5, y: 1)
                     .padding(.horizontal, width * 0.04)
                     .padding(.top, height * 0.075)
-            }
         }
     }
 
@@ -366,7 +355,6 @@ struct HeroDetailsView: View {
     @Binding var selection: HeroSelection?
     let onExit: () -> Void
 
-    @State private var selectionError: String?
 
     private var selectionRole: HeroSelection.Role? { selection?.role(for: hero.id) }
 
@@ -400,8 +388,7 @@ struct HeroDetailsView: View {
                 )
 
                 HStack(spacing: 36 * metrics.scale) {
-                    Image(UIImage(named: hero.detailsImageName) != nil
-                          ? hero.detailsImageName : hero.primaryImageName)
+                    Image(uiImage: heroPortrait(hero))
                         .resizable()
                         .scaledToFit()
                         .frame(height: 380 * metrics.scale)
@@ -425,7 +412,7 @@ struct HeroDetailsView: View {
                                 do {
                                     selection = try HeroSelectionStore(dao: db.heroDao).toggle(hero)
                                 } catch {
-                                    selectionError = error.localizedDescription
+                                    fatalError("Invalid authored hero selection: \(error)")
                                 }
                             } label: {
                                 Text(selectionButtonTitle)
@@ -461,12 +448,7 @@ struct HeroDetailsView: View {
         .persistentSystemOverlays(.hidden)
         .onAppear {
             do { selection = try HeroSelectionStore(dao: db.heroDao).load() }
-            catch { selectionError = error.localizedDescription }
-        }
-        .alert("Unable to save hero choices", isPresented: Binding(
-            get: { selectionError != nil }, set: { if !$0 { selectionError = nil } }
-        )) { Button("OK", role: .cancel) { selectionError = nil } } message: {
-            Text(selectionError ?? "")
+            catch { fatalError("Invalid authored hero selection: \(error)") }
         }
     }
 }

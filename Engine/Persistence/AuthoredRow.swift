@@ -29,6 +29,11 @@ struct AuthoredRow {
         return value
     }
 
+    func optionalText(_ field: String) throws -> String? {
+        if sqlite3_column_type(statement, try column(field)) == SQLITE_NULL { return nil }
+        return try text(field)
+    }
+
     func integer(_ field: String, minimum: Int) throws -> Int {
         let index = try column(field)
         guard sqlite3_column_type(statement, index) == SQLITE_INTEGER,
@@ -91,5 +96,20 @@ extension BaseDAO {
                 throw DbError.Db(message: "\(entity): \(String(cString: sqlite3_errmsg(conn)))")
             }
         }
+    }
+}
+
+extension AuthoredRow {
+    func heroCombatStats() throws -> HeroCombatStats {
+        let defense = try number("defense_rating", minimum: 0, maximum: 1)
+        guard defense < 1 else { throw invalid("defense_rating", "must be less than 1") }
+        return HeroCombatStats(
+            attackRating: try number("attack_rating", minimum: 0, strictlyGreater: true),
+            defenseRating: defense,
+            hp: try number("hp", minimum: 0, strictlyGreater: true),
+            attackInterval: try number("attack_interval", minimum: 0, strictlyGreater: true),
+            respawnSeconds: try number("respawn_seconds", minimum: 0, strictlyGreater: true),
+            healPerSecond: try number("heal_per_second", minimum: 0),
+            moveSpeed: try number("move_speed", minimum: 0, strictlyGreater: true))
     }
 }

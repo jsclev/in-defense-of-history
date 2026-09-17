@@ -1,44 +1,18 @@
 INSERT INTO hero_combat (
-    id, hero_id, attack_rating, defense_rating, hp,
-    attack_interval, respawn_seconds, heal_per_second, move_speed
+    id, hero_id, attack_rating, defense_rating, hp, attack_interval, respawn_seconds, heal_per_second, move_speed
 ) VALUES
-(
-    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c001',
-    (SELECT id FROM hero WHERE short_name = 'George Washington'),
-    14.0, 0.40, 340.0, 1.1, 20.0, 5.0, 180.0
-),
-(
-    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c002',
-    (SELECT id FROM hero WHERE short_name = 'Henry Knox'),
-    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
-),
-(
-    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c003',
-    (SELECT id FROM hero WHERE short_name = 'Daniel Morgan'),
-    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
-),
-(
-    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c004',
-    (SELECT id FROM hero WHERE short_name = 'Salem Poor'),
-    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
-),
-(
-    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c005',
-    (SELECT id FROM hero WHERE short_name = 'Israel Putnam'),
-    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
-),
-(
-    '9b3d5e40-1a72-4c8b-8f31-4d6e2a90c006',
-    (SELECT id FROM hero WHERE short_name = 'Friedrich von Steuben'),
-    12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
-);
-
--- Provisional baseline for the rest of the selectable roster. Runtime now
--- deploys the player's choices, so every hero needs database-backed stats.
-INSERT INTO hero_combat (
-    id, hero_id, attack_rating, defense_rating, hp,
-    attack_interval, respawn_seconds, heal_per_second, move_speed
-)
-SELECT h.id, h.id, 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0
-FROM hero h
-WHERE NOT EXISTS (SELECT 1 FROM hero_combat hc WHERE hc.hero_id = h.id);
+('9b3d5e40-1a72-4c8b-8f31-4d6e2a90c001', 'fac6c094-9cbc-474a-975e-8d2a170e07da', 14.0, 0.4, 340.0, 1.1, 20.0, 5.0, 180.0),
+('9b3d5e40-1a72-4c8b-8f31-4d6e2a90c002', '43b37067-8f24-4f3e-ba9b-3c7f10cc629d', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('9b3d5e40-1a72-4c8b-8f31-4d6e2a90c003', 'c418c84b-0eb0-46a6-badb-ea0302ca89a7', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('9b3d5e40-1a72-4c8b-8f31-4d6e2a90c004', '90048c5e-9113-4b6e-987f-047d95f3590a', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('9b3d5e40-1a72-4c8b-8f31-4d6e2a90c005', '75a615ca-f880-44ca-8386-e28f72fe2f7f', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('9b3d5e40-1a72-4c8b-8f31-4d6e2a90c006', '1d9dba5f-e46a-4ca6-ac50-d62b22e7bd1b', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('1feb2d3f-815d-4139-9e47-b99aac112fc8', '1feb2d3f-815d-4139-9e47-b99aac112fc8', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('31f3c69a-094a-4923-8dd0-a7411216d3cb', '31f3c69a-094a-4923-8dd0-a7411216d3cb', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('4e290eb7-6af2-4e3e-8bd6-ff0759b1b13d', '4e290eb7-6af2-4e3e-8bd6-ff0759b1b13d', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('4f5ea61b-2be4-46b1-ad0b-21c1a80ab8e4', '4f5ea61b-2be4-46b1-ad0b-21c1a80ab8e4', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('5c689e4f-5105-4bab-8dd9-63f61124bd35', '5c689e4f-5105-4bab-8dd9-63f61124bd35', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('a72abee1-88a6-4856-a5d4-da460a2233b9', 'a72abee1-88a6-4856-a5d4-da460a2233b9', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('a8c1a230-8fb2-421e-bd22-4aadf6770c3a', 'a8c1a230-8fb2-421e-bd22-4aadf6770c3a', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('ca5f165f-d3e1-44e4-a224-65c8a798c022', 'ca5f165f-d3e1-44e4-a224-65c8a798c022', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0),
+('dd5b7c53-5f26-4035-aa43-b78b5e177b08', 'dd5b7c53-5f26-4035-aa43-b78b5e177b08', 12.0, 0.35, 300.0, 1.2, 20.0, 5.0, 180.0);

@@ -52,11 +52,11 @@ struct DesignTransform {
 }
 
 enum Palette {
-    static let towerColors: [Emplacement: Color] = [
-        .minutemanPost: .blue,
-        .longRifles: .indigo,
-        .fieldBattery: .orange,
-        .libertyPole: .purple,
+    static let towerColors: [TowerKind: Color] = [
+        .melee: .blue,
+        .ranged: .indigo,
+        .areaOfEffect: .orange,
+        .special: .purple,
     ]
 
     static let foeColors: [Foe: Color] = [
@@ -87,10 +87,7 @@ enum Palette {
         return .white
     }
 
-    static func color(forTowerID id: UUID) -> Color {
-        if let e = Emplacement.allCases.first(where: { $0.id == id }) {
-            return towerColors[e] ?? .white
-        }
-        return .white
+    static func color(forTowerID id: UUID, arsenal: DesignArsenal) -> Color {
+        towerColors[arsenal.kind(forTowerID: id)]!
     }
 }

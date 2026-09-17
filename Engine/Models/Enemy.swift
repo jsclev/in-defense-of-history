@@ -26,7 +26,8 @@ public struct Enemy: Sendable {
         waveIndex: Int,
         pathIndex: Int,
         type: EnemyType,
-        shakenThreshold: Double
+        shakenThreshold: Double,
+        moraleMax: Double
     ) {
         self.spawnID = spawnID
         self.typeIndex = typeIndex
@@ -34,7 +35,7 @@ public struct Enemy: Sendable {
         self.pathIndex = pathIndex
         self.distance = 0
         self.hp = type.stats.maxHP
-        self.morale = Tunables.moraleMax
+        self.morale = moraleMax
         self.shakenThreshold = shakenThreshold
         self.state = .steady
         self.infected = false

@@ -2,7 +2,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
+    primary_image_name, icon_image_name, ability_icon_image_name,
     unit_image_name, ranking
 ) VALUES
 (
@@ -20,6 +20,6 @@ INSERT INTO hero (
     || 'pulling Washington''s assault force through the ice-choked Delaware on Christmas night.
 
 At Pell''s Point his seven hundred delayed four thousand British and Hessians for a full day.',
-    'hero_john_glover_card_16x15', 'hero_details_john_glover', 'hero_icon_john_glover', 'hero_ability_icon_john_glover',
+    'hero_john_glover_card_16x15', 'hero_icon_john_glover', 'hero_ability_icon_john_glover',
     'hero_unit_john_glover', 87
 );

@@ -1050,7 +1050,7 @@ struct EditorCanvas: View {
         let s = t.scale
         let draft = document.draft
         let warnings = state.mapGeometry.warnings(for: draft, maxTowerRange: content.maxTowerRange)
-        var planned: [Int: Emplacement] = [:]
+        var planned: [Int: TowerKind] = [:]
         for step in draft.intendedSolution where step.kind == "place" {
             if planned[step.slot] == nil,
                let value = step.emplacement, let e = content.arsenal?.emplacement(for: value) {
@@ -1067,17 +1067,14 @@ struct EditorCanvas: View {
 
             state.towerSlotImage.draw(&ctx, at: c, index: i, scale: s, selected: selected)
 
-            if selected, state.showRanges {
+            if selected, state.showRanges, let rules = content.arsenal?.combatRules {
                 let runtimeCanvas = RuntimeCanvas(
                     virtualCanvas: virtualCanvas,
                     physicalRect: t.frame,
                     safeInsetsRect: t.view(virtualCanvas.playAreaRect))
-                // Ranges come from the tower table. They were hardcoded here as
-                // 210 and 240 with tower names copied alongside them, and had
-                // already drifted from the real values.
                 for ring in content.ringsByName {
                     let label = "\(ring.name) \(Int(ring.range))"
-                    let rangeRect = TowerRangeOverlay.rect(center: c, range: ring.range,
+                    let rangeRect = TowerRangeOverlay.rect(center: c, range: ring.range, verticalFraction: rules.rangeVerticalFraction,
                                                            runtimeCanvas: runtimeCanvas)
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect),
                                with: .color(Color(red: 0, green: 1, blue: 0)),

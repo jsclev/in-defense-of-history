@@ -156,7 +156,7 @@ struct PlaytestView: View {
             } else {
                 HStack(spacing: 8) {
                     Text("Slot \(slot)").font(.callout.weight(.semibold))
-                    ForEach(Emplacement.allCases, id: \.self) { e in
+                    ForEach(session.arsenal.kinds, id: \.self) { e in
                         let cost = session.arsenal.type(e).levels[0].cost
                         Button {
                             session.build(e, at: slot)
@@ -165,7 +165,7 @@ struct PlaytestView: View {
                                 Circle()
                                     .fill(Palette.towerColors[e] ?? .white)
                                     .frame(width: 12, height: 12)
-                                Text(session.arsenal.shortName(e)).font(.caption2)
+                                Text(session.arsenal.type(e).name).font(.caption2)
                                 Text("$\(cost)").font(.caption2).monospacedDigit()
                             }
                         }

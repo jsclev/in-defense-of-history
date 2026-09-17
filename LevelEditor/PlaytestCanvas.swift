@@ -107,7 +107,7 @@ struct PlaytestCanvas: View {
             let rect = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
 
             if let (type, lvl) = session.towerType(at: i) {
-                let color = Palette.color(forTowerID: type.id)
+                let color = Palette.color(forTowerID: type.id, arsenal: session.arsenal)
                 if session.selectedSlot == i {
                     let runtimeCanvas = RuntimeCanvas(
                         virtualCanvas: session.virtualCanvas,
@@ -117,6 +117,7 @@ struct PlaytestCanvas: View {
                     let radius = tuning.meleeUnit?.rallyPointRadius ?? tuning.range
                     let rangeRect = TowerRangeOverlay.rect(center: c,
                                                            range: CGFloat(radius),
+                                                           verticalFraction: tuning.combatRules.rangeVerticalFraction,
                                                            runtimeCanvas: runtimeCanvas)
                     ctx.fill(SwiftUI.Path(ellipseIn: rangeRect), with: .color(color.opacity(0.10)))
                     ctx.stroke(SwiftUI.Path(ellipseIn: rangeRect), with: .color(color.opacity(0.5)), lineWidth: 1.5)
@@ -138,9 +139,8 @@ struct PlaytestCanvas: View {
 
     private func drawFlashes(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         for f in session.flashes {
-            let color = Palette.towerColors[
-                Emplacement.allCases.first { session.arsenal.type($0).id == session.catalog.towerTypes[f.towerTypeIndex].id } ?? .minutemanPost
-            ] ?? .white
+            let color = Palette.color(forTowerID: session.catalog.towerTypes[f.towerTypeIndex].id,
+                                      arsenal: session.arsenal)
             var p = SwiftUI.Path()
             p.move(to: t.view(f.from))
             p.addLine(to: t.view(f.to))

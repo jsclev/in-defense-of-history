@@ -6,19 +6,19 @@ public struct EnemyMoraleResponse: Codable, Equatable, Sendable {
     public var speedMultiplier: Double
     public var attackMultiplier: Double
 
-    public init(speedThreshold: Double = 0.4, attackThreshold: Double = 0.4,
-                speedMultiplier: Double = 2.0 / 3.0, attackMultiplier: Double = 2.0 / 3.0) {
+    public init(speedThreshold: Double, attackThreshold: Double,
+                speedMultiplier: Double, attackMultiplier: Double) {
         self.speedThreshold = speedThreshold
         self.attackThreshold = attackThreshold
         self.speedMultiplier = speedMultiplier
         self.attackMultiplier = attackMultiplier
     }
 
-    public func movementMultiplier(morale: Double) -> Double {
-        morale <= speedThreshold * Tunables.moraleMax ? speedMultiplier : 1
+    public func movementMultiplier(morale: Double, maximum: Double) -> Double {
+        morale <= speedThreshold * maximum ? speedMultiplier : 1
     }
 
-    public func damageMultiplier(morale: Double) -> Double {
-        morale <= attackThreshold * Tunables.moraleMax ? attackMultiplier : 1
+    public func damageMultiplier(morale: Double, maximum: Double) -> Double {
+        morale <= attackThreshold * maximum ? attackMultiplier : 1
     }
 }

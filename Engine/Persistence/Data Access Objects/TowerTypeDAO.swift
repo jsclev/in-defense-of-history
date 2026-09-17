@@ -3,15 +3,18 @@ import SQLite3
 
 public class TowerTypeDAO: BaseDAO {
     private let meleeUnitDao: MeleeUnitDAO
+    private let combatRulesDao: CombatRulesDAO
 
-    init(conn: OpaquePointer?, meleeUnitDao: MeleeUnitDAO) {
+    init(conn: OpaquePointer?, meleeUnitDao: MeleeUnitDAO, combatRulesDao: CombatRulesDAO) {
         self.meleeUnitDao = meleeUnitDao
+        self.combatRulesDao = combatRulesDao
         super.init(conn: conn, table: "tower_type", loggerName: TowerTypeDAO.self)
     }
 
     private struct Identity {
         let id: UUID
         let category: String
+        let kind: TowerKind
         let name: String
         let layout: [[Int]]
     }
@@ -26,8 +29,7 @@ public class TowerTypeDAO: BaseDAO {
     }
 
     public func validateAuthoredContent() throws {
-        _ = try records()
-        _ = try getDesignArsenal()
+        _ = try content()
     }
 
     private func identities() throws -> [Identity] {
@@ -35,7 +37,7 @@ public class TowerTypeDAO: BaseDAO {
             let id = try row.uuid("id")
             let row = AuthoredRow(statement: row.statement, entity: "tower_type[\(id)]")
             let category = try row.text("tower_type_category")
-            guard TowerKind(categoryName: category) != nil else {
+            guard let kind = TowerKind(categoryName: category) else {
                 throw row.invalid("tower_type_category", "is unsupported")
             }
             let layout: [[Int]]
@@ -46,7 +48,7 @@ public class TowerTypeDAO: BaseDAO {
                       && Set($0).count == $0.count }) else {
                 throw row.invalid("level_layout", "is invalid")
             }
-            return Identity(id: id, category: category, name: try row.text("tower_type_name"), layout: layout)
+            return Identity(id: id, category: category, kind: kind, name: try row.text("tower_type_name"), layout: layout)
         }
         let kinds = values.compactMap { TowerKind(categoryName: $0.category) }
         guard Set(kinds) == Set(TowerKind.allCases), Set(kinds).count == values.count else {
@@ -55,7 +57,11 @@ public class TowerTypeDAO: BaseDAO {
         return values
     }
 
-    private func tuning(_ row: AuthoredRow, melee: MeleeUnitStats?) throws -> TowerLevel {
+    private func tuning(_ row: AuthoredRow, melee: MeleeUnitStats?, rules: CombatRules) throws -> TowerLevel {
+        guard let mode = TowerAttackMode(rawValue: try row.text("attack_mode")) else {
+            throw row.invalid("attack_mode", "is unsupported")
+        }
+        let turnRate = try row.number("turn_rate_degrees", minimum: 0, strictlyGreater: mode.requiresAim)
         let hasMelee = try row.flag("has_melee_unit")
         guard hasMelee == (melee != nil) else {
             throw row.invalid("melee_unit", hasMelee ? "is missing" : "exists while its capability is disabled")
@@ -75,7 +81,7 @@ public class TowerTypeDAO: BaseDAO {
             guard slow < 1 else { throw row.invalid("obstacle_slow_fraction", "must be less than 1") }
             obstacles = EngineerObstacleStats(
                 radius: try row.number("obstacle_radius", minimum: 0, strictlyGreater: true),
-                slowFraction: slow)
+                slowFraction: slow, verticalFraction: rules.rangeVerticalFraction)
         } else {
             try row.requireNull("obstacle_radius")
             try row.requireNull("obstacle_slow_fraction")
@@ -87,6 +93,7 @@ public class TowerTypeDAO: BaseDAO {
         let minimumDamage = try row.number("shot_min_damage", minimum: 0)
         let minimumTerror = try row.number("terror_min", minimum: 0)
         return TowerLevel(
+            combatRules: rules, attackMode: mode, turnRateDegrees: turnRate,
             cost: try row.integer("cost", minimum: 0),
             range: try row.number("tower_range", minimum: 0, strictlyGreater: true),
             fireInterval: try row.number("fire_interval", minimum: 0),
@@ -105,9 +112,10 @@ public class TowerTypeDAO: BaseDAO {
             engineerObstacles: obstacles)
     }
 
-    private func records() throws -> [Record] {
+    private func content() throws -> DesignArsenal {
+        let rules = try combatRulesDao.get()
         let types = try identities()
-        let melee = try meleeUnitDao.getStatsByTowerId()
+        let melee = try meleeUnitDao.getStatsByTowerId(combatRules: rules)
         let values = try authoredRows("""
             SELECT t.*, tt.tower_type_category
             FROM tower t LEFT JOIN tower_type tt ON tt.id = t.tower_type_id
@@ -120,7 +128,7 @@ public class TowerTypeDAO: BaseDAO {
                     branch: try row.integer("branch", minimum: 1),
                     details: TowerMenuDetails(name: try row.text("tower_name"),
                                               description: try row.text("tower_description")),
-                    tuning: try tuning(row, melee: melee[id]))
+                    tuning: try tuning(row, melee: melee[id], rules: rules))
             }
         guard Set(melee.keys).isSubset(of: Set(values.map(\.id))) else {
             throw DbError.Db(message: "melee_unit: tower_id does not identify an authored tower")
@@ -135,98 +143,68 @@ public class TowerTypeDAO: BaseDAO {
                 throw DbError.Db(message: "tower_type[\(type.id)]: tower rows do not match level_layout; missing \(expected.subtracting(actual).sorted())")
             }
         }
-        return values
+        return try DesignArsenal(towers: types.map { type in
+            DesignArsenal.Definition(id: type.id, kind: type.kind, category: type.category, name: type.name,
+                tiers: values.filter { $0.category == type.category }.map {
+                    DesignArsenal.Tier(id: $0.id, level: $0.level, branch: $0.branch,
+                                       details: $0.details, tuning: $0.tuning)
+                })
+        }, combatRules: rules)
     }
 
     public func getDesignArsenal() throws -> DesignArsenal {
-        let definitions = try authoredRows("SELECT * FROM design_emplacement", entity: "design_emplacement") { row in
-            let key = try row.text("emplacement_key")
-            let row = AuthoredRow(statement: row.statement, entity: "design_emplacement[\(key)]")
-            guard let emplacement = Emplacement(rawValue: key) else {
-                throw row.invalid("emplacement_key", "is unsupported")
-            }
-            return (emplacement, DesignArsenal.Labels(name: try row.text("tower_name"),
-                shortName: try row.text("short_name")), try row.integer("level_count", minimum: 1))
-        }
-        var labels: [Emplacement: DesignArsenal.Labels] = [:]
-        var counts: [Emplacement: Int] = [:]
-        for (key, text, count) in definitions {
-            guard labels.updateValue(text, forKey: key) == nil else {
-                throw DbError.Db(message: "design_emplacement[\(key)]: duplicate key")
-            }
-            counts[key] = count
-        }
-        var levels: [Emplacement: [TowerLevel]] = [:]
-        let rows = try authoredRows("""
-            SELECT * FROM design_emplacement_level ORDER BY emplacement_key, tower_level
-            """, entity: "design_emplacement_level") { row in
-                let key = try row.text("emplacement_key")
-                let tier = try row.integer("tower_level", minimum: 1)
-                let row = AuthoredRow(statement: row.statement, entity: "design_emplacement_level[\(key):\(tier)]")
-                guard let emplacement = Emplacement(rawValue: key), labels[emplacement] != nil else {
-                    throw row.invalid("emplacement_key", "does not identify an authored emplacement")
-                }
-                return (emplacement, tier, try tuning(row, melee: nil))
-            }
-        for (key, tier, tuning) in rows {
-            let previous = levels[key, default: []].count
-            guard tier == previous + 1 else {
-                throw DbError.Db(message: "design_emplacement_level[\(key):\(tier)]: missing or duplicate tower_level")
-            }
-            levels[key, default: []].append(tuning)
-        }
-        for key in Emplacement.allCases {
-            guard let count = counts[key], let tiers = levels[key], tiers.count == count else {
-                throw DbError.Db(message: "design_emplacement[\(key)]: tower levels do not match level_count")
-            }
-        }
-        return try DesignArsenal(labels: labels, levels: levels)
+        try content()
     }
 
     public func getCostsByLevel() throws -> [String: [Int: [Int: Int]]] {
         var result: [String: [Int: [Int: Int]]] = [:]
-        for row in try records() { result[row.category, default: [:]][row.level, default: [:]][row.branch] = row.tuning.cost }
+        for tower in try content().towers {
+            for tier in tower.tiers {
+                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.tuning.cost
+            }
+        }
         return result
     }
 
     public func getNamesByLevel() throws -> [String: [Int: [Int: String]]] {
         var result: [String: [Int: [Int: String]]] = [:]
-        for row in try records() { result[row.category, default: [:]][row.level, default: [:]][row.branch] = row.details.name }
+        for tower in try content().towers {
+            for tier in tower.tiers {
+                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.details.name
+            }
+        }
         return result
     }
 
     public func getMenuDetailsByLevel() throws -> [String: [Int: [Int: TowerMenuDetails]]] {
         var result: [String: [Int: [Int: TowerMenuDetails]]] = [:]
-        for row in try records() { result[row.category, default: [:]][row.level, default: [:]][row.branch] = row.details }
-        return result
-    }
-
-    public func getTowerLevels() throws -> [String: [TowerLevel]] {
-        var result: [String: [TowerLevel]] = [:]
-        for row in try records() where row.branch == 1 { result[row.category, default: []].append(row.tuning) }
-        return result
-    }
-
-    public func getTowerLevelsByBranch() throws -> [String: [Int: [Int: TowerLevel]]] {
-        var result: [String: [Int: [Int: TowerLevel]]] = [:]
-        for row in try records() { result[row.category, default: [:]][row.level, default: [:]][row.branch] = row.tuning }
-        return result
-    }
-
-    public func getTowerTypes() throws -> [String: TowerType] {
-        let levels = try getTowerLevels()
-        var result: [String: TowerType] = [:]
-        for type in try identities() {
-            guard let tiers = levels[type.category], !tiers.isEmpty else {
-                throw DbError.Db(message: "tower_type[\(type.id)]: missing base tower levels")
+        for tower in try content().towers {
+            for tier in tower.tiers {
+                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.details
             }
-            result[type.category] = TowerType(id: type.id, name: type.name, levels: tiers)
         }
         return result
     }
 
+    public func getTowerLevels() throws -> [String: [TowerLevel]] {
+        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.category, $0.type.levels) })
+    }
+
+    public func getTowerLevelsByBranch() throws -> [String: [Int: [Int: TowerLevel]]] {
+        var result: [String: [Int: [Int: TowerLevel]]] = [:]
+        for tower in try content().towers {
+            for tier in tower.tiers {
+                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.tuning
+            }
+        }
+        return result
+    }
+
+    public func getTowerTypes() throws -> [String: TowerType] {
+        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.category, $0.type) })
+    }
+
     public func getDisplayNames() throws -> [String: String] {
-        _ = try records()
-        return Dictionary(uniqueKeysWithValues: try identities().map { ($0.category, $0.name) })
+        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.category, $0.name) })
     }
 }

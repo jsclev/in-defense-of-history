@@ -3,11 +3,13 @@ import CoreGraphics
 
 /// Authored lane-control tuning; engineers do no direct HP or morale damage.
 public struct EngineerObstacleStats: Codable, Sendable, Equatable {
+    public var verticalFraction: Double
     public var radius: Double
     public var slowFraction: Double
 
-    public init(radius: Double, slowFraction: Double) {
+    public init(radius: Double, slowFraction: Double, verticalFraction: Double) {
         self.radius = radius
+        self.verticalFraction = verticalFraction
         self.slowFraction = slowFraction
     }
 }
@@ -27,7 +29,7 @@ public struct EngineerObstacleField: Sendable, Equatable {
                                           fields: [EngineerObstacleField]) -> Double {
         guard !retreating else { return 1 }
         let strongest = fields.reduce(0.0) { slow, field in
-            guard TowerAttackRange(field.stats.radius).contains(point, from: field.position)
+            guard TowerAttackRange(field.stats.radius, verticalFraction: field.stats.verticalFraction).contains(point, from: field.position)
             else { return slow }
             return max(slow, field.stats.slowFraction)
         }

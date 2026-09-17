@@ -251,7 +251,7 @@ final class LevelGeoJSONTests: XCTestCase {
         d.backgroundImageData = Data([1, 2, 3, 4])
         d.guideImagePath = "guide.png"; d.guideImageData = Data([5, 6])
         d.overlayImagePath = "overlay.png"; d.overlayImageData = Data([7, 8])
-        d.intendedSolution = [.init(at: 2, kind: "place", emplacement: Emplacement.minutemanPost.rawValue, slot: 0)]
+        d.intendedSolution = [.init(at: 2, kind: "place", emplacement: TowerKind.melee.rawValue, slot: 0)]
         d.hiddenLayers = ["background", "slots"]
         d.waves[0].lines[0].road = 1
         let file = NativeMapFile(draft: d, canvas: canvas)

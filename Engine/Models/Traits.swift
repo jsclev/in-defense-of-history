@@ -45,8 +45,7 @@ extension Trait: Codable {
             self = .commandAura(
                 radius: try c.decode(Double.self, forKey: .radius),
                 disciplineBonus: try c.decode(Double.self, forKey: .disciplineBonus),
-                deathShock: try c.decodeIfPresent(Double.self, forKey: .deathShock)
-                    ?? Tunables.commandDeathShockDefault
+                deathShock: try c.decode(Double.self, forKey: .deathShock)
             )
         case "skirmish": self = .skirmish
         case "marksman": self = .marksman
@@ -61,7 +60,7 @@ extension Trait: Codable {
         case "tag":
             self = .tag(try c.decode(String.self, forKey: .name))
         default:
-            self = .tag(type)
+            throw DecodingError.dataCorruptedError(forKey: .type, in: c, debugDescription: "Unknown authored trait: \(type)")
         }
     }
 

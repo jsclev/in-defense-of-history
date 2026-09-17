@@ -135,6 +135,8 @@ typedef struct {
     float dt;
     int ticksPerSecond;
 
+    float arrivalRadius;
+    float rangeVerticalFraction;
     float militiaMoveSpeed;
     float militiaMeleeReach;
     float militiaRallySpread;

@@ -4,12 +4,14 @@ import CoreGraphics
 /// A solid cannonball travels along its original bearing, hitting each enemy
 /// at most once. Swept segments preserve penetration even across a long frame.
 public struct SolidShotFlight: Sendable {
-    public static let hitRadius: CGFloat = 16
+    public let hitRadius: CGFloat
     public private(set) var remainingDistance: CGFloat
     public private(set) var hitIDs: Set<Int> = []
 
-    public init(range: CGFloat) {
-        remainingDistance = range.isFinite ? max(0, range) : 0
+    public init(range: CGFloat, hitRadius: CGFloat) {
+        precondition(range.isFinite && range >= 0 && hitRadius.isFinite && hitRadius > 0)
+        remainingDistance = range
+        self.hitRadius = hitRadius
     }
 
     public mutating func advance(from start: CGPoint, heading: CGFloat,
@@ -28,7 +30,7 @@ public struct SolidShotFlight: Sendable {
         let hits = targets.compactMap { target -> (id: Int, fraction: CGFloat)? in
             guard !hitIDs.contains(target.id),
                   let fraction = GrapeshotFlight.hitFraction(from: start, to: end,
-                    target: target.position, radius: Self.hitRadius) else { return nil }
+                    target: target.position, radius: hitRadius) else { return nil }
             return (target.id, fraction)
         }.sorted { $0.fraction == $1.fraction ? $0.id < $1.id : $0.fraction < $1.fraction }
         var result: [Int] = []

@@ -9,13 +9,20 @@ struct HeroHUDButton: View {
     let isSelected: Bool
     let action: () -> Void
 
+    private func requiredPortrait(_ name: String) -> UIImage {
+        guard let image = UIImage(named: name), image.size.width > 0, image.size.height > 0 else {
+            fatalError("Missing required hero HUD image '\(name)'")
+        }
+        return image
+    }
+
     var body: some View {
         Button(action: action) {
             ZStack {
                 if let iconName {
                     // Render the authored icon directly. Missing artwork must
                     // never select another portrait or a legacy frame.
-                    Image(iconName)
+                    Image(uiImage: requiredPortrait(iconName))
                         .resizable()
                         .interpolation(.high)
                         .frame(width: buttonSize, height: buttonSize)

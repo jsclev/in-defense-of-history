@@ -11,7 +11,7 @@ final class TowerAttackRangeTests: XCTestCase {
         // At range 300 the visible top/bottom boundary is 210 map units.
         // The previous targeting circle incorrectly accepted y=250.
         let command = RangedTargetCommand(tower: TowerTargetingContext(
-            slotIndex: 0, position: .zero, range: 300, targeting: .strongest),
+            slotIndex: 0, position: .zero, range: 300, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction, targeting: .strongest),
             enemies: [enemy(0, 0, 250, hp: 1000), enemy(1, 0, 209)], paths: [])
         XCTAssertFalse(command.isInRange(command.enemies[0]))
         XCTAssertTrue(command.isInRange(command.enemies[1]))
@@ -21,19 +21,19 @@ final class TowerAttackRangeTests: XCTestCase {
     func testAllTargetPrioritiesRejectEnemiesOutsideRange() {
         for targeting in Targeting.allCases {
             let command = RangedTargetCommand(tower: TowerTargetingContext(
-                slotIndex: 0, position: .zero, range: 300, targeting: targeting),
+                slotIndex: 0, position: .zero, range: 300, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction, targeting: targeting),
                 enemies: [enemy(0, 301, 0), enemy(1, 0, -211)], paths: [])
             XCTAssertNil(command.execute())
         }
         let zeroRange = RangedTargetCommand(tower: TowerTargetingContext(
-            slotIndex: 0, position: .zero, range: 0, targeting: .first),
+            slotIndex: 0, position: .zero, range: 0, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction, targeting: .first),
             enemies: [enemy(0, 0, 0)], paths: [])
         XCTAssertFalse(zeroRange.isInRange(zeroRange.enemies[0]))
         XCTAssertNil(zeroRange.execute())
     }
 
     func testPelletTravelEndsAtTheVisibleBoundaryInEveryDirection() {
-        let reach = TowerAttackRange(300)
+        let reach = TowerAttackRange(300, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction)
         for degrees in 0..<360 {
             let heading = Double(degrees) * .pi / 180
             let distance = reach.travelDistance(heading: heading)
@@ -44,7 +44,7 @@ final class TowerAttackRangeTests: XCTestCase {
     }
 
     func testBodyOffsetIsClampedWithoutMovingAnInRangeAim() {
-        let reach = TowerAttackRange(300)
+        let reach = TowerAttackRange(300, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction)
         let origin = CGPoint(x: 500, y: 400)
         let inside = CGPoint(x: 500, y: 195)
         XCTAssertEqual(reach.clamped(inside, from: origin), inside)

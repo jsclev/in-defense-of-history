@@ -60,7 +60,10 @@ enum HeroPhysicalScaleCheck {
                            "minimum_image_height_points": p.imageHeight.resolved(playableHeightOnScreen: 340),
                            "image_height_at_372_points": p.imageHeight.resolved(playableHeightOnScreen: 372)])
         }
-        precondition(MapSpriteSizing.hero(baseAssetName: "future_unknown_hero") == MapSpriteSizing.hero)
+        do {
+            _ = try HeroSpriteProfile.load(baseAssetName: "future_unknown_hero")
+            preconditionFailure("Missing hero profiles must fail")
+        } catch {}
         near(TouchTarget.minimum, 44)
         print(String(data: try JSONSerialization.data(withJSONObject: output, options: [.prettyPrinted, .sortedKeys]),
                      encoding: .utf8)!)

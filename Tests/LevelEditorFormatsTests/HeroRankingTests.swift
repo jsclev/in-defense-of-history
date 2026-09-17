@@ -82,6 +82,42 @@ final class HeroRankingTests: XCTestCase {
         XCTAssertThrowsError(try dao.getCombatStats(heroID: UUID()))
     }
 
+    func testHeroCombatLookupReflectsDatabaseEdits() throws {
+        let dao = HeroDAO(conn: conn)
+        let hero = try XCTUnwrap(dao.getAll().first)
+        let original = try dao.getCombatStats(heroID: hero.id)
+        let changed = HeroCombatStats(
+            attackRating: original.attackRating + 7,
+            defenseRating: (original.defenseRating + 1) / 2,
+            hp: original.hp + 13,
+            attackInterval: original.attackInterval / 2,
+            respawnSeconds: original.respawnSeconds + 3,
+            healPerSecond: original.healPerSecond + 2,
+            moveSpeed: original.moveSpeed + 11)
+        try execute("""
+            UPDATE hero_combat SET
+                attack_rating = \(changed.attackRating),
+                defense_rating = \(changed.defenseRating),
+                hp = \(changed.hp),
+                attack_interval = \(changed.attackInterval),
+                respawn_seconds = \(changed.respawnSeconds),
+                heal_per_second = \(changed.healPerSecond),
+                move_speed = \(changed.moveSpeed)
+            WHERE hero_id = '\(hero.id.uuidString.lowercased())'
+            """)
+        XCTAssertEqual(try dao.getCombatStats(heroID: hero.id), changed)
+    }
+
+    func testMissingHeroCombatRowFailsAfterSuccessfulLookup() throws {
+        let dao = HeroDAO(conn: conn)
+        let hero = try XCTUnwrap(dao.getAll().first)
+        _ = try dao.getCombatStats(heroID: hero.id)
+        try execute("DELETE FROM hero_combat WHERE hero_id = '\(hero.id.uuidString.lowercased())'")
+        XCTAssertThrowsError(try dao.getCombatStats(heroID: hero.id)) {
+            XCTAssertTrue(String(describing: $0).contains(hero.id.uuidString), "\($0)")
+        }
+    }
+
     func testOneOrTwoHeroesAlwaysHaveRankingDerivedRoles() throws {
         let dao = HeroDAO(conn: conn)
         let seeded = try dao.getSelectedHeroes()

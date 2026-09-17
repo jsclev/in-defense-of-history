@@ -30,7 +30,8 @@ struct TowerLabelDeviceReview: View {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             let level = try store.db.levelInfoDao.getCampaignLevels(campaignName: "Main")[14]
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas,
-                runtimeCanvas: canvas, levelInfoID: level.id, mapImageName: level.mapImageName)
+                runtimeCanvas: canvas, levelInfoID: level.id, mapImageName: level.mapImageName,
+                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
             self.runner = runner
             self.node = CampaignNode(order: 15, level: level)
             try await Task.sleep(for: .milliseconds(400))

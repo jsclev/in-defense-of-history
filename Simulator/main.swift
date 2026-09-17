@@ -301,7 +301,7 @@ if let levelName = opts.meleeDemo {
         if let m = fixed.towerLevels["melee"] {
             towers.append(TowerType(id: meleeID, name: fixed.towerNames["melee"]!, levels: Array(m.prefix(2))))
         }
-        let catalog = ContentCatalog(enemyTypes: fixed.roster, towerTypes: towers)
+        let catalog = ContentCatalog(combatRules: fixed.combatRules, enemyTypes: fixed.roster, towerTypes: towers)
         let order = GreedyCommander(level: base, catalog: catalog).slotOrder
 
         func run(withMelee: Bool, seed: UInt64) -> (SimulationResult, Simulation) {
@@ -495,7 +495,7 @@ if let bpName = opts.blueprint {
         }
         let sim = try Simulation(
             level: level, catalog: catalog,
-            policy: opts.idle ? IdleCommander() : bp.scriptedSolution(),
+            policy: opts.idle ? IdleCommander() : bp.scriptedSolution(arsenal: store.arsenal),
             seed: opts.baseSeed
         )
         sim.addObserver(Tracer(catalog: catalog))
@@ -510,7 +510,7 @@ if let bpName = opts.blueprint {
         catalog: catalog
     ) { _ -> any CommanderPolicy in
         if opts.idle { return IdleCommander() }
-        return bp.scriptedSolution()
+        return bp.scriptedSolution(arsenal: store.arsenal)
     }
 
     func pct(_ v: Double) -> String { String(format: "%5.1f%%", v * 100) }
@@ -548,9 +548,9 @@ do {
 
     let levelInfo = try store.db.levelLoader.load(id: levelInfoId)
 
-    let minutemanPost = store.arsenal.type(.minutemanPost)
+    let melee = store.arsenal.type(.melee)
     let enemyTypes = try store.db.enemyTypeDao.getAll()
-    let catalog = ContentCatalog(enemyTypes: enemyTypes, towerTypes: [minutemanPost])
+    let catalog = ContentCatalog(combatRules: store.arsenal.combatRules, enemyTypes: enemyTypes, towerTypes: [melee])
 
     let sim = try Simulation(
         level: levelInfo,
@@ -563,9 +563,9 @@ do {
         throw DbError.Db(message: "Level '\(levelInfo.name)' has no tower slots to place a tower in.")
     }
     let goldBefore = sim.gold
-    let buildResult = sim.build(slot: 0, towerID: minutemanPost.id)
+    let buildResult = sim.build(slot: 0, towerID: melee.id)
     guard buildResult == .ok else {
-        throw DbError.Db(message: "Failed to place \(minutemanPost.name) in slot 0: \(buildResult)")
+        throw DbError.Db(message: "Failed to place \(melee.name) in slot 0: \(buildResult)")
     }
 
     let occupiedSlots = sim.towers.filter { $0 != nil }.count
@@ -577,7 +577,7 @@ do {
     playable:     \(levelInfo.playArea)
     enemies:      \(enemyTypes.count) types loaded from roster
     tower slots:  \(levelInfo.towerSlots.count)
-    tower built:  \(minutemanPost.name) → slot 0 (\(occupiedSlots)/\(levelInfo.towerSlots.count) occupied)
+    tower built:  \(melee.name) → slot 0 (\(occupiedSlots)/\(levelInfo.towerSlots.count) occupied)
     gold:         \(goldBefore) → \(sim.gold)  (lives: \(sim.lives))
     initialized:  wave 1  (waves loaded: \(levelInfo.waves.count), paths loaded: \(levelInfo.paths.count))
     ──────────────────────────────────────────────────────

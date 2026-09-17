@@ -2,11 +2,17 @@ import Foundation
 import SQLite3
 
 public class MeleeUnitDAO: BaseDAO {
-    init(conn: OpaquePointer?) {
+    private let combatRulesDao: CombatRulesDAO
+    init(conn: OpaquePointer?, combatRulesDao: CombatRulesDAO) {
+        self.combatRulesDao = combatRulesDao
         super.init(conn: conn, table: "melee_unit", loggerName: MeleeUnitDAO.self)
     }
 
     public func getStatsByTowerId() throws -> [UUID: MeleeUnitStats] {
+        try getStatsByTowerId(combatRules: combatRulesDao.get())
+    }
+
+    func getStatsByTowerId(combatRules rules: CombatRules) throws -> [UUID: MeleeUnitStats] {
         let rows = try authoredRows("SELECT * FROM melee_unit", entity: "melee_unit") { row in
             let id = try row.uuid("tower_id")
             let row = AuthoredRow(statement: row.statement, entity: "tower[\(id)] melee_unit")
@@ -14,7 +20,7 @@ public class MeleeUnitDAO: BaseDAO {
             guard soldiers <= 4 else { throw row.invalid("soldier_count", "exceeds the engine limit") }
             let defense = try row.number("defense_rating", minimum: 0, maximum: 1)
             guard defense < 1 else { throw row.invalid("defense_rating", "must be less than 1") }
-            return (id, MeleeUnitStats(soldierCount: soldiers,
+            return (id, MeleeUnitStats(combatRules: rules, soldierCount: soldiers,
                 attackRating: try row.number("attack_rating", minimum: 0, strictlyGreater: true),
                 defenseRating: defense,
                 hp: try row.number("hp", minimum: 0, strictlyGreater: true),

@@ -191,7 +191,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                 }
             } else if (st == SIM_MU_RETURNING) {
                 float d = distance(pos, post);
-                if (d <= 2.0f) {
+                if (d <= lvl.arrivalRadius) {
                     S.muState[m] = SIM_MU_HOLDING;
                 } else {
                     float step = lvl.militiaMoveSpeed * dt;
@@ -212,7 +212,7 @@ static bool militiaStep(device SimStateGPU& S, constant LevelGPU& lvl,
                     S.muTarget[m] = int(S.spawnID[best]);
                     muClaimed[best] = 1;
                     muFree[best] = 0;
-                } else if (distance(pos, post) > 2.0f) {
+                } else if (distance(pos, post) > lvl.arrivalRadius) {
                     float d = distance(pos, post);
                     float step = lvl.militiaMoveSpeed * dt;
                     float2 np = d <= step ? post : mix(pos, post, step / d);
@@ -526,7 +526,9 @@ kernel void simulate(
                 float bestKey = -INFINITY;
                 for (uint i = 0; i < n; i++) {
                     if (S.removed[i]) continue;
-                    if (dist2(positions[i], origin) > r2) continue;
+                    float2 delta = positions[i] - origin;
+                    delta.y /= lvl.rangeVerticalFraction;
+                    if (dot(delta, delta) > r2) continue;
                     float key;
                     switch (tw.targeting) {
                         case SIM_TARGET_FIRST: key = S.distance[i] - lvl.pathTotalLength[S.pathIndex[i]]; break;

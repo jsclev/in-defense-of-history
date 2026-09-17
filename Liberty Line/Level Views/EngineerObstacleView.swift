@@ -4,10 +4,11 @@ import SwiftUI
 /// matches the actual slowdown area; tiny stakes or texture carry no state.
 struct EngineerObstacleView: View {
     let radius: CGFloat
+    let verticalFraction: Double
     var selected = false
 
     var body: some View {
-        let height = radius * 2 * TowerAttackRange.verticalFraction
+        let height = radius * 2 * verticalFraction
         ZStack {
             Ellipse().fill(Color(red: 0.36, green: 0.22, blue: 0.08).opacity(0.30))
                 .overlay(Ellipse().stroke(Color(red: 0.96, green: 0.70, blue: 0.27)

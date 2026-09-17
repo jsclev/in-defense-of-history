@@ -16,9 +16,9 @@ public class Db {
     public let pathDao: PathDAO
     public let enemyTypeDao: EnemyTypeDAO
     public let towerUnlockDao: TowerUnlockDAO
-    public let levelHeroDao: LevelHeroDAO
     public let meleeUnitDao: MeleeUnitDAO
     public let towerTypeDao: TowerTypeDAO
+    public let combatRulesDao: CombatRulesDAO
     public let simBoundsDao: SimBoundsDAO
     public let simEnemyTypeDao: SimEnemyTypeDAO
     public let simMeleeUnitDao: SimMeleeUnitDAO
@@ -93,9 +93,9 @@ public class Db {
         levelLoader = LevelLoader(info: levelInfoDao, paths: pathDao, waves: waveDao, geoJSON: levelGeoJSONDao)
         enemyTypeDao = EnemyTypeDAO(conn: conn)
         towerUnlockDao = TowerUnlockDAO(conn: conn)
-        levelHeroDao = LevelHeroDAO(conn: conn)
-        meleeUnitDao = MeleeUnitDAO(conn: conn)
-        towerTypeDao = TowerTypeDAO(conn: conn, meleeUnitDao: meleeUnitDao)
+        combatRulesDao = CombatRulesDAO(conn: conn)
+        meleeUnitDao = MeleeUnitDAO(conn: conn, combatRulesDao: combatRulesDao)
+        towerTypeDao = TowerTypeDAO(conn: conn, meleeUnitDao: meleeUnitDao, combatRulesDao: combatRulesDao)
         simBoundsDao = SimBoundsDAO(conn: conn)
         simEnemyTypeDao = SimEnemyTypeDAO(conn: conn)
         simMeleeUnitDao = SimMeleeUnitDAO(conn: conn)

@@ -40,7 +40,8 @@ struct CombatDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                                        safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                                     levelInfoID: level.id, mapImageName: level.mapImageName)
+                                     levelInfoID: level.id, mapImageName: level.mapImageName,
+                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
             let ranges = try runner.verifyArtilleryRangeOnDevice()
             let morale = try runner.verifyArtilleryMoraleOnDevice()
             let result = try runner.verifyMoraleCombatOnDevice()
@@ -48,7 +49,7 @@ struct CombatDeviceReview: View {
             record = ["passed": true, "combat": result.checks, "rangeChecks": ranges,
                       "moraleChecks": morale.checks, "displayScale": window.screen.scale,
                       "walkerHeightPoints": MapSpriteScale(runtimeCanvas: canvas).points(MapSpriteSizing.walker),
-                      "combatSpacingPoints": MilitiaTunables.combatSpacing * canvas.scaleFactor]
+                      "combatSpacingPoints": runner.combatRules.meleeCombatSpacing * canvas.scaleFactor]
             let format = UIGraphicsImageRendererFormat(); format.scale = window.screen.scale
             for (index, frame) in result.frames.enumerated() {
                 self.frame = frame

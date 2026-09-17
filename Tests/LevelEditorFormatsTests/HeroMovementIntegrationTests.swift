@@ -29,7 +29,7 @@ final class HeroMovementIntegrationTests: XCTestCase {
         }
     }
     private func context() -> MilitiaContext {
-        MilitiaContext(freeEnemies: [], targetPosition: nil, rallyPoint: .zero,
+        MilitiaContext(rules: AuthoredDatabaseFixture.combatRules, freeEnemies: [], targetPosition: nil, rallyPoint: .zero,
                        towerPosition: .zero, leashRadius: 130, engageScanRadius: 80)
     }
     private func arrive(_ movement: inout HeroMovement, _ unit: inout MilitiaUnit,

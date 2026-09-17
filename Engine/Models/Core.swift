@@ -124,28 +124,3 @@ public enum SimClock {
     public static let ticksPerSecond: Int = 30
     public static let dt: Double = 1.0 / Double(ticksPerSecond)
 }
-
-public enum Tunables {
-    public static let killBountyMultiplier: Double = 1.0
-    public static let routBountyMultiplier: Double = 0.6
-    public static let captureBountyMultiplier: Double = 1.3
-
-    public static let moraleMax: Double = 100
-    public static let baseMoraleRegenPerSecond: Double = 0.5
-    public static let breakMoraleSplash: Double = 15
-    public static let breakSplashRadius: Double = 70
-    public static let waveringSplashMultiplier: Double = 2
-    public static let commandDeathShockDefault: Double = 25
-
-    public static let shakenSpeedMultiplier: Double = 0.9
-    public static let routSpeedMultiplier: Double = 1.15
-
-    public static let steadyAdvanceHPGate: Double = 0.25
-
-    public static let contagionTickInterval: Double = 0.5
-    public static let diseaseHPPerSecond: Double = 2.5
-    public static let diseaseHPFloorFraction: Double = 0.15
-    public static let diseaseMoralePerSecond: Double = 4.0
-    public static let contagionSpreadRadius: Double = 60
-    public static let contagionSpreadChance: Double = 0.35
-}

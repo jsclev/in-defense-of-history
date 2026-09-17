@@ -19,7 +19,6 @@ final class SimulatorStore {
         let databaseURL = Db.authoredDatabaseURL
         db = Db(dbPath: databaseURL.path,
                 fullRefresh: false, levelGeoJSONDao: LevelGeoJSONDAO(directory: levelDirectory))
-        try db.towerTypeDao.validateAuthoredContent()
         virtualCanvas = try db.virtualCanvasDao.get()
         roster = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll())
         arsenal = try db.towerTypeDao.getDesignArsenal()

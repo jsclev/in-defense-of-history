@@ -7,9 +7,9 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
     /// Provisional historical military effectiveness and impact, from 1 to 100 (higher is better).
     public let ranking: Int
     public let nickname: String?
-    public let unlockedAtLevelId: UUID?
-    public let unlockedAtLevelName: String?
-    public let unlockedAtCampaignName: String?
+    public let unlockedAtLevelId: UUID
+    public let unlockedAtLevelName: String
+    public let unlockedAtCampaignName: String
     public let unlockedAtWave: Int
     public let unlocked: Bool
     public let fromMiniCampaign: Bool
@@ -17,10 +17,9 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
     public let historicalDescription: String
     public let historicalText: String
     public let primaryImageName: String
-    public let detailsImageName: String
     public let iconImageName: String
     public let abilityIconImageName: String
-    public let unitImageName: String?
+    public let unitImageName: String
 
     public init(
         id: UUID,
@@ -28,9 +27,9 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         longName: String,
         ranking: Int,
         nickname: String?,
-        unlockedAtLevelId: UUID?,
-        unlockedAtLevelName: String?,
-        unlockedAtCampaignName: String?,
+        unlockedAtLevelId: UUID,
+        unlockedAtLevelName: String,
+        unlockedAtCampaignName: String,
         unlockedAtWave: Int,
         unlocked: Bool,
         fromMiniCampaign: Bool,
@@ -38,10 +37,9 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         historicalDescription: String,
         historicalText: String,
         primaryImageName: String,
-        detailsImageName: String,
         iconImageName: String,
         abilityIconImageName: String,
-        unitImageName: String?
+        unitImageName: String
     ) {
         self.id = id
         self.shortName = shortName
@@ -58,9 +56,20 @@ public struct Hero: Codable, Sendable, Identifiable, Equatable {
         self.historicalDescription = historicalDescription
         self.historicalText = historicalText
         self.primaryImageName = primaryImageName
-        self.detailsImageName = detailsImageName
         self.iconImageName = iconImageName
         self.abilityIconImageName = abilityIconImageName
         self.unitImageName = unitImageName
     }
+
+    public func validateArtwork(isAvailable: (String) -> Bool) throws {
+        for (field, name) in [("primary_image_name", primaryImageName),
+                              ("icon_image_name", iconImageName),
+                              ("ability_icon_image_name", abilityIconImageName),
+                              ("unit_image_name", unitImageName)] {
+            guard isAvailable(name) else {
+                throw DbError.Db(message: "hero[\(id)]: attribute '\(field)' references missing image '\(name)'")
+            }
+        }
+    }
+
 }

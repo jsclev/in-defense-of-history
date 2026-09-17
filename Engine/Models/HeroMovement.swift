@@ -35,9 +35,9 @@ public struct HeroMovement {
         if unit.state == .fighting, let target = context.targetPosition {
             // Keep the combat stance on navigable ground, including narrow
             // paths. Reposition physically rather than offsetting the artwork.
-            var preferred = MilitiaAI.combatPosition(for: unit, target: target)
+            var preferred = MilitiaAI.combatPosition(for: unit, target: target, rules: context.rules)
             if !area.contains(preferred) {
-                let opposite = Point(target.x - unit.combatSide * MilitiaTunables.combatSpacing, target.y)
+                let opposite = Point(target.x - unit.combatSide * context.rules.meleeCombatSpacing, target.y)
                 if area.contains(opposite) {
                     unit.combatSide *= -1
                     preferred = opposite
@@ -48,7 +48,7 @@ public struct HeroMovement {
         let decision = MilitiaAI.decide(unit, context: context)
         switch decision {
         case .idle where unit.state == .returning:
-            // MilitiaAI uses a two-unit arrival radius; heroes still finish at
+            // Heroes finish inside the configured arrival radius at
             // the exact commanded point, including orders shorter than that.
             if advance(&unit, toward: station, distance: moveSpeed * deltaTime), unit.position == station {
                 unit.state = .holding

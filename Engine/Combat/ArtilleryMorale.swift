@@ -8,10 +8,14 @@ public struct ArtilleryMoraleStrike: Equatable, Sendable {
     public let falloffExponent: Double
 
     public init(tuning: TowerLevel) {
-        minimum = max(0, tuning.terrorMin)
-        maximum = max(minimum, tuning.terrorMax)
-        radius = max(0, tuning.aoeRadius)
-        falloffExponent = max(0.01, tuning.aoeFalloffExponent)
+        precondition(tuning.terrorMin.isFinite && tuning.terrorMin >= 0)
+        precondition(tuning.terrorMax.isFinite && tuning.terrorMax >= tuning.terrorMin)
+        precondition(tuning.aoeRadius.isFinite && tuning.aoeRadius >= 0)
+        precondition(tuning.aoeFalloffExponent.isFinite && tuning.aoeFalloffExponent > 0)
+        minimum = tuning.terrorMin
+        maximum = tuning.terrorMax
+        radius = tuning.aoeRadius
+        falloffExponent = tuning.aoeFalloffExponent
     }
 
     public func loss(distance: Double, discipline: Double) -> Double {
@@ -26,40 +30,42 @@ public struct ArtilleryMoraleStrike: Equatable, Sendable {
 /// Morale and its short impact response use game time, so pause and speed-up agree.
 /// Visibility is independent of future combat-state/break thresholds.
 public struct EnemyMorale: Equatable, Sendable {
-    public static let visibilityThreshold = 90.0
-    public static let responseDuration = 0.8
-    public static let recoveryDelay = 3.0
+    public let rules: CombatRules
 
-    public private(set) var value = Tunables.moraleMax
+    public private(set) var value: Double
     public private(set) var impactAge = Double.infinity
-    public private(set) var valueBeforeImpact = Tunables.moraleMax
+    public private(set) var valueBeforeImpact: Double
     public private(set) var flinchDirection = 1.0
 
-    public init() {}
+    public init(rules: CombatRules) {
+        self.rules = rules
+        value = rules.moraleMax
+        valueBeforeImpact = rules.moraleMax
+    }
 
-    public var isVisible: Bool { value < Self.visibilityThreshold }
-    public var response: Double { max(0, 1 - impactAge / Self.responseDuration) }
+    public var isVisible: Bool { value < rules.moraleVisibilityThreshold }
+    public var response: Double { max(0, 1 - impactAge / rules.moraleResponseDuration) }
     public var displayedValue: Double {
-        let t = min(1, impactAge / 0.34)
+        let t = min(1, impactAge / rules.moraleDisplayDuration)
         let ease = 1 - pow(1 - t, 3)
         return valueBeforeImpact + (value - valueBeforeImpact) * ease
     }
 
-    public var remainingFraction: Double { min(1, max(0, value / Tunables.moraleMax)) }
-    public var displayedFraction: Double { min(1, max(0, displayedValue / Tunables.moraleMax)) }
+    public var remainingFraction: Double { min(1, max(0, value / rules.moraleMax)) }
+    public var displayedFraction: Double { min(1, max(0, displayedValue / rules.moraleMax)) }
 
     /// Integrate only this frame's travel, including a recovery crossing. A
     /// changing speed must never recalculate the unit's entire past journey.
     public mutating func advance(seconds: Double, baseSpeed: Double,
                                  response: EnemyMoraleResponse, blocked: Bool) -> Double {
         guard seconds.isFinite, seconds > 0 else { return 0 }
-        let threshold = response.speedThreshold * Tunables.moraleMax
+        let threshold = response.speedThreshold * rules.moraleMax
         var slowedSeconds = 0.0
-        if threshold >= Tunables.moraleMax {
+        if threshold >= rules.moraleMax {
             slowedSeconds = seconds
         } else if value <= threshold {
-            let recoveryWait = max(0, Self.recoveryDelay - impactAge)
-            let recoveryToThreshold = (threshold - value) / Tunables.baseMoraleRegenPerSecond
+            let recoveryWait = max(0, rules.moraleRecoveryDelay - impactAge)
+            let recoveryToThreshold = (threshold - value) / rules.baseMoraleRegenPerSecond
             slowedSeconds = min(seconds, recoveryWait + recoveryToThreshold)
         }
         advance(seconds: seconds)
@@ -83,7 +89,7 @@ public struct EnemyMorale: Equatable, Sendable {
         impactAge += seconds
         let recoveryTime: Double
         if previousAge.isInfinite { recoveryTime = seconds }
-        else { recoveryTime = max(0, impactAge - max(previousAge, Self.recoveryDelay)) }
-        value = min(Tunables.moraleMax, value + Tunables.baseMoraleRegenPerSecond * recoveryTime)
+        else { recoveryTime = max(0, impactAge - max(previousAge, rules.moraleRecoveryDelay)) }
+        value = min(rules.moraleMax, value + rules.baseMoraleRegenPerSecond * recoveryTime)
     }
 }

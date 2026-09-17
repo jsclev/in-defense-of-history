@@ -19,8 +19,10 @@ trap 'rm -f "$database" "$database-wal" "$database-shm" "$database-journal"' EXI
 trap 'exit 1' HUP INT TERM
 
 sqlite3 -bail "$database" < DDL/create_tables.sql
+sqlite3 -bail "$database" < DDL/create_combat_rules.sql
 
 # Add all the data
+sqlite3 -bail "$database" < DML/combat_rules.sql
 sqlite3 -bail "$database" < DML/virtual_canvas.sql
 sqlite3 -bail "$database" < DML/campaigns.sql
 sqlite3 -bail "$database" < DML/Levels/level_01_battle_road.sql

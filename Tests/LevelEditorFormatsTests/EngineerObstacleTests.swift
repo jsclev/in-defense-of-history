@@ -5,7 +5,7 @@ import SQLite3
 final class EngineerObstacleTests: XCTestCase {
     func testFootprintOverlapAndRetreat() {
         let fields = [0.2, 0.3, 0.4].map {
-            EngineerObstacleField(position: .zero, stats: .init(radius: 100, slowFraction: $0))
+            EngineerObstacleField(position: .zero, stats: .init(radius: 100, slowFraction: $0, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction))
         }
         XCTAssertEqual(EngineerObstacleField.movementMultiplier(at: .zero, retreating: false, fields: fields), 0.6)
         XCTAssertEqual(EngineerObstacleField.movementMultiplier(at: CGPoint(x: 100, y: 0), retreating: false, fields: fields), 0.6)
@@ -32,7 +32,7 @@ final class EngineerObstacleTests: XCTestCase {
             paths: [Path(points: [Point(0, 0), Point(1000, 0)])],
             towerSlots: [TowerSlot(id: UUID(), position: Point(0, 40))],
             waves: [Wave(startTime: 0, spawns: [SpawnEntry(enemyTypeID: enemy.id, count: 1, interval: 1)])])
-        let sim = try Simulation(level: level, catalog: ContentCatalog(enemyTypes: [enemy], towerTypes: [type]),
+        let sim = try Simulation(level: level, catalog: ContentCatalog(combatRules: AuthoredDatabaseFixture.combatRules, enemyTypes: [enemy], towerTypes: [type]),
                                  policy: IdleCommander(), seed: 1)
         XCTAssertEqual(sim.build(slot: 0, towerID: type.id), .ok)
         XCTAssertEqual(sim.gold, 900)
@@ -62,15 +62,15 @@ final class EngineerObstacleTests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture()
         var type = try XCTUnwrap(fixture.db.towerTypeDao.getTowerTypes()["Special"])
         type.levels[0].range = 100
-        type.levels[0].engineerObstacles = .init(radius: 30, slowFraction: 0.2)
+        type.levels[0].engineerObstacles = .init(radius: 30, slowFraction: 0.2, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction)
         type.levels[1].range = 300
-        type.levels[1].engineerObstacles = .init(radius: 60, slowFraction: 0.3)
+        type.levels[1].engineerObstacles = .init(radius: 60, slowFraction: 0.3, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction)
         let level = LevelInfo(id: UUID(), name: "Reach", campaign: Campaign(id: UUID(), name: "Test"),
             startedAt: Date(), endedAt: Date(), startingMoney: 1000, numStartingLives: 10,
             playArea: CGRect(x: 0, y: 0, width: 1000, height: 500),
             paths: [Path(points: [Point(0, 200), Point(1000, 200)])],
             towerSlots: [TowerSlot(id: UUID(), position: Point(0, 0))], waves: [])
-        let sim = try Simulation(level: level, catalog: ContentCatalog(enemyTypes: [], towerTypes: [type]),
+        let sim = try Simulation(level: level, catalog: ContentCatalog(combatRules: AuthoredDatabaseFixture.combatRules, enemyTypes: [], towerTypes: [type]),
                                  policy: IdleCommander(), seed: 1)
         XCTAssertEqual(sim.build(slot: 0, towerID: type.id), .ok)
         XCTAssertTrue(sim.engineerObstacleFields.isEmpty)

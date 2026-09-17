@@ -26,7 +26,8 @@ struct DemolitionHapticsDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                 safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                levelInfoID: level.id, mapImageName: level.mapImageName)
+                levelInfoID: level.id, mapImageName: level.mapImageName,
+                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
             record["demolition"] = try runner.verifyDemolitionOnDevice()
             record["haptics"] = try await runner.verifyDemolitionHapticsOnDevice()
             record["passed"] = true

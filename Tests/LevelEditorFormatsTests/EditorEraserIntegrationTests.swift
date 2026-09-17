@@ -164,7 +164,7 @@ final class EditorEraserIntegrationTests: XCTestCase {
         document.draft.placeHero(.primary, at: Point(500, 260))
         document.draft.placeHero(.secondary, at: Point(520, 260))
         document.draft.callWaveButtons = [.init(position: Point(500, 260), pathIndices: [0])]
-        document.draft.intendedSolution = [.init(at: 3, kind: "place", emplacement: Emplacement.minutemanPost.rawValue, slot: 0)]
+        document.draft.intendedSolution = [.init(at: 3, kind: "place", emplacement: TowerKind.melee.rawValue, slot: 0)]
         document.draft.backgroundImagePath = "map.png"
         document.draft.backgroundImageData = Data([1, 2, 3])
         document.draft.overlayImagePath = "trees.png"

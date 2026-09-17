@@ -2,7 +2,7 @@
 INSERT INTO hero (
     id, short_name, long_name, nickname, unlocked_at_level_wave_id,
     general_description, historical_description, historical_text,
-    primary_image_name, details_image_name, icon_image_name, ability_icon_image_name,
+    primary_image_name, icon_image_name, ability_icon_image_name,
     unit_image_name, ranking
 ) VALUES
 (
@@ -19,6 +19,6 @@ INSERT INTO hero (
     'Born enslaved in Andover, he purchased his freedom in 1769 for the price of a year''s wages.
 
 At Bunker Hill he fought with such conspicuous courage that fourteen officers petitioned the Massachusetts legislature to honor him as a brave and gallant soldier, a distinction accorded no other man that day. He went on to serve at Valley Forge and White Plains.',
-    'hero_salem_poor_card_16x15', 'hero_details_salem_poor', 'hero_icon_salem_poor', 'hero_ability_icon_salem_poor',
+    'hero_salem_poor_card_16x15', 'hero_icon_salem_poor', 'hero_ability_icon_salem_poor',
     'hero_unit_salem_poor', 70
 );
