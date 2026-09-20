@@ -16,7 +16,7 @@ public class SimMeleeUnitDAO: BaseDAO {
 
         let rows = try authoredRows("""
             SELECT
-                tt.tower_type_category,
+                tt.tower_type_key,
                 t.tower_level,
                 m.min_hp,
                 m.max_hp,
@@ -29,7 +29,8 @@ public class SimMeleeUnitDAO: BaseDAO {
             LEFT JOIN
                 tower_type tt ON tt.id = t.tower_type_id
         """, entity: "sim_melee_unit") { row in
-            let category = try row.text("tower_type_category")
+            let kind = try row.text("tower_type_key")
+            guard TowerKind(rawValue: kind) != nil else { throw row.invalid("tower_type_key", "is unsupported") }
             let level = try row.integer("tower_level", minimum: 1)
             let minHP = try row.number("min_hp", minimum: 0, strictlyGreater: true)
             let minDamage = try row.number("min_damage", minimum: 0, strictlyGreater: true)
@@ -37,11 +38,11 @@ public class SimMeleeUnitDAO: BaseDAO {
                 hp: minHP...(try row.number("max_hp", minimum: minHP)),
                 averageDamage: minDamage...(try row.number("max_damage", minimum: minDamage))
             )
-            return (category, level, brackets)
+            return (kind, level, brackets)
         }
-        for (category, level, brackets) in rows {
-            guard out[category, default: [:]].updateValue(brackets, forKey: level) == nil else {
-                throw DbError.Db(message: "sim_melee_unit: duplicate category/tier \(category)/\(level)")
+        for (kind, level, brackets) in rows {
+            guard out[kind, default: [:]].updateValue(brackets, forKey: level) == nil else {
+                throw DbError.Db(message: "sim_melee_unit: duplicate kind/tier \(kind)/\(level)")
             }
         }
 

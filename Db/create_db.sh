@@ -20,6 +20,8 @@ trap 'exit 1' HUP INT TERM
 
 sqlite3 -bail "$database" < DDL/create_tables.sql
 sqlite3 -bail "$database" < DDL/create_combat_rules.sql
+sqlite3 -bail "$database" < DDL/create_meta_upgrades.sql
+sqlite3 -bail "$database" < DDL/create_player_meta_upgrades.sql
 
 # Add all the data
 sqlite3 -bail "$database" < DML/combat_rules.sql
@@ -72,9 +74,13 @@ sqlite3 -bail "$database" < DML/difficulties.sql
 sqlite3 -bail "$database" < DML/selected_difficulty.sql
 sqlite3 -bail "$database" < DML/hud_layout.sql
 sqlite3 -bail "$database" < DML/player_settings.sql
+sqlite3 -bail "$database" < DML/meta_upgrades.sql
+sqlite3 -bail "$database" < DML/player_meta_upgrades.sql
 sqlite3 -bail "$database" < DML/tower_types.sql
 sqlite3 -bail "$database" < DML/towers.sql
+sqlite3 -bail "$database" < DML/supply_towers.sql
 sqlite3 -bail "$database" < DML/melee_units.sql
+sqlite3 -bail "$database" < DML/tower_upgrades.sql
 sqlite3 -bail "$database" < DML/reinforcement_config.sql
 sqlite3 -bail "$database" < DML/level_waves.sql
 sqlite3 -bail "$database" < DML/level_wave_enemy_spawns.sql

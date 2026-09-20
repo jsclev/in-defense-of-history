@@ -17,16 +17,6 @@ enum MenuScreen: String, CaseIterable, Identifiable {
 
     var iconAssetName: String { "main_menu_\(rawValue)" }
 
-    var placeholderSymbol: String {
-        switch self {
-        case .heroes: return "person.2.fill"
-        case .encyclopedia: return "book.fill"
-        case .shop: return "diamond.fill"
-        case .upgrades: return "arrow.up"
-        case .settings: return "gearshape.fill"
-        }
-    }
-
     var accessibilityHint: String {
         switch self {
         case .heroes: return "Choose and review campaign heroes."
@@ -38,6 +28,25 @@ enum MenuScreen: String, CaseIterable, Identifiable {
     }
 }
 
+/// Campaign artwork has one required catalog entry at all three pixel densities.
+struct CampaignButtonArt: View {
+    let name: String
+
+    var body: some View {
+        Image(uiImage: Self.requiredImage(named: name))
+            .resizable()
+            .interpolation(.high)
+            .scaledToFit()
+    }
+
+    static func requiredImage(named name: String) -> UIImage {
+        guard let image = UIImage(named: name) else {
+            fatalError("Missing required campaign button asset: \(name)")
+        }
+        return image
+    }
+}
+
 struct MenuButton: View {
     let menuScreen: MenuScreen
     let size: CGFloat
@@ -45,24 +54,7 @@ struct MenuButton: View {
 
     var body: some View {
         Button(action: action) {
-            Group {
-                if UIImage(named: menuScreen.iconAssetName) != nil {
-                    Image(menuScreen.iconAssetName)
-                        .resizable()
-                        .scaledToFit()
-                } else {
-                    ZStack {
-                        Circle().fill(.black.opacity(0.55))
-                        Circle().strokeBorder(
-                            Color(red: 0.85, green: 0.7, blue: 0.3),
-                            lineWidth: size * 0.027
-                        )
-                        Image(systemName: menuScreen.placeholderSymbol)
-                            .font(.system(size: Typography.size(size * 0.42), weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                }
-            }
+            CampaignButtonArt(name: menuScreen.iconAssetName)
             .frame(width: size, height: size)
             .shadow(color: .black.opacity(0.48), radius: size * 0.018, y: size * 0.027)
             .contentShape(Rectangle())
@@ -128,19 +120,8 @@ struct MenuPlaceholderView: View {
                 Color(red: 0.14, green: 0.11, blue: 0.08)
 
                 VStack(spacing: 20 * metrics.scale) {
-                    if UIImage(named: menuScreen.iconAssetName) != nil {
-                        Image(menuScreen.iconAssetName)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(
-                                width: 150 * metrics.scale,
-                                height: 150 * metrics.scale
-                            )
-                    } else {
-                        Image(systemName: menuScreen.placeholderSymbol)
-                            .font(.system(size: Typography.size(64 * metrics.scale), weight: .bold))
-                            .foregroundStyle(Color(red: 0.85, green: 0.7, blue: 0.3))
-                    }
+                    CampaignButtonArt(name: menuScreen.iconAssetName)
+                        .frame(width: 150 * metrics.scale, height: 150 * metrics.scale)
                     Text(menuScreen.title)
                         .font(.custom("Baskerville-Bold", size: 48 * metrics.scale))
                         .foregroundStyle(.white)

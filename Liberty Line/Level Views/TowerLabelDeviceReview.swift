@@ -14,10 +14,14 @@ struct TowerLabelDeviceReview: View {
             if let runner, let node {
                 LevelMapView(db: store.db, virtualCanvas: store.virtualCanvas,
                     runtimeCanvas: canvas, towerMenuLayout: store.towerMenuLayout,
-                    node: node, difficulty: Difficulty(id: UUID(), level: 1, name: "Review",
-                        detail: "", enemyHPMultiplier: 1), hudLayoutConfig: store.hudLayoutConfig,
+                    node: node, hudLayoutConfig: store.hudLayoutConfig,
                     reviewRunner: runner, runsAutomatically: false, onExit: {})
             } else { Color.black }
+        }
+        .overlay {
+            if CommandLine.arguments.contains("--layout-guides") {
+                DebugLayoutGuidesView(runtimeCanvas: canvas)
+            }
         }
         .task { await review() }
     }
@@ -30,8 +34,7 @@ struct TowerLabelDeviceReview: View {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             let level = try store.db.levelInfoDao.getCampaignLevels(campaignName: "Main")[14]
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas,
-                runtimeCanvas: canvas, levelInfoID: level.id, mapImageName: level.mapImageName,
-                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
+                runtimeCanvas: canvas, levelInfoID: level.id, mapImageName: level.mapImageName)
             self.runner = runner
             self.node = CampaignNode(order: 15, level: level)
             try await Task.sleep(for: .milliseconds(400))

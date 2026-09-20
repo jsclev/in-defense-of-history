@@ -73,7 +73,8 @@ struct LevelMapArt {
         layer(forestOcclusionImage, in: projection)
     }
 
-    /// Tier 3 — entrance/exit occlusion, below exit markers and heroes.
+    /// Tier 3 — entrance/exit occlusion, above heroes and below exit markers
+    /// and HUD controls.
     @ViewBuilder func occlusion(in projection: LevelMapProjection) -> some View {
         layer(occlusionImage, in: projection)
     }

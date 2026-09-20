@@ -1,6 +1,31 @@
 import SwiftUI
 
+/// Recreating an attempt constructs a fresh runner through the same database load
+/// as campaign entry. Returning from pause keeps the current runner intact.
 struct LevelMapView: View {
+    let db: Db
+    let virtualCanvas: VirtualCanvas
+    let runtimeCanvas: RuntimeCanvas
+    let towerMenuLayout: TowerMenuLayout
+    let node: CampaignNode
+    let hudLayoutConfig: HudLayoutConfig
+    var onVictory: (Int, Int) -> Int = { _, _ in 0 }
+    var reviewRunner: LevelRunner? = nil
+    var runsAutomatically = true
+    let onExit: () -> Void
+    @State private var attempt = 0
+
+    var body: some View {
+        LevelAttemptView(db: db, virtualCanvas: virtualCanvas, runtimeCanvas: runtimeCanvas,
+            towerMenuLayout: towerMenuLayout, node: node,
+            hudLayoutConfig: hudLayoutConfig, onVictory: onVictory,
+            reviewRunner: attempt == 0 ? reviewRunner : nil, runsAutomatically: runsAutomatically,
+            onRestart: { attempt += 1 }, onExit: onExit)
+            .id(attempt)
+    }
+}
+
+private struct LevelAttemptView: View {
     @EnvironmentObject private var settings: PlayerSettingsStore
     private var debugMode: Bool { settings.values.debugMode }
     private var showDebugLayoutGuides: Bool { settings.values.showDebugLayoutGuides }
@@ -9,8 +34,8 @@ struct LevelMapView: View {
     let towerMenuLayout: TowerMenuLayout
 
     var node: CampaignNode
-    var difficulty: Difficulty
     var onExit: () -> Void
+    private let onRestart: () -> Void
 
     @StateObject private var runner: LevelRunner
     @State private var towerSlotCount: Int = 0
@@ -83,17 +108,18 @@ struct LevelMapView: View {
          runtimeCanvas: RuntimeCanvas,
          towerMenuLayout: TowerMenuLayout,
          node: CampaignNode,
-         difficulty: Difficulty,
-         hudLayoutConfig: HudLayoutConfig, reviewRunner: LevelRunner? = nil,
-         runsAutomatically: Bool = true, onExit: @escaping () -> Void) {
+         hudLayoutConfig: HudLayoutConfig,
+         onVictory: @escaping (Int, Int) -> Int = { _, _ in 0 }, reviewRunner: LevelRunner? = nil,
+         runsAutomatically: Bool = true, onRestart: @escaping () -> Void,
+         onExit: @escaping () -> Void) {
         self.db = db
         self.virtualCanvas = virtualCanvas
         self.runtimeCanvas = runtimeCanvas
         self.towerMenuLayout = towerMenuLayout
         self.node = node
-        self.difficulty = difficulty
         self.hudLayoutConfig = hudLayoutConfig
         self.onExit = onExit
+        self.onRestart = onRestart
         self.runsAutomatically = runsAutomatically
         _runner = StateObject(wrappedValue: reviewRunner ?? LevelRunner(
             db: db,
@@ -102,7 +128,7 @@ struct LevelMapView: View {
             hudLayoutConfig: hudLayoutConfig,
             levelInfoID: node.levelInfoID,
             mapImageName: node.mapImageName,
-            enemyHPMultiplier: difficulty.enemyHPMultiplier
+            onVictory: onVictory
         ))
     }
 
@@ -112,12 +138,27 @@ struct LevelMapView: View {
                 .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
         } interface: {
             ZStack(alignment: .topLeading) {
+                let projection = LevelMapArt.projection(
+                    virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
+
+                // Heroes < foreground map art < HUD controls < presentations.
+                HeroMapLayer(heroes: runner.heroes, runtimeCanvas: runtimeCanvas,
+                             projection: projection,
+                             onSelect: runner.selectHero)
+
+                runner.mapArt.occlusion(in: projection)
+
+                LevelExitMarkersView(positions: runner.exitPositions,
+                                     projection: projection,
+                                     spriteSize: MapSpriteScale(runtimeCanvas: runtimeCanvas)
+                                        .points(MapSpriteSizing.exitMarker))
+
                 HudView(runtimeCanvas: runtimeCanvas,
                         db: db,
                         runner: runner,
                         hudLayoutConfig: hudLayoutConfig,
                         onSpeedUp: { runner.speedUp() },
-                        onExit: onExit)
+                        onPause: runner.pause)
                     .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)
 
                 if showDebugLayoutGuides {
@@ -140,6 +181,40 @@ struct LevelMapView: View {
             }
         }
         .persistentSystemOverlays(.hidden)
+        .overlay(alignment: .top) {
+            if runner.isCleared && runner.earnedMetaStars > 0 {
+                HStack(spacing: 8) {
+                    ForEach(0..<runner.earnedMetaStars, id: \.self) { _ in
+                        Image(systemName: "star.fill").font(.system(size: 28, weight: .bold))
+                    }
+                }
+                .foregroundStyle(Color(red: 1, green: 0.78, blue: 0.28))
+                .padding(12).background(.black.opacity(0.8), in: Capsule())
+                .padding(.top, 16)
+                .allowsHitTesting(false)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Victory. Earned \(runner.earnedMetaStars) upgrade stars.")
+            }
+        }
+        .allowsHitTesting(!runner.isPaused)
+        .accessibilityHidden(runner.isPaused)
+        .overlay {
+            if runner.isPaused {
+                LevelPauseView(runtimeCanvas: runtimeCanvas,
+                    onResume: {
+                        runner.resume()
+                        if scenePhase == .active && runsAutomatically { runner.start() }
+                    },
+                    onRestart: {
+                        runner.stop()
+                        onRestart()
+                    },
+                    onCampaign: {
+                        runner.stop()
+                        onExit()
+                    })
+            }
+        }
         .onChange(of: runner.escapedEnemyCount) { previous, current in
             guard let cue = escapeHapticPolicy.feedback(previousCount: previous, escapeCount: current,
                                                livesRemaining: runner.lives,
@@ -150,7 +225,7 @@ struct LevelMapView: View {
         }
         .onAppear {
             runner.updateRuntimeCanvas(runtimeCanvas)
-            if runsAutomatically { runner.start() }
+            if scenePhase == .active && runsAutomatically { runner.start() }
         }
         .onChange(of: runtimeCanvas.playAreaRect) { _, _ in
             runner.updateRuntimeCanvas(runtimeCanvas)
@@ -174,6 +249,7 @@ struct LevelMapView: View {
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         let sprites = MapSpriteScale(runtimeCanvas: runtimeCanvas)
         let art = runner.mapArt
+        let obstacleFeedback = runner.engineerObstacleFeedback
         return ZStack(alignment: .topLeading) {
             Color.black
 
@@ -212,13 +288,13 @@ struct LevelMapView: View {
             }
 
             ForEach(runner.placedTowers) { tower in
-                if let position = tower.engineerObstaclePosition,
-                   let stats = runner.towerLevel(for: tower)?.engineerObstacles {
-                    EngineerObstacleView(radius: CGFloat(stats.radius) * projection.scale,
-                        verticalFraction: stats.verticalFraction,
-                        selected: runner.selectedTowerSlotIndex == tower.slotIndex)
-                        .accessibilityValue("\(Int(stats.slowFraction * 100)) percent slowdown")
-                        .position(projection.viewPoint(position))
+                if let field = runner.engineerObstacleField(for: tower) {
+                    EngineerObstacleView(field: field, roadSurface: runner.roadSurfacePath,
+                        scale: projection.scale,
+                        selected: runner.selectedTowerSlotIndex == tower.slotIndex,
+                        isSlowingEnemies: obstacleFeedback.towerSlots.contains(tower.slotIndex))
+                        .accessibilityValue("\(Int(field.stats.slowFraction * 100)) percent slowdown")
+                        .position(projection.viewPoint(field.position))
                 }
             }
 
@@ -265,7 +341,7 @@ struct LevelMapView: View {
                 }.position(projection.viewPoint(impact.position))
             }
 
-            GroundTroopLayer(walkers: runner.walkers, militia: runner.militia,
+            GroundTroopLayer(walkers: runner.displayedWalkers, militia: runner.militia,
                              sprites: sprites, projection: projection)
 
             art.forestOcclusion(in: projection)
@@ -279,21 +355,12 @@ struct LevelMapView: View {
                             .frame(height: sprites.points(projectile.kind.projectileHeight)
                                    * (projectile.grapeshot == nil ? 1 : 0.45))
                             .rotationEffect(.radians(projectile.heading))
-                            .position(projection.viewPoint(projectile.position))
+                            .position(projection.viewPoint(runner.displayedPosition(of: projectile)))
                     }
                 }
             }
             .opacity(runner.isDefeated ? 0 : 1)
             .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
-
-            art.occlusion(in: projection)
-
-            LevelExitMarkersView(positions: runner.exitPositions,
-                                 projection: projection,
-                                 spriteSize: sprites.points(MapSpriteSizing.exitMarker))
-
-            HeroMapLayer(heroes: runner.heroes, runtimeCanvas: runtimeCanvas,
-                         projection: projection, onSelect: runner.selectHero)
 
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                 let slotTap = slotTapSize(projection: projection)
@@ -376,8 +443,9 @@ struct LevelMapView: View {
             if runner.slotPositions.indices.contains(upgradeSlot),
                let tower = runner.placedTower(atSlot: upgradeSlot) {
                 let previewRadius = runner.armedUpgradeBranch
-                    .flatMap { runner.upgradePreviewRadius(branch: $0) }
-                if let radius = runner.rangeOverlayRadius(for: tower) {
+                    .flatMap { runner.upgradePreviewRadius(branch: $0) } ?? runner.upgradePathPreviewRadius
+                // Supply camps gain their first local aura at specialization.
+                if let radius = runner.rangeOverlayRadius(for: tower) ?? previewRadius {
                     TowerRangeOverlayView(
                         center: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                         range: radius, upgradeRange: previewRadius, verticalFraction: runner.combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
@@ -610,20 +678,80 @@ struct LevelMapView: View {
     }
 
     private var towerLabelObstacles: [CGRect] {
-        let miscSide = min(runtimeCanvas.miscViewSize.width, runtimeCanvas.miscViewSize.height)
-        return [HeroBarLayout(runtimeCanvas: runtimeCanvas).frame,
-                HudStatsView.occupiedFrame(runtimeCanvas: runtimeCanvas, config: hudLayoutConfig),
-                hudLayoutConfig.frame(for: .miscView,
-                    size: CGSize(width: miscSide, height: miscSide), in: runtimeCanvas.hudRect),
-                hudLayoutConfig.frame(for: .masterControls,
-                    size: MasterControlsLayout(runtimeCanvas: runtimeCanvas).frame.size,
-                    in: runtimeCanvas.hudRect)] + (runner.awaitingWaveStart
+        runtimeCanvas.hudPlayArea.occlusionAreas + (runner.awaitingWaveStart
                         ? runner.callWaveButtonPositions.map {
                             CallWaveButtonLayout(position: $0, runtimeCanvas: runtimeCanvas).frame
                         } : [])
     }
 
-    private func upgradeMenu(for tower: PlacedTower, around anchor: CGPoint,
+    @ViewBuilder private func upgradeMenu(for tower: PlacedTower, around anchor: CGPoint,
+                                          playAreaScalingFactor: CGFloat) -> some View {
+        if runner.upgradePaths.isEmpty {
+            tierUpgradeMenu(for: tower, around: anchor, playAreaScalingFactor: playAreaScalingFactor)
+        } else {
+            specialtyUpgradeMenu(for: tower, around: anchor, playAreaScalingFactor: playAreaScalingFactor)
+        }
+    }
+
+    private func specialtyUpgradeMenu(for tower: PlacedTower, around anchor: CGPoint,
+                                       playAreaScalingFactor: CGFloat) -> some View {
+        let paths = runner.upgradePaths
+        let center = towerMenuLayout.getCenterPoint(anchor: anchor, scale: playAreaScalingFactor)
+        let buttonSize = towerMenuLayout.getTowerButtonSize(playAreaScalingFactor: playAreaScalingFactor)
+        let hasRally = runner.rallyPoint(forSlot: tower.slotIndex) != nil
+        let hasCharge = tower.demolitionCharge != nil
+        let hasObstacles = runner.towerLevel(for: tower)?.engineerObstacles != nil
+        let hasPlacement = hasRally || hasCharge || hasObstacles
+        let rallySize = CGSize(width: buttonSize.width * Self.rallyButtonScale,
+                               height: buttonSize.height * Self.rallyButtonScale)
+        let rallyCenter = towerMenuLayout.getButtonSeatCenterPoint(index: 1, count: 2,
+            menuCenterPoint: center, playAreaScalingFactor: playAreaScalingFactor)
+        func place(_ path: TowerUpgradePath) -> CGPoint {
+            towerMenuLayout.getButtonCenterPoint(index: path.slot == 1 ? 3 : 1, count: 4,
+                menuCenterPoint: center, playAreaScalingFactor: playAreaScalingFactor,
+                towerButtonSize: buttonSize.width)
+        }
+        return Group {
+            towerMenuBgImage(center: center, playAreaScalingFactor: playAreaScalingFactor)
+            ForEach(paths) { path in
+                let rank = tower.upgrades.rank(for: path.id)
+                let next = path.ranks.first { $0.rank == rank + 1 }
+                UpgradeMenuItem(towerMenuLayout: towerMenuLayout, iconName: path.iconName, dropKind: tower.kind,
+                    cost: next?.cost, isArmed: runner.armedUpgradePathID == path.id && next != nil,
+                    isAffordable: next.map { runner.money >= $0.cost } ?? true,
+                    buttonSize: buttonSize, canInspect: true,
+                    progress: CGFloat(rank) / CGFloat(path.ranks.count)) {
+                        runner.tapUpgradePath(path.id)
+                    }
+                    .accessibilityLabel(path.name)
+                    .accessibilityValue("\(rank) of \(path.ranks.count) ranks purchased. " + (next.map {
+                        "\($0.cost) coins. \($0.description)"
+                    } ?? "Fully upgraded."))
+                    .accessibilityIdentifier("tower-path-\(path.id)")
+                    .position(place(path))
+            }
+            if hasPlacement {
+                RallyMenuItem(towerMenuLayout: towerMenuLayout, buttonSize: rallySize) {
+                    if hasCharge { runner.beginDemolitionPlacement() }
+                    else if hasObstacles { runner.beginEngineerObstaclePlacement() }
+                    else { runner.toggleRallyPlacement() }
+                }
+                .accessibilityLabel(hasCharge ? "Place charge" : hasObstacles ? "Move abatis" : "Set rally point")
+                .accessibilityIdentifier(hasCharge ? "demolition-placement" : hasObstacles ? "engineer-obstacle-placement" : "rally-placement")
+                .position(rallyCenter)
+            }
+            if let selected = paths.first(where: { $0.id == runner.armedUpgradePathID }) {
+                TowerSelectionLabel(details: selected.menuDetails(purchasedRank: tower.upgrades.rank(for: selected.id)),
+                    button: menuButtonFrame(at: place(selected), size: buttonSize),
+                    safeBounds: runtimeCanvas.safeInsetsRect,
+                    obstacles: towerLabelObstacles + paths.filter { $0.id != selected.id }.map {
+                        menuButtonFrame(at: place($0), size: buttonSize)
+                    } + (hasPlacement ? [menuButtonFrame(at: rallyCenter, size: rallySize)] : []))
+            }
+        }
+    }
+
+    private func tierUpgradeMenu(for tower: PlacedTower, around anchor: CGPoint,
                              playAreaScalingFactor: CGFloat) -> some View {
         let offers = runner.upgradeOffers
         let center = towerMenuLayout.getCenterPoint(anchor: anchor, scale: playAreaScalingFactor)
@@ -682,7 +810,7 @@ struct LevelMapView: View {
                     else if hasObstacles { runner.beginEngineerObstaclePlacement() }
                     else { runner.toggleRallyPlacement() }
                 }
-                .accessibilityLabel(hasCharge ? "Place charge" : hasObstacles ? "Move obstacles" : "Set rally point")
+                .accessibilityLabel(hasCharge ? "Place charge" : hasObstacles ? "Move abatis" : "Set rally point")
                 .accessibilityIdentifier(hasCharge ? "demolition-placement" : hasObstacles ? "engineer-obstacle-placement" : "rally-placement")
 
                 .position(rallyCenter)
@@ -896,12 +1024,14 @@ struct UpgradeMenuItem: View {
     let isArmed: Bool
     let isAffordable: Bool
     let buttonSize: CGSize
+    var canInspect: Bool = false
+    var progress: CGFloat? = nil
     let action: () -> Void
 
     var body: some View {
         Button(action: action) { content }
             .buttonStyle(.plain)
-            .disabled(cost == nil)
+            .disabled(cost == nil && !canInspect)
     }
 
     @ViewBuilder private var content: some View {
@@ -922,9 +1052,18 @@ struct UpgradeMenuItem: View {
                 .frame(width: frameSize, height: frameSize)
             TowerMenuIcon(towerMenuLayout: towerMenuLayout, name: iconName, buttonSize: frameSize)
                 .grayscale(cost != nil && !isAffordable ? 1 : 0)
-                .opacity(cost != nil ? 1 : 0.5)
+                .opacity(cost != nil || canInspect ? 1 : 0.5)
             TowerCostLabel(cost: cost, frameSize: frameSize)
                 .grayscale(cost != nil && !isAffordable ? 1 : 0)
+            if let progress {
+                ZStack(alignment: .leading) {
+                    Capsule().fill(.black)
+                    Capsule().fill(Color(red: 0.3, green: 0.9, blue: 0.35))
+                        .frame(width: frameSize * 0.66 * progress)
+                }
+                .frame(width: frameSize * 0.66, height: 5)
+                .position(x: frameSize / 2, y: frameSize * 0.13)
+            }
         }
         .frame(width: frameSize, height: frameSize)
         .contentShape(Rectangle())

@@ -137,7 +137,7 @@ public struct LevelBlueprint: Sendable {
         ScriptedBuildOrder(steps: intendedSolution.map { step in
             switch step.order {
             case let .place(e, slot):
-                return ScriptedBuildOrder.Step(time: step.at, action: .build(slot: slot, towerID: arsenal.type(e).id))
+                return ScriptedBuildOrder.Step(time: step.at, action: .build(slot: slot, towerID: arsenal.towers.first(where: { $0.kind == e })!.tiers.filter { $0.branch == 1 }.max(by: { $0.level < $1.level })!.id))
             case let .upgrade(slot):
                 return ScriptedBuildOrder.Step(time: step.at, action: .upgrade(slot: slot))
             }

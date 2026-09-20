@@ -1,5 +1,6 @@
-INSERT INTO tower_type (id, tower_type_category, tower_type_name, level_layout) VALUES
-('c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'Area of Effect', 'Artillery', '[[1],[1],[1],[1,2,4]]'),
-('2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'Melee', 'Militia', '[[1],[1],[1],[1,2,3]]'),
-('7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'Ranged', 'Ranged', '[[1],[1],[1],[1,2,3]]'),
-('5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'Special', 'Engineers', '[[1],[1],[1],[2,3]]');
+INSERT INTO tower_type (id, tower_type_key, tower_type_category, tower_type_name, level_layout) VALUES
+('c94d7f21-6e38-4b0a-b152-8d06a5e9fc03', 'areaOfEffect', 'Area of Effect', 'Artillery', '[[1],[1],[1],[1,2,4]]'),
+('2f8e6b93-0c5a-4d18-8a67-1e94d3c7ab02', 'melee', 'Melee', 'Militia', '[[1],[1],[1],[1,2,3]]'),
+('7a10c1de-4b71-4f3d-9d34-5b7f1a2c9e01', 'ranged', 'Ranged', 'Ranged', '[[1],[1],[1],[1,2,3]]'),
+('5b3a9e87-1d64-4c29-9f80-3c72b6d4ea04', 'special', 'Special', 'Engineers', '[[1],[1],[1],[2,3]]'),
+('8cf674b2-397d-4a81-ae50-1d6c9427b035', 'supply', 'Support', 'Supply Camp', '[[1],[1],[1],[1,2,3]]');

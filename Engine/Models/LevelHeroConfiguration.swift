@@ -26,15 +26,15 @@ public struct LevelHeroConfiguration: Sendable, Equatable {
 
     public init(heroCount: Int, spawns: [HeroSpawn]) throws {
         guard (0...2).contains(heroCount) else {
-            throw DbError.Db(message: "GeoJSON heroCount must be 0, 1 or 2")
+            throw LevelGeoJSONError(message: "GeoJSON heroCount must be 0, 1 or 2")
         }
         let expected: Set<HeroSelection.Role> = heroCount == 0 ? []
             : heroCount == 1 ? [.primary] : [.primary, .secondary]
         guard spawns.count == heroCount, Set(spawns.map(\.role)) == expected else {
-            throw DbError.Db(message: "Place each available hero's starting point in the level editor and export the GeoJSON: primary for one hero; primary and secondary for two")
+            throw LevelGeoJSONError(message: "Place each available hero's starting point in the level editor and export the GeoJSON: primary for one hero; primary and secondary for two")
         }
         guard spawns.allSatisfy({ !$0.featureID.isEmpty && $0.position.x.isFinite && $0.position.y.isFinite }) else {
-            throw DbError.Db(message: "Hero starts need an ID and finite coordinates")
+            throw LevelGeoJSONError(message: "Hero starts need an ID and finite coordinates")
         }
         self.heroCount = heroCount
         self.spawns = spawns.sorted { $0.role == .primary && $1.role == .secondary }

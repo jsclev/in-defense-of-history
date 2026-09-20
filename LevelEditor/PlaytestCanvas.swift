@@ -106,14 +106,14 @@ struct PlaytestCanvas: View {
             let r: CGFloat = 16 * s
             let rect = CGRect(x: c.x - r, y: c.y - r, width: 2 * r, height: 2 * r)
 
-            if let (type, lvl) = session.towerType(at: i) {
-                let color = Palette.color(forTowerID: type.id, arsenal: session.arsenal)
+            if let tower = session.tower(at: i) {
+                let color = Palette.towerColors[tower.kind] ?? .white
                 if session.selectedSlot == i {
                     let runtimeCanvas = RuntimeCanvas(
                         virtualCanvas: session.virtualCanvas,
                         physicalRect: t.frame,
                         safeInsetsRect: t.view(session.virtualCanvas.playAreaRect))
-                    let tuning = type.levels[lvl]
+                    let tuning = tower.tuning
                     let radius = tuning.meleeUnit?.rallyPointRadius ?? tuning.range
                     let rangeRect = TowerRangeOverlay.rect(center: c,
                                                            range: CGFloat(radius),
@@ -126,7 +126,7 @@ struct PlaytestCanvas: View {
                 ctx.stroke(SwiftUI.Path(ellipseIn: rect), with: .color(.white.opacity(0.8)),
                            lineWidth: session.selectedSlot == i ? 3 : 1.5)
                 ctx.draw(
-                    Text(String(repeating: "I", count: lvl + 1))
+                    Text(String(repeating: "I", count: tower.level))
                         .font(.system(size: max(9, 11 * s), weight: .heavy))
                         .foregroundStyle(.white),
                     at: c
@@ -139,8 +139,7 @@ struct PlaytestCanvas: View {
 
     private func drawFlashes(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         for f in session.flashes {
-            let color = Palette.color(forTowerID: session.catalog.towerTypes[f.towerTypeIndex].id,
-                                      arsenal: session.arsenal)
+            let color = Palette.towerColors[f.kind] ?? .white
             var p = SwiftUI.Path()
             p.move(to: t.view(f.from))
             p.addLine(to: t.view(f.to))
@@ -152,36 +151,15 @@ struct PlaytestCanvas: View {
     private func drawEnemies(_ ctx: inout GraphicsContext, _ t: DesignTransform) {
         let s = t.scale
         let sim = session.sim
-        for e in sim.enemies where !e.removed {
-            let type = session.catalog.enemyTypes[e.typeIndex]
-            guard e.pathIndex < sim.level.paths.count else { continue }
-            let pos = t.view(sim.level.paths[e.pathIndex].point(atDistance: e.distance))
-            let baseR: CGFloat = [7.0, 10.0, 12.5][min(2, max(0, type.stats.livesCost - 1))] * s
-            var color = Palette.color(forFoeID: type.id)
-            if e.state == .broken { color = color.opacity(0.45) }
+        for e in sim.enemies {
+            let pos = t.view(e.position)
+            let baseR: CGFloat = [7.0, 10.0, 12.5][min(2, max(0, e.livesCost - 1))] * s
+            let color = Palette.color(forFoeID: e.typeID)
 
             let rect = CGRect(x: pos.x - baseR, y: pos.y - baseR, width: 2 * baseR, height: 2 * baseR)
             ctx.fill(SwiftUI.Path(ellipseIn: rect), with: .color(color))
 
-            switch e.state {
-            case .shaken:
-                ctx.stroke(SwiftUI.Path(ellipseIn: rect.insetBy(dx: -2, dy: -2)),
-                           with: .color(.orange), lineWidth: 2)
-            case .broken:
-                ctx.stroke(SwiftUI.Path(ellipseIn: rect.insetBy(dx: -2, dy: -2)),
-                           with: .color(.white.opacity(0.6)),
-                           style: StrokeStyle(lineWidth: 1.5, dash: [3, 2]))
-            case .steady:
-                break
-            }
-            if e.infected {
-                ctx.fill(
-                    SwiftUI.Path(ellipseIn: CGRect(x: pos.x - 2.5, y: pos.y - 2.5, width: 5, height: 5)),
-                    with: .color(Color(red: 0.5, green: 0.9, blue: 0.3))
-                )
-            }
-
-            let frac = max(0, min(1, e.hp / type.stats.maxHP))
+            let frac = max(0, min(1, e.hp / e.maxHP))
             if frac < 1 {
                 let w = 2.4 * baseR
                 let y = rect.minY - 5 * s - 2

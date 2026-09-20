@@ -7,14 +7,20 @@ public final class HeroMovementArea {
     public enum InvalidArea: Error { case missingPath, malformedGeometry }
 
     public let bounds: CGRect
+    /// Immutable road surface from GeoJSON, including holes and separate regions.
+    /// Ground effects use this same boundary instead of guessing the road width.
+    public var boundaryPath: CGPath { shape }
     private let shape: CGPath
     private let edges: [(Point, Point)]
     private let vertices: [Point]
     private let edgeRows: [Int: [Int]]
+    private let edgeBins: [Cell: [Int]]
     private let components: [CGPath]
     private let rowHeight = 32.0
     private let spacing = 16.0
     private var neighborCache: [Cell: [Cell]] = [:]
+    private var walkableCache: [Cell: Bool] = [:]
+    private var gridCrossings: [Int: [Double]] = [:]
 
     /// Polygon holes are preserved. Legacy centerlines are expanded by their
     /// authored widthPx (or the virtual canvas width when it is absent).
@@ -124,12 +130,17 @@ public final class HeroMovementArea {
         self.edges = edges
         vertices = Array(Set(edges.map(\.0))).sorted { $0.x == $1.x ? $0.y < $1.y : $0.x < $1.x }
         var rows: [Int: [Int]] = [:]
+        var bins: [Cell: [Int]] = [:]
         for (index, edge) in edges.enumerated() {
             for row in Int(floor(min(edge.0.y, edge.1.y) / rowHeight))...Int(floor(max(edge.0.y, edge.1.y) / rowHeight)) {
                 rows[row, default: []].append(index)
+                for column in Int(floor(min(edge.0.x, edge.1.x) / rowHeight))...Int(floor(max(edge.0.x, edge.1.x) / rowHeight)) {
+                    bins[Cell(x: column, y: row), default: []].append(index)
+                }
             }
         }
         edgeRows = rows
+        edgeBins = bins
     }
 
     /// Boundaries are allowed; no tolerance beyond floating-point roundoff is
@@ -141,7 +152,9 @@ public final class HeroMovementArea {
         var inside = false
         for index in edgeRows[Int(floor(point.y / rowHeight))] ?? [] {
             let (a, b) = edges[index]
-            if point.distance(toSegment: a, b) <= 1e-7 { return true }
+            if point.x >= min(a.x, b.x) - 1e-7, point.x <= max(a.x, b.x) + 1e-7,
+               point.y >= min(a.y, b.y) - 1e-7, point.y <= max(a.y, b.y) + 1e-7,
+               point.distance(toSegment: a, b) <= 1e-7 { return true }
             if (a.y > point.y) != (b.y > point.y),
                point.x < a.x + (point.y - a.y) * (b.x - a.x) / (b.y - a.y) { inside.toggle() }
         }
@@ -150,25 +163,29 @@ public final class HeroMovementArea {
 
     public func containsSegment(from start: Point, to end: Point) -> Bool {
         guard contains(start), contains(end) else { return false }
+        return segmentStaysInside(from: start, to: end)
+    }
+
+    /// Endpoints have already been validated. Short grid links only examine
+    /// nearby edges instead of rescanning entire rows of a detailed polygon.
+    private func segmentStaysInside(from start: Point, to end: Point) -> Bool {
         if start == end { return true }
+        let candidates = segmentEdges(from: start, to: end)
+        if candidates.isEmpty { return true }
         let dx = end.x - start.x, dy = end.y - start.y
         var cuts = [0.0, 1.0]
-        var checked = Set<Int>()
-        for row in Int(floor(min(start.y, end.y) / rowHeight))...Int(floor(max(start.y, end.y) / rowHeight)) {
-            for index in edgeRows[row] ?? [] where checked.insert(index).inserted {
-                let (a, b) = edges[index]
-                guard max(a.x, b.x) >= min(start.x, end.x), min(a.x, b.x) <= max(start.x, end.x) else { continue }
-                let ex = b.x - a.x, ey = b.y - a.y
-                let denominator = dx * ey - dy * ex
-                if abs(denominator) > 1e-12 {
-                    let t = ((a.x - start.x) * ey - (a.y - start.y) * ex) / denominator
-                    let u = ((a.x - start.x) * dy - (a.y - start.y) * dx) / denominator
-                    if t > 0, t < 1, u >= 0, u <= 1 { cuts.append(t) }
-                } else {
-                    // Collinear boundary vertices also split the segment.
-                    for p in [a, b] where p.distance(toSegment: start, end) <= 1e-7 {
-                        cuts.append(((p.x - start.x) * dx + (p.y - start.y) * dy) / (dx * dx + dy * dy))
-                    }
+        for index in candidates {
+            let (a, b) = edges[index]
+            let ex = b.x - a.x, ey = b.y - a.y
+            let denominator = dx * ey - dy * ex
+            if abs(denominator) > 1e-12 {
+                let t = ((a.x - start.x) * ey - (a.y - start.y) * ex) / denominator
+                let u = ((a.x - start.x) * dy - (a.y - start.y) * dx) / denominator
+                if t > 0, t < 1, u >= 0, u <= 1 { cuts.append(t) }
+            } else {
+                // Collinear boundary vertices also split the segment.
+                for p in [a, b] where p.distance(toSegment: start, end) <= 1e-7 {
+                    cuts.append(((p.x - start.x) * dx + (p.y - start.y) * dy) / (dx * dx + dy * dy))
                 }
             }
         }
@@ -176,6 +193,33 @@ public final class HeroMovementArea {
         return zip(cuts, cuts.dropFirst()).allSatisfy { a, b in
             b - a <= 1e-12 || contains(Point.lerp(start, end, (a + b) / 2))
         }
+    }
+
+    private func segmentEdges(from start: Point, to end: Point) -> Set<Int> {
+        let minX = min(start.x, end.x), maxX = max(start.x, end.x)
+        let minY = min(start.y, end.y), maxY = max(start.y, end.y)
+        let columns = Int(floor(minX / rowHeight))...Int(floor(maxX / rowHeight))
+        let rows = Int(floor(minY / rowHeight))...Int(floor(maxY / rowHeight))
+        var result = Set<Int>()
+        func include(_ indices: [Int]) {
+            for index in indices {
+                let (a, b) = edges[index]
+                if max(a.x, b.x) >= minX, min(a.x, b.x) <= maxX,
+                   max(a.y, b.y) >= minY, min(a.y, b.y) <= maxY {
+                    result.insert(index)
+                }
+            }
+        }
+        if columns.count * rows.count <= 16 {
+            for row in rows { for column in columns {
+                include(edgeBins[Cell(x: column, y: row)] ?? [])
+            } }
+        } else {
+            // Long visibility checks are cheaper with the row index than by
+            // visiting every empty spatial bin in their bounding rectangle.
+            for row in rows { include(edgeRows[row] ?? []) }
+        }
+        return result
     }
 
     public func nearestPoint(to point: Point) -> Point? {
@@ -208,12 +252,51 @@ public final class HeroMovementArea {
 
     private struct Cell: Hashable { let x: Int; let y: Int }
     private func point(_ cell: Cell) -> Point { Point(Double(cell.x) * spacing, Double(cell.y) * spacing) }
+    private func isWalkable(_ cell: Cell) -> Bool {
+        if let cached = walkableCache[cell] { return cached }
+        let p = point(cell)
+        guard p.x >= bounds.minX - 1e-7, p.x <= bounds.maxX + 1e-7,
+              p.y >= bounds.minY - 1e-7, p.y <= bounds.maxY + 1e-7 else {
+            walkableCache[cell] = false
+            return false
+        }
+        let row = Int(floor(p.y / rowHeight))
+        let crossings: [Double]
+        if let cached = gridCrossings[cell.y] { crossings = cached }
+        else {
+            crossings = (edgeRows[row] ?? []).compactMap { index -> Double? in
+                let (a, b) = edges[index]
+                guard (a.y > p.y) != (b.y > p.y) else { return nil }
+                return a.x + (p.y - a.y) * (b.x - a.x) / (b.y - a.y)
+            }.sorted()
+            gridCrossings[cell.y] = crossings
+        }
+        // Grid points share scanlines. Compute the polygon crossings once per
+        // Y coordinate, then use the same even/odd rule as contains(_:).
+        var low = 0, high = crossings.count
+        while low < high {
+            let middle = (low + high) / 2
+            if crossings[middle] <= p.x { low = middle + 1 } else { high = middle }
+        }
+        var result = !(crossings.count - low).isMultiple(of: 2)
+        if !result {
+            // The ray rule excludes some boundary points; retain the exact
+            // boundary allowance, including grid points on a hole's edge.
+            for column in Int(floor((p.x - 1e-7) / rowHeight))...Int(floor((p.x + 1e-7) / rowHeight)) {
+                if (edgeBins[Cell(x: column, y: row)] ?? []).contains(where: {
+                    p.distance(toSegment: edges[$0].0, edges[$0].1) <= 1e-7
+                }) { result = true; break }
+            }
+        }
+        walkableCache[cell] = result
+        return result
+    }
     private func connections(at p: Point) -> [Cell] {
         let x = Int((p.x / spacing).rounded()), y = Int((p.y / spacing).rounded())
         var result: [Cell] = []
         for dx in -2...2 { for dy in -2...2 {
             let cell = Cell(x: x + dx, y: y + dy)
-            if containsSegment(from: p, to: point(cell)) { result.append(cell) }
+            if isWalkable(cell), segmentStaysInside(from: p, to: point(cell)) { result.append(cell) }
         } }
         return result
     }
@@ -222,7 +305,7 @@ public final class HeroMovementArea {
         var result: [Cell] = []
         for dx in -1...1 { for dy in -1...1 where dx != 0 || dy != 0 {
             let next = Cell(x: cell.x + dx, y: cell.y + dy)
-            if containsSegment(from: point(cell), to: point(next)) { result.append(next) }
+            if isWalkable(next), segmentStaysInside(from: point(cell), to: point(next)) { result.append(next) }
         } }
         neighborCache[cell] = result
         return result
@@ -285,7 +368,19 @@ public final class HeroMovementArea {
         var result: [Point] = []; var current = start; var index = 0
         while index < route.count {
             var next = route.count - 1
-            while next > index && !containsSegment(from: current, to: route[next]) { next -= 1 }
+            if next > index && !containsSegment(from: current, to: route[next]) {
+                var visible = index
+                var blocked = next
+                while visible + 1 < blocked {
+                    let candidate = (visible + blocked) / 2
+                    if containsSegment(from: current, to: route[candidate]) { visible = candidate }
+                    else { blocked = candidate }
+                }
+                // Visibility need not be monotonic around several bends. We
+                // only require a verified shortcut, not the farthest possible
+                // one; the adjacent grid leg is always a valid lower bound.
+                next = visible
+            }
             result.append(route[next]); current = route[next]; index = next + 1
         }
         return result

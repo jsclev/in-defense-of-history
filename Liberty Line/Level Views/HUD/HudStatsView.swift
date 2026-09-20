@@ -7,18 +7,18 @@ struct HudStatsView: View {
     @ObservedObject private var runner: LevelRunner
     private let runtimeCanvas: RuntimeCanvas
     private let metrics: HudMetrics
+    private let location: HudLocation
 
-    public init(runtimeCanvas: RuntimeCanvas, runner: LevelRunner) {
+    public init(runtimeCanvas: RuntimeCanvas, runner: LevelRunner, location: HudLocation = .northWest) {
         self.runtimeCanvas = runtimeCanvas
         self.runner = runner
+        self.location = location
         metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
     }
 
     private static let goldTemplate = "9,999"
     private static let plateOpacity = 0.72
     private static let leadingPaddingMultiplier: CGFloat = 3
-    // Scale the resolved artwork, text, padding and corners together by exactly 12%.
-    private static let displayScale: CGFloat = 0.88
 
     private static func dimensions(in runtimeCanvas: RuntimeCanvas) -> (panel: StatsPanelLayout, size: CGSize, waveWidth: CGFloat, spacing: CGFloat, plateHeight: CGFloat) {
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
@@ -44,16 +44,16 @@ struct HudStatsView: View {
 
     static func occupiedFrame(runtimeCanvas: RuntimeCanvas, config: HudLayoutConfig) -> CGRect {
         let layout = dimensions(in: runtimeCanvas)
-        let size = CGSize(width: layout.size.width * Self.displayScale,
-                          height: layout.size.height * Self.displayScale)
-        return config.frame(for: .statsView, size: size, in: runtimeCanvas.hudRect)
+        return runtimeCanvas.hudPlayArea.fittedFrame(size: layout.size, at: config.statsView)
     }
 
     var body: some View {
         let layout = Self.dimensions(in: runtimeCanvas)
         let panel = layout.panel
-        let width = layout.size.width * Self.displayScale
-        let height = layout.size.height * Self.displayScale
+        let fitted = runtimeCanvas.hudPlayArea.fittedFrame(size: layout.size, at: location)
+        let displayScale = fitted.width / layout.size.width
+        let width = fitted.width
+        let height = fitted.height
         VStack(alignment: .center, spacing: layout.spacing) {
             HStack(spacing: layout.spacing) {
                 counter(icon: "lives_icon_05", value: livesText, row: panel.lives, plateHeight: layout.plateHeight)
@@ -67,7 +67,7 @@ struct HudStatsView: View {
                 .accessibilityLabel("Wave \(runner.currentWaveNumber) of \(runner.waveCount)")
         }
         .frame(width: layout.size.width, height: layout.size.height)
-        .scaleEffect(Self.displayScale)
+        .scaleEffect(displayScale)
         .frame(width: width, height: height)
         .overlay(alignment: .topLeading) {
             if showDebugInfo {

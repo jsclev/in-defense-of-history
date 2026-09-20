@@ -34,7 +34,7 @@ final class LevelRunner: ObservableObject {
     func load(_ db: Db, level: String) throws {
         virtualCanvas = try db.virtualCanvasDao.get()
         paths = try db.pathDao.getPathsFor(levelInfoId: db.levelInfoDao.getIdBy(levelName: level)!)
-        towerLevels = Dictionary(uniqueKeysWithValues: try db.towerTypeDao.getTowerLevelsByBranch().compactMap { k,v in TowerKind(categoryName: k).map { ($0,v) } })
+        towerLevels = try db.towerTypeDao.getTowerLevelsByBranch()
         reinforcementSchedule = ReinforcementSchedule(config: try db.reinforcementConfigDao.get())
     }
     private var meleeFormation: MeleeFormation { MeleeFormation(rules: combatRules) }
@@ -62,7 +62,7 @@ final class LevelRunner: ObservableObject {
     var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] {
         do {
             let rows = try authoredDB.towerTypeDao.getTowerLevelsByBranch()
-            guard let melee = rows["Melee"] else { fatalError("Missing authored melee tiers") }
+            guard let melee = rows[.melee] else { fatalError("Missing authored melee tiers") }
             return [.melee: melee]
         } catch { fatalError("Invalid authored tower data: \(error)") }
     }

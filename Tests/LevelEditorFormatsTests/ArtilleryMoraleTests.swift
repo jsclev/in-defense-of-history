@@ -3,7 +3,7 @@ import XCTest
 
 final class ArtilleryMoraleTests: XCTestCase {
     func testBlastUsesDistanceAndDisciplineAndStopsAtRadius() throws {
-        var tuning = try AuthoredDatabaseFixture.tower("Area of Effect", level: 1, branch: 1)
+        var tuning = try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 1, branch: 1)
         tuning.terrorMin = 24
         tuning.terrorMax = 44
         tuning.aoeRadius = 95
@@ -57,7 +57,7 @@ final class ArtilleryMoraleTests: XCTestCase {
     }
 
     func testSwivelShotAndTuningSnapshot() throws {
-        var tuning = try AuthoredDatabaseFixture.tower("Area of Effect", level: 4, branch: 2)
+        var tuning = try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 4, branch: 2)
         tuning.terrorMin = 20
         tuning.terrorMax = 32
         let strike = ArtilleryMoraleStrike(tuning: tuning)
@@ -69,7 +69,7 @@ final class ArtilleryMoraleTests: XCTestCase {
     }
 
     func testLevelOneHitsDrainTheDisplayedMeterWithoutRefillingAfterTheHit() throws {
-        var tuning = try AuthoredDatabaseFixture.tower("Area of Effect", level: 1, branch: 1)
+        var tuning = try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 1, branch: 1)
         tuning.terrorMin = 24
         tuning.terrorMax = 44
         tuning.aoeRadius = 95

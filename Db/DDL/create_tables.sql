@@ -30,13 +30,18 @@ CREATE TABLE enemy_type (
 
 CREATE TABLE tower_type (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
-    tower_type_category TEXT NOT NULL,
-    tower_type_name TEXT NOT NULL,
+    tower_type_key TEXT NOT NULL UNIQUE CHECK (LENGTH(TRIM(tower_type_key)) > 0),
+    tower_type_category TEXT NOT NULL CHECK (LENGTH(TRIM(tower_type_category)) > 0),
+    tower_type_name TEXT NOT NULL CHECK (LENGTH(TRIM(tower_type_name)) > 0),
     level_layout TEXT NOT NULL CHECK (json_valid(level_layout))
 );
 
 CREATE TABLE tower (
-    attack_mode TEXT NOT NULL CHECK (attack_mode IN ('direct', 'shell', 'grapeshot', 'solidShot', 'melee', 'obstacles', 'demolition')),
+    upgrade_path_count INTEGER NOT NULL CHECK (upgrade_path_count IN (0, 2)),
+    income_per_wave INTEGER NOT NULL CHECK (income_per_wave >= 0),
+    support_attack_speed_multiplier REAL NOT NULL CHECK (support_attack_speed_multiplier >= 1),
+    support_heal_per_second REAL NOT NULL CHECK (support_heal_per_second >= 0),
+    attack_mode TEXT NOT NULL CHECK (attack_mode IN ('none', 'direct', 'shell', 'grapeshot', 'solidShot', 'melee', 'obstacles', 'demolition')),
     turn_rate_degrees REAL NOT NULL CHECK (turn_rate_degrees >= 0),
     has_melee_unit INTEGER NOT NULL CHECK (has_melee_unit IN (0, 1)),
     has_demolition_charge INTEGER NOT NULL CHECK (has_demolition_charge IN (0, 1)),
@@ -62,10 +67,13 @@ CREATE TABLE tower (
     projectile_speed REAL NOT NULL CHECK (projectile_speed >= 0),
     demolition_prepare_seconds REAL
         CHECK (demolition_prepare_seconds IS NULL OR demolition_prepare_seconds > 0),
+    obstacle_width_fraction REAL CHECK (obstacle_width_fraction IS NULL OR
+        (obstacle_width_fraction > 0 AND obstacle_width_fraction <= 1)),
     obstacle_radius REAL CHECK (obstacle_radius IS NULL OR obstacle_radius > 0),
     obstacle_slow_fraction REAL CHECK (obstacle_slow_fraction IS NULL OR
         (obstacle_slow_fraction > 0 AND obstacle_slow_fraction < 1)),
     CHECK ((obstacle_radius IS NULL) = (obstacle_slow_fraction IS NULL)),
+    CHECK ((obstacle_radius IS NULL) = (obstacle_width_fraction IS NULL)),
     CHECK ((demolition_prepare_seconds IS NOT NULL) = has_demolition_charge),
     CHECK ((obstacle_radius IS NOT NULL) = has_engineer_obstacles)
 );
@@ -73,6 +81,28 @@ CREATE TABLE tower (
 -- attack_rating is the soldier's average swing damage; the engine rolls a
 -- fixed band around it. defense_rating is the fraction of incoming damage
 -- the soldier turns away.
+CREATE TABLE tower_upgrade_path (
+    id TEXT PRIMARY KEY NOT NULL,
+    tower_id TEXT NOT NULL REFERENCES tower(id),
+    slot INTEGER NOT NULL CHECK (slot IN (1, 2)),
+    path_name TEXT NOT NULL CHECK (LENGTH(TRIM(path_name)) > 0),
+    path_description TEXT NOT NULL CHECK (LENGTH(TRIM(path_description)) > 0),
+    icon_name TEXT NOT NULL CHECK (LENGTH(TRIM(icon_name)) > 0),
+    historical_basis TEXT NOT NULL CHECK (LENGTH(TRIM(historical_basis)) > 0),
+    source_url TEXT NOT NULL CHECK (LENGTH(TRIM(source_url)) > 0),
+    rank_count INTEGER NOT NULL CHECK (rank_count >= 2),
+    UNIQUE(tower_id, slot)
+);
+
+CREATE TABLE tower_upgrade_rank (
+    path_id TEXT NOT NULL REFERENCES tower_upgrade_path(id),
+    rank INTEGER NOT NULL CHECK (rank >= 1),
+    cost INTEGER NOT NULL CHECK (cost > 0),
+    rank_description TEXT NOT NULL CHECK (LENGTH(TRIM(rank_description)) > 0),
+    effects_json TEXT NOT NULL CHECK (json_valid(effects_json) AND json_type(effects_json) = 'array'),
+    PRIMARY KEY(path_id, rank)
+);
+
 CREATE TABLE melee_unit (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     tower_id TEXT NOT NULL UNIQUE REFERENCES tower (id),
@@ -190,7 +220,7 @@ CREATE TABLE level_info (
     world_map_y REAL NOT NULL,
     started_at REAL NOT NULL,
     ended_at REAL NOT NULL,
-    starting_money INTEGER NOT NULL CHECK (starting_money > 0),
+    starting_money INTEGER NOT NULL CHECK (typeof(starting_money) = 'integer' AND starting_money > 0),
     num_starting_lives INTEGER NOT NULL CHECK (num_starting_lives > 0),
     num_waves INTEGER NOT NULL DEFAULT 0 CHECK (num_waves >= 0),
     map_image_name TEXT NOT NULL DEFAULT ''
@@ -382,3 +412,28 @@ CREATE TABLE sweep_row (
 CREATE INDEX idx_sweep_row_run ON sweep_row (run_id);
 CREATE INDEX idx_sweep_row_range ON sweep_row (tower_range);
 CREATE INDEX idx_sweep_row_win ON sweep_row (win_rate);
+
+-- Authored-level money experiments keep their paired plan identities and
+-- outcomes separate from the older synthetic-wave parameter sweeps.
+CREATE TABLE money_study (
+    run_id TEXT PRIMARY KEY NOT NULL REFERENCES simulator_run(id),
+    configuration_json TEXT NOT NULL CHECK (json_valid(configuration_json)),
+    content_sha256 TEXT NOT NULL,
+    plans_json TEXT NOT NULL CHECK (json_valid(plans_json))
+);
+CREATE TABLE money_study_result (
+    run_id TEXT NOT NULL REFERENCES money_study(run_id),
+    money INTEGER NOT NULL CHECK (money > 0),
+    placement_plan INTEGER NOT NULL CHECK (placement_plan >= 0),
+    upgrade_policy INTEGER NOT NULL CHECK (upgrade_policy >= 0),
+    seeds INTEGER NOT NULL CHECK (seeds > 0),
+    victories INTEGER NOT NULL CHECK (victories >= 0),
+    defeats INTEGER NOT NULL CHECK (defeats >= 0),
+    timeouts INTEGER NOT NULL CHECK (timeouts >= 0),
+    mean_lives REAL NOT NULL,
+    mean_leaked REAL NOT NULL,
+    mean_seconds REAL NOT NULL,
+    seed_results_json TEXT NOT NULL CHECK (json_valid(seed_results_json)),
+    CHECK (victories + defeats + timeouts = seeds),
+    PRIMARY KEY(run_id, money, placement_plan, upgrade_policy)
+);

@@ -1,16 +1,19 @@
 import SwiftUI
 
-enum CampaignProgress {
-    static let completedThrough = 6
+extension CampaignProgress.State {
+    var assetName: String { "campaign_marker_\(rawValue)" }
 
-    static func state(forLevel id: Int) -> CampaignMarkers.State {
-        if id <= completedThrough { return .completed }
-        return id == completedThrough + 1 ? .current : .upcoming
+    var accessibilityValue: String {
+        switch self {
+        case .completed: return "Completed"
+        case .current: return "Current battle"
+        case .upcoming: return "Upcoming battle"
+        }
     }
 }
 
 enum CampaignMarkers {
-    enum State { case completed, current, upcoming }
+    typealias State = CampaignProgress.State
 
     struct Placement: Identifiable {
         var id: Int
@@ -44,11 +47,22 @@ enum CampaignMarkers {
             ?? .systemFont(ofSize: size, weight: .bold)
     }
 
-    static func placements(for nodes: [CampaignNode], viewSize: CGSize) -> [Placement] {
+    static func placements(for nodes: [CampaignNode], bestStarsByLevel: [UUID: Int], viewSize: CGSize) -> [Placement] {
         guard viewSize.width > 0, viewSize.height > 0, !nodes.isEmpty else { return [] }
 
         let scale = scale(for: viewSize)
-        let states = nodes.map { CampaignProgress.state(forLevel: $0.id) }
+        let states: [State]
+        do {
+            let levelIDs = try nodes.map { node in
+                guard let id = node.levelInfoID else {
+                    throw DbError.Db(message: "campaign node[\(node.id)]: missing level_info_id")
+                }
+                return id
+            }
+            states = try CampaignProgress.states(orderedLevelIDs: levelIDs, bestStarsByLevel: bestStarsByLevel)
+        } catch {
+            fatalError("Campaign progress database error: \(error)")
+        }
         let diameters = states.map { diameter(scale: scale, state: $0) }
         let anchors = nodes.map {
             CampaignMapLayout.viewPoint(
@@ -116,16 +130,8 @@ enum CampaignMarkers {
 }
 
 enum MarkerPalette {
-    static let doneFill = Color(red: 0.373, green: 0.431, blue: 0.329)
-    static let doneEdge = Color(red: 0.235, green: 0.282, blue: 0.208)
-    static let doneInk = Color(red: 0.918, green: 0.886, blue: 0.784)
-    static let brass = Color(red: 0.788, green: 0.643, blue: 0.271)
-    static let brassLight = Color(red: 0.910, green: 0.784, blue: 0.408)
-    static let navy = Color(red: 0.043, green: 0.141, blue: 0.267)
-    static let currentInk = Color(red: 0.949, green: 0.894, blue: 0.737)
-    static let upcomingFill = Color(red: 0.863, green: 0.816, blue: 0.682)
-    static let upcomingEdge = Color(red: 0.541, green: 0.478, blue: 0.333)
-    static let upcomingInk = Color(red: 0.416, green: 0.353, blue: 0.220)
+    static let lightInk = Color(red: 1, green: 0.956, blue: 0.792)
+    static let darkInk = Color(red: 0.208, green: 0.141, blue: 0.078)
     static let tether = Color(red: 0.353, green: 0.290, blue: 0.165)
 }
 
@@ -136,41 +142,15 @@ struct CampaignLevelMarker: View {
     var body: some View {
         let d = placement.diameter
         ZStack {
-            switch placement.state {
-            case .completed:
-                Circle().fill(MarkerPalette.doneFill)
-                Circle().strokeBorder(MarkerPalette.doneEdge, lineWidth: max(1.5, 2 * scale))
-                Text("\(placement.node.id)")
-                    .font(Font(CampaignMarkers.numberFont(scale: scale, state: .completed)))
-                    .foregroundStyle(MarkerPalette.doneInk)
-
-            case .current:
-                Circle().fill(MarkerPalette.brass)
-                Circle().fill(MarkerPalette.navy).padding(d * 0.10)
-                Circle().strokeBorder(MarkerPalette.brassLight, lineWidth: max(1, 1.2 * scale))
-                    .padding(d * 0.10)
-                Text("\(placement.node.id)")
-                    .font(Font(CampaignMarkers.numberFont(scale: scale, state: .current)))
-                    .foregroundStyle(MarkerPalette.currentInk)
-
-            case .upcoming:
-                Circle().fill(MarkerPalette.upcomingFill)
-                Circle().strokeBorder(MarkerPalette.upcomingEdge, lineWidth: max(1.4, 1.8 * scale))
-                Text("\(placement.node.id)")
-                    .font(Font(CampaignMarkers.numberFont(scale: scale, state: .upcoming)))
-                    .foregroundStyle(MarkerPalette.upcomingInk)
-            }
+            CampaignButtonArt(name: placement.state.assetName)
+            Text("\(placement.node.id)")
+                .font(Font(CampaignMarkers.numberFont(scale: scale, state: placement.state)))
+                .foregroundStyle(placement.state == .upcoming
+                    ? MarkerPalette.darkInk : MarkerPalette.lightInk)
         }
         .frame(width: d, height: d)
+        .contentShape(Circle())
         .shadow(color: .black.opacity(0.45), radius: 2 * scale, y: 1.5 * scale)
-        .overlay {
-            if placement.state == .current {
-                Circle()
-                    .stroke(MarkerPalette.brassLight.opacity(0.5),
-                            lineWidth: max(1, 1.1 * scale))
-                    .frame(width: d * 1.42, height: d * 1.42)
-            }
-        }
     }
 }
 

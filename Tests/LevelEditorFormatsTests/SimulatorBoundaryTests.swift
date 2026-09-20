@@ -1,0 +1,106 @@
+import XCTest
+import SQLite3
+@testable import LevelEditorFormats
+
+final class SimulatorBoundaryTests: XCTestCase {
+    private var root: URL {
+        URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+    }
+
+    func testNoAlternateCombatImplementationOrUnreviewedSimulatorEntryPoint() throws {
+        for path in ["Engine/Models/Simulation.swift", "Simulator/GPUSweep.swift", "Simulator/SimKernel.metal",
+                     "Simulator/SimGPUTypes.h", "Simulator/Sweep.swift", "Simulator/SupplySupportValidation.swift"] {
+            XCTAssertFalse(FileManager.default.fileExists(atPath: root.appendingPathComponent(path).path), path)
+        }
+        let sources = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
+            .filter { ["swift", "metal", "h", "m", "mm", "c", "cpp"].contains(($0 as NSString).pathExtension) }
+        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "SimulatorStore.swift", "BuildVersion.swift"]),
+                       "Every new simulator source requires a boundary audit; no alternate combat backend is permitted")
+        let driverPaths = sources.map { "Simulator/" + $0 } + ["LevelEditor/SimSession.swift"]
+        for path in driverPaths {
+            let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
+            XCTAssertNil(source.range(of: #"\bSimulation\s*\("#, options: .regularExpression), path)
+            for forbidden in ["sim.engine", "BattleEngine(", "MTLCreateSystemDefaultDevice", "import Metal"] {
+                XCTAssertFalse(source.contains(forbidden), "\(path) bypasses the input/result boundary: \(forbidden)")
+            }
+        }
+    }
+
+    func testHeadlessAdapterDoesNotComputeOrMutateGameplay() throws {
+        let source = try String(contentsOf: root.appendingPathComponent("Engine/Models/GameSimulation.swift"), encoding: .utf8)
+        for forbidden in ["gold >=", "money >=", "money -=", "gold +=", ".stats.", "shotMinDamage",
+                          "shotMaxDamage", "splashCoverPierce", "applyMorale", "applyImpact", "pathDistance",
+                          "advanceWalkers", "wave.startTime", "hp -=", "case .victory", "case .defeat"] {
+            XCTAssertFalse(source.contains(forbidden), "Gameplay leaked into the input driver: \(forbidden)")
+        }
+        XCTAssertTrue(source.contains("engine.perform(command)"))
+        XCTAssertTrue(source.contains("engine.simulationResult()"))
+        let game = try String(contentsOf: root.appendingPathComponent("Liberty Line/LevelRunner.swift"), encoding: .utf8)
+        XCTAssertTrue(game.contains("class LevelRunner: BattleEngine"))
+    }
+
+    func testCommandDriverCannotBypassPlayerHandlersOrSupplySeparateTuning() throws {
+        let commands = try String(contentsOf: root.appendingPathComponent("Engine/Models/BattleCommands.swift"), encoding: .utf8)
+        for forbidden in ["return buildTower(", "return upgradeSelectedTower(", "return purchaseTowerUpgrade(",
+                          "return callReinforcements(", "money >=", "waveSchedule.state(at:"] {
+            XCTAssertFalse(commands.contains(forbidden), "Command bypasses the player handler: \(forbidden)")
+        }
+        for handler in ["tapBuildButton", "tapUpgradeButton", "tapUpgradePath", "placeDemolition", "placeEngineerObstacles",
+                        "placeRallyPoint", "commandSelectedHero", "placeReinforcements", "startNextWave"] {
+            XCTAssertTrue(commands.contains(handler + "("), "Missing shared player handler: \(handler)")
+        }
+        for path in ["Engine/Models/GameSimulation.swift", "Liberty Line/LevelRunner.swift"] {
+            let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
+            XCTAssertFalse(source.contains("enemyHPMultiplier:"), path)
+            XCTAssertFalse(source.contains("metaUpgrades:"), path)
+            XCTAssertTrue(source.contains("advance(ticks:"), path)
+        }
+    }
+
+    @MainActor func testEngineRejectsInvalidAndUnaffordableCommandsWithoutMutatingBattle() throws {
+        let content = try BattleTestFixture.authored()
+        let sim = try GameSimulation(content: content, startingMoney: 1, heroesEnabled: false, seed: 1)
+        for command in [BattleCommand.build(slot: -1, kind: .ranged), .upgrade(slot: 0, branch: 1),
+                        .purchaseUpgrade(slot: 0, pathID: "missing"), .placeDemolition(slot: 0, point: .zero),
+                        .placeObstacles(slot: 0, point: .zero), .rally(slot: 0, point: .zero),
+                        .moveHero(id: UUID(), point: .zero)] {
+            XCTAssertEqual(sim.perform(command), .invalid)
+        }
+        XCTAssertEqual(sim.perform(.build(slot: 0, kind: .ranged)), .needGold)
+        XCTAssertEqual(sim.gold, 1)
+        XCTAssertTrue(sim.towers.isEmpty)
+        XCTAssertEqual(sim.lives, content.level.numStartingLives)
+    }
+
+    @MainActor func testHeadlessVictoryRewardDoesNotDependOnPersistenceCallback() throws {
+        let source = try BattleTestFixture.authored()
+        let enemy = try XCTUnwrap(source.enemies.first)
+        var level = BattleTestFixture.level(enemy: enemy, slots: [], waveTimes: [0])
+        level.waves[0].spawns = []
+        let content = try BattleTestFixture.content(level: level, enemies: [enemy], base: source)
+        let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+        let player = try BattleEngine(content: content, heroesEnabled: false,
+            startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 999 })
+        sim.startNextWave(); player.startNextWave()
+        sim.step(); player.advance(ticks: 1, interpolation: 0)
+        XCTAssertEqual(sim.outcome, .victory)
+        XCTAssertEqual(sim.earnedMetaStars, 3)
+        XCTAssertEqual(sim.earnedMetaStars, player.earnedMetaStars)
+    }
+
+    @MainActor func testDatabaseChangesAndMissingContentReachTheSharedEntryPoint() throws {
+        let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao:
+            LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
+        let original = try BattleTestFixture.authored(db: fixture.db)
+        XCTAssertEqual(sqlite3_exec(fixture.connection, "UPDATE tower SET shot_min_damage=shot_min_damage+11, shot_max_damage=shot_max_damage+11 WHERE attack_mode='direct'", nil, nil, nil), SQLITE_OK)
+        let changed = try BattleTestFixture.authored(db: fixture.db)
+        let before = try GameSimulation(content: original, startingMoney: nil, heroesEnabled: false, seed: 1)
+        let after = try GameSimulation(content: changed, startingMoney: nil, heroesEnabled: false, seed: 1)
+        XCTAssertEqual(before.perform(.build(slot: 0, kind: .ranged)), .ok)
+        XCTAssertEqual(after.perform(.build(slot: 0, kind: .ranged)), .ok)
+        XCTAssertEqual(try XCTUnwrap(after.towers.first).tuning.shotMinDamage,
+                       try XCTUnwrap(before.towers.first).tuning.shotMinDamage + 11)
+        XCTAssertEqual(sqlite3_exec(fixture.connection, "DELETE FROM tower WHERE tower_level=1 AND attack_mode='direct'", nil, nil, nil), SQLITE_OK)
+        XCTAssertThrowsError(try BattleTestFixture.authored(db: fixture.db))
+    }
+}

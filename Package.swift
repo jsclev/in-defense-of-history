@@ -34,12 +34,12 @@ let package = Package(
                     "LevelEditor/EditorView.swift",
                     "LevelEditor/EditorCanvas.swift",
                     "LevelEditor/EditorGrid.swift",
-                    "LevelEditor/Info.plist",
-                    "LevelEditor/SimSession.swift"
+                    "LevelEditor/Info.plist"
                 ],
                 sources: [
                     "Engine",
                     "LevelEditor/MapDocument.swift",
+                    "LevelEditor/SimSession.swift",
                     "LevelEditor/EditorDocumentLifecycle.swift",
                     "LevelEditor/NativeMapFile.swift",
                     "LevelEditor/LevelGeoJSON.swift",

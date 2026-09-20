@@ -6,14 +6,14 @@ struct SettingsView: View {
     @State private var settingsError: String?
 
     private let runtimeCanvas: RuntimeCanvas
-    private let onConfigureHudLayout: () -> Void
+    private let onConfigureHudLayout: (() -> Void)?
     private let onExit: () -> Void
     private let metrics: HudMetrics
     private let contentInsets: EdgeInsets
     private let doneButtonHeight: CGFloat
 
     init(runtimeCanvas: RuntimeCanvas,
-         onConfigureHudLayout: @escaping () -> Void,
+         onConfigureHudLayout: (() -> Void)? = nil,
          onExit: @escaping () -> Void) {
         self.runtimeCanvas = runtimeCanvas
         self.onConfigureHudLayout = onConfigureHudLayout
@@ -99,16 +99,18 @@ struct SettingsView: View {
                detail: "Wave and spawn state, top-left of the level map.",
                isOn: setting(\.showDebugInfo))
 
-        Button(action: onConfigureHudLayout) {
-            VStack(alignment: .leading, spacing: 3 * metrics.scale) {
-                Text("HUD layout")
-                    .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
-                    .foregroundStyle(Color(red: 0.87, green: 0.72, blue: 0.35))
-                Text("Drag the hero bar, stats, misc button, and master controls "
-                     + "to any edge or corner of the screen.")
-                    .font(.system(size: Typography.size(13 * metrics.scale)))
-                    .foregroundStyle(.white.opacity(0.65))
-                    .fixedSize(horizontal: false, vertical: true)
+        if let onConfigureHudLayout {
+            Button(action: onConfigureHudLayout) {
+                VStack(alignment: .leading, spacing: 3 * metrics.scale) {
+                    Text("HUD layout")
+                        .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
+                        .foregroundStyle(Color(red: 0.87, green: 0.72, blue: 0.35))
+                    Text("Drag the hero bar, stats, misc button, and master controls "
+                         + "to any edge or corner of the screen.")
+                        .font(.system(size: Typography.size(13 * metrics.scale)))
+                        .foregroundStyle(.white.opacity(0.65))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
         }
     }

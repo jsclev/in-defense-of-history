@@ -11,10 +11,11 @@ public struct TowerMenuLayout {
     public static let iconInsetFraction: CGFloat = 0.17
     private let towerButtonOffsetFactor: CGFloat = 4.0
     private let buttonAngleDegrees: [TowerKind: CGFloat] = [
-        TowerKind.ranged: 140,
-        TowerKind.melee: 40,
-        TowerKind.special: 220,
-        TowerKind.areaOfEffect: 320
+        TowerKind.supply: 90,
+        TowerKind.melee: 18,
+        TowerKind.areaOfEffect: -54,
+        TowerKind.special: -126,
+        TowerKind.ranged: -198
     ]
     
     public init(virtualCanvas: VirtualCanvas) {
@@ -112,6 +113,14 @@ public struct TowerMenuLayout {
         return (x, y)
     }
 
+    /// Covers every seat angle used by build, upgrade and rally/charge menus,
+    /// including the complete square touch target at the outside of the ring.
+    public var interactionExtent: CGFloat {
+        let halfButton = getTowerButtonSize(playAreaScalingFactor: 1).width / 2
+        let ring = getButtonRingRadius(playAreaScalingFactor: 1) - halfButton / 2
+        return max(ring, getButtonSeatRadius(playAreaScalingFactor: 1)) + halfButton
+    }
+
     public enum VerticalEdge {
         case top
         case bottom
@@ -123,36 +132,14 @@ public struct TowerMenuLayout {
     }
 
     public func slotSafeInset(_ edge: VerticalEdge) -> CGFloat {
-        switch edge {
-        case .top, .bottom:
-            menuMapExtent.y - virtualCanvas.towerSlotSize.height / 2
-        }
+        max(virtualCanvas.towerMenuTotalSize.height / 2, interactionExtent)
+            - virtualCanvas.towerSlotSize.height / 2
     }
 
     public func slotSafeInset(_ edge: HorizontalEdge) -> CGFloat {
-        switch edge {
-        case .left, .right:
-            menuMapExtent.x - virtualCanvas.towerSlotSize.width / 2
-        }
+        max(virtualCanvas.towerMenuTotalSize.width / 2, interactionExtent)
+            - virtualCanvas.towerSlotSize.width / 2
     }
 
-    public var slotMenuSafeShape: CGPath {
-        let play = virtualCanvas.playAreaRect
-        let left = play.minX + slotSafeInset(.left)
-        let right = play.maxX - slotSafeInset(.right)
-        let bottom = play.minY + slotSafeInset(.bottom)
-        let top = play.maxY - slotSafeInset(.top)
-        let shape = CGMutablePath()
-        shape.addRect(CGRect(x: left, y: bottom,
-                             width: right - left, height: top - bottom))
-        let standoff = CGMutablePath()
-        for corner in virtualCanvas.occlusionAreas where !corner.isEmpty {
-            standoff.addRect(CGRect(
-                x: corner.minX - slotSafeInset(.left),
-                y: corner.minY - slotSafeInset(.top),
-                width: corner.width + slotSafeInset(.left) + slotSafeInset(.right),
-                height: corner.height + slotSafeInset(.top) + slotSafeInset(.bottom)))
-        }
-        return shape.subtracting(standoff, using: .winding)
-    }
+    public var slotMenuSafeShape: CGPath { virtualCanvas.towerSlotValidFootprint }
 }

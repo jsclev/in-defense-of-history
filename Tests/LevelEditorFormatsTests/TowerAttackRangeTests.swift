@@ -53,7 +53,7 @@ final class TowerAttackRangeTests: XCTestCase {
     }
 
     func testBlastRadiusAndFiringRangeAreIndependent() throws {
-        var tuning = try AuthoredDatabaseFixture.tower("Area of Effect", level: 1, branch: 1)
+        var tuning = try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 1, branch: 1)
         tuning.aoeRadius = 95
         let reach = tuning.attackRange
         tuning.aoeRadius *= 1.35

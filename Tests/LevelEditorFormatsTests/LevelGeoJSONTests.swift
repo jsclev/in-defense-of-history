@@ -35,8 +35,36 @@ final class LevelGeoJSONTests: XCTestCase {
         var c = try valid()
         change(&c)
         XCTAssertThrowsError(try LevelGeoJSON(collection: c), file: file, line: line) { error in
+            XCTAssertTrue(error is LevelGeoJSONError, "Unexpected error type: \(type(of: error))",
+                          file: file, line: line)
             XCTAssertTrue(error.localizedDescription.contains(message), error.localizedDescription,
                           file: file, line: line)
+        }
+    }
+
+    func testExportReportsMapErrorsForInvalidEnemyRoutes() throws {
+        var routed = draft
+        routed.enemyRoutes = [.init(index: 0, name: "Main route",
+            entranceID: "gameplay.entry.0", exitID: "gameplay.exit.0",
+            points: [Point(100, 100), Point(250, 100), Point(400, 100)])]
+        let data = try GeoJSONExport(virtualCanvas: canvas).data(for: routed)
+        XCTAssertEqual(try LevelGeoJSONDAO.enemyRoutes(from: data), routed.enemyRoutes)
+
+        let cases: [(message: String, change: (inout MapDraft) -> Void)] = [
+            ("enemy path from Entrance 0 to Exit 0 leaves the painted road", { $0.enemyRoutes[0].points[1] = Point(250, 150) }),
+            ("missing or invalid entrance", { $0.enemyRoutes[0].entranceID = "missing" })
+        ]
+        for test in cases {
+            var invalid = routed
+            test.change(&invalid)
+            let before = invalid
+            XCTAssertThrowsError(try GeoJSONExport(virtualCanvas: canvas).data(for: invalid)) { error in
+                XCTAssertTrue(error is LevelGeoJSONError, "Unexpected error type: \(type(of: error))")
+                XCTAssertFalse(error is DbError)
+                XCTAssertTrue(error.localizedDescription.contains(test.message), error.localizedDescription)
+                XCTAssertEqual((error as NSError).localizedDescription, error.localizedDescription)
+            }
+            XCTAssertEqual(invalid, before, "Reporting an export error must not change the map")
         }
     }
 

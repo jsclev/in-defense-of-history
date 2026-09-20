@@ -1,7 +1,7 @@
 import CoreGraphics
 
-/// Shared input projection, testable without gestures or views. HUD hit testing
-/// is a presentation concern; the movement model validates the resulting map point.
+/// Shared input projection. Reserve the same HUD controls as the presentation;
+/// the movement model validates the resulting map point.
 struct MapDestinationInput {
     let runtimeCanvas: RuntimeCanvas
     var projection: LevelMapProjection {
@@ -12,7 +12,7 @@ struct MapDestinationInput {
 
     func mapPoint(at screenPoint: CGPoint) -> CGPoint? {
         guard screenPoint.x.isFinite, screenPoint.y.isFinite,
-              runtimeCanvas.runtimePlayArea.contains(screenPoint) else { return nil }
+              runtimeCanvas.runtimeMapInputArea.contains(screenPoint) else { return nil }
         return projection.mapPoint(screenPoint)
     }
 }

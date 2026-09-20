@@ -11,7 +11,6 @@ struct SapperPlaygroundView: View {
 
     private struct Session {
         let node: CampaignNode
-        let difficulty: Difficulty
         let runner: LevelRunner
         let hudLayout: HudLayoutConfig
     }
@@ -23,7 +22,7 @@ struct SapperPlaygroundView: View {
             } else if let session {
                 LevelMapView(db: store.db, virtualCanvas: store.virtualCanvas,
                     runtimeCanvas: runtimeCanvas, towerMenuLayout: store.towerMenuLayout,
-                    node: session.node, difficulty: session.difficulty,
+                    node: session.node,
                     hudLayoutConfig: session.hudLayout, reviewRunner: session.runner) {
                         exited = true
                     }
@@ -47,36 +46,66 @@ struct SapperPlaygroundView: View {
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
             try JSONSerialization.data(withJSONObject: record)
                 .write(to: directory.appendingPathComponent("result.json"), options: .atomic)
-            guard let node = CampaignNode.load(db: store.db).first(where: { $0.id == 15 }),
-                  let difficulty = try store.db.difficultyDao.getSelected()
-                    ?? store.db.difficultyDao.getAll().first else {
+            guard let node = CampaignNode.load(db: store.db).first(where: { $0.id == 15 }) else {
                 throw NSError(domain: "SapperPlayground", code: 1,
-                    userInfo: [NSLocalizedDescriptionKey: "Level or difficulty is missing"])
+                    userInfo: [NSLocalizedDescriptionKey: "Level is missing"])
             }
-            let hudLayout = (try? store.db.hudLayoutDao.get()) ?? .standard
-            let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas,
-                runtimeCanvas: runtimeCanvas, hudLayoutConfig: hudLayout,
-                levelInfoID: node.levelInfoID, mapImageName: node.mapImageName,
-                enemyHPMultiplier: difficulty.enemyHPMultiplier)
+            let hudLayout = try store.db.hudLayoutDao.get()
+            func makeRunner() -> LevelRunner {
+                LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas,
+                    runtimeCanvas: runtimeCanvas, hudLayoutConfig: hudLayout,
+                    levelInfoID: node.levelInfoID, mapImageName: node.mapImageName)
+            }
+            var runner = makeRunner()
             guard runner.isReady, runner.maxLevel(for: .areaOfEffect) >= 4, runner.maxLevel(for: .special) >= 4 else {
                 throw NSError(domain: "SapperPlayground", code: 2,
                     userInfo: [NSLocalizedDescriptionKey: "Level is not ready with the charge-placement branch unlocked: \(runner.status)"])
             }
 
-            guard runner.startingMoney == 3_000, runner.money == 3_000 else {
+            guard let levelID = node.levelInfoID else {
                 throw NSError(domain: "SapperPlayground", code: 5,
-                    userInfo: [NSLocalizedDescriptionKey: "Level 15 must start with 3,000 money"])
+                    userInfo: [NSLocalizedDescriptionKey: "Level has no database identity"])
             }
+            let authoredMoney = try store.db.levelInfoDao.getBy(id: levelID).startingMoney
+            guard runner.startingMoney == authoredMoney, runner.money == authoredMoney else {
+                throw NSError(domain: "SapperPlayground", code: 5,
+                    userInfo: [NSLocalizedDescriptionKey: "Level starting money differs from level_info.starting_money"])
+            }
+            record["databaseStartingMoney"] = authoredMoney
+            // Campaign re-entry creates a fresh runner. Spend through the real
+            // purchase handler, then verify that re-entry reloads the DAO value.
+            guard let slot = runner.slotPositions.indices.first,
+                  let kind = TowerKind.allCases.first(where: {
+                      runner.maxLevel(for: $0) > 0 && (runner.buildCost(for: $0).map { $0 <= authoredMoney } == true)
+                  }) else {
+                throw NSError(domain: "SapperPlayground", code: 6,
+                    userInfo: [NSLocalizedDescriptionKey: "No affordable tower for the re-entry check"])
+            }
+            runner.selectSlot(slot)
+            runner.tapBuildButton(kind)
+            runner.tapBuildButton(kind)
+            guard runner.money < authoredMoney else {
+                throw NSError(domain: "SapperPlayground", code: 7,
+                    userInfo: [NSLocalizedDescriptionKey: "Purchase did not spend money"])
+            }
+            record["moneyAfterPurchase"] = runner.money
+            runner = makeRunner()
+            guard runner.isReady, runner.money == authoredMoney, runner.placedTowers.isEmpty else {
+                throw NSError(domain: "SapperPlayground", code: 8,
+                    userInfo: [NSLocalizedDescriptionKey: "Campaign re-entry did not restore the database starting money"])
+            }
+            record["moneyAfterReentry"] = runner.money
+            record["reentryVerified"] = true
             record["level"] = node.id
             record["levelName"] = node.title
             record["startingMoney"] = runner.startingMoney
             record["moneyAtLaunch"] = runner.money
             record["moneySource"] = "Normal level data; no session override"
-            record["difficulty"] = difficulty.name
+            record["difficulty"] = runner.content.difficulty.name
             record["artilleryMaxLevel"] = runner.maxLevel(for: .areaOfEffect)
             record["engineersMaxLevel"] = runner.maxLevel(for: .special)
             record["awaitingFirstWave"] = runner.awaitingWaveStart
-            session = Session(node: node, difficulty: difficulty, runner: runner, hudLayout: hudLayout)
+            session = Session(node: node, runner: runner, hudLayout: hudLayout)
 
             try await Task.sleep(for: .milliseconds(700))
             guard let window = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene })

@@ -4,7 +4,8 @@ import SQLite3
 
 final class EnemyContentTests: XCTestCase {
     private func withDatabase(_ body: (Db, OpaquePointer) throws -> Void) throws {
-        let fixture = try AuthoredDatabaseFixture()
+        let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao:
+            LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
         try body(fixture.db, fixture.connection)
     }
 
@@ -46,6 +47,65 @@ final class EnemyContentTests: XCTestCase {
             XCTAssertEqual(Set(rows.map(\.key)), Set(Foe.allCases.map(\.rawValue)))
             rows.removeLast()
             XCTAssertThrowsError(try DesignRoster(enemyTypes: rows))
+        }
+    }
+
+    func testSimulatorRosterRejectsEachMissingDatabaseEnemyEvenWhenOthersExist() throws {
+        try withDatabase { db, conn in
+            for foe in Foe.allCases {
+                XCTAssertEqual(sqlite3_exec(conn, """
+                    SAVEPOINT missing_enemy;
+                    DELETE FROM enemy_type WHERE id='\(foe.id.uuidString.lowercased())';
+                    """, nil, nil, nil), SQLITE_OK)
+                let remaining = try db.enemyTypeDao.getAll()
+                XCTAssertFalse(remaining.isEmpty)
+                XCTAssertFalse(remaining.contains { $0.id == foe.id })
+                XCTAssertThrowsError(try DesignRoster(enemyTypes: remaining), foe.rawValue) {
+                    let message = String(describing: $0)
+                    XCTAssertTrue(message.contains(foe.rawValue), message)
+                    XCTAssertTrue(message.contains(foe.id.uuidString), message)
+                }
+                XCTAssertEqual(sqlite3_exec(conn, "ROLLBACK TO missing_enemy; RELEASE missing_enemy",
+                                           nil, nil, nil), SQLITE_OK)
+            }
+        }
+    }
+
+    func testSimulatorEnemyLookupPreservesIdentityAndDatabaseEdits() throws {
+        try withDatabase { db, conn in
+            for foe in Foe.allCases {
+                let original = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()).type(foe)
+                XCTAssertEqual(sqlite3_exec(conn, """
+                    SAVEPOINT changed_enemy;
+                    UPDATE enemy_type SET speed = speed + 1 WHERE id='\(foe.id.uuidString.lowercased())';
+                    """, nil, nil, nil), SQLITE_OK)
+                let updated = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()).type(foe)
+                XCTAssertEqual(updated.id, foe.id)
+                XCTAssertEqual(updated.key, foe.rawValue)
+                XCTAssertEqual(updated.stats.speed, original.stats.speed + 1)
+                XCTAssertEqual(sqlite3_exec(conn, "ROLLBACK TO changed_enemy; RELEASE changed_enemy",
+                                           nil, nil, nil), SQLITE_OK)
+            }
+        }
+    }
+
+    func testSimulationRejectsEveryMissingRequestedEnemyBeforeStarting() throws {
+        try withDatabase { db, _ in
+            let levelID = try XCTUnwrap(db.levelInfoDao.getCampaignLevels(campaignName: "Main").first?.id)
+            var level = try db.levelLoader.load(id: levelID)
+            let enemies = try db.enemyTypeDao.getAll()
+            let base = try BattleTestFixture.authored(db: db)
+            for foe in Foe.allCases {
+                level.waves = [Wave(startTime: 0, spawns: [
+                    SpawnEntry(enemyTypeID: foe.id, count: 1, interval: 1)
+                ], callButtonDelay: 0, autoStartCountdown: 0, earlyCallBonus: 0)]
+                level.numWaves = 1
+                for remaining in [enemies.filter { $0.id != foe.id }, []] {
+                    XCTAssertThrowsError(try BattleTestFixture.content(level: level, enemies: remaining, base: base)) {
+                        XCTAssertTrue(String(describing: $0).contains(foe.id.uuidString))
+                    }
+                }
+            }
         }
     }
 

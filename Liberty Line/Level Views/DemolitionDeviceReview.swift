@@ -15,8 +15,7 @@ struct DemolitionDeviceReview: View {
             if let runner, let canvas, let node {
                 LevelMapView(db: store.db, virtualCanvas: store.virtualCanvas,
                     runtimeCanvas: canvas, towerMenuLayout: store.towerMenuLayout,
-                    node: node, difficulty: Difficulty(id: UUID(), level: 1, name: "Review",
-                        detail: "", enemyHPMultiplier: 1), hudLayoutConfig: .standard,
+                    node: node, hudLayoutConfig: .standard,
                     reviewRunner: runner, runsAutomatically: false, onExit: {})
             }
             if !CommandLine.arguments.contains("--demolition-ui-review")
@@ -52,8 +51,7 @@ struct DemolitionDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                 safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                levelInfoID: level.id, mapImageName: level.mapImageName,
-                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
+                levelInfoID: level.id, mapImageName: level.mapImageName)
             record["checks"] = try runner.verifyDemolitionOnDevice()
             record["displayScale"] = window.screen.scale
             let sapperSlotWidth = runner.slotSize.width * canvas.scaleFactor

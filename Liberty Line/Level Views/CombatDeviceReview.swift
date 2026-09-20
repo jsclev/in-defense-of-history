@@ -40,8 +40,7 @@ struct CombatDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                                        safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                                     levelInfoID: level.id, mapImageName: level.mapImageName,
-                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
+                                     levelInfoID: level.id, mapImageName: level.mapImageName)
             let ranges = try runner.verifyArtilleryRangeOnDevice()
             let morale = try runner.verifyArtilleryMoraleOnDevice()
             let result = try runner.verifyMoraleCombatOnDevice()

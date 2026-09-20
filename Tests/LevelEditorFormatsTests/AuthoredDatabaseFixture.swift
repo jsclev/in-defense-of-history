@@ -16,29 +16,44 @@ final class AuthoredDatabaseFixture {
     let db: Db
     var connection: OpaquePointer { db.conn! }
 
-    static func tower(_ category: String, level: Int, branch: Int) throws -> TowerLevel {
+    static func tower(_ kind: TowerKind, level: Int, branch: Int) throws -> TowerLevel {
         let fixture = try AuthoredDatabaseFixture()
-        return try XCTUnwrap(fixture.db.towerTypeDao.getTowerLevelsByBranch()[category]?[level]?[branch])
+        return try XCTUnwrap(fixture.db.towerTypeDao.getTowerLevelsByBranch()[kind]?[level]?[branch])
     }
 
     init(levelGeoJSONDao: LevelGeoJSONDAO = LevelGeoJSONDAO()) throws {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/sqlite3")
-        process.arguments = ["-readonly", Db.authoredDatabaseURL.path, ".dump"]
-        let output = Pipe()
-        process.standardOutput = output
-        try process.run()
-        let sql = output.fileHandleForReading.readDataToEndOfFile()
-        process.waitUntilExit()
-        guard process.terminationStatus == 0, let statements = String(data: sql, encoding: .utf8) else {
-            throw DbError.Db(message: "Unable to load authored SQL for tests")
-        }
         db = Db(dbPath: ":memory:", fullRefresh: false, levelGeoJSONDao: levelGeoJSONDao)
-        var error: UnsafeMutablePointer<CChar>?
-        guard sqlite3_exec(connection, statements, nil, nil, &error) == SQLITE_OK else {
-            let message = error.map { String(cString: $0) } ?? "Unable to load authored test data"
-            sqlite3_free(error)
-            throw DbError.Db(message: message)
+        func execute(_ sql: String) throws {
+            var error: UnsafeMutablePointer<CChar>?
+            guard sqlite3_exec(connection, sql, nil, nil, &error) == SQLITE_OK else {
+                let message = error.map { String(cString: $0) } ?? "Unable to load authored test data"
+                sqlite3_free(error)
+                throw DbError.Db(message: message)
+            }
         }
+        func identifier(_ name: String) -> String { "\"" + name.replacingOccurrences(of: "\"", with: "\"\"") + "\"" }
+        let path = Db.authoredDatabaseURL.path.replacingOccurrences(of: "'", with: "''")
+        try execute("ATTACH DATABASE 'file:\(path)?mode=ro' AS authored; PRAGMA foreign_keys=OFF;")
+        var statement: OpaquePointer?
+        guard sqlite3_prepare_v2(connection, "SELECT type,name,sql FROM authored.sqlite_master WHERE sql IS NOT NULL AND name NOT LIKE 'sqlite_%' ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END", -1, &statement, nil) == SQLITE_OK else {
+            throw DbError.Db(message: String(cString: sqlite3_errmsg(connection)))
+        }
+        var schema: [(String, String, String)] = []
+        while sqlite3_step(statement) == SQLITE_ROW {
+            schema.append((String(cString: sqlite3_column_text(statement, 0)),
+                           String(cString: sqlite3_column_text(statement, 1)),
+                           String(cString: sqlite3_column_text(statement, 2))))
+        }
+        sqlite3_finalize(statement)
+        try execute("BEGIN")
+        for (_, _, sql) in schema { try execute(sql) }
+        // Historical run output is not authored content. Preserve its schema
+        // for persistence tests without copying millions of old result rows.
+        let results: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result"]
+        for (type, name, _) in schema where type == "table" && !results.contains(name) {
+            let table = identifier(name)
+            try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")
+        }
+        try execute("COMMIT; DETACH DATABASE authored;")
     }
 }

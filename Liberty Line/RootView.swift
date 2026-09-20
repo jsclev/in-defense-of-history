@@ -19,13 +19,18 @@ struct RootView: View {
 
     var body: some View {
         if let selectedNode {
-            if let playingDifficulty {
+            if playingDifficulty != nil {
                 LevelMapView(db: store.db,
                              virtualCanvas: store.virtualCanvas,
                              runtimeCanvas: runtimeCanvas,
                              towerMenuLayout: store.towerMenuLayout,
-                             node: selectedNode, difficulty: playingDifficulty,
-                             hudLayoutConfig: hudLayoutConfig) {
+                             node: selectedNode,
+                             hudLayoutConfig: hudLayoutConfig,
+                             onVictory: { lives, startingLives in
+                                 guard let id = selectedNode.levelInfoID else { return 0 }
+                                 do { return try store.metaUpgrades.recordVictory(levelID: id, lives: lives, startingLives: startingLives) }
+                                 catch { fatalError("Meta upgrade database error: \(error)") }
+                             }) {
                     self.playingDifficulty = nil
                     self.selectedNode = nil
                 }
@@ -34,6 +39,10 @@ struct RootView: View {
                                   runtimeCanvas: runtimeCanvas, node: selectedNode) { difficulty in
                     self.playingDifficulty = difficulty
                 }
+            }
+        } else if menuScreen == .upgrades {
+            MetaUpgradesView(upgrades: store.metaUpgrades, runtimeCanvas: runtimeCanvas) {
+                self.menuScreen = nil
             }
         } else if menuScreen == .heroes {
             HeroesView(db: store.db, runtimeCanvas: runtimeCanvas) {
@@ -63,6 +72,7 @@ struct RootView: View {
             }
         } else {
             CampaignMapView(
+                playerProgress: store.metaUpgrades,
                 onSelectNode: { selectedNode = $0 },
                 onSelectMenu: { menuScreen = $0 },
                 virtualCanvas: store.virtualCanvas, db: store.db, runtimeCanvas: runtimeCanvas

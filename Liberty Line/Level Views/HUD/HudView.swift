@@ -7,72 +7,41 @@ struct HudView: View {
     private let runner: LevelRunner
     private let hudLayoutConfig: HudLayoutConfig
     private let onSpeedUp: () -> Void
-    private let onExit: () -> Void
+    private let onPause: () -> Void
 
 
     public init(runtimeCanvas: RuntimeCanvas, db: Db, runner: LevelRunner,
                 hudLayoutConfig: HudLayoutConfig,
                 onSpeedUp: @escaping () -> Void,
-                onExit: @escaping () -> Void) {
+                onPause: @escaping () -> Void) {
         self.db = db
         self.runtimeCanvas = runtimeCanvas
         self.runner = runner
-        self.hudLayoutConfig = hudLayoutConfig.moving(.heroBar, to: .southWest)
+        self.hudLayoutConfig = hudLayoutConfig
         self.onSpeedUp = onSpeedUp
-        self.onExit = onExit
+        self.onPause = onPause
     }
 
     var body: some View {
-        let hud = runtimeCanvas.hudRect
         ZStack(alignment: .topLeading) {
-            ForEach(HudLocation.allCases, id: \.self) { location in
-                // Independent anchors: text changes in one section cannot
-                // push the center or opposite edge's controls around.
-                Color.clear
-                    .frame(width: hud.width, height: hud.height)
-                    .overlay(alignment: location.alignment) {
-                        section(at: location)
-                    }
-                    .position(x: hud.midX, y: hud.midY)
-            }
-        }
-        .overlay(alignment: .topLeading) {
-            let layout = HeroBarLayout(runtimeCanvas: runtimeCanvas)
-            HudHeroesBarView(layout: layout, runner: runner)
-                .position(x: layout.frame.midX, y: layout.frame.midY)
-        }
-    }
+            let heroes = HeroBarLayout(runtimeCanvas: runtimeCanvas, location: hudLayoutConfig.heroBar)
+            HudHeroesBarView(layout: heroes, runner: runner)
+                .position(x: heroes.frame.midX, y: heroes.frame.midY)
 
-    @ViewBuilder
-    private func section(at hudLocation: HudLocation) -> some View {
-        switch hudLayoutConfig.section(at: hudLocation) {
-        case .heroBar:
-            EmptyView()
-        case .statsView:
-            HudStatsView(runtimeCanvas: runtimeCanvas, runner: runner)
-        case .miscView:
-            HudMiscView(runtimeCanvas: runtimeCanvas)
-        case .masterControls:
-            HudMasterControlsView(runtimeCanvas: runtimeCanvas,
-                                  onSpeedUp: onSpeedUp,
-                                  onExit: onExit)
-        case nil:
-            EmptyView()
-        }
-    }
-}
+            let stats = HudStatsView.occupiedFrame(runtimeCanvas: runtimeCanvas, config: hudLayoutConfig)
+            HudStatsView(runtimeCanvas: runtimeCanvas, runner: runner, location: hudLayoutConfig.statsView)
+                .position(x: stats.midX, y: stats.midY)
 
-private extension HudLocation {
-    var alignment: Alignment {
-        switch self {
-        case .northWest: return .topLeading
-        case .north: return .top
-        case .northEast: return .topTrailing
-        case .west: return .leading
-        case .east: return .trailing
-        case .southWest: return .bottomLeading
-        case .south: return .bottom
-        case .southEast: return .bottomTrailing
+            let misc = HudButtonRowLayout(area: runtimeCanvas.hudPlayArea,
+                                           location: hudLayoutConfig.miscView, count: 1)
+            HudMiscView(runtimeCanvas: runtimeCanvas, location: hudLayoutConfig.miscView)
+                .position(x: misc.frame.midX, y: misc.frame.midY)
+
+            let controls = MasterControlsLayout(runtimeCanvas: runtimeCanvas,
+                                                 location: hudLayoutConfig.masterControls)
+            HudMasterControlsView(runtimeCanvas: runtimeCanvas, location: hudLayoutConfig.masterControls,
+                                  onSpeedUp: onSpeedUp, onPause: onPause)
+                .position(x: controls.frame.midX, y: controls.frame.midY)
         }
     }
 }

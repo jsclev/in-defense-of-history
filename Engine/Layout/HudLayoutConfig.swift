@@ -10,6 +10,8 @@ public enum HudLocation: String, CaseIterable, Sendable {
     case southWest = "south_west"
     case south = "south"
     case southEast = "south_east"
+
+    public static let corners: [HudLocation] = [.northWest, .northEast, .southWest, .southEast]
 }
 
 public enum HudSection: String, CaseIterable, Sendable {
@@ -25,10 +27,10 @@ public struct HudLayoutConfig: Equatable, Sendable {
     public let miscView: HudLocation
     public let masterControls: HudLocation
 
-    public static let standard = HudLayoutConfig(heroBar: .northEast,
-                                                 statsView: .north,
-                                                 miscView: .northWest,
-                                                 masterControls: .southWest)
+    public static let standard = HudLayoutConfig(heroBar: .southWest,
+                                                 statsView: .northWest,
+                                                 miscView: .southEast,
+                                                 masterControls: .northEast)
 
     public init(heroBar: HudLocation, statsView: HudLocation,
                 miscView: HudLocation, masterControls: HudLocation) {

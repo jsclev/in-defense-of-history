@@ -7,7 +7,7 @@ struct MapDestinationInputView: View {
 
     var body: some View {
         let input = MapDestinationInput(runtimeCanvas: runtimeCanvas)
-        let area = SwiftUI.Path(runtimeCanvas.runtimePlayArea)
+        let area = SwiftUI.Path(runtimeCanvas.runtimeMapInputArea)
         area.fill(Color.black.opacity(0.001))
             .contentShape(area)
             .frame(width: runtimeCanvas.physicalRect.width,

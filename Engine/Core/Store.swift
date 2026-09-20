@@ -8,6 +8,7 @@ public final class Store {
     public let virtualCanvas: VirtualCanvas
     public let db: Db
     public let towerMenuLayout: TowerMenuLayout
+    public let metaUpgrades: MetaUpgradeStore
     public let settings: PlayerSettingsStore
     public let hudLayoutConfig: HudLayoutConfig
 
@@ -34,6 +35,7 @@ public final class Store {
             towerMenuLayout = TowerMenuLayout(virtualCanvas: virtualCanvas)
             settings = try PlayerSettingsStore(dao: db.playerSettingsDao)
             hudLayoutConfig = try db.hudLayoutDao.get()
+            metaUpgrades = try MetaUpgradeStore(dao: db.playerMetaUpgradeDao)
         }
         catch {
             fatalError("\(error)")

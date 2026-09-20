@@ -6,26 +6,30 @@ public enum ScreenEdge {
 
 public struct RuntimeCanvas {
     public let virtualCanvas: VirtualCanvas
-    public let hudRect: CGRect
+    public let hudPlayArea: HudPlayArea
+    public var runtimeHUDPlayArea: CGPath { hudPlayArea.shape }
     public let physicalRect: CGRect
     public let safeInsetsRect: CGRect
     public let playAreaRect: CGRect
     public let runtimePlayArea: CGPath
+    /// Movement gestures use the path area with actual HUD controls excluded.
+    public var runtimeMapInputArea: CGPath { hudPlayArea.excludingControls(from: runtimePlayArea) }
     /// Screen-coordinate placement region for tappable map elements.
     public let runtimeTapArea: CGPath
     public let occlusionAreas: [CGRect]
     public let bottomCenterOcclusionArea: CGRect
     public let towerSlotValidArea: CGPath
+    public let towerSlotValidCentres: CGPath
     public let scaleFactor: CGFloat
     public let maxY: CGFloat
-    public let marginScaleFactor = 0.02
+    public let marginScaleFactor = HudPlayArea.marginFraction
     public let hudTopMargin: CGFloat
     public let hudHorizontalMargin: CGFloat
     public let hudBottomMargin: CGFloat
-    public let heroBarSize: CGSize
-    public let statsViewSize: CGSize
-    public let miscViewSize: CGSize
-    public let masterControlsSize: CGSize
+    public var heroBarSize: CGSize { hudPlayArea.lowerLeftOcclusionArea.size }
+    public var statsViewSize: CGSize { hudPlayArea.upperLeftOcclusionArea.size }
+    public var miscViewSize: CGSize { hudPlayArea.lowerRightOcclusionArea.size }
+    public var masterControlsSize: CGSize { hudPlayArea.upperRightOcclusionArea.size }
 
     /// Database ranges are radii in canonical map units, just like combat
     /// positions. Resolve them with the live play-area fit, never a device's
@@ -33,8 +37,6 @@ public struct RuntimeCanvas {
     public func rangeRadius(forMapRadius radius: CGFloat) -> CGFloat {
         max(0, radius) * scaleFactor
     }
-//    private let hudMarginFactor = 0.04
-//    public let hudLowerLeftRect: CGRect
 
     public init(virtualCanvas: VirtualCanvas,
                 physicalRect: CGRect,
@@ -66,14 +68,11 @@ public struct RuntimeCanvas {
         let playShape = virtualCanvas.playAreaShape(forScreenWidth: screenWidthInMapUnits)
         runtimePlayArea = playShape.copy(using: &transform) ?? playShape
         let tapShape = virtualCanvas.tapAreaShape(forScreenWidth: screenWidthInMapUnits)
-        runtimeTapArea = tapShape.copy(using: &transform) ?? tapShape
         occlusionAreas = virtualCanvas.occlusionAreas(forScreenWidth: screenWidthInMapUnits)
             .map { $0.applying(transform) }
         bottomCenterOcclusionArea = virtualCanvas.bottomCenterOcclusionArea(forScreenWidth: screenWidthInMapUnits)
             .applying(transform)
 
-        let validShape = virtualCanvas.towerSlotValidFootprint(forScreenWidth: screenWidthInMapUnits)
-        towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
         
         var safeMargin = playAreaRect.height * marginScaleFactor
         
@@ -83,59 +82,17 @@ public struct RuntimeCanvas {
         
         maxY = safeInsetsRect.maxY - safeMargin
         
-        let horizontalMargin = playAreaRect.width * marginScaleFactor
-
-        var hudMinX = min(safeInsetsRect.minX, playAreaRect.minX)
-        if hudMinX < horizontalMargin {
-            hudMinX = horizontalMargin
-        }
-        
-        var hudMaxX = max(safeInsetsRect.maxX, playAreaRect.maxX)
-        if physicalRect.maxX - safeInsetsRect.maxX < horizontalMargin {
-            hudMaxX -= horizontalMargin
-        }
-        
-        let verticalPhysicalMargin = physicalRect.height - safeInsetsRect.height
-        var hudMaxY = playAreaRect.maxY
-        
-        if verticalPhysicalMargin > playAreaRect.height * marginScaleFactor {
-            hudMaxY = safeInsetsRect.maxY
-        }
-        let verticalMargin = playAreaRect.height * marginScaleFactor
-//        let horizontalMargin = playAreaRect.width * marginScaleFactor
-//        let verticalMargin = playAreaRect.height * marginScaleFactor
-        
-        let hudMinY = min(safeInsetsRect.minY, playAreaRect.minY) + verticalMargin
-        
-        hudRect = CGRect(
-            x: hudMinX,
-            y: hudMinY,
-            width: hudMaxX - hudMinX,
-            height: hudMaxY - hudMinY
-        )
-        
-        hudHorizontalMargin = hudRect.minX
-        hudTopMargin = hudRect.minY
-        hudBottomMargin = physicalRect.maxY - hudRect.maxY
-        
-        heroBarSize = CGSize(
-            width: virtualCanvas.heroBarSizeFraction.width * playAreaRect.width,
-            height: virtualCanvas.heroBarSizeFraction.height * playAreaRect.height)
-        statsViewSize = CGSize(
-            width: virtualCanvas.statsViewSizeFraction.width * playAreaRect.width,
-            height: virtualCanvas.statsViewSizeFraction.height * playAreaRect.height)
-        miscViewSize = CGSize(
-            width: virtualCanvas.miscViewSizeFraction.width * playAreaRect.width,
-            height: virtualCanvas.miscViewSizeFraction.height * playAreaRect.height)
-        masterControlsSize = CGSize(
-            width: virtualCanvas.masterControlsSizeFraction.width * playAreaRect.width,
-            height: virtualCanvas.masterControlsSizeFraction.height * playAreaRect.height)
+        let hudBounds = HudPlayArea.layoutBounds(physical: physicalRect, safe: safeInsetsRect, play: playAreaRect)
+        let canonicalHUDBounds = hudBounds.applying(transform.inverted())
+        let canonicalHUD = virtualCanvas.hudPlayArea(in: canonicalHUDBounds)
+        hudPlayArea = canonicalHUD.applying(transform)
+        runtimeTapArea = hudPlayArea.excludingControls(from: tapShape.copy(using: &transform) ?? tapShape)
+        let validShape = virtualCanvas.towerSlotValidFootprint(forScreenWidth: screenWidthInMapUnits, hudArea: canonicalHUD)
+        towerSlotValidArea = validShape.copy(using: &transform) ?? validShape
+        let validCentres = virtualCanvas.towerSlotValidCentres(forScreenWidth: screenWidthInMapUnits, hudArea: canonicalHUD)
+        towerSlotValidCentres = validCentres.copy(using: &transform) ?? validCentres
+        hudHorizontalMargin = hudBounds.minX
+        hudTopMargin = hudBounds.minY
+        hudBottomMargin = physicalRect.maxY - hudBounds.maxY
     }
-    
-//    public var lowerLeftHudWidth: CGFloat {
-//        let extraWidth = (safeInsetsRect.width - playAreaRect.width) / 2.0
-////        let occlusionWidth = virtualCanvas.heroBarSizeFraction.width * playAreaRect.width
-//        
-//        return virtualCanvas.heroBarSizeFraction.width * playAreaRect.width + extraWidth
-//    }
 }

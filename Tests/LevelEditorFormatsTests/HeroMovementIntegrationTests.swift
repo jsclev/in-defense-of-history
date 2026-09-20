@@ -147,6 +147,29 @@ final class HeroMovementIntegrationTests: XCTestCase {
         XCTAssertGreaterThan(checked, 20); XCTAssertGreaterThan(outside, 20)
     }
 
+    func testCharlestonColdMovementCommandStartsWithoutPrewarmingTheRoute() throws {
+        let dao = LevelGeoJSONDAO(directory: directory)
+        let spawns = try dao.getHeroConfiguration(mapImageName: "level_15_charleston").spawns
+        XCTAssertGreaterThanOrEqual(spawns.count, 2)
+        for spawn in spawns {
+            let destination = try XCTUnwrap(spawns.first { $0.position != spawn.position }).position
+            let area = try dao.getHeroMovementArea(mapImageName: "level_15_charleston", defaultPathWidth: 140)
+            var movement = try HeroMovement(area: area, spawn: spawn.position)
+            var unit = MilitiaUnit(position: spawn.position, hp: 100)
+            // Existing arrival tests ask for the route before issuing an order,
+            // which warms the neighbor cache and misses first-command costs.
+            let start = ProcessInfo.processInfo.systemUptime
+            XCTAssertTrue(movement.command(to: destination, unit: &unit))
+            let elapsed = ProcessInfo.processInfo.systemUptime - start
+            print("Charleston cold hero command: \(elapsed * 1_000) ms")
+            XCTAssertLessThan(elapsed, 0.1, "A first movement order must not block the game")
+            XCTAssertEqual(unit.position, spawn.position, "Issuing the command must not teleport the hero")
+            _ = movement.update(&unit, context: context(), moveSpeed: 73, deltaTime: SimClock.dt)
+            XCTAssertNotEqual(unit.position, spawn.position)
+            XCTAssertTrue(area.contains(unit.position))
+        }
+    }
+
     func testReexportedAreaImmediatelyChangesMovementWithoutDatabaseWaypoints() throws {
         let folder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)

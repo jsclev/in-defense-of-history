@@ -239,6 +239,7 @@ final class HeroRankingTests: XCTestCase {
             showDebugLayoutGuides: false, enemyEscapeHapticsEnabled: true))
         var changed = authored
         changed.debugMode = true
+        changed.showDebugLayoutGuides = true
         changed.enemyEscapeHapticsEnabled = false
         try dao.set(changed)
         XCTAssertEqual(try dao.get(), changed)

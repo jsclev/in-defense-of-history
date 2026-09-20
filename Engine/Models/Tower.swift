@@ -55,7 +55,7 @@ public struct MeleeUnitStats: Codable, Sendable, Equatable {
 }
 
 public enum TowerAttackMode: String, Codable, Sendable {
-    case direct, shell, grapeshot, solidShot, melee, obstacles, demolition
+    case none, direct, shell, grapeshot, solidShot, melee, obstacles, demolition
     public var requiresAim: Bool { self == .shell || self == .grapeshot || self == .solidShot }
     public var firesProjectiles: Bool { self == .direct || requiresAim }
 }
@@ -83,6 +83,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
     /// Non-nil for a planted charge that detonates at the outgoing blast boundary.
     public var demolitionPreparationSeconds: Double?
     public var engineerObstacles: EngineerObstacleStats?
+    public var support: TowerSupportStats
+    public var upgradePaths: [TowerUpgradePath]
 
     public init(
         combatRules: CombatRules,
@@ -103,7 +105,9 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         projectileSpeed: Double,
         meleeUnit: MeleeUnitStats?,
         demolitionPreparationSeconds: Double?,
-        engineerObstacles: EngineerObstacleStats?
+        engineerObstacles: EngineerObstacleStats?,
+        support: TowerSupportStats,
+        upgradePaths: [TowerUpgradePath]
     ) {
         self.combatRules = combatRules
         self.attackMode = attackMode
@@ -124,6 +128,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         self.meleeUnit = meleeUnit
         self.demolitionPreparationSeconds = demolitionPreparationSeconds
         self.engineerObstacles = engineerObstacles
+        self.support = support
+        self.upgradePaths = upgradePaths
     }
 
     private enum CodingKeys: String, CodingKey, CaseIterable {
@@ -131,6 +137,7 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         case cost, range, fireInterval, shotMinDamage, shotMaxDamage, terrorMin, terrorMax
         case aoeRadius, aoeFalloffExponent, splashCoverPierce, contagionChance, targeting
         case projectileSpeed, meleeUnit, demolitionPreparationSeconds, engineerObstacles
+        case support, upgradePaths
     }
 
     public init(from decoder: Decoder) throws {
@@ -154,6 +161,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         meleeUnit = try values.decode(MeleeUnitStats?.self, forKey: .meleeUnit)
         demolitionPreparationSeconds = try values.decode(Double?.self, forKey: .demolitionPreparationSeconds)
         engineerObstacles = try values.decode(EngineerObstacleStats?.self, forKey: .engineerObstacles)
+        support = try values.decode(TowerSupportStats.self, forKey: .support)
+        upgradePaths = try values.decode([TowerUpgradePath].self, forKey: .upgradePaths)
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -177,6 +186,8 @@ public struct TowerLevel: Codable, Sendable, Equatable {
         try values.encode(meleeUnit, forKey: .meleeUnit)
         try values.encode(demolitionPreparationSeconds, forKey: .demolitionPreparationSeconds)
         try values.encode(engineerObstacles, forKey: .engineerObstacles)
+        try values.encode(support, forKey: .support)
+        try values.encode(upgradePaths, forKey: .upgradePaths)
     }
 }
 
@@ -189,19 +200,5 @@ public struct TowerType: Codable, Sendable, Identifiable, Equatable {
         self.id = id
         self.name = name
         self.levels = levels
-    }
-}
-
-public struct Tower: Sendable {
-    public var typeIndex: Int
-    public var slotIndex: Int
-    public var level: Int
-    public var cooldown: Int
-
-    public init(typeIndex: Int, slotIndex: Int, level: Int = 0, cooldown: Int = 0) {
-        self.typeIndex = typeIndex
-        self.slotIndex = slotIndex
-        self.level = level
-        self.cooldown = cooldown
     }
 }

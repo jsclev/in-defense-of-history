@@ -24,7 +24,11 @@ final class EnemyRouteTests: XCTestCase {
         var features = doc["features"] as! [[String: Any]]
         features[3]["geometry"] = ["type": "LineString", "coordinates": [[10,50],[190,50]]]
         doc["features"] = features
-        XCTAssertThrowsError(try LevelGeoJSONDAO.enemyRoutes(from: bytes(doc)))
+        XCTAssertThrowsError(try LevelGeoJSONDAO.enemyRoutes(from: bytes(doc))) { error in
+            XCTAssertTrue(error is LevelGeoJSONError)
+            XCTAssertFalse(error is DbError)
+            XCTAssertTrue(error.localizedDescription.contains("enemy path from Entrance 0 to Exit 0 leaves the painted road"))
+        }
     }
 
     func testRejectsMissingMarkersDuplicateIndicesInvalidEndpointsAndMissingWaveRoutes() throws {

@@ -21,7 +21,7 @@ public class TowerTypeDAO: BaseDAO {
 
     private struct Record {
         let id: UUID
-        let category: String
+        let typeID: UUID
         let level: Int
         let branch: Int
         let details: TowerMenuDetails
@@ -37,8 +37,8 @@ public class TowerTypeDAO: BaseDAO {
             let id = try row.uuid("id")
             let row = AuthoredRow(statement: row.statement, entity: "tower_type[\(id)]")
             let category = try row.text("tower_type_category")
-            guard let kind = TowerKind(categoryName: category) else {
-                throw row.invalid("tower_type_category", "is unsupported")
+            guard let kind = TowerKind(rawValue: try row.text("tower_type_key")) else {
+                throw row.invalid("tower_type_key", "is unsupported")
             }
             let layout: [[Int]]
             do { layout = try JSONDecoder().decode([[Int]].self, from: Data(try row.text("level_layout").utf8)) }
@@ -50,14 +50,15 @@ public class TowerTypeDAO: BaseDAO {
             }
             return Identity(id: id, category: category, kind: kind, name: try row.text("tower_type_name"), layout: layout)
         }
-        let kinds = values.compactMap { TowerKind(categoryName: $0.category) }
+        let kinds = values.map(\.kind)
         guard Set(kinds) == Set(TowerKind.allCases), Set(kinds).count == values.count else {
-            throw DbError.Db(message: "tower_type: missing or duplicate tower category")
+            throw DbError.Db(message: "tower_type: missing or duplicate tower_type_key")
         }
         return values
     }
 
-    private func tuning(_ row: AuthoredRow, melee: MeleeUnitStats?, rules: CombatRules) throws -> TowerLevel {
+    private func tuning(_ row: AuthoredRow, melee: MeleeUnitStats?, rules: CombatRules,
+                        upgrades: [TowerUpgradePath]) throws -> TowerLevel {
         guard let mode = TowerAttackMode(rawValue: try row.text("attack_mode")) else {
             throw row.invalid("attack_mode", "is unsupported")
         }
@@ -68,6 +69,9 @@ public class TowerTypeDAO: BaseDAO {
         }
         let hasCharge = try row.flag("has_demolition_charge")
         let hasObstacles = try row.flag("has_engineer_obstacles")
+        guard mode != .none || (!hasMelee && !hasCharge && !hasObstacles) else {
+            throw row.invalid("attack_mode", "none requires melee, demolition and obstacle capabilities to be disabled")
+        }
         let preparation: Double?
         if hasCharge {
             preparation = try row.number("demolition_prepare_seconds", minimum: 0, strictlyGreater: true)
@@ -81,9 +85,10 @@ public class TowerTypeDAO: BaseDAO {
             guard slow < 1 else { throw row.invalid("obstacle_slow_fraction", "must be less than 1") }
             obstacles = EngineerObstacleStats(
                 radius: try row.number("obstacle_radius", minimum: 0, strictlyGreater: true),
-                slowFraction: slow, verticalFraction: rules.rangeVerticalFraction)
+                slowFraction: slow, widthFraction: try row.number("obstacle_width_fraction", minimum: 0, strictlyGreater: true, maximum: 1))
         } else {
             try row.requireNull("obstacle_radius")
+            try row.requireNull("obstacle_width_fraction")
             try row.requireNull("obstacle_slow_fraction")
             obstacles = nil
         }
@@ -92,10 +97,14 @@ public class TowerTypeDAO: BaseDAO {
         }
         let minimumDamage = try row.number("shot_min_damage", minimum: 0)
         let minimumTerror = try row.number("terror_min", minimum: 0)
+        let support = TowerSupportStats(
+            incomePerWave: try row.integer("income_per_wave", minimum: 0),
+            attackSpeedMultiplier: try row.number("support_attack_speed_multiplier", minimum: 1),
+            healPerSecond: try row.number("support_heal_per_second", minimum: 0))
         return TowerLevel(
             combatRules: rules, attackMode: mode, turnRateDegrees: turnRate,
             cost: try row.integer("cost", minimum: 0),
-            range: try row.number("tower_range", minimum: 0, strictlyGreater: true),
+            range: try row.number("tower_range", minimum: 0, strictlyGreater: mode != .none || support.hasAura),
             fireInterval: try row.number("fire_interval", minimum: 0),
             shotMinDamage: minimumDamage,
             shotMaxDamage: try row.number("shot_max_damage", minimum: minimumDamage),
@@ -109,32 +118,41 @@ public class TowerTypeDAO: BaseDAO {
             projectileSpeed: try row.number("projectile_speed", minimum: 0),
             meleeUnit: melee,
             demolitionPreparationSeconds: preparation,
-            engineerObstacles: obstacles)
+            engineerObstacles: obstacles, support: support, upgradePaths: upgrades)
     }
 
     private func content() throws -> DesignArsenal {
         let rules = try combatRulesDao.get()
         let types = try identities()
         let melee = try meleeUnitDao.getStatsByTowerId(combatRules: rules)
+        let upgradeDAO = TowerUpgradeDAO(conn: conn)
+        let towerIDs = try authoredRows("SELECT id FROM tower", entity: "tower") { try $0.uuid("id") }
+        let allUpgrades = try upgradeDAO.allPaths(towerIDs: Set(towerIDs))
         let values = try authoredRows("""
-            SELECT t.*, tt.tower_type_category
-            FROM tower t LEFT JOIN tower_type tt ON tt.id = t.tower_type_id
-            ORDER BY tt.tower_type_category, t.tower_level, t.branch
+            SELECT * FROM tower ORDER BY tower_type_id, tower_level, branch
             """, entity: "tower") { row in
                 let id = try row.uuid("id")
                 let row = AuthoredRow(statement: row.statement, entity: "tower[\(id)]")
-                return Record(id: id, category: try row.text("tower_type_category"),
-                    level: try row.integer("tower_level", minimum: 1),
+                let level = try row.integer("tower_level", minimum: 1)
+                let upgrades = try upgradeDAO.paths(for: id, level: level,
+                    expectedCount: row.integer("upgrade_path_count", minimum: 0), from: allUpgrades)
+                let attributes = try tuning(row, melee: melee[id], rules: rules, upgrades: upgrades)
+                try upgradeDAO.validateCombinations(attributes)
+                return Record(id: id, typeID: try row.uuid("tower_type_id"),
+                    level: level,
                     branch: try row.integer("branch", minimum: 1),
                     details: TowerMenuDetails(name: try row.text("tower_name"),
                                               description: try row.text("tower_description")),
-                    tuning: try tuning(row, melee: melee[id], rules: rules))
+                    tuning: attributes)
             }
         guard Set(melee.keys).isSubset(of: Set(values.map(\.id))) else {
             throw DbError.Db(message: "melee_unit: tower_id does not identify an authored tower")
         }
+        guard Set(values.map(\.typeID)).isSubset(of: Set(types.map(\.id))) else {
+            throw DbError.Db(message: "tower: tower_type_id does not identify an authored tower type")
+        }
         for type in types {
-            let rows = values.filter { $0.category == type.category }
+            let rows = values.filter { $0.typeID == type.id }
             let expected = Set(type.layout.enumerated().flatMap { index, branches in
                 branches.map { "\(index + 1):\($0)" }
             })
@@ -145,7 +163,7 @@ public class TowerTypeDAO: BaseDAO {
         }
         return try DesignArsenal(towers: types.map { type in
             DesignArsenal.Definition(id: type.id, kind: type.kind, category: type.category, name: type.name,
-                tiers: values.filter { $0.category == type.category }.map {
+                tiers: values.filter { $0.typeID == type.id }.map {
                     DesignArsenal.Tier(id: $0.id, level: $0.level, branch: $0.branch,
                                        details: $0.details, tuning: $0.tuning)
                 })
@@ -156,55 +174,55 @@ public class TowerTypeDAO: BaseDAO {
         try content()
     }
 
-    public func getCostsByLevel() throws -> [String: [Int: [Int: Int]]] {
-        var result: [String: [Int: [Int: Int]]] = [:]
+    public func getCostsByLevel() throws -> [TowerKind: [Int: [Int: Int]]] {
+        var result: [TowerKind: [Int: [Int: Int]]] = [:]
         for tower in try content().towers {
             for tier in tower.tiers {
-                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.tuning.cost
+                result[tower.kind, default: [:]][tier.level, default: [:]][tier.branch] = tier.tuning.cost
             }
         }
         return result
     }
 
-    public func getNamesByLevel() throws -> [String: [Int: [Int: String]]] {
-        var result: [String: [Int: [Int: String]]] = [:]
+    public func getNamesByLevel() throws -> [TowerKind: [Int: [Int: String]]] {
+        var result: [TowerKind: [Int: [Int: String]]] = [:]
         for tower in try content().towers {
             for tier in tower.tiers {
-                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.details.name
+                result[tower.kind, default: [:]][tier.level, default: [:]][tier.branch] = tier.details.name
             }
         }
         return result
     }
 
-    public func getMenuDetailsByLevel() throws -> [String: [Int: [Int: TowerMenuDetails]]] {
-        var result: [String: [Int: [Int: TowerMenuDetails]]] = [:]
+    public func getMenuDetailsByLevel() throws -> [TowerKind: [Int: [Int: TowerMenuDetails]]] {
+        var result: [TowerKind: [Int: [Int: TowerMenuDetails]]] = [:]
         for tower in try content().towers {
             for tier in tower.tiers {
-                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.details
+                result[tower.kind, default: [:]][tier.level, default: [:]][tier.branch] = tier.details
             }
         }
         return result
     }
 
-    public func getTowerLevels() throws -> [String: [TowerLevel]] {
-        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.category, $0.type.levels) })
+    public func getTowerLevels() throws -> [TowerKind: [TowerLevel]] {
+        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.kind, $0.type.levels) })
     }
 
-    public func getTowerLevelsByBranch() throws -> [String: [Int: [Int: TowerLevel]]] {
-        var result: [String: [Int: [Int: TowerLevel]]] = [:]
+    public func getTowerLevelsByBranch() throws -> [TowerKind: [Int: [Int: TowerLevel]]] {
+        var result: [TowerKind: [Int: [Int: TowerLevel]]] = [:]
         for tower in try content().towers {
             for tier in tower.tiers {
-                result[tower.category, default: [:]][tier.level, default: [:]][tier.branch] = tier.tuning
+                result[tower.kind, default: [:]][tier.level, default: [:]][tier.branch] = tier.tuning
             }
         }
         return result
     }
 
-    public func getTowerTypes() throws -> [String: TowerType] {
-        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.category, $0.type) })
+    public func getTowerTypes() throws -> [TowerKind: TowerType] {
+        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.kind, $0.type) })
     }
 
-    public func getDisplayNames() throws -> [String: String] {
-        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.category, $0.name) })
+    public func getDisplayNames() throws -> [TowerKind: String] {
+        Dictionary(uniqueKeysWithValues: try content().towers.map { ($0.kind, $0.name) })
     }
 }

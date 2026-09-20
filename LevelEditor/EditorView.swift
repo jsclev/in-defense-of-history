@@ -605,12 +605,10 @@ struct EditorView: View {
                 if let error = state.content.enemyRosterError {
                     throw DbError.Db(message: error)
                 }
-                let roster = try DesignRoster(enemyTypes: state.content.enemyTypes)
-                guard let arsenal = state.content.arsenal else {
-                    throw DbError.Db(message: state.content.towerTextError ?? "Tower text is unavailable.")
+                guard let db = state.content.db else {
+                    throw DbError.Db(message: "The authored database is unavailable.")
                 }
-                session = SimSession(blueprint: try document.draft.makeBlueprint(
-                    virtualCanvas: state.virtualCanvas, arsenal: arsenal), roster: roster, arsenal: arsenal)
+                session = try SimSession(draft: document.draft, db: db, virtualCanvas: state.virtualCanvas)
             } catch {
                 state.flash("Unable to start playtest: \(error)")
                 return

@@ -5,537 +5,15 @@ import QuartzCore
 import UIKit
 import CoreHaptics
 
-struct PlacedTower: Identifiable {
-    let slotIndex: Int
-    let kind: TowerKind
-    let position: CGPoint
-    var level: Int = 1
-    var branch: Int = 1
-    var artilleryAim: ArtilleryAim
-    var artilleryFacing: ArtilleryFacing { artilleryAim.facing }
-    var demolitionCharge: DemolitionCharge?
-    var engineerObstaclePosition: CGPoint?
-
-    init(combatRules: CombatRules, slotIndex: Int, kind: TowerKind, position: CGPoint,
-         level: Int = 1, branch: Int = 1) {
-        self.slotIndex = slotIndex
-        self.kind = kind
-        self.position = position
-        self.level = level
-        self.branch = branch
-        self.artilleryAim = ArtilleryAim(heading: combatRules.initialHeading,
-                                         firingTolerance: combatRules.firingTolerance)
-    }
-
-    var id: Int { slotIndex }
-}
-
+/// The iPhone adapter owns rendering, the display clock, images and haptics.
+/// All battle rules and commands are inherited from the shared BattleEngine.
 @MainActor
-public final class LevelRunner: NSObject, ObservableObject {
-    private static let normalTickDuration: Duration = .seconds(1) / SimClock.ticksPerSecond
-    private(set) var mapImageName: String
-
+public final class LevelRunner: BattleEngine {
     private(set) var mapArt: LevelMapArt
-    private(set) var playArea: CGRect
-
-    var slotSize: CGSize { virtualCanvas.towerSlotSize }
-    private(set) var startingMoney = 0
-
-    @Published private(set) var money = 0
-
-    private(set) var startingLives = 0
-
-    @Published private(set) var lives = 0
-
-    @Published private(set) var escapedEnemyCount = 0
-
-    @Published private(set) var isDefeated = false
-
-    @Published private(set) var isCleared = false
-
-    @Published private(set) var awaitingWaveStart = false
-
-    @Published private(set) var waveCountdownSeconds: Int?
-
-    private(set) var towerCosts: [TowerKind: [Int: [Int: Int]]] = [:]
-    private(set) var towerMenuDetails: [TowerKind: [Int: [Int: TowerMenuDetails]]] = [:]
-
-    func towerName(for kind: TowerKind, atLevel level: Int, branch: Int = 1) -> String {
-        guard let details = menuDetails(for: kind, atLevel: level, branch: branch) else {
-            preconditionFailure("Missing authored tower text for \(kind), level \(level), branch \(branch)")
-        }
-        return details.name
-    }
-
-    func menuDetails(for kind: TowerKind, atLevel level: Int, branch: Int = 1) -> TowerMenuDetails? {
-        towerMenuDetails[kind]?[level]?[branch]
-    }
-
-    func buildCost(for kind: TowerKind) -> Int? {
-        guard let cost = towerCosts[kind]?[1]?[1] else {
-            fatalError("Missing database build cost for \(kind)")
-        }
-        return cost
-    }
-
-    func upgradeCost(for kind: TowerKind, to level: Int, branch: Int = 1) -> Int? {
-        guard let cost = towerCosts[kind]?[level]?[branch] else {
-            fatalError("Missing database upgrade cost for \(kind), level \(level), branch \(branch)")
-        }
-        return cost
-    }
-
-    @Published private(set) var towerUnlocks: [TowerKind: Int] = [:]
-
-    private(set) var chosenHeroes: HeroSelection?
-    private(set) var heroSelection: HeroSelection?
-    private var heroImageAspectRatios: [UUID: CGFloat] = [:]
-
-    var primaryHero: Hero? { heroSelection?.primary }
-    var secondaryHero: Hero? { heroSelection?.secondary }
-
-    var availableTowerKinds: Set<TowerKind> { Set(towerUnlocks.filter { $0.value > 0 }.keys) }
-
-    private(set) var slotPositions: [CGPoint] = []
-
-    private(set) var exitPositions: [CGPoint] = []
-
-    private var projectileHitRadiusInImagePixels: CGFloat { combatRules.projectileHitRadius }
-
-    private(set) var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] = [:]
-
-    func towerLevel(for tower: PlacedTower) -> TowerLevel? {
-        guard let tuning = towerLevels[tower.kind]?[tower.level]?[tower.branch] else {
-            fatalError("Missing database tower attributes: \(tower.kind), level \(tower.level), branch \(tower.branch)")
-        }
-        return tuning
-    }
-
-    func attackRange(for tower: PlacedTower) -> CGFloat? {
-        towerLevel(for: tower)?.attackRange.radius
-    }
-
-    func hasAttackRange(_ tower: PlacedTower) -> Bool {
-        tower.kind.projectileAssetName != nil && (attackRange(for: tower) ?? 0) > 0
-    }
-
-    private func fireCooldownTicks(for tower: PlacedTower) -> Int64 {
-        guard let interval = towerLevel(for: tower)?.fireInterval, interval > 0
-        else { return .max }
-        return max(1, Int64((interval * Double(SimClock.ticksPerSecond)).rounded()))
-    }
-
-    func rateOfFire(for tower: PlacedTower) -> Double {
-        guard let interval = towerLevel(for: tower)?.fireInterval, interval > 0
-        else { return 0 }
-        return 1 / interval
-    }
-
-    private var distinctTowerRanges: [CGFloat] {
-        let ranges = towerLevels.values.flatMap { levels in
-            levels.values.flatMap { $0.values.map { CGFloat($0.range) } }
-        }
-        return Array(Set(ranges)).sorted()
-    }
-
-    private var damageTotalBySlot: [Int: Double] = [:]
-    private var targetingSecondsBySlot: [Int: Double] = [:]
-    private var lastStatsTick: Int64 = 0
-
-    @Published private(set) var totalDamageBySlot: [Int: Double] = [:]
-
-    @Published private(set) var targetingTimeBySlot: [Int: Double] = [:]
-
-    private func refreshTowerStatsIfDue() {
-        guard timer.tick - lastStatsTick >= Int64(SimClock.ticksPerSecond) else { return }
-        lastStatsTick = timer.tick
-        totalDamageBySlot = damageTotalBySlot
-        targetingTimeBySlot = targetingSecondsBySlot
-    }
-
-    private var pathHalfWidthInImagePixels: CGFloat { virtualCanvas.pathWidth / 2 }
-
-    private var laneAreaBySlot: [Int: [Int: Double]] = [:]
-
-    private static let laneCell: CGFloat = 4
-
-    private static func rangeKey(_ range: CGFloat) -> Int { Int(range.rounded()) }
-
-    func pathAreaInRange(for tower: PlacedTower) -> Double {
-        guard let range = towerLevel(for: tower)?.range else { return 0 }
-        return laneAreaBySlot[tower.slotIndex]?[Self.rangeKey(CGFloat(range))] ?? 0
-    }
-
-    private func precomputeLaneCoverage() {
-        let cell = Self.laneCell
-        let w = pathHalfWidthInImagePixels
-        let cols = Int((virtualCanvas.size.width / cell).rounded(.up)) + 1
-        let rows = Int((virtualCanvas.size.height / cell).rounded(.up)) + 1
-        var lane = [Bool](repeating: false, count: cols * rows)
-
-        for path in paths {
-            let pts = path.points
-            guard pts.count > 1 else { continue }
-            for i in 0..<(pts.count - 1) {
-                let a = pts[i], b = pts[i + 1]
-                let x0 = Int((min(a.x, b.x) - w) / cell), x1 = Int((max(a.x, b.x) + w) / cell)
-                let y0 = Int((min(a.y, b.y) - w) / cell), y1 = Int((max(a.y, b.y) + w) / cell)
-                for gy in max(0, y0)...max(0, min(rows - 1, y1)) {
-                    for gx in max(0, x0)...max(0, min(cols - 1, x1)) {
-                        let idx = gy * cols + gx
-                        if lane[idx] { continue }
-                        let centre = Point((Double(gx) + 0.5) * cell, (Double(gy) + 0.5) * cell)
-                        if centre.distance(toSegment: a, b) <= w { lane[idx] = true }
-                    }
-                }
-            }
-        }
-
-        let cellArea = Double(cell * cell)
-        let ranges = distinctTowerRanges
-        for (slot, c) in slotPositions.enumerated() {
-            var byRange: [Int: Double] = [:]
-            for r in ranges {
-                let reach = TowerAttackRange(Double(r), verticalFraction: combatRules.rangeVerticalFraction)
-                let key = Self.rangeKey(r)
-                let gx0 = max(0, Int((c.x - r) / cell)), gx1 = min(cols - 1, Int((c.x + r) / cell))
-                let gy0 = max(0, Int((c.y - r) / cell)), gy1 = min(rows - 1, Int((c.y + r) / cell))
-                guard gx0 <= gx1, gy0 <= gy1 else { byRange[key] = 0; continue }
-                var covered = 0.0
-                for gy in gy0...gy1 {
-                    for gx in gx0...gx1 where lane[gy * cols + gx] {
-                        let px = (CGFloat(gx) + 0.5) * cell, py = (CGFloat(gy) + 0.5) * cell
-                        if reach.contains(CGPoint(x: px, y: py), from: c) { covered += cellArea }
-                    }
-                }
-                byRange[key] = covered
-            }
-            laneAreaBySlot[slot] = byRange
-        }
-    }
-
-    struct Projectile: Identifiable {
-        let id: Int
-        let kind: TowerKind
-        var position: CGPoint
-        var heading: CGFloat
-        let damage: Double
-        let targetID: Int
-
-        let slotIndex: Int
-
-        let speed: CGFloat
-        let splashRadius: CGFloat
-
-        var impactPoint: CGPoint? = nil
-
-        var firingBoundary: TowerAttackRange? = nil
-        var firingOrigin: CGPoint? = nil
-        var moraleStrike: ArtilleryMoraleStrike? = nil
-        var grapeshot: GrapeshotFlight? = nil
-        var solidShot: SolidShotFlight? = nil
-    }
-
-    #if DEBUG
-    private var reviewEnemyStats: EnemyStats {
-        guard let enemy = enemyTypesByID.values.first(where: { $0.key == "redcoat_regular" }) else {
-            fatalError("Missing authored review enemy")
-        }
-        return enemy.stats
-    }
-    #endif
-
-    struct Walker: Identifiable {
-        let id: Int
-        let assetName: String
-        let speed: Double
-        let maxHP: Double
-        var hp: Double
-        let bounty: Int
-        let livesCost: Int
-        let damageMin: Double
-        let damageMax: Double
-        let cover: Double
-        let blockImmune: Bool
-        let spawnTick: Int64
-        let pathIndex: Int
-        var discipline: Double
-        var moraleResponse: EnemyMoraleResponse
-        var morale: EnemyMorale
-        var position: CGPoint = .zero
-        var pathDistance: Double = 0
-        var meleeDamageRange: ClosedRange<Double> {
-            let multiplier = moraleResponse.damageMultiplier(morale: morale.value, maximum: morale.rules.moraleMax)
-            return (damageMin * multiplier)...(damageMax * multiplier)
-        }
-    }
-
-    struct MilitiaSoldier: Identifiable {
-        let id: Int
-        let assetName: String
-        var position: CGPoint
-        var hp: Double
-        var maxHP: Double
-    }
-
-    struct HeroSoldier: Identifiable {
-        let id: Int
-        let assetName: String
-        let baseAssetName: String
-        let imageAspectRatio: CGFloat
-        var position: CGPoint
-        var hp: Double
-        var maxHP: Double
-        var isSelected: Bool
-    }
-
-    private struct HeroPost {
-        let hero: Hero
-        let assetName: String
-        let combat: HeroCombatStats
-        var unit: MilitiaUnit
-        var movement: HeroMovement
-        var enemySwingTicks: [Int: Int] = [:]
-    }
-
-    private struct MilitiaGarrison {
-        var rallyPoint: Point
-        var units: [MilitiaUnit]
-        var enemySwingTicks: [Int: Int] = [:]
-        var stats: MeleeUnitStats? = nil
-        var anchor: Point? = nil
-    }
-
-    private struct WalkPose {
-        var facing: UnitFacing
-        var walkPhase: Double
-        var isWalking: Bool
-    }
-
-    @Published private(set) var projectiles: [Projectile] = []
-    struct ArtilleryImpact: Identifiable {
-        let id: Int
-        let position: CGPoint
-        let radius: CGFloat
-        var isDemolition = false
-        var age: Double = 0
-        var duration: Double { isDemolition ? DemolitionExplosion.duration : 0.78 }
-    }
-    @Published private(set) var artilleryImpacts: [ArtilleryImpact] = []
-    private var nextProjectileID = 0
-    private var grapeshotHits: [Int: Set<Int>] = [:]
-    private var nextFireTickBySlot: [Int: Int64] = [:]
-    private var lastStepGameTicks: Double = 0
-
-    @Published private(set) var placedTowers: [PlacedTower] = []
-
-    @Published private(set) var selectedSlotIndex: Int?
-
-    @Published private(set) var selectedTowerSlotIndex: Int?
-
-    @Published private(set) var rallyPointsBySlot: [Int: CGPoint] = [:]
-
-    @Published private(set) var isPlacingRallyPoint = false
-    @Published private(set) var isPlacingDemolition = false
-    @Published private(set) var isPlacingEngineerObstacles = false
-
-    var engineerObstacleFields: [EngineerObstacleField] {
-        placedTowers.compactMap { tower in
-            guard let position = tower.engineerObstaclePosition,
-                  let stats = towerLevel(for: tower)?.engineerObstacles else { return nil }
-            return EngineerObstacleField(position: position, stats: stats)
-        }
-    }
-
-    func beginEngineerObstaclePlacement() {
-        guard let slot = selectedTowerSlotIndex, let tower = placedTower(atSlot: slot),
-              towerLevel(for: tower)?.engineerObstacles != nil else { return }
-        isPlacingRallyPoint = false
-        isPlacingDemolition = false
-        armedUpgradeBranch = nil
-        isPlacingEngineerObstacles = true
-    }
-
-    func placeEngineerObstacles(at requested: CGPoint) {
-        guard isPlacingEngineerObstacles, let slot = selectedTowerSlotIndex,
-              let index = placedTowers.firstIndex(where: { $0.slotIndex == slot }),
-              let tuning = towerLevel(for: placedTowers[index]), tuning.engineerObstacles != nil else { return }
-        let origin = placedTowers[index].position
-        if tuning.attackRange.contains(requested, from: origin),
-           let site = tuning.attackRange.nearestPathPoint(to: requested, from: origin, paths: paths) {
-            placedTowers[index].engineerObstaclePosition = site
-        }
-        dismissMenu()
-    }
-
-    func beginDemolitionPlacement() {
-        guard let slot = selectedTowerSlotIndex,
-              placedTower(atSlot: slot)?.demolitionCharge != nil else { return }
-        isPlacingRallyPoint = false
-        armedUpgradeBranch = nil
-        isPlacingDemolition = true
-    }
-
-    func placeDemolition(at requested: CGPoint) {
-        guard isPlacingDemolition, let slot = selectedTowerSlotIndex,
-              let index = placedTowers.firstIndex(where: { $0.slotIndex == slot }),
-              let tuning = towerLevel(for: placedTowers[index]) else { return }
-        let origin = placedTowers[index].position
-        guard tuning.attackRange.contains(requested, from: origin),
-              let point = tuning.attackRange.nearestPathPoint(to: requested, from: origin, paths: paths)
-        else {
-
-            dismissMenu()
-            return
-        }
-        placedTowers[index].demolitionCharge?.place(at: point)
-
-        if placedTowers[index].demolitionCharge?.isReady == false {
-            rallyFlagFlashCount += 1
-            rallyFlagFlash = RallyFlagFlash(id: rallyFlagFlashCount, position: point)
-        } else {
-            rallyFlagFlash = nil
-        }
-        dismissMenu()
-    }
-
-    @discardableResult func detonateDemolition(atSlot slot: Int) -> Bool {
-        guard isReady, !isDefeated, !isCleared,
-              let index = placedTowers.firstIndex(where: { $0.slotIndex == slot }),
-              var charge = placedTowers[index].demolitionCharge,
-              let position = charge.position,
-              let tuning = towerLevel(for: placedTowers[index]),
-              tuning.attackRange.contains(position, from: placedTowers[index].position),
-              charge.detonate() else { return false }
-        placedTowers[index].demolitionCharge = charge
-        let blast = Projectile(id: nextProjectileID, kind: .areaOfEffect, position: position,
-            heading: 0, damage: Double.random(in: tuning.shotMinDamage...max(tuning.shotMinDamage, tuning.shotMaxDamage)),
-            targetID: -1, slotIndex: slot, speed: 0, splashRadius: CGFloat(tuning.aoeRadius),
-            impactPoint: position, moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
-        nextProjectileID += 1
-        applyImpact(blast, at: position, isDemolition: true)
-        let playback = playGameplayHaptic(.demolitionExplosion)
-        #if DEBUG
-        if playback != .inactive {
-            demolitionHapticStarts += 1
-            lastDemolitionHapticPlayback = playback
-        }
-        #endif
-        return true
-    }
-
-    private func advanceDemolitionCharges(seconds: Double) {
-        guard seconds > 0, !isCleared, !isDefeated else { return }
-        for index in placedTowers.indices {
-            guard placedTowers[index].demolitionCharge?.isReady == false else { continue }
-            placedTowers[index].demolitionCharge?.advance(seconds: seconds)
-        }
-    }
-
-    private func detonateOutgoingDemolitionCharges(seconds: Double, nowTicks: Double) {
-        guard seconds > 0, !paths.isEmpty, !isCleared, !isDefeated else { return }
-        let fields = engineerObstacleFields
-        for tower in placedTowers {
-            guard let charge = tower.demolitionCharge, charge.isReady, charge.position != nil,
-                  let tuning = towerLevel(for: tower) else { continue }
-            let enemyAboutToExit = walkers.contains { walker in
-                guard walker.hp > 0 else { return false }
-                var morale = walker.morale
-                let secondsAlive = max(0, nowTicks - Double(walker.spawnTick)) * SimClock.dt
-                let slow = EngineerObstacleField.movementMultiplier(at: walker.position,
-                    retreating: false, fields: fields)
-                let travel = morale.advance(seconds: min(seconds, secondsAlive), baseSpeed: walker.speed * slow,
-                    response: walker.moraleResponse, blocked: blockedWalkerIDs.contains(walker.id))
-                let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
-                return charge.willEnemyExitBlast(on: path, from: walker.pathDistance,
-                    advancingBy: travel, radius: tuning.aoeRadius, targetOffset: enemyBodyOffset)
-            }
-            if enemyAboutToExit { detonateDemolition(atSlot: tower.slotIndex) }
-        }
-    }
-
-    private func advanceWalkers(seconds: Double, nowTicks: Double) {
-        guard seconds.isFinite, seconds > 0, !paths.isEmpty, !isCleared, !isDefeated else { return }
-        var remaining = seconds
-        let fields = engineerObstacleFields
-        while remaining > 0, !isDefeated {
-            let dt = min(remaining, SimClock.dt)
-            let stepEndTicks = nowTicks - (remaining - dt) / SimClock.dt
-            advanceDemolitionCharges(seconds: dt)
-            detonateOutgoingDemolitionCharges(seconds: dt, nowTicks: stepEndTicks)
-            var marching: [Walker] = []
-            for var walker in walkers {
-                let secondsAlive = max(0, stepEndTicks - Double(walker.spawnTick)) * SimClock.dt
-                let slow = EngineerObstacleField.movementMultiplier(at: walker.position,
-                    retreating: false, fields: fields)
-                let travel = walker.morale.advance(seconds: min(dt, secondsAlive), baseSpeed: walker.speed * slow,
-                    response: walker.moraleResponse, blocked: blockedWalkerIDs.contains(walker.id))
-                let distance = walker.pathDistance + travel
-                let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
-                if path.totalLength > 0, distance >= path.totalLength {
-                    loseLife(cost: walker.livesCost)
-                    continue
-                }
-                let p = path.point(atDistance: distance)
-                walker.position = CGPoint(x: p.x, y: p.y)
-                walker.pathDistance = distance
-                marching.append(walker)
-            }
-            walkers = marching
-            remaining -= dt
-        }
-    }
-
-    struct RallyFlagFlash: Equatable {
-        let id: Int
-        let position: CGPoint
-    }
-
-    @Published private(set) var rallyFlagFlash: RallyFlagFlash?
-
-    private var rallyFlagFlashCount = 0
-
-    func dismissRallyFlag(id: Int) {
-        guard rallyFlagFlash?.id == id else { return }
-        rallyFlagFlash = nil
-    }
-
-    func toggleRallyPlacement() {
-        isPlacingRallyPoint.toggle()
-        if isPlacingRallyPoint { armedUpgradeBranch = nil }
-    }
-
-    func placeRallyPoint(at point: CGPoint) {
-        guard isPlacingRallyPoint, let slot = selectedTowerSlotIndex else { return }
-        if let tower = placedTower(atSlot: slot),
-           let melee = towerLevel(for: tower)?.meleeUnit,
-           hypot(point.x - tower.position.x, point.y - tower.position.y)
-               <= CGFloat(melee.rallyPointRadius) {
-            setRallyPoint(slot: slot, to: point)
-            if let placed = rallyPointsBySlot[slot] {
-                rallyFlagFlashCount += 1
-                rallyFlagFlash = RallyFlagFlash(id: rallyFlagFlashCount, position: placed)
-            }
-        }
-        isPlacingRallyPoint = false
-        selectedTowerSlotIndex = nil
-    }
-
-    func rallyPoint(forSlot slot: Int) -> CGPoint? { rallyPointsBySlot[slot] }
-
-    func setRallyPoint(slot: Int, to point: CGPoint) {
-        guard var g = garrisonsBySlot[slot],
-              let tower = placedTower(atSlot: slot),
-              let melee = towerLevel(for: tower)?.meleeUnit else { return }
-        let towerPos = Point(Double(tower.position.x), Double(tower.position.y))
-        g.rallyPoint = Simulation.rallyPoint(requested: Point(Double(point.x), Double(point.y)),
-                                             towerPosition: towerPos,
-                                             flagRange: melee.rallyPointRadius, paths: paths)
-        garrisonsBySlot[slot] = g
-        rallyPointsBySlot[slot] = CGPoint(x: g.rallyPoint.x, y: g.rallyPoint.y)
-    }
-
-    @Published private(set) var armedBuildKind: TowerKind?
+    private let db: Db
+    private var runtimeCanvas: RuntimeCanvas
+    private let hudLayoutConfig: HudLayoutConfig
+    private var displayLink: CADisplayLink?
     private let enemyEscapeFeedback = UINotificationFeedbackGenerator()
     private let demolitionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     private var hapticEngine: CHHapticEngine?
@@ -543,505 +21,67 @@ public final class LevelRunner: NSObject, ObservableObject {
 
     private var demolitionHapticPlayer: (any CHHapticAdvancedPatternPlayer)?
     private var hapticsActive = false
-    private enum HapticPlayback: String { case inactive, coreHaptics, fallback }
-    #if DEBUG
-    private var demolitionHapticStarts = 0
-    private var lastDemolitionHapticPlayback = HapticPlayback.inactive
-    private var demolitionHapticCompleted: Bool?
-    #endif
 
-    @Published private(set) var armedUpgradeBranch: Int?
-
-    @Published private(set) var walkers: [Walker] = []
-    private var nextWalkerID = 0
-
-    @Published private(set) var militia: [MilitiaSoldier] = []
-    private var garrisonsBySlot: [Int: MilitiaGarrison] = [:]
-    private var blockedWalkerIDs: Set<Int> = []
-    private var lastMilitiaTick: Int64 = 0
-
-    private var militiaPrevPositions: [Int: CGPoint] = [:]
-    private var militiaRespawnedIDs: Set<Int> = []
-    private var militiaPoses: [Int: WalkPose] = [:]
-    let combatRules: CombatRules
-    private let meleeFormation: MeleeFormation
-    private var nextReinforcementSlot = -1
-    private var reinforcementSchedule: ReinforcementSchedule?
-    @Published private(set) var reinforcementCooldown: ReinforcementCooldown = .ready
-    @Published private(set) var isPlacingReinforcements = false
-
-    var canCallReinforcements: Bool {
-        isReady && !isDefeated && !isCleared && reinforcementStats != nil
-            && reinforcementSchedule?.cooldown(at: timer.tick).isReady == true
+    convenience init(db: Db, virtualCanvas: VirtualCanvas, runtimeCanvas: RuntimeCanvas,
+         hudLayoutConfig: HudLayoutConfig = .standard, levelInfoID: UUID?,
+         mapImageName: String, onVictory: @escaping (Int, Int) -> Int = { _, _ in 0 }) {
+        guard let levelInfoID else { fatalError("Campaign node has no authored level_info id") }
+        do {
+            let content = try BattleContent(db: db, levelID: levelInfoID)
+            self.init(db: db, content: content, runtimeCanvas: runtimeCanvas,
+                      hudLayoutConfig: hudLayoutConfig, onVictory: onVictory)
+        } catch { fatalError("Database load failed: \(error)") }
     }
 
-    @Published private(set) var heroes: [HeroSoldier] = []
-    @Published private(set) var selectedHeroIndex: Int?
-    private var heroPosts: [HeroPost] = []
-
-    var hudHeroes: [Hero] {
-        heroSelection?.heroes ?? []
-    }
-
-    func hudHeroIndex(for heroID: UUID) -> Int? {
-        heroPosts.firstIndex { $0.hero.id == heroID && $0.unit.state != .dead }
-    }
-    private var heroRespawnedIDs: Set<Int> = []
-    private var heroPoses: [Int: HeroWalkPose] = [:]
-
-    private struct ScheduledSpawn {
-        let tick: Int64
-        let enemyTypeID: UUID
-        let pathIndex: Int
-    }
-
-    private var pendingSpawns: [ScheduledSpawn] = []
-
-    @Published private(set) var speedMultiplier = 1
-
-    @Published private(set) var status: String = "Loading…"
-
-    private(set) var isReady = false
-
-    private var paths: [Path] = []
-
-    private var callWaveButtons: [CallWaveButtonPosition] = []
-
-    var callWaveButtonPositions: [Point] {
-        let next = waveSchedule.nextWaveIndex
-        guard waves.indices.contains(next) else { return [] }
-        return CallWaveButtonPosition.visiblePositions(
-            callWaveButtons, forPathIndices: Set(waves[next].spawns.map(\.pathIndex)))
-    }
-
-    private var levelName = ""
-    private var enemyTypesByID: [UUID: EnemyType] = [:]
-    private var waves: [Wave] = []
-    private var waveIndex = 0
-    private var waveSchedule = WaveStartSchedule()
-
-    var waveCount: Int { waves.count }
-    var currentWaveNumber: Int { min(waveIndex + 1, max(waves.count, 1)) }
-    var nextWaveNumber: Int { waveSchedule.nextWaveIndex + 1 }
-
-    private let timer = Timer(tickDuration: LevelRunner.normalTickDuration)
-    private var displayLink: CADisplayLink?
-
-    private let enemyHPMultiplier: Double
-
-    private let db: Db
-    private let virtualCanvas: VirtualCanvas
-    private var runtimeCanvas: RuntimeCanvas
-    private let hudLayoutConfig: HudLayoutConfig
-
-    init(db: Db,
-         virtualCanvas: VirtualCanvas,
-         runtimeCanvas: RuntimeCanvas,
-         hudLayoutConfig: HudLayoutConfig = .standard,
-         levelInfoID: UUID?,
-         mapImageName: String,
-         enemyHPMultiplier: Double) {
-        do { self.combatRules = try db.combatRulesDao.get() }
-        catch { fatalError("Invalid authored combat rules: \(error)") }
-        self.meleeFormation = MeleeFormation(rules: combatRules)
+    init(db: Db, content: BattleContent, runtimeCanvas: RuntimeCanvas,
+         hudLayoutConfig: HudLayoutConfig,
+         onVictory: @escaping (Int, Int) -> Int = { _, _ in 0 }) {
         self.db = db
-        self.virtualCanvas = virtualCanvas
         self.runtimeCanvas = runtimeCanvas
         self.hudLayoutConfig = hudLayoutConfig.moving(.heroBar, to: .southWest)
-        self.mapImageName = mapImageName
-        self.mapArt = LevelMapArt(mapImageName: mapImageName)
-        self.playArea = virtualCanvas.playAreaRect
-        self.enemyHPMultiplier = enemyHPMultiplier
-        super.init()
-        load(levelInfoID: levelInfoID)
-    }
-
-    private func load(levelInfoID: UUID?) {
-        guard let levelInfoID else {
-            status = "This campaign node has no level_info id."
-            return
-        }
-        guard Bundle.main.url(forResource: "in_defense_of_history", withExtension: "sqlite") != nil else {
-            status = "in_defense_of_history.sqlite is not in the app bundle."
-            return
-        }
-
+        mapArt = LevelMapArt(mapImageName: content.level.mapImageName)
         do {
-            reinforcementSchedule = ReinforcementSchedule(config: try db.reinforcementConfigDao.get())
-            let level = try db.levelLoader.load(id: levelInfoID)
-            let enemies = try db.enemyTypeDao.getAll()
-            callWaveButtons = try db.levelGeoJSONDao.getCallWaveButtons(mapImageName: level.mapImageName)
-            exitPositions = try db.levelGeoJSONDao.getExitPoints(mapImageName: level.mapImageName)
-                .map { CGPoint(x: $0.position.x, y: $0.position.y) }
-
-            let chosen = try HeroSelectionStore(dao: db.heroDao).load()
-            chosenHeroes = chosen
-            let heroConfiguration = try db.levelGeoJSONDao.getHeroConfiguration(mapImageName: level.mapImageName)
-            let deployments = heroConfiguration.deployments(for: chosen)
-            heroImageAspectRatios = try Dictionary(uniqueKeysWithValues: deployments.map { deployment in
-                let name = deployment.hero.unitImageName
-                guard let image = UIImage(named: name),
-                      image.size.width > 0, image.size.height > 0 else {
-                    throw DbError.Db(message: "Missing sprite dimensions for \(deployment.hero.shortName)")
-                }
-                return (deployment.hero.id, image.size.width / image.size.height)
-            })
-            if deployments.isEmpty { heroSelection = nil }
-            else { heroSelection = try HeroSelection(heroes: deployments.map(\.hero)) }
-
-            let unlockRows = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelInfoID)
-            towerUnlocks = Dictionary(uniqueKeysWithValues: unlockRows.compactMap { key, value in
-                TowerKind(rawValue: key).map { ($0, value) }
-            })
-
-            levelName = level.name
-            playArea = level.playArea
-            if !level.mapImageName.isEmpty {
-                mapImageName = level.mapImageName
-                mapArt = LevelMapArt(mapImageName: level.mapImageName)
-            }
-            startingMoney = level.startingMoney
-            money = level.startingMoney
-            startingLives = level.numStartingLives
-            lives = level.numStartingLives
-
-            let costRows = try db.towerTypeDao.getCostsByLevel()
-            towerCosts = Dictionary(uniqueKeysWithValues: costRows.compactMap { category, levels in
-                TowerKind(categoryName: category).map { ($0, levels) }
-            })
-
-            let detailRows = try db.towerTypeDao.getMenuDetailsByLevel()
-            towerMenuDetails = Dictionary(uniqueKeysWithValues: detailRows.compactMap { category, levels in
-                TowerKind(categoryName: category).map { ($0, levels) }
-            })
-            for kind in TowerKind.allCases {
-                guard menuDetails(for: kind, atLevel: 1) != nil else {
-                    throw DbError.Db(message: "Missing authored base tower text for \(kind)")
-                }
-                guard let costs = towerCosts[kind] else {
-                    throw DbError.Db(message: "Missing authored tower costs for \(kind)")
-                }
-                for (level, branches) in costs {
-                    for branch in branches.keys where menuDetails(for: kind, atLevel: level, branch: branch) == nil {
-                        throw DbError.Db(message: "Missing authored tower text for \(kind), level \(level), branch \(branch)")
-                    }
-                }
-            }
-
-            let tuningRows = try db.towerTypeDao.getTowerLevelsByBranch()
-            towerLevels = Dictionary(uniqueKeysWithValues: tuningRows.compactMap { category, levels in
-                TowerKind(categoryName: category).map { ($0, levels) }
-            })
-            slotPositions = level.towerSlots.map { CGPoint(x: $0.position.x, y: $0.position.y) }
-
-            guard !level.paths.isEmpty else {
-                status = "\(level.name): no path in the database."
-                return
-            }
-            enemyTypesByID = Dictionary(uniqueKeysWithValues: enemies.map { ($0.id, $0) })
-            waves = level.waves
-            guard !waves.isEmpty else {
-                status = "\(level.name): no waves in the database."
-                return
-            }
-
-            paths = level.paths
-            let movementArea = try db.levelGeoJSONDao.getHeroMovementArea(
-                mapImageName: level.mapImageName, defaultPathWidth: virtualCanvas.pathWidth)
-            heroPosts = try deployments.map { deployment in
+            try super.init(content: content, heroesEnabled: true, startingMoneyOverride: nil,
+                seed: UInt64.random(in: UInt64.min...UInt64.max), onVictory: onVictory)
+            heroImageAspectRatios = try Dictionary(uniqueKeysWithValues: content.deployments.map { deployment in
                 let hero = deployment.hero
-                let assetName = hero.unitImageName
-                let combat = try db.heroDao.getCombatStats(heroID: hero.id)
-                let position = deployment.spawn.position
-                let movement = try HeroMovement(area: movementArea, spawn: position)
-                return HeroPost(hero: hero, assetName: assetName, combat: combat,
-                    unit: MilitiaUnit(position: position, hp: combat.hp),
-                    movement: movement)
-            }
-            heroPoses = Dictionary(uniqueKeysWithValues: heroPosts.enumerated().map { index, post in
-                (index, HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position))
+                guard let image = UIImage(named: hero.unitImageName),
+                      image.size.width > 0, image.size.height > 0 else {
+                    throw DbError.Db(message: "Missing sprite dimensions for \(hero.shortName)")
+                }
+                return (hero.id, image.size.width / image.size.height)
             })
+            validateHeroAsset = { name in
+                guard UIImage(named: name) != nil else { fatalError("Missing hero animation image '\(name)'") }
+            }
+            publishesPresentation = true
             publishHeroes()
-            precomputeLaneCoverage()
-            waveSchedule = try WaveStartSchedule(waves: waves)
-            isReady = true
-            refreshWaveStartState()
-            status = "\(levelName)  •  wave 1/\(waves.count) waiting  •  tap an entrance, then tap to confirm"
-        } catch {
-            fatalError("Database load failed: \(error)")
-        }
+        } catch { fatalError("Database load failed: \(error)") }
     }
 
-    func isSlotOccupied(_ index: Int) -> Bool {
-        placedTowers.contains { $0.slotIndex == index }
+    func updateRuntimeCanvas(_ canvas: RuntimeCanvas) { runtimeCanvas = canvas }
+    @objc private func handleFrame() { step() }
+    private func step() {
+        advance(ticks: timer.dueTicks(), interpolation: timer.interpolationAlpha)
     }
 
-    func placedTower(atSlot index: Int) -> PlacedTower? {
-        placedTowers.first { $0.slotIndex == index }
-    }
-
-    func maxLevel(for kind: TowerKind) -> Int {
-        guard let maximum = towerUnlocks[kind] else {
-            fatalError("Missing database tower unlock for \(kind)")
-        }
-        return maximum
-    }
-
-    func selectSlot(_ index: Int) {
-        guard !isSlotOccupied(index) else { return }
-        isPlacingReinforcements = false
-        isPlacingDemolition = false
-        isPlacingEngineerObstacles = false
-        if selectedHeroIndex != nil {
-            selectedHeroIndex = nil
-            publishHeroes()
-        }
-        selectedTowerSlotIndex = nil
-        armedBuildKind = nil
-        armedUpgradeBranch = nil
-        selectedSlotIndex = selectedSlotIndex == index ? nil : index
-    }
-
-    func selectPlacedTower(atSlot index: Int) {
-        guard isSlotOccupied(index) else { return }
-        isPlacingReinforcements = false
-        isPlacingDemolition = false
-        isPlacingEngineerObstacles = false
-        if selectedHeroIndex != nil {
-            selectedHeroIndex = nil
-            publishHeroes()
-        }
-        selectedSlotIndex = nil
-        armedBuildKind = nil
-        armedUpgradeBranch = nil
-        isPlacingRallyPoint = false
-        selectedTowerSlotIndex = selectedTowerSlotIndex == index ? nil : index
-    }
-
-    func dismissMenu() {
-        selectedSlotIndex = nil
-        selectedTowerSlotIndex = nil
-        armedBuildKind = nil
-        armedUpgradeBranch = nil
-        isPlacingRallyPoint = false
-        isPlacingDemolition = false
-        isPlacingEngineerObstacles = false
-    }
-
-    func tapBuildButton(_ kind: TowerKind) {
-        guard selectedSlotIndex != nil, maxLevel(for: kind) >= 1 else { return }
-        if armedBuildKind == kind {
-            guard let cost = buildCost(for: kind), money >= cost else {
-                dismissMenu()
-                return
-            }
-            buildTower(kind)
-        } else if armedBuildKind != nil {
-            armedBuildKind = nil
-        } else {
-            armedBuildKind = kind
-        }
-    }
-
-    func buildPreviewRadius(for kind: TowerKind) -> CGFloat? {
-        guard let cost = buildCost(for: kind), money >= cost else { return nil }
-        return towerLevels[kind]?[1]?[1].flatMap(Self.overlayRadius)
-    }
-
-    func rangeOverlayRadius(for tower: PlacedTower) -> CGFloat? {
-        towerLevel(for: tower).flatMap(Self.overlayRadius)
-    }
-
-    func tapUpgradeButton(branch: Int) {
-        guard let offer = upgradeOffers.first(where: { $0.branch == branch }) else { return }
-        if armedUpgradeBranch == branch {
-            guard money >= offer.cost else {
-                dismissMenu()
-                return
-            }
-            upgradeSelectedTower(branch: branch)
-        } else {
-            armedUpgradeBranch = branch
-            isPlacingRallyPoint = false
-        }
-    }
-
-    func upgradePreviewRadius(branch: Int) -> CGFloat? {
-        guard let slotIndex = selectedTowerSlotIndex,
-              let tower = placedTower(atSlot: slotIndex),
-              let offer = upgradeOffers.first(where: { $0.branch == branch }),
-              money >= offer.cost
-        else { return nil }
-        return towerLevels[tower.kind]?[offer.nextLevel]?[offer.branch]
-            .flatMap(Self.overlayRadius)
-    }
-
-    private static func overlayRadius(for tuning: TowerLevel) -> CGFloat? {
-        if let melee = tuning.meleeUnit { return CGFloat(melee.rallyPointRadius) }
-        return tuning.attackRange.radius > 0 ? tuning.attackRange.radius : nil
-    }
-
-    func buildTower(_ kind: TowerKind) {
-        guard let slotIndex = selectedSlotIndex,
-              maxLevel(for: kind) >= 1,
-              kind.assetName != nil,
-              !isSlotOccupied(slotIndex),
-              slotPositions.indices.contains(slotIndex),
-              let cost = buildCost(for: kind),
-              money >= cost
-        else { return }
-        money -= cost
-        var tower = PlacedTower(combatRules: combatRules,
-            slotIndex: slotIndex,
-            kind: kind,
-            position: slotPositions[slotIndex]
-        )
-        if let tuning = towerLevel(for: tower), tuning.engineerObstacles != nil {
-            tower.engineerObstaclePosition = tuning.attackRange.nearestPathPoint(
-                to: tower.position, from: tower.position, paths: paths)
-        }
-        placedTowers.append(tower)
-        if let melee = towerLevel(for: tower)?.meleeUnit {
-            let towerPos = Point(Double(tower.position.x), Double(tower.position.y))
-            let rally = Simulation.defaultRallyPoint(
-                towerPosition: towerPos,
-                flagRange: melee.rallyPointRadius,
-                paths: paths)
-            rallyPointsBySlot[slotIndex] = CGPoint(x: rally.x, y: rally.y)
-            garrisonsBySlot[slotIndex] = MilitiaGarrison(
-                rallyPoint: rally,
-                units: (0..<melee.soldierCount).map { index in
-                    MilitiaUnit(position: meleeFormation.spawnPoint(
-                        index: index, of: melee.soldierCount, building: towerPos),
-                                hp: melee.hp)
-                })
-            publishMilitia()
-        }
-        selectedSlotIndex = nil
-        armedBuildKind = nil
-    }
-
-    var upgradeOffers: [(nextLevel: Int, branch: Int, cost: Int)] {
-        guard let slotIndex = selectedTowerSlotIndex,
-              let tower = placedTower(atSlot: slotIndex) else { return [] }
-        let next = tower.level + 1
-        guard next <= maxLevel(for: tower.kind) else { return [] }
-        guard let branches = towerCosts[tower.kind]?[next] else {
-            fatalError("Missing database upgrade costs for \(tower.kind), level \(next)")
-        }
-        return branches.keys.sorted().compactMap { branch in
-            if let tuning = towerLevels[tower.kind]?[next]?[branch],
-               tuning.demolitionPreparationSeconds != nil,
-               tuning.attackRange.nearestPathPoint(to: tower.position, from: tower.position, paths: paths) == nil {
-                return nil
-            }
-            return branches[branch].map { (next, branch, $0) }
-        }
-    }
-
-    func upgradeSelectedTower(branch: Int = 1) {
-        guard let slotIndex = selectedTowerSlotIndex,
-              let offer = upgradeOffers.first(where: { $0.branch == branch }),
-              let arrayIndex = placedTowers.firstIndex(where: { $0.slotIndex == slotIndex }),
-              money >= offer.cost
-        else { return }
-        money -= offer.cost
-        placedTowers[arrayIndex].level = offer.nextLevel
-        placedTowers[arrayIndex].branch = offer.branch
-        if towerLevel(for: placedTowers[arrayIndex])?.engineerObstacles == nil {
-            placedTowers[arrayIndex].engineerObstaclePosition = nil
-        } else if placedTowers[arrayIndex].engineerObstaclePosition == nil,
-                  let tuning = towerLevel(for: placedTowers[arrayIndex]) {
-            let origin = placedTowers[arrayIndex].position
-            placedTowers[arrayIndex].engineerObstaclePosition = tuning.attackRange.nearestPathPoint(
-                to: origin, from: origin, paths: paths)
-        }
-        if let tuning = towerLevel(for: placedTowers[arrayIndex]),
-           let preparation = tuning.demolitionPreparationSeconds {
-            placedTowers[arrayIndex].demolitionCharge = DemolitionCharge(preparationSeconds: preparation)
-        }
-        if var g = garrisonsBySlot[slotIndex],
-           let melee = towerLevel(for: placedTowers[arrayIndex])?.meleeUnit {
-
-            for i in 0..<g.units.count where g.units[i].state != .dead {
-                g.units[i].hp = melee.hp
-            }
-            garrisonsBySlot[slotIndex] = g
-            publishMilitia()
-        }
-        selectedTowerSlotIndex = nil
-        armedUpgradeBranch = nil
-    }
-
-    private func refreshWaveStartState() {
-        let state = waveSchedule.state(at: timer.tick)
-        let visible = !isDefeated && !isCleared && state.canCall
-        if awaitingWaveStart != visible { awaitingWaveStart = visible }
-        let seconds: Int?
-        if visible, case .countingDown(let remaining) = state {
-            seconds = remaining
-        } else {
-            seconds = nil
-        }
-        if waveCountdownSeconds != seconds { waveCountdownSeconds = seconds }
-    }
-
-    func startNextWave() {
-        guard isReady, !isDefeated, !isCleared,
-              let start = waveSchedule.startNextWave(at: timer.tick, manually: true)
-        else { return }
-        money += start.moneyBonus
-        enterWave(start.index)
-        refreshWaveStartState()
-    }
-
-    private func advanceWaveSchedule() {
-
-        while let start = waveSchedule.startNextWave(at: timer.tick, manually: false) {
-            enterWave(start.index)
-        }
-        refreshWaveStartState()
-    }
-
-    private func enterWave(_ index: Int) {
-        guard waves.indices.contains(index) else { return }
-        waveIndex = index
-        let wave = waves[index]
-        let base = timer.tick
-
-        var scheduled: [ScheduledSpawn] = []
-        for entry in wave.spawns {
-            for i in 0..<entry.count {
-                let seconds = entry.delay + Double(i) * entry.interval
-                scheduled.append(ScheduledSpawn(
-                    tick: base + Int64((seconds / SimClock.dt).rounded()),
-                    enemyTypeID: entry.enemyTypeID,
-                    pathIndex: entry.pathIndex))
-            }
-        }
-
-        pendingSpawns.append(contentsOf: scheduled)
-        pendingSpawns.sort { $0.tick < $1.tick }
-        status = "\(levelName)  •  wave \(index + 1)/\(waves.count)  •  "
-            + "\(scheduled.count) enemies"
-    }
-
-    func start() {
-        guard isReady, (!isDefeated && !isCleared) || !artilleryImpacts.isEmpty,
+    override func start() {
+        guard !isPaused, isReady, (!isDefeated && !isCleared) || !artilleryImpacts.isEmpty,
               displayLink == nil else { return }
-        timer.resync()
-        lastStepGameTicks = Double(timer.tick) + timer.interpolationAlpha
-        lastMilitiaTick = timer.tick
-
         refreshWaveStartState()
         hapticsActive = true
         startHapticEngine()
         let link = CADisplayLink(target: self, selector: #selector(handleFrame))
+        // Haptic startup can take several ticks. Anchor the clock only when
+        // everything is ready so resuming never advances through setup time.
+        timer.resync()
+        lastStepGameTicks = Double(timer.tick)
+        lastMilitiaTick = timer.tick
         link.add(to: .main, forMode: .common)
         displayLink = link
     }
 
-    func stop() {
+    override func stop() {
         stopSimulation()
         hapticsActive = false
         try? activeHapticPlayer?.stop(atTime: CHHapticTimeImmediate)
@@ -1052,7 +92,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         hapticEngine = nil
     }
 
-    private func stopSimulation() {
+    override func stopSimulation() {
         displayLink?.invalidate()
         displayLink = nil
     }
@@ -1081,7 +121,7 @@ public final class LevelRunner: NSObject, ObservableObject {
         _ = playGameplayHaptic(cue == .defeat ? .defeat : .lifeLoss)
     }
 
-    @discardableResult private func playGameplayHaptic(_ pattern: GameplayHapticPattern) -> HapticPlayback {
+    @discardableResult override func playGameplayHaptic(_ pattern: GameplayHapticPattern) -> HapticPlayback {
         guard hapticsActive else { return .inactive }
         if pattern == .demolitionExplosion {
             try? demolitionHapticPlayer?.stop(atTime: CHHapticTimeImmediate)
@@ -1125,937 +165,47 @@ public final class LevelRunner: NSObject, ObservableObject {
         }
     }
 
-    private func loseLife(cost: Int) {
-        guard !isDefeated else { return }
-        lives = max(0, lives - cost)
-        escapedEnemyCount += 1
-        guard lives == 0 else { return }
-        isDefeated = true
-        pendingSpawns.removeAll()
-        refreshWaveStartState()
-
-        if artilleryImpacts.isEmpty { stopSimulation() }
-    }
-
-    func speedUp() {
-        timer.setTickDuration(timer.tickDuration / 2)
-        speedMultiplier *= 2
-    }
-
-    @objc private func handleFrame() {
-        step()
-    }
-
-    private func step() {
-        guard !paths.isEmpty else { return }
-        if isCleared || isDefeated {
-
-            for _ in 0..<timer.dueTicks() { timer.advanceTick() }
-            let nowTicks = Double(timer.tick) + timer.interpolationAlpha
-            let gameDt = max(0, nowTicks - lastStepGameTicks) * SimClock.dt
-            lastStepGameTicks = nowTicks
-            advanceArtilleryImpacts(seconds: gameDt)
-            if artilleryImpacts.isEmpty { stopSimulation() }
-            return
-        }
-
-        for _ in 0..<timer.dueTicks() {
-            timer.advanceTick()
-            advanceWaveSchedule()
-        }
-        advanceReinforcements()
-        refreshTowerStatsIfDue()
-
-        while let next = pendingSpawns.first, timer.tick >= next.tick {
-            pendingSpawns.removeFirst()
-            guard let type = enemyTypesByID[next.enemyTypeID] else { continue }
-            let stats = type.stats
-            let maxHP = stats.maxHP * enemyHPMultiplier
-            walkers.append(Walker(
-                id: nextWalkerID,
-                assetName: type.imageName,
-                speed: stats.speed,
-                maxHP: maxHP,
-                hp: maxHP,
-                bounty: stats.gold, livesCost: stats.livesCost,
-                damageMin: stats.damageMin,
-                damageMax: stats.damageMax,
-                cover: stats.cover,
-                blockImmune: type.traits.contains(.rideDown),
-                spawnTick: next.tick,
-                pathIndex: next.pathIndex,
-                discipline: stats.discipline,
-                moraleResponse: stats.moraleResponse,
-                morale: EnemyMorale(rules: combatRules),
-                position: {
-                    let point = paths[min(max(next.pathIndex, 0), paths.count - 1)].point(atDistance: 0)
-                    return CGPoint(x: point.x, y: point.y)
-                }()
-            ))
-            nextWalkerID += 1
-        }
-
-        let alpha = timer.interpolationAlpha
-        let nowTicks = Double(timer.tick) + alpha
-        let frameDtTicks = max(0, nowTicks - lastStepGameTicks)
-        lastStepGameTicks = nowTicks
-        let gameDt = frameDtTicks * SimClock.dt
-        advanceArtilleryImpacts(seconds: gameDt)
-        advanceWalkers(seconds: gameDt, nowTicks: nowTicks)
-
-        guard !isDefeated else { return }
-
-        stepMilitia()
-        if !garrisonsBySlot.isEmpty {
-            publishMilitia(alpha: alpha)
-        }
-        if !heroPosts.isEmpty {
-            publishHeroes(alpha: alpha)
-        }
-
-        if waveSchedule.allWavesStarted && pendingSpawns.isEmpty && walkers.isEmpty && !isCleared {
-            isCleared = true
-            refreshWaveStartState()
-            status = "\(levelName)  •  all \(waves.count) waves cleared"
-        }
-
-        updateCombat(gameDt: gameDt)
-    }
-
-    private func stepMilitia() {
-        guard timer.tick > lastMilitiaTick else { return }
-        let dueTicks = min(Int(timer.tick - lastMilitiaTick), 8)
-        lastMilitiaTick = timer.tick
-        guard !garrisonsBySlot.isEmpty || !heroPosts.isEmpty else {
-            blockedWalkerIDs.removeAll()
-            return
-        }
-        for (id, post) in heroPosts.enumerated() where post.unit.state != .dead && heroPoses[id] == nil {
-            heroPoses[id] = HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
-        }
-        for _ in 0..<dueTicks {
-
-            militiaPrevPositions = militiaPositionsById()
-            militiaRespawnedIDs.removeAll()
-            heroRespawnedIDs.removeAll()
-            stepMilitiaTick()
-            if !militiaRespawnedIDs.isEmpty {
-                let now = militiaPositionsById()
-                for id in militiaRespawnedIDs {
-                    militiaPrevPositions[id] = now[id]
-                }
-            }
-            updateMilitiaPoses()
-            updateHeroPoses()
-        }
-    }
-
-    private func updateMilitiaPoses() {
-        let now = militiaPositionsById()
-        let enemies = Dictionary(uniqueKeysWithValues: walkers.map { ($0.id, $0.position) })
-        var combatTargets: [Int: CGPoint] = [:]
-        for (slot, garrison) in garrisonsBySlot {
-            for (index, unit) in garrison.units.enumerated() where unit.state == .fighting {
-                combatTargets[slot * 8 + index] = enemies[unit.targetSpawnID]
-            }
-        }
-        var poses: [Int: WalkPose] = [:]
-        poses.reserveCapacity(now.count)
-        for (id, cur) in now {
-            let prev = militiaPrevPositions[id] ?? cur
-            let dx = Double(cur.x - prev.x)
-            let dy = Double(cur.y - prev.y)
-            let moved = (dx * dx + dy * dy).squareRoot()
-            var pose = militiaPoses[id]
-                ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
-            pose.isWalking = moved > MeleeWalkCycle.walkingThreshold
-            if pose.isWalking {
-                pose.facing = UnitFacing(dx: dx, dy: dy)
-                pose.walkPhase = (pose.walkPhase + moved)
-                    .truncatingRemainder(dividingBy: MeleeWalkCycle.cycleDistance)
-            } else if let target = combatTargets[id] {
-                pose.facing = UnitFacing(dx: target.x - cur.x, dy: target.y - cur.y)
-            }
-            poses[id] = pose
-        }
-        militiaPoses = poses
-    }
-
-    private func updateHeroPoses() {
-        var poses: [Int: HeroWalkPose] = [:]
-        poses.reserveCapacity(heroPosts.count)
-        for (id, post) in heroPosts.enumerated() where post.unit.state != .dead {
-            var pose: HeroWalkPose
-            if heroRespawnedIDs.contains(id) {
-                pose = HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
-            } else {
-                guard let existing = heroPoses[id] else {
-                    fatalError("hero[\(post.hero.id)]: missing animation pose")
-                }
-                pose = existing
-            }
-            pose.advance(to: post.unit.position)
-            if post.unit.state == .fighting,
-               let target = walkers.first(where: { $0.id == post.unit.targetSpawnID }) {
-                pose.face(toward: Point(target.position.x, target.position.y))
-            }
-            poses[id] = pose
-        }
-        heroPoses = poses
-    }
-
-    private var reinforcementStats: MeleeUnitStats? {
-        guard let levels = towerLevels[.melee] else { return nil }
-        for level in levels.keys.sorted() {
-            guard let branches = levels[level] else { continue }
-            for branch in branches.keys.sorted() {
-                if let melee = branches[branch]?.meleeUnit { return melee }
-            }
-        }
-        return nil
-    }
-
-    private func garrisonMelee(slot: Int,
-                               garrison: MilitiaGarrison) -> (stats: MeleeUnitStats,
-                                                              anchor: Point)? {
-        if let stats = garrison.stats, let anchor = garrison.anchor {
-            return (stats, anchor)
-        }
-        guard let tower = placedTower(atSlot: slot),
-              let stats = towerLevel(for: tower)?.meleeUnit else { return nil }
-        return (stats, Point(Double(tower.position.x), Double(tower.position.y)))
-    }
-
-    @discardableResult
-    func callReinforcements(at point: CGPoint) -> Bool {
-        guard canCallReinforcements, let melee = reinforcementStats,
-              reinforcementSchedule?.deploy(slot: nextReinforcementSlot, at: timer.tick) == true
-        else { return false }
-        let anchor = Point(Double(point.x), Double(point.y))
-        garrisonsBySlot[nextReinforcementSlot] = MilitiaGarrison(
-            rallyPoint: anchor,
-            units: (0..<combatRules.reinforcementSoldierCount).map { index in
-                MilitiaUnit(position: meleeFormation.spawnPoint(
-                    index: index, of: combatRules.reinforcementSoldierCount, building: anchor),
-                            hp: melee.hp)
-            },
-            stats: melee,
-            anchor: anchor)
-        nextReinforcementSlot -= 1
-        isPlacingReinforcements = false
-        reinforcementCooldown = reinforcementSchedule!.cooldown(at: timer.tick)
-        publishMilitia()
-        return true
-    }
-
-    func toggleReinforcementPlacement() {
-        guard canCallReinforcements else { return }
-        dismissMenu()
-        if selectedHeroIndex != nil {
-            selectedHeroIndex = nil
-            publishHeroes()
-        }
-        isPlacingReinforcements.toggle()
-    }
-
-    func placeReinforcements(at point: CGPoint) {
-        guard isPlacingReinforcements, isOnPath(point) else { return }
-        callReinforcements(at: point)
-    }
-
-    private func advanceReinforcements() {
-        guard let expired = reinforcementSchedule?.expire(at: timer.tick) else { return }
-        let cooldown = reinforcementSchedule!.cooldown(at: timer.tick)
-        if reinforcementCooldown != cooldown { reinforcementCooldown = cooldown }
-        guard !expired.isEmpty else { return }
-        for slot in expired {
-            guard let garrison = garrisonsBySlot.removeValue(forKey: slot) else { continue }
-            for index in garrison.units.indices {
-                let id = slot * 8 + index
-                militiaPrevPositions[id] = nil
-                militiaPoses[id] = nil
-                militiaRespawnedIDs.remove(id)
-            }
-            damageTotalBySlot[slot] = nil
-        }
-
-        let fightingUnits = garrisonsBySlot.values.flatMap(\.units) + heroPosts.map(\.unit)
-        blockedWalkerIDs = Set(fightingUnits.filter { $0.state == .fighting && $0.targetSpawnID >= 0 }
-            .map(\.targetSpawnID))
-
-        publishMilitia()
-    }
-
-    private func militiaPositionsById() -> [Int: CGPoint] {
-        var out: [Int: CGPoint] = [:]
-        for (slot, g) in garrisonsBySlot {
-            for (i, u) in g.units.enumerated() where u.state != .dead {
-                out[slot * 8 + i] = CGPoint(x: u.position.x, y: u.position.y)
-            }
-        }
-        return out
-    }
-
-    private func pathNearest(to target: Point) -> Path? {
-        var nearest: Path?
-        var nearestGap = Double.infinity
-        for path in paths {
-            let gap = path.point(atDistance: path.nearestDistance(to: target)).distance(to: target)
-            if gap < nearestGap {
-                nearestGap = gap
-                nearest = path
-            }
-        }
-        return nearest
-    }
-
-    private func marchWaypoint(from current: Point, to target: Point,
-                               path: Path, targetAlong: Double) -> Point {
-        let fallInRadius = meleeFormation.postSpread
-        guard current.distance(to: target) > fallInRadius else { return target }
-        let currentAlong = path.nearestDistance(to: current)
-        let remaining = targetAlong - currentAlong
-        guard abs(remaining) > fallInRadius else { return target }
-        let lookahead = remaining > 0 ? fallInRadius : -fallInRadius
-        return path.point(atDistance: currentAlong + lookahead)
-    }
-
-    private func stepMilitiaTick() {
-        let dt = SimClock.dt
-
-        var claimed: Set<Int> = []
-        for post in heroPosts where post.unit.state != .dead && post.unit.targetSpawnID >= 0 {
-            claimed.insert(post.unit.targetSpawnID)
-        }
-        for (_, g) in garrisonsBySlot.sorted(by: { $0.key < $1.key }) {
-            for u in g.units where u.targetSpawnID >= 0 {
-                claimed.insert(u.targetSpawnID)
-            }
-        }
-
-        var indexByWalkerID: [Int: Int] = [:]
-        for (i, w) in walkers.enumerated() {
-            indexByWalkerID[w.id] = i
-        }
-        var killedIDs: Set<Int> = []
-
-        blockedWalkerIDs.removeAll(keepingCapacity: true)
-
-        for slot in garrisonsBySlot.keys.sorted() {
-            guard var g = garrisonsBySlot[slot],
-                  let resolved = garrisonMelee(slot: slot, garrison: g)
-            else { continue }
-            let melee = resolved.stats
-            let towerPos = resolved.anchor
-            let marchPath = pathNearest(to: g.rallyPoint)
-            let marchTargetAlong = marchPath?.nearestDistance(to: g.rallyPoint)
-
-            var free: [(spawnID: Int, position: Point)] = []
-            for w in walkers where !w.blockImmune && !claimed.contains(w.id)
-                && !killedIDs.contains(w.id) {
-                free.append((w.id, Point(Double(w.position.x), Double(w.position.y))))
-            }
-
-            for ui in 0..<g.units.count {
-                var unit = g.units[ui]
-                var targetPos: Point? = nil
-                if unit.targetSpawnID >= 0, !killedIDs.contains(unit.targetSpawnID),
-                   let wi = indexByWalkerID[unit.targetSpawnID] {
-                    targetPos = Point(Double(walkers[wi].position.x),
-                                      Double(walkers[wi].position.y))
-                }
-                let context = MilitiaContext(rules: combatRules,
-                    freeEnemies: free,
-                    targetPosition: targetPos,
-                    rallyPoint: meleeFormation.postPoint(index: ui, of: g.units.count,
-                                                        rallyPoint: g.rallyPoint),
-                    towerPosition: towerPos,
-                    leashRadius: melee.leashRadius,
-                    engageScanRadius: melee.engageScanRadius)
-                if unit.swingTicksLeft > 0 { unit.swingTicksLeft -= 1 }
-
-                switch MilitiaAI.decide(unit, context: context) {
-                case .idle:
-                    if unit.state == .returning { unit.state = .holding }
-                case .countdownRespawn:
-                    unit.respawnTicksLeft -= 1
-                case .respawn:
-                    unit = MilitiaUnit(position: meleeFormation.spawnPoint(
-                        index: ui, of: g.units.count, building: towerPos), hp: melee.hp)
-                    militiaRespawnedIDs.insert(slot * 8 + ui)
-                case .heal:
-                    unit.hp = min(melee.hp, unit.hp + melee.healPerSecond * dt)
-                case let .move(toward):
-                    let chasing = unit.state == .engaging || unit.state == .fighting
-                    let waypoint: Point
-                    if !chasing, let path = marchPath, let targetAlong = marchTargetAlong {
-                        waypoint = marchWaypoint(from: unit.position, to: toward,
-                                                 path: path, targetAlong: targetAlong)
-                    } else {
-                        waypoint = toward
-                    }
-                    let d = unit.position.distance(to: waypoint)
-                    let step = combatRules.meleeMoveSpeed * dt
-                    unit.position = d <= step ? waypoint
-                        : Point.lerp(unit.position, waypoint, step / d)
-                case let .engage(targetSpawnID):
-                    unit.state = .engaging
-                    unit.targetSpawnID = targetSpawnID
-                    claimed.insert(targetSpawnID)
-                    free.removeAll { $0.spawnID == targetSpawnID }
-                case let .strike(targetSpawnID):
-                    if unit.state == .engaging {
-                        unit.combatSide = unit.position.x < (targetPos?.x ?? unit.position.x) ? -1 : 1
-                        unit.state = .fighting
-                        g.enemySwingTicks[targetSpawnID] =
-                            Simulation.fireTicks(combatRules.enemySwingInterval)
-                    }
-                    if !killedIDs.contains(targetSpawnID),
-                       let wi = indexByWalkerID[targetSpawnID] {
-                        var w = walkers[wi]
-                        let roll = Double.random(in: melee.damageRange)
-                        let dealt = min(w.hp, roll * (1.0 - w.cover))
-                        w.hp -= roll * (1.0 - w.cover)
-                        damageTotalBySlot[slot, default: 0] += dealt
-                        walkers[wi] = w
-                        if w.hp <= 0 {
-                            money += Int((Double(w.bounty) * combatRules.killBountyMultiplier).rounded())
-                            killedIDs.insert(targetSpawnID)
-                            unit.state = .holding
-                            unit.targetSpawnID = -1
-                            g.enemySwingTicks[targetSpawnID] = nil
-                        }
-                    }
-                    unit.swingTicksLeft = Simulation.fireTicks(melee.attackInterval)
-                case .disengage:
-                    if unit.targetSpawnID >= 0 {
-                        claimed.remove(unit.targetSpawnID)
-                        g.enemySwingTicks[unit.targetSpawnID] = nil
-                    }
-                    unit.state = .returning
-                    unit.targetSpawnID = -1
-                }
-
-                if unit.state == .fighting, unit.targetSpawnID >= 0,
-                   !killedIDs.contains(unit.targetSpawnID),
-                   let wi = indexByWalkerID[unit.targetSpawnID] {
-                    blockedWalkerIDs.insert(unit.targetSpawnID)
-                    var swing = g.enemySwingTicks[unit.targetSpawnID]
-                        ?? Simulation.fireTicks(combatRules.enemySwingInterval)
-                    swing -= 1
-                    if swing <= 0 {
-                        let w = walkers[wi]
-                        unit.hp -= Double.random(in: w.meleeDamageRange)
-                            * (1.0 - melee.defenseRating)
-                        swing = Simulation.fireTicks(combatRules.enemySwingInterval)
-                        if unit.hp <= 0 {
-                            claimed.remove(unit.targetSpawnID)
-                            blockedWalkerIDs.remove(unit.targetSpawnID)
-                            g.enemySwingTicks[unit.targetSpawnID] = nil
-                            unit.state = .dead
-                            unit.targetSpawnID = -1
-                            unit.respawnTicksLeft =
-                                Simulation.fireTicks(melee.respawnSeconds)
-                        }
-                    }
-                    if unit.targetSpawnID >= 0 {
-                        g.enemySwingTicks[unit.targetSpawnID] = swing
-                    }
-                }
-
-                g.units[ui] = unit
-            }
-            garrisonsBySlot[slot] = g
-        }
-
-        stepHeroesTick(claimed: &claimed, killedIDs: &killedIDs,
-                       indexByWalkerID: indexByWalkerID)
-
-        if !killedIDs.isEmpty {
-            walkers.removeAll { killedIDs.contains($0.id) }
-        }
-    }
-
-    func updateRuntimeCanvas(_ canvas: RuntimeCanvas) {
-        runtimeCanvas = canvas
-    }
-
-    private func stepHeroesTick(claimed: inout Set<Int>,
-                                killedIDs: inout Set<Int>,
-                                indexByWalkerID: [Int: Int]) {
-        guard !heroPosts.isEmpty else { return }
-        let dt = SimClock.dt
-
-        for hi in 0..<heroPosts.count {
-            var post = heroPosts[hi]
-            let station = post.movement.station
-
-            var free: [(spawnID: Int, position: Point)] = []
-            for w in walkers where !w.blockImmune && !claimed.contains(w.id)
-                && !killedIDs.contains(w.id) {
-                free.append((w.id, Point(Double(w.position.x), Double(w.position.y))))
-            }
-
-            var targetPos: Point? = nil
-            if post.unit.targetSpawnID >= 0, !killedIDs.contains(post.unit.targetSpawnID),
-               let wi = indexByWalkerID[post.unit.targetSpawnID] {
-                targetPos = Point(Double(walkers[wi].position.x),
-                                  Double(walkers[wi].position.y))
-            }
-
-            let context = MilitiaContext(rules: combatRules, freeEnemies: free,
-                                         targetPosition: targetPos,
-                                         rallyPoint: station,
-                                         towerPosition: station,
-                                         leashRadius: combatRules.heroLeashRadius,
-                                         engageScanRadius: combatRules.heroEngageScanRadius)
-            if post.unit.swingTicksLeft > 0 { post.unit.swingTicksLeft -= 1 }
-
-            switch post.movement.update(&post.unit, context: context,
-                                        moveSpeed: post.combat.moveSpeed, deltaTime: dt) {
-            case .idle:
-                break
-            case .countdownRespawn:
-                post.unit.respawnTicksLeft -= 1
-            case .respawn:
-                post.movement.respawn(unit: &post.unit, hp: post.combat.hp)
-                heroRespawnedIDs.insert(hi)
-            case .heal:
-                post.unit.hp = min(post.combat.hp,
-                                   post.unit.hp + post.combat.healPerSecond * dt)
-            case .move:
-                break
-            case let .engage(targetSpawnID):
-                post.unit.state = .engaging
-                post.unit.targetSpawnID = targetSpawnID
-                claimed.insert(targetSpawnID)
-            case let .strike(targetSpawnID):
-                if post.unit.state == .engaging {
-                    post.unit.combatSide = post.unit.position.x < (targetPos?.x ?? post.unit.position.x) ? -1 : 1
-                    post.unit.state = .fighting
-                    post.enemySwingTicks[targetSpawnID] =
-                        Simulation.fireTicks(combatRules.enemySwingInterval)
-                }
-                if !killedIDs.contains(targetSpawnID),
-                   let wi = indexByWalkerID[targetSpawnID] {
-                    var w = walkers[wi]
-                    let roll = Double.random(in: post.combat.damageRange(attackSpread: combatRules.meleeAttackSpread))
-                    w.hp -= roll * (1.0 - w.cover)
-                    walkers[wi] = w
-                    if w.hp <= 0 {
-                        money += Int((Double(w.bounty) * combatRules.killBountyMultiplier).rounded())
-                        killedIDs.insert(targetSpawnID)
-                        post.unit.state = .holding
-                        post.unit.targetSpawnID = -1
-                        post.enemySwingTicks[targetSpawnID] = nil
-                    }
-                }
-                post.unit.swingTicksLeft = Simulation.fireTicks(post.combat.attackInterval)
-            case .disengage:
-                if post.unit.targetSpawnID >= 0 {
-                    claimed.remove(post.unit.targetSpawnID)
-                    post.enemySwingTicks[post.unit.targetSpawnID] = nil
-                }
-                post.unit.state = .returning
-                post.unit.targetSpawnID = -1
-            }
-
-            if post.unit.state == .fighting, post.unit.targetSpawnID >= 0,
-               !killedIDs.contains(post.unit.targetSpawnID),
-               let wi = indexByWalkerID[post.unit.targetSpawnID] {
-                blockedWalkerIDs.insert(post.unit.targetSpawnID)
-                var swing = post.enemySwingTicks[post.unit.targetSpawnID]
-                    ?? Simulation.fireTicks(combatRules.enemySwingInterval)
-                swing -= 1
-                if swing <= 0 {
-                    let w = walkers[wi]
-                    post.unit.hp -= Double.random(in: w.meleeDamageRange)
-                        * (1.0 - post.combat.defenseRating)
-                    swing = Simulation.fireTicks(combatRules.enemySwingInterval)
-                    if post.unit.hp <= 0 {
-                        claimed.remove(post.unit.targetSpawnID)
-                        blockedWalkerIDs.remove(post.unit.targetSpawnID)
-                        post.enemySwingTicks[post.unit.targetSpawnID] = nil
-                        post.unit.state = .dead
-                        post.unit.targetSpawnID = -1
-                        post.unit.respawnTicksLeft =
-                            Simulation.fireTicks(post.combat.respawnSeconds)
-                        if selectedHeroIndex == hi { selectedHeroIndex = nil }
-                    }
-                }
-                if post.unit.targetSpawnID >= 0 {
-                    post.enemySwingTicks[post.unit.targetSpawnID] = swing
-                }
-            }
-
-            heroPosts[hi] = post
-        }
-    }
-
-    private func publishHeroes(alpha: Double = 1) {
-        var out: [HeroSoldier] = []
-        for (i, post) in heroPosts.enumerated() where post.unit.state != .dead {
-            guard let pose = heroPoses[i] else {
-                fatalError("hero[\(post.hero.id)]: missing animation pose")
-            }
-            let sample = pose.sample(alpha: alpha)
-            guard UIImage(named: sample.assetName) != nil else {
-                fatalError("hero[\(post.hero.id)]: missing animation image '\(sample.assetName)'")
-            }
-            out.append(HeroSoldier(
-                id: i,
-                assetName: sample.assetName,
-                baseAssetName: post.assetName,
-                imageAspectRatio: heroImageAspectRatios[post.hero.id]!,
-                position: CGPoint(x: sample.position.x, y: sample.position.y),
-                hp: post.unit.hp,
-                maxHP: post.combat.hp,
-                isSelected: selectedHeroIndex == i))
-        }
-        heroes = out
-    }
-
-    func isOnPath(_ point: CGPoint) -> Bool {
-        let target = Point(Double(point.x), Double(point.y))
-        let reach = virtualCanvas.pathWidth / 2
-        for path in paths {
-            let nearest = path.point(atDistance: path.nearestDistance(to: target))
-            if nearest.distance(to: target) <= reach { return true }
-        }
-        return false
-    }
-
-    func selectHero(_ index: Int) {
-        guard heroPosts.indices.contains(index), heroPosts[index].unit.state != .dead else { return }
-        dismissMenu()
-        isPlacingReinforcements = false
-        selectedHeroIndex = selectedHeroIndex == index ? nil : index
-        publishHeroes()
-    }
-
-    func selectHero(heroID: UUID) {
-        guard let index = hudHeroIndex(for: heroID) else { return }
-        selectHero(index)
-    }
-
-    @discardableResult
-    func commandSelectedHero(to point: CGPoint) -> Bool {
-        guard let index = selectedHeroIndex, heroPosts.indices.contains(index) else { return false }
-        var post = heroPosts[index]
-        let previousTarget = post.unit.targetSpawnID
-        guard post.movement.command(to: Point(point.x, point.y), unit: &post.unit) else { return false }
-        if previousTarget >= 0 {
-            post.enemySwingTicks[previousTarget] = nil
-            blockedWalkerIDs.remove(previousTarget)
-        }
-        heroPosts[index] = post
-        selectedHeroIndex = nil
-        publishHeroes()
-        return true
-    }
-
-    private func publishMilitia(alpha: Double = 1) {
-        var out: [MilitiaSoldier] = []
-        for slot in garrisonsBySlot.keys.sorted() {
-            guard let g = garrisonsBySlot[slot],
-                  let resolved = garrisonMelee(slot: slot, garrison: g)
-            else { continue }
-            let melee = resolved.stats
-            for (i, u) in g.units.enumerated() where u.state != .dead {
-                let id = slot * 8 + i
-                let cur = CGPoint(x: u.position.x, y: u.position.y)
-                let prev = militiaPrevPositions[id] ?? cur
-                let pose = militiaPoses[id]
-                    ?? WalkPose(facing: .south, walkPhase: 0, isWalking: false)
-                let stepDistance = hypot(Double(cur.x - prev.x),
-                                         Double(cur.y - prev.y))
-                let renderedPhase = MeleeWalkCycle.interpolatedPhase(
-                    currentPhase: pose.walkPhase,
-                    stepDistance: stepDistance,
-                    alpha: alpha,
-                    cycleDistance: MeleeWalkCycle.cycleDistance)
-                out.append(MilitiaSoldier(
-                    id: id,
-                    assetName: MeleeWalkCycle.assetName(facing: pose.facing,
-                                                        walkPhase: renderedPhase,
-                                                        isWalking: pose.isWalking),
-                    position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
-                                      y: prev.y + (cur.y - prev.y) * alpha),
-                    hp: u.hp,
-                    maxHP: melee.hp))
-            }
-        }
-        militia = out
-    }
-
-    private var enemyBodyOffset: CGPoint { CGPoint(x: combatRules.enemyBodyOffsetX, y: combatRules.enemyBodyOffsetY) }
-
-    private func bodyPoint(_ walker: Walker) -> CGPoint {
-        CGPoint(x: walker.position.x + enemyBodyOffset.x,
-                y: walker.position.y + enemyBodyOffset.y)
-    }
-
-    private func updateCombat(gameDt: Double) {
-        guard !walkers.isEmpty else {
-            updateProjectiles(gameDt: gameDt)
-            return
-        }
-
-        let candidates = targetCandidates()
-
-        for towerIndex in placedTowers.indices {
-            let tower = placedTowers[towerIndex]
-            guard let tuning = towerLevel(for: tower) else { continue }
-            guard tuning.attackMode.firesProjectiles else { continue }
-            let origin = tower.position
-            let solution = RangedTargetCommand(
-                tower: TowerTargetingContext(
-                    slotIndex: tower.slotIndex,
-                    position: Point(Double(origin.x), Double(origin.y)),
-                    range: tuning.range, verticalFraction: combatRules.rangeVerticalFraction,
-                    targeting: tuning.targeting),
-                enemies: candidates,
-                paths: paths
-            ).execute()
-            guard let solution, let leader = walkers.first(where: { $0.id == solution.id })
-            else { continue }
-
-            targetingSecondsBySlot[tower.slotIndex, default: 0] += gameDt
-
-            let target = tuning.attackMode.requiresAim
-                ? tuning.attackRange.clamped(bodyPoint(leader), from: origin)
-                : bodyPoint(leader)
-            var heading = atan2(target.y - origin.y, target.x - origin.x)
-            var aligned = true
-            if tuning.attackMode.requiresAim {
-                var aim = tower.artilleryAim
-                aligned = aim.track(from: origin, to: target,
-                                    radiansPerSecond: tuning.turnRate,
-                                    deltaTime: gameDt)
-                placedTowers[towerIndex].artilleryAim = aim
-                heading = CGFloat(aim.heading)
-            }
-
-            guard aligned,
-                  timer.tick >= nextFireTickBySlot[tower.slotIndex, default: 0] else { continue }
-            nextFireTickBySlot[tower.slotIndex] = timer.tick + fireCooldownTicks(for: tower)
-            let minDamage = tuning.shotMinDamage
-            let maxDamage = tuning.shotMaxDamage
-            if tuning.attackMode == .grapeshot {
-                let volleyID = nextProjectileID
-                let damage = Double.random(in: minDamage...maxDamage)
-                for offset in combatRules.grapeshotSpread {
-                    let pelletHeading = heading + CGFloat(offset)
-                    projectiles.append(Projectile(
-                        id: nextProjectileID, kind: tower.kind, position: origin,
-                        heading: pelletHeading, damage: damage,
-                        targetID: leader.id, slotIndex: tower.slotIndex,
-                        speed: CGFloat(tuning.projectileSpeed), splashRadius: 0,
-                        firingBoundary: tuning.attackRange, firingOrigin: origin,
-                        moraleStrike: ArtilleryMoraleStrike(tuning: tuning),
-                        grapeshot: GrapeshotFlight(volleyID: volleyID,
-                            range: tuning.attackRange.travelDistance(heading: pelletHeading))))
-                    nextProjectileID += 1
-                }
-                continue
-            }
-            if tuning.attackMode == .solidShot {
-                projectiles.append(Projectile(
-                    id: nextProjectileID, kind: tower.kind, position: origin,
-                    heading: heading, damage: Double.random(in: minDamage...maxDamage),
-                    targetID: leader.id, slotIndex: tower.slotIndex,
-                    speed: CGFloat(tuning.projectileSpeed), splashRadius: 0,
-                    firingBoundary: tuning.attackRange, firingOrigin: origin,
-                    moraleStrike: ArtilleryMoraleStrike(tuning: tuning),
-                    solidShot: SolidShotFlight(range: tuning.attackRange.travelDistance(heading: heading), hitRadius: combatRules.solidShotHitRadius)))
-                nextProjectileID += 1
-                continue
-            }
-            projectiles.append(Projectile(
-                id: nextProjectileID,
-                kind: tower.kind,
-                position: origin,
-                heading: heading,
-                damage: Double.random(in: minDamage...maxDamage),
-                targetID: leader.id,
-                slotIndex: tower.slotIndex,
-                speed: CGFloat(tuning.projectileSpeed),
-                splashRadius: CGFloat(tuning.aoeRadius),
-                impactPoint: tuning.attackMode == .shell ? target : nil,
-                moraleStrike: tuning.attackMode.requiresAim ? ArtilleryMoraleStrike(tuning: tuning) : nil
-            ))
-            nextProjectileID += 1
-        }
-
-        updateProjectiles(gameDt: gameDt)
-    }
-
-    private func updateProjectiles(gameDt: Double) {
-        var survivors: [Projectile] = []
-        for var projectile in projectiles {
-            if var flight = projectile.solidShot {
-                let start = projectile.position
-                let end = flight.advance(from: start, heading: projectile.heading,
-                                         speed: projectile.speed, seconds: gameDt)
-                let targets = walkers.compactMap { walker -> (id: Int, position: CGPoint)? in
-                    if let boundary = projectile.firingBoundary, let origin = projectile.firingOrigin,
-                       !boundary.contains(walker.position, from: origin) { return nil }
-                    return (walker.id, bodyPoint(walker))
-                }
-                for id in flight.contacts(from: start, to: end, targets: targets) {
-                    if let index = walkers.firstIndex(where: { $0.id == id }),
-                       let strike = projectile.moraleStrike {
-                        var walker = walkers[index]
-                        applyMorale(strike, to: &walker, at: bodyPoint(walker))
-                        walkers[index] = walker
-                    }
-                    damageWalker(id: id, damage: projectile.damage, slotIndex: projectile.slotIndex)
-                }
-                projectile.position = end
-                projectile.solidShot = flight
-                if flight.remainingDistance > 0 { survivors.append(projectile) }
-                continue
-            }
-            if var flight = projectile.grapeshot {
-                let distance = min(flight.remainingDistance, projectile.speed * CGFloat(gameDt))
-                let end = CGPoint(x: projectile.position.x + cos(projectile.heading) * distance,
-                                  y: projectile.position.y + sin(projectile.heading) * distance)
-                let hit = walkers.compactMap { walker -> (id: Int, fraction: CGFloat)? in
-                    if let boundary = projectile.firingBoundary, let origin = projectile.firingOrigin,
-                       !boundary.contains(walker.position, from: origin) { return nil }
-                    guard !grapeshotHits[flight.volleyID, default: []].contains(walker.id),
-                          let fraction = GrapeshotFlight.hitFraction(
-                            from: projectile.position, to: end, target: bodyPoint(walker), radius: combatRules.grapeshotHitRadius) else { return nil }
-                    return (walker.id, fraction)
-                }.min { $0.fraction < $1.fraction }
-                if let hit {
-                    if let index = walkers.firstIndex(where: { $0.id == hit.id }),
-                       let strike = projectile.moraleStrike {
-                        let point = bodyPoint(walkers[index])
-                        if grapeshotHits[flight.volleyID, default: []].isEmpty {
-                            let impactPoint: CGPoint
-                            if let boundary = projectile.firingBoundary, let origin = projectile.firingOrigin {
-                                impactPoint = boundary.clamped(point, from: origin)
-                            } else { impactPoint = point }
-                            artilleryImpacts.append(ArtilleryImpact(id: flight.volleyID,
-                                position: impactPoint, radius: 24))
-                        }
-                        var walker = walkers[index]
-                        applyMorale(strike, to: &walker, at: point)
-                        walkers[index] = walker
-                    }
-                    grapeshotHits[flight.volleyID, default: []].insert(hit.id)
-                    damageWalker(id: hit.id, damage: projectile.damage, slotIndex: projectile.slotIndex)
-                } else if flight.remainingDistance > distance {
-                    flight.remainingDistance -= distance
-                    projectile.position = end
-                    projectile.grapeshot = flight
-                    survivors.append(projectile)
-                }
-                continue
-            }
-            let stepLength = projectile.speed * CGFloat(gameDt)
-            let aim: CGPoint
-            if let impact = projectile.impactPoint {
-                aim = impact
-            } else if let target = walkers.first(where: { $0.id == projectile.targetID }) {
-                aim = bodyPoint(target)
-            } else { continue }
-            let dx = aim.x - projectile.position.x
-            let dy = aim.y - projectile.position.y
-            let distance = hypot(dx, dy)
-            if distance <= projectileHitRadiusInImagePixels || distance <= stepLength {
-                applyImpact(projectile, at: aim)
-                continue
-            }
-            projectile.heading = atan2(dy, dx)
-            projectile.position.x += dx / distance * stepLength
-            projectile.position.y += dy / distance * stepLength
-            survivors.append(projectile)
-        }
-        projectiles = survivors
-        let liveVolleys = Set(survivors.compactMap { $0.grapeshot?.volleyID })
-        grapeshotHits = grapeshotHits.filter { liveVolleys.contains($0.key) }
-    }
-
-    private func damageWalker(id: Int, damage: Double, slotIndex: Int) {
-        guard let index = walkers.firstIndex(where: { $0.id == id }) else { return }
-        damageTotalBySlot[slotIndex, default: 0] += min(walkers[index].hp, damage)
-        walkers[index].hp -= damage
-        if walkers[index].hp <= 0 {
-            money += Int((Double(walkers[index].bounty) * combatRules.killBountyMultiplier).rounded())
-            walkers.remove(at: index)
-        }
-    }
-
-    private func distanceFrom(_ point: CGPoint, to walker: Walker) -> CGFloat {
-        let bp = bodyPoint(walker)
-        return hypot(bp.x - point.x, bp.y - point.y)
-    }
-
-    private func targetCandidates() -> [TargetCandidate] {
-        walkers.map { walker in
-            TargetCandidate(id: walker.id,
-                            position: Point(Double(walker.position.x),
-                                            Double(walker.position.y)),
-                            pathIndex: walker.pathIndex,
-                            pathDistance: walker.pathDistance,
-                            hp: walker.hp,
-                            morale: walker.morale.value,
-                            isBroken: false)
-        }
-    }
-
-    private func advanceArtilleryImpacts(seconds: Double) {
-        guard seconds.isFinite, seconds > 0 else { return }
-        artilleryImpacts = artilleryImpacts.compactMap { impact in
-            var next = impact
-            next.age += seconds
-            return next.age < next.duration ? next : nil
-        }
-    }
-
-    private func applyImpact(_ projectile: Projectile, at point: CGPoint, isDemolition: Bool = false) {
-        if projectile.moraleStrike != nil {
-            artilleryImpacts.append(ArtilleryImpact(id: projectile.id, position: point,
-                                                  radius: max(24, projectile.splashRadius),
-                                                  isDemolition: isDemolition))
-        }
-        var remaining: [Walker] = []
-        for var walker in walkers {
-            let isHit: Bool
-            if projectile.moraleStrike != nil {
-                isHit = distanceFrom(point, to: walker) <= projectile.splashRadius
-            } else {
-                isHit = walker.id == projectile.targetID
-            }
-            if isHit {
-                if let strike = projectile.moraleStrike {
-                    applyMorale(strike, to: &walker, at: point)
-                }
-                let dealt = min(walker.hp, projectile.damage)
-                walker.hp -= projectile.damage
-                damageTotalBySlot[projectile.slotIndex, default: 0] += dealt
-                if walker.hp <= 0 {
-                    money += Int((Double(walker.bounty) * combatRules.killBountyMultiplier).rounded())
-                    continue
-                }
-            }
-            remaining.append(walker)
-        }
-        walkers = remaining
-    }
-
-    private func applyMorale(_ strike: ArtilleryMoraleStrike, to walker: inout Walker,
-                             at point: CGPoint) {
-        let loss = strike.loss(distance: Double(distanceFrom(point, to: walker)),
-                               discipline: walker.discipline)
-        walker.morale.apply(loss: loss, direction: walker.position.x < point.x ? -1 : 1)
-    }
 }
 
 #if DEBUG
 extension LevelRunner {
+    /// Exercises the real display-link clock; a pause must survive a foreground
+    /// start request and resume without spending the wall time on game ticks.
+    func runPauseLifecycleReview() async throws -> [String: Any] {
+        func require(_ condition: Bool, _ message: String) throws {
+            if !condition { throw NSError(domain: "PauseReview", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: message]) }
+        }
+        try require(isReady, "Level did not load")
+        startNextWave()
+        speedUp()
+        start()
+        try await Task.sleep(for: .milliseconds(600))
+        pause()
+        let pausedTick = timer.tick
+        let pausedMoney = money
+        let pausedLives = lives
+        let positions = walkers.map(\.pathDistance)
+        let countdown = waveCountdownSeconds
+        try require(pausedTick > 0, "Game clock did not start")
+        // This is the same request made when the scene becomes active again.
+        start()
+        try await Task.sleep(for: .seconds(1))
+        try require(isPaused && displayLink == nil && !hapticsActive, "Pause restarted in the foreground")
+        try require(timer.tick == pausedTick && money == pausedMoney && lives == pausedLives
+                    && walkers.map(\.pathDistance) == positions && waveCountdownSeconds == countdown,
+                    "Gameplay advanced while paused")
+        resume()
+        start()
+        try require(timer.dueTicks() == 0 && timer.tick == pausedTick, "Resume caught up paused wall time")
+        try await Task.sleep(for: .milliseconds(350))
+        pause()
+        try require(timer.tick > pausedTick && speedMultiplier == 2, "Resume lost progress or speed")
+        return ["passed": true, "pausedTick": pausedTick, "resumedTick": timer.tick,
+                "frozenGameplay": true, "foregroundStaysPaused": true,
+                "resumeWithoutCatchUp": true, "speedPreserved": true]
+    }
+
     struct CombatReviewFrame {
         let seconds: Double
         let walkers: [Walker]
@@ -2330,12 +480,99 @@ extension LevelRunner {
                 "killedEnemyStaysDeadAndPaysOnce": true, "blockedAfterGameEnd": true]
     }
 
+    func verifySupplyBehaviorOnDevice() throws -> [String: Any] {
+        func require(_ condition: Bool, _ message: String) throws {
+            if !condition { throw NSError(domain: "SupplyBehaviorReview", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: message]) }
+        }
+        try require(isReady && startingMoney > 0, "The level did not load its authored starting money")
+        stop()
+        let savedTowers = placedTowers, savedHeroes = heroPosts
+        let savedMoney = money
+        defer {
+            placedTowers = savedTowers; heroPosts = savedHeroes; money = savedMoney
+            walkers = []; projectiles = []; pendingSpawns = []; garrisonsBySlot = [:]
+            paidSupplyWaves = []; nextFireTickBySlot = [:]
+            waveSchedule = try! WaveStartSchedule(waves: waves)
+            refreshWaveStartState(); publishMilitia(); publishHeroes()
+        }
+        let origin = CGPoint(x: playArea.midX, y: playArea.midY)
+        func supply(_ level: Int, _ branch: Int = 1, slot: Int = 0,
+                    point: CGPoint? = nil) -> PlacedTower {
+            PlacedTower(combatRules: combatRules, slotIndex: slot, kind: .supply,
+                        position: point ?? origin, level: level, branch: branch)
+        }
+        var payouts: [Int] = []
+        for (level, branch) in [(1,1), (2,1), (3,1), (4,1), (4,2), (4,3)] {
+            let tower = supply(level, branch)
+            placedTowers = [tower]; paidSupplyWaves = []; money = 0
+            waveSchedule = try WaveStartSchedule(waves: waves)
+            startNextWave()
+            let expected = towerLevel(for: tower)!.support.incomePerWave
+            try require(money == expected, "Manual wave start failed to pay the authored income")
+            payouts.append(money)
+            paySupplyIncome(for: 0)
+            try require(money == expected, "Wave paid twice")
+            let second = waves[1]
+            let waitTicks = Int(ceil((second.callButtonDelay! + second.autoStartCountdown!)
+                                     * Double(SimClock.ticksPerSecond))) + 1
+            for _ in 0..<waitTicks { timer.advanceTick() }
+            advanceWaveSchedule()
+            try require(money == expected * 2, "Automatic wave start failed to pay once")
+        }
+        let gun = PlacedTower(combatRules: combatRules, slotIndex: 1, kind: .ranged, position: origin)
+        let normalRate = 1 / towerLevel(for: gun)!.fireInterval
+        placedTowers = [gun, supply(4, 2), supply(4, 2, slot: 2)]
+        let boosted = rateOfFire(for: gun)
+        try require(abs(boosted / normalRate - 1.25) < 1e-9, "Ordnance speed missing or stacked")
+        let nearTicks = fireCooldownTicks(for: gun)
+        placedTowers = [gun, supply(4, 2, point: CGPoint(x: origin.x + 1000, y: origin.y))]
+        try require(rateOfFire(for: gun) == normalRate && fireCooldownTicks(for: gun) > nearTicks,
+                    "Ordnance affects a tower outside its displayed range")
+        placedTowers = [gun]
+        try require(rateOfFire(for: gun) == normalRate, "Removed depot left a permanent buff")
+
+        guard let melee = reinforcementStats, var hero = savedHeroes.first else {
+            throw NSError(domain: "SupplyBehaviorReview", code: 2)
+        }
+        let militiaTower = PlacedTower(combatRules: combatRules, slotIndex: 1, kind: .melee, position: origin)
+        placedTowers = [supply(4, 3), supply(4, 3, slot: 2), militiaTower]
+        walkers = []; garrisonsBySlot = [:]
+        let point = Point(origin.x, origin.y)
+        var wounded = MilitiaUnit(position: point, hp: 10)
+        wounded.state = .returning
+        garrisonsBySlot[1] = MilitiaGarrison(rallyPoint: Point(origin.x + 100, origin.y), units: [wounded])
+        try require(callReinforcements(at: origin), "Could not deploy reinforcements for hospital test")
+        let reinforcementSlot = nextReinforcementSlot + 1
+        for index in garrisonsBySlot[reinforcementSlot]!.units.indices {
+            garrisonsBySlot[reinforcementSlot]!.units[index].hp = 10
+        }
+        hero.unit.hp = 10; hero.unit.position = point; hero.unit.state = .returning
+        hero.unit.targetSpawnID = -1
+        heroPosts = [hero]
+        stepMilitiaTick()
+        let expectedHP = 10 + 8 * SimClock.dt
+        try require(abs(garrisonsBySlot[1]!.units[0].hp - expectedHP) < 1e-8,
+                    "Hospital did not heal militia, or hospitals stacked")
+        try require(abs(garrisonsBySlot[reinforcementSlot]!.units[0].hp - expectedHP) < 1e-8,
+                    "Hospital did not heal reinforcements")
+        try require(abs(heroPosts[0].unit.hp - expectedHP) < 1e-8,
+                    "Hospital did not heal heroes")
+        try require(garrisonsBySlot[1]!.units[0].hp <= melee.hp, "Hospital overhealed militia")
+        return ["incomeByTier": payouts, "manualAndAutomaticWavePayouts": true,
+                "onePaymentPerWave": true, "ordnanceRateMultiplier": boosted / normalRate,
+                "ordnanceReloadTicks": nearTicks, "rangeAndRemovalVerified": true,
+                "healsMilitiaReinforcementsAndHeroes": true, "overlappingAurasDoNotStack": true,
+                "charlestonStartingMoney": startingMoney]
+    }
+
     @discardableResult func prepareTowerUpgradeReview(kind: TowerKind, atLevel: Int = 3) throws -> Int {
         guard isReady, let tuning = towerLevels[kind]?[atLevel]?[1],
               let slot = slotPositions.indices.sorted(by: {
                   hypot(slotPositions[$0].x - playArea.midX, slotPositions[$0].y - playArea.midY)
                     < hypot(slotPositions[$1].x - playArea.midX, slotPositions[$1].y - playArea.midY)
               }).first(where: {
+                  tuning.attackMode == .none ||
                   tuning.attackRange.nearestPathPoint(to: slotPositions[$0], from: slotPositions[$0], paths: paths) != nil
               }) else {
             throw NSError(domain: "TowerUpgradeReview", code: 1,
@@ -2343,6 +580,7 @@ extension LevelRunner {
         }
         stop()
         placedTowers = []; walkers = []; projectiles = []; artilleryImpacts = []
+        garrisonsBySlot = [:]; rallyPointsBySlot = [:]; militia = []
         rallyFlagFlash = nil; grapeshotHits = [:]
         nextFireTickBySlot = [:]; damageTotalBySlot = [:]
         money = 10_000; towerUnlocks[kind] = 4
@@ -2355,6 +593,253 @@ extension LevelRunner {
         }
         selectPlacedTower(atSlot: slot)
         return slot
+    }
+
+    /// Exercises conditional meta effects in the actual runner with isolated, in-memory battle fixtures.
+    func verifyHistoricalMetaUpgradesOnDevice() throws -> [String: Any] {
+        func require(_ valid: Bool, _ message: String) throws {
+            if !valid { throw NSError(domain: "HistoricalUpgradeReview", code: 1,
+                userInfo: [NSLocalizedDescriptionKey: message]) }
+        }
+        func enemy(_ id: Int, at point: CGPoint, cover: Double = 0) -> Walker {
+            Walker(id: id, assetName: "redcoat_regular", speed: 60, maxHP: 1000, hp: 1000,
+                bounty: 0, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7,
+                cover: cover, blockImmune: false, spawnTick: 0, pathIndex: 0,
+                discipline: reviewEnemyStats.discipline, moraleResponse: reviewEnemyStats.moraleResponse,
+                morale: EnemyMorale(rules: combatRules), position: point)
+        }
+        var evidence: [String: Any] = [:]
+        let slot = try prepareTowerUpgradeReview(kind: .ranged, atLevel: 1)
+        let tower = placedTowers[0]
+        // Fix the random damage range only in this disposable runner.
+        pricedTowerLevels[.ranged]![1]![1]!.shotMinDamage = 100
+        pricedTowerLevels[.ranged]![1]![1]!.shotMaxDamage = 100
+        let target = CGPoint(x: tower.position.x + 50, y: tower.position.y)
+        var shots: [Double] = []
+        for index in 0..<3 {
+            walkers = [enemy(index, at: target)]
+            blockedWalkerIDs = [index]
+            projectiles = []; nextFireTickBySlot = [:]
+            updateCombat(gameDt: 0.000001)
+            try require(projectiles.count == 1, "Prepared ranged tower failed to fire")
+            shots.append(projectiles[0].damage)
+        }
+        try require(abs(shots[0] - 156) < 1e-8 && shots[0] == shots[1] && abs(shots[2] - 120) < 1e-8,
+                    "Prepared pair, combined arms, or retarget behavior is incorrect")
+        if selectedTowerSlotIndex != slot { selectPlacedTower(atSlot: slot) }
+        upgradeSelectedTower(branch: 1)
+        try require(placedTowers[0].preparedVolley?.shotsRemaining == 0, "Tier purchase refilled the volley")
+        walkers = []; projectiles = []; blockedWalkerIDs = []
+        updateCombat(gameDt: 0)
+        try require(placedTowers[0].preparedVolley?.shotsRemaining == 0, "Pause refilled the volley")
+        updateCombat(gameDt: 7.9)
+        try require(placedTowers[0].preparedVolley?.shotsRemaining == 0, "A short gap refilled the volley")
+        updateCombat(gameDt: 0.1)
+        try require(placedTowers[0].preparedVolley?.shotsRemaining == 2, "Quiet tower did not prepare its next pair")
+        evidence["preparedVolleyDamage"] = shots
+
+        // Model Company and French Contracts affect offers and the amount actually paid.
+        let trainedPrice = upgradeCost(for: .ranged, to: 2)!
+        try require(trainedPrice == Int(ceil(Double(authoredTowerLevels[.ranged]![2]![1]!.cost) * 0.85)),
+                    "Second same-family tier did not receive the model-company discount")
+        let trainedSlot = try prepareTowerUpgradeReview(kind: .ranged, atLevel: 1)
+        let beforeTraining = money
+        upgradeSelectedTower(branch: 1)
+        try require(beforeTraining - money == trainedPrice, "Training discount shown but not charged")
+        selectPlacedTower(atSlot: trainedSlot); upgradeSelectedTower(branch: 1)
+        selectPlacedTower(atSlot: trainedSlot)
+        let firstOffer = upgradeOffers.first!
+        let beforeContract = money
+        upgradeSelectedTower(branch: firstOffer.branch)
+        try require(beforeContract - money == firstOffer.cost && metaBattleProgress.hasSpecialization,
+                    "French contract was not consumed by the actual purchase")
+        let afterContract = upgradeCost(for: .ranged, to: 4, branch: firstOffer.branch)!
+        try require(firstOffer.cost == Int(ceil(Double(afterContract) * 0.75)),
+                    "French contract did not apply exactly once")
+        evidence["modelCompanyPrice"] = trainedPrice
+        evidence["firstSpecializationPrices"] = [firstOffer.cost, afterContract]
+
+        // Coverage uses another post's authored range and does not stack.
+        let supplySlot = try prepareTowerUpgradeReview(kind: .ranged, atLevel: 1)
+        let point = slotPositions[supplySlot]
+        let unserved = upgradeCost(for: .ranged, to: 2)!
+        let postSlot = (supplySlot + 1) % slotPositions.count
+        let post = PlacedTower(combatRules: combatRules, slotIndex: postSlot, kind: .supply, position: point)
+        placedTowers.append(post)
+        let served = upgradeCost(for: .ranged, to: 2)!
+        placedTowers.append(PlacedTower(combatRules: combatRules, slotIndex: (postSlot + 1) % slotPositions.count,
+            kind: .supply, position: point))
+        try require(served < unserved && upgradeCost(for: .ranged, to: 2) == served, "Magazine discount missing or stacked")
+        let beforeMagazine = money
+        upgradeSelectedTower(branch: 1)
+        try require(beforeMagazine - money == served, "Magazine offer differs from the charged price")
+        placedTowers = [post]
+        try require(!isServedByMagazine(postSlot), "Supply post discounted itself")
+        evidence["magazineTierPrices"] = [unserved, served]
+
+        // A shared abatis field qualifies at impact, once even if fields overlap.
+        let engineerSlot = try prepareTowerUpgradeReview(kind: .special, atLevel: 1)
+        let site = placedTower(atSlot: engineerSlot)!.engineerObstaclePosition!
+        var secondField = PlacedTower(combatRules: combatRules, slotIndex: postSlot, kind: .special, position: site)
+        secondField.engineerObstaclePosition = site
+        placedTowers.append(secondField)
+        let shot = Projectile(id: 0, kind: .ranged, position: site, heading: 0, damage: 100,
+            targetID: 0, slotIndex: 0, speed: 640, splashRadius: 0)
+        walkers = [enemy(0, at: site)]
+        applyImpact(shot, at: site)
+        try require(abs(walkers[0].hp - 885) < 1e-8, "Fire lane bonus missing or stacked")
+        walkers = [enemy(0, at: CGPoint(x: site.x + 1000, y: site.y))]
+        applyImpact(shot, at: site)
+        try require(walkers[0].hp == 900, "Fire lane persisted after leaving the obstacle")
+        evidence["fireLaneImpactAndOverlap"] = true
+
+        // Shell cover penetration uses the actual explosion path.
+        placedTowers = []
+        let origin = CGPoint(x: playArea.midX, y: playArea.midY)
+        let shell = towerLevels[.areaOfEffect]![1]![1]!
+        walkers = [enemy(0, at: origin, cover: 0.5)]
+        applyImpact(Projectile(id: 1, kind: .areaOfEffect, position: origin, heading: 0,
+            damage: 100, targetID: 0, slotIndex: 0, speed: 640,
+            splashRadius: CGFloat(shell.aoeRadius), splashCoverPierce: shell.splashCoverPierce,
+            moraleStrike: ArtilleryMoraleStrike(tuning: shell)), at: origin)
+        let shellDamage = 100 * (1 - 0.5 * (1 - shell.splashCoverPierce))
+        try require(abs(1000 - walkers[0].hp - shellDamage) < 1e-8, "Shell doctrine ignored authored cover penetration")
+        evidence["shellDamageAgainstHalfCover"] = shellDamage
+
+        // Solid shot bonus begins with its second distinct contact, never its first.
+        let boundary = TowerAttackRange(300, verticalFraction: combatRules.rangeVerticalFraction)
+        walkers = (0..<3).map { enemy($0, at: CGPoint(x: origin.x + 30 + Double($0) * 50 - enemyBodyOffset.x,
+                                                    y: origin.y - enemyBodyOffset.y)) }
+        projectiles = [Projectile(id: 2, kind: .areaOfEffect, position: origin, heading: 0,
+            damage: 100, targetID: 0, slotIndex: 0, speed: 640, splashRadius: 0,
+            firingBoundary: boundary, firingOrigin: origin,
+            solidShot: SolidShotFlight(range: 300, hitRadius: combatRules.solidShotHitRadius))]
+        updateCombat(gameDt: 0.3)
+        try require(walkers.map(\.hp) == [900, 875, 875], "Solid-shot doctrine did not distinguish the first victim")
+        updateCombat(gameDt: 0.05)
+        try require(walkers.map(\.hp) == [900, 875, 875], "Solid shot hit the same victim twice")
+        evidence["solidShotDamage"] = [100, 125, 125]
+
+        // Close grapeshot benefits only inside half the firing reach.
+        var grapeDamage: [Double] = []
+        for distance in [60.0, 240.0] {
+            walkers = [enemy(0, at: CGPoint(x: origin.x + distance - enemyBodyOffset.x, y: origin.y - enemyBodyOffset.y))]
+            grapeshotHits = [:]
+            projectiles = [Projectile(id: 3, kind: .areaOfEffect, position: origin, heading: 0,
+                damage: 100, targetID: 0, slotIndex: 0, speed: 640, splashRadius: 0,
+                firingBoundary: boundary, firingOrigin: origin,
+                grapeshot: GrapeshotFlight(volleyID: 3, range: 300))]
+            updateCombat(gameDt: 0.5)
+            grapeDamage.append(1000 - walkers[0].hp)
+        }
+        try require(grapeDamage == [125, 100], "Grapeshot doctrine ignored distance")
+        evidence["grapeshotDamageNearAndFar"] = grapeDamage
+        try require(reinforcementSchedule?.capacity == 2 && reinforcementCharges == 1,
+                    "Alarm Riders did not load two-charge capacity with one ready deployment")
+        evidence["reinforcementCapacity"] = 2
+        stop()
+        return evidence
+    }
+
+    func verifyPurchasedTowerOnDevice(slot: Int) throws -> [String: Any] {
+        func require(_ valid: Bool, _ message: String) throws {
+            if !valid { throw NSError(domain: "TowerPathReview", code: 1,
+                                      userInfo: [NSLocalizedDescriptionKey: message]) }
+        }
+        guard let tower = placedTower(atSlot: slot), let tuning = towerLevel(for: tower),
+              let index = placedTowers.firstIndex(where: { $0.slotIndex == slot }) else {
+            throw NSError(domain: "TowerPathReview", code: 2)
+        }
+        try require(tuning.upgradePaths.allSatisfy { tower.upgrades.rank(for: $0.id) == $0.ranks.count },
+                    "Not all paths purchased")
+        func enemy(at point: CGPoint) -> Walker {
+            Walker(id: 0, assetName: "redcoat_regular", speed: 60, maxHP: 1000, hp: 1000,
+                bounty: 0, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7,
+                cover: 0, blockImmune: false, spawnTick: 0, pathIndex: 0, discipline: 0.6,
+                moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules),
+                position: CGPoint(x: point.x - enemyBodyOffset.x, y: point.y - enemyBodyOffset.y))
+        }
+        var evidence: [String: Any] = ["kind": tower.kind.rawValue, "branch": tower.branch,
+                                       "ranks": tower.upgrades.ranks]
+        defer { walkers = []; projectiles = []; artilleryImpacts = []; nextFireTickBySlot = [:] }
+        if tuning.attackMode.firesProjectiles {
+            let point = CGPoint(x: tower.position.x + 100, y: tower.position.y)
+            walkers = [enemy(at: point)]
+            placedTowers[index].artilleryAim = ArtilleryAim(heading: 0, firingTolerance: combatRules.firingTolerance)
+            nextFireTickBySlot = [:]; grapeshotHits = [:]
+            updateCombat(gameDt: 0.00001)
+            let expectedCount = tuning.attackMode == .grapeshot ? combatRules.grapeshotSpreadDegrees.count : 1
+            try require(projectiles.count == expectedCount, "Upgraded specialty failed to fire")
+            try require(projectiles.allSatisfy {
+                (tuning.shotMinDamage...tuning.shotMaxDamage).contains($0.damage)
+            }, "Shot did not use purchased damage")
+            try require(nextFireTickBySlot[slot] == timer.tick + fireCooldownTicks(for: placedTowers[index]),
+                        "Shot did not use purchased reload")
+            let snapshot = projectiles[0]
+            updateProjectiles(gameDt: 2)
+            try require(walkers[0].hp < 1000, "Purchased shot did not damage an enemy")
+            if tuning.attackMode.requiresAim {
+                try require(snapshot.moraleStrike == ArtilleryMoraleStrike(tuning: tuning)
+                    && walkers[0].morale.value < 100, "Purchased shot lost its morale effect")
+            }
+            evidence["shotDamage"] = 1000 - walkers[0].hp
+            evidence["reloadTicks"] = fireCooldownTicks(for: placedTowers[index])
+        }
+        if let seconds = tuning.demolitionPreparationSeconds {
+            try require(tower.demolitionCharge?.isReadyForPlacement == true,
+                        "Purchasing sapper paths placed or consumed the initial charge")
+            selectPlacedTower(atSlot: slot)
+            if selectedTowerSlotIndex != slot { selectPlacedTower(atSlot: slot) }
+            beginDemolitionPlacement()
+            let site = tuning.attackRange.nearestPathPoint(to: tower.position, from: tower.position, paths: paths)!
+            placeDemolition(at: site)
+            walkers = [enemy(at: site)]
+            try require(detonateDemolition(atSlot: slot), "Upgraded charge did not detonate")
+            try require((tuning.shotMinDamage...tuning.shotMaxDamage).contains(1000 - walkers[0].hp),
+                        "Charge did not use purchased damage")
+            try require(placedTowers[index].demolitionCharge?.remainingSeconds == seconds,
+                        "Charge did not use purchased preparation time")
+            evidence["chargePreparationSeconds"] = seconds
+            evidence["chargeDamage"] = 1000 - walkers[0].hp
+        }
+        if let stats = tuning.engineerObstacles {
+            let field = try { () throws -> EngineerObstacleField in
+                guard let field = engineerObstacleFields.first else { throw NSError(domain: "TowerPathReview", code: 3) }
+                return field
+            }()
+            try require(field.stats == stats, "Live obstacle field did not use purchased stats")
+            let multiplier = EngineerObstacleField.movementMultiplier(at: field.position, retreating: false, fields: engineerObstacleFields)
+            try require(abs(multiplier - (1 - stats.slowFraction)) < 1e-8, "Live obstacles ignored purchased slow")
+            evidence["movementMultiplier"] = multiplier
+        }
+        if let melee = tuning.meleeUnit {
+            publishMilitia()
+            try require(militia.allSatisfy { $0.maxHP == melee.hp },
+                        "Displayed soldiers ignored purchased health")
+            evidence["soldierHP"] = melee.hp
+            evidence["soldierDamage"] = melee.attackRating
+            evidence["soldierInterval"] = melee.attackInterval
+        }
+        if tuning.support.incomePerWave > 0 {
+            let before = money
+            paySupplyIncome(for: Int.max)
+            try require(money - before == tuning.support.incomePerWave, "Purchased supply income was ignored")
+            paySupplyIncome(for: Int.max)
+            try require(money - before == tuning.support.incomePerWave, "Supply purchase duplicated wave income")
+            paidSupplyWaves.remove(Int.max)
+            if tuning.support.healPerSecond > 0 {
+                try require(TowerSupportSource.healing(at: tower.position, sources: supportSources) == tuning.support.healPerSecond,
+                            "Purchased healing missing from live sources")
+            }
+            if tuning.support.attackSpeedMultiplier > 1 {
+                try require(TowerSupportSource.attackSpeed(at: tower.position, for: .direct, sources: supportSources)
+                            == tuning.support.attackSpeedMultiplier, "Purchased reload aura missing from live sources")
+            }
+            evidence["income"] = tuning.support.incomePerWave
+            evidence["healing"] = tuning.support.healPerSecond
+            evidence["reloadAura"] = tuning.support.attackSpeedMultiplier
+        }
+        return evidence
     }
 
     func verifyEngineerObstaclesOnDevice() throws -> [String: Any] {
@@ -2388,15 +873,21 @@ extension LevelRunner {
             try require(placedTower(atSlot: slot)?.level == tier
                 && placedTower(atSlot: slot)?.engineerObstaclePosition == site, "Upgrade lost its field")
             walkers = [enemy(0), enemy(1, lane: 1)]
+            try require(engineerObstacleFeedback.walkerIDs == [0]
+                && engineerObstacleFeedback.towerSlots == [slot],
+                "Slow feedback did not identify the affected enemy and its tower")
             advanceWalkers(seconds: 0.25, nowTicks: 10000)
             let travel = walkers[0].pathDistance - 500
             travelByLevel.append(travel)
-            try require(abs(travel - 15 * (1 - Double(tier + 1) / 10)) < 0.001,
+            guard let authoredSlow = towerLevels[.special]?[tier]?[1]?.engineerObstacles?.slowFraction else {
+                throw NSError(domain: "EngineerReview.MissingSlow", code: tier)
+            }
+            try require(abs(travel - 15 * (1 - authoredSlow)) < 0.001,
                         "Wrong tier \(tier) slowdown")
             try require(abs(walkers[1].pathDistance - 515) < 0.001, "Slowed an unrelated lane")
             updateCombat(gameDt: 0.25)
             try require(projectiles.isEmpty && walkers.allSatisfy { $0.hp == 100 && $0.morale.value == 100 },
-                        "Engineers dealt direct damage")
+                        "\(towerFamilyName(for: .special)) dealt direct damage")
         }
         let beforePause = walkers[0].pathDistance
         advanceWalkers(seconds: 0, nowTicks: 10000)
@@ -2405,6 +896,13 @@ extension LevelRunner {
         advanceWalkers(seconds: 0.25, nowTicks: 10000)
         try require(walkers[0].pathDistance == beforePause, "Obstacles overrode melee blocking")
         blockedWalkerIDs = []
+        walkers[0].hp = 0
+        try require(engineerObstacleFeedback.walkerIDs.isEmpty
+            && engineerObstacleFeedback.towerSlots.isEmpty, "Dead enemies kept obstacles active")
+        walkers[0].hp = 100
+        walkers[0].position = CGPoint(x: site.x + 1000, y: site.y)
+        try require(engineerObstacleFeedback.walkerIDs.isEmpty, "Slow feedback lingered after exit")
+        walkers[0].position = site
         selectPlacedTower(atSlot: slot); beginEngineerObstaclePlacement()
         placeEngineerObstacles(at: CGPoint(x: -99999, y: -99999))
         try require(placedTower(atSlot: slot)?.engineerObstaclePosition == site
@@ -2415,14 +913,17 @@ extension LevelRunner {
                     "Placement control failed to move obstacles")
         selectPlacedTower(atSlot: slot); tapUpgradeButton(branch: 3); tapUpgradeButton(branch: 3)
         try require(engineerObstacleFields.isEmpty
+            && engineerObstacleFeedback.walkerIDs.isEmpty
+            && engineerObstacleFeedback.towerSlots.isEmpty
             && placedTower(atSlot: slot)?.demolitionCharge?.isReadyForPlacement == true,
                     "Demolition upgrade retained obstacles or auto-placed its charge")
         return ["passed": true, "distanceInQuarterSecondByLevel": travelByLevel,
                 "unaffectedLaneDistance": 15, "upgradeAndPlacement": true,
-                "pauseAndMeleeBlocking": true, "demolitionTransition": true]
+                "pauseAndMeleeBlocking": true, "demolitionTransition": true,
+                "feedbackMatchesMovementAndClearsOnExitDeathAndRemoval": true]
     }
 
-    @discardableResult func prepareEngineerObstacleReview(level: Int) throws -> Int {
+    @discardableResult func prepareEngineerObstacleReview(level: Int, entering: Bool = false) throws -> Int {
         let slot = try prepareTowerUpgradeReview(kind: .special, atLevel: level)
         guard let site = placedTower(atSlot: slot)?.engineerObstaclePosition else { return slot }
         let target = Point(site.x, site.y)
@@ -2431,16 +932,54 @@ extension LevelRunner {
                 < paths[$1].point(atDistance: paths[$1].nearestDistance(to: target)).distance(to: target)
         }) {
             let center = paths[lane].nearestDistance(to: target)
-            walkers = [-65.0, 0, 65].enumerated().map { index, offset in
+            let offsets = entering ? [-220.0, -345, -470] : [-65.0, 0, 65]
+            walkers = offsets.enumerated().map { index, offset in
                 let distance = max(0, center + offset)
                 let point = paths[lane].point(atDistance: distance)
                 return Walker(id: index, assetName: "redcoat_regular", speed: 60, maxHP: 100, hp: 100,
                     bounty: 5, livesCost: reviewEnemyStats.livesCost, damageMin: 4, damageMax: 7, cover: 0, blockImmune: false,
                     spawnTick: -10000, pathIndex: lane, discipline: reviewEnemyStats.discipline, moraleResponse: reviewEnemyStats.moraleResponse, morale: EnemyMorale(rules: combatRules), position: CGPoint(x: point.x, y: point.y), pathDistance: distance)
             }
+            if entering {
+                walkers[1].hp = 65
+                walkers[1].morale.apply(loss: combatRules.moraleMax * 0.4, direction: 1)
+            }
         }
         dismissMenu()
         return slot
+    }
+
+    func engineerRoadFitReviewFields() throws -> [(slot: Int, stage: String, field: EngineerObstacleField)] {
+        guard let first = towerLevels[.special]?[1]?[1],
+              let fourth = towerLevels[.special]?[4]?[2] else {
+            throw NSError(domain: "EngineerRoadFit.MissingTuning", code: 1)
+        }
+        var progress = TowerUpgradeProgress(), reviewBudget = 10_000
+        for path in fourth.upgradePaths {
+            for _ in path.ranks {
+                guard progress.purchase(pathID: path.id, from: fourth, money: &reviewBudget) == .ok else {
+                    throw NSError(domain: "EngineerRoadFit.Upgrade", code: 2)
+                }
+            }
+        }
+        var stages: [(String, TowerLevel)] = try (1...3).map { tier in
+            guard let tuning = towerLevels[.special]?[tier]?[1] else {
+                throw NSError(domain: "EngineerRoadFit.MissingTier", code: tier)
+            }
+            return (String(tier), tuning)
+        }
+        stages += [("4", fourth), ("4-max", fourth.upgraded(with: progress))]
+        return try slotPositions.enumerated().flatMap { slot, position in
+            guard let site = first.attackRange.nearestPathPoint(to: position, from: position, paths: paths) else {
+                throw NSError(domain: "EngineerRoadFit.NoSite", code: slot)
+            }
+            return try stages.map { stage, tuning in
+                guard let stats = tuning.engineerObstacles else {
+                    throw NSError(domain: "EngineerRoadFit.MissingObstacles", code: slot)
+                }
+                return (slot, stage, EngineerObstacleField(position: site, stats: stats, paths: paths))
+            }
+        }
     }
 
     func advanceEngineerObstacleReview(seconds: Double) {
@@ -2630,7 +1169,7 @@ extension LevelRunner {
         isCleared = false; isDefeated = true
         try require(!detonateDemolition(atSlot: slot), "Charge fired after defeat")
         isDefeated = false
-        return ["family": "Engineers", "branches": [2, 3], "preparationSeconds": 8, "upgradeCost": tuning.cost,
+        return ["family": towerFamilyName(for: .special), "branches": [2, 3], "preparationSeconds": 8, "upgradeCost": tuning.cost,
                 "initialChargeReadyAndUnplaced": true, "firstPlacementImmediatelyArmed": true,
                 "unplacedChargeCannotDetonate": true, "cancelledFirstPlacementKeepsReadyCharge": true,
                 "placementRange": tuning.range, "blastRadius": tuning.aoeRadius,
@@ -2870,6 +1409,7 @@ extension LevelRunner {
                     position: CGPoint(x: center.x - 10, y: center.y), heading: 0,
                     damage: 12, targetID: 0, slotIndex: 0, speed: 640,
                     splashRadius: CGFloat(tuning.aoeRadius),
+                    splashCoverPierce: tuning.splashCoverPierce,
                     moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
                 if tuning.attackMode == .grapeshot {
                     grapeshotHits = [:]
@@ -2877,7 +1417,9 @@ extension LevelRunner {
                         var pellet = shot
                         pellet = Projectile(id: index, kind: pellet.kind, position: pellet.position,
                             heading: 0, damage: pellet.damage, targetID: 0, slotIndex: 0,
-                            speed: pellet.speed, splashRadius: 0, moraleStrike: pellet.moraleStrike,
+                            speed: pellet.speed, splashRadius: 0,
+                            firingBoundary: tuning.attackRange, firingOrigin: pellet.position,
+                            moraleStrike: pellet.moraleStrike,
                             grapeshot: GrapeshotFlight(volleyID: 0, range: 100))
                         return pellet
                     }
@@ -2911,7 +1453,8 @@ extension LevelRunner {
             walkers = [enemy(count, x: 0)]
             let shot = Projectile(id: count, kind: .areaOfEffect, position: center, heading: 0,
                 damage: 12, targetID: count, slotIndex: 0, speed: 320,
-                splashRadius: CGFloat(tuning.aoeRadius), moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
+                splashRadius: CGFloat(tuning.aoeRadius), splashCoverPierce: tuning.splashCoverPierce,
+                moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
             for _ in 0..<count { applyImpact(shot, at: center) }
             walkers[0].morale.advance(seconds: 0.8)
             try require(abs(walkers[0].morale.displayedFraction - walkers[0].morale.value / 100) < 0.001,
@@ -2929,7 +1472,8 @@ extension LevelRunner {
         walkers = targets
         let shot = Projectile(id: 100, kind: .areaOfEffect, position: center, heading: 0,
             damage: 12, targetID: targets.first?.id ?? 0, slotIndex: 0, speed: 320,
-            splashRadius: CGFloat(tuning.aoeRadius), moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
+            splashRadius: CGFloat(tuning.aoeRadius), splashCoverPierce: tuning.splashCoverPierce,
+            moraleStrike: ArtilleryMoraleStrike(tuning: tuning))
         applyImpact(shot, at: center)
         return walkers
     }

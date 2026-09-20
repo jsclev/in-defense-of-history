@@ -63,12 +63,12 @@ final class CombatDatabaseAuthorityTests: XCTestCase {
         XCTAssertEqual(arsenal.combatRules, rules)
         XCTAssertEqual(arsenal.catalog(roster: try DesignRoster(enemyTypes: fixture.db.enemyTypeDao.getAll())).combatRules, rules)
         let towers = try fixture.db.towerTypeDao.getTowerLevelsByBranch()
-        let melee = try XCTUnwrap(towers["Melee"]?[1]?[1]?.meleeUnit)
+        let melee = try XCTUnwrap(towers[.melee]?[1]?[1]?.meleeUnit)
         XCTAssertEqual(melee.combatRules, rules)
         XCTAssertEqual(melee.damageRange.lowerBound, melee.attackRating * 0.9, accuracy: 1e-10)
         XCTAssertEqual(melee.engageScanRadius, melee.rallyPointRadius * 0.2)
         XCTAssertEqual(melee.leashRadius, melee.rallyPointRadius * 0.8)
-        let ranged = try XCTUnwrap(towers["Ranged"]?[1]?[1])
+        let ranged = try XCTUnwrap(towers[.ranged]?[1]?[1])
         XCTAssertEqual(ranged.attackRange.size.height, ranged.range * 0.8)
         XCTAssertEqual(MeleeFormation(rules: rules).postSpread, 60)
         XCTAssertEqual(MeleeFormation(rules: rules).spawnSpread, 12)
@@ -138,7 +138,11 @@ final class CombatDatabaseAuthorityTests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture()
         for table in ["tower"] {
             try execute("SAVEPOINT authored", fixture)
-            try execute("UPDATE \(table) SET attack_mode='solidShot', turn_rate_degrees=17", fixture)
+            // A mode change must also author compatible service upgrades.
+            try execute("""
+                UPDATE \(table) SET attack_mode='solidShot', turn_rate_degrees=17, tower_range=300, fire_interval=1;
+                UPDATE tower_upgrade_rank SET effects_json='[{"attribute":"turnRate","delta":1}]';
+                """, fixture)
             let values = try fixture.db.towerTypeDao.getDesignArsenal().towers.flatMap(\.tiers).map(\.tuning)
             XCTAssertFalse(values.isEmpty)
             for value in values {
@@ -160,7 +164,7 @@ final class CombatDatabaseAuthorityTests: XCTestCase {
     func testPositiveFalloffIsNeverReplacedWithAMinimum() throws {
         let fixture = try AuthoredDatabaseFixture()
         try execute("UPDATE tower SET aoe_falloff_exponent=0.005", fixture)
-        let tuning = try XCTUnwrap(fixture.db.towerTypeDao.getTowerLevelsByBranch()["Area of Effect"]?[1]?[1])
+        let tuning = try XCTUnwrap(fixture.db.towerTypeDao.getTowerLevelsByBranch()[.areaOfEffect]?[1]?[1])
         XCTAssertEqual(ArtilleryMoraleStrike(tuning: tuning).falloffExponent, 0.005)
     }
 

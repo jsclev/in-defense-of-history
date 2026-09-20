@@ -54,19 +54,19 @@ public class LevelGeoJSONDAO {
             guard p.category == "gameplay", let geometry = feature.geometry,
                   geometry.type == "Point", geometry.coordinates.count == 2,
                   geometry.coordinates.allSatisfy(\.isFinite) else {
-                throw DbError.Db(message: "\(mapImageName): tower slots need finite gameplay Point coordinates")
+                throw LevelGeoJSONError(message: "\(mapImageName): tower slots need finite gameplay Point coordinates")
             }
             // Both exported formats number slots. Support legacy one-based-only files.
             guard p.slotNumber.map({ $0 > 0 }) ?? true,
                   let index = p.slotIndex ?? p.slotNumber.map({ $0 - 1 }), index >= 0,
                   p.slotNumber.map({ $0 - 1 == index }) ?? true else {
-                throw DbError.Db(message: "\(mapImageName): tower slots need matching nonnegative indices and one-based numbers")
+                throw LevelGeoJSONError(message: "\(mapImageName): tower slots need matching nonnegative indices and one-based numbers")
             }
             numbered.append((index, Point(geometry.coordinates[0], geometry.coordinates[1])))
         }
         numbered.sort { $0.index < $1.index }
         guard numbered.map(\.index) == Array(0..<numbered.count) else {
-            throw DbError.Db(message: "\(mapImageName): tower slot indices must be unique and contiguous from zero")
+            throw LevelGeoJSONError(message: "\(mapImageName): tower slot indices must be unique and contiguous from zero")
         }
         return numbered.map { slot in
             // Stable per-map identities survive reloads, moves and feature reordering.
@@ -96,17 +96,25 @@ public class LevelGeoJSONDAO {
     public static func enemyRoutes(from data: Data) throws -> [EnemyRoute]? {
         guard let root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
               let features = root["features"] as? [[String: Any]] else {
-            throw DbError.Db(message: "Level GeoJSON has no features array")
+            throw LevelGeoJSONError(message: "Level GeoJSON has no features array")
         }
         let routeFeatures = features.filter { ($0["properties"] as? [String: Any])?["kind"] as? String == "enemy_route" }
         guard !routeFeatures.isEmpty else { return nil }
+        // Match the numbers drawn on the editor's entrance/exit markers.
+        func markerLabel(_ id: String, kind: String) -> String {
+            let markers = features.filter { ($0["properties"] as? [String: Any])?["kind"] as? String == kind }
+            let label = kind == "spawn_point" ? "Entrance" : "Exit"
+            guard let index = markers.firstIndex(where: { $0["id"] as? String == id }) else { return label }
+            return "\(label) \(index)"
+        }
         func marker(_ id: String, kind: String) throws -> Point {
             let matches = features.filter { $0["id"] as? String == id }
             guard matches.count == 1, let f = matches.first,
                   (f["properties"] as? [String: Any])?["kind"] as? String == kind,
                   let geometry = f["geometry"] as? [String: Any], geometry["type"] as? String == "Point",
                   let xy = geometry["coordinates"] as? [Double], xy.count == 2, xy.allSatisfy(\.isFinite) else {
-                throw DbError.Db(message: "Enemy route references a missing or invalid \(kind) marker: \(id)")
+                let label = kind == "spawn_point" ? "entrance" : "exit"
+                throw LevelGeoJSONError(message: "An enemy path is connected to a missing or invalid \(label). Restore that marker before exporting.")
             }
             return Point(xy[0], xy[1])
         }
@@ -115,7 +123,7 @@ public class LevelGeoJSONDAO {
         for f in routeFeatures {
             guard let props = f["properties"] as? [String: Any], props["category"] as? String == "gameplay",
                   let indexValue = props["pathIndex"] else {
-                throw DbError.Db(message: "Enemy routes require a gameplay pathIndex")
+                throw LevelGeoJSONError(message: "Enemy routes require a gameplay pathIndex")
             }
             let index = try JSONDecoder().decode(Int.self, from: JSONSerialization.data(withJSONObject: indexValue, options: .fragmentsAllowed))
             guard index >= 0, let name = props["name"] as? String,
@@ -123,33 +131,46 @@ public class LevelGeoJSONDAO {
                   let geometry = f["geometry"] as? [String: Any], geometry["type"] as? String == "LineString",
                   let xy = geometry["coordinates"] as? [[Double]], xy.count >= 2,
                   xy.allSatisfy({ $0.count == 2 && $0.allSatisfy(\.isFinite) }) else {
-                throw DbError.Db(message: "Enemy routes need named LineStrings, finite waypoints and entrance/exit references")
+                throw LevelGeoJSONError(message: "Enemy routes need named LineStrings, finite waypoints and entrance/exit references")
             }
             let points = xy.map { Point($0[0], $0[1]) }
-            guard Set(points).count >= 2,
-                  points.first == (try marker(entranceID, kind: "spawn_point")),
-                  points.last == (try marker(exitID, kind: "goal_point")),
-                  zip(points, points.dropFirst()).allSatisfy({ area.containsSegment(from: $0.0, to: $0.1) }) else {
-                throw DbError.Db(message: "Enemy route \(index) must start/end at its markers and remain entirely inside the path area")
+            let entrance = markerLabel(entranceID, kind: "spawn_point")
+            let exit = markerLabel(exitID, kind: "goal_point")
+            guard Set(points).count >= 2 else {
+                throw LevelGeoJSONError(message: "The enemy path from \(entrance) to \(exit) needs at least two different points.")
+            }
+            guard points.first == (try marker(entranceID, kind: "spawn_point")) else {
+                throw LevelGeoJSONError(message: "The enemy path connected to \(entrance) does not start at that marker. Reopen the source map in the level editor and export it again.")
+            }
+            guard points.last == (try marker(exitID, kind: "goal_point")) else {
+                throw LevelGeoJSONError(message: "The enemy path connected to \(exit) does not end at that marker. Reopen the source map in the level editor and export it again.")
+            }
+            if let segment = zip(points, points.dropFirst()).enumerated().first(where: {
+                !area.containsSegment(from: $0.element.0, to: $0.element.1)
+            }) {
+                let (start, end) = segment.element
+                let location = Point.lerp(start, end, 0.5)
+                let x = String(format: "%.0f", location.x), y = String(format: "%.0f", location.y)
+                throw LevelGeoJSONError(message: "The enemy path from \(entrance) to \(exit) leaves the painted road near (\(x), \(y)). Check the road in that area before exporting.")
             }
             routes.append(EnemyRoute(index: index, name: name, entranceID: entranceID, exitID: exitID, points: points))
         }
         routes.sort { $0.index < $1.index }
         guard routes.map(\.index) == Array(0..<routes.count) else {
-            throw DbError.Db(message: "Enemy route indices must be unique and contiguous from zero")
+            throw LevelGeoJSONError(message: "Enemy route indices must be unique and contiguous from zero")
         }
         let indices = Set(routes.map(\.index))
         for wave in root["waves"] as? [[String: Any]] ?? [] {
             for line in wave["lines"] as? [[String: Any]] ?? [] {
                 guard let index = line["pathIndex"] as? Int, indices.contains(index) else {
-                    throw DbError.Db(message: "Wave references an undefined enemy route")
+                    throw LevelGeoJSONError(message: "Wave references an undefined enemy route")
                 }
             }
         }
         for feature in features where (feature["properties"] as? [String: Any])?["kind"] as? String == "call_wave_button" {
             if let selected = (feature["properties"] as? [String: Any])?["pathIndices"] as? [Int],
                !Set(selected).isSubset(of: indices) {
-                throw DbError.Db(message: "Call wave button references an undefined enemy route")
+                throw LevelGeoJSONError(message: "Call wave button references an undefined enemy route")
             }
         }
         return routes
@@ -168,7 +189,7 @@ public class LevelGeoJSONDAO {
         let heroCount = try JSONDecoder().decode(Header.self, from: data).heroCount
         guard let collection = try JSONSerialization.jsonObject(with: data) as? [String: Any],
               let features = collection["features"] as? [[String: Any]] else {
-            throw DbError.Db(message: "Level GeoJSON has no features array")
+            throw LevelGeoJSONError(message: "Level GeoJSON has no features array")
         }
         var spawns: [HeroSpawn] = []
         var spawnIDs = Set<String>()
@@ -178,7 +199,7 @@ public class LevelGeoJSONDAO {
             let kind = props["kind"] as? String
             guard kind == "hero_spawn" else {
                 if let rawRoles, (rawRoles as? [String]) != [] {
-                    throw DbError.Db(message: "Hero roles require hero_spawn points. Open this map in the level editor and export it again.")
+                    throw LevelGeoJSONError(message: "Hero roles require hero_spawn points. Open this map in the level editor and export it again.")
                 }
                 continue
             }
@@ -188,16 +209,16 @@ public class LevelGeoJSONDAO {
                   geometry["type"] as? String == "Point",
                   let xy = geometry["coordinates"] as? [Double], xy.count == 2,
                   xy.allSatisfy(\.isFinite) else {
-                throw DbError.Db(message: "Hero starts need unique IDs and finite Point coordinates")
+                throw LevelGeoJSONError(message: "Hero starts need unique IDs and finite Point coordinates")
             }
-            guard let rawRoles else { throw DbError.Db(message: "Hero starting points need exactly one role") }
+            guard let rawRoles else { throw LevelGeoJSONError(message: "Hero starting points need exactly one role") }
             guard let rolesArray = rawRoles as? [Any] else {
-                throw DbError.Db(message: "heroRoles must be an array of primary/secondary roles")
+                throw LevelGeoJSONError(message: "heroRoles must be an array of primary/secondary roles")
             }
             let roles = try JSONDecoder().decode([HeroSelection.Role].self,
                 from: JSONSerialization.data(withJSONObject: rolesArray))
             if roles.count != 1 {
-                throw DbError.Db(message: "Hero starting points need exactly one role")
+                throw LevelGeoJSONError(message: "Hero starting points need exactly one role")
             }
             spawns += roles.map { HeroSpawn(role: $0, featureID: id, position: Point(xy[0], xy[1])) }
         }
@@ -220,7 +241,7 @@ public class LevelGeoJSONDAO {
         let root = try JSONSerialization.jsonObject(with: data)
         guard let collection = root as? [String: Any],
               let features = collection["features"] as? [[String: Any]] else {
-            throw DbError.Db(message: "Level GeoJSON has no features array")
+            throw LevelGeoJSONError(message: "Level GeoJSON has no features array")
         }
         let positions = try features.compactMap { feature -> CallWaveButtonPosition? in
             guard let props = feature["properties"] as? [String: Any],
@@ -229,23 +250,23 @@ public class LevelGeoJSONDAO {
                   geometry["type"] as? String == "Point",
                   let xy = geometry["coordinates"] as? [Double], xy.count == 2,
                   xy.allSatisfy(\.isFinite) else {
-                throw DbError.Db(message: "Call wave buttons need finite Point coordinates")
+                throw LevelGeoJSONError(message: "Call wave buttons need finite Point coordinates")
             }
             var pathIndices: [Int]?
             if let raw = props["pathIndices"] {
                 guard let array = raw as? [Any] else {
-                    throw DbError.Db(message: "Call wave button path indices must be an array")
+                    throw LevelGeoJSONError(message: "Call wave button path indices must be an array")
                 }
                 pathIndices = try JSONDecoder().decode([Int].self, from: JSONSerialization.data(withJSONObject: array))
                 guard let paths = pathIndices, !paths.isEmpty,
                       paths.allSatisfy({ $0 >= 0 }), Set(paths).count == paths.count else {
-                    throw DbError.Db(message: "Call wave button path indices must be nonempty, unique and nonnegative")
+                    throw LevelGeoJSONError(message: "Call wave button path indices must be nonempty, unique and nonnegative")
                 }
             }
             return CallWaveButtonPosition(position: Point(xy[0], xy[1]), pathIndices: pathIndices)
         }
         guard !positions.isEmpty else {
-            throw DbError.Db(message: "Place a call wave button in the level editor and export the GeoJSON")
+            throw LevelGeoJSONError(message: "Place a call wave button in the level editor and export the GeoJSON")
         }
         return positions
     }
@@ -255,7 +276,7 @@ public class LevelGeoJSONDAO {
             return try Data(contentsOf: directory.appendingPathComponent(mapImageName).appendingPathExtension("geojson"))
         }
         guard let url = bundle.url(forResource: mapImageName, withExtension: "geojson") else {
-            throw DbError.Db(message: "\(mapImageName).geojson is not in the app bundle")
+            throw LevelGeoJSONError(message: "\(mapImageName).geojson is not in the app bundle")
         }
         return try Data(contentsOf: url)
     }
@@ -264,7 +285,7 @@ public class LevelGeoJSONDAO {
         let root = try JSONSerialization.jsonObject(with: data(mapImageName: mapImageName))
         guard let collection = root as? [String: Any],
               let features = collection["features"] as? [[String: Any]] else {
-            throw DbError.Db(message: "\(mapImageName).geojson has no features array")
+            throw LevelGeoJSONError(message: "\(mapImageName).geojson has no features array")
         }
         return features.compactMap { f in
             guard let props = f["properties"] as? [String: Any], props["kind"] as? String == kind,

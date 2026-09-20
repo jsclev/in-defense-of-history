@@ -44,7 +44,7 @@ public struct DesignRoster: Sendable {
         self.enemyTypes = try Foe.allCases.map { foe in
             let matches = enemyTypes.filter { $0.id == foe.id && $0.key == foe.rawValue }
             guard matches.count == 1, let type = matches.first else {
-                throw DbError.Db(message: "Missing or ambiguous authored enemy key \(foe.rawValue)")
+                throw DbError.Db(message: "Missing or ambiguous authored enemy key '\(foe.rawValue)' (id '\(foe.id)')")
             }
             return type
         }

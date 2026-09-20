@@ -332,13 +332,9 @@ struct EditorCanvas: View {
                         document.draft.roads[r].points[i] = p
                     }
                 case let .entrance(i):
-                    if document.draft.entrances.indices.contains(i) {
-                        document.draft.entrances[i] = p
-                    }
+                    document.draft.moveEntrance(at: i, to: p)
                 case let .exitPoint(i):
-                    if document.draft.exits.indices.contains(i) {
-                        document.draft.exits[i] = p
-                    }
+                    document.draft.moveExit(at: i, to: p)
                 }
             }
             .onEnded { v in
@@ -505,9 +501,9 @@ struct EditorCanvas: View {
                 where d.roads.indices.contains(r) && d.roads[r].points.indices.contains(i):
                 d.roads[r].points[i] = moved(d.roads[r].points[i])
             case let .entrance(i) where d.entrances.indices.contains(i):
-                d.entrances[i] = moved(d.entrances[i])
+                d.moveEntrance(at: i, to: moved(d.entrances[i]))
             case let .exitPoint(i) where d.exits.indices.contains(i):
-                d.exits[i] = moved(d.exits[i])
+                d.moveExit(at: i, to: moved(d.exits[i]))
             default:
                 break
             }
@@ -858,15 +854,21 @@ struct EditorCanvas: View {
             virtualCanvas: virtualCanvas,
             physicalRect: t.frame,
             safeInsetsRect: t.view(virtualCanvas.playAreaRect))
+        // The uncut reference rectangle is separate from every placement polygon.
+        ctx.stroke(SwiftUI.Path(runtimeCanvas.playAreaRect),
+                   with: .color(.white), style: StrokeStyle(lineWidth: 3))
+        ctx.stroke(SwiftUI.Path(runtimeCanvas.runtimeHUDPlayArea),
+                   with: .color(Color(red: 1.0, green: 0.8, blue: 0.0)),
+                   style: StrokeStyle(lineWidth: 3, dash: [16, 9]))
         ctx.stroke(SwiftUI.Path(runtimeCanvas.runtimePlayArea),
                    with: .color(Color(red: 1.0, green: 0.0, blue: 1.0)),
-                   style: StrokeStyle(lineWidth: 1.5, dash: [7.935, 10]))
+                   style: StrokeStyle(lineWidth: 3, dash: [7.935, 10]))
         ctx.stroke(SwiftUI.Path(runtimeCanvas.runtimeTapArea),
                    with: .color(Color(red: 0.0, green: 1.0, blue: 1.0)),
-                   style: StrokeStyle(lineWidth: 1.5, dash: [7.2, 4.8]))
+                   style: StrokeStyle(lineWidth: 3, dash: [7.2, 4.8]))
         ctx.stroke(SwiftUI.Path(runtimeCanvas.towerSlotValidArea),
                    with: .color(.blue.opacity(0.85)),
-                   style: StrokeStyle(lineWidth: 3, dash: [5, 4]))
+                   style: StrokeStyle(lineWidth: 6, dash: [5, 4]))
     }
 
     private func drawMenuPreview(_ ctx: inout GraphicsContext, _ t: DesignTransform) {

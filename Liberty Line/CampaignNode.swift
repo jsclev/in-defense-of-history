@@ -24,7 +24,14 @@ extension CampaignNode {
     }
 
     static func load(db: Db, campaignName: String = mainCampaignName) -> [CampaignNode] {
-        let levels = (try? db.levelInfoDao.getCampaignLevels(campaignName: campaignName)) ?? []
-        return levels.enumerated().map { CampaignNode(order: $0.offset + 1, level: $0.element) }
+        do {
+            let levels = try db.levelInfoDao.getCampaignLevels(campaignName: campaignName)
+            guard !levels.isEmpty else {
+                throw DbError.Db(message: "campaign[\(campaignName)]: missing authored levels")
+            }
+            return levels.enumerated().map { CampaignNode(order: $0.offset + 1, level: $0.element) }
+        } catch {
+            fatalError("Campaign map database error: \(error)")
+        }
     }
 }

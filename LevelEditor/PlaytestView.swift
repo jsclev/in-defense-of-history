@@ -81,6 +81,12 @@ struct PlaytestView: View {
                 Image(systemName: session.paused ? "play.fill" : "pause.fill")
             }
 
+            Button { session.sim.startNextWave() } label: {
+                Image(systemName: "flag.fill")
+            }
+            .disabled(!session.sim.canStartWave)
+            .help("Call the next wave")
+
             Picker("", selection: Binding(get: { session.speed }, set: { session.speed = $0 })) {
                 ForEach([1, 2, 4, 8], id: \.self) { s in
                     Text("\(s)×").tag(s)
@@ -140,37 +146,31 @@ struct PlaytestView: View {
     @ViewBuilder
     private var buildPanel: some View {
         if let slot = session.selectedSlot {
-            if let (type, lvl) = session.towerType(at: slot) {
+            if let tower = session.tower(at: slot) {
                 HStack(spacing: 10) {
-                    Text("\(type.name) L\(lvl + 1)")
-                        .font(.callout.weight(.semibold))
-                    if lvl + 1 < type.levels.count {
-                        Button("Upgrade $\(type.levels[lvl + 1].cost)") {
-                            session.upgrade(slot: slot)
+                    Text("\(tower.name) L\(tower.level)").font(.callout.weight(.semibold))
+                    ForEach(session.sim.upgradeOffers(at: slot), id: \.branch) { offer in
+                        Button("Branch \(offer.branch) $\(offer.cost)") {
+                            session.upgrade(slot: slot, branch: offer.branch)
                         }
-                        .disabled(session.sim.gold < type.levels[lvl + 1].cost)
-                    } else {
-                        Text("Max").foregroundStyle(.secondary)
+                        .disabled(session.sim.gold < offer.cost)
                     }
                 }
             } else {
                 HStack(spacing: 8) {
                     Text("Slot \(slot)").font(.callout.weight(.semibold))
-                    ForEach(session.arsenal.kinds, id: \.self) { e in
-                        let cost = session.arsenal.type(e).levels[0].cost
+                    ForEach(session.sim.buildOffers, id: \.kind) { offer in
                         Button {
-                            session.build(e, at: slot)
+                            session.build(offer.kind, at: slot)
                         } label: {
                             VStack(spacing: 1) {
-                                Circle()
-                                    .fill(Palette.towerColors[e] ?? .white)
-                                    .frame(width: 12, height: 12)
-                                Text(session.arsenal.type(e).name).font(.caption2)
-                                Text("$\(cost)").font(.caption2).monospacedDigit()
+                                Circle().fill(Palette.towerColors[offer.kind] ?? .white).frame(width: 12, height: 12)
+                                Text(session.arsenal.type(offer.kind).name).font(.caption2)
+                                Text("$\(offer.cost)").font(.caption2).monospacedDigit()
                             }
                         }
                         .buttonStyle(.bordered)
-                        .disabled(session.sim.gold < cost)
+                        .disabled(session.sim.gold < offer.cost)
                     }
                 }
             }
@@ -183,6 +183,7 @@ struct PlaytestView: View {
 
     private var reportCard: some View {
         let sim = session.sim
+        let result = sim.result()
         let won = sim.outcome == .victory
         return VStack(spacing: 12) {
             Text(won ? "Victory" : (sim.outcome == .defeat ? "Defeat" : "Timeout"))
@@ -192,17 +193,15 @@ struct PlaytestView: View {
                         sim.time, max(0, sim.lives), sim.gold))
                 .foregroundStyle(.secondary)
             HStack(spacing: 18) {
-                fateStat("Shot", sim.killed, .blue)
-                fateStat("Routed", sim.routed, .purple)
-                fateStat("Captured", sim.captured, .teal)
-                fateStat("Leaked", sim.leaked, .red)
+                fateStat("Shot", result.killed, .blue)
+                fateStat("Leaked", result.leaked, .red)
             }
             VStack(alignment: .leading, spacing: 3) {
                 Text("Tension — how far each wave pushed")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 HStack(alignment: .bottom, spacing: 4) {
-                    ForEach(Array(sim.waveMaxProgress.enumerated()), id: \.offset) { i, v in
+                    ForEach(Array(result.waveMaxProgress.enumerated()), id: \.offset) { i, v in
                         VStack(spacing: 2) {
                             RoundedRectangle(cornerRadius: 2)
                                 .fill(v >= 0.999 ? Color.red : Color.cyan)

@@ -66,11 +66,11 @@ final class ArtilleryAimTests: XCTestCase {
     func testSwivelAcquiresTargetBeforeSiegeGun() throws {
         var swivel = ArtilleryAim(heading: 0, firingTolerance: AuthoredDatabaseFixture.combatRules.firingTolerance), siege = swivel
         XCTAssertTrue(swivel.track(from: origin, to: point(.pi / 2),
-            radiansPerSecond: try AuthoredDatabaseFixture.tower("Area of Effect", level: 4, branch: 2).turnRate, deltaTime: 0.5))
+            radiansPerSecond: try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 4, branch: 2).turnRate, deltaTime: 0.5))
         XCTAssertFalse(siege.track(from: origin, to: point(.pi / 2),
-            radiansPerSecond: try AuthoredDatabaseFixture.tower("Area of Effect", level: 4, branch: 4).turnRate, deltaTime: 0.5))
-        XCTAssertEqual(try AuthoredDatabaseFixture.tower("Area of Effect", level: 4, branch: 2).attackMode, .grapeshot)
-        XCTAssertEqual(try AuthoredDatabaseFixture.tower("Area of Effect", level: 3, branch: 1).attackMode, .shell)
+            radiansPerSecond: try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 4, branch: 4).turnRate, deltaTime: 0.5))
+        XCTAssertEqual(try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 4, branch: 2).attackMode, .grapeshot)
+        XCTAssertEqual(try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 3, branch: 1).attackMode, .shell)
     }
 
     func testSweptGrapeshotHitsBetweenTicksAndRejectsOffAxisTargets() {

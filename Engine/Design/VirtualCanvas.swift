@@ -14,8 +14,43 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
     public let miscViewSizeFraction: CGSize
     public let upperLeftOcclusionArea: CGRect
     public let upperRightOcclusionArea: CGRect
-    public let lowerLeftOcclusionArea: CGRect
     public let lowerRightOcclusionArea: CGRect
+
+    /// HUD reservations use the original corner dimensions, independently of
+    /// the extra lower-left clearance required by the road.
+    public var hudPlayArea: HudPlayArea {
+        let flip = CGAffineTransform(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: size.height)
+        let referencePlay = playAreaRect.applying(flip)
+        let bounds = HudPlayArea.layoutBounds(physical: CGRect(origin: .zero, size: size),
+                                              safe: referencePlay, play: referencePlay)
+        return hudPlayArea(in: bounds.applying(flip))
+    }
+
+    public func hudPlayArea(in bounds: CGRect) -> HudPlayArea {
+        func size(_ fraction: CGSize) -> CGSize {
+            CGSize(width: playAreaRect.width * fraction.width,
+                   height: playAreaRect.height * fraction.height * 0.9)
+        }
+        return HudPlayArea(bounds: bounds, upperLeft: size(statsViewSizeFraction),
+                           upperRight: size(masterControlsSizeFraction),
+                           lowerLeft: size(heroBarSizeFraction), lowerRight: size(miscViewSizeFraction))
+    }
+
+    /// The existing space used to size the hero buttons. Extra road clearance
+    /// above this area must not enlarge the HUD artwork.
+    public var heroBarLayoutArea: CGRect {
+        CGRect(x: playAreaRect.minX, y: playAreaRect.minY,
+               width: playAreaRect.width * heroBarSizeFraction.width,
+               height: playAreaRect.height * heroBarSizeFraction.height * 0.9)
+    }
+
+    /// Reserve 30% more height above the hero bar. Derive this on access so
+    /// older saved editor canvases cannot restore the obsolete cutout height.
+    public var lowerLeftOcclusionArea: CGRect {
+        let area = heroBarLayoutArea
+        return CGRect(x: area.minX, y: area.minY,
+                      width: area.width, height: area.height * 1.3)
+    }
 
     public init(size: CGSize,
                 playAreaRect: CGRect,
@@ -43,7 +78,6 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
         }
         let ul = cornerSize(statsViewSizeFraction)
         let ur = cornerSize(masterControlsSizeFraction)
-        let ll = cornerSize(heroBarSizeFraction)
         let lr = cornerSize(miscViewSizeFraction)
         upperLeftOcclusionArea = CGRect(x: playAreaRect.minX,
                                         y: playAreaRect.maxY - ul.height,
@@ -51,9 +85,6 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
         upperRightOcclusionArea = CGRect(x: playAreaRect.maxX - ur.width,
                                          y: playAreaRect.maxY - ur.height,
                                          width: ur.width, height: ur.height)
-        lowerLeftOcclusionArea = CGRect(x: playAreaRect.minX,
-                                        y: playAreaRect.minY,
-                                        width: ll.width, height: ll.height)
         lowerRightOcclusionArea = CGRect(x: playAreaRect.maxX - lr.width,
                                          y: playAreaRect.minY,
                                          width: lr.width, height: lr.height)
@@ -96,7 +127,7 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
         return CGRect(x: playAreaRect.midX - width / 2,
                       y: playAreaRect.minY,
                       width: width,
-                      height: lowerLeftOcclusionArea.height * 0.2)
+                      height: heroBarLayoutArea.height * 0.2)
     }
 
     public var occlusionAreas: [CGRect] { occlusionAreas(forScreenWidth: size.width) }
@@ -107,38 +138,43 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
 
     /// Where a slot's CENTRE may sit. Test placements against this.
     public var towerSlotValidCentres: CGPath {
-        slotValidShape(measuringFootprintEdge: false, screenWidth: size.width)
+        towerSlotValidCentres(forScreenWidth: size.width, hudArea: hudPlayArea)
+    }
+
+    public func towerSlotValidCentres(forScreenWidth screenWidth: CGFloat, hudArea: HudPlayArea) -> CGPath {
+        slotValidShape(measuringFootprintEdge: false, screenWidth: screenWidth, hudArea: hudArea)
     }
 
     /// Where the outer edge of a slot's pad may reach. Draw this.
     public var towerSlotValidFootprint: CGPath { towerSlotValidFootprint(forScreenWidth: size.width) }
 
     public func towerSlotValidFootprint(forScreenWidth screenWidth: CGFloat) -> CGPath {
-        slotValidShape(measuringFootprintEdge: true, screenWidth: screenWidth)
+        towerSlotValidFootprint(forScreenWidth: screenWidth, hudArea: hudPlayArea)
     }
 
-    private func slotValidShape(measuringFootprintEdge: Bool, screenWidth: CGFloat) -> CGPath {
-        let menuHalfWidth = towerMenuTotalSize.width / 2
-        let menuHalfHeight = towerMenuTotalSize.height / 2
+    public func towerSlotValidFootprint(forScreenWidth screenWidth: CGFloat, hudArea: HudPlayArea) -> CGPath {
+        slotValidShape(measuringFootprintEdge: true, screenWidth: screenWidth, hudArea: hudArea)
+    }
+
+    private func slotValidShape(measuringFootprintEdge: Bool, screenWidth: CGFloat, hudArea: HudPlayArea) -> CGPath {
+        let interactionExtent = TowerMenuLayout(virtualCanvas: self).interactionExtent
+        let menuHalfWidth = max(towerMenuTotalSize.width / 2, interactionExtent)
+        let menuHalfHeight = max(towerMenuTotalSize.height / 2, interactionExtent)
         let slotHalfWidth = towerSlotSize.width / 2
         let slotHalfHeight = towerSlotSize.height / 2
         let insetWidth = measuringFootprintEdge ? menuHalfWidth - slotHalfWidth : menuHalfWidth
         let insetHeight = measuringFootprintEdge ? menuHalfHeight - slotHalfHeight : menuHalfHeight
-        let upperLeftStandoffWidth = measuringFootprintEdge ? 0 : slotHalfWidth
-        let upperLeftStandoffHeight = measuringFootprintEdge ? 0 : slotHalfHeight
 
         let valid = CGMutablePath()
         valid.addRect(playAreaRect.insetBy(dx: insetWidth, dy: insetHeight))
         let blocked = CGMutablePath()
-        for corner in [lowerLeftOcclusionArea, lowerRightOcclusionArea, upperRightOcclusionArea] {
+        for corner in hudArea.occlusionAreas where !corner.isEmpty {
             blocked.addRect(corner.insetBy(dx: -insetWidth, dy: -insetHeight))
         }
         let bottomCenter = bottomCenterOcclusionArea(forScreenWidth: screenWidth)
         if !bottomCenter.isEmpty {
             blocked.addRect(bottomCenter.insetBy(dx: -insetWidth, dy: -insetHeight))
         }
-        blocked.addRect(upperLeftOcclusionArea.insetBy(dx: -upperLeftStandoffWidth,
-                                                       dy: -upperLeftStandoffHeight))
         return valid.subtracting(blocked, using: .winding)
     }
 
@@ -158,18 +194,29 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
 
     public var playAreaShape: CGPath { playAreaShape(forScreenWidth: size.width) }
 
-    /// Reserve finger clearance at the exposed top edge for tappable elements.
+    /// Lower the exposed path edge without changing the 16:9 reference bounds.
+    public static let pathAreaTopInsetFraction: CGFloat = 0.09
+
+    /// Minimum top clearance for taps, which also stay inside the path area.
     public static let tapAreaTopInsetFraction: CGFloat = 0.05
+
+    public var pathAreaTopExclusionArea: CGRect {
+        topExclusionArea(insetFraction: Self.pathAreaTopInsetFraction)
+    }
+
+    public var tapAreaTopExclusionArea: CGRect {
+        topExclusionArea(insetFraction: Self.tapAreaTopInsetFraction)
+    }
 
     /// Only the top segment between the upper corner occlusions moves inward.
     /// Canonical map coordinates have +Y up, so downward means decreasing Y.
-    public var tapAreaTopExclusionArea: CGRect {
+    private func topExclusionArea(insetFraction: CGFloat) -> CGRect {
         let play = playAreaRect
         let left = upperLeftOcclusionArea.isEmpty ? play.minX
             : min(play.maxX, max(play.minX, upperLeftOcclusionArea.maxX))
         let right = upperRightOcclusionArea.isEmpty ? play.maxX
             : max(play.minX, min(play.maxX, upperRightOcclusionArea.minX))
-        let height = play.height * Self.tapAreaTopInsetFraction
+        let height = play.height * insetFraction
         return CGRect(x: left, y: play.maxY - height,
                       width: max(0, right - left), height: height)
     }
@@ -191,6 +238,8 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
         return play.subtracting(CGPath(rect: cut, transform: nil), using: .winding)
     }
 
+    /// Paths reach both horizontal extents of playAreaRect between its corner
+    /// cutouts. Tower-menu clearance belongs only to the tower-slot shapes.
     public func playAreaShape(forScreenWidth screenWidth: CGFloat) -> CGPath {
         let play = playAreaRect
         // Cuts extend past the boundary so subtraction removes the shared edge cleanly.
@@ -198,7 +247,7 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
         let shape = CGMutablePath()
         shape.addRect(play)
         let cuts = CGMutablePath()
-        for occlusion in occlusionAreas(forScreenWidth: screenWidth) where !occlusion.isEmpty {
+        for occlusion in occlusionAreas(forScreenWidth: screenWidth) + [pathAreaTopExclusionArea] where !occlusion.isEmpty {
             var cut = occlusion
             if abs(occlusion.minX - play.minX) < 0.5 { cut.origin.x -= pad; cut.size.width += pad }
             if abs(occlusion.maxX - play.maxX) < 0.5 { cut.size.width += pad }

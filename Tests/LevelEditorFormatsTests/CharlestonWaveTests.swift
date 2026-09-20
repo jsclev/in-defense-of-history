@@ -13,6 +13,15 @@ final class CharlestonWaveTests: XCTestCase {
         let data = try Data(contentsOf: root.appendingPathComponent("Db/level_15_charleston.geojson"))
         let authored = try LevelGeoJSON(data: data)
         let imported = try GeoJSONImport.draft(from: data)
+        XCTAssertEqual(imported.entrances, native.draft.entrances)
+        XCTAssertEqual(imported.exits, native.draft.exits)
+        XCTAssertEqual(imported.slots, native.draft.slots)
+        XCTAssertEqual(imported.slots.count, 19)
+        XCTAssertEqual(imported.primaryHeroPosition, native.draft.primaryHeroPosition)
+        XCTAssertEqual(imported.secondaryHeroPosition, native.draft.secondaryHeroPosition)
+        XCTAssertEqual(imported.callWaveButtons, native.draft.callWaveButtons)
+        XCTAssertEqual(imported.callWaveButtons.map(\.pathIndices), [[0, 2, 4], [1, 3, 5]])
+        XCTAssertEqual(imported.startingGold, 500)
         XCTAssertEqual(imported.waves, native.draft.waves)
         XCTAssertEqual(imported.waves.count, 15)
         let exported = try GeoJSONExport(virtualCanvas: native.canvas).document(for: imported)
@@ -22,7 +31,8 @@ final class CharlestonWaveTests: XCTestCase {
         let fromNative = try GeoJSONExport(virtualCanvas: native.canvas).document(for: native.draft)
         XCTAssertEqual(fromNative.collection.waves, authored.collection.waves)
         XCTAssertEqual(try LevelGeoJSONDAO.enemyRoutes(from: fromNative.data()), native.draft.enemyRoutes)
-        XCTAssertEqual(Set(imported.waves.flatMap { $0.lines.map(\.road) }), [0, 1, 2, 3])
+        XCTAssertEqual(Set(imported.waves.flatMap { $0.lines.map(\.road) }), [0, 1, 2, 3, 4, 5])
+        XCTAssertEqual(Set(imported.waves.last!.lines.map(\.road)), [0, 1, 2, 3, 4, 5])
         var erased = imported
         erased.applyErase(.init(points: [Point(1600, 1000)], width: 20, erases: true),
                           mapGeometry: MapGeometry(virtualCanvas: native.canvas))
@@ -40,7 +50,7 @@ final class CharlestonWaveTests: XCTestCase {
         let draft = try GeoJSONImport.draft(from: geo.data())
         let enemies = Dictionary(uniqueKeysWithValues: try db.enemyTypeDao.getAll().map { ($0.id, $0.key) })
         XCTAssertEqual(level.numWaves, 15)
-        XCTAssertEqual(level.paths.count, 4)
+        XCTAssertEqual(level.paths.count, 6)
         XCTAssertEqual(level.paths[0].points.first, draft.entrances[0])
         XCTAssertEqual(level.paths[0].points.last, draft.exits[1])
         XCTAssertEqual(level.paths[1].points.first, draft.entrances[1])
@@ -49,6 +59,10 @@ final class CharlestonWaveTests: XCTestCase {
         XCTAssertEqual(level.paths[2].points.last, draft.exits[0])
         XCTAssertEqual(level.paths[3].points.first, draft.entrances[1])
         XCTAssertEqual(level.paths[3].points.last, draft.exits[1])
+        XCTAssertEqual(level.paths[4].points.first, draft.entrances[0])
+        XCTAssertEqual(level.paths[4].points.last, draft.exits[0])
+        XCTAssertEqual(level.paths[5].points.first, draft.entrances[1])
+        XCTAssertEqual(level.paths[5].points.last, draft.exits[1])
         let area = try HeroMovementArea(geoJSON: geo.data(), defaultPathWidth: 140)
         for path in level.paths {
             XCTAssertTrue(zip(path.points, path.points.dropFirst()).allSatisfy { area.containsSegment(from: $0.0, to: $0.1) })
@@ -90,7 +104,7 @@ final class CharlestonWaveTests: XCTestCase {
             XCTAssertFalse(CallWaveButtonPosition.visiblePositions(draft.callWaveButtons,
                 forPathIndices: Set(wave.spawns.map(\.pathIndex))).isEmpty)
         }
-        XCTAssertEqual(total, 424)
+        XCTAssertEqual(total, 414)
         XCTAssertEqual(start, 540)
         XCTAssertTrue(schedule.allWavesStarted)
     }

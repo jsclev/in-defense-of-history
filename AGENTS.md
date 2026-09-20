@@ -24,6 +24,33 @@ reinforcement counts. Author shared rules in `Db/DML/combat_rules.sql` and load
 them through `CombatRulesDAO`. Pass the resulting rules into combat models;
 never introduce a parallel Swift tuning catalog or a mutable global registry.
 
+# Simulator boundary
+
+Standing user instruction (September 20, 2026): the simulator must execute the
+same gameplay rules as the game. Use the shared BattleEngine for combat,
+movement, wave timing, purchases, abilities, rewards and victory/defeat. Do not
+maintain separate simulator damage or morale implementations. Campaign settings
+and selected upgrades remain database-authoritative; exclude only features the
+user explicitly asks to exclude. Legacy CPU/GPU simulation results are not valid
+game balance evidence.
+
+The simulator is only an input driver and result recorder. It must not implement
+or duplicate any gameplay rule, including eligibility, prices, damage, targeting,
+movement, timing, morale, rewards, or outcomes. All simulation entry points,
+including editor playtests, must call the same engine used by the game. Delete
+obsolete alternate implementations; disabling an entry point is insufficient.
+Keep strategy choices and experiment limits separate from engine rules.
+Run `SimulatorBoundaryTests` and shared-engine regressions after simulator
+changes; any new simulator source requires an explicit ownership audit.
+
+Use the same player-facing engine handlers in the same order, including purchase
+confirmation and map-placement validation. Calling lower-level commit methods is
+not equivalent. Both drivers must advance complete shared engine ticks; display
+interpolation is presentation only. Verify fractional frames and catch-up batches
+against individual ticks, and compare native display-clock play with headless
+replay. BattleEngine derives difficulty and selected upgrades from BattleContent;
+adapters must not supply independent tuning arguments.
+
 # Standard build process — explicit authorization required
 
 Standing user instruction (September 11, 2026): Keep a standard, native Xcode compilation process. Never introduce compiler or build-system workarounds, wrappers, shims, toolchain substitutions or patches, or process-killing/retry automation to get a build through an error or hang unless the user explicitly authorizes that specific workaround in advance. A general request to fix a build or make the workspace compile is not authorization for any such change.
@@ -34,9 +61,9 @@ Investigate the root cause, report the evidence and propose a normal fix. Do not
 
 Standing user instruction (September 16, 2026): every new installation/update must overwrite all previous player state with exactly the authored bundled database. The game currently refreshes that database on every process launch; preserve that behavior. Hero selections, settings, difficulty and HUD configuration must come from SQLite. Never restore or merge prior `UserDefaults`, `AppStorage`, saved preferences or other parallel state over the fresh database. Remove obsolete preferences without importing them. Treat a failed database refresh or missing required seed as an error, not permission to reuse old state or invent replacement values.
 
-# Sapper experimentation money
+# Starting money authority
 
-Standing user instruction (September 16, 2026): keep level 15 (Charleston) starting money at 3,000 until the user explicitly asks to change it back. This must apply to ordinary campaign entry, level restarts, app relaunches, and future deployments, not only a special launch session. Preserve the value in the level's authored data.
+Standing user instruction (September 17, 2026): the temporary Charleston experimentation budget has ended. Every campaign level's starting money is authored only in its SQL `level_info.starting_money` field and loaded through `LevelInfoDAO`. Preserve this single source for campaign entry, restarts, app relaunches and deployments; do not introduce Swift budgets, overrides or fallback values.
 
 # Game art and rendering reviews
 

@@ -76,37 +76,3 @@ public struct BatchReport: Sendable {
         return sums.map { $0 / Double(results.count) }
     }
 }
-
-/// A run of `count` seeded simulations of one level, seeds `baseSeed`,
-/// `baseSeed + 1`, ...
-public struct Batch: Sendable {
-    public let baseSeed: UInt64
-    public let count: Int
-    public let maxSeconds: Double
-
-    public init(baseSeed: UInt64, count: Int, maxSeconds: Double = 900) {
-        self.baseSeed = baseSeed
-        self.count = count
-        self.maxSeconds = maxSeconds
-    }
-
-    public func run(
-        level: LevelInfo,
-        catalog: ContentCatalog,
-        makePolicy: (UInt64) -> any CommanderPolicy
-    ) throws -> BatchReport {
-        var results: [SimulationResult] = []
-        results.reserveCapacity(count)
-        for k in 0..<count {
-            let seed = baseSeed &+ UInt64(k)
-            let sim = try Simulation(
-                level: level,
-                catalog: catalog,
-                policy: makePolicy(seed),
-                seed: seed
-            )
-            results.append(sim.run(maxSeconds: maxSeconds))
-        }
-        return BatchReport(results: results)
-    }
-}

@@ -9,4 +9,9 @@ public struct TowerMenuDetails: Equatable, Sendable {
         self.name = name
         self.description = description
     }
+
+    public func including(upgrades: [TowerUpgradePath]) -> Self {
+        guard !upgrades.isEmpty else { return self }
+        return Self(name: name, description: description + "\n\n" + upgrades.map(\.overview).joined(separator: "\n\n"))
+    }
 }

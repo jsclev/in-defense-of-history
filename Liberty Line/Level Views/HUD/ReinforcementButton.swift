@@ -6,6 +6,8 @@ struct ReinforcementButton: View {
     let isAvailable: Bool
     let action: () -> Void
     var isSelected = false
+    var reserveCapacity = 1
+    var availableDeployments = 1
 
     var body: some View {
         Button(action: action) {
@@ -22,6 +24,20 @@ struct ReinforcementButton: View {
                 }
             }
             .frame(width: buttonSize.width, height: buttonSize.height)
+            .overlay(alignment: .bottom) {
+                if reserveCapacity > 1 {
+                    HStack(spacing: 3) {
+                        ForEach(0..<reserveCapacity, id: \.self) { index in
+                            Circle().fill(index < availableDeployments ? Color.yellow : Color.black)
+                                .overlay(Circle().strokeBorder(Color.white.opacity(0.8), lineWidth: 1))
+                                .frame(width: 8, height: 8)
+                        }
+                    }
+                    .padding(3).background(.black.opacity(0.85), in: Capsule())
+                    .padding(.bottom, 3)
+                    .allowsHitTesting(false).accessibilityHidden(true)
+                }
+            }
             .overlay {
                 if isSelected {
                     RoundedRectangle(cornerRadius: buttonSize.width * 0.08)
@@ -33,7 +49,7 @@ struct ReinforcementButton: View {
         .buttonStyle(ReinforcementButtonStyle())
         .disabled(!isAvailable)
         .accessibilityLabel("Call reinforcements")
-        .accessibilityValue(cooldown.isReady ? "Ready" : "\(cooldown.displaySeconds) seconds remaining")
+        .accessibilityValue(cooldown.isReady ? "\(availableDeployments) of \(reserveCapacity) deployments ready" : "\(cooldown.displaySeconds) seconds remaining")
     }
 
     private var cooldownOverlay: some View {
@@ -43,20 +59,10 @@ struct ReinforcementButton: View {
         let height = buttonSize.height * 0.78
         let remainingHeight = height * cooldown.remainingFraction
         let boundary = height - remainingHeight
-        let labelHeight = buttonSize.height * 0.34
         return ZStack(alignment: .topLeading) {
             Color.black.opacity(0.55)
                 .frame(width: width, height: remainingHeight)
                 .offset(y: boundary)
-            Text("\(cooldown.displaySeconds)")
-                .font(.system(size: max(12, buttonSize.height * 0.26), weight: .bold, design: .rounded))
-                .monospacedDigit()
-                .foregroundStyle(.white)
-                .padding(.horizontal, buttonSize.width * 0.06)
-                .frame(height: labelHeight)
-                .background(.black.opacity(0.85), in: RoundedRectangle(cornerRadius: buttonSize.width * 0.06))
-                .position(x: width / 2,
-                          y: labelHeight / 2 + (height - labelHeight) * (1 - cooldown.remainingFraction))
         }
         .frame(width: width, height: height)
         .clipShape(RoundedRectangle(cornerRadius: buttonSize.width * 0.04))

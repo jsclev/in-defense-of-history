@@ -52,15 +52,15 @@ enum TowerRangeCheck {
             heroBarSizeFraction: size("hero_bar", fraction: true),
             miscViewSizeFraction: size("misc_view", fraction: true))
         let towers = rows("""
-            SELECT t.*, tt.tower_type_category AS category, m.rally_point_radius
+            SELECT t.*, tt.tower_type_key AS kind, m.rally_point_radius
             FROM tower t JOIN tower_type tt ON tt.id = t.tower_type_id
             LEFT JOIN melee_unit m ON m.tower_id = t.id
-            ORDER BY category, tower_level, branch
+            ORDER BY kind, tower_level, branch
             """, db: db)
         precondition(towers.count == 23)
-        func range(_ category: String, _ level: Int, _ branch: Int = 1) -> Double {
+        func range(_ kind: String, _ level: Int, _ branch: Int = 1) -> Double {
             let row = towers.first {
-                $0["category"] == category && $0["tower_level"] == String(level) && $0["branch"] == String(branch)
+                $0["kind"] == kind && $0["tower_level"] == String(level) && $0["branch"] == String(branch)
             }!
             return Double(row["tower_range"]!)!
         }
@@ -72,29 +72,29 @@ enum TowerRangeCheck {
             precondition(radius >= Double(row["min_range"]!)!)
             precondition(radius <= Double(row["max_range"]!)!)
         }
-        let rally = range("Melee", 1)
+        let rally = range("melee", 1)
         near(rally, 330.48)
 
-        near(range("Ranged", 1) / rally, 280.0 / 290, tolerance: 0.00002)
-        near(range("Ranged", 4, 1) / rally, 470.0 / 290, tolerance: 0.00002)
-        precondition(range("Ranged", 4, 1) > range("Ranged", 4, 3))
-        precondition(range("Ranged", 4, 3) > range("Ranged", 4, 2))
-        let artilleryChoices = towers.filter { $0["category"] == "Area of Effect" && $0["tower_level"] == "4" }
+        near(range("ranged", 1) / rally, 280.0 / 290, tolerance: 0.00002)
+        near(range("ranged", 4, 1) / rally, 470.0 / 290, tolerance: 0.00002)
+        precondition(range("ranged", 4, 1) > range("ranged", 4, 3))
+        precondition(range("ranged", 4, 3) > range("ranged", 4, 2))
+        let artilleryChoices = towers.filter { $0["kind"] == "areaOfEffect" && $0["tower_level"] == "4" }
         precondition(Set(artilleryChoices.map { Int($0["branch"]!)! }) == [1, 2, 4])
-        near(range("Special", 4, 3), 410.25)
-        precondition(range("Area of Effect", 4, 1) > range("Area of Effect", 4, 2))
-        for group in Dictionary(grouping: towers, by: { $0["category"]! }).values {
+        near(range("special", 4, 3), 410.25)
+        precondition(range("areaOfEffect", 4, 1) > range("areaOfEffect", 4, 2))
+        for group in Dictionary(grouping: towers, by: { $0["kind"]! }).values {
             for tower in group {
                 let tier = Int(tower["tower_level"]!)!
                 let radius = Double(tower["tower_range"]!)!
 
-                if tower["category"] == "Area of Effect" && tier == 4 && tower["branch"] == "2" {
+                if tower["kind"] == "areaOfEffect" && tier == 4 && tower["branch"] == "2" {
                     near(radius, 320)
                 } else if tier > 1 {
                     let previous = group.first { Int($0["tower_level"]!)! == tier - 1 }!
                     precondition(radius >= Double(previous["tower_range"]!)!)
                 }
-                if tower["category"] == "Melee" {
+                if tower["kind"] == "melee" {
                     near(radius, rally)
                     near(Double(tower["rally_point_radius"]!)!, rally)
                 }

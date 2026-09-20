@@ -7,14 +7,14 @@ public struct DebugLayoutGuidesView: View {
 
     private let physicalRectDash: [CGFloat] = [16, 9]
     private let safeInsetsRectDash: [CGFloat] = [16, 9]
-    private let hudRectDash: [CGFloat] = [16, 9]
+    private let hudPlayAreaDash: [CGFloat] = [16, 9]
     private let playAreaDash: [CGFloat] = [7.935, 10]
     // 60% cyan, 40% gap so the purple guide underneath remains visible.
     private let tapAreaDash: [CGFloat] = [7.2, 4.8]
 
     private let physicalRectGuideColor = Color(red: 1.0, green: 0.16, blue: 0.16)
     private let safeInsetsRectGuideColor = Color(red: 0.18, green: 1.0, blue: 0.33)
-    private let hudRectGuideColor = Color(red: 1.0, green: 0.8, blue: 0.0)
+    private let hudPlayAreaGuideColor = Color(red: 1.0, green: 0.8, blue: 0.0)
     private let playAreaGuideColor = Color(red: 1.0, green: 0.0, blue: 1.0)
     private let tapAreaGuideColor = Color(red: 0.0, green: 1.0, blue: 1.0)
 
@@ -24,6 +24,12 @@ public struct DebugLayoutGuidesView: View {
 
     public var body: some View {
         ZStack(alignment: .topLeading) {
+            // Keep the full calculated 16:9 rectangle visible independently
+            // of the path/HUD cutouts and the inset tower-slot boundary.
+            // Draw underneath the dashed guides so shared edges show both.
+            createRectView(rect: runtimeCanvas.playAreaRect,
+                           borderColor: .white,
+                           borderThickness: 2)
             createRectView(rect: runtimeCanvas.physicalRect,
                            borderColor: physicalRectGuideColor,
                            borderThickness: lineThickness,
@@ -32,12 +38,14 @@ public struct DebugLayoutGuidesView: View {
                            borderColor: safeInsetsRectGuideColor,
                            borderThickness: lineThickness,
                            borderDash: safeInsetsRectDash)
-            createRectView(rect: runtimeCanvas.hudRect,
-                           borderColor: hudRectGuideColor,
-                           borderThickness: lineThickness,
-                           borderDash: hudRectDash)
+            SwiftUI.Path(runtimeCanvas.runtimeHUDPlayArea)
+                .stroke(hudPlayAreaGuideColor,
+                        style: StrokeStyle(lineWidth: CGFloat(lineThickness), dash: hudPlayAreaDash))
             createPlayAreaView()
             createTapAreaView()
+            SwiftUI.Path(runtimeCanvas.towerSlotValidArea)
+                .stroke(.blue.opacity(0.85),
+                        style: StrokeStyle(lineWidth: CGFloat(lineThickness), dash: [5, 4]))
         }
         .allowsHitTesting(false)
     }

@@ -141,7 +141,7 @@ enum GeoJSONImport {
         }
         let (roads, slots, entrances, exits, callWaveButtons) = try geometry(from: data)
         guard !roads.isEmpty else {
-            throw DbError.Db(message: "GeoJSON has no gameplay road to edit")
+            throw LevelGeoJSONError(message: "GeoJSON has no gameplay road to edit")
         }
         let collection = try JSONDecoder().decode(Collection.self, from: data)
         var draft = MapDraft.starter

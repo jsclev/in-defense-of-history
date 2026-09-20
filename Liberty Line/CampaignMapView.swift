@@ -3,6 +3,7 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct CampaignMapView: View {
     @EnvironmentObject private var settings: PlayerSettingsStore
+    @ObservedObject var playerProgress: MetaUpgradeStore
     private var showDebugLayoutGuides: Bool { settings.values.showDebugLayoutGuides }
     var onSelectNode: (CampaignNode) -> Void
     var onSelectMenu: (MenuScreen) -> Void
@@ -24,6 +25,7 @@ struct CampaignMapView: View {
         let scale = CampaignMarkers.scale(for: mapSize)
         let placements = CampaignMarkers.placements(
             for: nodes,
+            bestStarsByLevel: playerProgress.bestStarsByLevel,
             viewSize: mapSize
         )
         let menuBox = CGRect(
@@ -73,6 +75,7 @@ struct CampaignMapView: View {
                     .accessibilityLabel(
                         "Level \(placement.node.id), \(placement.node.title)"
                     )
+                    .accessibilityValue(placement.state.accessibilityValue)
                 }
             }
 
@@ -104,7 +107,17 @@ struct CampaignMapView: View {
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .task {
-            if nodes.isEmpty { nodes = CampaignNode.load(db: db) }
+            do {
+                try playerProgress.reload()
+                nodes = CampaignNode.load(db: db)
+            } catch {
+                fatalError("Campaign map database error: \(error)")
+            }
+            #if DEBUG
+            if CommandLine.arguments.contains("--campaign-art-review") {
+                await CampaignArtDeviceReview.capture(runtimeCanvas: runtimeCanvas)
+            }
+            #endif
         }
     }
 }

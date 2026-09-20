@@ -8,21 +8,6 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
 
     public var id: String { rawValue }
 
-    public var categoryName: String {
-        switch self {
-        case .ranged: return "Ranged"
-        case .melee: return "Melee"
-        case .areaOfEffect: return "Area of Effect"
-        case .special: return "Special"
-        }
-    }
-
-    public init?(categoryName: String) {
-        guard let kind = Self.allCases.first(where: { $0.categoryName == categoryName })
-        else { return nil }
-        self = kind
-    }
-
     private var assetFamilyName: String {
         switch self {
         case .ranged: return "ranged"

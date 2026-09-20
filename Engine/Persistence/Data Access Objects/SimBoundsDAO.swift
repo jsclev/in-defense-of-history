@@ -79,7 +79,7 @@ public class SimBoundsDAO: BaseDAO {
     }
 
     /// Range search bounds from sim_tower_range, one entry per tower row that
-    /// has one, keyed category then tower level.
+    /// has one, keyed kind then tower level.
     ///
     /// A tower with no row is not swept over range: the sweep uses its own
     /// tower_range instead. That is how the search stays confined to the levels
@@ -91,7 +91,7 @@ public class SimBoundsDAO: BaseDAO {
         let sql = getCleanedSql("""
             SELECT
                 r.tower_id,
-                tt.tower_type_category,
+                tt.tower_type_key,
                 t.tower_level,
                 t.branch,
                 r.min_range,
@@ -110,20 +110,21 @@ public class SimBoundsDAO: BaseDAO {
         var step = sqlite3_step(stmt)
         while step == SQLITE_ROW {
             let row = AuthoredRow(statement: stmt!, entity: "sim_tower_range")
-            let category = try row.text("tower_type_category")
+            let kind = try row.text("tower_type_key")
+            guard TowerKind(rawValue: kind) != nil else { throw row.invalid("tower_type_key", "is unsupported") }
             let towerID = try row.uuid("tower_id")
             let level = try row.integer("tower_level", minimum: 1)
             let minimum = try row.integer("min_range", minimum: 1)
             let value = SimTowerRange(
                 towerID: towerID,
-                towerKind: category,
+                towerKind: kind,
                 towerLevel: level,
                 branch: try row.integer("branch", minimum: 1),
                 minRange: minimum,
                 maxRange: try row.integer("max_range", minimum: minimum)
             )
-            guard out[category, default: [:]].updateValue(value, forKey: level) == nil else {
-                throw row.invalid("tower_level", "duplicates a category/tier")
+            guard out[kind, default: [:]].updateValue(value, forKey: level) == nil else {
+                throw row.invalid("tower_level", "duplicates a kind/tier")
             }
             step = sqlite3_step(stmt)
         }

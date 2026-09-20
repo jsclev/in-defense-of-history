@@ -93,17 +93,17 @@ struct HudLayoutConfigView: View {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
                     zone(.northWest, alignment: .topLeading)
-                    zone(.north, alignment: .top)
+                    Color.clear.frame(width: cellSize.width, height: cellSize.height)
                     zone(.northEast, alignment: .topTrailing)
                 }
                 HStack(spacing: 0) {
-                    zone(.west, alignment: .leading)
+                    Color.clear.frame(width: cellSize.width, height: cellSize.height)
                     controlPanel
-                    zone(.east, alignment: .trailing)
+                    Color.clear.frame(width: cellSize.width, height: cellSize.height)
                 }
                 HStack(spacing: 0) {
                     zone(.southWest, alignment: .bottomLeading)
-                    zone(.south, alignment: .bottom)
+                    Color.clear.frame(width: cellSize.width, height: cellSize.height)
                     zone(.southEast, alignment: .bottomTrailing)
                 }
             }
@@ -207,7 +207,7 @@ struct HudLayoutConfigView: View {
                 .font(.custom("Baskerville-Bold", size: titleFontSize))
                 .foregroundStyle(.white)
 
-            Text("Drag a section onto any edge or corner. "
+            Text("Drag a section onto a corner. "
                  + "Dropping onto an occupied area swaps the two.")
                 .font(.system(size: bodyFontSize))
                 .foregroundStyle(.white.opacity(0.68))
@@ -264,9 +264,9 @@ struct HudLayoutConfigView: View {
     private static let boardSpace = "hudLayoutBoard"
 
     private static let zoneGrid: [[HudLocation?]] = [
-        [.northWest, .north, .northEast],
-        [.west, nil, .east],
-        [.southWest, .south, .southEast],
+        [.northWest, nil, .northEast],
+        [nil, nil, nil],
+        [.southWest, nil, .southEast],
     ]
 
     private static let gold = Color(red: 0.87, green: 0.72, blue: 0.35)

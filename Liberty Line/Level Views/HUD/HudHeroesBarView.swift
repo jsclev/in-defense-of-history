@@ -24,7 +24,9 @@ struct HudHeroesBarView: View {
                                 cooldown: runner.reinforcementCooldown,
                                 isAvailable: runner.canCallReinforcements,
                                 action: { runner.toggleReinforcementPlacement() },
-                                isSelected: runner.isPlacingReinforcements)
+                                isSelected: runner.isPlacingReinforcements,
+                                reserveCapacity: runner.metaUpgrades.reinforcementCapacity,
+                                availableDeployments: runner.reinforcementCharges)
         }
         .frame(width: layout.frame.width, height: layout.frame.height)
     }

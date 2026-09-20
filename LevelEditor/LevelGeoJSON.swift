@@ -3,10 +3,7 @@ import Foundation
 /// The flattened interchange format. Construction and decoding both validate;
 /// immutable storage means a valid instance cannot later acquire a second path.
 final class LevelGeoJSON: Codable {
-    struct ValidationError: LocalizedError, Equatable {
-        let message: String
-        var errorDescription: String? { message }
-    }
+    typealias ValidationError = LevelGeoJSONError
 
     enum Geometry: Codable, Equatable, Sendable {
         typealias Position = [Double]
@@ -272,11 +269,7 @@ final class LevelGeoJSON: Codable {
             }
         }
         try require(slots == Set(0..<slots.count), "Tower slot indices must be contiguous from zero.")
-        do {
-            _ = try LevelHeroConfiguration(heroCount: c.heroCount ?? 0, spawns: heroSpawns)
-        } catch let DbError.Db(message) {
-            throw ValidationError(message: message)
-        }
+        _ = try LevelHeroConfiguration(heroCount: c.heroCount ?? 0, spawns: heroSpawns)
         let declaredRouteCount = c.features.filter { $0.properties.kind == .enemyRoute }.count
         let routeCount: Int? = declaredRouteCount > 0 ? declaredRouteCount : nil
         for wave in c.waves {

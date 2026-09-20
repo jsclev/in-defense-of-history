@@ -80,7 +80,11 @@ INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level) 
 ('2f6a8e91-7c04-4b3d-a6e8-1d92c5b4f037', (
     SELECT id FROM level_info
     WHERE level_name = 'Charleston'
-), 'special', 4);
+), 'special', 4),
+('a7c2fdb4-08e1-4659-b2e0-86c75f140935', (
+    SELECT id FROM level_info
+    WHERE level_name = 'Charleston'
+), 'supply', 4);
 
 INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level) VALUES
 ('d37e1e56-81ca-5ad9-836d-5694d9e79331', '17914ebc-7052-490d-b606-afc1746da512', 'ranged', 3),
@@ -123,6 +127,7 @@ SELECT lower(hex(randomblob(4))) || '-' || lower(hex(randomblob(2))) || '-4' ||
        '-' || lower(hex(randomblob(6))), level.id, kind.key, 0
 FROM level_info AS level
 CROSS JOIN (SELECT 'ranged' AS key UNION ALL SELECT 'melee'
-            UNION ALL SELECT 'areaOfEffect' UNION ALL SELECT 'special') AS kind
+            UNION ALL SELECT 'areaOfEffect' UNION ALL SELECT 'special'
+            UNION ALL SELECT 'supply') AS kind
 WHERE NOT EXISTS (SELECT 1 FROM level_tower_unlock existing
                   WHERE existing.level_info_id = level.id AND existing.tower_kind = kind.key);

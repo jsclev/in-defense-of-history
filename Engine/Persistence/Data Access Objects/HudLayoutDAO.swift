@@ -32,6 +32,11 @@ public class HudLayoutDAO: BaseDAO {
                 throw DbError.Db(message: "player_hud_layout has an unrecognised hud_location_name.")
             }
 
+            guard HudLocation.corners.contains(hudLocation) else {
+                sqlite3_finalize(stmt)
+                throw DbError.Db(message: "player_hud_layout record \(sectionName), hud_location_name '\(locationName)' must name a reserved HUD corner.")
+            }
+
             hudLocations[hudSection] = hudLocation
         }
 
@@ -52,6 +57,9 @@ public class HudLayoutDAO: BaseDAO {
     }
 
     public func set(hudLayoutConfig: HudLayoutConfig) throws {
+        for section in HudSection.allCases where !HudLocation.corners.contains(hudLayoutConfig.location(of: section)) {
+            throw DbError.Db(message: "player_hud_layout record \(section.rawValue), hud_location_name must name a reserved HUD corner.")
+        }
         try executeNonQuery(conn: conn, sql: "DELETE FROM player_hud_layout;")
 
         let sql = """

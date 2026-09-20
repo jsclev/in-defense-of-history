@@ -84,7 +84,7 @@ final class TowerAttributeAuthorityTests: XCTestCase {
     func testEnabledCapabilitiesCannotLoseAttributesOrBecomeDisabledSilently() throws {
         let fixture = try AuthoredDatabaseFixture()
         try relaxConstraints("tower", in: fixture)
-        for field in ["demolition_prepare_seconds", "obstacle_radius", "obstacle_slow_fraction"] {
+        for field in ["demolition_prepare_seconds", "obstacle_radius", "obstacle_slow_fraction", "obstacle_width_fraction"] {
             for value in ["NULL", "'invalid'", "0", "1e999"] {
                 try rejects("UPDATE tower SET \(field) = \(value) WHERE \(field) IS NOT NULL",
                             field: field, in: fixture)
@@ -106,7 +106,7 @@ final class TowerAttributeAuthorityTests: XCTestCase {
                 aoe_radius = 87, aoe_falloff_exponent = 2.3, splash_cover_pierce = 0.42,
                 contagion_chance = 0.37, targeting = 'last', projectile_speed = 876;
             UPDATE tower SET demolition_prepare_seconds = 9 WHERE has_demolition_charge = 1;
-            UPDATE tower SET obstacle_radius = 123, obstacle_slow_fraction = 0.27 WHERE has_engineer_obstacles = 1;
+            UPDATE tower SET obstacle_radius = 123, obstacle_slow_fraction = 0.27, obstacle_width_fraction = 0.6 WHERE has_engineer_obstacles = 1;
             UPDATE melee_unit SET soldier_count = 2, attack_rating = 42, defense_rating = 0.23,
                 hp = 345, rally_point_radius = 456, attack_interval = 1.7,
                 respawn_seconds = 11, heal_per_second = 3.4;
@@ -131,7 +131,7 @@ final class TowerAttributeAuthorityTests: XCTestCase {
                     XCTAssertEqual(value.projectileSpeed, 876)
                     if let charge = value.demolitionPreparationSeconds { XCTAssertEqual(charge, 9) }
                     if let obstacles = value.engineerObstacles {
-                        XCTAssertEqual(obstacles, .init(radius: 123, slowFraction: 0.27, verticalFraction: AuthoredDatabaseFixture.combatRules.rangeVerticalFraction))
+                        XCTAssertEqual(obstacles, .init(radius: 123, slowFraction: 0.27, widthFraction: 0.6))
                     }
                     if let melee = value.meleeUnit {
                         XCTAssertEqual(melee, MeleeUnitStats(combatRules: AuthoredDatabaseFixture.combatRules, soldierCount: 2, attackRating: 42,
@@ -142,14 +142,14 @@ final class TowerAttributeAuthorityTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual(count, 23)
+        XCTAssertEqual(count, 29)
     }
 
     func testSerializedTuningRequiresEveryKeyIncludingDisabledCapabilities() throws {
-        let tuning = try AuthoredDatabaseFixture.tower("Ranged", level: 1, branch: 1)
+        let tuning = try AuthoredDatabaseFixture.tower(.ranged, level: 1, branch: 1)
         let encoded = try JSONEncoder().encode(tuning)
         let fields = try XCTUnwrap(JSONSerialization.jsonObject(with: encoded) as? [String: Any])
-        XCTAssertEqual(fields.count, 19)
+        XCTAssertEqual(fields.count, 21)
         for field in fields.keys {
             var incomplete = fields
             incomplete.removeValue(forKey: field)

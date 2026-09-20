@@ -77,7 +77,7 @@ final class TowerLabelPlacementTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual(count, 23)
-        XCTAssertTrue(try XCTUnwrap(details["Special"]?[4]?[3]).description.contains("charge"))
+        XCTAssertEqual(count, 29)
+        XCTAssertTrue(try XCTUnwrap(details[.special]?[4]?[3]).description.contains("charge"))
     }
 }

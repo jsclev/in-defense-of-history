@@ -135,7 +135,7 @@ final class DemolitionChargeTests: XCTestCase {
         let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
         defer { db.close() }
         let all = try db.towerTypeDao.getTowerLevelsByBranch()
-        let branches = try XCTUnwrap(all["Area of Effect"]?[4])
+        let branches = try XCTUnwrap(all[.areaOfEffect]?[4])
         XCTAssertEqual(branches.count, 3)
         XCTAssertEqual(branches.keys.sorted(), [1, 2, 4])
         let siege = try XCTUnwrap(branches[4])
@@ -143,7 +143,7 @@ final class DemolitionChargeTests: XCTestCase {
         XCTAssertEqual(siege.range, 478.63)
         XCTAssertEqual(siege.aoeRadius, 0)
         XCTAssertTrue(branches.values.allSatisfy { $0.demolitionPreparationSeconds == nil })
-        let engineers = try XCTUnwrap(all["Special"]?[4])
+        let engineers = try XCTUnwrap(all[.special]?[4])
         XCTAssertEqual(engineers.keys.sorted(), [2, 3])
         let tuning = try XCTUnwrap(engineers[3])
         XCTAssertEqual(tuning.demolitionPreparationSeconds, 8)
@@ -152,18 +152,15 @@ final class DemolitionChargeTests: XCTestCase {
         XCTAssertEqual(tuning.aoeRadius, 180)
         XCTAssertTrue(branches.filter { $0.key != 4 }.allSatisfy { $0.value.demolitionPreparationSeconds == nil })
         let names = try db.towerTypeDao.getNamesByLevel()
-        XCTAssertEqual(try XCTUnwrap(names["Area of Effect"]?[4]).keys.sorted(), [1, 2, 4])
-        XCTAssertEqual(try XCTUnwrap(names["Special"]?[4]).keys.sorted(), [2, 3])
-        XCTAssertEqual(TowerKind(categoryName: "Special"), .special)
-        XCTAssertEqual(TowerKind(categoryName: "Engineers"), .special)
-        XCTAssertEqual(TowerKind.special.categoryName, "Engineers")
+        XCTAssertEqual(try XCTUnwrap(names[.areaOfEffect]?[4]).keys.sorted(), [1, 2, 4])
+        XCTAssertEqual(try XCTUnwrap(names[.special]?[4]).keys.sorted(), [2, 3])
     }
 
     func testExistingSerializedTowerTuningRemainsAutomatic() throws {
-        let old = try AuthoredDatabaseFixture.tower("Ranged", level: 1, branch: 1)
+        let old = try AuthoredDatabaseFixture.tower(.ranged, level: 1, branch: 1)
         let bytes = try JSONEncoder().encode(old)
         XCTAssertNil(try JSONDecoder().decode(TowerLevel.self, from: bytes).demolitionPreparationSeconds)
-        let new = try AuthoredDatabaseFixture.tower("Special", level: 4, branch: 3)
+        let new = try AuthoredDatabaseFixture.tower(.special, level: 4, branch: 3)
         XCTAssertEqual(try JSONDecoder().decode(TowerLevel.self, from: JSONEncoder().encode(new)), new)
     }
 }

@@ -18,7 +18,8 @@ struct EnemyMoraleSprite: View {
             Image(assetName)
                 .resizable().scaledToFit().frame(height: height)
                 .rotationEffect(.degrees(flinch * 9 * morale.flinchDirection), anchor: .bottom)
-                .offset(x: flinch * 2 * scale * morale.flinchDirection, y: flinch * scale)
+                .offset(x: flinch * 2 * scale * morale.flinchDirection,
+                        y: flinch * scale)
             if morale.isVisible {
                 EnemyMoraleCrescent(morale: morale, reduceMotion: reduceMotion)
                     .frame(width: 34 * scale, height: 34 * scale)

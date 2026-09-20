@@ -17,7 +17,7 @@ final class BottomCenterOcclusionTests: XCTestCase {
         XCTAssertEqual(cutout.midX, canvas.playAreaRect.midX, accuracy: 1e-8)
         XCTAssertEqual(cutout.minY, canvas.playAreaRect.minY)
         XCTAssertEqual(cutout.height, 33.048, accuracy: 1e-8)
-        for corner in [canvas.lowerLeftOcclusionArea, canvas.lowerRightOcclusionArea,
+        for corner in [canvas.heroBarLayoutArea, canvas.lowerRightOcclusionArea,
                        canvas.upperRightOcclusionArea] {
             XCTAssertEqual(cutout.height, corner.height * 0.2, accuracy: 1e-8)
         }
@@ -42,7 +42,7 @@ final class BottomCenterOcclusionTests: XCTestCase {
             XCTAssertFalse(shape.contains(CGPoint(x: corner.midX, y: corner.midY)))
         }
         // The tower menu needs the same clearance above this cut as the corners.
-        let centreLimit = cutout.maxY + canvas.towerMenuTotalSize.height / 2
+        let centreLimit = cutout.maxY + max(canvas.towerMenuTotalSize.height / 2, TowerMenuLayout(virtualCanvas: canvas).interactionExtent)
         XCTAssertFalse(canvas.towerSlotValidCentres.contains(CGPoint(x: cutout.midX, y: centreLimit - 1)))
         XCTAssertTrue(canvas.towerSlotValidCentres.contains(CGPoint(x: cutout.midX, y: centreLimit + 1)))
         let footprintLimit = centreLimit - canvas.towerSlotSize.height / 2
@@ -71,8 +71,7 @@ final class BottomCenterOcclusionTests: XCTestCase {
             XCTAssertTrue(runtime.playAreaRect.insetBy(dx: -1e-8, dy: -1e-8).contains(cutout))
             XCTAssertFalse(runtime.runtimePlayArea.contains(CGPoint(x: cutout.midX, y: cutout.midY)))
             XCTAssertTrue(runtime.runtimePlayArea.contains(CGPoint(x: cutout.midX, y: cutout.minY - 1)))
-            let limit = cutout.minY - (canvas.towerMenuTotalSize.height - canvas.towerSlotSize.height)
-                / 2 * runtime.scaleFactor
+            let limit = cutout.minY - (max(canvas.towerMenuTotalSize.height / 2, TowerMenuLayout(virtualCanvas: canvas).interactionExtent) - canvas.towerSlotSize.height / 2) * runtime.scaleFactor
             XCTAssertFalse(runtime.towerSlotValidArea.contains(CGPoint(x: cutout.midX, y: limit + 1)))
             XCTAssertTrue(runtime.towerSlotValidArea.contains(CGPoint(x: cutout.midX, y: limit - 1)))
             XCTAssertEqual(runtime.occlusionAreas.count, 5)

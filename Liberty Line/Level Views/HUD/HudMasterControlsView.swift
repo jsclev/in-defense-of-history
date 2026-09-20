@@ -4,28 +4,30 @@ import SwiftUI
 struct HudMasterControlsView: View {
     private let layout: MasterControlsLayout
     private let onSpeedUp: () -> Void
-    private let onExit: () -> Void
+    private let onPause: () -> Void
 
     public init(runtimeCanvas: RuntimeCanvas,
+                location: HudLocation = .northEast,
                 onSpeedUp: @escaping () -> Void,
-                onExit: @escaping () -> Void) {
+                onPause: @escaping () -> Void) {
         self.onSpeedUp = onSpeedUp
-        self.onExit = onExit
-        self.layout = MasterControlsLayout(runtimeCanvas: runtimeCanvas)
+        self.onPause = onPause
+        self.layout = MasterControlsLayout(runtimeCanvas: runtimeCanvas, location: location)
     }
 
     var body: some View {
         HStack(spacing: layout.buttonSpacing) {
-            PaintedMasterControlButton(iconName: "hud_speed_up_framed", label: "Speed up",
+            PaintedMasterControlButton(iconName: "speed_up_icon_glyph", label: "Speed up",
                                        buttonSize: layout.buttonSize, action: onSpeedUp)
-            PaintedMasterControlButton(iconName: "hud_back_to_main_framed", label: "Back to main",
-                                       buttonSize: layout.buttonSize, action: onExit)
+            PaintedMasterControlButton(iconName: "pause_icon_glyph", label: "Pause level",
+                                       buttonSize: layout.buttonSize, action: onPause)
+                .accessibilityIdentifier("pause-level")
         }
         .frame(width: layout.frame.width, height: layout.frame.height)
     }
 }
 
-/// The emblem, blue clearance and rim are painted together, like the hero HUD art.
+/// Both master controls share the same visible rim, icon inset and touch target.
 struct PaintedMasterControlButton: View {
     let iconName: String
     let label: String
@@ -34,40 +36,19 @@ struct PaintedMasterControlButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(iconName)
-                .resizable()
-                .interpolation(.high)
-                .frame(width: buttonSize, height: buttonSize)
-                .clipShape(PaintedMasterControlOutline())
-                .contentShape(Rectangle())
+            ZStack {
+                PaintedHUDButtonFrame(buttonSize: CGSize(width: buttonSize, height: buttonSize))
+                Image(iconName)
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: buttonSize * HudSizing.paintedButtonIconFraction,
+                           height: buttonSize * HudSizing.paintedButtonIconFraction)
+            }
+            .frame(width: buttonSize, height: buttonSize)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityLabel(label)
-    }
-}
-
-/// Remove only the generated RGB exterior around the chamfered metal brackets.
-/// Coordinates refer to the normalized visible rim, not the source canvas.
-private struct PaintedMasterControlOutline: Shape {
-    func path(in rect: CGRect) -> SwiftUI.Path {
-        let points: [CGPoint] = [
-            CGPoint(x: 0.060, y: 0.003), CGPoint(x: 0.143, y: 0.003),
-            CGPoint(x: 0.157, y: 0.015), CGPoint(x: 0.843, y: 0.015),
-            CGPoint(x: 0.857, y: 0.003), CGPoint(x: 0.940, y: 0.003),
-            CGPoint(x: 0.997, y: 0.061), CGPoint(x: 0.997, y: 0.155),
-            CGPoint(x: 0.984, y: 0.174), CGPoint(x: 0.984, y: 0.814),
-            CGPoint(x: 0.997, y: 0.833), CGPoint(x: 0.997, y: 0.940),
-            CGPoint(x: 0.940, y: 0.997), CGPoint(x: 0.857, y: 0.997),
-            CGPoint(x: 0.843, y: 0.984), CGPoint(x: 0.157, y: 0.984),
-            CGPoint(x: 0.143, y: 0.997), CGPoint(x: 0.060, y: 0.997),
-            CGPoint(x: 0.003, y: 0.940), CGPoint(x: 0.003, y: 0.833),
-            CGPoint(x: 0.016, y: 0.814), CGPoint(x: 0.016, y: 0.174),
-            CGPoint(x: 0.003, y: 0.155), CGPoint(x: 0.003, y: 0.061)
-        ]
-        var path = SwiftUI.Path()
-        path.addLines(points.map { CGPoint(x: rect.minX + $0.x * rect.width,
-                                          y: rect.minY + $0.y * rect.height) })
-        path.closeSubpath()
-        return path
     }
 }

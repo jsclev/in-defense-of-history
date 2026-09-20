@@ -102,6 +102,27 @@ nonisolated struct MapDraft: Codable, Equatable, Sendable {
         else { secondaryHeroPosition = nil }
     }
 
+    mutating func moveEntrance(at index: Int, to position: Point) {
+        guard entrances.indices.contains(index) else { return }
+        entrances[index] = position
+        for route in enemyRoutes.indices
+            where enemyRoutes[route].entranceID == "gameplay.entry.\(index)"
+                && enemyRoutes[route].points.count >= 2 {
+            enemyRoutes[route].points[0] = position
+        }
+    }
+
+    mutating func moveExit(at index: Int, to position: Point) {
+        guard exits.indices.contains(index) else { return }
+        exits[index] = position
+        for route in enemyRoutes.indices
+            where enemyRoutes[route].exitID == "gameplay.exit.\(index)"
+                && enemyRoutes[route].points.count >= 2 {
+            let last = enemyRoutes[route].points.count - 1
+            enemyRoutes[route].points[last] = position
+        }
+    }
+
     mutating func removeExit(at index: Int) {
         guard exits.indices.contains(index) else { return }
         exits.remove(at: index)
@@ -274,6 +295,11 @@ extension MapDraft {
             coordinateSpace = Self.canvasSpace
         }
         bakeStoredErasures(mapGeometry: mapGeometry)
+        // Older editor builds moved markers without their attached endpoints.
+        // Repair those connections on open/export; keep interior waypoints and
+        // validate the whole route against the painted road during export.
+        for index in entrances.indices { moveEntrance(at: index, to: entrances[index]) }
+        for index in exits.indices { moveExit(at: index, to: exits[index]) }
     }
 
     init(blueprint bp: LevelBlueprint) {

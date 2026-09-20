@@ -81,7 +81,7 @@ final class RunnerProbe {
     var towerLevels: [TowerKind: [Int: [Int: TowerLevel]]] {
         do {
             let rows = try authoredDB.towerTypeDao.getTowerLevelsByBranch()
-            guard let melee = rows["Melee"] else { fatalError("Missing authored melee tiers") }
+            guard let melee = rows[.melee] else { fatalError("Missing authored melee tiers") }
             return [.melee: melee]
         } catch { fatalError("Invalid authored tower data: \(error)") }
     }

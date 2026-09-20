@@ -29,6 +29,8 @@ public class Db {
     public let difficultyDao: DifficultyDAO
     public let hudLayoutDao: HudLayoutDAO
     public let reinforcementConfigDao: ReinforcementConfigDAO
+    public let metaUpgradeDao: MetaUpgradeDAO
+    public let playerMetaUpgradeDao: PlayerMetaUpgradeDAO
     public let playerSettingsDao: PlayerSettingsDAO
     public let simulatorRunDao: SimulatorRunDAO
     public let path: String
@@ -105,6 +107,8 @@ public class Db {
         hudLayoutDao = HudLayoutDAO(conn: conn)
         reinforcementConfigDao = ReinforcementConfigDAO(conn: conn)
         playerSettingsDao = PlayerSettingsDAO(conn: conn)
+        metaUpgradeDao = MetaUpgradeDAO(conn: conn)
+        playerMetaUpgradeDao = PlayerMetaUpgradeDAO(conn: conn)
         simulatorRunDao = SimulatorRunDAO(conn: conn)
     }
 

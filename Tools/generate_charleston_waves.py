@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 """Author Charleston's 15-wave finale in SQL, GeoJSON, and the saved editor map.
 
-Routes 0/2 use the left entrance; routes 1/3 use the northern entrance.
+Routes 0/2/4 use entrance 0; routes 1/3/5 use entrance 1.
 The lower and central roads end at the bottom, the upper roads at the right.
-Routes are generated inside the GeoJSON polygon from the editor road centerlines.
+First run GenerateCharlestonRoutes with the current native map to produce a fresh
+GeoJSON base and replacement routes, then pass both outputs to this script.
 The generated LineStrings are the source for SQL; marker positions are preserved.
 """
 import json
 import re
 import uuid
-import os
-import subprocess
-import tempfile
 import argparse
 from pathlib import Path
 
@@ -32,22 +30,24 @@ N, H, D, S = "native_warrior", "highlander", "light_dragoon", "spy"
 G, A, O, B, T = "grenadier", "royal_artillery", "mounted_officer", "foot_guards", "regimental_drummer"
 
 # Each group is (enemy, count, route, seconds after wave start, individual interval).
+# Introduce one alternate road at a time before combining all six in the finale.
+# The shortest northern routes start lightly; slow siege units use longer roads.
 PLAN = [
-    ("Left approach", [(M,10,0,0,.9), (R,6,0,6,1.2)]),
-    ("Northern advance", [(R,8,1,0,.95), (M,8,1,5,.7), (L,4,0,9,.7)]),
-    ("Both roads", [(R,8,0,0,.9), (F,6,1,0,1.1), (L,6,1,8,.75)]),
-    ("Skirmisher rush", [(N,8,0,0,.7), (L,8,1,0,.7), (J,6,0,7,.9), (T,1,1,2,1)]),
-    ("Drums and bayonets", [(T,1,0,0,1), (T,1,1,0,1), (F,10,0,2,.9), (R,8,1,2,.85), (H,6,0,10,1)]),
-    ("Infiltration", [(N,8,1,0,.65), (L,8,0,0,.7), (S,4,0,7,1.4), (F,8,1,8,.85)]),
-    ("Cavalry screen", [(D,6,1,0,1.1), (R,10,0,0,.8), (J,6,1,7,.8), (T,2,0,2,3)]),
-    ("Highland assault", [(H,10,0,0,1), (F,10,1,0,.9), (N,6,0,10,.65), (T,1,0,2,1), (T,1,1,2,1)]),
-    ("Heavy infantry and riders", [(G,6,0,0,1.4), (L,10,1,0,.7), (D,6,0,9,.95), (S,4,1,8,1.2)]),
-    ("Officer-led columns", [(O,1,0,0,1), (O,1,1,0,1), (G,8,0,2,1.3), (F,12,1,2,.8), (N,8,0,12,.6), (T,1,0,5,1), (T,1,1,5,1)]),
-    ("Siege train", [(A,3,0,0,3), (H,8,0,3,1), (R,12,1,0,.7), (D,6,1,11,.9)]),
-    ("The guards arrive", [(B,4,0,0,2.1), (G,8,1,0,1.2), (L,10,0,7,.7), (N,8,1,10,.65), (T,1,0,3,1), (T,1,1,3,1)]),
-    ("Relentless pursuit", [(B,4,1,0,2), (G,8,0,0,1.2), (D,10,1,8,.85), (F,8,0,8,.8), (S,2,0,15,1.2), (S,2,1,15,1.2)]),
-    ("Invest the city", [(B,3,0,0,2), (B,3,1,0,2), (O,2,0,4,2), (O,2,1,4,2), (H,5,0,8,.9), (H,5,1,8,.9), (F,5,0,12,.7), (F,5,1,12,.7), (D,6,1,17,.8)]),
-    ("Final assault", [(B,4,0,0,2), (B,4,1,0,2), (A,2,0,4,3), (A,2,1,4,3), (T,1,0,6,1), (T,1,1,6,1), (G,6,0,8,.9), (G,6,1,8,.9), (F,6,0,12,.6), (F,6,1,12,.6), (O,1,0,12,1), (O,1,1,12,1), (D,5,0,18,.6), (D,5,1,18,.6)]),
+    ("Entrance 0: lower road", [(M,10,0,0,1.0), (R,6,0,7,1.3)]),
+    ("Entrance 1: upper road", [(M,8,1,0,.95), (R,6,1,5,1.25), (L,4,0,10,.85)]),
+    ("Both entrances", [(R,8,0,0,1.0), (F,6,1,3,1.2), (N,7,0,10,.8)]),
+    ("Entrance 0: upper road", [(L,8,2,0,.8), (J,6,0,5,1.0), (R,8,1,8,.95), (T,1,2,2,1)]),
+    ("Entrance 1: central road", [(M,8,3,0,.9), (F,8,0,2,1.0), (H,6,1,9,1.2), (T,1,0,3,1), (T,1,3,4,1)]),
+    ("Entrance 0: central road", [(F,10,4,0,.9), (N,8,2,5,.8), (L,6,3,9,.85), (S,3,0,12,1.5)]),
+    ("Entrance 1: right road", [(D,6,5,0,1.25), (R,10,2,1,.9), (J,6,3,9,1.0), (T,2,2,3,3)]),
+    ("Three-road assault", [(H,10,4,0,1.1), (F,8,3,2,1.0), (N,8,5,10,.75), (T,1,4,2,1), (T,1,3,4,1)]),
+    ("Infantry and cavalry", [(G,6,0,0,1.5), (L,8,2,3,.8), (D,6,5,10,1.0), (S,4,3,12,1.3)]),
+    ("Officers at both entrances", [(O,1,4,0,1), (O,1,5,0,1), (G,8,4,2,1.4), (F,10,5,3,.9), (N,8,2,13,.7), (T,1,4,5,1), (T,1,5,5,1)]),
+    ("Artillery on the long roads", [(A,3,4,0,3.5), (H,8,0,4,1.1), (R,10,5,1,.8), (D,6,1,13,1.0)]),
+    ("Guards at both exits", [(B,4,0,0,2.2), (G,8,1,2,1.3), (L,10,4,8,.8), (N,8,3,12,.75), (T,1,0,3,1), (T,1,1,5,1)]),
+    ("Fast flanking attack", [(B,4,5,0,2.1), (G,8,4,1,1.3), (D,10,2,9,.9), (F,8,3,10,.9), (S,2,0,17,1.3), (S,2,1,17,1.3)]),
+    ("All roads under attack", [(B,3,0,0,2.1), (B,3,1,0,2.1), (O,2,4,4,2.2), (O,2,5,4,2.2), (H,5,4,9,1.0), (H,5,5,9,1.0), (F,5,2,13,.8), (F,5,3,13,.8), (D,6,1,18,.9)]),
+    ("Final assault", [(B,4,0,0,2.2), (B,4,1,0,2.2), (A,2,4,4,3.5), (A,2,5,4,3.5), (T,1,0,6,1), (T,1,1,6,1), (G,6,2,9,1.0), (G,6,3,9,1.0), (F,6,4,13,.7), (F,6,5,13,.7), (O,1,4,13,1), (O,1,5,13,1), (D,5,2,20,.7), (D,5,3,20,.7)]),
 ]
 # Nominal starts relative to the player's first call. Early calls shift the
 # remaining schedule relative to that wave's actual start, as WaveStartSchedule requires.
@@ -84,23 +84,6 @@ def replace_waves(path, waves, native=False):
     block = json.dumps(waves, ensure_ascii=False, indent=2)
     block = block.replace("\n", "\n" + indent)
     path.write_text(text[:match.end()] + block + text[match.end()+length:])
-
-
-def generate_routes(native, geo, scratch):
-    environment = dict(os.environ)
-    environment.setdefault('CLANG_MODULE_CACHE_PATH', '/tmp/td-hero-clang-cache')
-    environment.setdefault('SWIFTPM_MODULECACHE_OVERRIDE', '/tmp/td-hero-swift-cache')
-    subprocess.run(['swift', 'build', '--disable-sandbox', '--scratch-path', str(scratch)], cwd=ROOT, env=environment, check=True)
-    build = scratch / 'arm64-apple-macosx/debug'
-    with tempfile.TemporaryDirectory(prefix='td-charleston-routes-') as directory:
-        executable = Path(directory) / 'routes'
-        output = Path(directory) / 'routes.json'
-        subprocess.run(['swiftc', '-parse-as-library', '-module-cache-path', '/tmp/td-hero-swift-cache',
-                        '-I', str(build / 'Modules'), str(ROOT / 'Tools/GenerateCharlestonRoutes.swift')]
-                       + [str(p) for p in sorted((build / 'LevelEditorFormats.build').glob('*.swift.o'))]
-                       + ['-o', str(executable)], cwd=ROOT, env=environment, check=True)
-        subprocess.run([str(executable), str(native), str(geo), str(output)], check=True)
-        return json.loads(output.read_text())
 
 
 def write_routes(geo, native, routes):
@@ -153,25 +136,21 @@ def write_routes(geo, native, routes):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--scratch-path', type=Path, default=Path('/tmp/td-hero-movement-tests'))
+    parser.add_argument('--routes', type=Path, required=True, help='Replacement routes from GenerateCharlestonRoutes')
+    parser.add_argument('--geojson-base', type=Path, required=True, help='Fresh export from the same generator run')
     args = parser.parse_args()
     geo = ROOT / "Db/level_15_charleston.geojson"
     native = ROOT / "Db/level_15_charleston.tdmap"
-    routes = generate_routes(native, geo, args.scratch_path)
+    routes = json.loads(args.routes.read_text())
+    base = json.loads(args.geojson_base.read_text())
+    assert len(routes) == 6 and [r['index'] for r in routes] == list(range(6))
+    draft = json.loads(native.read_text())['draft']
+    for kind, points in [('spawn_point', draft['entrances']), ('goal_point', draft['exits'])]:
+        exported = [f['geometry']['coordinates'] for f in base['features'] if f['properties']['kind'] == kind]
+        assert exported == [[p['x'], p['y']] for p in points], 'Regenerate from the latest native map'
+    geo.write_text(json.dumps(base, ensure_ascii=False, indent=2) + '\n')
     write_routes(geo, native, routes)
     waves = wave_models()
-    # Introduce the upper western flank in wave 4 and central northern flank
-    # in wave 6, then mix the alternate roads into the later assault columns.
-    variants = {3: {0: 2}, 5: {0: 3, 2: 2}, 6: {0: 3}, 7: {2: 2},
-                8: {1: 3}, 9: {4: 2}, 10: {3: 3}, 11: {2: 2, 3: 3},
-                12: {2: 3, 3: 2}, 13: {4: 2, 5: 3}, 14: {8: 2, 9: 3, 12: 2, 13: 3}}
-    # PLAN group indices apply before sorting by delay.
-    for wave_index, replacements in variants.items():
-        groups = []
-        for group_index, (enemy, count, route, delay, interval) in enumerate(PLAN[wave_index][1]):
-            route = replacements.get(group_index, route)
-            groups.append(dict(foe=enemy, count=count, pathIndex=route, delay=delay, every=interval))
-        waves[wave_index]['lines'] = sorted(groups, key=lambda line: line['delay'])
     assert len(waves) == len(WAVE_IDS) == 15
     geo = ROOT / "Db/level_15_charleston.geojson"
     source = json.loads(geo.read_text())
@@ -189,8 +168,10 @@ def main():
             assert gap >= 0 and line['pathIndex'] in range(len(routes))
             spawn_rows.append(f"('{sid}', '{wid}', (SELECT id FROM enemy_type WHERE enemy_type_key = '{enemy}'), {index}, {line['count']}, {gap}, {line['every']}, {line['pathIndex']})")
             previous_delay = line['delay']
-    sql = """-- Generated by Tools/generate_charleston_waves.py: Charleston's two-entrance, four-route finale.
--- Routes: 0 left/lower -> bottom; 1 top/upper -> right; 2 left/upper -> right; 3 top/central -> bottom.
+    sql = """-- Generated by Tools/generate_charleston_waves.py: Charleston's two-entrance, six-route finale.
+-- Routes: 0 entrance 0/lower -> exit 1; 1 entrance 1/upper -> exit 0;
+-- 2 entrance 0/upper -> exit 0; 3 entrance 1/central -> exit 1;
+-- 4 entrance 0/central -> exit 0; 5 entrance 1/right -> exit 1.
 -- Fifteen waves; first call is manual.
 -- spawn_time is the nominal no-early-call schedule relative to wave 1.
 -- Delay + countdown runs from the previous wave's actual start; early-call reward = 13.

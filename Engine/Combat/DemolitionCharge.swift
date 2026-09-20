@@ -6,7 +6,7 @@ import CoreGraphics
 /// The caller advances only simulation time, so pausing and game speed apply.
 public struct DemolitionCharge: Equatable, Sendable {
     public private(set) var position: CGPoint?
-    public let preparationSeconds: Double
+    public private(set) var preparationSeconds: Double
     public private(set) var remainingSeconds: Double
 
     public init(preparationSeconds: Double) {
@@ -19,6 +19,14 @@ public struct DemolitionCharge: Equatable, Sendable {
     public var isReady: Bool { remainingSeconds == 0 }
     public var isReadyForPlacement: Bool { isReady && position == nil }
     public var progress: Double { 1 - remainingSeconds / preparationSeconds }
+
+    /// Preserve site, readiness and fractional progress when the crew improves.
+    /// Buying an upgrade must never grant a second armed charge or move its site.
+    public mutating func updatePreparation(seconds: Double) {
+        precondition(seconds.isFinite && seconds > 0)
+        remainingSeconds = remainingSeconds / preparationSeconds * seconds
+        preparationSeconds = seconds
+    }
 
     /// Trigger immediately before a forward-moving enemy leaves the occupied
     /// part of the blast area. Follow its actual route, including bends and

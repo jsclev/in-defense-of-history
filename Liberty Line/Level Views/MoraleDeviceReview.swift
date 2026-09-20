@@ -81,8 +81,7 @@ struct MoraleDeviceReview: View {
             let canvas = RuntimeCanvas(virtualCanvas: store.virtualCanvas, physicalRect: window.bounds,
                                        safeInsetsRect: window.bounds.inset(by: window.safeAreaInsets))
             let runner = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas, runtimeCanvas: canvas,
-                                     levelInfoID: level.id, mapImageName: level.mapImageName,
-                                     enemyHPMultiplier: try store.db.difficultyDao.requireSelected().enemyHPMultiplier)
+                                     levelInfoID: level.id, mapImageName: level.mapImageName)
             let rangeChecks = try runner.verifyArtilleryRangeOnDevice()
             let result = try runner.verifyArtilleryMoraleOnDevice()
             impactRadius = CGFloat(result.checks.first?["aoeRadius"] as? Double ?? 0) * canvas.scaleFactor

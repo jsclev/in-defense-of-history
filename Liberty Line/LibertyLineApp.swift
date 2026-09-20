@@ -13,7 +13,43 @@ struct LibertyLineApp: App {
         WindowGroup {
             Group {
                 #if DEBUG
-                if CommandLine.arguments.contains("--tower-label-review") {
+                if CommandLine.arguments.contains("--shared-engine-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        SharedBattleDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--pause-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        LevelPauseDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--meta-upgrade-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { runtimeCanvas in
+                        MetaUpgradeDeviceReview(store: store, canvas: runtimeCanvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--level4-upgrade-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        TowerUpgradeDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--hero-interaction-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        HeroInteractionDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--supply-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        SupplyDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--tower-label-review") {
                     ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
                         TowerLabelDeviceReview(store: store, canvas: canvas)
                     }

@@ -43,9 +43,8 @@ public class TowerUnlockDAO: BaseDAO {
         guard step == SQLITE_DONE, Set(unlocks.keys) == Set(TowerKind.allCases.map(\.rawValue)) else {
             throw DbError.Db(message: "level_tower_unlock[\(levelInfoId)]: every tower kind requires an explicit maximum level")
         }
-        let rows = try authoredRows("SELECT tower_type_category, level_layout FROM tower_type", entity: "tower_type") { row in
-            let category = try row.text("tower_type_category")
-            guard let kind = TowerKind(categoryName: category) else { throw row.invalid("tower_type_category", "is unsupported") }
+        let rows = try authoredRows("SELECT tower_type_key, level_layout FROM tower_type", entity: "tower_type") { row in
+            guard let kind = TowerKind(rawValue: try row.text("tower_type_key")) else { throw row.invalid("tower_type_key", "is unsupported") }
             let layout = try JSONDecoder().decode([[Int]].self, from: Data(try row.text("level_layout").utf8))
             return (kind.rawValue, layout.count)
         }

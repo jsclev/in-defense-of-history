@@ -5,25 +5,9 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
     case melee
     case areaOfEffect
     case special
+    case supply
 
     public var id: String { rawValue }
-
-    public var categoryName: String {
-        switch self {
-        case .ranged: return "Ranged"
-        case .melee: return "Melee"
-        case .areaOfEffect: return "Area of Effect"
-        case .special: return "Engineers"
-        }
-    }
-
-    public init?(categoryName: String) {
-
-        if categoryName == "Special" { self = .special; return }
-        guard let kind = Self.allCases.first(where: { $0.categoryName == categoryName })
-        else { return nil }
-        self = kind
-    }
 
     private var assetFamilyName: String {
         switch self {
@@ -31,6 +15,7 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         case .melee: return "melee"
         case .areaOfEffect: return "artillery"
         case .special: return "special"
+        case .supply: return "supply"
         }
     }
 
@@ -52,11 +37,20 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         case .melee: return "tower_menu_melee_square"
         case .areaOfEffect: return "tower_menu_artillery_square"
         case .special: return "tower_menu_special_square"
+        case .supply: return "tower_menu_supply_square"
         }
     }
 
     public func specializationMenuIconName(atLevel level: Int, branch: Int) -> String? {
         guard level == 4 else { return nil }
+        if self == .supply {
+            switch branch {
+            case 1: return "tower_menu_supply_quartermaster"
+            case 2: return "tower_menu_supply_ordnance"
+            case 3: return "tower_menu_supply_hospital"
+            default: return nil
+            }
+        }
         if self == .special {
             return branch == 3 ? "tower_menu_engineer_sapper" : menuIconName
         }
@@ -85,6 +79,7 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         case .melee: return MapSpriteSizing.tower(mapPixels: 75.0)
         case .areaOfEffect: return MapSpriteSizing.tower(mapPixels: 70.0)
         case .special: return MapSpriteSizing.tower(mapPixels: 80.0)
+        case .supply: return MapSpriteSizing.tower(mapPixels: 80.0)
         }
     }
 
@@ -92,7 +87,7 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .areaOfEffect: return "cannonball_projectile"
         case .ranged: return "musket_ball_projectile"
-        case .melee, .special: return nil
+        case .melee, .special, .supply: return nil
         }
     }
 

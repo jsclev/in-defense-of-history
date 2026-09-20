@@ -51,6 +51,27 @@ public class LevelInfoDAO: BaseDAO {
         return id
     }
 
+    /// Native map documents use either the authored display name or asset key.
+    /// Resolve only exact identities; an ambiguous or missing level is an error.
+    public func getIdForEditorDocument(named name: String) throws -> UUID {
+        var statement: OpaquePointer?
+        try prepare(conn: conn, stmt: &statement,
+                    sql: "SELECT id FROM level_info WHERE level_name = ? OR map_image_name = ?")
+        defer { sqlite3_finalize(statement) }
+        guard sqlite3_bind_text(statement, 1, name, -1, SQLITE_TRANSIENT) == SQLITE_OK,
+              sqlite3_bind_text(statement, 2, name, -1, SQLITE_TRANSIENT) == SQLITE_OK else {
+            throw DbError.Db(message: "Unable to bind editor level identity")
+        }
+        guard sqlite3_step(statement) == SQLITE_ROW else {
+            throw DbError.Db(message: "level_info: no authored level for editor document '\(name)'")
+        }
+        let id = try getUUID(stmt: statement, colIndex: 0, msg: "editor level id")
+        guard sqlite3_step(statement) == SQLITE_DONE else {
+            throw DbError.Db(message: "level_info: ambiguous editor document '\(name)'")
+        }
+        return id
+    }
+
     public func getCampaignLevels(campaignName: String) throws -> [CampaignLevel] {
         var levels: [CampaignLevel] = []
 
@@ -129,7 +150,8 @@ public class LevelInfoDAO: BaseDAO {
         """)
         
         try prepare(conn: conn, stmt: &stmt, sql: sql)
-        
+        defer { sqlite3_finalize(stmt) }
+
         guard sqlite3_bind_text(stmt, 1, id.uuidString.lowercased(), -1, SQLITE_TRANSIENT) == SQLITE_OK else {
             throw DbError.Db(message: "Unable to bind level info id")
         }
@@ -143,7 +165,14 @@ public class LevelInfoDAO: BaseDAO {
 
                 let startedAt = try getDate(stmt: stmt, colIndex: 2)
                 let endedAt = try getDate(stmt: stmt, colIndex: 3)
-                let startingMoney = getInt(stmt: stmt, colIndex: 4)
+                // This is the sole campaign starting-money read. SQLite's
+                // numeric conversions otherwise turn NULL/text into zero or
+                // truncate fractions and values larger than a 32-bit integer.
+                guard sqlite3_column_type(stmt, 4) == SQLITE_INTEGER,
+                      let startingMoney = Int(exactly: sqlite3_column_int64(stmt, 4)),
+                      startingMoney > 0 else {
+                    throw DbError.Db(message: "level_info row \(levelInfoId.uuidString.lowercased()) (\(levelName)) field starting_money must be a positive integer.")
+                }
                 let numStartingLives = getInt(stmt: stmt, colIndex: 5)
                 let playArea = CGRect(
                     x: getDouble(stmt: stmt, colIndex: 8),
@@ -154,9 +183,6 @@ public class LevelInfoDAO: BaseDAO {
 
                 let mapImageName = (try getString(stmt: stmt, colIndex: 12)) ?? ""
                 let numWaves = getInt(stmt: stmt, colIndex: 13)
-
-                sqlite3_finalize(stmt)
-                stmt = nil
 
                 return Record(id: levelInfoId,
                                  name: levelName,
@@ -171,9 +197,6 @@ public class LevelInfoDAO: BaseDAO {
             }
         }
         
-        sqlite3_finalize(stmt)
-        stmt = nil
-
         throw DbError.Db(message: "No level info with id = \(id.uuidString.lowercased()).")
     }
 
