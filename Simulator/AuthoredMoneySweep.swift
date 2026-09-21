@@ -14,7 +14,7 @@ final class AuthoredMoneySweep {
         return try AuthoredMoneyStudy(db: db, levelID: id)
     }
 
-    private func snapshot(_ study: AuthoredMoneyStudy) throws -> Data {
+    func snapshot(_ study: AuthoredMoneyStudy) throws -> Data {
         let encoder = JSONEncoder()
         func json<T: Encodable>(_ value: T) throws -> Any {
             try JSONSerialization.jsonObject(with: encoder.encode(value))
@@ -22,16 +22,22 @@ final class AuthoredMoneySweep {
         let loadout = study.battle.playerUpgrades.loadout
         let upgrades: [[String: Any]] = loadout.catalog.upgrades.map { definition in
             ["id": definition.id.rawValue, "selected": loadout.selected.contains(definition.id),
+             "title": definition.title, "starCost": definition.cost,
+             "prerequisite": definition.prerequisite.map { $0.rawValue as Any } ?? NSNull(),
              "parameters": Dictionary(uniqueKeysWithValues: definition.parameters.map { ($0.key.rawValue, $0.value) })]
         }
         let content: [String: Any] = [
             "engine": "shared-game-engine", "level": try json(study.level),
+            "mapGeoJSON": try JSONSerialization.jsonObject(with: db.levelGeoJSONDao.sourceData(mapImageName: study.level.mapImageName)),
             "unlocks": Dictionary(uniqueKeysWithValues: study.battle.unlocks.map { ($0.key.rawValue, $0.value) }),
             "canvas": try json(study.battle.virtualCanvas),
             "towers": try json(study.catalog.towerTypes),
             "enemies": try json(study.battle.enemies), "combatRules": try json(study.arsenal.combatRules),
             "difficulty": study.difficulty.name, "enemyHPMultiplier": study.difficulty.enemyHPMultiplier,
             "campaignUpgrades": upgrades, "heroes": false,
+            "metaProgression": ["earnedStars": loadout.starBudget, "spentStars": loadout.spentStars,
+                "availableStars": loadout.availableStars,
+                "bestStarsByLevel": Dictionary(uniqueKeysWithValues: study.battle.playerUpgrades.bestStarsByLevel.map { ($0.key.uuidString, $0.value) })],
             "reinforcementConfig": ["cooldownSeconds": study.battle.reinforcementConfig.cooldownSeconds,
                 "timeToLiveSeconds": study.battle.reinforcementConfig.timeToLiveSeconds]]
         return try JSONSerialization.data(withJSONObject: content, options: [.sortedKeys])
@@ -60,6 +66,9 @@ final class AuthoredMoneySweep {
             "result": try JSONSerialization.jsonObject(with: JSONEncoder().encode(result)),
             "events": trace.events, "finalState": state(sim),
             "shotsBySlot": Dictionary(uniqueKeysWithValues: sim.shotsBySlot.map { (String($0.key), $0.value) }),
+            "heroes": false, "reinforcementCommands": true, "earlyWaveCalls": false,
+            "reinforcementStrategy": try JSONSerialization.jsonObject(with: JSONEncoder().encode(ReinforcementStrategy.immediate)),
+            "reinforcementDeployments": try JSONSerialization.jsonObject(with: JSONEncoder().encode(sim.reinforcementDeployments)),
             "demolitionDetonations": sim.demolitionDetonations, "earnedMetaStars": sim.earnedMetaStars]
         let path = output.appendingPathComponent("replay-\(placement)-\(policy)-\(money)-\(seed).json")
         try write(report, at: path)
@@ -102,7 +111,8 @@ final class AuthoredMoneySweep {
         let configuration: [String: Any] = ["level": study.level.name, "levelID": study.level.id.uuidString,
             "mode": "shared-game-engine", "heroes": false, "campaignMetaUpgrades": true,
             "selectedCampaignUpgrades": study.battle.playerUpgrades.loadout.selected.map(\.rawValue).sorted(),
-            "reinforcementCommands": false, "earlyWaveCalls": false,
+            "reinforcementCommands": true, "earlyWaveCalls": false,
+            "reinforcementStrategy": try JSONSerialization.jsonObject(with: JSONEncoder().encode(ReinforcementStrategy.immediate)),
             "moneyValues": grid.money, "placementPlans": grid.placementPlans,
             "upgradePolicies": grid.upgradePolicies, "combatSeeds": grid.combatSeeds,
             "baseSeed": baseSeed, "totalRuns": grid.runCount, "workers": 1, "requestedWorkers": workers,
@@ -127,7 +137,7 @@ final class AuthoredMoneySweep {
         var runID: UUID?
         if !calibration {
             let started = try db.simulatorRunDao.begin(levelName: study.level.name,
-                focus: "shared game engine; tower-only; authored campaign upgrades", totalIterations: grid.runCount, outputPath: db.path)
+                focus: "shared game engine; towers and reinforcements; no heroes; authored campaign upgrades", totalIterations: grid.runCount, outputPath: db.path)
             runID = started
             do {
                 try dao.begin(runID: started,
@@ -143,6 +153,7 @@ final class AuthoredMoneySweep {
         print("\(study.difficulty.name) ×\(study.difficulty.enemyHPMultiplier) HP; \(study.battle.playerUpgrades.loadout.selected.count) selected campaign upgrades; heroes excluded")
         fflush(stdout)
         var completed = 0, victories = 0, defeats = 0, timeouts = 0, detonations = 0
+        var reinforcementDeployments = 0
         var simulatedSeconds = 0.0
         var attacks: [String: Int] = [:]
         var pending: [MoneyStudyResultRow] = []
@@ -161,6 +172,7 @@ final class AuthoredMoneySweep {
                     samples.append(try sim.run(steps: plan.steps, maxSeconds: maxSeconds))
                     for (mode, count) in sim.shotsByMode { attacks[mode.rawValue, default: 0] += count }
                     detonations += sim.demolitionDetonations
+                    reinforcementDeployments += sim.reinforcementDeployments.count
                 }
                 let report = BatchReport(results: samples)
                 completed += seeds; victories += report.victories; defeats += report.defeats; timeouts += report.timeouts
@@ -203,7 +215,8 @@ final class AuthoredMoneySweep {
             "projectedFullRunHours": Double(grid.runCount) / rate / 3600,
             "victories": victories, "defeats": defeats, "timeouts": timeouts,
             "meanSimulationSeconds": simulatedSeconds / Double(completed), "attacksByMode": attacks,
-            "demolitionDetonations": detonations, "calibration": calibration]
+            "demolitionDetonations": detonations, "reinforcementDeployments": reinforcementDeployments,
+            "heroes": false, "reinforcementCommands": true, "earlyWaveCalls": false, "calibration": calibration]
         try write(measurement, at: output.appendingPathComponent(calibration ? "calibration.json" : "completion.json"))
         print(String(format: "Completed %d shared-game runs in %.2fs (%.1f/s): %d wins, %d defeats, %d timeouts.",
             completed, elapsed, rate, victories, defeats, timeouts))

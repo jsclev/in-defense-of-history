@@ -12,11 +12,11 @@ final class BattleAPIParityTests: XCTestCase {
         XCTAssertTrue(player.garrisonsBySlot.isEmpty)
         XCTAssertEqual(sim.perform(.reinforcements(point: Point(offRoad.x, offRoad.y))), .invalid)
         XCTAssertTrue(sim.engine.garrisonsBySlot.isEmpty, "A simulated player cannot deploy off the road")
-        XCTAssertEqual(sim.engine.reinforcementCharges, player.reinforcementCharges)
+        XCTAssertEqual(sim.engine.reinforcementCooldown, player.reinforcementCooldown)
         let road = try XCTUnwrap(content.level.paths.first).point(atDistance: 200)
         XCTAssertEqual(player.placeReinforcements(at: CGPoint(x: road.x, y: road.y)), .ok)
         XCTAssertEqual(sim.perform(.reinforcements(point: road)), .ok)
-        XCTAssertEqual(sim.engine.reinforcementCharges, player.reinforcementCharges)
+        XCTAssertEqual(sim.engine.reinforcementCooldown, player.reinforcementCooldown)
         XCTAssertEqual(sim.engine.garrisonsBySlot.keys.sorted(), player.garrisonsBySlot.keys.sorted())
     }
 

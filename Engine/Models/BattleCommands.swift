@@ -14,6 +14,7 @@ public enum BattleCommand: Sendable {
     case placeDemolition(slot: Int, point: Point)
     case placeObstacles(slot: Int, point: Point)
     case rally(slot: Int, point: Point)
+    case setHeroAI(id: UUID, enabled: Bool)
     case moveHero(id: UUID, point: Point)
     case reinforcements(point: Point)
     case startWave
@@ -41,6 +42,16 @@ public struct BattleEnemySnapshot {
     public let livesCost: Int
 }
 
+/// Receipt recorded by the shared engine after a successful manual wave call.
+public struct WaveCallReceipt: Codable, Equatable, Sendable {
+    public let seconds: Double
+    public let wave: Int
+    public let countdownSeconds: Int?
+    public let earlyCallBonus: Int
+    public let moneyBefore: Int
+    public let moneyAfter: Int
+}
+
 extension BattleEngine {
     public var elapsedTime: Double { Double(outcomeTick ?? timer.tick) * SimClock.dt }
     public var outcome: Outcome? { isDefeated ? .defeat : isCleared ? .victory : nil }
@@ -48,6 +59,10 @@ extension BattleEngine {
     /// This entry point invokes the same handlers as the interactive controls.
     @discardableResult
     public func perform(_ command: BattleCommand) -> BuildResult {
+        // Control switches are also available while the battle is paused.
+        if case let .setHeroAI(id, enabled) = command {
+            return setHeroAIEnabled(enabled, for: id) ? .ok : .invalid
+        }
         guard acceptsPlayerInput else { return .invalid }
         switch command {
         case let .build(slot, kind):
@@ -80,6 +95,7 @@ extension BattleEngine {
             selectPlacedTower(atSlot: slot)
             toggleRallyPlacement()
             return placeRallyPoint(at: CGPoint(x: point.x, y: point.y))
+        case .setHeroAI: return .invalid // Handled above, including paused battles.
         case let .moveHero(id, point):
             guard let index = hudHeroIndex(for: id) else { return .invalid }
             if selectedHeroIndex != index { selectHero(heroID: id) }
@@ -88,6 +104,12 @@ extension BattleEngine {
             if !isPlacingReinforcements { toggleReinforcementPlacement() }
             return placeReinforcements(at: CGPoint(x: point.x, y: point.y))
         case .startWave:
+            // Follow the HUD's selection/confirmation flow at an authored
+            // entrance. The engine handler remains the authority on readiness.
+            guard awaitingWaveStart, let point = callWaveButtonPositions.first else { return .invalid }
+            var selection = CallWaveButtonSelection()
+            guard !selection.tap(point, for: nextWaveNumber),
+                  selection.tap(point, for: nextWaveNumber) else { return .invalid }
             return startNextWave()
         }
     }
@@ -124,7 +146,7 @@ extension BattleEngine {
     public func simulationResult() -> SimulationResult {
         SimulationResult(outcome: outcome ?? .timeout, seconds: elapsedTime,
             livesRemaining: lives, goldRemaining: money, goldEarned: goldEarned,
-            killed: killedCount, routed: 0, captured: 0, leaked: escapedEnemyCount,
+            killed: killedCount, leaked: escapedEnemyCount,
             fatesByTypeID: fatesByType, waveMaxProgress: waveMaxProgress, leaksByWave: leaksByWave)
     }
 }

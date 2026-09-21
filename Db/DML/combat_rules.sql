@@ -45,7 +45,7 @@ INSERT INTO combat_rules (
     grapeshot_spread_degrees
 ) VALUES (
     1,
-    1.0,
+    0.30,
     0.6,
     1.3,
     100,

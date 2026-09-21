@@ -12,6 +12,8 @@ public struct BattleContent {
     public let chosenHeroes: HeroSelection
     public let deployments: [HeroDeployment]
     public let heroCombat: [UUID: HeroCombatStats]
+    public let heroAI: [UUID: HeroAIConfiguration]
+    public let heroControls: [HeroControlSetting]
     public let movementArea: HeroMovementArea
     public let callButtons: [CallWaveButtonPosition]
     public let exits: [Point]
@@ -35,6 +37,8 @@ public struct BattleContent {
         heroCombat = try Dictionary(uniqueKeysWithValues: deployments.map {
             ($0.hero.id, try db.heroDao.getCombatStats(heroID: $0.hero.id))
         })
+        heroAI = try db.heroDao.getAIConfigurations()
+        heroControls = try db.playerSettingsDao.getHeroControls()
         movementArea = try draft?.movementArea ?? db.levelGeoJSONDao.getHeroMovementArea(
             mapImageName: level.mapImageName, defaultPathWidth: virtualCanvas.pathWidth)
         callButtons = try draft?.callButtons ?? db.levelGeoJSONDao.getCallWaveButtons(mapImageName: level.mapImageName)
@@ -59,17 +63,38 @@ public struct BattleContent {
     init(level: LevelInfo, virtualCanvas: VirtualCanvas, arsenal: DesignArsenal,
          enemies: [EnemyType], unlocks: [TowerKind: Int], reinforcementConfig: ReinforcementConfig,
          chosenHeroes: HeroSelection, deployments: [HeroDeployment], heroCombat: [UUID: HeroCombatStats],
+         heroAI: [UUID: HeroAIConfiguration], heroControls: [HeroControlSetting],
          movementArea: HeroMovementArea, callButtons: [CallWaveButtonPosition], exits: [Point],
          difficulty: Difficulty, playerUpgrades: PlayerMetaUpgradeState) throws {
         self.level = level; self.virtualCanvas = virtualCanvas; self.arsenal = arsenal
         self.enemies = enemies; self.unlocks = unlocks; self.reinforcementConfig = reinforcementConfig
         self.chosenHeroes = chosenHeroes; self.deployments = deployments; self.heroCombat = heroCombat
+        self.heroAI = heroAI; self.heroControls = heroControls
         self.movementArea = movementArea; self.callButtons = callButtons; self.exits = exits
         self.difficulty = difficulty; self.playerUpgrades = playerUpgrades
         try validate()
     }
 
+    /// Assemble an explicit pre-battle loadout without modifying the player's
+    /// database. All prerequisites and star accounting belong to player state.
+    public func selectingMetaUpgrades(_ selected: Set<MetaUpgrade>) throws -> Self {
+        try Self(level: level, virtualCanvas: virtualCanvas, arsenal: arsenal,
+            enemies: enemies, unlocks: unlocks, reinforcementConfig: reinforcementConfig,
+            chosenHeroes: chosenHeroes, deployments: deployments, heroCombat: heroCombat,
+            heroAI: heroAI, heroControls: heroControls,
+            movementArea: movementArea, callButtons: callButtons, exits: exits,
+            difficulty: difficulty, playerUpgrades: playerUpgrades.selecting(selected))
+    }
+
     private func validate() throws {
+        for deployment in deployments {
+            guard heroAI[deployment.hero.id] != nil else {
+                throw DbError.Db(message: "hero_ai[\(deployment.hero.id)]: missing configuration")
+            }
+            guard heroControls.contains(where: { $0.id == deployment.hero.id }) else {
+                throw DbError.Db(message: "player_hero_control[\(deployment.hero.id)]: missing ai_enabled")
+            }
+        }
         let levelID = level.id
         guard !level.paths.isEmpty, level.waves.count == level.numWaves else {
             throw DbError.Db(message: "level_info[\(levelID)]: missing paths or inconsistent authored waves")

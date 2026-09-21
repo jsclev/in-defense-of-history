@@ -12,9 +12,9 @@ final class MetaUpgradeDAOTests: XCTestCase {
     func testCompleteCatalogHasHistorySourcesAndExplicitEffects() throws {
         let fixture = try AuthoredDatabaseFixture()
         let catalog = try fixture.db.metaUpgradeDao.get()
-        XCTAssertEqual(catalog.upgrades.count, 24)
+        XCTAssertEqual(catalog.upgrades.count, 23)
         XCTAssertEqual(catalog.tracks.count, 6)
-        XCTAssertEqual(Set(catalog.upgrades.map(\.iconAssetName)).count, 24)
+        XCTAssertEqual(Set(catalog.upgrades.map(\.iconAssetName)).count, 23)
         for node in catalog.upgrades {
             XCTAssertFalse(node.title.isEmpty)
             XCTAssertFalse(node.detail.isEmpty)
@@ -26,7 +26,7 @@ final class MetaUpgradeDAOTests: XCTestCase {
         }
         let preset = try fixture.db.playerMetaUpgradeDao.get(profile: .level15).loadout
         for key in [MetaUpgrade.modelCompany, .twoGoodVolleys, .bayonetCounterstroke,
-                    .preparedFireLanes, .forwardMagazines, .alarmRiders, .frenchContracts] {
+                    .preparedFireLanes, .forwardMagazines, .frenchContracts] {
             XCTAssertTrue(preset.selected.contains(key), "Preset must demonstrate \(key)")
         }
     }
@@ -52,7 +52,7 @@ final class MetaUpgradeDAOTests: XCTestCase {
         XCTAssertEqual(node.sourceURL.absoluteString, "https://www.nps.gov/vafo/")
         XCTAssertEqual(node.iconAssetName, "meta_surveyed_ground")
         XCTAssertEqual(store.loadout.catalog[MetaUpgradeTrack.marksmanship].shortTitle, "Rifles")
-        XCTAssertEqual(store.loadout.availableStars, 1)
+        XCTAssertEqual(store.loadout.availableStars, 5)
         let base = try AuthoredDatabaseFixture.tower(.ranged, level: 1, branch: 1)
         XCTAssertEqual(store.loadout.effects.combat(base, kind: .ranged).range, base.range * 1.4)
         XCTAssertEqual(snapshot.combat(base, kind: .ranged).range, base.range * 1.15, "An ongoing battle keeps its snapshot")
@@ -84,13 +84,13 @@ final class MetaUpgradeDAOTests: XCTestCase {
             ("UPDATE meta_upgrade SET source_url='javascript:alert(1)' WHERE upgrade_key='powderWorks'", "source_url"),
             ("PRAGMA ignore_check_constraints=ON; UPDATE meta_upgrade SET star_cost=0 WHERE upgrade_key='powderWorks'", "star_cost"),
             ("UPDATE meta_upgrade SET display_order=9 WHERE upgrade_key='powderWorks'", "display_order"),
-            ("UPDATE meta_upgrade SET prerequisite_key='alarmRiders' WHERE upgrade_key='powderWorks'", "prerequisite_key"),
+            ("UPDATE meta_upgrade SET prerequisite_key='frenchContracts' WHERE upgrade_key='powderWorks'", "prerequisite_key"),
             ("UPDATE meta_upgrade SET prerequisite_key='twoGoodVolleys' WHERE upgrade_key='rangeEstimation'", "prerequisite_key"),
             ("DELETE FROM meta_upgrade_effect WHERE upgrade_key='powderWorks' AND parameter='moraleMultiplier'", "moraleMultiplier"),
             ("UPDATE meta_upgrade_effect SET parameter='unsupported' WHERE upgrade_key='powderWorks' AND parameter='moraleMultiplier'", "parameter"),
             ("UPDATE meta_upgrade_effect SET value=1 WHERE upgrade_key='powderWorks' AND parameter='moraleMultiplier'", "value"),
             ("UPDATE meta_upgrade_effect SET value=1e999 WHERE upgrade_key='powderWorks' AND parameter='moraleMultiplier'", "value"),
-            ("UPDATE meta_upgrade_effect SET value=2.5 WHERE upgrade_key='alarmRiders'", "value"),
+            ("UPDATE meta_upgrade_effect SET value=2.5 WHERE upgrade_key='twoGoodVolleys' AND parameter='shotCount'", "value"),
             ("UPDATE meta_upgrade_effect SET value=3 WHERE upgrade_key='forwardMagazines'", "value")
         ]
         for (sql, field) in cases {

@@ -3,7 +3,7 @@ import Foundation
 /// A player's decisions, separate from gameplay. All action results come from
 /// the engine. Waiting, build priority and charge-site choice are strategy.
 public struct ScriptedBuildOrder: Sendable {
-    public enum Action: Sendable, Equatable {
+    public enum Action: Sendable, Equatable, Codable {
         case build(slot: Int, towerID: UUID)
         case upgrade(slot: Int)
         case purchaseUpgrade(slot: Int, pathID: String)
@@ -15,7 +15,7 @@ public struct ScriptedBuildOrder: Sendable {
         }
     }
 
-    public struct Step: Sendable, Equatable {
+    public struct Step: Sendable, Equatable, Codable {
         public var time: Double
         public var action: Action
         public init(time: Double, action: Action) { self.time = time; self.action = action }
@@ -24,11 +24,13 @@ public struct ScriptedBuildOrder: Sendable {
     public let steps: [Step]
     private var pending: [(offset: Int, element: Step)]
     private let strictOrder: Bool
+    private var reinforcements: ReinforcementCommander
 
-    public init(steps: [Step], strictOrder: Bool = false) {
+    public init(steps: [Step], strictOrder: Bool = false, reinforcements: ReinforcementStrategy = .immediate) {
         self.steps = steps
         pending = Array(steps.enumerated())
         self.strictOrder = strictOrder
+        self.reinforcements = ReinforcementCommander(reinforcements)
     }
 
     @MainActor public mutating func tick(sim: GameSimulation) throws {
@@ -55,5 +57,6 @@ public struct ScriptedBuildOrder: Sendable {
         // This commander chooses to call wave one after its opening purchases.
         // Subsequent automatic starts and all rewards belong to the engine.
         if sim.currentWave == 0 { sim.startNextWave() }
+        try reinforcements.tick(sim: sim)
     }
 }

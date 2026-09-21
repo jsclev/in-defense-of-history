@@ -61,8 +61,6 @@ final class SharedBattleEngineTests: XCTestCase {
             XCTAssertEqual(game.walkers[0].pathDistance, enemy.speed * enemy.moraleResponse.speedMultiplier, accuracy: 1e-8)
             XCTAssertEqual(game.walkers[0].morale.value, 0, accuracy: 1e-9)
             XCTAssertEqual(game.money, money, "Zero morale must not invent a routing bounty")
-            XCTAssertEqual(sim.result().routed, 0)
-            XCTAssertEqual(sim.result().captured, 0)
         }
     }
 
@@ -160,7 +158,7 @@ final class SharedBattleEngineTests: XCTestCase {
         }
     }
 
-    func testKnownWinningCharlestonReplayUsesAuthored500CoinsWithoutHeroes() async throws {
+    func testCharlestonReplayUsesAuthored500CoinsAndReducedBountyWithoutHeroes() async throws {
         let url = Db.authoredDatabaseURL
         let db = Db(dbPath: url.path, fullRefresh: false,
                     levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()))
@@ -169,14 +167,25 @@ final class SharedBattleEngineTests: XCTestCase {
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
         try await MainActor.run {
             XCTAssertEqual(study.level.startingMoney, 500)
+            XCTAssertEqual(study.arsenal.combatRules.killBountyMultiplier, 0.30)
             let sim = try GameSimulation(content: study.battle, startingMoney: nil, heroesEnabled: false, seed: 1776)
             XCTAssertTrue(sim.engine.heroPosts.isEmpty)
             let result = try sim.run(steps: plan.steps, maxSeconds: 1500)
-            XCTAssertEqual(result.outcome, .victory)
-            XCTAssertGreaterThan(result.livesRemaining, 0)
-            XCTAssertEqual(sim.engine.waveSchedule.nextWaveIndex, study.level.numWaves)
-            XCTAssertEqual(result.routed, 0)
-            XCTAssertEqual(result.captured, 0)
+            // This recorded plan won under the former 1.0 bounty multiplier.
+            // With the reduced authored bounty it exhausts its lives on wave 5.
+            XCTAssertEqual(result.outcome, .defeat)
+            XCTAssertEqual(result.livesRemaining, 0)
+            XCTAssertEqual(sim.engine.waveSchedule.nextWaveIndex, 5)
+            let data = try JSONEncoder().encode(result)
+            let report = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
+            XCTAssertEqual(Set(report.keys), Set(["outcome", "seconds", "livesRemaining", "goldRemaining",
+                "goldEarned", "killed", "leaked", "fatesByTypeID", "waveMaxProgress", "leaksByWave"]))
+            XCTAssertFalse(result.fatesByTypeID.isEmpty)
+            for fates in result.fatesByTypeID.values {
+                let data = try JSONEncoder().encode(fates)
+                let counts = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Int])
+                XCTAssertEqual(Set(counts.keys), Set(["killed", "leaked"]))
+            }
         }
     }
 }

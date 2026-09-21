@@ -132,8 +132,5 @@ VALUES ('frenchContracts', 'command', 3, 3, 'modelCompany', 'French Contracts', 
 INSERT INTO meta_upgrade_effect (upgrade_key, parameter, value) VALUES
     ('frenchContracts', 'priceMultiplier', 0.75);
 
-INSERT INTO meta_upgrade (upgrade_key, track_key, display_order, star_cost, prerequisite_key, title, description, icon_name, historical_information, source_title, source_url)
-VALUES ('alarmRiders', 'command', 4, 4, 'frenchContracts', 'Alarm Riders', 'Reinforcements can store two deployments, recovering one at a time at the usual rate. Begin with one ready; saving the second lets you answer two lanes together.', 'meta_alarm_riders', 'Paul Revere was one participant in a wider alarm system. Watches around Boston, designated couriers and local leaders relayed warnings to towns and militia. The two stored deployments adapt organized mobilization into a reserve the player can hold; they do not represent a literal historical limit.', 'NPS · The Militia Alarm Network', 'https://www.nps.gov/places/paul-revere-capture-site.htm');
-INSERT INTO meta_upgrade_effect (upgrade_key, parameter, value) VALUES
-    ('alarmRiders', 'capacity', 2);
+-- Reinforcements have one cooldown; the stored-deployment upgrade is retired.
 COMMIT;

@@ -1,5 +1,5 @@
--- Start at level 15: 18/24 upgrades learned (40 stars spent), fourteen
--- three-star Main campaign victories (42 stars earned), two stars available.
+-- Start at level 15: 17/23 upgrades learned (36 stars spent), fourteen
+-- three-star Main campaign victories (42 stars earned), six stars available.
 -- Startup refreshes these authored values with the rest of the bundled database.
 INSERT INTO player_meta_upgrade_profile (profile_key) VALUES ('active'), ('level15');
 
@@ -26,8 +26,7 @@ WITH selections(upgrade_key, is_selected) AS (VALUES
     ('fieldHospitals', 0),
     ('artificerCorps', 1),
     ('modelCompany', 1),
-    ('frenchContracts', 1),
-    ('alarmRiders', 1)
+    ('frenchContracts', 1)
 )
 INSERT INTO player_meta_upgrade_selection (profile_key, upgrade_key, is_selected)
 SELECT p.profile_key, s.upgrade_key, s.is_selected

@@ -19,14 +19,13 @@ struct HudHeroesBarView: View {
                               isSelected: unitIndex != nil && unitIndex == runner.selectedHeroIndex) {
                     if let hero { runner.selectHero(heroID: hero.id) }
                 }
+                .accessibilityIdentifier("hero-hud-\(index)")
             }
             ReinforcementButton(buttonSize: CGSize(width: layout.buttonSize, height: layout.buttonSize),
                                 cooldown: runner.reinforcementCooldown,
                                 isAvailable: runner.canCallReinforcements,
                                 action: { runner.toggleReinforcementPlacement() },
-                                isSelected: runner.isPlacingReinforcements,
-                                reserveCapacity: runner.metaUpgrades.reinforcementCapacity,
-                                availableDeployments: runner.reinforcementCharges)
+                                isSelected: runner.isPlacingReinforcements)
         }
         .frame(width: layout.frame.width, height: layout.frame.height)
     }

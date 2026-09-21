@@ -7,6 +7,7 @@ public final class GameSimulation {
     public let content: BattleContent
     private var chosenPaths: [Int: DesignArsenal.Tier] = [:]
     private var observers: [SimulationObserver] = []
+    public private(set) var reinforcementDeployments: [ReinforcementDeployment] = []
 
     public init(content: BattleContent, startingMoney: Int?, heroesEnabled: Bool, seed: UInt64) throws {
         self.content = content
@@ -27,6 +28,10 @@ public final class GameSimulation {
     public var enemies: [BattleEnemySnapshot] { engine.enemySnapshots }
     public var canStartWave: Bool { engine.awaitingWaveStart }
     public var currentWave: Int { engine.waveSchedule.nextWaveIndex }
+    public var nextWaveNumber: Int { engine.nextWaveNumber }
+    public var waveCountdownSeconds: Int? { engine.waveCountdownSeconds }
+    public var waveCalls: [WaveCallReceipt] { engine.waveCallReceipts }
+    public var canCallReinforcements: Bool { engine.canCallReinforcements }
     public var readyDemolitionSites: [(slot: Int, point: Point)] { engine.readyDemolitionSites }
     public func upgradeOffers(at slot: Int) -> [(nextLevel: Int, branch: Int, cost: Int)] { engine.upgradeOffers(at: slot) }
     public var shotsByMode: [TowerAttackMode: Int] { engine.shotsByMode }
@@ -38,7 +43,13 @@ public final class GameSimulation {
     public func addObserver(_ observer: SimulationObserver) { observers.append(observer) }
 
     @discardableResult
-    public func perform(_ command: BattleCommand) -> BuildResult { engine.perform(command) }
+    public func perform(_ command: BattleCommand) -> BuildResult {
+        let result = engine.perform(command)
+        if result == .ok, case let .reinforcements(point) = command {
+            reinforcementDeployments.append(ReinforcementDeployment(seconds: time, wave: currentWave, point: point))
+        }
+        return result
+    }
 
     /// The tier ID is the commander's intended final branch, not a request to
     /// skip construction. Only the engine decides whether the build is legal.
@@ -79,8 +90,8 @@ public final class GameSimulation {
     public func result() -> SimulationResult { engine.simulationResult() }
 
     public func run(steps: [ScriptedBuildOrder.Step], maxSeconds: Double,
-                    strictOrder: Bool = false) throws -> SimulationResult {
-        var commander = ScriptedBuildOrder(steps: steps, strictOrder: strictOrder)
+                    strictOrder: Bool = false, reinforcements: ReinforcementStrategy = .immediate) throws -> SimulationResult {
+        var commander = ScriptedBuildOrder(steps: steps, strictOrder: strictOrder, reinforcements: reinforcements)
         while outcome == nil, time < maxSeconds {
             try commander.tick(sim: self)
             step()

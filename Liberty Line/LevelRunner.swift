@@ -13,6 +13,7 @@ public final class LevelRunner: BattleEngine {
     private let db: Db
     private var runtimeCanvas: RuntimeCanvas
     private let hudLayoutConfig: HudLayoutConfig
+    private var heroControlSubscription: AnyCancellable?
     private var displayLink: CADisplayLink?
     private let enemyEscapeFeedback = UINotificationFeedbackGenerator()
     private let demolitionFeedback = UIImpactFeedbackGenerator(style: .heavy)
@@ -57,6 +58,11 @@ public final class LevelRunner: BattleEngine {
             publishesPresentation = true
             publishHeroes()
         } catch { fatalError("Database load failed: \(error)") }
+    }
+
+    func bindHeroControls(to settings: PlayerSettingsStore) {
+        heroControlSubscription?.cancel()
+        heroControlSubscription = settings.bindHeroControls(to: self)
     }
 
     func updateRuntimeCanvas(_ canvas: RuntimeCanvas) { runtimeCanvas = canvas }
@@ -169,6 +175,45 @@ public final class LevelRunner: BattleEngine {
 
 #if DEBUG
 extension LevelRunner {
+    /// Records the actual playable launch without issuing game commands.
+    func capturePlayableLaunch() async {
+        let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        var report: [String: Any] = ["ready": false]
+        do {
+            try await Task.sleep(for: .seconds(1))
+            let heroStates = try heroPosts.map { post -> [String: Any] in
+                guard let enabled = heroAIEnabled[post.hero.id], let controller = heroAIControllers[post.hero.id] else {
+                    throw DbError.Db(message: "Missing hero controller for launch verification: \(post.hero.id)")
+                }
+                return ["id": post.hero.id.uuidString, "name": post.hero.shortName,
+                    "aiEnabled": enabled, "controller": String(describing: type(of: controller)),
+                    "x": post.unit.position.x, "y": post.unit.position.y]
+            }
+            report = ["ready": isReady, "levelID": content.level.id.uuidString,
+                "levelName": levelName, "map": mapImageName, "money": money,
+                "startingMoney": content.level.startingMoney, "awaitingWaveStart": awaitingWaveStart,
+                "isPaused": isPaused, "tick": timer.tick,
+                "heroes": heroStates]
+            guard let window = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene })
+                .flatMap(\.windows).first(where: \.isKeyWindow) else {
+                throw DbError.Db(message: "No active game window for launch verification")
+            }
+            window.layoutIfNeeded()
+            let format = UIGraphicsImageRendererFormat()
+            format.scale = window.screen.scale
+            let capture = UIGraphicsImageRenderer(bounds: window.bounds, format: format).image { _ in
+                window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
+            }
+            guard let png = capture.pngData() else { throw DbError.Db(message: "Launch screenshot failed") }
+            try png.write(to: directory.appendingPathComponent("playable-launch.png"), options: .atomic)
+        } catch { report["ready"] = false; report["error"] = String(describing: error) }
+        report["capturedAt"] = ISO8601DateFormatter().string(from: Date())
+        do {
+            try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
+                .write(to: directory.appendingPathComponent("playable-launch.json"), options: .atomic)
+        } catch { print("Unable to save playable launch verification: \(error)") }
+    }
+
     /// Exercises the real display-link clock; a pause must survive a foreground
     /// start request and resume without spending the wall time on game ticks.
     func runPauseLifecycleReview() async throws -> [String: Any] {
@@ -471,8 +516,9 @@ extension LevelRunner {
         artilleryImpacts = []
         walkers = [enemy(0, distance: 100, hp: 1, speed: 300)]
         let cash = money, livesBefore = lives
+        let expectedKillMoney = cash + Int((Double(walkers[0].bounty) * combatRules.killBountyMultiplier).rounded())
         move(3)
-        try require(artilleryImpacts.count == 1 && walkers.isEmpty && money == cash + 5 && lives == livesBefore,
+        try require(artilleryImpacts.count == 1 && walkers.isEmpty && money == expectedKillMoney && lives == livesBefore,
             "Long frame skipped the blast, revived a killed enemy, or duplicated its bounty")
         return ["waitsAtEntryAndCenter": true, "firesBeforeOutgoingEnemyLeaves": true,
                 "blockedAndPausedStayArmed": true, "emptyDeadAndOtherLaneIgnored": true,
@@ -734,9 +780,6 @@ extension LevelRunner {
         }
         try require(grapeDamage == [125, 100], "Grapeshot doctrine ignored distance")
         evidence["grapeshotDamageNearAndFar"] = grapeDamage
-        try require(reinforcementSchedule?.capacity == 2 && reinforcementCharges == 1,
-                    "Alarm Riders did not load two-charge capacity with one ready deployment")
-        evidence["reinforcementCapacity"] = 2
         stop()
         return evidence
     }
@@ -1122,6 +1165,7 @@ extension LevelRunner {
         try require(projectiles.isEmpty && artilleryImpacts.isEmpty && walkers.allSatisfy { $0.hp == $0.maxHP },
                     "Charge incorrectly used ordinary ranged targeting")
         let cash = money
+        let expectedKillMoney = cash + Int((Double(walkers[3].bounty) * combatRules.killBountyMultiplier).rounded())
         try require(detonateDemolition(atSlot: slot), "Armed charge did not detonate")
         let center = walkers.first { $0.id == 0 }!
         let edge = walkers.first { $0.id == 1 }!
@@ -1130,7 +1174,7 @@ extension LevelRunner {
                     "Blast failed HP or morale damage inside its radius")
         try require(outside.hp == 1000 && outside.morale.value == 100,
                     "Blast damaged enemy beyond its independent radius")
-        try require(!walkers.contains { $0.id == 3 } && money == cash + 5,
+        try require(!walkers.contains { $0.id == 3 } && money == expectedKillMoney,
                     "Blast kill did not pay its bounty exactly once")
         try require(artilleryImpacts.count == 1 && artilleryImpacts[0].isDemolition,
                     "Missing demolition effect")
@@ -1141,7 +1185,7 @@ extension LevelRunner {
         try require(artilleryImpacts.count == 1,
                     "Demolition smoke was removed at the ordinary artillery lifetime")
         advanceArtilleryImpacts(seconds: DemolitionExplosion.duration - 0.8 + 0.001)
-        try require(artilleryImpacts.isEmpty && walkers.map(\.hp) == hitPointsAfterBlast && money == cash + 5,
+        try require(artilleryImpacts.isEmpty && walkers.map(\.hp) == hitPointsAfterBlast && money == expectedKillMoney,
                     "Explosion failed to expire or applied damage/rewards during animation")
         try require(placedTower(atSlot: slot)?.demolitionCharge?.remainingSeconds == 8,
                     "Next charge did not restart preparation")
@@ -1205,6 +1249,7 @@ extension LevelRunner {
                    enemy(2, x: 220, discipline: 1), enemy(3, x: 140, y: 60),
                    enemy(4, x: tuning.range + 1)]
         let cash = money
+        let expectedKillMoney = cash + Int((Double(walkers[0].bounty) * combatRules.killBountyMultiplier).rounded())
         updateCombat(gameDt: 0.00001)
         try require(projectiles.count == 1 && projectiles[0].solidShot != nil
                     && projectiles[0].impactPoint == nil, "Siege did not launch one solid shot")
@@ -1213,7 +1258,7 @@ extension LevelRunner {
         updateCombat(gameDt: 0.00001)
         try require(projectiles.count == 1, "Siege ignored its reload interval")
         updateProjectiles(gameDt: 0.13)
-        try require(!walkers.contains(where: { $0.id == 0 }) && money == cash + 5,
+        try require(!walkers.contains(where: { $0.id == 0 }) && money == expectedKillMoney,
                     "First penetration failed to kill or pay its bounty once")
         try require(projectiles.count == 1, "Solid shot stopped when its target died")
         for _ in 0..<30 { updateProjectiles(gameDt: 0.01) }
@@ -1231,7 +1276,7 @@ extension LevelRunner {
         try require(projectiles.isEmpty && artilleryImpacts.isEmpty,
                     "Solid shot travelled beyond its range or exploded like a shell")
         try require(walkers.filter { $0.id >= 3 }.allSatisfy { $0.hp == 1000 && $0.morale.value == 100 }
-                    && money == cash + 5, "Shot damaged an off-line/out-of-range enemy or duplicated bounty")
+                    && money == expectedKillMoney, "Shot damaged an off-line/out-of-range enemy or duplicated bounty")
         try require(abs(damageTotalBySlot[slot, default: 0] - (1 + 2 * shotDamage)) < 0.001,
                     "Penetration damage was attributed incorrectly")
 

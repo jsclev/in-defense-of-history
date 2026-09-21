@@ -15,9 +15,9 @@ final class PlayerMetaUpgradeDAOTests: XCTestCase {
         XCTAssertEqual(profiles.count, 2)
         XCTAssertEqual(profiles[.active], profiles[.level15])
         let active = try XCTUnwrap(profiles[.active])
-        XCTAssertEqual(active.loadout.selected.count, 18)
+        XCTAssertEqual(active.loadout.selected.count, 17)
         XCTAssertEqual(active.loadout.starBudget, 42)
-        XCTAssertEqual(active.loadout.availableStars, 2)
+        XCTAssertEqual(active.loadout.availableStars, 6)
         XCTAssertEqual(active.bestStarsByLevel.count, 41)
         XCTAssertEqual(active.bestStarsByLevel.values.filter { $0 == 3 }.count, 14)
     }
@@ -27,7 +27,7 @@ final class PlayerMetaUpgradeDAOTests: XCTestCase {
         let store = try MetaUpgradeStore(dao: fixture.db.playerMetaUpgradeDao)
         let tower = try XCTUnwrap(fixture.db.towerTypeDao.getTowerLevelsByBranch()[.supply]?[1]?[1])
         let discounted = store.loadout.effects.priced(tower, kind: .supply, level: 1).cost
-        try execute("UPDATE player_meta_upgrade_selection SET is_selected = 0 WHERE profile_key = 'active' AND upgrade_key IN ('artificerCorps', 'modelCompany', 'frenchContracts', 'alarmRiders')", in: fixture)
+        try execute("UPDATE player_meta_upgrade_selection SET is_selected = 0 WHERE profile_key = 'active' AND upgrade_key IN ('artificerCorps', 'modelCompany', 'frenchContracts')", in: fixture)
         try store.reload()
         XCTAssertEqual(store.loadout.selected.count, 14)
         XCTAssertEqual(store.loadout.availableStars, 12)
@@ -41,8 +41,8 @@ final class PlayerMetaUpgradeDAOTests: XCTestCase {
         let dao = fixture.db.playerMetaUpgradeDao
         try execute("UPDATE player_meta_upgrade_selection SET is_selected = 0 WHERE profile_key = 'level15' AND upgrade_key = 'twoGoodVolleys'", in: fixture)
         let preset = try dao.get(profile: .level15)
-        XCTAssertEqual(preset.loadout.selected.count, 17)
-        XCTAssertEqual(try dao.get().loadout.selected.count, 18)
+        XCTAssertEqual(preset.loadout.selected.count, 16)
+        XCTAssertEqual(try dao.get().loadout.selected.count, 17)
         try dao.restoreLevel15()
         XCTAssertEqual(try dao.get(), preset)
         try dao.reset()
@@ -98,17 +98,18 @@ final class PlayerMetaUpgradeDAOTests: XCTestCase {
         XCTAssertEqual(try dao.get(), before)
         try dao.restoreLevel15()
         XCTAssertTrue(try dao.purchase(.thunderousReport))
+        XCTAssertTrue(try dao.purchase(.ammunitionWagons))
         let spent = try dao.get()
-        XCTAssertEqual(spent.loadout.availableStars, 0)
-        XCTAssertFalse(try dao.purchase(.ammunitionWagons))
+        XCTAssertEqual(spent.loadout.availableStars, 1)
+        XCTAssertFalse(try dao.purchase(.batteryDoctrine))
         XCTAssertEqual(try dao.get(), spent)
     }
 
     func testMissingUnknownAndMalformedRowsFailWithRecordAndFieldDiagnostics() throws {
         let cases: [(String, String)] = [
-            ("DELETE FROM player_meta_upgrade_selection WHERE profile_key = 'active' AND upgrade_key = 'alarmRiders'", "alarmRiders"),
-            ("PRAGMA foreign_keys=OFF; UPDATE player_meta_upgrade_selection SET upgrade_key = 'unknownUpgrade' WHERE profile_key = 'active' AND upgrade_key = 'alarmRiders'", "upgrade_key"),
-            ("PRAGMA ignore_check_constraints=ON; UPDATE player_meta_upgrade_selection SET is_selected = 2 WHERE profile_key = 'active' AND upgrade_key = 'alarmRiders'", "is_selected"),
+            ("DELETE FROM player_meta_upgrade_selection WHERE profile_key = 'active' AND upgrade_key = 'frenchContracts'", "frenchContracts"),
+            ("PRAGMA foreign_keys=OFF; UPDATE player_meta_upgrade_selection SET upgrade_key = 'unknownUpgrade' WHERE profile_key = 'active' AND upgrade_key = 'frenchContracts'", "upgrade_key"),
+            ("PRAGMA ignore_check_constraints=ON; UPDATE player_meta_upgrade_selection SET is_selected = 2 WHERE profile_key = 'active' AND upgrade_key = 'frenchContracts'", "is_selected"),
             ("PRAGMA ignore_check_constraints=ON; UPDATE player_meta_upgrade_level_stars SET best_stars = 4 WHERE profile_key = 'active'", "best_stars"),
             ("DELETE FROM player_meta_upgrade_level_stars WHERE profile_key = 'active'", "best_stars"),
             ("UPDATE player_meta_upgrade_selection SET is_selected = 0 WHERE profile_key = 'active' AND upgrade_key = 'cartridgeDrill'", "is_selected"),
@@ -153,6 +154,6 @@ final class PlayerMetaUpgradeDAOTests: XCTestCase {
             "UPDATE player_meta_upgrade_level_stars SET level_info_id='00000000-0000-0000-0000-000000000000'",
             "INSERT INTO player_meta_upgrade_selection VALUES ('active','rangeEstimation',1)"
         ] { XCTAssertNotEqual(sqlite3_exec(fixture.connection, sql, nil, nil, nil), SQLITE_OK, sql) }
-        XCTAssertEqual(try fixture.db.playerMetaUpgradeDao.get().loadout.selected.count, 18)
+        XCTAssertEqual(try fixture.db.playerMetaUpgradeDao.get().loadout.selected.count, 17)
     }
 }

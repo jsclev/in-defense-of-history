@@ -14,7 +14,7 @@ final class SimulatorBoundaryTests: XCTestCase {
         }
         let sources = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { ["swift", "metal", "h", "m", "mm", "c", "cpp"].contains(($0 as NSString).pathExtension) }
-        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "SimulatorStore.swift", "BuildVersion.swift"]),
+        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "SimulatorStore.swift", "BuildVersion.swift"]),
                        "Every new simulator source requires a boundary audit; no alternate combat backend is permitted")
         let driverPaths = sources.map { "Simulator/" + $0 } + ["LevelEditor/SimSession.swift"]
         for path in driverPaths {
@@ -23,6 +23,37 @@ final class SimulatorBoundaryTests: XCTestCase {
             for forbidden in ["sim.engine", "BattleEngine(", "MTLCreateSystemDefaultDevice", "import Metal"] {
                 XCTAssertFalse(source.contains(forbidden), "\(path) bypasses the input/result boundary: \(forbidden)")
             }
+        }
+    }
+
+    func testGeneticSearchOwnsOnlyPlayerIntentAndWholeBattleScoring() throws {
+        // Ownership audit: the coordinator breeds/records plans; the commander
+        // chooses commands. Neither has access to mutable battle internals.
+        for path in ["Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticMetaSearch.swift",
+                     "Engine/Design/ReinforcementStrategy.swift", "Engine/Design/EarlyWaveStrategy.swift", "Simulator/GeneticStudy.swift"] {
+            let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
+            for forbidden in ["sim.engine", "BattleEngine(", "buildTower(", "upgradeSelectedTower(",
+                "applyImpact", "applyMorale", "shotMinDamage", "shotMaxDamage", "enemyHPMultiplier:",
+                "gold +=", "money -=", "hp -=", "wave.startTime", "SimClock.dt"] {
+                XCTAssertFalse(source.contains(forbidden), "\(path) duplicates or bypasses gameplay: \(forbidden)")
+            }
+        }
+        let commander = try String(contentsOf: root.appendingPathComponent("Engine/Design/GeneticStrategy.swift"), encoding: .utf8)
+        XCTAssertTrue(commander.contains("sim.execute(decision.step.action)"))
+        XCTAssertTrue(commander.contains("sim.step()"))
+        XCTAssertTrue(commander.contains("result: sim.result()"))
+        XCTAssertTrue(commander.contains("while sim.outcome == nil, sim.time < maxSeconds"))
+        let reinforcement = try String(contentsOf: root.appendingPathComponent("Engine/Design/ReinforcementStrategy.swift"), encoding: .utf8)
+        XCTAssertTrue(reinforcement.contains("sim.canCallReinforcements"))
+        XCTAssertTrue(reinforcement.contains("sim.perform(.reinforcements(point:"))
+        for forbidden in ["ReinforcementSchedule(", "reinforcementStats", "cooldownSeconds", "timeToLiveSeconds", "reinforcementSoldierCount"] {
+            XCTAssertFalse(reinforcement.contains(forbidden), "Reinforcement driver owns gameplay: \(forbidden)")
+        }
+        let calls = try String(contentsOf: root.appendingPathComponent("Engine/Design/EarlyWaveStrategy.swift"), encoding: .utf8)
+        XCTAssertTrue(calls.contains("sim.canStartWave"))
+        XCTAssertTrue(calls.contains("sim.perform(.startWave)"))
+        for forbidden in ["WaveStartSchedule(", "callButtonDelay", "autoStartCountdown", "earlyCallBonus", "wave.startTime"] {
+            XCTAssertFalse(calls.contains(forbidden), "Early-wave driver owns gameplay: \(forbidden)")
         }
     }
 
@@ -49,6 +80,8 @@ final class SimulatorBoundaryTests: XCTestCase {
                         "placeRallyPoint", "commandSelectedHero", "placeReinforcements", "startNextWave"] {
             XCTAssertTrue(commands.contains(handler + "("), "Missing shared player handler: \(handler)")
         }
+        XCTAssertTrue(commands.contains("CallWaveButtonSelection()"))
+        XCTAssertTrue(commands.contains("selection.tap(point, for: nextWaveNumber)"))
         for path in ["Engine/Models/GameSimulation.swift", "Liberty Line/LevelRunner.swift"] {
             let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
             XCTAssertFalse(source.contains("enemyHPMultiplier:"), path)

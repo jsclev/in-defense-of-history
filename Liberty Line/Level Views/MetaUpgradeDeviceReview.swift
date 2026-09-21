@@ -81,7 +81,7 @@ struct MetaUpgradeDeviceReview: View {
             }
             try store.metaUpgrades.restoreLevel15()
             try await capture("level15")
-            try require(store.metaUpgrades.loadout.selected.count == 18, "Preset is not 75 percent")
+            try require(store.metaUpgrades.loadout.selected.count == 17, "Preset selection differs from the authored seed")
             try store.metaUpgrades.reset()
             try require(store.metaUpgrades.loadout.availableStars == 42, "Reset did not refund all stars")
             try await capture("reset")
@@ -159,24 +159,25 @@ struct MetaUpgradeDeviceReview: View {
                 arsenal: source.arsenal, enemies: source.enemies, unlocks: source.unlocks,
                 reinforcementConfig: source.reinforcementConfig, chosenHeroes: source.chosenHeroes,
                 deployments: source.deployments, heroCombat: source.heroCombat,
+            heroAI: source.heroAI, heroControls: source.heroControls,
                 movementArea: source.movementArea, callButtons: source.callButtons, exits: source.exits,
                 difficulty: source.difficulty, playerUpgrades: historicalState)
             let historicalBattle = LevelRunner(db: store.db, content: historicalContent,
                 runtimeCanvas: canvas, hudLayoutConfig: store.hudLayoutConfig)
             let historicalChecks = try historicalBattle.verifyHistoricalMetaUpgradesOnDevice()
             let hud = HeroBarLayout(runtimeCanvas: canvas, location: store.hudLayoutConfig.heroBar)
-            let reservePreview = ImageRenderer(content: HStack(spacing: hud.buttonSpacing) {
-                ForEach(0...2, id: \.self) { charges in
+            let cooldownPreview = ImageRenderer(content: HStack(spacing: hud.buttonSpacing) {
+                ForEach([1.0, 0.5, 0.0], id: \.self) { fraction in
                     ReinforcementButton(buttonSize: CGSize(width: hud.buttonSize, height: hud.buttonSize),
-                        cooldown: charges == 0 ? ReinforcementCooldown(remainingSeconds: 8, remainingFraction: 0.5) : .ready,
-                        isAvailable: charges > 0, action: {}, reserveCapacity: 2, availableDeployments: charges)
+                        cooldown: ReinforcementCooldown(remainingSeconds: fraction * battle.content.reinforcementConfig.cooldownSeconds, remainingFraction: fraction),
+                        isAvailable: fraction == 0, action: {})
                 }
             }.padding(8).background(Color.black))
-            reservePreview.scale = window.screen.scale
-            guard let reserves = reservePreview.uiImage?.pngData() else {
+            cooldownPreview.scale = window.screen.scale
+            guard let cooldowns = cooldownPreview.uiImage?.pngData() else {
                 throw NSError(domain: "MetaUpgradeReview.ReserveRender", code: 1)
             }
-            try reserves.write(to: directory.appendingPathComponent("reserve-states.png"))
+            try cooldowns.write(to: directory.appendingPathComponent("cooldown-states.png"))
             NotificationCenter.default.post(name: .init("MetaUpgradeHistoryReview"), object: MetaUpgrade.twoGoodVolleys)
             try await Task.sleep(for: .milliseconds(500))
             try await capture("history-volley")
@@ -186,8 +187,8 @@ struct MetaUpgradeDeviceReview: View {
             try await capture("battery-inspector")
             NotificationCenter.default.post(name: .init("MetaUpgradeFocusReview"), object: MetaUpgrade.crossfire)
             try await capture("level15-final")
-            result = ["passed": true, "selected": 18, "total": 24, "spentStars": 40,
-                "availableStars": 2, "specializationsPurchased": checked,
+            result = ["passed": true, "selected": 17, "total": 23, "spentStars": 36,
+                "availableStars": 6, "specializationsPurchased": checked,
                 "historicalMechanics": historicalChecks,
                 "reinforcementButtonPoints": hud.buttonSize,
                 "startingMoneyUnchanged": true, "databaseSelectionReloadVerified": true, "snapshotStable": true, "resetRemovesBonuses": true,

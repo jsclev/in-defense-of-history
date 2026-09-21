@@ -224,6 +224,16 @@ private struct LevelAttemptView: View {
             runner.playEnemyEscapeHaptic(cue)
         }
         .onAppear {
+            runner.bindHeroControls(to: settings)
+            #if DEBUG
+            if CommandLine.arguments.contains("--capture-launch") {
+                Task { await runner.capturePlayableLaunch() }
+            }
+            if CommandLine.arguments.contains("--reinforcement-slider-review") {
+                let layout = HeroBarLayout(runtimeCanvas: runtimeCanvas, location: .southWest)
+                Task { await runner.reviewReinforcementSlider(buttonSize: layout.buttonSize) }
+            }
+            #endif
             runner.updateRuntimeCanvas(runtimeCanvas)
             if scenePhase == .active && runsAutomatically { runner.start() }
         }
@@ -381,6 +391,8 @@ private struct LevelAttemptView: View {
                         .frame(width: slotTap.width, height: slotTap.height)
                 }
                 .position(projection.viewPoint(slotPosition))
+                .accessibilityIdentifier("tower-slot-\(index)")
+                .accessibilityLabel(runner.isSlotOccupied(index) ? "Select tower" : "Build tower")
             }
 
             demolitionSites(projection: projection)
@@ -434,7 +446,7 @@ private struct LevelAttemptView: View {
                         center: projection.viewPoint(runner.slotPositions[buildSlot]),
                         range: radius, verticalFraction: runner.combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
                 }
-                dismissCatcher()
+                dismissCatcher(runtimeCanvas: runtimeCanvas)
                 towerMenu(around: projection.viewPoint(runner.slotPositions[buildSlot]),
                           playAreaScalingFactor: playAreaScalingFactor)
             }
@@ -451,16 +463,13 @@ private struct LevelAttemptView: View {
                         range: radius, upgradeRange: previewRadius, verticalFraction: runner.combatRules.rangeVerticalFraction, runtimeCanvas: runtimeCanvas)
                 }
                 if case .rallyPlacement = presentation {
-                    rallyPlacementCatcher(projection: projection)
+                    MapDestinationInputView(runtimeCanvas: runtimeCanvas) { runner.placeRallyPoint(at: $0) }
                 } else if case .demolitionPlacement = presentation {
-                    demolitionPlacementCatcher(projection: projection)
+                    MapDestinationInputView(runtimeCanvas: runtimeCanvas) { runner.placeDemolition(at: $0) }
                 } else if case .engineerObstaclePlacement = presentation {
-                    Color.black.opacity(0.001)
-                        .gesture(SpatialTapGesture().onEnded { value in
-                            runner.placeEngineerObstacles(at: projection.mapPoint(value.location))
-                        })
+                    MapDestinationInputView(runtimeCanvas: runtimeCanvas) { runner.placeEngineerObstacles(at: $0) }
                 } else {
-                    dismissCatcher()
+                    dismissCatcher(runtimeCanvas: runtimeCanvas)
                     upgradeMenu(for: tower, around: projection.viewPoint(runner.slotPositions[upgradeSlot]),
                                 playAreaScalingFactor: playAreaScalingFactor)
                 }
@@ -600,13 +609,6 @@ private struct LevelAttemptView: View {
             .stroke(tint.opacity(0.8), lineWidth: 1))
     }
 
-    private func rallyPlacementCatcher(projection: LevelMapProjection) -> some View {
-        Color.black.opacity(0.001)
-            .gesture(SpatialTapGesture().onEnded { value in
-                runner.placeRallyPoint(at: projection.mapPoint(value.location))
-            })
-    }
-
     private func demolitionSites(projection: LevelMapProjection) -> some View {
         ForEach(runner.placedTowers) { tower in
             if let charge = tower.demolitionCharge, let position = charge.position,
@@ -619,16 +621,10 @@ private struct LevelAttemptView: View {
         }
     }
 
-    private func demolitionPlacementCatcher(projection: LevelMapProjection) -> some View {
-        Color.black.opacity(0.001)
-            .gesture(SpatialTapGesture().onEnded { value in
-                runner.placeDemolition(at: projection.mapPoint(value.location))
-            })
-    }
-
-    private func dismissCatcher() -> some View {
-        Color.black.opacity(0.001)
-            .onTapGesture { runner.dismissMenu() }
+    private func dismissCatcher(runtimeCanvas: RuntimeCanvas) -> some View {
+        // Map presentations sit above the HUD, so their input region must leave
+        // the controls exposed. Otherwise the first HUD tap only dismisses a menu.
+        MapDestinationInputView(runtimeCanvas: runtimeCanvas) { _ in runner.dismissMenu() }
     }
 
     private func towerMenu(around anchor: CGPoint,

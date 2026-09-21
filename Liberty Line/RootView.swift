@@ -15,6 +15,26 @@ struct RootView: View {
         self.store = store
         self.runtimeCanvas = runtimeCanvas
         _hudLayoutConfig = State(initialValue: store.hudLayoutConfig)
+        #if DEBUG
+        // A launch shortcut enters the ordinary campaign view. Hero control,
+        // difficulty, upgrades and starting money still come from SQLite.
+        let arguments = CommandLine.arguments
+        if let flag = arguments.firstIndex(of: "--play-level") {
+            do {
+                guard arguments.indices.contains(flag + 1),
+                      let number = Int(arguments[flag + 1]), number > 0 else {
+                    throw DbError.Db(message: "--play-level requires a positive campaign level number")
+                }
+                let levels = try store.db.levelInfoDao.getCampaignLevels(campaignName: "Main")
+                guard levels.indices.contains(number - 1),
+                      let difficulty = try store.db.difficultyDao.getSelected() else {
+                    throw DbError.Db(message: "Requested campaign level or authored difficulty is missing")
+                }
+                _selectedNode = State(initialValue: CampaignNode(order: number, level: levels[number - 1]))
+                _playingDifficulty = State(initialValue: difficulty)
+            } catch { fatalError("Unable to launch campaign level: \(error)") }
+        }
+        #endif
     }
 
     var body: some View {

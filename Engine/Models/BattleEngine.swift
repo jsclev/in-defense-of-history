@@ -678,7 +678,7 @@ public class BattleEngine: NSObject, ObservableObject {
 
     func recordRemoval(_ walker: Walker, fate: EnemyFate) {
         guard let origin = spawnOrigins.removeValue(forKey: walker.id) else { return }
-        var fates = fatesByType[origin.type] ?? SimulationResult.TypeFates(killed: 0, routed: 0, captured: 0, leaked: 0)
+        var fates = fatesByType[origin.type] ?? SimulationResult.TypeFates(killed: 0, leaked: 0)
         if fate == .killed { killedCount += 1; fates.killed += 1 }
         if fate == .leaked {
             fates.leaked += 1; leaksByWave[origin.wave] += 1; waveMaxProgress[origin.wave] = 1
@@ -705,19 +705,20 @@ public class BattleEngine: NSObject, ObservableObject {
     let combatRules: CombatRules
     let meleeFormation: MeleeFormation
     var nextReinforcementSlot = -1
-    var reinforcementSchedule: ReinforcementSchedule?
-    @Published var reinforcementCooldown: ReinforcementCooldown = .ready
-    @Published var reinforcementCharges = 1
+    private var reinforcementSchedule: ReinforcementSchedule
+    @Published private(set) var reinforcementCooldown: ReinforcementCooldown = .ready
     @Published var isPlacingReinforcements = false
 
     var canCallReinforcements: Bool {
-        isReady && !isDefeated && !isCleared && reinforcementStats != nil
-            && reinforcementSchedule?.cooldown(at: timer.tick).isReady == true
+        acceptsPlayerInput && reinforcementStats != nil && reinforcementCooldown.isReady
     }
 
     @Published var heroes: [HeroSoldier] = []
     @Published var selectedHeroIndex: Int?
     var heroPosts: [HeroPost] = []
+    @Published public private(set) var heroAIEnabled: [UUID: Bool] = [:]
+    var heroAIControllers: [UUID: any HeroAI] = [:]
+    var nextHeroAIDecisionTick: [UUID: Int64] = [:]
 
     var hudHeroes: [Hero] {
         heroSelection?.heroes ?? []
@@ -770,6 +771,7 @@ public class BattleEngine: NSObject, ObservableObject {
     var waves: [Wave] = []
     var waveIndex = 0
     var waveSchedule = WaveStartSchedule()
+    private(set) var waveCallReceipts: [WaveCallReceipt] = []
 
     var waveCount: Int { waves.count }
     var currentWaveNumber: Int { min(waveIndex + 1, max(waves.count, 1)) }
@@ -832,9 +834,8 @@ public class BattleEngine: NSObject, ObservableObject {
         previousBestStars = previous
         self.enemyHPMultiplier = content.difficulty.enemyHPMultiplier
         random = SeededRNG(seed: seed)
+        reinforcementSchedule = ReinforcementSchedule(config: content.reinforcementConfig)
         super.init()
-        reinforcementSchedule = ReinforcementSchedule(config: content.reinforcementConfig,
-            capacity: metaUpgrades.reinforcementCapacity)
         let level = content.level
         callWaveButtons = content.callButtons
         exitPositions = content.exits.map { CGPoint(x: $0.x, y: $0.y) }
@@ -875,10 +876,19 @@ public class BattleEngine: NSObject, ObservableObject {
                 unit: MilitiaUnit(position: position, hp: combat.hp),
                 movement: try HeroMovement(area: content.movementArea, spawn: position))
         }
+        for post in heroPosts {
+            guard let config = content.heroAI[post.hero.id],
+                  let control = content.heroControls.first(where: { $0.id == post.hero.id }) else {
+                throw DbError.Db(message: "hero[\(post.hero.id)]: missing AI configuration or control setting")
+            }
+            heroAIControllers[post.hero.id] = config.controller.makeController()
+            heroAIEnabled[post.hero.id] = control.aiEnabled
+        }
         heroPoses = Dictionary(uniqueKeysWithValues: heroPosts.enumerated().map { index, post in
             (index, HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position))
         })
         waveSchedule = try WaveStartSchedule(waves: waves)
+        waveCallReceipts.removeAll()
         isReady = true
         refreshWaveStartState()
         status = "\(levelName)  •  wave 1/\(waves.count) waiting  •  tap an entrance, then tap to confirm"
@@ -1195,9 +1205,13 @@ public class BattleEngine: NSObject, ObservableObject {
         guard acceptsPlayerInput,
               let start = waveSchedule.startNextWave(at: timer.tick, manually: true)
         else { return .invalid }
+        let moneyBefore = money, countdown = waveCountdownSeconds
         money += start.moneyBonus
         goldEarned += start.moneyBonus
         enterWave(start.index)
+        waveCallReceipts.append(WaveCallReceipt(seconds: elapsedTime, wave: start.index + 1,
+            countdownSeconds: countdown, earlyCallBonus: start.moneyBonus,
+            moneyBefore: moneyBefore, moneyAfter: money))
         refreshWaveStartState()
         return .ok
     }
@@ -1324,6 +1338,7 @@ public class BattleEngine: NSObject, ObservableObject {
         advanceWalkers(seconds: gameDt, nowTicks: Double(timer.tick))
 
         guard !isDefeated else { return }
+        stepHeroAI()
         stepMilitia()
 
         if waveSchedule.allWavesStarted && pendingSpawns.isEmpty && walkers.isEmpty && !isCleared {
@@ -1448,7 +1463,7 @@ public class BattleEngine: NSObject, ObservableObject {
     @discardableResult
     func callReinforcements(at point: CGPoint) -> Bool {
         guard acceptsPlayerInput, canCallReinforcements, let melee = reinforcementStats,
-              reinforcementSchedule?.deploy(slot: nextReinforcementSlot, at: timer.tick) == true
+              reinforcementSchedule.deploy(slot: nextReinforcementSlot, at: timer.tick)
         else { return false }
         let anchor = Point(Double(point.x), Double(point.y))
         garrisonsBySlot[nextReinforcementSlot] = MilitiaGarrison(
@@ -1462,8 +1477,7 @@ public class BattleEngine: NSObject, ObservableObject {
             anchor: anchor)
         nextReinforcementSlot -= 1
         isPlacingReinforcements = false
-        reinforcementCooldown = reinforcementSchedule!.cooldown(at: timer.tick)
-        reinforcementCharges = reinforcementSchedule!.availableDeployments(at: timer.tick)
+        publishReinforcementCooldown()
         publishMilitia()
         return true
     }
@@ -1485,11 +1499,8 @@ public class BattleEngine: NSObject, ObservableObject {
     }
 
     func advanceReinforcements() {
-        guard let expired = reinforcementSchedule?.expire(at: timer.tick) else { return }
-        let cooldown = reinforcementSchedule!.cooldown(at: timer.tick)
-        if reinforcementCooldown != cooldown { reinforcementCooldown = cooldown }
-        let charges = reinforcementSchedule!.availableDeployments(at: timer.tick)
-        if reinforcementCharges != charges { reinforcementCharges = charges }
+        let expired = reinforcementSchedule.expire(at: timer.tick)
+        publishReinforcementCooldown()
         guard !expired.isEmpty else { return }
         for slot in expired {
             guard let garrison = garrisonsBySlot.removeValue(forKey: slot) else { continue }
@@ -1507,6 +1518,11 @@ public class BattleEngine: NSObject, ObservableObject {
             .map(\.targetSpawnID))
 
         publishMilitia()
+    }
+
+    private func publishReinforcementCooldown() {
+        let cooldown = reinforcementSchedule.cooldown(at: timer.tick)
+        if reinforcementCooldown != cooldown { reinforcementCooldown = cooldown }
     }
 
     func militiaPositionsById() -> [Int: CGPoint] {
@@ -1716,7 +1732,9 @@ public class BattleEngine: NSObject, ObservableObject {
             let station = post.movement.station
 
             var free: [(spawnID: Int, position: Point)] = []
-            for w in walkers where !w.blockImmune && !claimed.contains(w.id)
+            let recovering = heroAIEnabled[post.hero.id] == true
+                && heroAIControllers[post.hero.id]?.isRecovering == true
+            for w in walkers where !recovering && !w.blockImmune && !claimed.contains(w.id)
                 && !killedIDs.contains(w.id) {
                 free.append((w.id, Point(Double(w.position.x), Double(w.position.y))))
             }
@@ -1865,14 +1883,9 @@ public class BattleEngine: NSObject, ObservableObject {
     @discardableResult
     func commandSelectedHero(to point: CGPoint) -> Bool {
         guard acceptsPlayerInput, let index = selectedHeroIndex, heroPosts.indices.contains(index) else { return false }
-        var post = heroPosts[index]
-        let previousTarget = post.unit.targetSpawnID
-        guard post.movement.command(to: Point(point.x, point.y), unit: &post.unit) else { return false }
-        if previousTarget >= 0 {
-            post.enemySwingTicks[previousTarget] = nil
-            blockedWalkerIDs.remove(previousTarget)
-        }
-        heroPosts[index] = post
+        guard commandHero(at: index, to: Point(point.x, point.y)) else { return false }
+        // A valid player order takes ownership immediately. An invalid order is atomic.
+        setHeroAIEnabled(false, for: heroPosts[index].hero.id, stopMovement: false)
         selectedHeroIndex = nil
         publishHeroes()
         return true
@@ -2203,5 +2216,27 @@ public class BattleEngine: NSObject, ObservableObject {
         let loss = strike.loss(distance: Double(distanceFrom(point, to: walker)),
                                discipline: walker.discipline)
         walker.morale.apply(loss: loss, direction: walker.position.x < point.x ? -1 : 1)
+    }
+}
+
+
+extension BattleEngine {
+    @discardableResult
+    public func setHeroAIEnabled(_ enabled: Bool, for heroID: UUID) -> Bool {
+        setHeroAIEnabled(enabled, for: heroID, stopMovement: true)
+    }
+
+    @discardableResult
+    private func setHeroAIEnabled(_ enabled: Bool, for heroID: UUID, stopMovement: Bool) -> Bool {
+        guard isReady, !isDefeated, !isCleared,
+              let index = heroPosts.firstIndex(where: { $0.hero.id == heroID }) else { return false }
+        guard heroAIEnabled[heroID] != enabled else { return true }
+        heroAIControllers[heroID]?.reset()
+        nextHeroAIDecisionTick[heroID] = nil
+        if !enabled && stopMovement && heroPosts[index].unit.state == .returning {
+            _ = commandHero(at: index, to: heroPosts[index].unit.position)
+        }
+        heroAIEnabled[heroID] = enabled
+        return true
     }
 }

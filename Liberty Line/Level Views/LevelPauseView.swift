@@ -43,7 +43,7 @@ struct LevelPauseView: View {
         VStack(spacing: 12) {
             HStack {
                 Image("pause_icon_glyph").resizable().scaledToFit()
-                    .frame(width: 20, height: 25).accessibilityHidden(true)
+                    .frame(width: 44, height: 44).accessibilityHidden(true)
                 Text("PAUSED").font(.custom("Baskerville-Bold", size: 28))
                 Spacer()
                 Button { showingSettings = true } label: {

@@ -24,6 +24,10 @@ final class BundledDatabaseTests: XCTestCase {
         let db = Db(dbPath: destination.path, fullRefresh: false)
         let authoredHeroes = try db.heroDao.getSelectedHeroes()
         let authoredSettings = try db.playerSettingsDao.get()
+        let authoredControls = try db.playerSettingsDao.getHeroControls()
+        try db.playerSettingsDao.setHeroAIEnabled(
+            !XCTUnwrap(authoredControls.first { $0.id == authoredHeroes.primary.id }).aiEnabled,
+            heroID: authoredHeroes.primary.id)
         try db.heroDao.setSelectedHeroes([authoredHeroes.primary.id])
         var changed = authoredSettings
         changed.debugMode.toggle()
@@ -46,6 +50,7 @@ final class BundledDatabaseTests: XCTestCase {
         defer { refreshed.close() }
         XCTAssertEqual(try refreshed.heroDao.getSelectedHeroes(), authoredHeroes)
         XCTAssertEqual(try refreshed.playerSettingsDao.get(), authoredSettings)
+        XCTAssertEqual(try refreshed.playerSettingsDao.getHeroControls(), authoredControls)
     }
 
     func testFailedRefreshThrowsInsteadOfReturningOldDatabase() throws {

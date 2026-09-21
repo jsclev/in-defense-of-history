@@ -6,16 +6,16 @@ final class MetaUpgradeTests: XCTestCase {
     func testLevel15PresetBudgetAndPrerequisites() throws {
         let fixture = try AuthoredDatabaseFixture()
         let loadout = try fixture.db.playerMetaUpgradeDao.get(profile: .level15).loadout
-        XCTAssertEqual(MetaUpgrade.allCases.count, 24)
-        XCTAssertEqual(loadout.selected.count, 18)
-        XCTAssertEqual(loadout.spentStars, 40)
-        XCTAssertEqual(loadout.availableStars, 2)
+        XCTAssertEqual(MetaUpgrade.allCases.count, 23)
+        XCTAssertEqual(loadout.selected.count, 17)
+        XCTAssertEqual(loadout.spentStars, 36)
+        XCTAssertEqual(loadout.availableStars, 6)
         XCTAssertEqual(try MetaUpgradeLoadout(catalog: loadout.catalog, starBudget: 42, selected: loadout.selected), loadout)
         XCTAssertThrowsError(try MetaUpgradeLoadout(catalog: loadout.catalog, starBudget: -1))
         XCTAssertThrowsError(try MetaUpgradeLoadout(catalog: loadout.catalog, starBudget: 60, selected: [.twoGoodVolleys]))
-        XCTAssertThrowsError(try MetaUpgradeLoadout(catalog: loadout.catalog, starBudget: 37, selected: loadout.selected))
+        XCTAssertThrowsError(try MetaUpgradeLoadout(catalog: loadout.catalog, starBudget: 35, selected: loadout.selected))
         for track in MetaUpgradeTrack.allCases {
-            XCTAssertEqual(loadout.catalog.upgrades(in: track).map(\.cost), [1, 2, 3, 4])
+            XCTAssertEqual(loadout.catalog.upgrades(in: track).map(\.cost), track == .command ? [1, 2, 3] : [1, 2, 3, 4])
         }
     }
 
@@ -173,26 +173,6 @@ final class MetaUpgradeTests: XCTestCase {
         XCTAssertThrowsError(try fixture.db.towerTypeDao.getDesignArsenal())
     }
 
-    func testAlarmRidersRefillSeriallyAndGroupsKeepIndependentLifetimes() throws {
-        let fixture = try AuthoredDatabaseFixture()
-        let effects = try fixture.db.playerMetaUpgradeDao.get().loadout.effects
-        let base = try ReinforcementConfig(timeToLiveSeconds: 20, cooldownSeconds: 16)
-        let second = Int64(SimClock.ticksPerSecond)
-        var schedule = ReinforcementSchedule(config: base, capacity: effects.reinforcementCapacity)
-        XCTAssertEqual(schedule.availableDeployments(at: 0), 1)
-        XCTAssertEqual(schedule.availableDeployments(at: 16 * second), 2)
-        XCTAssertTrue(schedule.deploy(slot: -1, at: 16 * second))
-        XCTAssertTrue(schedule.deploy(slot: -2, at: 16 * second))
-        XCTAssertFalse(schedule.deploy(slot: -3, at: 16 * second))
-        XCTAssertEqual(schedule.availableDeployments(at: 31 * second), 0)
-        XCTAssertEqual(schedule.availableDeployments(at: 32 * second), 1)
-        XCTAssertFalse(schedule.cooldown(at: 32 * second).isReady, "At most two reserve groups may be active")
-        XCTAssertEqual(schedule.expire(at: 36 * second), [-2, -1])
-        XCTAssertTrue(schedule.deploy(slot: -3, at: 36 * second))
-        XCTAssertEqual(schedule.availableDeployments(at: 48 * second), 1, "Spending one reserve must not restart the other recharge")
-        XCTAssertEqual(schedule.expire(at: 56 * second), [-3])
-        XCTAssertEqual(schedule.availableDeployments(at: 1000 * second), 2)
-    }
 
     @MainActor func testVictoriesAwardOnlyImprovementsAndPresetClearsEarnedProgress() throws {
         let fixture = try AuthoredDatabaseFixture()
@@ -223,7 +203,7 @@ final class MetaUpgradeTests: XCTestCase {
         let store = try MetaUpgradeStore(dao: fixture.db.playerMetaUpgradeDao)
         let snapshot = store.loadout.effects
         try store.reset()
-        XCTAssertEqual(snapshot.selected.count, 18)
+        XCTAssertEqual(snapshot.selected.count, 17)
         XCTAssertTrue(store.loadout.selected.isEmpty)
         XCTAssertTrue(try store.purchase(.rangeEstimation))
         XCTAssertEqual(store.loadout.selected, [.rangeEstimation])

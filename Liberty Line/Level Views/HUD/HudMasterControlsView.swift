@@ -27,7 +27,7 @@ struct HudMasterControlsView: View {
     }
 }
 
-/// Both master controls share the same visible rim, icon inset and touch target.
+/// Icon canvases include their own clearance from the shared painted rim.
 struct PaintedMasterControlButton: View {
     let iconName: String
     let label: String
@@ -42,8 +42,7 @@ struct PaintedMasterControlButton: View {
                     .resizable()
                     .interpolation(.high)
                     .scaledToFit()
-                    .frame(width: buttonSize * HudSizing.paintedButtonIconFraction,
-                           height: buttonSize * HudSizing.paintedButtonIconFraction)
+                    .frame(width: buttonSize, height: buttonSize)
             }
             .frame(width: buttonSize, height: buttonSize)
             .contentShape(Rectangle())

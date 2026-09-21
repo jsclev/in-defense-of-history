@@ -5,13 +5,13 @@ public enum MetaUpgradeTrack: String, CaseIterable, Identifiable, Sendable {
     case marksmanship, infantry, artillery, engineering, supply, command
     public var id: String { rawValue }
 }
-public enum MetaUpgrade: String, CaseIterable, Identifiable, Sendable {
+public enum MetaUpgrade: String, Codable, CaseIterable, Identifiable, Sendable {
     case rangeEstimation, cartridgeDrill, crossfire, twoGoodVolleys
     case campaignVeterans, reliefCompanies, fieldDressings, bayonetCounterstroke
     case gunCarriages, thunderousReport, ammunitionWagons, batteryDoctrine
     case forwardWorks, preparedFireLanes, workingParties, powderWorks
     case localSuppliers, supplyConvoys, forwardMagazines, fieldHospitals
-    case artificerCorps, modelCompany, frenchContracts, alarmRiders
+    case artificerCorps, modelCompany, frenchContracts
     public var id: String { rawValue }
     var requiredParameters: Set<MetaUpgradeParameter> {
         switch self {
@@ -33,7 +33,6 @@ public enum MetaUpgrade: String, CaseIterable, Identifiable, Sendable {
         case .localSuppliers, .artificerCorps, .modelCompany, .frenchContracts: return [.priceMultiplier]
         case .supplyConvoys: return [.incomeMultiplier]
         case .fieldHospitals: return [.healingMultiplier, .rangeMultiplier]
-        case .alarmRiders: return [.capacity]
         }
     }
 }
@@ -41,12 +40,11 @@ public enum MetaUpgradeParameter: String, CaseIterable, Sendable {
     case rangeMultiplier, reloadMultiplier, damageMultiplier, shotCount, preparationSeconds
     case healthMultiplier, respawnMultiplier, healingMultiplier, moraleThreshold, turnMultiplier
     case moraleMultiplier, secondaryHitMultiplier, closeRangeMultiplier, closeRangeFraction, coverPierceFraction
-    case obstacleSizeMultiplier, preparationMultiplier, priceMultiplier, incomeMultiplier, capacity, serviceRange
+    case obstacleSizeMultiplier, preparationMultiplier, priceMultiplier, incomeMultiplier, serviceRange
     func accepts(_ value: Double) -> Bool {
         guard value.isFinite else { return false }
         switch self {
         case .shotCount: return value.rounded() == value && (1...10).contains(value)
-        case .capacity: return value.rounded() == value && (2...4).contains(value)
         case .preparationSeconds: return value > 0 && value <= 120
         case .serviceRange: return value > 0 && value <= 10000
         case .reloadMultiplier, .respawnMultiplier, .preparationMultiplier, .priceMultiplier:
@@ -220,7 +218,6 @@ public struct MetaUpgradeEffects: Equatable, Sendable {
         if mode == .grapeshot, distanceFraction <= doctrine.value(.closeRangeFraction) { return doctrine.value(.closeRangeMultiplier) }
         return 1
     }
-    public var reinforcementCapacity: Int { value(.alarmRiders, .capacity).map(Int.init) ?? 1 }
 }
 public struct MetaUpgradePriceContext: Equatable, Sendable {
     public let trainingEstablished: Bool

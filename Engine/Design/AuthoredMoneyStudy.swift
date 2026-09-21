@@ -18,8 +18,17 @@ public struct AuthoredMoneyStudy {
     public let battle: BattleContent
 
     public init(db: Db, levelID: UUID) throws {
-        battle = try BattleContent(db: db, levelID: levelID)
+        try self.init(battle: BattleContent(db: db, levelID: levelID))
+    }
+
+    public func selectingMetaUpgrades(_ selected: Set<MetaUpgrade>) throws -> Self {
+        try Self(battle: battle.selectingMetaUpgrades(selected))
+    }
+
+    private init(battle: BattleContent) throws {
+        self.battle = battle
         level = battle.level
+        let levelID = level.id
         guard !level.paths.isEmpty, !level.towerSlots.isEmpty, !level.waves.isEmpty else {
             throw DbError.Db(message: "level_info[\(levelID)]: money study requires paths, tower slots and authored waves")
         }
@@ -29,10 +38,10 @@ public struct AuthoredMoneyStudy {
         let selected = battle.difficulty
         difficulty = selected
         arsenal = battle.arsenal
-        let unlocks = try db.towerUnlockDao.getUnlocksFor(levelInfoId: levelID)
+        let unlocks = battle.unlocks
         var paths: [TowerPath] = []
         for definition in arsenal.towers {
-            guard let maximum = unlocks[definition.kind.rawValue] else {
+            guard let maximum = unlocks[definition.kind] else {
                 throw DbError.Db(message: "level_tower_unlock[\(levelID)]: missing \(definition.kind.rawValue)")
             }
             guard maximum > 0 else { continue }

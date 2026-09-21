@@ -1,10 +1,8 @@
 import Foundation
 
-public struct SimulationResult: Sendable, Codable {
-    public struct TypeFates: Sendable, Codable {
+public struct SimulationResult: Sendable, Codable, Equatable {
+    public struct TypeFates: Sendable, Codable, Equatable {
         public var killed: Int
-        public var routed: Int
-        public var captured: Int
         public var leaked: Int
     }
 
@@ -14,8 +12,6 @@ public struct SimulationResult: Sendable, Codable {
     public var goldRemaining: Int
     public var goldEarned: Int
     public var killed: Int
-    public var routed: Int
-    public var captured: Int
     public var leaked: Int
     public var fatesByTypeID: [UUID: TypeFates]
     public var waveMaxProgress: [Double]
@@ -56,14 +52,7 @@ public struct BatchReport: Sendable {
     }
 
     public var totalKilled: Int { results.reduce(0) { $0 + $1.killed } }
-    public var totalRouted: Int { results.reduce(0) { $0 + $1.routed } }
-    public var totalCaptured: Int { results.reduce(0) { $0 + $1.captured } }
     public var totalLeaked: Int { results.reduce(0) { $0 + $1.leaked } }
-
-    public var routShare: Double {
-        let removed = totalKilled + totalRouted + totalCaptured
-        return removed == 0 ? 0 : Double(totalRouted + totalCaptured) / Double(removed)
-    }
 
     public var meanWaveMaxProgress: [Double] {
         guard let first = results.first else { return [] }

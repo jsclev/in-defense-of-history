@@ -271,6 +271,9 @@ public class LevelGeoJSONDAO {
         return positions
     }
 
+    /// Exact authored input for reproducible experiment provenance.
+    public func sourceData(mapImageName: String) throws -> Data { try data(mapImageName: mapImageName) }
+
     private func data(mapImageName: String) throws -> Data {
         if let directory {
             return try Data(contentsOf: directory.appendingPathComponent(mapImageName).appendingPathExtension("geojson"))

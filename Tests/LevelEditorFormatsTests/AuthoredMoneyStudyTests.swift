@@ -139,10 +139,22 @@ final class AuthoredMoneyStudyTests: XCTestCase {
         let id = try fixture.db.simulatorRunDao.begin(levelName: "Charleston", focus: "test", totalIterations: 2, outputPath: ":memory:")
         try dao.begin(runID: id, configuration: "{}", contentSHA256: "test", plans: "[]")
         let sample = SimulationResult(outcome: .defeat, seconds: 100, livesRemaining: 0,
-            goldRemaining: 5, goldEarned: 10, killed: 2, routed: 0, captured: 0, leaked: 20,
+            goldRemaining: 5, goldEarned: 10, killed: 2, leaked: 20,
             fatesByTypeID: [:], waveMaxProgress: [], leaksByWave: [])
         let row = MoneyStudyResultRow(money: 100, placementPlan: 0, upgradePolicy: 0, results: [sample, sample])
         try dao.insert([row], runID: id, completed: 2, rate: 10)
+        var statement: OpaquePointer?
+        XCTAssertEqual(sqlite3_prepare_v2(fixture.connection,
+            "SELECT seed_results_json FROM money_study_result", -1, &statement, nil), SQLITE_OK)
+        defer { sqlite3_finalize(statement) }
+        XCTAssertEqual(sqlite3_step(statement), SQLITE_ROW)
+        let json = String(cString: try XCTUnwrap(sqlite3_column_text(statement, 0)))
+        let samples = try XCTUnwrap(JSONSerialization.jsonObject(with: Data(json.utf8)) as? [[String: Any]])
+        XCTAssertEqual(samples.count, 2)
+        for sample in samples {
+            XCTAssertEqual(Set(sample.keys), Set(["seedIndex", "outcome", "seconds", "lives", "gold", "killed", "leaked"]))
+        }
+        XCTAssertEqual(sqlite3_step(statement), SQLITE_DONE)
         XCTAssertEqual(try fixture.db.simulatorRunDao.get(id: id)?.completedIterations, 2)
         XCTAssertEqual(try dao.summary(runID: id).first?["runs"] as? Int, 2)
         XCTAssertThrowsError(try dao.insert([row], runID: id, completed: 4, rate: 10))

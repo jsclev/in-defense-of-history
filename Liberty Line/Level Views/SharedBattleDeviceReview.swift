@@ -32,6 +32,18 @@ struct SharedBattleDeviceReview: View {
             guard let id = try store.db.levelInfoDao.getIdBy(levelName: "Charleston") else {
                 throw DbError.Db(message: "Missing Charleston for shared battle verification")
             }
+            // Exercise AI through the same live SQLite-backed settings as the
+            // pause screen, before both adapters load their battle snapshots.
+            let originalControls = store.settings.heroControls
+            defer {
+                for control in originalControls {
+                    do { try store.settings.setHeroAIEnabled(control.aiEnabled, heroID: control.id) }
+                    catch { fatalError("Unable to restore review hero controls: \(error)") }
+                }
+            }
+            for id in try store.db.heroDao.getSelectedHeroIds() {
+                try store.settings.setHeroAIEnabled(true, heroID: id)
+            }
             let content = try BattleContent(db: store.db, levelID: id)
             let player = LevelRunner(db: store.db, virtualCanvas: store.virtualCanvas,
                 runtimeCanvas: canvas, hudLayoutConfig: store.hudLayoutConfig, levelInfoID: id,
@@ -65,6 +77,8 @@ struct SharedBattleDeviceReview: View {
                     && player.killedCount == headless.engine.killedCount
                     && player.goldEarned == headless.engine.goldEarned, "Attacks or rewards diverged")
             }
+            let starts = Dictionary(uniqueKeysWithValues: player.heroPosts.map { ($0.hero.id, $0.unit.position) })
+            var movedHeroes = Set<UUID>()
             for block in 0..<225 {
                 if block % 2 == 0 {
                     for _ in 0..<4 {
@@ -74,7 +88,11 @@ struct SharedBattleDeviceReview: View {
                 } else { player.advance(ticks: 4, interpolation: 0.75) }
                 for _ in 0..<4 { headless.step() }
                 try requireParity()
+                for post in player.heroPosts where starts[post.hero.id] != post.unit.position {
+                    movedHeroes.insert(post.hero.id)
+                }
             }
+            try require(movedHeroes == Set(starts.keys), "An enabled hero never moved under AI control")
             let before = player.timer.tick
             player.start()
             try await Task.sleep(for: .seconds(2))
@@ -83,6 +101,17 @@ struct SharedBattleDeviceReview: View {
             while headless.engine.timer.tick < player.timer.tick { headless.step() }
             try requireParity()
             let pausedTick = player.timer.tick
+            if let hero = player.heroPosts.first {
+                try store.settings.setHeroAIEnabled(false, heroID: hero.hero.id)
+                try require(headless.perform(.setHeroAI(id: hero.hero.id, enabled: false)) == .ok,
+                            "Headless AI disable failed")
+                try require(player.heroAIEnabled[hero.hero.id] == false, "Live settings did not disable hero AI")
+                try requireParity()
+                try store.settings.setHeroAIEnabled(true, heroID: hero.hero.id)
+                try require(headless.perform(.setHeroAI(id: hero.hero.id, enabled: true)) == .ok,
+                            "Headless AI enable failed")
+                try require(player.heroAIEnabled[hero.hero.id] == true, "Live settings did not enable hero AI")
+            }
             try await Task.sleep(for: .milliseconds(250))
             try require(player.timer.tick == pausedTick, "Paused display clock advanced")
             player.resume(); player.speedUp(); player.start()
@@ -93,6 +122,8 @@ struct SharedBattleDeviceReview: View {
             try requireParity()
             report = ["passed": true, "matchedTicks": player.timer.tick, "startingMoney": content.level.startingMoney,
                 "difficulty": content.difficulty.name, "heroes": true,
+                "heroAI": true, "liveHeroAISettingsWhilePaused": true,
+                "heroesMovedUnderAI": player.heroPosts.filter { movedHeroes.contains($0.hero.id) }.map { $0.hero.shortName },
                 "selectedCampaignUpgrades": content.playerUpgrades.loadout.selected.map(\.rawValue).sorted(),
                 "matchedDamageMovementMoraleMoneyLivesRewards": true,
                 "nativeDisplayClockAdvanced": player.timer.tick > before,

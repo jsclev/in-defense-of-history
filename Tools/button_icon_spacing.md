@@ -1,5 +1,27 @@
 # Speed and pause icon sizing
 
+## Current implementation — September 20, 2026
+
+Pause and speed padding is authored in the square transparent canvases of
+`pause_icon_glyph` and `speed_up_icon_glyph`. `PaintedMasterControlButton`
+renders these canvases at the full button size. Do not apply an additional
+glyph fraction or trim their transparent margins during export. The frame,
+layout and touch geometry are independent of the icon's visible bounds.
+
+All three density exports (128/256/384 pixels) come from one source per icon
+in the asset workspace's `HUD/MasterControls/2026-09-20-padding` directory.
+The opaque pause pair occupies about 57% of the canvas height, and the speed
+pair about 52% of its width. These optical fits increase clearance from the
+current painted rim compared with the former 64% runtime glyph box.
+The pause-menu heading also consumes the padded asset, using a 44-point
+canvas to retain an approximately 25-point visible symbol.
+
+The reusable `button-icon-padding` skill in `~/.codex/skills` records the
+method and references the earlier work below. The historical ratios are
+design references, not active Swift sizing constants.
+
+## Earlier research
+
 Decision, September 8, 2026: fit each speed/pause glyph proportionally inside a
 square **60% of its decorative frame's side**. Center that square in the frame.
 This leaves **20% of the frame side between each edge of the icon box and the

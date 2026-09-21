@@ -38,7 +38,11 @@ enum BattleTestFixture {
             arsenal: DesignArsenal(towers: definitions, combatRules: source.arsenal.combatRules),
             enemies: enemies, unlocks: source.unlocks, reinforcementConfig: source.reinforcementConfig,
             chosenHeroes: source.chosenHeroes, deployments: [], heroCombat: source.heroCombat,
-            movementArea: source.movementArea, callButtons: source.callButtons, exits: source.exits,
+            heroAI: source.heroAI, heroControls: source.heroControls,
+            // Synthetic paths do not retain Charleston's route IDs. Give the
+            // fixture explicit level-wide controls at its authored positions.
+            movementArea: source.movementArea,
+            callButtons: source.callButtons.map { CallWaveButtonPosition(position: $0.position) }, exits: source.exits,
             difficulty: Difficulty(id: source.difficulty.id, level: source.difficulty.level, name: source.difficulty.name,
                 detail: source.difficulty.detail, enemyHPMultiplier: 1),
             playerUpgrades: PlayerMetaUpgradeState(catalog: source.playerUpgrades.loadout.catalog,

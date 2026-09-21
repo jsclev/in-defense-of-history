@@ -20,7 +20,7 @@ public final class PlayerMetaUpgradeDAO: BaseDAO {
 
     public func setSelectedUpgrades(_ selected: Set<MetaUpgrade>) throws {
         try change { current in
-            (try PlayerMetaUpgradeState(catalog: current.loadout.catalog, selected: selected, bestStarsByLevel: current.bestStarsByLevel), ())
+            (try current.selecting(selected), ())
         }
     }
 

@@ -53,7 +53,8 @@ let package = Package(
                     "LevelEditor/PlatformSupport.swift",
                     "LevelEditor/SwiftExport.swift"
                 ]),
-        .testTarget(name: "LevelEditorFormatsTests", dependencies: ["LevelEditorFormats"],
+        .target(name: "CooldownPresentation", path: "Liberty Line/Level Views/HUD/Cooldown"),
+        .testTarget(name: "LevelEditorFormatsTests", dependencies: ["LevelEditorFormats", "CooldownPresentation"],
                     path: "Tests/LevelEditorFormatsTests")
     ],
     swiftLanguageModes: [.v5]

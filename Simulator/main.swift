@@ -4,11 +4,11 @@ struct Options {
     var baseSeed: UInt64 = 1776
     var showRuns = false
     var runStatusID: UUID?
-    var reportDir = ("~/projects/td/in-defense-of-history-data/SimulatorRuns" as NSString).expandingTildeInPath
+    var reportDir = FileManager.default.temporaryDirectory.appendingPathComponent("liberty-line-simulation-\(UUID().uuidString)").path
     var benchSims = 64
     var help = false
     var moneyStudy: String?
-    var moneyRange = (minimum: 100, maximum: 800, step: 5)
+    var moneyRange = (minimum: 590, maximum: 770, step: 5)
     var placementPlans = 100
     var upgradePolicies = 10
     var moneySeeds = 20
@@ -16,17 +16,36 @@ struct Options {
     var workers = 1
     var calibrateMoney = false
     var replayMoneyPlan: (placement: Int, policy: Int, money: Int)?
+    var geneticStudy: String?
+    var genetic = GeneticStudyOptions()
+    var geneticReplay: String?
 }
 
 func printUsage() {
     print("""
     revsim \(BuildVersion.version) — shared game engine
 
+    --genetic-study <name> Evolve towers, reinforcements and early wave calls; no heroes.
+    --starting-money <n>   Genetic experiment budget (default 660).
+    --bounty-fraction <n>  Genetic experiment fraction of authored kill bounty, 0–1 (default 1).
+    --fixed-meta          Keep the exact database-selected upgrades; requires its exact star group.
+    --no-early-wave-calls  Control experiment: exclude early calls from candidate generation/mutation.
+    --seed-strategy <path> Seed the GA with explicit strategy JSON (repeatable).
+    --star-range <min:max:step> Exact stars spent; default 0 through database-earned stars, step 1.
+    --population <n>       Population per star-spend group (default 64).
+    --generations <n>      Maximum generations including the initial one (default 300).
+    --training-seeds <n>   Complete games per candidate (default 3).
+    --validation-seeds <n> Unseen seeds per frozen finalist (default 64).
+    --finalists <n>        Finalists per star-spend group (default 8).
+    --max-evaluations <n>  Total engine-game ceiling including validation (default 50000).
+    --genetic-hours <n>    Wall-time budget; reserves 15% for validation (default 8).
+    --genetic-replay <path> Verify a saved best-strategy.json against the same content/engine.
+
     --money-study <name>   Run the authored level using the iPhone battle rules.
                           Current database difficulty, campaign upgrades, tower
                           prices, abilities, waves and map remain pinned.
-                          Heroes are excluded for the requested tower-only study.
-    --money-range <min:max:step>  Starting money only (default 100:800:5).
+                          Reinforcements are used; heroes are excluded.
+    --money-range <min:max:step>  Starting money only (default 590:770:5).
     --placement-plans <n>  Number of sampled placement plans (default 100).
     --upgrade-policies <n>  Ten upgrade schedules (currently exactly 10).
     --money-seeds <n>      Seeds per plan and budget (default 20).
@@ -50,6 +69,40 @@ func parseOptions() throws -> Options? {
     var args = ArraySlice(CommandLine.arguments.dropFirst())
     while let arg = args.popFirst() {
         switch arg {
+        case "--genetic-study":
+            guard let value = args.popFirst() else { return nil }
+            opts.geneticStudy = value
+        case "--genetic-replay":
+            guard let value = args.popFirst() else { return nil }
+            opts.geneticReplay = value
+        case "--bounty-fraction":
+            guard let value = args.popFirst(), let fraction = Double(value), fraction.isFinite, (0...1).contains(fraction) else { return nil }
+            opts.genetic.bountyFraction = fraction
+        case "--fixed-meta": opts.genetic.fixedMeta = true
+        case "--no-early-wave-calls": opts.genetic.earlyWaveCalls = false
+        case "--seed-strategy":
+            guard let path = args.popFirst() else { return nil }
+            opts.genetic.seedStrategies.append(try JSONDecoder().decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: path))))
+        case "--star-range":
+            guard let value = args.popFirst() else { return nil }
+            let fields = value.split(separator: ":", omittingEmptySubsequences: false)
+            guard fields.count == 3, let minimum = Int(fields[0]), let maximum = Int(fields[1]),
+                  let step = Int(fields[2]), minimum >= 0, maximum >= minimum, step > 0 else { return nil }
+            opts.genetic.starMinimum = minimum; opts.genetic.starMaximum = maximum; opts.genetic.starStep = step
+        case "--starting-money", "--population", "--generations", "--training-seeds", "--validation-seeds", "--finalists", "--max-evaluations":
+            guard let value = args.popFirst(), let number = Int(value), number > 0 else { return nil }
+            switch arg {
+            case "--starting-money": opts.genetic.money = number
+            case "--population": opts.genetic.population = number
+            case "--generations": opts.genetic.generations = number
+            case "--training-seeds": opts.genetic.trainingSeeds = number
+            case "--validation-seeds": opts.genetic.validationSeeds = number
+            case "--finalists": opts.genetic.finalists = number
+            default: opts.genetic.maxEvaluations = number
+            }
+        case "--genetic-hours":
+            guard let value = args.popFirst(), let number = Double(value), number.isFinite, number > 0 else { return nil }
+            opts.genetic.hours = number
         case "--money-study":
             guard let v = args.popFirst() else { return nil }
             opts.moneyStudy = v
@@ -119,9 +172,26 @@ if opts.help {
     exit(0)
 }
 
-if opts.moneyStudy == nil && !opts.showRuns && opts.runStatusID == nil {
-    FileHandle.standardError.write(Data("Specify --money-study, --runs or --run-status. Only the shared battle engine is available.\n".utf8))
+if opts.moneyStudy == nil && opts.geneticStudy == nil && !opts.showRuns && opts.runStatusID == nil {
+    FileHandle.standardError.write(Data("Specify --genetic-study, --money-study, --runs or --run-status. Only the shared battle engine is available.\n".utf8))
     exit(2)
+}
+
+if let name = opts.geneticStudy {
+    do {
+        guard opts.moneyStudy == nil else { throw DbError.Db(message: "Select one experiment mode") }
+        var configuration = opts.genetic
+        configuration.seed = opts.baseSeed; configuration.maxGameSeconds = opts.maxGameSeconds
+        try MainActor.assumeIsolated {
+            let study = GeneticStudy(db: store.db)
+            if let replay = opts.geneticReplay { try study.replay(levelName: name, document: replay, directory: opts.reportDir) }
+            else { try study.run(levelName: name, options: configuration, directory: opts.reportDir) }
+        }
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("genetic-study error: \(error)\n".utf8))
+        exit(1)
+    }
 }
 
 if let name = opts.moneyStudy {

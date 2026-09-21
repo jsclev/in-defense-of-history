@@ -104,6 +104,7 @@ sqlite3 -bail "$database" < DML/Heroes/13_Salem_Poor.sql
 sqlite3 -bail "$database" < DML/Heroes/14_John_Glover.sql
 sqlite3 -bail "$database" < DML/Heroes/15_Horatio_Gates.sql
 sqlite3 -bail "$database" < DML/hero_combat.sql
+sqlite3 -bail "$database" < DML/hero_ai.sql
 sqlite3 -bail "$database" < DML/level_heroes.sql
 sqlite3 -bail "$database" < DML/selected_heroes.sql
 sqlite3 -bail "$database" < DML/unlocked_heroes.sql

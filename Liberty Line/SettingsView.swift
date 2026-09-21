@@ -42,6 +42,8 @@ struct SettingsView: View {
                            detail: "Feel feedback when an enemy escapes and you lose a life.",
                            isOn: setting(\.enemyEscapeHapticsEnabled))
 
+                    heroControls
+
                     options
                 }
                 .frame(width: runtimeCanvas.safeInsetsRect.width - 56 * metrics.scale,
@@ -82,6 +84,24 @@ struct SettingsView: View {
             do { try settings.set(keyPath, to: value) }
             catch { settingsError = error.localizedDescription }
         })
+    }
+
+    private var heroControls: some View {
+        VStack(alignment: .leading, spacing: 12 * metrics.scale) {
+            Text("Hero AI").font(.custom("Baskerville-Bold", size: 26 * metrics.scale))
+                .foregroundStyle(.white)
+            ForEach(settings.heroControls.filter(\.unlocked)) { hero in
+                Toggle(hero.name, isOn: Binding(get: { hero.aiEnabled }, set: { enabled in
+                    do { try settings.setHeroAIEnabled(enabled, heroID: hero.id) }
+                    catch { settingsError = error.localizedDescription }
+                }))
+                .font(.custom("Baskerville-SemiBold", size: 22 * metrics.scale))
+                .foregroundStyle(.white)
+                .tint(Color(red: 0.87, green: 0.72, blue: 0.35))
+                .accessibilityLabel("AI control for \(hero.name)")
+                .accessibilityIdentifier("hero-ai-\(hero.id.uuidString.lowercased())")
+            }
+        }
     }
 
     @ViewBuilder

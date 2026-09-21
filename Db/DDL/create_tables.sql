@@ -299,6 +299,19 @@ CREATE TABLE hero_combat (
     move_speed REAL NOT NULL CHECK (move_speed > 0)
 );
 
+CREATE TABLE hero_ai (
+    hero_id TEXT PRIMARY KEY NOT NULL REFERENCES hero (id),
+    controller TEXT NOT NULL UNIQUE CHECK (LENGTH(TRIM(controller)) > 0),
+    decision_interval REAL NOT NULL CHECK (decision_interval > 0 AND decision_interval <= 60),
+    retreat_health_fraction REAL NOT NULL CHECK (retreat_health_fraction > 0 AND retreat_health_fraction < 1),
+    resume_health_fraction REAL NOT NULL CHECK (resume_health_fraction > retreat_health_fraction AND resume_health_fraction <= 1)
+);
+
+CREATE TABLE player_hero_control (
+    hero_id TEXT PRIMARY KEY NOT NULL REFERENCES hero (id),
+    ai_enabled INTEGER NOT NULL CHECK (typeof(ai_enabled) = 'integer' AND ai_enabled IN (0, 1))
+);
+
 CREATE TABLE level_hero (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     level_info_id TEXT NOT NULL REFERENCES level_info (id),
