@@ -81,6 +81,20 @@ CREATE TABLE tower (
 -- attack_rating is the soldier's average swing damage; the engine rolls a
 -- fixed band around it. defense_rating is the fraction of incoming damage
 -- the soldier turns away.
+CREATE TABLE tower_history (
+    tower_id TEXT PRIMARY KEY NOT NULL REFERENCES tower(id),
+    historical_description TEXT NOT NULL CHECK (LENGTH(TRIM(historical_description)) > 0),
+    source_title TEXT NOT NULL CHECK (LENGTH(TRIM(source_title)) > 0),
+    source_url TEXT NOT NULL CHECK (LENGTH(TRIM(source_url)) > 0),
+    presentation_kind TEXT NOT NULL CHECK (presentation_kind IN ('standard', 'mortarStudy', 'siegeStudy')),
+    strategy_text TEXT,
+    inclusion_reason TEXT,
+    CHECK ((presentation_kind = 'standard' AND strategy_text IS NULL AND inclusion_reason IS NULL)
+        OR (presentation_kind IN ('mortarStudy', 'siegeStudy') AND strategy_text IS NOT NULL
+            AND LENGTH(TRIM(strategy_text)) > 0 AND inclusion_reason IS NOT NULL
+            AND LENGTH(TRIM(inclusion_reason)) > 0))
+);
+
 CREATE TABLE tower_upgrade_path (
     id TEXT PRIMARY KEY NOT NULL,
     tower_id TEXT NOT NULL REFERENCES tower(id),
@@ -449,4 +463,21 @@ CREATE TABLE money_study_result (
     seed_results_json TEXT NOT NULL CHECK (json_valid(seed_results_json)),
     CHECK (victories + defeats + timeouts = seeds),
     PRIMARY KEY(run_id, money, placement_plan, upgrade_policy)
+);
+-- Read-only encyclopedia encounters have their own authored purchase budget.
+-- This row never changes campaign level_info or the player's balance.
+CREATE TABLE encyclopedia_demo (
+    id INTEGER PRIMARY KEY CHECK (id = 1),
+    context_level_id TEXT NOT NULL REFERENCES level_info(id),
+    starting_money INTEGER NOT NULL CHECK (starting_money > 0)
+);
+
+CREATE TABLE enemy_encyclopedia (
+    enemy_type_id TEXT PRIMARY KEY NOT NULL REFERENCES enemy_type(id),
+    strategy_text TEXT NOT NULL CHECK (length(trim(strategy_text)) > 0),
+    historical_description TEXT NOT NULL CHECK (length(trim(historical_description)) > 0),
+    inclusion_reason TEXT NOT NULL CHECK (length(trim(inclusion_reason)) > 0),
+    adaptation_text TEXT NOT NULL CHECK (length(trim(adaptation_text)) > 0),
+    source_title TEXT NOT NULL CHECK (length(trim(source_title)) > 0),
+    source_url TEXT NOT NULL CHECK (length(trim(source_url)) > 0)
 );

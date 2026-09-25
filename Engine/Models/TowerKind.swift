@@ -1,6 +1,6 @@
 import Foundation
 
-public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
+public enum TowerKind: String, Codable, CaseIterable, Identifiable, Sendable {
     case ranged
     case melee
     case areaOfEffect
@@ -52,7 +52,12 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
             }
         }
         if self == .special {
-            return branch == 3 ? "tower_menu_engineer_sapper" : menuIconName
+            switch branch {
+            case 1: return "grenadier_grenade"
+            case 2: return menuIconName
+            case 3: return "tower_menu_engineer_sapper"
+            default: return nil
+            }
         }
         guard self == .areaOfEffect else { return nil }
         switch branch {
@@ -87,11 +92,12 @@ public enum TowerKind: String, CaseIterable, Identifiable, Sendable {
         switch self {
         case .areaOfEffect: return "cannonball_projectile"
         case .ranged: return "musket_ball_projectile"
-        case .melee, .special, .supply: return nil
+        case .special: return "grenadier_grenade"
+        case .melee, .supply: return nil
         }
     }
 
     public var projectileHeight: SpriteHeight {
-        self == .areaOfEffect ? MapSpriteSizing.cannonball : MapSpriteSizing.musketBall
+        self == .areaOfEffect || self == .special ? MapSpriteSizing.cannonball : MapSpriteSizing.musketBall
     }
 }

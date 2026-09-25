@@ -49,6 +49,7 @@ extension BattleEngine {
             blockedWalkerIDs.remove(previousTarget)
         }
         heroPosts[index] = post
+        recordCombat("heroDestination", ["heroID": post.hero.id.uuidString, "x": String(destination.x), "y": String(destination.y), "aiEnabled": String(heroAIEnabled[post.hero.id] == true)])
         return true
     }
 }

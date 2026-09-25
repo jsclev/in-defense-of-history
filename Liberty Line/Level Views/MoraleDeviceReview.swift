@@ -10,7 +10,6 @@ struct MoraleDeviceReview: View {
     @State private var crowdTravel: CGFloat = 0
     @State private var impactRadius: CGFloat = 0
     @State private var impactAge = Double.infinity
-    private let hpFractions = [1.0, 0.85, 0.70, 0.55, 0.40, 0.25, 0.10]
     private let paths: [(String, Color)] = [
         ("Tan dirt", Color(red: 201/255.0, green: 176/255.0, blue: 128/255.0)),
         ("Dark mud", Color(red: 72/255.0, green: 61/255.0, blue: 52/255.0)),
@@ -54,18 +53,17 @@ struct MoraleDeviceReview: View {
     }
 
     private func reviewUnit(_ index: Int) -> some View {
-        let walker = walkers[index]
-        let hp = hpFractions[index]
         let height = MapSpriteSizing.walker.minimum
-        return ZStack {
-            EnemyMoraleSprite(assetName: walker.assetName, morale: walker.morale, height: height)
-            if hp < 1 {
-                UnitHealthBar(fraction: hp, width: MapSpriteSizing.healthBarWidth.minimum,
-                               height: MapSpriteSizing.healthBarHeight.minimum)
-                    .offset(y: -height / 2 - MapSpriteSizing.walkerLabelLift.minimum)
-            }
-        }
-        .frame(height: height)
+        let size = CGSize(width: 40, height: 44)
+        var walker = walkers[index]
+        // Static staging only: use the production troop layer and projection.
+        walker.position = CGPoint(x: size.width / 2, y: (size.height - height) / 2)
+        let bounds = CGRect(origin: .zero, size: size)
+        return GroundTroopLayer(presentation: BattlePresentation(walkers: [walker], projectiles: [],
+            paths: [], previousWalkerDistances: [:], previousProjectilePositions: [:]), interpolation: 1,
+            militia: [], sprites: MapSpriteScale(playArea: bounds, viewSize: size),
+            projection: LevelMapProjection(playArea: bounds, fitRect: bounds, virtualCanvas: store.virtualCanvas))
+            .frame(width: size.width, height: size.height)
     }
 
     @MainActor private func runReview() async {
@@ -89,7 +87,7 @@ struct MoraleDeviceReview: View {
             message = "All six artillery tiers passed · firing boundary · separate blast radius · morale"
             record = ["passed": true, "checks": result.checks, "rangeChecks": rangeChecks,
                       "displayMorale": result.walkers.map { $0.morale.value },
-                      "displayHPFractions": hpFractions,
+                      "displayHPFractions": result.walkers.map { $0.health.fraction },
                       "displayMoraleFractions": result.walkers.map { $0.morale.displayedFraction },
                       "healthBarWidthPoints": MapSpriteSizing.healthBarWidth.minimum,
                       "healthBarHeightPoints": MapSpriteSizing.healthBarHeight.minimum,

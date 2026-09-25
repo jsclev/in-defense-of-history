@@ -103,6 +103,7 @@ public enum MapSpriteSizing {
     public static let healthBarWidth = SpriteHeight(mapPixels: 44)
     public static let healthBarHeight = SpriteHeight(mapPixels: 8)
 
+    public static let towerArtworkLift: CGFloat = 12
     public static let towerBaseLift = SpriteHeight(mapPixels: 14)
     public static let walkerLabelLift = SpriteHeight(mapPixels: 7)
 }

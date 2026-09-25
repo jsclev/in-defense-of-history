@@ -53,9 +53,9 @@ final class TowerUpgradeTests: XCTestCase {
                 XCTAssertEqual(base.upgraded(with: TowerUpgradeProgress()), base, "A new tower inherited upgrades")
             }
         }
-        XCTAssertEqual(specialtyCount, 14)
-        XCTAssertEqual(pathCount, 28)
-        XCTAssertEqual(rankCount, 56)
+        XCTAssertEqual(specialtyCount, 15)
+        XCTAssertEqual(pathCount, 30)
+        XCTAssertEqual(rankCount, 60)
     }
 
     func testUnaffordableUnknownAndPreSpecializationPurchasesAreAtomic() throws {
@@ -255,7 +255,7 @@ final class TowerUpgradeTests: XCTestCase {
         var enemy = try XCTUnwrap(content.enemies.first { $0.key == "loyalist_militia" })
         enemy.stats.maxHP = 100_000; enemy.stats.speed = 0; enemy.stats.cover = 0
         let level = BattleTestFixture.level(enemy: enemy, slots: [Point(200, 0), Point(220, 0)], waveTimes: waveTimes)
-        let sim = try GameSimulation(content: BattleTestFixture.content(level: level, enemies: [enemy], base: content),
+        let sim = try GameSimulation(recording: .preview, content: BattleTestFixture.content(level: level, enemies: [enemy], base: content),
                                      startingMoney: nil, heroesEnabled: false, seed: 42)
         try BattleTestFixture.build(kind, level: 4, branch: branch, in: sim)
         sim.startNextWave()

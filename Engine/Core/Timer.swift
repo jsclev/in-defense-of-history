@@ -13,15 +13,17 @@ public final class Timer {
     public var spinWindow: Duration = .microseconds(500)
 
     private let clock: ContinuousClock
+    private let now: () -> ContinuousClock.Instant
     private var origin: ContinuousClock.Instant
     private var anchorTick: Int64 = 0
 
-    public init(tickDuration: Duration) {
+    public init(tickDuration: Duration, now: @escaping () -> ContinuousClock.Instant = { ContinuousClock().now }) {
         precondition(tickDuration >= .zero, "tickDuration must be non-negative")
         self.tickDuration = tickDuration
         let clock = ContinuousClock()
         self.clock = clock
-        self.origin = clock.now
+        self.now = now
+        self.origin = now()
     }
 
     public var isUnbounded: Bool { tickDuration == .zero }
@@ -33,7 +35,7 @@ public final class Timer {
     public var currentLag: Duration {
         guard !isUnbounded else { return .zero }
         let due = deadline(forTick: tick)
-        let now = clock.now
+        let now = now()
         return now > due ? due.duration(to: now) : .zero
     }
 
@@ -46,12 +48,19 @@ public final class Timer {
         return tick
     }
 
+    /// Wait without advancing battle state; only the shared engine owns ticks.
+    public func waitUntilNextTick() {
+        if !isUnbounded { waitPrecisely(until: deadline(forTick: tick + 1)) }
+    }
+
     public func dueTicks(maxCatchUp: Int = 8) -> Int {
         guard !isUnbounded else { return 1 }
-        let elapsed = origin.duration(to: clock.now) / tickDuration
-        let target = anchorTick &+ Int64(elapsed.rounded(.down))
-        let due = max(Int64(0), target - tick)
-        return Int(min(due, Int64(maxCatchUp)))
+        precondition(maxCatchUp > 0)
+        let elapsed = origin.duration(to: now()) / tickDuration
+        // Clamp before converting to an integer: very high speed settings can
+        // accumulate a large backlog, but must never overflow or skip ticks.
+        let due = max(0, elapsed.rounded(.down) - Double(tick - anchorTick))
+        return Int(min(due, Double(maxCatchUp)))
     }
 
     @discardableResult
@@ -62,19 +71,27 @@ public final class Timer {
 
     public var interpolationAlpha: Double {
         guard !isUnbounded else { return 1 }
-        let f = origin.duration(to: clock.now) / tickDuration
+        let f = origin.duration(to: now()) / tickDuration
         let frac = f - f.rounded(.down)
         return min(max(frac, 0), 1)
     }
 
     public func resync() {
-        origin = clock.now
+        origin = now()
         anchorTick = tick
     }
 
     public func setTickDuration(_ newValue: Duration) {
         precondition(newValue >= .zero, "tickDuration must be non-negative")
-        resync()
+        let instant = now()
+        let progress = isUnbounded ? 0 : origin.duration(to: instant) / tickDuration
+        let fraction = max(0, min(1, progress - progress.rounded(.down)))
+        // Preserve the partial tick, but start the new rate at the current
+        // completed tick. A CPU-bound billion-times-speed run must not carry
+        // years of overdue wall-clock deadlines into a new real-time rate.
+        // No battle ticks are advanced or skipped by this re-anchoring.
+        origin = instant.advanced(by: newValue * -fraction)
+        anchorTick = tick
         tickDuration = newValue
     }
 

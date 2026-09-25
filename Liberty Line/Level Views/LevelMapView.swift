@@ -95,7 +95,7 @@ private struct LevelAttemptView: View {
 
     private static let rallyButtonScale: CGFloat = 0.9702
 
-    private static let towerArtworkLift: CGFloat = 12
+    private static let towerArtworkLift = MapSpriteSizing.towerArtworkLift
 
     private var db: Db
     private var virtualCanvas: VirtualCanvas
@@ -206,10 +206,12 @@ private struct LevelAttemptView: View {
                         if scenePhase == .active && runsAutomatically { runner.start() }
                     },
                     onRestart: {
+                        runner.finishRecording(status: .abandoned)
                         runner.stop()
                         onRestart()
                     },
                     onCampaign: {
+                        runner.finishRecording(status: .abandoned)
                         runner.stop()
                         onExit()
                     })
@@ -241,6 +243,7 @@ private struct LevelAttemptView: View {
             runner.updateRuntimeCanvas(runtimeCanvas)
         }
         .onDisappear {
+            runner.finishRecording(status: .abandoned)
             runner.stop()
             presentationStack.removeAll()
         }
@@ -351,24 +354,14 @@ private struct LevelAttemptView: View {
                 }.position(projection.viewPoint(impact.position))
             }
 
-            GroundTroopLayer(walkers: runner.displayedWalkers, militia: runner.militia,
+            GroundTroopLayer(presentation: runner.presentation, interpolation: runner.presentationAlpha,
+                             militia: runner.militia,
                              sprites: sprites, projection: projection)
 
             art.forestOcclusion(in: projection)
 
-            Group {
-                ForEach(runner.projectiles) { projectile in
-                    if let assetName = projectile.kind.projectileAssetName {
-                        Image(assetName)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: sprites.points(projectile.kind.projectileHeight)
-                                   * (projectile.grapeshot == nil ? 1 : 0.45))
-                            .rotationEffect(.radians(projectile.heading))
-                            .position(projection.viewPoint(runner.displayedPosition(of: projectile)))
-                    }
-                }
-            }
+            ProjectileLayer(presentation: runner.presentation, interpolation: runner.presentationAlpha,
+                            sprites: sprites, projection: projection)
             .opacity(runner.isDefeated ? 0 : 1)
             .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
 
@@ -760,8 +753,8 @@ private struct LevelAttemptView: View {
         let upgradeCount = hasCharge ? offers.count : max(offers.count, 1)
         let count = upgradeCount + (hasRally || hasCharge || hasObstacles ? 1 : 0)
         func place(_ index: Int) -> CGPoint {
-            if hasObstacles && offers.count == 2 {
-                return towerMenuLayout.getButtonCenterPoint(index: index == 0 ? 3 : 1, count: 4,
+            if hasObstacles && !offers.isEmpty {
+                return towerMenuLayout.getEngineerUpgradeButtonCenterPoint(index: index, offerCount: offers.count,
                     menuCenterPoint: center, playAreaScalingFactor: playAreaScalingFactor,
                     towerButtonSize: buttonSize.width)
             }
@@ -870,7 +863,8 @@ struct TowerMenuIcon: View {
     }
 }
 
-@MainActor private enum TowerMenuIconArtwork {
+/// Shared alpha-bounds crop of the canonical artwork, independent of each screen's frame.
+@MainActor enum TowerMenuIconArtwork {
     private static var images: [String: UIImage] = [:]
 
     static func image(named name: String) -> UIImage? {

@@ -94,7 +94,7 @@ final class TowerSupportTests: XCTestCase {
         enemy.stats.maxHP = 100_000; enemy.stats.speed = 0
         enemy.stats.damageMin = 5; enemy.stats.damageMax = 5
         let level = BattleTestFixture.level(enemy: enemy, slots: slots, waveTimes: waveTimes)
-        return try GameSimulation(content: BattleTestFixture.content(level: level, enemies: [enemy], base: content),
+        return try GameSimulation(recording: .preview, content: BattleTestFixture.content(level: level, enemies: [enemy], base: content),
                                   startingMoney: nil, heroesEnabled: false, seed: 42)
     }
 

@@ -55,7 +55,7 @@ final class LevelStartingMoneyTests: XCTestCase {
             for _ in 0..<2 {
                 let level = try fixture.db.levelLoader.load(id: id)
                 XCTAssertEqual(level.startingMoney, money)
-                XCTAssertEqual(try GameSimulation(content: BattleContent(db: fixture.db, levelID: id),
+                XCTAssertEqual(try GameSimulation(recording: .preview, content: BattleContent(db: fixture.db, levelID: id),
                     startingMoney: nil, heroesEnabled: false, seed: 1776).gold, money)
             }
         }

@@ -23,7 +23,7 @@ final class SharedBattleEngineTests: XCTestCase {
     func testDirectHitsUseGameDamageAndExplosionsUseAuthoredCoverPiercing() async throws {
         let content = try content()
         try await MainActor.run {
-            let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1776)
+            let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1776)
             let game = sim.engine
             let enemy = try walker(game)
             game.walkers = [enemy]
@@ -47,7 +47,7 @@ final class SharedBattleEngineTests: XCTestCase {
     func testZeroMoraleKeepsEnemyMarchingAndHonorsRecoveryDelay() async throws {
         let content = try content()
         try await MainActor.run {
-            let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1776)
+            let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1776)
             let game = sim.engine
             var enemy = try walker(game)
             enemy.morale.apply(loss: game.combatRules.moraleMax, direction: 1)
@@ -69,8 +69,8 @@ final class SharedBattleEngineTests: XCTestCase {
         try await MainActor.run {
             for definition in content.arsenal.towers {
                 for final in definition.tiers where final.level == content.unlocks[definition.kind] {
-                    let sim = try GameSimulation(content: content, startingMoney: 100_000, heroesEnabled: false, seed: 1776)
-                    let player = try BattleEngine(content: content, heroesEnabled: false,
+                    let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 100_000, heroesEnabled: false, seed: 1776)
+                    let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
                         startingMoneyOverride: 100_000, seed: 1776, onVictory: { _, _ in 0 })
                     let slot = try XCTUnwrap(content.level.towerSlots.indices.first { index in
                         let p = content.level.towerSlots[index].position
@@ -109,8 +109,8 @@ final class SharedBattleEngineTests: XCTestCase {
     func testPlayerAndHeadlessEntryProduceIdenticalSeededBattlesWithHeroesAndSupply() async throws {
         let content = try content()
         try await MainActor.run {
-            let sim = try GameSimulation(content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776)
-            let player = try BattleEngine(content: content, heroesEnabled: true,
+            let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776)
+            let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: true,
                 startingMoneyOverride: 1000, seed: 1776, onVictory: { _, _ in 0 })
             XCTAssertEqual(sim.engine.metaUpgrades.selected, content.playerUpgrades.loadout.selected)
             XCTAssertFalse(sim.engine.metaUpgrades.selected.isEmpty)
@@ -141,7 +141,7 @@ final class SharedBattleEngineTests: XCTestCase {
     func testUnaffordableUpgradeDoesNotPreventIndependentAffordableDefense() async throws {
         let content = try content()
         try await MainActor.run {
-            let sim = try GameSimulation(content: content, startingMoney: 130, heroesEnabled: false, seed: 1776)
+            let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 130, heroesEnabled: false, seed: 1776)
             let ranged = try XCTUnwrap(content.arsenal.towers.first { $0.kind == .ranged })
             let final = try XCTUnwrap(ranged.tiers.first { $0.level == 4 })
             let first = try XCTUnwrap(ranged.tiers.first { $0.level == 1 })
@@ -168,7 +168,7 @@ final class SharedBattleEngineTests: XCTestCase {
         try await MainActor.run {
             XCTAssertEqual(study.level.startingMoney, 500)
             XCTAssertEqual(study.arsenal.combatRules.killBountyMultiplier, 0.30)
-            let sim = try GameSimulation(content: study.battle, startingMoney: nil, heroesEnabled: false, seed: 1776)
+            let sim = try GameSimulation(recording: .preview, content: study.battle, startingMoney: nil, heroesEnabled: false, seed: 1776)
             XCTAssertTrue(sim.engine.heroPosts.isEmpty)
             let result = try sim.run(steps: plan.steps, maxSeconds: 1500)
             // This recorded plan won under the former 1.0 bounty multiplier.

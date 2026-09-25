@@ -19,12 +19,15 @@ trap 'rm -f "$database" "$database-wal" "$database-shm" "$database-journal"' EXI
 trap 'exit 1' HUP INT TERM
 
 sqlite3 -bail "$database" < DDL/create_tables.sql
+sqlite3 -bail "$database" < DDL/create_level_runs.sql
+sqlite3 -bail "$database" < DDL/create_play_speed.sql
 sqlite3 -bail "$database" < DDL/create_combat_rules.sql
 sqlite3 -bail "$database" < DDL/create_meta_upgrades.sql
 sqlite3 -bail "$database" < DDL/create_player_meta_upgrades.sql
 
 # Add all the data
 sqlite3 -bail "$database" < DML/combat_rules.sql
+sqlite3 -bail "$database" < DML/play_speed.sql
 sqlite3 -bail "$database" < DML/virtual_canvas.sql
 sqlite3 -bail "$database" < DML/campaigns.sql
 sqlite3 -bail "$database" < DML/Levels/level_01_battle_road.sql
@@ -69,6 +72,7 @@ sqlite3 -bail "$database" < DML/Levels/level_39_cowpens.sql
 sqlite3 -bail "$database" < DML/Levels/level_40_guilford_courthouse.sql
 sqlite3 -bail "$database" < DML/Levels/level_41_eutaw_springs.sql
 sqlite3 -bail "$database" < DML/level_tower_unlocks.sql
+sqlite3 -bail "$database" < DML/encyclopedia_demo.sql
 sqlite3 -bail "$database" < DML/enemy_types.sql
 sqlite3 -bail "$database" < DML/difficulties.sql
 sqlite3 -bail "$database" < DML/selected_difficulty.sql
@@ -79,6 +83,7 @@ sqlite3 -bail "$database" < DML/player_meta_upgrades.sql
 sqlite3 -bail "$database" < DML/tower_types.sql
 sqlite3 -bail "$database" < DML/towers.sql
 sqlite3 -bail "$database" < DML/supply_towers.sql
+sqlite3 -bail "$database" < DML/tower_history.sql
 sqlite3 -bail "$database" < DML/melee_units.sql
 sqlite3 -bail "$database" < DML/tower_upgrades.sql
 sqlite3 -bail "$database" < DML/reinforcement_config.sql

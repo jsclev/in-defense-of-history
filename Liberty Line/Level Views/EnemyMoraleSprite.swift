@@ -64,25 +64,6 @@ private struct EnemyMoraleCrescent: View {
 }
 
 /// Shared by gameplay and the native art review so the HP/morale comparison is exact.
-struct UnitHealthBar: View {
-    let fraction: CGFloat
-    let width: CGFloat
-    let height: CGFloat
-    var fill: Color = .green
-
-    var body: some View {
-        ZStack(alignment: .leading) {
-            Capsule().fill(Color.red)
-            Capsule().fill(fill)
-                .frame(width: width * fraction, height: height)
-        }
-        .frame(width: width, height: height)
-        .background {
-            Capsule().stroke(Color(red: 16 / 255.0, green: 36 / 255.0, blue: 56 / 255.0),
-                             lineWidth: height / MapSpriteSizing.healthBarHeight.minimum)
-        }
-    }
-}
 
 struct ArtilleryImpactView: View {
     let age: Double

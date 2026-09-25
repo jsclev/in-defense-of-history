@@ -9,7 +9,7 @@ final class HeroAITests: XCTestCase {
         }
     }
 
-    func testEveryHeroHasADedicatedControllerAndOnlyWashingtonStartsWithAI() throws {
+    func testEveryHeroHasADedicatedControllerAndStartsWithManualControl() throws {
         let fixture = try AuthoredDatabaseFixture()
         let heroes = try fixture.db.heroDao.getAll()
         let configs = try fixture.db.heroDao.getAIConfigurations()
@@ -17,7 +17,8 @@ final class HeroAITests: XCTestCase {
         XCTAssertEqual(Set(configs.keys), Set(heroes.map(\.id)))
         XCTAssertEqual(Set(controls.map(\.id)), Set(heroes.map(\.id)))
         let washington = try XCTUnwrap(configs.first { $0.value.controller == .georgeWashington }?.key)
-        XCTAssertEqual(controls.filter(\.aiEnabled).map(\.id), [washington])
+        XCTAssertEqual(controls.first { $0.id == washington }?.aiEnabled, false)
+        XCTAssertTrue(controls.allSatisfy { !$0.aiEnabled })
         XCTAssertEqual(Set(configs.values.map { String(describing: type(of: $0.controller.makeController())) }).count, heroes.count)
         for config in configs.values {
             XCTAssertFalse(config.controller.makeController() === config.controller.makeController())
@@ -100,7 +101,7 @@ final class HeroAITests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
         let content = try BattleTestFixture.authored(db: fixture.db)
         try await MainActor.run {
-            let battle = try BattleEngine(content: content, heroesEnabled: true, startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 0 })
+            let battle = try BattleEngine(recording: .preview, content: content, heroesEnabled: true, startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 0 })
             let settings = try PlayerSettingsStore(dao: fixture.db.playerSettingsDao)
             let binding = settings.bindHeroControls(to: battle)
             defer { binding.cancel() }
@@ -134,7 +135,7 @@ final class HeroAITests: XCTestCase {
     func testRetreatAtSpawnDisengagesAndAllowsHealingWithoutReengaging() async throws {
         let content = try BattleTestFixture.authored()
         try await MainActor.run {
-            let battle = try BattleEngine(content: content, heroesEnabled: true, startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 0 })
+            let battle = try BattleEngine(recording: .preview, content: content, heroesEnabled: true, startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 0 })
             let post = try XCTUnwrap(battle.heroPosts.first)
             let enemy = try XCTUnwrap(content.enemies.first)
             let stats = enemy.stats
@@ -167,8 +168,8 @@ final class HeroAITests: XCTestCase {
     func testAIUsesSharedTicksAndDoesNotChangePlayerSelectionOrMenus() async throws {
         let content = try BattleTestFixture.authored()
         try await MainActor.run {
-            let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
-            let player = try BattleEngine(content: content, heroesEnabled: true, startingMoneyOverride: nil, seed: 1776, onVictory: { _, _ in 0 })
+            let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
+            let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: true, startingMoneyOverride: nil, seed: 1776, onVictory: { _, _ in 0 })
             for post in player.heroPosts {
                 XCTAssertEqual(sim.perform(.setHeroAI(id: post.hero.id, enabled: true)), .ok)
                 XCTAssertTrue(player.setHeroAIEnabled(true, for: post.hero.id))

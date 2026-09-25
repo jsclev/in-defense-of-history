@@ -12,7 +12,8 @@ public struct PlayerMetaUpgradeState: Equatable, Sendable {
     /// A pre-battle respec uses the same validation as a persisted selection.
     /// The earned ledger and SQL catalog remain unchanged.
     public func selecting(_ upgrades: Set<MetaUpgrade>) throws -> Self {
-        try Self(catalog: loadout.catalog, selected: upgrades, bestStarsByLevel: bestStarsByLevel)
+        if upgrades == loadout.selected { return self }
+        return try Self(catalog: loadout.catalog, selected: upgrades, bestStarsByLevel: bestStarsByLevel)
     }
 
     init(catalog: MetaUpgradeCatalog, selected: Set<MetaUpgrade>, bestStarsByLevel: [UUID: Int], profile: MetaUpgradeProfile = .active) throws {

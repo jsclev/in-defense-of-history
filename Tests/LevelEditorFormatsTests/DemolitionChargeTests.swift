@@ -144,7 +144,7 @@ final class DemolitionChargeTests: XCTestCase {
         XCTAssertEqual(siege.aoeRadius, 0)
         XCTAssertTrue(branches.values.allSatisfy { $0.demolitionPreparationSeconds == nil })
         let engineers = try XCTUnwrap(all[.special]?[4])
-        XCTAssertEqual(engineers.keys.sorted(), [2, 3])
+        XCTAssertEqual(engineers.keys.sorted(), [1, 2, 3])
         let tuning = try XCTUnwrap(engineers[3])
         XCTAssertEqual(tuning.demolitionPreparationSeconds, 8)
         XCTAssertEqual(tuning.fireInterval, 0)
@@ -153,7 +153,7 @@ final class DemolitionChargeTests: XCTestCase {
         XCTAssertTrue(branches.filter { $0.key != 4 }.allSatisfy { $0.value.demolitionPreparationSeconds == nil })
         let names = try db.towerTypeDao.getNamesByLevel()
         XCTAssertEqual(try XCTUnwrap(names[.areaOfEffect]?[4]).keys.sorted(), [1, 2, 4])
-        XCTAssertEqual(try XCTUnwrap(names[.special]?[4]).keys.sorted(), [2, 3])
+        XCTAssertEqual(try XCTUnwrap(names[.special]?[4]).keys.sorted(), [1, 2, 3])
     }
 
     func testExistingSerializedTowerTuningRemainsAutomatic() throws {

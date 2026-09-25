@@ -17,8 +17,8 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let fixture = try fixture()
         try execute("UPDATE level_wave SET call_button_delay=0.6,auto_start_countdown=0.5,early_call_bonus=19", fixture)
         let content = try BattleTestFixture.authored(db: fixture.db)
-        let sim = try GameSimulation(content: content, startingMoney: 660, heroesEnabled: false, seed: 1776)
-        let player = try BattleEngine(content: content, heroesEnabled: false,
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 660, heroesEnabled: false, seed: 1776)
+        let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: 660, seed: 1776, onVictory: { _, _ in 0 })
         let policy = EarlyWaveStrategy(decisions: [
             .init(wave: 2, policy: .afterVisible(seconds: 0.1)),
@@ -69,17 +69,17 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let first = try BattleTestFixture.authored(db: fixture.db)
         let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(first.playerUpgrades.loadout.selected),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 0.1))]))
-        let before = try GeneticCommander.evaluate(strategy, content: first, money: 660, seed: 1776, maxSeconds: 1)
+        let before = try GeneticCommander.evaluate(strategy, recording: .preview, content: first, money: 660, seed: 1776, maxSeconds: 1)
         let firstCall = try XCTUnwrap(before.waveCalls.first { $0.wave == 2 })
         XCTAssertEqual(firstCall.earlyCallBonus, 23)
         try execute("UPDATE level_wave SET call_button_delay=0.7,early_call_bonus=41", fixture)
         let changed = try BattleTestFixture.authored(db: fixture.db)
-        let after = try GeneticCommander.evaluate(strategy, content: changed, money: 660, seed: 1776, maxSeconds: 1.1)
+        let after = try GeneticCommander.evaluate(strategy, recording: .preview, content: changed, money: 660, seed: 1776, maxSeconds: 1.1)
         let secondCall = try XCTUnwrap(after.waveCalls.first { $0.wave == 2 })
         XCTAssertEqual(secondCall.earlyCallBonus, 41)
         XCTAssertGreaterThan(secondCall.seconds, firstCall.seconds)
         let copy = try JSONDecoder().decode(GeneticStrategy.self, from: JSONEncoder().encode(strategy))
-        XCTAssertEqual(after, try GeneticCommander.evaluate(copy, content: changed, money: 660, seed: 1776, maxSeconds: 1.1))
+        XCTAssertEqual(after, try GeneticCommander.evaluate(copy, recording: .preview, content: changed, money: 660, seed: 1776, maxSeconds: 1.1))
         // Deletion is only in this disposable fixture; the DAO must reject it.
         try execute("PRAGMA foreign_keys=OFF; DELETE FROM level_wave WHERE level_info_id='\(changed.level.id.uuidString.lowercased())' AND wave_index=2", fixture)
         XCTAssertThrowsError(try BattleTestFixture.authored(db: fixture.db))
@@ -94,12 +94,12 @@ final class GeneticEarlyWaveTests: XCTestCase {
                        .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 5))]),
                        .init(decisions: [.init(wave: 2, policy: .whenEnemiesAtMost(count: 0, holdSeconds: 0))])] {
             let result = try GeneticCommander.evaluate(GeneticStrategy(decisions: [], metaUpgrades: meta,
-                earlyWaves: policy), content: content, money: 660, seed: 1776, maxSeconds: 1.2)
+                earlyWaves: policy), recording: .preview, content: content, money: 660, seed: 1776, maxSeconds: 1.2)
             XCTAssertEqual(result.waveCalls.map(\.wave), [1])
             XCTAssertEqual(result.waveCalls[0].earlyCallBonus, 0)
             XCTAssertGreaterThanOrEqual(result.wavesStarted, 3)
         }
-        let sim = try GameSimulation(content: content, startingMoney: 660, heroesEnabled: false, seed: 1)
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 660, heroesEnabled: false, seed: 1)
         XCTAssertEqual(sim.perform(.startWave), .ok)
         let money = sim.gold
         XCTAssertEqual(sim.perform(.startWave), .invalid)
@@ -113,13 +113,13 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let content = try BattleTestFixture.authored(db: fixture.db)
         let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .whenCountdownAtMost(seconds: 1))]))
-        let before = try GeneticCommander.evaluate(strategy, content: content, money: 660, seed: 1776, maxSeconds: 4)
+        let before = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 660, seed: 1776, maxSeconds: 4)
         let call = try XCTUnwrap(before.waveCalls.first { $0.wave == 2 })
         XCTAssertEqual(call.countdownSeconds, 1)
         XCTAssertEqual(call.earlyCallBonus, 31)
         try execute("UPDATE level_wave SET auto_start_countdown=0.6", fixture)
         let changed = try BattleTestFixture.authored(db: fixture.db)
-        let after = try GeneticCommander.evaluate(strategy, content: changed, money: 660, seed: 1776, maxSeconds: 1)
+        let after = try GeneticCommander.evaluate(strategy, recording: .preview, content: changed, money: 660, seed: 1776, maxSeconds: 1)
         let earlier = try XCTUnwrap(after.waveCalls.first { $0.wave == 2 })
         XCTAssertEqual(earlier.countdownSeconds, 1)
         XCTAssertEqual(earlier.earlyCallBonus, 31)
@@ -170,7 +170,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: tower.type.id)), saveForPurchase: true)],
             metaUpgrades: Array(content.playerUpgrades.loadout.selected),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 0))]))
-        let evaluation = try GeneticCommander.evaluate(strategy, content: content, money: 1, seed: 1776, maxSeconds: 0.5)
+        let evaluation = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 1, seed: 1776, maxSeconds: 0.5)
         XCTAssertEqual(evaluation.waveCalls.map(\.wave), [1, 2])
         let dao = try MoneyStudyDAO(db: fixture.db)
         let run = try fixture.db.simulatorRunDao.begin(levelName: "Test", focus: "early calls", totalIterations: 1, outputPath: ":memory:")

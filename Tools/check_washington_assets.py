@@ -66,7 +66,8 @@ def main():
               "runtime_frames_per_direction": counts, "imagesets": len(names),
               "source_pngs_verified": len(rows), "compiled_app": "NOT_CHECKED"}
     if args.bundle:
-        car = args.bundle / "Assets.car"
+        resources = args.bundle / "Contents" / "Resources" if (args.bundle / "Contents").is_dir() else args.bundle
+        car = resources / "Assets.car"
         info = subprocess.run(["/usr/bin/xcrun", "assetutil", "--info", str(car)],
                               check=True, capture_output=True, text=True)
         renditions = [r for r in json.loads(info.stdout)

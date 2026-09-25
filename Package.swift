@@ -41,6 +41,7 @@ let package = Package(
                     "LevelEditor/MapDocument.swift",
                     "LevelEditor/SimSession.swift",
                     "LevelEditor/EditorDocumentLifecycle.swift",
+                    "LevelEditor/EditorFileImporter.swift",
                     "LevelEditor/NativeMapFile.swift",
                     "LevelEditor/LevelGeoJSON.swift",
                     "LevelEditor/PathFlattening.swift",

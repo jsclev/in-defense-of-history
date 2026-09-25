@@ -36,14 +36,15 @@ public final class LevelRunner: BattleEngine {
 
     init(db: Db, content: BattleContent, runtimeCanvas: RuntimeCanvas,
          hudLayoutConfig: HudLayoutConfig,
+         replaySeed: UInt64? = nil, replayMoney: Int? = nil, heroesEnabled: Bool = true,
          onVictory: @escaping (Int, Int) -> Int = { _, _ in 0 }) {
         self.db = db
         self.runtimeCanvas = runtimeCanvas
         self.hudLayoutConfig = hudLayoutConfig.moving(.heroBar, to: .southWest)
         mapArt = LevelMapArt(mapImageName: content.level.mapImageName)
         do {
-            try super.init(content: content, heroesEnabled: true, startingMoneyOverride: nil,
-                seed: UInt64.random(in: UInt64.min...UInt64.max), onVictory: onVictory)
+            try super.init(recording: .database(db.levelRunDao, .player), content: content, playSpeed: content.playSpeeds.player, heroesEnabled: heroesEnabled, startingMoneyOverride: replayMoney,
+                seed: replaySeed ?? UInt64.random(in: UInt64.min...UInt64.max), onVictory: onVictory)
             heroImageAspectRatios = try Dictionary(uniqueKeysWithValues: content.deployments.map { deployment in
                 let hero = deployment.hero
                 guard let image = UIImage(named: hero.unitImageName),
@@ -253,7 +254,7 @@ extension LevelRunner {
 
     struct CombatReviewFrame {
         let seconds: Double
-        let walkers: [Walker]
+        let presentation: BattlePresentation
         let militia: [MilitiaSoldier]
     }
 
@@ -337,7 +338,7 @@ extension LevelRunner {
             try require(blockedWalkerIDs.count == 6, "Melee enemy lost its blocking state")
             if [0, 12, 24, 36, 60].contains(tick) {
                 frames.append(CombatReviewFrame(seconds: Double(tick) * SimClock.dt,
-                                               walkers: walkers, militia: militia))
+                                               presentation: presentation, militia: militia))
             }
         }
         for index in 0..<6 {
@@ -1125,7 +1126,7 @@ extension LevelRunner {
                                           userInfo: [NSLocalizedDescriptionKey: message]) }
         }
         let slot = try prepareDemolitionReview(stage: "upgrade")
-        try require(upgradeOffers.map(\.branch) == [2, 3], "Expected support upgrade branches 2 and 3")
+        try require(upgradeOffers.map(\.branch) == [1, 2, 3], "Expected engineer upgrade branches 1, 2 and 3")
         let before = money
         tapUpgradeButton(branch: 3)
         try require(placedTower(atSlot: slot)?.level == 3, "Preview spent money or upgraded")
@@ -1213,7 +1214,7 @@ extension LevelRunner {
         isCleared = false; isDefeated = true
         try require(!detonateDemolition(atSlot: slot), "Charge fired after defeat")
         isDefeated = false
-        return ["family": towerFamilyName(for: .special), "branches": [2, 3], "preparationSeconds": 8, "upgradeCost": tuning.cost,
+        return ["family": towerFamilyName(for: .special), "branches": [1, 2, 3], "preparationSeconds": 8, "upgradeCost": tuning.cost,
                 "initialChargeReadyAndUnplaced": true, "firstPlacementImmediatelyArmed": true,
                 "unplacedChargeCannotDetonate": true, "cancelledFirstPlacementKeepsReadyCharge": true,
                 "placementRange": tuning.range, "blastRadius": tuning.aoeRadius,

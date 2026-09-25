@@ -52,7 +52,7 @@ public final class BountyExperimentDAO {
                 guard status == SQLITE_DONE else { throw DbError.Db(message: "bounty experiment: schema read failed") }
                 for (_, _, sql) in schema { try execute(sql) }
                 // Retain SQL-defined result tables but not historical output.
-                let history: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result"]
+                let history: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result", "level_run", "level_action"]
                 for (type, name, _) in schema where type == "table" && !history.contains(name) {
                     let table = "\"" + name.replacingOccurrences(of: "\"", with: "\"\"") + "\""
                     try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")

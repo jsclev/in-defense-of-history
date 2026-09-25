@@ -17,7 +17,7 @@ final class SimulationTowerModesTests: XCTestCase {
             slots: [Point(0, tuning.combatRules.enemyBodyOffsetY)], starts: starts)
         let fixture = try BattleTestFixture.content(level: level, enemies: [enemy],
             tiers: [.init(kind, 4, branch): tuning], base: content)
-        let sim = try GameSimulation(content: fixture, startingMoney: nil, heroesEnabled: false, seed: 1776)
+        let sim = try GameSimulation(recording: .preview, content: fixture, startingMoney: nil, heroesEnabled: false, seed: 1776)
         try BattleTestFixture.build(kind, level: 4, branch: branch, in: sim)
         sim.startNextWave()
         return (sim, tuning)

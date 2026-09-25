@@ -51,6 +51,14 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
         return try content.playerUpgrades.selecting(Set(metaUpgrades))
     }
 
+    /// Keep a player's battle plan while changing only a selection accepted by
+    /// the shared player-state API. Used for controlled upgrade exchanges.
+    public func selectingMetaUpgrades(_ selection: [MetaUpgrade], in study: AuthoredMoneyStudy) throws -> Self {
+        let result = Self(decisions: decisions, metaUpgrades: selection, reinforcements: reinforcements, earlyWaves: earlyWaves)
+        try result.validate(study: study)
+        return result
+    }
+
     /// Structural validation of a player's plan, not a substitute for the
     /// engine's eligibility/affordability checks. Corrupt content is never repaired.
     public func validate(study: AuthoredMoneyStudy) throws {
@@ -77,12 +85,23 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
     /// Inherit a whole construction/upgrade chain for each slot. Interleave those
     /// chains by their parents' relative order, never swapping their predecessors.
     public static func crossover(_ a: Self, _ b: Self, slots: Int, rng: inout SeededRNG) -> Self {
-        var inherited: [(Double, Int, Decision)] = []
-        for slot in 0..<slots {
-            let parent = Bool.random(using: &rng) ? a : b
-            for (index, decision) in parent.decisions.enumerated() where decision.step.action.slot == slot {
-                inherited.append((Double(index) / Double(max(1, parent.decisions.count)), slot, decision))
+        // Index each parent's chains once, instead of scanning its complete
+        // purchase list again for every slot. Keep RNG draws and ordering exact.
+        func chains(_ parent: Self) -> [[(Double, Decision)]] {
+            var result = Array(repeating: [(Double, Decision)](), count: slots)
+            for (index, decision) in parent.decisions.enumerated() {
+                let slot = decision.step.action.slot
+                guard result.indices.contains(slot) else { continue }
+                result[slot].append((Double(index) / Double(max(1, parent.decisions.count)), decision))
             }
+            return result
+        }
+        let left = chains(a), right = chains(b)
+        var inherited: [(Double, Int, Decision)] = []
+        inherited.reserveCapacity(max(a.decisions.count, b.decisions.count))
+        for slot in 0..<slots {
+            let chain = Bool.random(using: &rng) ? left[slot] : right[slot]
+            for (order, decision) in chain { inherited.append((order, slot, decision)) }
         }
         inherited.sort { $0.0 == $1.0 ? $0.1 < $1.1 : $0.0 < $1.0 }
         return Self(decisions: inherited.map { $0.2 },
@@ -92,9 +111,10 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
     }
 
     public mutating func mutate(study: AuthoredMoneyStudy, metaChoices: [[MetaUpgrade]], rng: inout SeededRNG,
-                                earlyWaveCallsEnabled: Bool = true) {
+                                earlyWaveCallsEnabled: Bool = true, metaMutationEnabled: Bool = true) {
         precondition(!metaChoices.isEmpty)
-        let operation = decisions.isEmpty ? 0 : Int.random(in: 0..<(earlyWaveCallsEnabled ? 10 : 9), using: &rng)
+        let operations = (0..<(earlyWaveCallsEnabled ? 10 : 9)).filter { metaMutationEnabled || $0 != 7 }
+        let operation = decisions.isEmpty ? 0 : operations[Int.random(in: operations.indices, using: &rng)]
         switch operation {
         case 0:
             // Replace/add one slot's plan. Partial investments and skipped ability
@@ -149,7 +169,9 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
             let slot = decisions[index].step.action.slot
             decisions = decisions.enumerated().filter { $0.offset < index || $0.element.step.action.slot != slot }.map(\.element)
         case 7:
-            metaUpgrades = metaChoices[Int.random(in: metaChoices.indices, using: &rng)]
+            let neighbors = GeneticMetaSearch.nearestSelections(to: metaUpgrades, among: metaChoices)
+            let choices = !neighbors.isEmpty && Int.random(in: 0..<4, using: &rng) != 0 ? neighbors : metaChoices
+            metaUpgrades = choices[Int.random(in: choices.indices, using: &rng)]
         case 8:
             reinforcements = .random(paths: study.level.paths, rng: &rng)
         default:
@@ -161,12 +183,18 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
 /// A complete battle is the unit of fitness. Earlier wave performance is not
 /// discounted or cashed out as a win, and leftover money cannot outweigh victory.
 public struct GeneticEvaluation: Codable, Sendable, Equatable {
+    public var runID: UUID? = nil
     public let seed: UInt64
     public let result: SimulationResult
     public let wavesStarted: Int
     public let waveEconomy: [GeneticWaveEconomy]
     public let reinforcementDeployments: [ReinforcementDeployment]
     public let waveCalls: [WaveCallReceipt]
+    public static func == (a: Self, b: Self) -> Bool {
+        a.seed == b.seed && a.result == b.result && a.wavesStarted == b.wavesStarted
+            && a.waveEconomy == b.waveEconomy && a.reinforcementDeployments == b.reinforcementDeployments
+            && a.waveCalls == b.waveCalls
+    }
 }
 
 public struct GeneticWaveEconomy: Codable, Sendable, Equatable {
@@ -200,17 +228,16 @@ public struct GeneticFitness: Codable, Equatable, Comparable {
 /// The automated player retains only pending inputs. Every purchase, charge,
 /// wave transition, balance, tick and result belongs to GameSimulation/BattleEngine.
 public struct GeneticCommander {
-    private var pending: [(offset: Int, element: GeneticStrategy.Decision)]
+    private var pending: GeneticPurchaseCursor
     private let expectedMetaUpgrades: Set<MetaUpgrade>
     private var checkedMetaUpgrades = false
     // Player policy: after a needGold response, wait for a changed balance or a
     // successful purchase before trying again. Never calculate affordability.
-    private var waitingForIncome: [Int: (money: Int, purchases: Int)] = [:]
     private var purchases = 0
     private var reinforcements: ReinforcementCommander
     private var earlyWaves: EarlyWaveCommander
     public init(_ strategy: GeneticStrategy) {
-        pending = Array(strategy.decisions.enumerated())
+        pending = GeneticPurchaseCursor(strategy.decisions)
         expectedMetaUpgrades = Set(strategy.metaUpgrades)
         reinforcements = ReinforcementCommander(strategy.reinforcements)
         earlyWaves = EarlyWaveCommander(strategy.earlyWaves)
@@ -223,33 +250,28 @@ public struct GeneticCommander {
             }
             checkedMetaUpgrades = true
         }
-        var blockedSlots: Set<Int> = [], done: Set<Int> = []
-        for (index, decision) in pending {
-            let slot = decision.step.action.slot
-            guard !blockedSlots.contains(slot), decision.step.time <= sim.time,
-                  decision.earliestWave <= sim.currentWave else {
-                blockedSlots.insert(slot); continue
-            }
+        pending.beginTick()
+        while let index = pending.pop() {
+            let decision = pending.decisions[index]
+            guard decision.step.time <= sim.time, decision.earliestWave <= sim.currentWave else { continue }
+            let slot = pending.slots[index]
             let result: BuildResult
-            if let waiting = waitingForIncome[index], waiting.money == sim.gold, waiting.purchases == purchases {
-                // This is the previous engine response, not a computed price or
-                // new eligibility verdict. The player chooses to keep waiting.
-                blockedSlots.insert(slot)
+            if let waiting = pending.waiting[slot], waiting.money == sim.gold, waiting.purchases == purchases {
+                // Reuse the engine's previous needGold response until money or
+                // a completed purchase changes. No price rule is duplicated.
                 if decision.saveForPurchase { break }
                 continue
             } else { result = sim.execute(decision.step.action) }
             switch result {
             case .ok:
-                done.insert(index); waitingForIncome.removeValue(forKey: index); purchases += 1
+                pending.complete(index); purchases += 1
             case .needGold:
-                waitingForIncome[index] = (sim.gold, purchases)
-                blockedSlots.insert(slot)
+                pending.waiting[slot] = (sim.gold, purchases)
             case .invalid:
                 throw DbError.Db(message: "Engine rejected genetic command: \(decision.step.action)")
             }
             if result == .needGold && decision.saveForPurchase { break }
         }
-        if !done.isEmpty { pending.removeAll { done.contains($0.offset) } }
         finishInputs(sim: sim)
         try reinforcements.tick(sim: sim)
         try earlyWaves.tick(sim: sim)
@@ -260,24 +282,99 @@ public struct GeneticCommander {
         if sim.currentWave == 0 { sim.startNextWave() }
     }
 
-    @MainActor public static func evaluate(_ strategy: GeneticStrategy, content: BattleContent,
+    @MainActor public static func evaluate(_ strategy: GeneticStrategy, recording: BattleRecording, content: BattleContent,
         money: Int, seed: UInt64, maxSeconds: Double) throws -> GeneticEvaluation {
-        _ = try strategy.playerState(in: content)
+        let selection = Set(strategy.metaUpgrades)
+        guard selection.count == strategy.metaUpgrades.count else {
+            throw DbError.Db(message: "genetic strategy: duplicate meta upgrade ID")
+        }
         try strategy.reinforcements.validate()
         try strategy.earlyWaves.validate(waveCount: content.level.numWaves)
-        let battle = try content.selectingMetaUpgrades(Set(strategy.metaUpgrades))
-        let sim = try GameSimulation(content: battle, startingMoney: money, heroesEnabled: false, seed: seed)
+        let battle = try content.selectingMetaUpgrades(selection)
+        let sim = try GameSimulation(recording: recording, content: battle, startingMoney: money, heroesEnabled: false, seed: seed)
+        var completed = false
+        defer { if !completed { sim.finishRecording(status: .failed) } }
         var commander = Self(strategy), economy: [GeneticWaveEconomy] = []
         var previousWave = 0
         while sim.outcome == nil, sim.time < maxSeconds {
             try commander.tick(sim: sim)
-            sim.step()
+            sim.stepPaced()
             if sim.currentWave != previousWave {
                 previousWave = sim.currentWave
                 economy.append(GeneticWaveEconomy(wave: previousWave, seconds: sim.time, money: sim.gold, lives: sim.lives))
             }
         }
-        return GeneticEvaluation(seed: seed, result: sim.result(), wavesStarted: sim.currentWave, waveEconomy: economy,
+        let outcome = sim.result()
+        sim.finishRecording(status: outcome.outcome == .victory ? .victory : outcome.outcome == .defeat ? .defeat : .timeout)
+        var evaluation = GeneticEvaluation(seed: seed, result: outcome, wavesStarted: sim.currentWave, waveEconomy: economy,
                                  reinforcementDeployments: sim.reinforcementDeployments, waveCalls: sim.waveCalls)
+        evaluation.runID = sim.runID
+        completed = true
+        return evaluation
+    }
+}
+
+/// Only the first unfinished order for each tower slot can run. The small heap
+/// merges those chains by their original global priority, so later affordable
+/// orders, saving barriers, and same-tick purchases behave exactly as before.
+/// Completed entries never move and blocked chains are not rescanned each tick.
+private struct GeneticPurchaseCursor {
+    let decisions: [GeneticStrategy.Decision]
+    let slots: [Int]
+    private let next: [Int]
+    private var heads: [Int]
+    var waiting: [(money: Int, purchases: Int)?]
+    private var heap: [Int] = []
+
+    init(_ decisions: [GeneticStrategy.Decision]) {
+        self.decisions = decisions
+        var ordinals: [Int: Int] = [:], last: [Int] = [], heads: [Int] = []
+        var slots: [Int] = [], next = Array(repeating: -1, count: decisions.count)
+        slots.reserveCapacity(decisions.count)
+        for (index, decision) in decisions.enumerated() {
+            let key = decision.step.action.slot
+            if let ordinal = ordinals[key] {
+                next[last[ordinal]] = index; last[ordinal] = index; slots.append(ordinal)
+            } else {
+                ordinals[key] = heads.count; slots.append(heads.count)
+                heads.append(index); last.append(index)
+            }
+        }
+        self.slots = slots; self.next = next; self.heads = heads
+        waiting = Array(repeating: nil, count: heads.count)
+        heap.reserveCapacity(heads.count)
+    }
+    mutating func beginTick() {
+        heap.removeAll(keepingCapacity: true)
+        for head in heads where head >= 0 { push(head) }
+    }
+    mutating func complete(_ index: Int) {
+        let slot = slots[index]
+        waiting[slot] = nil; heads[slot] = next[index]
+        if next[index] >= 0 { push(next[index]) }
+    }
+    private mutating func push(_ index: Int) {
+        heap.append(index)
+        var child = heap.count - 1
+        while child > 0 {
+            let parent = (child - 1) / 2
+            guard heap[parent] > heap[child] else { break }
+            heap.swapAt(parent, child); child = parent
+        }
+    }
+    mutating func pop() -> Int? {
+        guard !heap.isEmpty else { return nil }
+        let result = heap[0], last = heap.removeLast()
+        if !heap.isEmpty {
+            heap[0] = last
+            var parent = 0
+            while parent * 2 + 1 < heap.count {
+                var child = parent * 2 + 1
+                if child + 1 < heap.count, heap[child + 1] < heap[child] { child += 1 }
+                guard heap[child] < heap[parent] else { break }
+                heap.swapAt(parent, child); parent = child
+            }
+        }
+        return result
     }
 }

@@ -2,7 +2,7 @@ import Foundation
 import CoreGraphics
 
 /// Continuous gun laying, independent of both the reload clock and atlas steps.
-public struct ArtilleryAim: Equatable, Sendable {
+public struct ArtilleryAim: Equatable, Sendable, Codable {
     public private(set) var heading: Double
     public let firingTolerance: Double
 

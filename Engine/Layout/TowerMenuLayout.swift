@@ -85,6 +85,24 @@ public struct TowerMenuLayout {
                                     towerButtonSize: towerButtonSize)
     }
 
+    /// Keep the abatis placement control at bottom center while specializations
+    /// occupy the remaining cardinal seats, including the full three-branch menu.
+    public func getEngineerUpgradeButtonCenterPoint(index: Int, offerCount: Int,
+                                                    menuCenterPoint: CGPoint,
+                                                    playAreaScalingFactor: CGFloat,
+                                                    towerButtonSize: CGFloat) -> CGPoint {
+        precondition((1...3).contains(offerCount) && (0..<offerCount).contains(index))
+        let seat: Int
+        switch offerCount {
+        case 1: seat = 0
+        case 2: seat = index == 0 ? 3 : 1
+        default: seat = [3, 0, 1][index]
+        }
+        return getButtonCenterPoint(index: seat, count: 4, menuCenterPoint: menuCenterPoint,
+                                    playAreaScalingFactor: playAreaScalingFactor,
+                                    towerButtonSize: towerButtonSize)
+    }
+
     private func getButtonCenterPoint(degrees: CGFloat,
                                              menuCenterPoint: CGPoint,
                                              playAreaScalingFactor: CGFloat,

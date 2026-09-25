@@ -31,14 +31,19 @@ func printUsage() {
     --fixed-meta          Keep the exact database-selected upgrades; requires its exact star group.
     --no-early-wave-calls  Control experiment: exclude early calls from candidate generation/mutation.
     --seed-strategy <path> Seed the GA with explicit strategy JSON (repeatable).
-    --star-range <min:max:step> Exact stars spent; default 0 through database-earned stars, step 1.
-    --population <n>       Population per star-spend group (default 64).
+    --star-range <min:max:step> Exact stars used; default the database-earned star total only.
+    --population <n>       Population cap per stars-used group (default 64), divided equally among meta selections.
+    --meta-selections <n>  Active meta-selection subpopulations per group (default 8).
+    --meta-min-candidates <n> Minimum distinct battle plans before a selection qualifies (default 4).
+    --meta-adaptation-generations <n> Protect a new selection for this many generations (default 2).
+    --meta-exchange-from <path> Compare a candidate's meta selection with nearby legal selections at the same stars used; adapt all battle plans equally.
     --generations <n>      Maximum generations including the initial one (default 300).
     --training-seeds <n>   Complete games per candidate (default 3).
     --validation-seeds <n> Unseen seeds per frozen finalist (default 64).
-    --finalists <n>        Finalists per star-spend group (default 8).
+    --finalists <n>        Maximum distinct meta-selection finalists per group (default 8).
     --max-evaluations <n>  Total engine-game ceiling including validation (default 50000).
     --genetic-hours <n>    Wall-time budget; reserves 15% for validation (default 8).
+    --workers <n>          Parallel shared-engine battle processes for GA (1–32, default 1).
     --genetic-replay <path> Verify a saved best-strategy.json against the same content/engine.
 
     --money-study <name>   Run the authored level using the iPhone battle rules.
@@ -60,7 +65,7 @@ func printUsage() {
     --run-status <id>      Read one saved run.
     --help                Show this help.
 
-    The shared engine currently executes serially. Legacy CPU/GPU combat implementations have been removed.
+    Each worker executes complete shared-engine ticks. Legacy alternate CPU/GPU combat implementations remain removed.
     """)
 }
 
@@ -83,13 +88,16 @@ func parseOptions() throws -> Options? {
         case "--seed-strategy":
             guard let path = args.popFirst() else { return nil }
             opts.genetic.seedStrategies.append(try JSONDecoder().decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: path))))
+        case "--meta-exchange-from":
+            guard let path = args.popFirst() else { return nil }
+            opts.genetic.metaExchangeFrom = try JSONDecoder().decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: path)))
         case "--star-range":
             guard let value = args.popFirst() else { return nil }
             let fields = value.split(separator: ":", omittingEmptySubsequences: false)
             guard fields.count == 3, let minimum = Int(fields[0]), let maximum = Int(fields[1]),
                   let step = Int(fields[2]), minimum >= 0, maximum >= minimum, step > 0 else { return nil }
             opts.genetic.starMinimum = minimum; opts.genetic.starMaximum = maximum; opts.genetic.starStep = step
-        case "--starting-money", "--population", "--generations", "--training-seeds", "--validation-seeds", "--finalists", "--max-evaluations":
+        case "--starting-money", "--population", "--generations", "--training-seeds", "--validation-seeds", "--finalists", "--max-evaluations", "--meta-selections", "--meta-min-candidates", "--meta-adaptation-generations":
             guard let value = args.popFirst(), let number = Int(value), number > 0 else { return nil }
             switch arg {
             case "--starting-money": opts.genetic.money = number
@@ -98,6 +106,9 @@ func parseOptions() throws -> Options? {
             case "--training-seeds": opts.genetic.trainingSeeds = number
             case "--validation-seeds": opts.genetic.validationSeeds = number
             case "--finalists": opts.genetic.finalists = number
+            case "--meta-selections": opts.genetic.metaSelections = number
+            case "--meta-min-candidates": opts.genetic.minimumMetaCandidates = number
+            case "--meta-adaptation-generations": opts.genetic.metaAdaptationGenerations = number
             default: opts.genetic.maxEvaluations = number
             }
         case "--genetic-hours":
@@ -155,6 +166,18 @@ func parseOptions() throws -> Options? {
     return opts
 }
 
+// Private worker entry point: transport only; all evaluation stays in the
+// shared commander/engine and all persistence stays behind DAOs.
+if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--genetic-worker" {
+    do {
+        try MainActor.assumeIsolated { try GeneticBattleWorker.run(configuration: CommandLine.arguments[2]) }
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("genetic worker error: \(error)\n".utf8))
+        exit(1)
+    }
+}
+
 let store: SimulatorStore
 do {
     store = try SimulatorStore()
@@ -182,6 +205,7 @@ if let name = opts.geneticStudy {
         guard opts.moneyStudy == nil else { throw DbError.Db(message: "Select one experiment mode") }
         var configuration = opts.genetic
         configuration.seed = opts.baseSeed; configuration.maxGameSeconds = opts.maxGameSeconds
+        configuration.workers = opts.workers
         try MainActor.assumeIsolated {
             let study = GeneticStudy(db: store.db)
             if let replay = opts.geneticReplay { try study.replay(levelName: name, document: replay, directory: opts.reportDir) }

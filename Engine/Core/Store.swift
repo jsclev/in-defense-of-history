@@ -17,10 +17,20 @@ public final class Store {
             if let domain = Bundle.main.bundleIdentifier {
                 BundledDatabase.discardLegacyPreferences(domain: domain)
             }
+            #if targetEnvironment(macCatalyst)
+            // Every desktop launch starts from the authoritative authored state.
+            // Gameplay/settings remain disposable and never alter study records
+            // or create a second persistent database in the checkout.
+            let authored = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false,
+                levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
+            db = try BountyExperimentDAO.contentCopy(of: authored, fraction: 1)
+            db.recordRuns(in: authored)
+            #else
             db = Db(
                 dbPath: Db.getAbsolutePathToDb(dbFilename: "in_defense_of_history"),
                 fullRefresh: true
             )
+            #endif
             try db.towerTypeDao.validateAuthoredContent()
             let heroes = try db.heroDao.validateAuthoredContent()
             #if canImport(UIKit)

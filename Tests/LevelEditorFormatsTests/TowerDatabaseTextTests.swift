@@ -27,7 +27,7 @@ final class TowerDatabaseTextTests: XCTestCase {
                     }
                 }
             }
-            XCTAssertEqual(count, 29)
+            XCTAssertEqual(count, 30)
         }
     }
 
@@ -191,7 +191,7 @@ final class TowerDatabaseTextTests: XCTestCase {
             XCTAssertEqual(arsenal.type(.ranged).id, changed)
             XCTAssertEqual(arsenal.kind(forTowerID: changed), .ranged)
             let content = try BattleTestFixture.authored(db: db)
-            let simulation = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+            let simulation = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
             let final = try XCTUnwrap(arsenal.towers.first { $0.id == changed }?.tiers.first { $0.level == 4 })
             var order = ScriptedBuildOrder(steps: [.init(time: 0, action: .build(slot: 0, towerID: final.id))])
             try order.tick(sim: simulation)
@@ -272,6 +272,12 @@ final class TowerDatabaseTextTests: XCTestCase {
                     has_melee_unit, has_demolition_charge, has_engineer_obstacles, attack_mode, turn_rate_degrees
                 FROM tower WHERE tower_type_id = '\(type.id.uuidString.lowercased())' AND branch = 1
                 ORDER BY tower_level DESC LIMIT 1;
+                INSERT INTO tower_history (tower_id, historical_description, source_title, source_url,
+                    presentation_kind, strategy_text, inclusion_reason)
+                SELECT '\(id)', historical_description, source_title, source_url, 'standard', NULL, NULL
+                FROM tower_history JOIN tower original ON original.id = tower_history.tower_id
+                WHERE original.tower_type_id = '\(type.id.uuidString.lowercased())' AND original.branch = 1
+                ORDER BY original.tower_level DESC LIMIT 1;
                 UPDATE tower_type SET level_layout = json_insert(level_layout, '$[#]', json('[1]'))
                 WHERE id = '\(type.id.uuidString.lowercased())';
                 """, nil, nil, nil), SQLITE_OK)

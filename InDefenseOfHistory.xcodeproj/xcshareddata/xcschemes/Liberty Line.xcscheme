@@ -30,8 +30,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       shouldAutocreateTestPlan = "YES">
       <Testables>
-         <TestableReference skipped="NO" parallelizable="NO">
-            <BuildableReference BuildableIdentifier="primary" BlueprintIdentifier="52E1F0200000000000000003" BuildableName="LibertyLineUITests.xctest" BlueprintName="LibertyLineUITests" ReferencedContainer="container:InDefenseOfHistory.xcodeproj"/>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "52E1F0200000000000000003"
+               BuildableName = "LibertyLineUITests.xctest"
+               BlueprintName = "LibertyLineUITests"
+               ReferencedContainer = "container:InDefenseOfHistory.xcodeproj">
+            </BuildableReference>
          </TestableReference>
       </Testables>
    </TestAction>

@@ -4,8 +4,8 @@ import XCTest
 final class BattleAPIParityTests: XCTestCase {
     @MainActor func testReinforcementsUsePlayerPlacementValidation() throws {
         let content = try BattleTestFixture.authored()
-        let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
-        let player = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: 1776).engine
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
+        let player = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: true, seed: 1776).engine
         let offRoad = CGPoint(x: -10000, y: -10000)
         player.toggleReinforcementPlacement()
         player.placeReinforcements(at: offRoad)
@@ -22,8 +22,8 @@ final class BattleAPIParityTests: XCTestCase {
 
     @MainActor func testDisplayFramePartitionDoesNotChangeBattle() throws {
         let content = try BattleTestFixture.authored()
-        let sim = try GameSimulation(content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776)
-        let player = try GameSimulation(content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776).engine
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776)
+        let player = try GameSimulation(recording: .preview, content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776).engine
         for (slot, kind) in [(17, TowerKind.ranged), (14, .areaOfEffect), (4, .melee), (0, .supply)] {
             XCTAssertEqual(sim.perform(.build(slot: slot, kind: kind)), .ok)
             player.selectSlot(slot); player.tapBuildButton(kind); player.tapBuildButton(kind)
@@ -60,8 +60,8 @@ final class BattleAPIParityTests: XCTestCase {
 
     @MainActor func testUnaffordablePurchasesFollowTheSameConfirmationAndMenuState() throws {
         let content = try BattleTestFixture.authored()
-        let sim = try GameSimulation(content: content, startingMoney: 1, heroesEnabled: false, seed: 1)
-        let player = try BattleEngine(content: content, heroesEnabled: false,
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 1, heroesEnabled: false, seed: 1)
+        let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: 1, seed: 1, onVictory: { _, _ in 0 })
         player.selectSlot(0)
         XCTAssertNil(player.tapBuildButton(.ranged))
@@ -80,8 +80,8 @@ final class BattleAPIParityTests: XCTestCase {
         var level = BattleTestFixture.level(enemy: enemy, slots: [])
         level.numStartingLives = 1
         let content = try BattleTestFixture.content(level: level, enemies: [enemy], base: source)
-        let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
-        let player = try BattleEngine(content: content, heroesEnabled: false,
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+        let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 0 })
         sim.startNextWave(); player.startNextWave()
         while sim.outcome == nil { sim.step() }
@@ -94,7 +94,7 @@ final class BattleAPIParityTests: XCTestCase {
 
     @MainActor func testPauseAndSpeedDoNotCreateASecondCombatClock() throws {
         let content = try BattleTestFixture.authored()
-        let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: 1)
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: true, seed: 1)
         sim.engine.pause()
         XCTAssertEqual(sim.perform(.build(slot: 0, kind: .ranged)), .invalid)
         sim.engine.selectSlot(0)
@@ -108,9 +108,9 @@ final class BattleAPIParityTests: XCTestCase {
 
     @MainActor func testCommandDispatchUsesTheExactInteractivePurchaseCallOrder() throws {
         let content = try BattleTestFixture.authored()
-        let scripted = try InputTraceEngine(content: content, heroesEnabled: false,
+        let scripted = try InputTraceEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: 100_000, seed: 1, onVictory: { _, _ in 0 })
-        let player = try InputTraceEngine(content: content, heroesEnabled: false,
+        let player = try InputTraceEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: 100_000, seed: 1, onVictory: { _, _ in 0 })
         XCTAssertEqual(scripted.perform(.build(slot: 0, kind: .ranged)), .ok)
         player.dismissMenu(); player.selectSlot(0)
@@ -136,8 +136,8 @@ final class BattleAPIParityTests: XCTestCase {
 
     @MainActor func testMapCommandsUseTheSameSelectionAndPlacementHandlers() throws {
         let content = try BattleTestFixture.authored()
-        let sim = try GameSimulation(content: content, startingMoney: 100_000, heroesEnabled: true, seed: 1)
-        let player = try BattleEngine(content: content, heroesEnabled: true,
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 100_000, heroesEnabled: true, seed: 1)
+        let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: true,
             startingMoneyOverride: 100_000, seed: 1, onVictory: { _, _ in 0 })
         let offMap = Point(-10000, -10000)
         let special = try XCTUnwrap(content.arsenal.towers.first { $0.kind == .special })

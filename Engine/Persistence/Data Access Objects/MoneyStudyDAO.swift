@@ -86,8 +86,12 @@ public final class MoneyStudyDAO {
         }
     }
 
-    public func insert(_ rows: [MoneyStudyResultRow], runID: UUID, completed: Int, rate: Double) throws {
+    public func insert(_ rows: [MoneyStudyResultRow], runID: UUID, completed: Int, rate: Double,
+                       replacingValidation: Bool = false) throws {
         guard !rows.isEmpty else { return }
+        guard !replacingValidation || rows.allSatisfy({ $0.upgradePolicy == 1 && $0.evidenceJSON != nil }) else {
+            throw DbError.Db(message: "genetic checkpoint: only held-out evidence may replace an existing panel")
+        }
         try exec("BEGIN IMMEDIATE")
         var committed = false
         defer { if !committed { try? exec("ROLLBACK") } }
@@ -95,6 +99,18 @@ public final class MoneyStudyDAO {
             INSERT INTO money_study_result(run_id,money,placement_plan,upgrade_policy,seeds,
                 victories,defeats,timeouts,mean_lives,mean_leaked,mean_seconds,seed_results_json)
             VALUES(?,?,?,?,?,?,?,?,?,?,?,?)
+            \(replacingValidation ? """
+            ON CONFLICT(run_id,money,placement_plan,upgrade_policy) DO UPDATE SET
+                seeds=excluded.seeds,victories=excluded.victories,defeats=excluded.defeats,timeouts=excluded.timeouts,
+                mean_lives=excluded.mean_lives,mean_leaked=excluded.mean_leaked,mean_seconds=excluded.mean_seconds,
+                seed_results_json=excluded.seed_results_json
+            WHERE excluded.seeds >= money_study_result.seeds
+                AND json_extract(excluded.seed_results_json,'$.strategy') = json_extract(money_study_result.seed_results_json,'$.strategy')
+                AND NOT EXISTS (
+                    SELECT 1 FROM json_each(money_study_result.seed_results_json,'$.evaluations') AS previous
+                    WHERE json_extract(excluded.seed_results_json,'$.evaluations[' || previous.key || ']') IS NOT json(previous.value)
+                )
+            """ : "")
             """) { stmt in
             for row in rows {
                 let report = BatchReport(results: row.results)
@@ -108,16 +124,21 @@ public final class MoneyStudyDAO {
                 sqlite3_bind_double(stmt, 9, row.results.reduce(0) { $0 + Double($1.livesRemaining) } / count)
                 sqlite3_bind_double(stmt, 10, Double(report.totalLeaked) / count)
                 sqlite3_bind_double(stmt, 11, row.results.reduce(0) { $0 + $1.seconds } / count)
-                // Compact per-seed evidence, retaining actual outcomes rather
-                // than treating a timeout as a defeat or inventing early exits.
-                let samples: [[String: Any]] = row.results.enumerated().map { index, result in
-                    ["seedIndex": index, "outcome": result.outcome.rawValue,
-                     "seconds": result.seconds, "lives": result.livesRemaining,
-                     "gold": result.goldRemaining, "killed": result.killed, "leaked": result.leaked]
+                if let evidence = row.evidenceJSON {
+                    text(stmt, 12, evidence)
+                } else {
+                    // Build fallback summaries only for callers without full
+                    // evidence. GA rows already carry exact seeds and receipts.
+                    let samples: [[String: Any]] = row.results.enumerated().map { index, result in
+                        ["seedIndex": index, "outcome": result.outcome.rawValue,
+                         "seconds": result.seconds, "lives": result.livesRemaining,
+                         "gold": result.goldRemaining, "killed": result.killed, "leaked": result.leaked]
+                    }
+                    let data = try JSONSerialization.data(withJSONObject: samples, options: [.sortedKeys])
+                    text(stmt, 12, String(decoding: data, as: UTF8.self))
                 }
-                let data = try JSONSerialization.data(withJSONObject: samples, options: [.sortedKeys])
-                text(stmt, 12, row.evidenceJSON ?? String(decoding: data, as: UTF8.self))
                 try execute(stmt)
+                guard sqlite3_changes(conn) == 1 else { throw DbError.Db(message: "genetic checkpoint: shrinking panel or changed candidate DNA") }
                 sqlite3_reset(stmt); sqlite3_clear_bindings(stmt)
             }
         }
@@ -137,7 +158,7 @@ public final class MoneyStudyDAO {
         var result: [[String: Any]] = []
         try statement("""
             SELECT COUNT(*) FROM money_study_result r JOIN money_study s USING(run_id)
-            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5')
+            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5','genetic-v6')
               AND (json_type(r.seed_results_json,'$.starsUsed') IS NOT 'integer'
                 OR json_extract(r.seed_results_json,'$.starsUsed')<0
                 OR json_type(r.seed_results_json,'$.strategy.metaUpgrades') IS NOT 'array')
@@ -152,7 +173,7 @@ public final class MoneyStudyDAO {
                    COUNT(*),SUM(r.seeds),SUM(r.victories),SUM(r.defeats),SUM(r.timeouts),
                    COUNT(DISTINCT json_extract(r.seed_results_json,'$.strategy.metaUpgrades'))
             FROM money_study_result r JOIN money_study s USING(run_id)
-            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5')
+            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5','genetic-v6')
             GROUP BY json_extract(r.seed_results_json,'$.starsUsed'),r.upgrade_policy ORDER BY 1,2
             """) { stmt in
             text(stmt, 1, runID.uuidString)

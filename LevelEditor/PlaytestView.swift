@@ -88,8 +88,8 @@ struct PlaytestView: View {
             .help("Call the next wave")
 
             Picker("", selection: Binding(get: { session.speed }, set: { session.speed = $0 })) {
-                ForEach([1, 2, 4, 8], id: \.self) { s in
-                    Text("\(s)×").tag(s)
+                ForEach([0.5, 1, 2, 4, 8], id: \.self) { s in
+                    Text("\(s.formatted())×").tag(s)
                 }
             }
             .pickerStyle(.segmented)

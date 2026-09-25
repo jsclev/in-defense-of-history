@@ -15,32 +15,7 @@ final class AuthoredMoneySweep {
     }
 
     func snapshot(_ study: AuthoredMoneyStudy) throws -> Data {
-        let encoder = JSONEncoder()
-        func json<T: Encodable>(_ value: T) throws -> Any {
-            try JSONSerialization.jsonObject(with: encoder.encode(value))
-        }
-        let loadout = study.battle.playerUpgrades.loadout
-        let upgrades: [[String: Any]] = loadout.catalog.upgrades.map { definition in
-            ["id": definition.id.rawValue, "selected": loadout.selected.contains(definition.id),
-             "title": definition.title, "starCost": definition.cost,
-             "prerequisite": definition.prerequisite.map { $0.rawValue as Any } ?? NSNull(),
-             "parameters": Dictionary(uniqueKeysWithValues: definition.parameters.map { ($0.key.rawValue, $0.value) })]
-        }
-        let content: [String: Any] = [
-            "engine": "shared-game-engine", "level": try json(study.level),
-            "mapGeoJSON": try JSONSerialization.jsonObject(with: db.levelGeoJSONDao.sourceData(mapImageName: study.level.mapImageName)),
-            "unlocks": Dictionary(uniqueKeysWithValues: study.battle.unlocks.map { ($0.key.rawValue, $0.value) }),
-            "canvas": try json(study.battle.virtualCanvas),
-            "towers": try json(study.catalog.towerTypes),
-            "enemies": try json(study.battle.enemies), "combatRules": try json(study.arsenal.combatRules),
-            "difficulty": study.difficulty.name, "enemyHPMultiplier": study.difficulty.enemyHPMultiplier,
-            "campaignUpgrades": upgrades, "heroes": false,
-            "metaProgression": ["earnedStars": loadout.starBudget, "spentStars": loadout.spentStars,
-                "availableStars": loadout.availableStars,
-                "bestStarsByLevel": Dictionary(uniqueKeysWithValues: study.battle.playerUpgrades.bestStarsByLevel.map { ($0.key.uuidString, $0.value) })],
-            "reinforcementConfig": ["cooldownSeconds": study.battle.reinforcementConfig.cooldownSeconds,
-                "timeToLiveSeconds": study.battle.reinforcementConfig.timeToLiveSeconds]]
-        return try JSONSerialization.data(withJSONObject: content, options: [.sortedKeys])
+        try study.replaySnapshot(db: db)
     }
 
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
@@ -52,7 +27,7 @@ final class AuthoredMoneySweep {
                 seed: UInt64, maxSeconds: Double, directory: String) throws {
         let study = try load(levelName)
         let plan = try MoneyStudyPlan(study: study, placementIndex: placement, upgradePolicyIndex: policy, seed: 1776)
-        let sim = try GameSimulation(content: study.battle, startingMoney: money, heroesEnabled: false, seed: seed)
+        let sim = try GameSimulation(recording: .database(db.levelRunDao, .simulator), content: study.battle, startingMoney: money, heroesEnabled: false, seed: seed)
         let trace = MoneyReplayTrace()
         sim.addObserver(trace)
         let result = try sim.run(steps: plan.steps, maxSeconds: maxSeconds)
@@ -60,7 +35,7 @@ final class AuthoredMoneySweep {
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         let content = try snapshot(study)
         try content.write(to: output.appendingPathComponent("content.json"), options: .atomic)
-        let report: [String: Any] = ["engine": "shared-game-engine", "placement": placement,
+        let report: [String: Any] = ["engine": "shared-game-engine", "runID": sim.runID!.uuidString, "placement": placement,
             "policy": policy, "money": money, "seed": seed, "planSeed": 1776,
             "contentSHA256": hash(content), "campaignMetaUpgrades": true,
             "result": try JSONSerialization.jsonObject(with: JSONEncoder().encode(result)),
@@ -166,10 +141,13 @@ final class AuthoredMoneySweep {
                 let plan = plans[index % plans.count]
                 let seeds = calibration ? min(grid.combatSeeds, requested - job * grid.combatSeeds) : grid.combatSeeds
                 var samples: [SimulationResult] = []
+                var levelRunIDs: [UUID] = []
                 for seedIndex in 0..<seeds {
-                    let sim = try GameSimulation(content: study.battle, startingMoney: money, heroesEnabled: false,
+                    let sim = try GameSimulation(recording: .database(db.levelRunDao, .simulator), content: study.battle, startingMoney: money, heroesEnabled: false,
                         seed: baseSeed &+ UInt64(seedIndex))
                     samples.append(try sim.run(steps: plan.steps, maxSeconds: maxSeconds))
+                    guard let levelRunID = sim.runID else { throw DbError.Db(message: "Simulator did not create a level run") }
+                    levelRunIDs.append(levelRunID)
                     for (mode, count) in sim.shotsByMode { attacks[mode.rawValue, default: 0] += count }
                     detonations += sim.demolitionDetonations
                     reinforcementDeployments += sim.reinforcementDeployments.count
@@ -180,7 +158,13 @@ final class AuthoredMoneySweep {
                 let now = Date(), elapsed = Date().timeIntervalSince(startedAt)
                 if let runID {
                     pending.append(MoneyStudyResultRow(money: money, placementPlan: plan.placementIndex,
-                        upgradePolicy: plan.upgradePolicyIndex, results: samples))
+                        upgradePolicy: plan.upgradePolicyIndex, results: samples,
+                        evidenceJSON: String(decoding: try JSONSerialization.data(withJSONObject: samples.enumerated().map { index, result in
+                            ["runID": levelRunIDs[index].uuidString, "seed": String(baseSeed &+ UInt64(index)),
+                             "outcome": result.outcome.rawValue, "seconds": result.seconds,
+                             "lives": result.livesRemaining, "gold": result.goldRemaining,
+                             "killed": result.killed, "leaked": result.leaked] as [String: Any]
+                        }, options: [.sortedKeys]), as: UTF8.self)))
                     if pending.count >= 32 || now.timeIntervalSince(lastLog) >= 15 {
                         try dao.insert(pending, runID: runID, completed: completed, rate: Double(completed) / elapsed)
                         pending.removeAll(keepingCapacity: true)

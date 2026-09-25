@@ -16,7 +16,7 @@ public struct EngineerObstacleStats: Codable, Sendable, Equatable {
     }
 }
 
-public struct EngineerObstacleField: Sendable, Equatable {
+public struct EngineerObstacleField: Sendable, Equatable, Codable {
     public var position: CGPoint
     public var stats: EngineerObstacleStats
     /// World-space road direction; the map renderer reverses its y axis.

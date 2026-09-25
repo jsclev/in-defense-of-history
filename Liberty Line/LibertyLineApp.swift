@@ -12,8 +12,29 @@ struct LibertyLineApp: App {
     var body: some Scene {
         WindowGroup {
             Group {
+                #if targetEnvironment(macCatalyst)
+                if let value = LevelReplayView.argument("--replay-run") {
+                    if let runID = UUID(uuidString: value) {
+                        ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                            LevelReplayView(store: store, canvas: canvas, runID: runID)
+                        }
+                    } else {
+                        Text("Replay failed: --replay-run requires a level-run UUID")
+                    }
+                } else if CommandLine.arguments.contains("--genetic-replay") || CommandLine.arguments.contains("--replay-run") {
+                    Text("Replay failed: use --replay-run with a recorded level-run UUID")
+                } else {
+                    gameRoot
+                }
+                #else
                 #if DEBUG
-                if CommandLine.arguments.contains("--shared-engine-review") {
+                if CommandLine.arguments.contains("--play-speed-review") {
+                    ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
+                        PlaySpeedDeviceReview(store: store, canvas: canvas)
+                    }
+                    .statusBarHidden(true)
+                    .persistentSystemOverlays(.hidden)
+                } else if CommandLine.arguments.contains("--shared-engine-review") {
                     ScreenGeometryGate(virtualCanvas: store.virtualCanvas) { canvas in
                         SharedBattleDeviceReview(store: store, canvas: canvas)
                     }
@@ -91,6 +112,7 @@ struct LibertyLineApp: App {
                 }
                 #else
                 gameRoot
+                #endif
                 #endif
             }
             .environmentObject(store.settings)

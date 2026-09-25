@@ -142,7 +142,7 @@ final class TowerAttributeAuthorityTests: XCTestCase {
                 }
             }
         }
-        XCTAssertEqual(count, 29)
+        XCTAssertEqual(count, 30)
     }
 
     func testSerializedTuningRequiresEveryKeyIncludingDisabledCapabilities() throws {

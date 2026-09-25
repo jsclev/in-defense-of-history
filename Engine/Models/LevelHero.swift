@@ -1,6 +1,6 @@
 import Foundation
 
-public struct HeroCombatStats: Sendable, Equatable {
+public struct HeroCombatStats: Codable, Sendable, Equatable {
     public let attackRating: Double
     public let defenseRating: Double
     public let hp: Double

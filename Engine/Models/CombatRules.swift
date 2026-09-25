@@ -48,4 +48,9 @@ public struct CombatRules: Codable, Sendable, Equatable {
     public var grapeshotSpread: [Double] { grapeshotSpreadDegrees.map { $0 * .pi / 180 } }
     public var firingTolerance: Double { firingToleranceDegrees * .pi / 180 }
     public var initialHeading: Double { initialHeadingDegrees * .pi / 180 }
+
+    /// Both combat receipts and reference screens use the same rounding rule.
+    public func killReward(baseBounty: Int) -> Int {
+        Int((Double(baseBounty) * killBountyMultiplier).rounded())
+    }
 }

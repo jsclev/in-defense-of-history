@@ -29,10 +29,22 @@ public class Db {
     public let difficultyDao: DifficultyDAO
     public let hudLayoutDao: HudLayoutDAO
     public let reinforcementConfigDao: ReinforcementConfigDAO
+    public let encyclopediaDemoDao: EncyclopediaDemoDAO
     public let metaUpgradeDao: MetaUpgradeDAO
     public let playerMetaUpgradeDao: PlayerMetaUpgradeDAO
     public let playerSettingsDao: PlayerSettingsDAO
     public let simulatorRunDao: SimulatorRunDAO
+    public let playSpeedDao: PlaySpeedDAO
+    private let localLevelRunDao: LevelRunDAO
+    private var runRecordingDatabase: Db?
+    public var levelRunDao: LevelRunDAO {
+        if let runRecordingDatabase { return runRecordingDatabase.levelRunDao }
+        return localLevelRunDao
+    }
+    public func recordRuns(in database: Db) {
+        precondition(database !== self)
+        runRecordingDatabase = database
+    }
     public let path: String
     
     public static var authoredDatabaseURL: URL {
@@ -62,6 +74,12 @@ public class Db {
             let sqliteMsg = String(cString: sqlite3_errmsg(conn))
             let errMsg = "Failed to open database connection to \(dbPath).  \(sqliteMsg)"
             fatalError("\(errMsg)")
+        }
+
+        // Independent simulator workers have separate connections. Let their
+        // short DAO transactions take turns; never drop a recording on BUSY.
+        guard sqlite3_busy_timeout(conn, 30_000) == SQLITE_OK else {
+            fatalError("Unable to configure database lock wait for \(dbPath)")
         }
         
         let pragma = "PRAGMA foreign_keys=ON;"
@@ -106,14 +124,18 @@ public class Db {
         difficultyDao = DifficultyDAO(conn: conn)
         hudLayoutDao = HudLayoutDAO(conn: conn)
         reinforcementConfigDao = ReinforcementConfigDAO(conn: conn)
+        encyclopediaDemoDao = EncyclopediaDemoDAO(conn: conn)
         playerSettingsDao = PlayerSettingsDAO(conn: conn)
         metaUpgradeDao = MetaUpgradeDAO(conn: conn)
         playerMetaUpgradeDao = PlayerMetaUpgradeDAO(conn: conn)
         simulatorRunDao = SimulatorRunDAO(conn: conn)
+        playSpeedDao = PlaySpeedDAO(conn: conn)
+        localLevelRunDao = LevelRunDAO(conn: conn)
     }
 
     public func close() {
         if let conn = conn {
+            localLevelRunDao.close()
             let rc = sqlite3_close_v2(conn)
             if rc != SQLITE_OK {
                 logger.error("sqlite3_close_v2 failed with code \(rc)")

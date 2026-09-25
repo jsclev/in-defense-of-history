@@ -1,6 +1,6 @@
 import Foundation
 
-public enum SimEvent: Sendable {
+public enum SimEvent: Codable, Sendable {
     case waveStarted(index: Int)
     case towerBuilt(slot: Int, towerID: UUID)
     case towerUpgraded(slot: Int, level: Int)

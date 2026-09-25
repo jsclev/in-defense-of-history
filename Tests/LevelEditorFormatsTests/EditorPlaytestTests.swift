@@ -20,7 +20,7 @@ final class EditorPlaytestTests: XCTestCase {
         XCTAssertEqual(session.sim.gold, 777)
         XCTAssertEqual(session.level.paths.count, file.draft.enemyRoutes.count)
         XCTAssertEqual(session.sim.currentWave, 0)
-        let shadow = try GameSimulation(content: session.content, startingMoney: nil, heroesEnabled: true, seed: session.seed)
+        let shadow = try GameSimulation(recording: .preview, content: session.content, startingMoney: nil, heroesEnabled: true, seed: session.seed)
         session.build(.ranged, at: 17)
         XCTAssertEqual(shadow.perform(.build(slot: 17, kind: .ranged)), .ok)
         session.sim.startNextWave(); shadow.startNextWave()

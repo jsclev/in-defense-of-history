@@ -1,11 +1,25 @@
 import Foundation
 
 public struct DesignArsenal: Sendable {
+    public struct History: Sendable {
+        public struct DemonstrationGuide: Sendable {
+            public enum Style: String, Sendable { case mortarStudy, siegeStudy }
+            public let style: Style
+            public let strategy: String
+            public let inclusionReason: String
+        }
+        public let description: String
+        public let sourceTitle: String
+        public let sourceURL: URL
+        public let guide: DemonstrationGuide?
+    }
+
     public struct Tier: Sendable {
         public let id: UUID
         public let level: Int
         public let branch: Int
         public let details: TowerMenuDetails
+        public let history: History
         public let tuning: TowerLevel
     }
 

@@ -240,7 +240,7 @@ public struct MetaUpgradeBattleProgress: Equatable, Sendable {
     }
 }
 /// Preparation uses game time. Tier upgrades keep this state; pauses and retargeting cannot replenish shots.
-public struct PreparedMetaVolley: Equatable, Sendable {
+public struct PreparedMetaVolley: Equatable, Sendable, Codable {
     public private(set) var shotsRemaining: Int
     private var quietSeconds = 0.0
     private let shotCount: Int

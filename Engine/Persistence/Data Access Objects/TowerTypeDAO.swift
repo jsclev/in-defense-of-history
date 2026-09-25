@@ -25,11 +25,48 @@ public class TowerTypeDAO: BaseDAO {
         let level: Int
         let branch: Int
         let details: TowerMenuDetails
+        let history: DesignArsenal.History
         let tuning: TowerLevel
     }
 
     public func validateAuthoredContent() throws {
         _ = try content()
+    }
+
+    private func histories(towerIDs: Set<UUID>) throws -> [UUID: DesignArsenal.History] {
+        var result: [UUID: DesignArsenal.History] = [:]
+        _ = try authoredRows("SELECT * FROM tower_history", entity: "tower_history") { row in
+            let id = try row.uuid("tower_id")
+            let row = AuthoredRow(statement: row.statement, entity: "tower_history[\(id)]")
+            guard towerIDs.contains(id) else {
+                throw row.invalid("tower_id", "does not identify an authored tower")
+            }
+            guard result[id] == nil else { throw row.invalid("tower_id", "is duplicated") }
+            let source = try row.text("source_url")
+            guard let url = URL(string: source), url.scheme == "https",
+                  let host = url.host, !host.isEmpty,
+                  !source.contains(where: \.isWhitespace) else {
+                throw row.invalid("source_url", "must be an absolute HTTPS URL")
+            }
+            let presentation = try row.text("presentation_kind")
+            let guide: DesignArsenal.History.DemonstrationGuide?
+            if presentation == "standard" {
+                try row.requireNull("strategy_text")
+                try row.requireNull("inclusion_reason")
+                guide = nil
+            } else if let style = DesignArsenal.History.DemonstrationGuide.Style(rawValue: presentation) {
+                guide = .init(style: style, strategy: try row.text("strategy_text"),
+                              inclusionReason: try row.text("inclusion_reason"))
+            } else {
+                throw row.invalid("presentation_kind", "is unsupported")
+            }
+            result[id] = DesignArsenal.History(description: try row.text("historical_description"),
+                sourceTitle: try row.text("source_title"), sourceURL: url, guide: guide)
+        }
+        for id in towerIDs where result[id] == nil {
+            throw DbError.Db(message: "tower_history[\(id)]: attribute 'tower_id' is missing its required history row")
+        }
+        return result
     }
 
     private func identities() throws -> [Identity] {
@@ -127,6 +164,7 @@ public class TowerTypeDAO: BaseDAO {
         let melee = try meleeUnitDao.getStatsByTowerId(combatRules: rules)
         let upgradeDAO = TowerUpgradeDAO(conn: conn)
         let towerIDs = try authoredRows("SELECT id FROM tower", entity: "tower") { try $0.uuid("id") }
+        let history = try histories(towerIDs: Set(towerIDs))
         let allUpgrades = try upgradeDAO.allPaths(towerIDs: Set(towerIDs))
         let values = try authoredRows("""
             SELECT * FROM tower ORDER BY tower_type_id, tower_level, branch
@@ -137,12 +175,19 @@ public class TowerTypeDAO: BaseDAO {
                 let upgrades = try upgradeDAO.paths(for: id, level: level,
                     expectedCount: row.integer("upgrade_path_count", minimum: 0), from: allUpgrades)
                 let attributes = try tuning(row, melee: melee[id], rules: rules, upgrades: upgrades)
+                if history[id]!.guide?.style == .mortarStudy, attributes.attackMode != .shell {
+                    throw row.invalid("attack_mode", "mortarStudy requires shell combat")
+                }
+                if history[id]!.guide?.style == .siegeStudy, attributes.attackMode != .solidShot {
+                    throw row.invalid("attack_mode", "siegeStudy requires solidShot combat")
+                }
                 try upgradeDAO.validateCombinations(attributes)
                 return Record(id: id, typeID: try row.uuid("tower_type_id"),
                     level: level,
                     branch: try row.integer("branch", minimum: 1),
                     details: TowerMenuDetails(name: try row.text("tower_name"),
                                               description: try row.text("tower_description")),
+                    history: history[id]!,
                     tuning: attributes)
             }
         guard Set(melee.keys).isSubset(of: Set(values.map(\.id))) else {
@@ -165,7 +210,7 @@ public class TowerTypeDAO: BaseDAO {
             DesignArsenal.Definition(id: type.id, kind: type.kind, category: type.category, name: type.name,
                 tiers: values.filter { $0.typeID == type.id }.map {
                     DesignArsenal.Tier(id: $0.id, level: $0.level, branch: $0.branch,
-                                       details: $0.details, tuning: $0.tuning)
+                                       details: $0.details, history: $0.history, tuning: $0.tuning)
                 })
         }, combatRules: rules)
     }

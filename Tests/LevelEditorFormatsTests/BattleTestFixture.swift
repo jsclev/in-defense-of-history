@@ -29,12 +29,13 @@ enum BattleTestFixture {
             DesignArsenal.Definition(id: tower.id, kind: tower.kind, category: tower.category, name: tower.name,
                 tiers: tower.tiers.map { tier in
                     DesignArsenal.Tier(id: tier.id, level: tier.level, branch: tier.branch, details: tier.details,
+                        history: tier.history,
                         tuning: tiers[Tier(tower.kind, tier.level, tier.branch)] ?? tier.tuning)
                 })
         }
         var ledger = source.playerUpgrades.bestStarsByLevel
         ledger[level.id] = 0
-        return try BattleContent(level: level, virtualCanvas: source.virtualCanvas,
+        return try BattleContent(level: level, playSpeeds: source.playSpeeds, virtualCanvas: source.virtualCanvas,
             arsenal: DesignArsenal(towers: definitions, combatRules: source.arsenal.combatRules),
             enemies: enemies, unlocks: source.unlocks, reinforcementConfig: source.reinforcementConfig,
             chosenHeroes: source.chosenHeroes, deployments: [], heroCombat: source.heroCombat,

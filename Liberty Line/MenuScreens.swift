@@ -72,9 +72,10 @@ struct DoneButton: View {
 
     let runtimeCanvas: RuntimeCanvas
     let action: () -> Void
+    var frame: CGRect? = nil
 
     var body: some View {
-        let frame = DoneButtonLayout(runtimeCanvas: runtimeCanvas, aspect: Self.aspect).frame
+        let frame = frame ?? DoneButtonLayout(runtimeCanvas: runtimeCanvas, aspect: Self.aspect).frame
         Button(action: action) {
             Image(Self.assetName)
                 .resizable()

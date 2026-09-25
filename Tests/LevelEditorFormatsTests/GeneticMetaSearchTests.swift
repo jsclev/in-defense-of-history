@@ -81,13 +81,13 @@ final class GeneticMetaSearchTests: XCTestCase {
         for selection: [MetaUpgrade] in [[], [.rangeEstimation], [.artificerCorps], [.rangeEstimation, .cartridgeDrill]] {
             let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)))], metaUpgrades: selection)
             let before = try fixture.db.playerMetaUpgradeDao.get()
-            let actual = try GeneticCommander.evaluate(strategy, content: source.battle, money: 500, seed: 9001, maxSeconds: 10)
+            let actual = try GeneticCommander.evaluate(strategy, recording: .preview, content: source.battle, money: 500, seed: 9001, maxSeconds: 10)
             XCTAssertEqual(try fixture.db.playerMetaUpgradeDao.get(), before, "Experiments must not mutate the player's saved progression")
             try fixture.db.playerMetaUpgradeDao.reset()
             for id in selection { XCTAssertTrue(try fixture.db.playerMetaUpgradeDao.purchase(id)) }
             let playerContent = try study(fixture).battle
             XCTAssertEqual(try source.battle.selectingMetaUpgrades(Set(selection)).playerUpgrades, playerContent.playerUpgrades)
-            let player = try BattleEngine(content: playerContent, heroesEnabled: false,
+            let player = try BattleEngine(recording: .preview, content: playerContent, heroesEnabled: false,
                 startingMoneyOverride: 500, seed: 9001, onVictory: { _, _ in 0 })
             player.selectSlot(0); _ = player.tapBuildButton(.ranged); _ = player.tapBuildButton(.ranged)
             player.startNextWave()
@@ -103,8 +103,8 @@ final class GeneticMetaSearchTests: XCTestCase {
             XCTAssertTrue(deployments.isEmpty)
             XCTAssertEqual(actual.result, player.simulationResult())
         }
-        let range = try GameSimulation(content: source.battle.selectingMetaUpgrades([.rangeEstimation]), startingMoney: 500, heroesEnabled: false, seed: 1)
-        let discount = try GameSimulation(content: source.battle.selectingMetaUpgrades([.artificerCorps]), startingMoney: 500, heroesEnabled: false, seed: 1)
+        let range = try GameSimulation(recording: .preview, content: source.battle.selectingMetaUpgrades([.rangeEstimation]), startingMoney: 500, heroesEnabled: false, seed: 1)
+        let discount = try GameSimulation(recording: .preview, content: source.battle.selectingMetaUpgrades([.artificerCorps]), startingMoney: 500, heroesEnabled: false, seed: 1)
         XCTAssertEqual(try source.battle.playerUpgrades.selecting([.rangeEstimation]).loadout.spentStars,
                        try source.battle.playerUpgrades.selecting([.artificerCorps]).loadout.spentStars)
         XCTAssertGreaterThan(try XCTUnwrap(range.buildOffers.first { $0.kind == .ranged }).cost,

@@ -49,7 +49,7 @@ struct SharedBattleDeviceReview: View {
                 runtimeCanvas: canvas, hudLayoutConfig: store.hudLayoutConfig, levelInfoID: id,
                 mapImageName: content.level.mapImageName)
             player.random = SeededRNG(seed: 1776)
-            let headless = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
+            let headless = try GameSimulation(recording: .database(store.db.levelRunDao, .simulator), content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
             self.runner = player
             let level = try store.db.levelInfoDao.getCampaignLevels(campaignName: "Main").first { $0.id == id }!
             self.node = CampaignNode(order: 15, level: level)

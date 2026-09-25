@@ -81,8 +81,14 @@ def verify_source():
 
 
 def verify_bundle(bundle):
-    info = plistlib.loads((bundle / "Info.plist").read_bytes())
-    for key in ("CFBundleIcons", "CFBundleIcons~ipad"):
+    is_mac = (bundle / "Contents").is_dir()
+    resources = bundle / "Contents" / "Resources" if is_mac else bundle
+    info_path = bundle / "Contents" / "Info.plist" if is_mac else bundle / "Info.plist"
+    info = plistlib.loads(info_path.read_bytes())
+    if is_mac:
+        require(info.get("CFBundleIconName") == "AppIcon", "Mac bundle does not reference AppIcon")
+        require((resources / "AppIcon.icns").is_file(), "Mac bundle is missing AppIcon.icns")
+    for key in (() if is_mac else ("CFBundleIcons", "CFBundleIcons~ipad")):
         primary = info.get(key, {}).get("CFBundlePrimaryIcon", {})
         require(primary.get("CFBundleIconName") == "AppIcon",
                 f"{key} does not reference AppIcon")
@@ -92,16 +98,17 @@ def verify_bundle(bundle):
             require(any(bundle.glob(f"{name}*.png")),
                     f"Missing bundled device icon: {name}")
     result = subprocess.run(["/usr/bin/xcrun", "assetutil", "--info",
-                             str(bundle / "Assets.car")],
+                             str(resources / "Assets.car")],
                             check=True, capture_output=True, text=True)
     icons = [item for item in json.loads(result.stdout)
              if item.get("Name") == "AppIcon"
              and item.get("AssetType") in ("Icon Image", "Image")
              and not item.get("Appearance")]
+    platforms = (("ipad", "pad"),) if is_mac else (("iphone", "phone"), ("ipad", "pad"))
     expected = {(idiom, int(size * scale), scale)
-                for source, idiom in (("iphone", "phone"), ("ipad", "pad"))
+                for source, idiom in platforms
                 for size, scale in SLOTS[source]}
-    expected.update((idiom, 1024, 1) for idiom in ("phone", "pad", "marketing"))
+    expected.update((idiom, 1024, 1) for idiom in (("pad", "marketing") if is_mac else ("phone", "pad", "marketing")))
     for idiom, pixels, scale in sorted(expected):
         require(any(item.get("Idiom") == idiom
                     and item.get("PixelWidth") == pixels
@@ -109,7 +116,8 @@ def verify_bundle(bundle):
                     and item.get("Scale") == scale
                     and item.get("Opaque") is True for item in icons),
                 f"Compiled AppIcon missing opaque {idiom} {pixels}px @{scale}x")
-    print("Compiled app icon verified: iPhone, iPad, iPad Pro, Settings, "
+    print("Compiled app icon verified: Mac Catalyst icon and iPad renditions."
+          if is_mac else "Compiled app icon verified: iPhone, iPad, iPad Pro, Settings, "
           "Spotlight, notifications, and 1024px App Store marketing icon.")
 
 

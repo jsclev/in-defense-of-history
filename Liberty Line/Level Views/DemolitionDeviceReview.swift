@@ -258,7 +258,7 @@ struct DemolitionDeviceReview: View {
                 && runner.money == moneyBefore - offer.cost, "Confirmation upgraded the wrong branch")
         }
         try runner.prepareDemolitionReview(stage: "upgrade")
-        try require(runner.upgradeOffers.map(\.branch) == [2, 3], "Wrong engineer branches")
+        try require(runner.upgradeOffers.map(\.branch) == [1, 2, 3], "Wrong engineer branches")
         try await capture("engineers-menu")
         for offer in runner.upgradeOffers {
             guard let name = TowerKind.special.specializationMenuIconName(atLevel: 4, branch: offer.branch),

@@ -1,13 +1,13 @@
 import Foundation
 
-public enum BuildResult: Sendable, Equatable {
+public enum BuildResult: String, Codable, Sendable, Equatable {
     case ok
     case needGold
     case invalid
 }
 
 /// Player intent only. The battle engine owns validation and every side effect.
-public enum BattleCommand: Sendable {
+public enum BattleCommand: Codable, Sendable {
     case build(slot: Int, kind: TowerKind)
     case upgrade(slot: Int, branch: Int)
     case purchaseUpgrade(slot: Int, pathID: String)
@@ -59,6 +59,10 @@ extension BattleEngine {
     /// This entry point invokes the same handlers as the interactive controls.
     @discardableResult
     public func perform(_ command: BattleCommand) -> BuildResult {
+        recordingInput("command", ["command": command.recordedJSON]) { performInput(command) }
+    }
+
+    private func performInput(_ command: BattleCommand) -> BuildResult {
         // Control switches are also available while the battle is paused.
         if case let .setHeroAI(id, enabled) = command {
             return setHeroAIEnabled(enabled, for: id) ? .ok : .invalid
@@ -148,5 +152,12 @@ extension BattleEngine {
             livesRemaining: lives, goldRemaining: money, goldEarned: goldEarned,
             killed: killedCount, leaked: escapedEnemyCount,
             fatesByTypeID: fatesByType, waveMaxProgress: waveMaxProgress, leaksByWave: leaksByWave)
+    }
+}
+
+private extension BattleCommand {
+    var recordedJSON: String {
+        do { return try LevelRecordingCodec.json(self) }
+        catch { fatalError("Cannot encode battle command: \(error)") }
     }
 }

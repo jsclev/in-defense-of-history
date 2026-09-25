@@ -19,6 +19,9 @@ struct RootView: View {
         // A launch shortcut enters the ordinary campaign view. Hero control,
         // difficulty, upgrades and starting money still come from SQLite.
         let arguments = CommandLine.arguments
+        if arguments.contains("--tower-encyclopedia-review") || arguments.contains("--tower-demo-review") || arguments.contains("--enemy-encyclopedia-review") {
+            _menuScreen = State(initialValue: .encyclopedia)
+        }
         if let flag = arguments.firstIndex(of: "--play-level") {
             do {
                 guard arguments.indices.contains(flag + 1),
@@ -69,7 +72,7 @@ struct RootView: View {
                 self.menuScreen = nil
             }
         } else if menuScreen == .encyclopedia {
-            EncyclopediaView(runtimeCanvas: runtimeCanvas) {
+            EncyclopediaView(db: store.db, runtimeCanvas: runtimeCanvas) {
                 self.menuScreen = nil
             }
         } else if menuScreen == .settings {

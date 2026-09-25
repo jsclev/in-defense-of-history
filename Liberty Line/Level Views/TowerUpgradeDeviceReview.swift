@@ -114,7 +114,9 @@ struct TowerUpgradeDeviceReview: View {
                     checks.append(try runner.verifyPurchasedTowerOnDevice(slot: slot))
                 }
             }
-            try require(purchases == 56 && checks.count == 14, "Incomplete specialty coverage")
+            let specialties = arsenal.towers.flatMap(\.tiers).filter { $0.level == 4 }
+            let expectedPurchases = specialties.flatMap { $0.tuning.upgradePaths }.reduce(0) { $0 + $1.ranks.count }
+            try require(purchases == expectedPurchases && checks.count == specialties.count, "Incomplete specialty coverage")
             result["purchases"] = purchases
             result["renderedLabels"] = renderedLabels
             result["checks"] = checks

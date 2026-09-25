@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ReinforcementConfig: Equatable, Sendable {
+public struct ReinforcementConfig: Codable, Equatable, Sendable {
     public let timeToLiveSeconds: Double
     public let cooldownSeconds: Double
 

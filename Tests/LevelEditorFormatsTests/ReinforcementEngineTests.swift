@@ -9,7 +9,7 @@ final class ReinforcementEngineTests: XCTestCase {
     }
 
     @MainActor private func engine(db: Db? = nil) throws -> BattleEngine {
-        try BattleEngine(content: BattleTestFixture.authored(db: db), heroesEnabled: false,
+        try BattleEngine(recording: .preview, content: BattleTestFixture.authored(db: db), heroesEnabled: false,
             startingMoneyOverride: nil, seed: 1, onVictory: { _, _ in 0 })
     }
 
@@ -186,8 +186,8 @@ final class ReinforcementEngineTests: XCTestCase {
     func testIndividualAndBatchedTicksPublishTheSameEngineCooldown() async throws {
         let content = try BattleTestFixture.authored()
         try await MainActor.run {
-            let single = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
-            let batched = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+            let single = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+            let batched = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
             let point = content.level.paths[0].point(atDistance: content.level.paths[0].totalLength / 2)
             for sim in [single, batched] {
                 XCTAssertEqual(sim.perform(.reinforcements(point: Point(-100_000, -100_000))), .invalid)

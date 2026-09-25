@@ -32,11 +32,6 @@ struct CampaignMapView: View {
             x: menu.bar.minX, y: menu.bar.minY,
             width: runtimeCanvas.physicalRect.maxX - menu.bar.minX,
             height: runtimeCanvas.physicalRect.maxY - menu.bar.minY)
-        let decor = CampaignDecor.placements(
-            viewSize: mapSize,
-            callouts: placements,
-            menuExclusion: menuBox
-        )
         let compass = CampaignCompass.placement(
             viewSize: mapSize,
             callouts: placements,
@@ -47,10 +42,8 @@ struct CampaignMapView: View {
                 CampaignMapMetalView(canvasSize: mapSize)
                     .frame(width: mapSize.width, height: mapSize.height)
 
-                ForEach(decor) { piece in
-                    CampaignDecorView(placement: piece)
-                        .position(piece.center)
-                }
+                // Historical landmarks are painted into this background.
+                CampaignOceanDecorations(runtimeCanvas: runtimeCanvas)
 
                 if let compass {
                     CampaignCompassView(placement: compass)
@@ -115,10 +108,34 @@ struct CampaignMapView: View {
             }
             #if DEBUG
             if CommandLine.arguments.contains("--campaign-art-review") {
-                await CampaignArtDeviceReview.capture(runtimeCanvas: runtimeCanvas)
+                await CampaignArtDeviceReview.capture(runtimeCanvas: runtimeCanvas,
+                    nodes: nodes, bestStarsByLevel: playerProgress.bestStarsByLevel,
+                    heroControls: settings.heroControls)
             }
             #endif
         }
+    }
+}
+
+/// Each canonical asset includes its own water transition and leaves taps free.
+struct CampaignOceanDecorations: View {
+    let runtimeCanvas: RuntimeCanvas
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            ForEach(CampaignOceanLayout.placements(runtimeCanvas: runtimeCanvas)) { placement in
+                Image(uiImage: CampaignButtonArt.requiredImage(named: placement.assetName))
+                    .resizable()
+                    .interpolation(.high)
+                    .scaledToFit()
+                    .frame(width: placement.frame.width, height: placement.frame.height)
+                    .position(x: placement.frame.midX, y: placement.frame.midY)
+            }
+        }
+        .frame(width: runtimeCanvas.physicalRect.width,
+               height: runtimeCanvas.physicalRect.height)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

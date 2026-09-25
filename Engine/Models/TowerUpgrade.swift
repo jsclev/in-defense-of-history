@@ -116,7 +116,7 @@ public struct TowerUpgradePath: Codable, Equatable, Sendable, Identifiable {
 
 /// Per-emplacement battle state, discarded with the level. Zero means that the
 /// player has not bought a rank; it is not a replacement for authored content.
-public struct TowerUpgradeProgress: Equatable, Sendable {
+public struct TowerUpgradeProgress: Codable, Equatable, Sendable {
     public private(set) var ranks: [String: Int] = [:]
     public init() {}
     public func rank(for pathID: String) -> Int { ranks[pathID] ?? 0 }

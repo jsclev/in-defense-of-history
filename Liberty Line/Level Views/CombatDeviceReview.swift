@@ -17,7 +17,7 @@ struct CombatDeviceReview: View {
                 let projection = LevelMapArt.projection(virtualCanvas: store.virtualCanvas,
                                                        fitting: canvas.playAreaRect)
                 runner.mapArt.underlay(in: projection)
-                GroundTroopLayer(walkers: frame.walkers, militia: frame.militia,
+                GroundTroopLayer(presentation: frame.presentation, interpolation: 1, militia: frame.militia,
                                  sprites: MapSpriteScale(runtimeCanvas: canvas), projection: projection)
             }
             Text(message).font(.system(size: 14, weight: .semibold)).foregroundStyle(.white)

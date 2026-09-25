@@ -13,9 +13,9 @@ final class GeneticStrategyTests: XCTestCase {
     @MainActor func testAuthoredReplayIsUnchangedByGeneticDriver() throws {
         let fixture = try fixture(), study = try study(fixture)
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
-        let old = try GameSimulation(content: study.battle, startingMoney: 500, heroesEnabled: false, seed: 1776)
+        let old = try GameSimulation(recording: .preview, content: study.battle, startingMoney: 500, heroesEnabled: false, seed: 1776)
         let expected = try old.run(steps: plan.steps, maxSeconds: 1800)
-        let actual = try GeneticCommander.evaluate(GeneticStrategy(plan: plan, metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected)), content: study.battle,
+        let actual = try GeneticCommander.evaluate(GeneticStrategy(plan: plan, metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected)), recording: .preview, content: study.battle,
             money: 500, seed: 1776, maxSeconds: 1800)
         // Balance edits may change the outcome of this old plan; they must
         // never make the two input drivers apply different engine behavior.
@@ -32,7 +32,7 @@ final class GeneticStrategyTests: XCTestCase {
     @MainActor func testSavingDoesNotSpendReservedIncomeOnOtherSlots() throws {
         let fixture = try fixture(), study = try study(fixture)
         let path = try XCTUnwrap(study.towerPaths.first { $0.kind == .ranged })
-        let probe = try GameSimulation(content: study.battle, startingMoney: 100_000, heroesEnabled: false, seed: 1)
+        let probe = try GameSimulation(recording: .preview, content: study.battle, startingMoney: 100_000, heroesEnabled: false, seed: 1)
         let cost = try XCTUnwrap(probe.buildOffers.first { $0.kind == path.kind }).cost
         XCTAssertEqual(probe.build(slot: 0, towerID: path.type.id), .ok)
         XCTAssertGreaterThan(try XCTUnwrap(probe.upgradeOffers(at: 0).first).cost, cost)
@@ -41,7 +41,7 @@ final class GeneticStrategyTests: XCTestCase {
                 .init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id))),
                 .init(step: .init(time: 0, action: .upgrade(slot: 0)), saveForPurchase: saving),
                 .init(step: .init(time: 0, action: .build(slot: 1, towerID: path.type.id)))], metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
-            let sim = try GameSimulation(content: study.battle, startingMoney: cost * 2, heroesEnabled: false, seed: 1)
+            let sim = try GameSimulation(recording: .preview, content: study.battle, startingMoney: cost * 2, heroesEnabled: false, seed: 1)
             var commander = GeneticCommander(strategy)
             try commander.tick(sim: sim)
             XCTAssertEqual(sim.towers.count, saving ? 1 : 2)
@@ -66,7 +66,7 @@ final class GeneticStrategyTests: XCTestCase {
                 executable.decisions[index].earliestWave = 0
             }
             let selectedContent = try study.battle.selectingMetaUpgrades(Set(executable.metaUpgrades))
-            let sim = try GameSimulation(content: selectedContent, startingMoney: 1_000_000, heroesEnabled: false, seed: UInt64(iteration))
+            let sim = try GameSimulation(recording: .preview, content: selectedContent, startingMoney: 1_000_000, heroesEnabled: false, seed: UInt64(iteration))
             var commander = GeneticCommander(executable)
             XCTAssertNoThrow(try commander.tick(sim: sim), "Mutation \(iteration) must remain legal in the actual engine")
         }
@@ -93,11 +93,11 @@ final class GeneticStrategyTests: XCTestCase {
         let fixture = try fixture(), original = try study(fixture)
         let path = try XCTUnwrap(original.towerPaths.first { $0.kind == .ranged })
         let genome = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)))], metaUpgrades: Array(original.battle.playerUpgrades.loadout.selected))
-        let before = try GameSimulation(content: original.battle, startingMoney: 1000, heroesEnabled: false, seed: 1)
+        let before = try GameSimulation(recording: .preview, content: original.battle, startingMoney: 1000, heroesEnabled: false, seed: 1)
         var commander = GeneticCommander(genome); try commander.tick(sim: before)
         XCTAssertEqual(sqlite3_exec(fixture.connection, "UPDATE tower SET cost=cost+100 WHERE tower_level=1", nil, nil, nil), SQLITE_OK)
         let changed = try study(fixture)
-        let after = try GameSimulation(content: changed.battle, startingMoney: 1000, heroesEnabled: false, seed: 1)
+        let after = try GameSimulation(recording: .preview, content: changed.battle, startingMoney: 1000, heroesEnabled: false, seed: 1)
         commander = GeneticCommander(genome); try commander.tick(sim: after)
         XCTAssertLessThan(after.gold, before.gold)
         let quote = try XCTUnwrap(after.buildOffers.first { $0.kind == .ranged }).cost
@@ -128,4 +128,49 @@ final class GeneticStrategyTests: XCTestCase {
         XCTAssertEqual(sqlite3_step(stmt), SQLITE_ROW)
         XCTAssertEqual(sqlite3_column_int(stmt, 0), 1776)
     }
+    private final class Purchases: SimulationObserver {
+        var events: [String] = []
+        func handle(_ event: SimEvent, atTime time: Double) {
+            switch event {
+            case let .towerBuilt(slot, _): events.append("build:\(slot)")
+            case let .towerUpgraded(slot, level): events.append("upgrade:\(slot):\(level)")
+            default: break
+            }
+        }
+    }
+
+    @MainActor func testPurchaseChainsPreserveGlobalPriorityAcrossTimeAndWaveGates() throws {
+        let fixture = try fixture(), study = try study(fixture)
+        let path = try XCTUnwrap(study.towerPaths.first { $0.kind == .ranged })
+        let strategy = GeneticStrategy(decisions: [
+            .init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id))),
+            .init(step: .init(time: 0, action: .upgrade(slot: 0)), earliestWave: 1),
+            .init(step: .init(time: 1, action: .build(slot: 1, towerID: path.type.id))),
+            .init(step: .init(time: 0, action: .build(slot: 2, towerID: path.type.id))),
+            .init(step: .init(time: 0, action: .upgrade(slot: 1))),
+            .init(step: .init(time: 0, action: .build(slot: 3, towerID: path.type.id)), earliestWave: 1)
+        ], metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
+        let sim = try GameSimulation(recording: .preview, content: study.battle,
+            startingMoney: 100_000, heroesEnabled: false, seed: 95)
+        let purchases = Purchases(); sim.addObserver(purchases)
+        var commander = GeneticCommander(strategy)
+        try commander.tick(sim: sim)
+        XCTAssertEqual(purchases.events, ["build:0", "build:2"])
+        try commander.tick(sim: sim)
+        XCTAssertEqual(purchases.events, ["build:0", "build:2", "upgrade:0:2", "build:3"])
+        for _ in 0..<31 { sim.step() }
+        try commander.tick(sim: sim)
+        XCTAssertEqual(purchases.events, ["build:0", "build:2", "upgrade:0:2", "build:3", "build:1", "upgrade:1:2"])
+        try commander.tick(sim: sim)
+        XCTAssertEqual(purchases.events.count, 6, "Completed purchases must not be repeated")
+    }
+
+    @MainActor func testEvaluationStillRejectsDuplicateMetaGenes() throws {
+        let fixture = try fixture(), study = try study(fixture)
+        let upgrade = try XCTUnwrap(study.battle.playerUpgrades.loadout.selected.first)
+        let strategy = GeneticStrategy(decisions: [], metaUpgrades: [upgrade, upgrade])
+        XCTAssertThrowsError(try GeneticCommander.evaluate(strategy, recording: .preview,
+            content: study.battle, money: 500, seed: 96, maxSeconds: 1))
+    }
+
 }

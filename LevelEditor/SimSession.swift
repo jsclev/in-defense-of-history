@@ -4,6 +4,7 @@ import Observation
 @MainActor
 @Observable
 final class SimSession {
+    private let runDAO: LevelRunDAO
     let blueprint: LevelBlueprint
     let content: BattleContent
     var level: LevelInfo { content.level }
@@ -13,10 +14,21 @@ final class SimSession {
     private var commander: ScriptedBuildOrder
 
     var seed: UInt64 = 1776
-    var speed: Int = 1
-    var paused = false
-    var autopilot = false
-    var selectedSlot: Int?
+    var speed: Double {
+        get { sim.playSpeed.factor }
+        set {
+            do { sim.setPlaySpeed(try PlaySpeed(newValue)) }
+            catch { fail(error) }
+        }
+    }
+    var paused = false {
+        didSet {
+            lastDate = nil
+            if paused { sim.pause() } else { sim.resume() }
+        }
+    }
+    var autopilot = false { didSet { sim.recordDriverControl("editorAutopilot", value: String(autopilot)) } }
+    var selectedSlot: Int? { didSet { sim.recordDriverControl("editorSelectSlot", value: selectedSlot.map(String.init) ?? "none") } }
     private(set) var banner: String?
     private(set) var bannerUntil: Double = 0
     private(set) var frame: Int = 0
@@ -35,6 +47,7 @@ final class SimSession {
     private var lastDate: Date?
 
     init(draft: MapDraft, db: Db, virtualCanvas: VirtualCanvas) throws {
+        runDAO = db.levelRunDao
         let levelID = try db.levelInfoDao.getIdForEditorDocument(named: draft.name)
         let record = try db.levelInfoDao.getBy(id: levelID)
         let arsenal = try db.towerTypeDao.getDesignArsenal()
@@ -64,14 +77,15 @@ final class SimSession {
             movementArea: try HeroMovementArea(geoJSON: geometry, defaultPathWidth: virtualCanvas.pathWidth),
             callButtons: try LevelGeoJSONDAO.callWaveButtons(from: geometry), exits: draft.exits)
         content = try BattleContent(db: db, levelID: levelID, draft: input)
-        sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: 1776)
+        sim = try GameSimulation(recording: .database(runDAO, .editor), content: content, playSpeed: content.playSpeeds.editor, startingMoney: nil, heroesEnabled: true, seed: 1776)
         commander = blueprint.scriptedSolution(arsenal: arsenal)
         attachObserver()
     }
 
     func restart() {
         do {
-            sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: true, seed: seed)
+            sim.finishRecording(status: .abandoned)
+            sim = try GameSimulation(recording: .database(runDAO, .editor), content: content, playSpeed: content.playSpeeds.editor, startingMoney: nil, heroesEnabled: true, seed: seed)
             commander = blueprint.scriptedSolution(arsenal: arsenal)
             attachObserver()
             accumulator = 0; lastDate = nil; flashes = []; banner = nil
@@ -84,9 +98,9 @@ final class SimSession {
         guard !paused, sim.outcome == nil else { lastDate = date; return }
         defer { frame += 1 }
         guard let last = lastDate else { lastDate = date; return }
-        accumulator += min(0.25, date.timeIntervalSince(last)) * Double(SimClock.ticksPerSecond * speed)
+        accumulator += max(0, date.timeIntervalSince(last)) * Double(SimClock.ticksPerSecond) * speed
         lastDate = date
-        let steps = min(Int(accumulator), SimClock.ticksPerSecond * 8)
+        let steps = Int(min(accumulator, Double(SimClock.ticksPerSecond * 8)))
         accumulator -= Double(steps)
         do {
             for _ in 0..<steps where sim.outcome == nil {
@@ -125,7 +139,7 @@ final class SimSession {
         do {
             var results: [SimulationResult] = []
             for index in 0..<100 {
-                let trial = try GameSimulation(content: content, startingMoney: nil,
+                let trial = try GameSimulation(recording: .database(runDAO, .editor), content: content, startingMoney: nil,
                                                heroesEnabled: true, seed: seed &+ UInt64(index))
                 results.append(try trial.run(steps: blueprint.scriptedSolution(arsenal: arsenal).steps, maxSeconds: 1800))
             }

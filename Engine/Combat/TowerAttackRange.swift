@@ -4,7 +4,7 @@ import Foundation
 /// The firing boundary in map coordinates. Targeting, projectile limits and
 /// the range overlay all use this geometry and the same tower_range value.
 /// Blast radius is a separate circle around impact and never enters this type.
-public struct TowerAttackRange: Equatable, Sendable {
+public struct TowerAttackRange: Equatable, Sendable, Codable {
     public let radius: CGFloat
     public let verticalFraction: CGFloat
 

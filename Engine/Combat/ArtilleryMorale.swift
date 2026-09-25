@@ -1,7 +1,7 @@
 import Foundation
 
 /// A shot keeps the morale tuning it had when fired, including across upgrades.
-public struct ArtilleryMoraleStrike: Equatable, Sendable {
+public struct ArtilleryMoraleStrike: Equatable, Sendable, Codable {
     public let minimum: Double
     public let maximum: Double
     public let radius: Double
@@ -29,7 +29,7 @@ public struct ArtilleryMoraleStrike: Equatable, Sendable {
 
 /// Morale and its short impact response use game time, so pause and speed-up agree.
 /// Visibility is independent of future combat-state/break thresholds.
-public struct EnemyMorale: Equatable, Sendable {
+public struct EnemyMorale: Equatable, Sendable, Codable {
     public let rules: CombatRules
 
     public private(set) var value: Double

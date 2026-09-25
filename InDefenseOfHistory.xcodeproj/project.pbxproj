@@ -33,6 +33,16 @@
 		52D0FEED000000000000C002 /* Levels in Resources */ = {isa = PBXBuildFile; fileRef = 52D0FEED000000000000C001 /* Levels */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		52E1F020000000000000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5263FCB53002C99600C1546D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5263FCBC3002C99600C1546D;
+			remoteInfo = "Liberty Line";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		520082B5300C245B00DF4F64 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -44,14 +54,6 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 /* End PBXCopyFilesBuildPhase section */
-
-/* Begin PBXContainerItemProxy section */
-		52E1F020000000000000000A = {isa = PBXContainerItemProxy; containerPortal = 5263FCB53002C99600C1546D; proxyType = 1; remoteGlobalIDString = 5263FCBC3002C99600C1546D; remoteInfo = "Liberty Line"; };
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXTargetDependency section */
-		52E1F020000000000000000B = {isa = PBXTargetDependency; target = 5263FCBC3002C99600C1546D; targetProxy = 52E1F020000000000000000A; };
-/* End PBXTargetDependency section */
 
 /* Begin PBXFileReference section */
 		520082B7300C245B00DF4F64 /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,7 +151,11 @@
 			path = "Level Views";
 			sourceTree = "<group>";
 		};
-		52E1F0200000000000000002 /* LibertyLineUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = Tests/LibertyLineUITests; sourceTree = "<group>"; };
+		52E1F0200000000000000002 /* Tests/LibertyLineUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Tests/LibertyLineUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,14 +180,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		52E1F0200000000000000005 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		52E1F0200000000000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		5263FCB43002C99600C1546D = {
 			isa = PBXGroup;
 			children = (
-				52E1F0200000000000000002 /* LibertyLineUITests */,
+				52E1F0200000000000000002 /* Tests/LibertyLineUITests */,
 				5200827F300C09D400DF4F64 /* Engine */,
 				5200839F300C399D00DF4F64 /* Db */,
 				5263FCBF3002C99600C1546D /* Liberty Line */,
@@ -270,9 +282,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5263FCD23002C99800C1546D /* Build configuration list for PBXNativeTarget "Liberty Line" */;
 			buildPhases = (
+				52C0FFEE000000000000A006 /* Verify Device Database Source */,
 				5263FCB93002C99600C1546D /* Sources */,
 				5263FCBA3002C99600C1546D /* Frameworks */,
 				5263FCBB3002C99600C1546D /* Resources */,
+				52C0FFEE000000000000A007 /* Verify Bundled Device Database */,
 				52C0FFEE000000000000A005 /* Verify Washington Assets */,
 				52C0FFEE000000000000A001 /* Stamp Build Number */,
 				52C0FFEE000000000000A004 /* Verify App Icon */,
@@ -321,14 +335,23 @@
 		};
 		52E1F0200000000000000003 /* LibertyLineUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 52E1F0200000000000000009;
-			buildPhases = (52E1F0200000000000000004, 52E1F0200000000000000005, 52E1F0200000000000000006);
-			buildRules = ();
-			dependencies = (52E1F020000000000000000B);
-			fileSystemSynchronizedGroups = (52E1F0200000000000000002);
+			buildConfigurationList = 52E1F0200000000000000009 /* Build configuration list for PBXNativeTarget "LibertyLineUITests" */;
+			buildPhases = (
+				52E1F0200000000000000004 /* Sources */,
+				52E1F0200000000000000005 /* Frameworks */,
+				52E1F0200000000000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				52E1F020000000000000000B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				52E1F0200000000000000002 /* Tests/LibertyLineUITests */,
+			);
 			name = LibertyLineUITests;
 			productName = LibertyLineUITests;
-			productReference = 52E1F0200000000000000001;
+			productReference = 52E1F0200000000000000001 /* LibertyLineUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -341,12 +364,15 @@
 				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
-					52E1F0200000000000000003 = {CreatedOnToolsVersion = 26.6; TestTargetID = 5263FCBC3002C99600C1546D; };
 					520082B6300C245B00DF4F64 = {
 						CreatedOnToolsVersion = 26.6;
 					};
 					5263FCBC3002C99600C1546D = {
 						CreatedOnToolsVersion = 26.6;
+					};
+					52E1F0200000000000000003 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 5263FCBC3002C99600C1546D;
 					};
 				};
 			};
@@ -389,7 +415,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		52E1F0200000000000000006 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		52E1F0200000000000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -483,6 +515,37 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/bin/python3 \"$SRCROOT/Tools/check_washington_assets.py\" --bundle \"$TARGET_BUILD_DIR/$WRAPPER_NAME\" --output \"$DERIVED_FILE_DIR/washington-assets-check.json\"\n";
 		};
+		52C0FFEE000000000000A006 /* Verify Device Database Source */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = (
+				"$(SRCROOT)/Tools/check_device_database.py",
+				"$(SRCROOT)/Db/in_defense_of_history.sqlite",
+			);
+			name = "Verify Device Database Source";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$PLATFORM_NAME\" in\n    iphoneos) /usr/bin/python3 \"$SRCROOT/Tools/check_device_database.py\" --database \"$SRCROOT/Db/in_defense_of_history.sqlite\" ;;\nesac\n";
+		};
+		52C0FFEE000000000000A007 /* Verify Bundled Device Database */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = (
+				"$(SRCROOT)/Tools/check_device_database.py",
+				"$(SRCROOT)/Db/in_defense_of_history.sqlite",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/in_defense_of_history.sqlite",
+			);
+			name = "Verify Bundled Device Database";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "case \"$PLATFORM_NAME\" in\n    iphoneos) /usr/bin/python3 \"$SRCROOT/Tools/check_device_database.py\" --database \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/in_defense_of_history.sqlite\" --matches \"$SRCROOT/Db/in_defense_of_history.sqlite\" ;;\nesac\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -529,8 +592,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		52E1F0200000000000000004 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		52E1F0200000000000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		52E1F020000000000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5263FCBC3002C99600C1546D /* Liberty Line */;
+			targetProxy = 52E1F020000000000000000A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		520082BC300C245B00DF4F64 /* Debug */ = {
@@ -595,8 +672,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zippyzen.liberty-line";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = "com.zippyzen.liberty-line.desktop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -634,8 +713,10 @@
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.zippyzen.liberty-line";
+				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = "com.zippyzen.liberty-line.desktop";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -922,7 +1003,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		52E1F0200000000000000009 = {isa = XCConfigurationList; buildConfigurations = (52E1F0200000000000000007, 52E1F0200000000000000008); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		52E1F0200000000000000009 /* Build configuration list for PBXNativeTarget "LibertyLineUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52E1F0200000000000000007 /* Debug */,
+				52E1F0200000000000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 	};
 	rootObject = 5263FCB53002C99600C1546D /* Project object */;

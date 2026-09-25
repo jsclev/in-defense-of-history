@@ -26,8 +26,8 @@ final class AuthoredMoneyStudyTests: XCTestCase {
         XCTAssertEqual(study.level.waves.count, 15)
         let expected = Set(study.arsenal.towers.flatMap(\.tiers).map(\.id))
         XCTAssertEqual(Set(study.towerPaths.flatMap(\.tierIDs)), expected)
-        XCTAssertEqual(expected.count, 29)
-        XCTAssertEqual(study.towerPaths.count, 14)
+        XCTAssertEqual(expected.count, 30)
+        XCTAssertEqual(study.towerPaths.count, 15)
         XCTAssertEqual(Set(study.towerPaths.map(\.kind)), Set(TowerKind.allCases))
         for money in [100, 450, 800] {
             let trial = study.level(startingMoney: money)

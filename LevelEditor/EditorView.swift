@@ -282,16 +282,8 @@ struct EditorView: View {
                                                  virtualCanvas: virtualCanvas))
     }
 
-    enum ImageImportTarget {
-        case background, overlay, guide
-    }
-
-    @State private var importingImage = false
-    /// Which image the open file chooser is for. Read in the completion, so
-    /// it survives the chooser's dismissal resetting `importingImage`.
-    @State private var importTarget: ImageImportTarget = .background
+    @State private var fileImport = EditorFileImportPresentation()
     @State private var exportingGeoJSON = false
-    @State private var importingGeoJSON = false
     @State private var geoJSONFile: GeoJSONFile?
     @State private var fileError: String?
     @Environment(\.undoManager) private var undoManager
@@ -312,10 +304,12 @@ struct EditorView: View {
     private var fileControls: some View {
         modeContent
             .toolbar { toolbarContent }
-            .fileImporter(isPresented: $importingImage,
-                          allowedContentTypes: [.png, .jpeg, .tiff], onCompletion: importImage)
-            .fileImporter(isPresented: $importingGeoJSON,
-                          allowedContentTypes: [.geoJSON, .json], onCompletion: importGeoJSON)
+            .modifier(EditorFileImporter(presentation: $fileImport) { target, result in
+                switch target {
+                case let .image(layer): importImage(result, target: layer)
+                case .geoJSON: importGeoJSON(result)
+                }
+            })
             .fileExporter(isPresented: $exportingGeoJSON, document: geoJSONFile,
                           contentType: .geoJSON,
                           defaultFilename: GeoJSONExport(virtualCanvas: state.virtualCanvas)
@@ -331,7 +325,7 @@ struct EditorView: View {
             message: { Text(fileError ?? "") }
     }
 
-    private func importImage(_ result: Result<URL, Error>) {
+    private func importImage(_ result: Result<URL, Error>, target: EditorImageImportTarget) {
         do {
             let url = try result.get()
             guard let data = PlatformImageLoader.freshRead(url),
@@ -339,7 +333,7 @@ struct EditorView: View {
                 throw LevelGeoJSON.ValidationError(message: "The selected image could not be read.")
             }
             document.edit(undoManager) { draft in
-                switch importTarget {
+                switch target {
                 case .background:
                     draft.backgroundImagePath = url.path
                     draft.backgroundImageData = data
@@ -351,7 +345,7 @@ struct EditorView: View {
                     draft.guideImageData = data
                 }
             }
-            if importTarget != .guide, loaded.pixelSize != state.virtualCanvas.size {
+            if target != .guide, loaded.pixelSize != state.virtualCanvas.size {
                 state.flash("Image is \(Int(loaded.pixelSize.width))×\(Int(loaded.pixelSize.height)) — artwork must be \(Int(state.virtualCanvas.size.width))×\(Int(state.virtualCanvas.size.height))")
             }
         } catch { fileError = error.localizedDescription }
@@ -416,7 +410,7 @@ struct EditorView: View {
                 hidden.compactMap(EditorLayer.init(rawValue:)))
         }
         .focusedSceneValue(\.editorFileActions, EditorFileActions(
-            importGeoJSON: { importingGeoJSON = true }, exportGeoJSON: exportGeoJSON))
+            importGeoJSON: { fileImport.present(.geoJSON) }, exportGeoJSON: exportGeoJSON))
         .focusedSceneValue(\.editorState, state)
         .background(
             Button("") { state.zoomIn() }
@@ -430,8 +424,7 @@ struct EditorView: View {
     private var editorBody: some View {
         EditorSplit(showSidebar: state.showInspector) {
             InspectorView(document: document, state: state) { target in
-                importTarget = target
-                importingImage = true
+                fileImport.present(.image(target))
             }
         } detail: {
             VStack(spacing: 0) {
@@ -584,7 +577,7 @@ struct EditorView: View {
                 }
                 .help("Copy a Blueprints.swift-ready LevelBlueprint to the clipboard")
 
-                Button { importingGeoJSON = true } label: {
+                Button { fileImport.present(.geoJSON) } label: {
                     Label("Import GeoJSON…", systemImage: "square.and.arrow.down")
                 }
                 Button { exportGeoJSON() } label: {

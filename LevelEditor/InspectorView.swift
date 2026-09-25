@@ -4,7 +4,7 @@ import SwiftUI
 struct InspectorView: View {
     @ObservedObject var document: MapDocument
     var state: EditorState
-    var requestImport: (EditorView.ImageImportTarget) -> Void
+    var requestImport: (EditorImageImportTarget) -> Void
     @Environment(\.undoManager) private var undoManager
 
     var body: some View {

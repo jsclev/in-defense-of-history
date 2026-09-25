@@ -56,6 +56,16 @@ final class WindowSpyView: UIView {
     override func didMoveToWindow() {
         super.didMoveToWindow()
         if let window {
+            #if targetEnvironment(macCatalyst)
+            if let scene = window.windowScene {
+                // 11-inch iPad Pro (4th generation), landscape logical points.
+                let size = CGSize(width: 1194, height: 834)
+                scene.sizeRestrictions?.minimumSize = size
+                scene.sizeRestrictions?.maximumSize = size
+                scene.sizeRestrictions?.allowsFullScreen = false
+                scene.titlebar?.titleVisibility = .hidden
+            }
+            #endif
             DispatchQueue.main.async { [onWindow] in onWindow(window) }
             report(in: window)
         }

@@ -4,7 +4,7 @@ import CoreGraphics
 /// A charge begins ready at the tower, awaiting the player's first placement.
 /// Elapsed preparation never places or detonates a charge.
 /// The caller advances only simulation time, so pausing and game speed apply.
-public struct DemolitionCharge: Equatable, Sendable {
+public struct DemolitionCharge: Equatable, Sendable, Codable {
     public private(set) var position: CGPoint?
     public private(set) var preparationSeconds: Double
     public private(set) var remainingSeconds: Double

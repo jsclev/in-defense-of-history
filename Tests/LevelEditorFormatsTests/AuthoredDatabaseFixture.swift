@@ -49,7 +49,7 @@ final class AuthoredDatabaseFixture {
         for (_, _, sql) in schema { try execute(sql) }
         // Historical run output is not authored content. Preserve its schema
         // for persistence tests without copying millions of old result rows.
-        let results: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result"]
+        let results: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result", "level_run", "level_action"]
         for (type, name, _) in schema where type == "table" && !results.contains(name) {
             let table = identifier(name)
             try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")

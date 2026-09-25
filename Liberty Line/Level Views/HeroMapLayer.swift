@@ -32,15 +32,12 @@ struct HeroMapLayer: View {
                     .onTapGesture { onSelect(hero.id) }
                     .position(x: footPoint.x, y: footPoint.y - spriteHeight / 2 + groundInset)
 
-                if hero.hp < hero.maxHP {
-                    let fraction = CGFloat(max(0, hero.hp / hero.maxHP))
-                    let barWidth = sprites.points(MapSpriteSizing.healthBarWidth)
-                    let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
-                    UnitHealthBar(fraction: fraction, width: barWidth, height: barHeight)
+                let barWidth = sprites.points(MapSpriteSizing.healthBarWidth)
+                let barHeight = sprites.points(MapSpriteSizing.healthBarHeight)
+                UnitHealthBar(health: hero.health, width: barWidth, height: barHeight)
                     .position(x: footPoint.x,
                               y: footPoint.y - spriteHeight - sprites.points(MapSpriteSizing.walkerLabelLift))
                     .allowsHitTesting(false)
-                }
             }
         }
     }

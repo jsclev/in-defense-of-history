@@ -55,8 +55,8 @@ final class BountyExperimentTests: XCTestCase {
         let source = try fixture()
         let low = try BountyExperimentDAO.contentCopy(of: source.db, fraction: 0.5)
         defer { low.close() }
-        let baseline = try GameSimulation(content: BattleTestFixture.authored(db: source.db), startingMoney: 500, heroesEnabled: false, seed: 7)
-        let reduced = try GameSimulation(content: BattleTestFixture.authored(db: low), startingMoney: 500, heroesEnabled: false, seed: 7)
+        let baseline = try GameSimulation(recording: .preview, content: BattleTestFixture.authored(db: source.db), startingMoney: 500, heroesEnabled: false, seed: 7)
+        let reduced = try GameSimulation(recording: .preview, content: BattleTestFixture.authored(db: low), startingMoney: 500, heroesEnabled: false, seed: 7)
         baseline.startNextWave(); reduced.startNextWave()
         baseline.step(); reduced.step()
         let a = try XCTUnwrap(baseline.engine.walkers.first), b = try XCTUnwrap(reduced.engine.walkers.first)

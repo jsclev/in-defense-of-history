@@ -88,3 +88,15 @@ INSERT INTO tower_upgrade_rank (path_id, rank, cost, rank_description, effects_j
 ('hospital_mates', 2, 190, 'Adds another 6 health per second to the healing aura. Overlapping healing auras do not stack.', '[{"attribute":"supportHealing","delta":6}]'),
 ('hospital_stations', 1, 100, 'Extends healing range by 60.', '[{"attribute":"range","delta":60}]'),
 ('hospital_stations', 2, 160, 'Extends healing range by another 90.', '[{"attribute":"range","delta":90}]');
+
+
+-- Grenadier Redoubt is a composite gameplay unit inspired by period hand grenades.
+INSERT INTO tower_upgrade_path (id, tower_id, slot, path_name, path_description, icon_name, historical_basis, source_url, rank_count) VALUES
+('grenadier_grenades', '8de0f7a6-1152-4c49-bf35-623ac190a401', 1, 'Prepared Grenades', 'Stronger grenades damage a broader cluster of enemies.', 'grenadier_grenade', 'Cast-iron hand grenades were period weapons. Increased damage and blast radius are gameplay abstractions, not specifications of a historical munition.', 'https://americanhistory.si.edu/collections/object/nmah_458176', 2),
+('grenadier_drill', '8de0f7a6-1152-4c49-bf35-623ac190a401', 2, 'Throwing Drill', 'A practiced team throws more often and reaches farther.', 'tower_menu_special_square', 'This fictional crew drill represents coordinated service of period hand grenades. Faster attacks and added range are gameplay abstractions.', 'https://americanhistory.si.edu/collections/object/nmah_458176', 2);
+
+INSERT INTO tower_upgrade_rank (path_id, rank, cost, rank_description, effects_json) VALUES
+('grenadier_grenades', 1, 120, 'Adds 8 grenade damage and 15 blast radius.', '[{"attribute":"damage","delta":8},{"attribute":"blastRadius","delta":15}]'),
+('grenadier_grenades', 2, 180, 'Adds another 12 grenade damage and 20 blast radius.', '[{"attribute":"damage","delta":12},{"attribute":"blastRadius","delta":20}]'),
+('grenadier_drill', 1, 110, 'Shortens the throwing interval by 0.25 seconds and adds 25 range.', '[{"attribute":"fireInterval","delta":-0.25},{"attribute":"range","delta":25}]'),
+('grenadier_drill', 2, 170, 'Shortens the throwing interval by another 0.25 seconds and adds another 25 range.', '[{"attribute":"fireInterval","delta":-0.25},{"attribute":"range","delta":25}]');

@@ -5,7 +5,9 @@ import UIKit
 /// Physical-device artwork evidence using the production views and compiled catalog.
 /// Exports images and JSON only; never changes campaign or player data.
 enum CampaignArtDeviceReview {
-    @MainActor static func capture(runtimeCanvas: RuntimeCanvas) async {
+    @MainActor static func capture(runtimeCanvas: RuntimeCanvas, nodes: [CampaignNode],
+                                  bestStarsByLevel: [UUID: Int],
+                                  heroControls: [HeroControlSetting]) async {
         let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("campaign-art-review", isDirectory: true)
         var result: [String: Any] = ["passed": false]
@@ -22,6 +24,92 @@ enum CampaignArtDeviceReview {
                 window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)
             }
             try write(screenshot, name: "campaign-screen", directory: directory)
+            try write(CampaignButtonArt.requiredImage(named: CampaignMapAsset.imageName),
+                      name: "campaign-background-decoded", directory: directory)
+            for decoration in CampaignOceanLayout.decorations {
+                try write(CampaignButtonArt.requiredImage(named: decoration.assetName),
+                          name: decoration.assetName + "-decoded", directory: directory)
+            }
+
+            let minimumSize = CGSize(width: 340.0 * 16 / 9, height: 340)
+            let minimumPlacements = CampaignMarkers.placements(for: nodes,
+                bestStarsByLevel: bestStarsByLevel, viewSize: minimumSize)
+            let minimumCanvas = RuntimeCanvas(virtualCanvas: runtimeCanvas.virtualCanvas,
+                physicalRect: CGRect(origin: .zero, size: minimumSize),
+                safeInsetsRect: CGRect(origin: .zero, size: minimumSize))
+            let minimumMenu = MenuBarLayout(runtimeCanvas: minimumCanvas,
+                itemCount: MenuScreen.allCases.count)
+            let minimumMenuBox = CGRect(x: minimumMenu.bar.minX, y: minimumMenu.bar.minY,
+                width: minimumSize.width - minimumMenu.bar.minX,
+                height: minimumSize.height - minimumMenu.bar.minY)
+            let minimumCompass = CampaignCompass.placement(viewSize: minimumSize,
+                callouts: minimumPlacements, menuBox: minimumMenuBox)
+            let minimumTitle = TitleLayout(runtimeCanvas: minimumCanvas,
+                aspect: 1 / max(HudIcon.aspect(of: "game_title"), 0.01))
+            let crop = CampaignMapLayout.makeCrop(imageSize: CampaignMapAsset.imageSize,
+                safeRect: CampaignMapAsset.safeRect, viewSize: minimumSize).rect
+            let ratio = minimumSize.width / crop.width
+            let preview = ZStack(alignment: .topLeading) {
+                Image(uiImage: CampaignButtonArt.requiredImage(named: CampaignMapAsset.imageName))
+                    .resizable()
+                    .frame(width: CampaignMapAsset.imageSize.width * ratio,
+                           height: CampaignMapAsset.imageSize.height * ratio)
+                    .offset(x: -crop.minX * ratio, y: -crop.minY * ratio)
+                    .frame(width: minimumSize.width, height: minimumSize.height,
+                           alignment: .topLeading)
+                    .clipped()
+                CampaignOceanDecorations(runtimeCanvas: minimumCanvas)
+                if let minimumCompass {
+                    CampaignCompassView(placement: minimumCompass)
+                }
+                CampaignMarkerTethers(placements: minimumPlacements)
+                    .stroke(MarkerPalette.tether, lineWidth: 1.6)
+                ForEach(minimumPlacements) { placement in
+                    CampaignLevelMarker(placement: placement,
+                        scale: CampaignMarkers.scale(for: minimumSize))
+                        .position(placement.center)
+                }
+                Image("game_title")
+                    .resizable().scaledToFit()
+                    .frame(width: minimumTitle.frame.width, height: minimumTitle.frame.height)
+                    .position(x: minimumTitle.frame.midX, y: minimumTitle.frame.midY)
+                ForEach(Array(MenuScreen.allCases.enumerated()), id: \.element.id) { index, screen in
+                    MenuButton(menuScreen: screen,
+                        size: minimumMenu.itemFrames[index].height, action: {})
+                        .position(x: minimumMenu.itemFrames[index].midX,
+                                  y: minimumMenu.itemFrames[index].midY)
+                }
+            }
+            .frame(width: minimumSize.width, height: minimumSize.height)
+            .clipped()
+            let previewRenderer = ImageRenderer(content: preview)
+            previewRenderer.scale = 1
+            guard let minimumImage = previewRenderer.uiImage else { throw CocoaError(.fileWriteUnknown) }
+            try write(minimumImage, name: "campaign-minimum-size", directory: directory)
+            for density in [2.0, 3.0] {
+                previewRenderer.scale = density
+                guard let image = previewRenderer.uiImage else { throw CocoaError(.fileWriteUnknown) }
+                try write(image, name: "campaign-minimum-size@\(Int(density))x", directory: directory)
+            }
+
+            var layouts: [[String: Any]] = []
+            for size in [minimumSize, runtimeCanvas.physicalRect.size] {
+                let placements = CampaignMarkers.placements(for: nodes,
+                    bestStarsByLevel: bestStarsByLevel, viewSize: size)
+                var minimumGap = CGFloat.greatestFiniteMagnitude
+                for (index, a) in placements.enumerated() {
+                    for b in placements.dropFirst(index + 1) {
+                        minimumGap = min(minimumGap, hypot(a.center.x - b.center.x,
+                            a.center.y - b.center.y) - (a.diameter + b.diameter) / 2)
+                    }
+                }
+                layouts.append(["width": size.width, "height": size.height,
+                    "minimumDiscGap": minimumGap,
+                    "markers": placements.map { p in
+                        ["level": p.id, "x": p.center.x, "y": p.center.y,
+                         "diameter": p.diameter, "anchorX": p.anchor.x, "anchorY": p.anchor.y]
+                    }])
+            }
 
             let menu = MenuBarLayout(runtimeCanvas: runtimeCanvas, itemCount: MenuScreen.allCases.count)
             var records: [[String: Any]] = []
@@ -57,7 +145,21 @@ enum CampaignArtDeviceReview {
             }
             result = ["passed": true, "build": Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") ?? "",
                       "screenWidth": window.bounds.width, "screenHeight": window.bounds.height,
-                      "screenScale": window.screen.scale, "assets": records]
+                      "screenScale": window.screen.scale, "assets": records,
+                      "campaignLayouts": layouts,
+                      "oceanLayouts": [minimumCanvas, runtimeCanvas].map { canvas in
+                          ["playX": canvas.playAreaRect.minX, "playY": canvas.playAreaRect.minY,
+                           "playWidth": canvas.playAreaRect.width, "playHeight": canvas.playAreaRect.height,
+                           "scaleFactor": canvas.scaleFactor,
+                           "decorations": CampaignOceanLayout.placements(runtimeCanvas: canvas).map { p in
+                               ["asset": p.assetName, "x": p.frame.minX, "y": p.frame.minY,
+                                "width": p.frame.width, "height": p.frame.height,
+                                "insidePlayArea": canvas.playAreaRect.contains(p.frame)] as [String: Any]
+                           }] as [String: Any]
+                      },
+                      "heroControls": heroControls.map {
+                          ["id": $0.id.uuidString, "name": $0.name, "aiEnabled": $0.aiEnabled]
+                      }]
         } catch {
             result["error"] = String(describing: error)
         }

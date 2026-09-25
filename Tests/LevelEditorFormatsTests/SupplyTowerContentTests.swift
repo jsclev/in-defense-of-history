@@ -91,8 +91,8 @@ final class SupplyTowerContentTests: XCTestCase {
             XCTAssertNil(tuning.demolitionPreparationSeconds)
             let level = BattleTestFixture.level(enemy: enemy, slots: [Point(0, 0)])
             let content = try BattleTestFixture.content(level: level, enemies: [enemy])
-            let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
-            let control = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+            let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+            let control = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
             try BattleTestFixture.build(.supply, level: tier.level, branch: tier.branch, in: sim)
             let paid = sim.gold
             sim.startNextWave(); control.startNextWave()

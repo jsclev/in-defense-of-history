@@ -18,8 +18,8 @@ final class GeneticReinforcementTests: XCTestCase {
         try execute("UPDATE reinforcement_config SET cooldown_seconds=1.7,time_to_live_seconds=3.1", fixture)
         try execute("UPDATE combat_rules SET reinforcement_soldier_count=4", fixture)
         let content = try BattleTestFixture.authored(db: fixture.db)
-        let sim = try GameSimulation(content: content, startingMoney: 500, heroesEnabled: false, seed: 1776)
-        let player = try BattleEngine(content: content, heroesEnabled: false,
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 500, heroesEnabled: false, seed: 1776)
+        let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: 500, seed: 1776, onVictory: { _, _ in 0 })
         let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected),
             reinforcements: .init(priority: .nearestExit, holdSeconds: 0.3))
@@ -59,13 +59,13 @@ final class GeneticReinforcementTests: XCTestCase {
         let beforeProfile = try fixture.db.playerMetaUpgradeDao.get()
         let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected))
         let copy = try JSONDecoder().decode(GeneticStrategy.self, from: JSONEncoder().encode(strategy))
-        let first = try GeneticCommander.evaluate(strategy, content: content, money: 500, seed: 1776, maxSeconds: 15)
-        let replay = try GeneticCommander.evaluate(copy, content: content, money: 500, seed: 1776, maxSeconds: 15)
+        let first = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 500, seed: 1776, maxSeconds: 15)
+        let replay = try GeneticCommander.evaluate(copy, recording: .preview, content: content, money: 500, seed: 1776, maxSeconds: 15)
         XCTAssertEqual(first, replay)
         XCTAssertFalse(first.reinforcementDeployments.isEmpty)
         try execute("UPDATE reinforcement_config SET cooldown_seconds=2,time_to_live_seconds=3", fixture)
         let changed = try BattleTestFixture.authored(db: fixture.db)
-        let after = try GeneticCommander.evaluate(strategy, content: changed, money: 500, seed: 1776, maxSeconds: 15)
+        let after = try GeneticCommander.evaluate(strategy, recording: .preview, content: changed, money: 500, seed: 1776, maxSeconds: 15)
         XCTAssertGreaterThan(after.reinforcementDeployments.count, first.reinforcementDeployments.count)
         XCTAssertEqual(try fixture.db.playerMetaUpgradeDao.get(), beforeProfile)
         try execute("DELETE FROM reinforcement_config", fixture)
@@ -77,7 +77,7 @@ final class GeneticReinforcementTests: XCTestCase {
         try execute("UPDATE reinforcement_config SET cooldown_seconds=2,time_to_live_seconds=20", fixture)
         let content = try BattleTestFixture.authored(db: fixture.db)
         for selected in [content.playerUpgrades.loadout.selected, Set<MetaUpgrade>()] {
-            let sim = try GameSimulation(content: content.selectingMetaUpgrades(selected), startingMoney: 500, heroesEnabled: false, seed: 1)
+            let sim = try GameSimulation(recording: .preview, content: content.selectingMetaUpgrades(selected), startingMoney: 500, heroesEnabled: false, seed: 1)
             var commander = ReinforcementCommander(.immediate)
             for _ in 0..<90 { try commander.tick(sim: sim); sim.step() }
             XCTAssertTrue(sim.reinforcementDeployments.isEmpty, "Wait for an enemy rather than wasting an idle charge")
@@ -128,7 +128,7 @@ final class GeneticReinforcementTests: XCTestCase {
         let tower = try XCTUnwrap(study.towerPaths.first)
         let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: tower.type.id)), saveForPurchase: true)],
             metaUpgrades: Array(content.playerUpgrades.loadout.selected))
-        let result = try GeneticCommander.evaluate(strategy, content: content, money: 1, seed: 1776, maxSeconds: 5)
+        let result = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 1, seed: 1776, maxSeconds: 5)
         XCTAssertFalse(result.reinforcementDeployments.isEmpty)
     }
 }

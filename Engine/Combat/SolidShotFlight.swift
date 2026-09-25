@@ -3,7 +3,7 @@ import CoreGraphics
 
 /// A solid cannonball travels along its original bearing, hitting each enemy
 /// at most once. Swept segments preserve penetration even across a long frame.
-public struct SolidShotFlight: Sendable {
+public struct SolidShotFlight: Sendable, Codable {
     public let hitRadius: CGFloat
     public private(set) var remainingDistance: CGFloat
     public private(set) var hitIDs: Set<Int> = []

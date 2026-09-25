@@ -118,16 +118,17 @@ final class EngineerObstacleTests: XCTestCase {
         let db = Db(dbPath: Db.authoredDatabaseURL.path, fullRefresh: false)
         defer { db.close() }
         let type = try XCTUnwrap(db.towerTypeDao.getTowerTypes()[.special])
-        XCTAssertEqual(type.levels.map(\.cost), [100, 150, 220])
-        XCTAssertEqual(type.levels.map { $0.engineerObstacles?.radius }, [143, 183, 223])
-        XCTAssertEqual(type.levels.map { $0.engineerObstacles?.slowFraction }, [0.5, 0.6, 0.7])
-        XCTAssertTrue(type.levels.allSatisfy { $0.shotMaxDamage == 0 && $0.terrorMax == 0 && $0.fireInterval == 0 })
+        let commonLevels = type.levels.prefix(3)
+        XCTAssertEqual(commonLevels.map(\.cost), [100, 150, 220])
+        XCTAssertEqual(commonLevels.map { $0.engineerObstacles?.radius }, [143, 183, 223])
+        XCTAssertEqual(commonLevels.map { $0.engineerObstacles?.slowFraction }, [0.5, 0.6, 0.7])
+        XCTAssertTrue(commonLevels.allSatisfy { $0.shotMaxDamage == 0 && $0.terrorMax == 0 && $0.fireInterval == 0 })
         let branches = try db.towerTypeDao.getTowerLevelsByBranch()
         XCTAssertEqual(branches[.special]?[4]?[2]?.engineerObstacles, type.levels[2].engineerObstacles)
         XCTAssertNil(branches[.special]?[4]?[3]?.engineerObstacles)
         let enemy = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()).type(.loyalistMilitia)
         let level = BattleTestFixture.level(enemy: enemy, slots: [Point(0, 40)], money: 1000)
-        let sim = try GameSimulation(content: BattleTestFixture.content(level: level, enemies: [enemy]),
+        let sim = try GameSimulation(recording: .preview, content: BattleTestFixture.content(level: level, enemies: [enemy]),
                                      startingMoney: nil, heroesEnabled: false, seed: 1)
         try BattleTestFixture.build(.special, in: sim)
         sim.startNextWave()
@@ -165,7 +166,7 @@ final class EngineerObstacleTests: XCTestCase {
         let level = BattleTestFixture.level(enemy: enemy, slots: [Point(0, 0)], starts: [Point(0, 200)])
         let content = try BattleTestFixture.content(level: level, enemies: [enemy],
             tiers: [.init(.special, 1): type.levels[0], .init(.special, 2): type.levels[1]])
-        let sim = try GameSimulation(content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
+        let sim = try GameSimulation(recording: .preview, content: content, startingMoney: nil, heroesEnabled: false, seed: 1)
         try BattleTestFixture.build(.special, in: sim)
         XCTAssertTrue(sim.engine.engineerObstacleFields.isEmpty)
         XCTAssertEqual(sim.perform(.upgrade(slot: 0, branch: 1)), .ok)
