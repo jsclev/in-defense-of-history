@@ -45,6 +45,8 @@ struct LevelReplaySetup: Codable {
     }
     let level: LevelInfo
     let virtualCanvas: VirtualCanvas
+    /// Absent only in recordings made before HUD capture was introduced.
+    let hudLayout: HudLayoutConfig?
     let towers: [Tower]
     let enemies: [EnemyType]
     let difficulty: Difficulty
@@ -62,6 +64,7 @@ struct LevelReplaySetup: Codable {
     @MainActor init(engine: BattleEngine, seed: UInt64, heroesEnabled: Bool) {
         let content = engine.content
         level = content.level; virtualCanvas = content.virtualCanvas
+        hudLayout = content.hudLayout
         towers = content.arsenal.towers.flatMap { definition in
             definition.tiers.map { tier in
                 Tower(id: tier.id, kind: definition.kind, level: tier.level, branch: tier.branch,
@@ -141,6 +144,8 @@ struct LevelReplayFrame: Codable {
     let selectedSlot: Int?
     let selectedTower: Int?
     let selectedHero: Int?
+    /// Older recordings remain playable without inventing missing UI history.
+    let hud: LevelHUDState?
 
     @MainActor init(_ engine: BattleEngine) {
         tick = engine.timer.tick; money = engine.money; lives = engine.lives
@@ -162,6 +167,7 @@ struct LevelReplayFrame: Codable {
         targetingSecondsBySlot = engine.targetingSecondsBySlot; shotsBySlot = engine.shotsBySlot
         selectedSlot = engine.selectedSlotIndex; selectedTower = engine.selectedTowerSlotIndex
         selectedHero = engine.selectedHeroIndex
+        hud = LevelHUDState(engine: engine)
     }
 }
 

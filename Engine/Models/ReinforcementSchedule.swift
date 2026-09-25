@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ReinforcementCooldown: Equatable, Sendable {
+public struct ReinforcementCooldown: Codable, Equatable, Sendable {
     public let remainingSeconds: Double
     public let remainingFraction: Double
     public var isReady: Bool { remainingSeconds == 0 }

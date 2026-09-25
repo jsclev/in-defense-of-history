@@ -6,6 +6,7 @@ struct ReinforcementButton: View {
     let isAvailable: Bool
     let action: () -> Void
     var isSelected = false
+    var isActivated = false
 
     var body: some View {
         Button(action: action) {
@@ -21,15 +22,10 @@ struct ReinforcementButton: View {
                 }
             }
             .frame(width: buttonSize.width, height: buttonSize.height)
-            .overlay {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: buttonSize.width * 0.08)
-                        .strokeBorder(.white, lineWidth: buttonSize.width * 0.04)
-                }
-            }
+            .hudActivationHighlight(isSelected || isActivated, side: buttonSize.width)
             .contentShape(Rectangle())
         }
-        .buttonStyle(ReinforcementButtonStyle())
+        .buttonStyle(HUDButtonStyle())
         .disabled(!isAvailable)
         .accessibilityLabel("Call reinforcements")
         .accessibilityIdentifier("call-reinforcements")
@@ -38,13 +34,5 @@ struct ReinforcementButton: View {
 
     private var cooldownOverlay: some View {
         ReinforcementCooldownOverlay(buttonSize: buttonSize, remainingFraction: cooldown.remainingFraction)
-    }
-}
-
-private struct ReinforcementButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        // The sliding shade is the sole availability cue; do not dim the icon
-        // or frame when SwiftUI disables the button.
-        configuration.label
     }
 }

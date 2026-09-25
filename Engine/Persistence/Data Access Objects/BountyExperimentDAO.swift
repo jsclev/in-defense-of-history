@@ -2,9 +2,11 @@ import Foundation
 import SQLite3
 
 /// Disposable content experiments. The authored database remains the source;
-/// only its copied combat_rules row changes, and normal DAOs reload all inputs.
+/// only copied bounty/optional hero-selection rows change. Normal DAOs reload
+/// all inputs; the source player's hero selection is never edited.
 public final class BountyExperimentDAO {
-    public static func contentCopy(of source: Db, fraction: Double) throws -> Db {
+    public static func contentCopy(of source: Db, fraction: Double, selectedHeroIDs: [UUID]? = nil,
+                                   heroAI: [UUID: Bool] = [:]) throws -> Db {
         guard fraction.isFinite, (0...1).contains(fraction), let original = source.conn else {
             throw DbError.Db(message: "bounty experiment: fraction must be between zero and one and source must be open")
         }
@@ -70,6 +72,13 @@ public final class BountyExperimentDAO {
                 throw DbError.Db(message: "bounty experiment: expected exactly one combat_rules row")
             }
             _ = try copy.combatRulesDao.get()
+            if let selectedHeroIDs {
+                try copy.heroDao.setSelectedHeroes(selectedHeroIDs)
+                _ = try HeroSelectionStore(dao: copy.heroDao).load()
+            }
+            for (id, enabled) in heroAI {
+                try copy.playerSettingsDao.setHeroAIEnabled(enabled, heroID: id)
+            }
             return copy
         } catch {
             copy.close()

@@ -171,6 +171,7 @@ private struct TowerEncyclopediaView: View {
     @State private var familyID: UUID
     @State private var tierID: UUID
     @State private var detailPage = 0
+    @State private var showingDetails = false
     @State private var reviewElapsed: Double?
     @State private var reviewSceneFrame = CGRect.zero
     #if DEBUG
@@ -184,7 +185,6 @@ private struct TowerEncyclopediaView: View {
     private static let ink = Color(red: 0.22, green: 0.12, blue: 0.055)
     private static let paper = Color(red: 0.97, green: 0.88, blue: 0.66)
     private static let gold = Color(red: 0.48, green: 0.23, blue: 0.07)
-    private static let gridRows = 6
 
     init(arsenal: DesignArsenal, demonstrations: TowerDemonstrationCatalog, runtimeCanvas: RuntimeCanvas,
          onExit: @escaping () -> Void) {
@@ -200,7 +200,8 @@ private struct TowerEncyclopediaView: View {
             }
             return definition
         }
-        guard families.count == 5, families.allSatisfy({ $0.tiers.count <= Self.gridRows }) else {
+        guard families.count == TowerEncyclopediaLayout.rows,
+              families.allSatisfy({ $0.tiers.count <= TowerEncyclopediaLayout.columns }) else {
             fatalError("tower_type.level_layout: encyclopedia requires five families with at most six entries each")
         }
         self.families = families
@@ -231,13 +232,7 @@ private struct TowerEncyclopediaView: View {
 
     var body: some View {
         let layout = TowerEncyclopediaLayout(runtimeCanvas: runtimeCanvas, doneAspect: DoneButton.aspect)
-        let rect = layout.contentFrame
         let scale = layout.typeScale
-        let gridGap = layout.gridGap
-        let cellSide = layout.cellSide
-        let gridWidth = layout.gridFrame.width
-        let columnGap = layout.columnGap
-        let detailHeight = layout.detailFrame.height
         ZStack(alignment: .topLeading) {
             Image(uiImage: DemonstrationArtwork.image("tower_encyclopedia_background"))
                 .resizable().interpolation(.high)
@@ -253,22 +248,48 @@ private struct TowerEncyclopediaView: View {
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
 
-            HStack(alignment: .top, spacing: columnGap) {
-                towerGrid(side: cellSide, iconSide: layout.iconSide, gap: gridGap, scale: scale)
-                .frame(width: gridWidth)
+            if showingDetails {
                 detailPages(scale: scale)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: detailHeight)
-            }
-            .foregroundStyle(Self.ink)
-            .frame(width: rect.width, height: rect.height, alignment: .top)
-            #if DEBUG
-            .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { reviewContentFrame = $0 }
-            #endif
-            .position(x: rect.midX, y: rect.midY)
+                    .foregroundStyle(Self.ink)
+                    .frame(width: layout.detailFrame.width, height: layout.detailFrame.height)
+                    .position(x: layout.detailFrame.midX, y: layout.detailFrame.midY)
+                    .accessibilityIdentifier("tower-encyclopedia-details-screen")
 
-            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit, frame: layout.doneFrame)
+                Text(tier.details.name)
+                    .font(.custom("Baskerville-Bold", size: 23 * scale))
+                    .foregroundStyle(Self.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(width: layout.titleFrame.width, height: layout.titleFrame.height)
+                    .position(x: layout.titleFrame.midX, y: layout.titleFrame.midY)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityIdentifier("tower-selection-name")
+
+                Button {
+                    showingDetails = false
+                } label: {
+                    Image(systemName: "arrow.left")
+                        .font(.system(size: 25 * scale, weight: .bold))
+                        .foregroundStyle(Self.ink)
+                        .frame(width: layout.backFrame.width, height: layout.backFrame.height)
+                        .background(Self.paper, in: Circle())
+                        .overlay { Circle().strokeBorder(Self.gold, lineWidth: 2 * scale) }
+                        .contentShape(Circle())
+                }
+                .buttonStyle(EncyclopediaButtonStyle())
+                .position(x: layout.backFrame.midX, y: layout.backFrame.midY)
+                .accessibilityLabel("Back to towers")
+                .accessibilityIdentifier("tower-encyclopedia-back")
+            } else {
+                towerGrid(cellSize: layout.cellSize, iconSide: layout.iconSide, gap: layout.gridGap, scale: scale)
+                    .frame(width: layout.gridFrame.width, height: layout.gridFrame.height)
+                    .position(x: layout.gridFrame.midX, y: layout.gridFrame.midY)
+
+                DoneButton(runtimeCanvas: runtimeCanvas, action: onExit, frame: layout.doneFrame)
+            }
         }
+        .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height,
+               alignment: .topLeading)
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onChange(of: tierID) { _, _ in detailPage = 0 }
@@ -279,16 +300,11 @@ private struct TowerEncyclopediaView: View {
 
     private func detailPages(scale: CGFloat) -> some View {
         VStack(spacing: 0) {
-            Text(tier.details.name)
-                .font(.custom("Baskerville-Bold", size: 23 * scale))
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-                .padding(.bottom, 6 * scale)
-                .accessibilityIdentifier("tower-selection-name")
             TabView(selection: $detailPage) {
                 TowerDemonstrationPage(demonstration: demonstration,
                     tier: tier, kind: family.kind, isActive: detailPage == 0, reviewElapsed: reviewElapsed)
                     .id(tierID)
+                    .aspectRatio(demonstration.bounds.width / demonstration.bounds.height, contentMode: .fit)
                     .overlay {
                         Rectangle().strokeBorder(Self.gold, lineWidth: 1.5 * scale)
                             .allowsHitTesting(false)
@@ -306,19 +322,22 @@ private struct TowerEncyclopediaView: View {
         }
         .background(Self.paper.opacity(0.24), in: RoundedRectangle(cornerRadius: 8))
         .clipShape(RoundedRectangle(cornerRadius: 8))
+        #if DEBUG
+        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { reviewContentFrame = $0 }
+        #endif
     }
 
-    private func towerGrid(side: CGFloat, iconSide: CGFloat, gap: CGFloat, scale: CGFloat) -> some View {
+    private func towerGrid(cellSize: CGSize, iconSide: CGFloat, gap: CGFloat, scale: CGFloat) -> some View {
         Grid(horizontalSpacing: gap, verticalSpacing: gap) {
-            ForEach(0..<Self.gridRows, id: \.self) { row in
+            ForEach(families, id: \.id) { definition in
                 GridRow {
-                    ForEach(families, id: \.id) { definition in
-                        if row < definition.tiers.count {
-                            towerButton(definition.tiers[row], family: definition, side: side,
+                    ForEach(0..<TowerEncyclopediaLayout.columns, id: \.self) { column in
+                        if column < definition.tiers.count {
+                            towerButton(definition.tiers[column], family: definition, cellSize: cellSize,
                                         iconSide: iconSide, scale: scale)
                         } else {
                             // An unauthored position is empty, never a fabricated tower.
-                            Color.clear.frame(width: side, height: side)
+                            Color.clear.frame(width: cellSize.width, height: cellSize.height)
                                 .accessibilityHidden(true)
                         }
                     }
@@ -329,13 +348,13 @@ private struct TowerEncyclopediaView: View {
             // Draw each shared boundary once, without separate button rims.
             GeometryReader { geometry in
                 SwiftUI.Path { path in
-                    for column in 1..<families.count {
-                        let x = CGFloat(column) * side
+                    for column in 1..<TowerEncyclopediaLayout.columns {
+                        let x = CGFloat(column) * cellSize.width
                         path.move(to: CGPoint(x: x, y: 0))
                         path.addLine(to: CGPoint(x: x, y: geometry.size.height))
                     }
-                    for row in 1..<Self.gridRows {
-                        let y = CGFloat(row) * side
+                    for row in 1..<families.count {
+                        let y = CGFloat(row) * cellSize.height
                         path.move(to: CGPoint(x: 0, y: y))
                         path.addLine(to: CGPoint(x: geometry.size.width, y: y))
                     }
@@ -355,7 +374,7 @@ private struct TowerEncyclopediaView: View {
     }
 
     private func towerButton(_ entry: DesignArsenal.Tier, family definition: DesignArsenal.Definition,
-                             side: CGFloat, iconSide: CGFloat, scale: CGFloat) -> some View {
+                             cellSize: CGSize, iconSide: CGFloat, scale: CGFloat) -> some View {
         let selected = tierID == entry.id
         let name = iconName(for: entry, kind: definition.kind)
         guard let artwork = TowerMenuIconArtwork.image(named: name) else {
@@ -365,6 +384,7 @@ private struct TowerEncyclopediaView: View {
             detailPage = 0
             familyID = definition.id
             tierID = entry.id
+            showingDetails = true
         } label: {
             ZStack {
                 EncyclopediaTowerCellBackground(kind: definition.kind, level: entry.level)
@@ -377,7 +397,7 @@ private struct TowerEncyclopediaView: View {
                         .padding(1.25 * scale)
                 }
             }
-            .frame(width: side, height: side)
+            .frame(width: cellSize.width, height: cellSize.height)
             .contentShape(Rectangle())
             .accessibilityHidden(true)
         }
@@ -593,6 +613,8 @@ private struct TowerEncyclopediaView: View {
                 guard let png = image.pngData() else { throw NSError(domain: "TowerEncyclopediaReview", code: 2) }
                 try png.write(to: directory.appendingPathComponent(filename))
             }
+            try capture("tower-list.png")
+            showingDetails = true
             for definition in families {
                 if supplyReview && definition.kind != .supply { continue }
                 if comparisonReview && definition.kind != .ranged { continue }
@@ -696,7 +718,7 @@ private struct TowerEncyclopediaView: View {
                         }
                         if !entry.tuning.upgradePaths.isEmpty {
                             guard let detail = scrollViews(in: window).first(where: {
-                                $0.convert($0.bounds, to: window).midX > window.bounds.midX
+                                $0.convert($0.bounds, to: window).intersection(layout.detailFrame).width > layout.detailFrame.width * 0.8
                                     && $0.contentSize.height > $0.bounds.height + 10
                             }) else {
                                 throw NSError(domain: "TowerEncyclopediaReview", code: 4,
@@ -763,12 +785,17 @@ private struct TowerEncyclopediaView: View {
                 tierID = first.id
             }
             detailPage = 0
+            if layoutReview {
+                showingDetails = false
+                try await Task.sleep(for: .milliseconds(200))
+                try capture("tower-list-return.png")
+            }
             let report: [String: Any] = ["renderedEntries": records, "interactionVerified": false,
                                         "animationReview": animationReview,
                                         "rangedComparisonReview": comparisonReview,
                                         "framingReview": framingReview,
                                         "layoutReview": layoutReview,
-                                        "gridColumns": families.count, "gridRows": Self.gridRows,
+                                        "gridColumns": TowerEncyclopediaLayout.columns, "gridRows": families.count,
                                         "gridIconSide": layout.iconSide,
                                         "gridIconInsetFraction": TowerEncyclopediaLayout.iconInsetFraction,
                                         "scrollFrame": [layout.scrollFrame.minX, layout.scrollFrame.minY,

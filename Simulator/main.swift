@@ -19,13 +19,25 @@ struct Options {
     var geneticStudy: String?
     var genetic = GeneticStudyOptions()
     var geneticReplay: String?
+    var balanceStudy: String?
+    var balanceScenarios: [BalanceScenario] = []
+    var balanceHours = 0.25
+    var suppliedStartingMoney = false
 }
 
 func printUsage() {
     print("""
     revsim \(BuildVersion.version) — shared game engine
 
-    --genetic-study <name> Evolve towers, reinforcements and early wave calls; no heroes.
+    --balance-study <name> Separate balance audit: no heroes, maximum ranged meta, authored money.
+    --balance-scenarios <path> JSON array of damage/enemy-mix variants; baseline always runs first.
+    --balance-hours <n>    Total allocated runtime across baseline, variants and controls (default 0.25).
+                          Uses population/generations/seeds/finalists/max-evaluations below.
+                          Single worker; records bounded evidence, never proves impossibility.
+
+    --genetic-study <name> Evolve towers, reinforcements and early wave calls with the chosen heroes.
+    --heroes <id[,id]>     Fix one or two authored hero UUIDs for this GA run (default: database selection).
+    --hero-ai <on|off>     Set chosen heroes' AI for this experiment only (default: database settings).
     --starting-money <n>   Genetic experiment budget (default 660).
     --bounty-fraction <n>  Genetic experiment fraction of authored kill bounty, 0–1 (default 1).
     --fixed-meta          Keep the exact database-selected upgrades; requires its exact star group.
@@ -74,12 +86,32 @@ func parseOptions() throws -> Options? {
     var args = ArraySlice(CommandLine.arguments.dropFirst())
     while let arg = args.popFirst() {
         switch arg {
+        case "--balance-study":
+            guard let value = args.popFirst() else { return nil }
+            opts.balanceStudy = value
+        case "--balance-scenarios":
+            guard let path = args.popFirst() else { return nil }
+            opts.balanceScenarios = try JSONDecoder().decode([BalanceScenario].self,
+                from: Data(contentsOf: URL(fileURLWithPath: path)))
+        case "--balance-hours":
+            guard let value = args.popFirst(), let hours = Double(value), hours.isFinite, hours > 0 else { return nil }
+            opts.balanceHours = hours
         case "--genetic-study":
             guard let value = args.popFirst() else { return nil }
             opts.geneticStudy = value
         case "--genetic-replay":
             guard let value = args.popFirst() else { return nil }
             opts.geneticReplay = value
+        case "--heroes":
+            guard let value = args.popFirst() else { return nil }
+            let fields = value.split(separator: ",", omittingEmptySubsequences: false)
+            let ids = fields.compactMap { UUID(uuidString: String($0)) }
+            guard (1...HeroSelection.maxSelected).contains(fields.count), ids.count == fields.count,
+                  Set(ids).count == ids.count else { return nil }
+            opts.genetic.selectedHeroIDs = ids
+        case "--hero-ai":
+            guard let value = args.popFirst(), ["on", "off"].contains(value) else { return nil }
+            opts.genetic.heroAIEnabled = value == "on"
         case "--bounty-fraction":
             guard let value = args.popFirst(), let fraction = Double(value), fraction.isFinite, (0...1).contains(fraction) else { return nil }
             opts.genetic.bountyFraction = fraction
@@ -100,7 +132,7 @@ func parseOptions() throws -> Options? {
         case "--starting-money", "--population", "--generations", "--training-seeds", "--validation-seeds", "--finalists", "--max-evaluations", "--meta-selections", "--meta-min-candidates", "--meta-adaptation-generations":
             guard let value = args.popFirst(), let number = Int(value), number > 0 else { return nil }
             switch arg {
-            case "--starting-money": opts.genetic.money = number
+            case "--starting-money": opts.genetic.money = number; opts.suppliedStartingMoney = true
             case "--population": opts.genetic.population = number
             case "--generations": opts.genetic.generations = number
             case "--training-seeds": opts.genetic.trainingSeeds = number
@@ -193,6 +225,31 @@ guard let opts = try parseOptions() else {
 if opts.help {
     printUsage()
     exit(0)
+}
+
+if let name = opts.balanceStudy {
+    do {
+        guard opts.moneyStudy == nil, opts.geneticStudy == nil, opts.geneticReplay == nil,
+              !opts.suppliedStartingMoney else {
+            throw DbError.Db(message: "Balance analysis is a separate mode and uses authored starting money; remove other study modes and --starting-money")
+        }
+        var configuration = opts.genetic
+        configuration.seed = opts.baseSeed; configuration.maxGameSeconds = opts.maxGameSeconds
+        configuration.workers = opts.workers
+        // The balance tool has no starting-money dimension. Record the DAO
+        // value even in the generic options metadata.
+        guard let id = try store.db.levelInfoDao.getIdBy(levelName: name) else {
+            throw DbError.Db(message: "Unknown balance-study level '\(name)'")
+        }
+        configuration.money = try AuthoredMoneyStudy(db: store.db, levelID: id).level.startingMoney
+        try MainActor.assumeIsolated {
+            try BalanceStudy(db: store.db).run(levelName: name, scenarios: opts.balanceScenarios,
+                options: configuration, hours: opts.balanceHours, directory: opts.reportDir)
+        }
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("balance-study error: \(error)\n".utf8)); exit(1)
+    }
 }
 
 if opts.moneyStudy == nil && opts.geneticStudy == nil && !opts.showRuns && opts.runStatusID == nil {

@@ -11,7 +11,9 @@ final class SimulatorBoundaryTests: XCTestCase {
         let simulator = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { $0.hasSuffix(".swift") }.map { "Simulator/" + $0 }
         let paths = simulator + ["Engine/Design/AuthoredMoneyStudy.swift", "Engine/Design/AuthoredMoneyStudy+Replay.swift",
-            "Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticReplay.swift", "Engine/Models/GameSimulation.swift",
+            "Engine/Design/GeneticStrategy.swift", "Engine/Design/BalanceAnalysis.swift",
+            "Engine/Design/GeneticReplay.swift", "Engine/Design/GeneticSolution.swift",
+            "Engine/Design/GeneticHeroLoadout.swift", "Engine/Design/GeneticSolutionPlayback.swift", "Engine/Models/GameSimulation.swift",
             "Engine/Models/BattleEngine+Recording.swift", "Engine/Models/LevelRecording.swift",
             "Engine/Models/LevelReplayTimeline.swift", "Engine/Models/ReplayTimelineEncoder.swift", "Engine/Models/LevelReplayer.swift"]
         for path in paths {
@@ -31,7 +33,7 @@ final class SimulatorBoundaryTests: XCTestCase {
         }
         let sources = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { ["swift", "metal", "h", "m", "mm", "c", "cpp"].contains(($0 as NSString).pathExtension) }
-        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "GeneticWorkers.swift", "SimulatorStore.swift", "BuildVersion.swift"]),
+        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "GeneticWorkers.swift", "BalanceStudy.swift", "SimulatorStore.swift", "BuildVersion.swift"]),
                        "Every new simulator source requires a boundary audit; no alternate combat backend is permitted")
         let driverPaths = sources.map { "Simulator/" + $0 } + ["LevelEditor/SimSession.swift"]
         for path in driverPaths {
@@ -48,7 +50,8 @@ final class SimulatorBoundaryTests: XCTestCase {
         // chooses commands. Neither has access to mutable battle internals.
         for path in ["Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticMetaSearch.swift", "Engine/Design/GeneticMetaPopulation.swift",
                      "Engine/Design/ReinforcementStrategy.swift", "Engine/Design/EarlyWaveStrategy.swift",
-                     "Engine/Design/GeneticReplay.swift", "Simulator/GeneticStudy.swift", "Simulator/GeneticWorkers.swift"] {
+                     "Engine/Design/GeneticReplay.swift", "Engine/Design/BalanceAnalysis.swift",
+                     "Simulator/GeneticStudy.swift", "Simulator/GeneticWorkers.swift", "Simulator/BalanceStudy.swift"] {
             let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
             for forbidden in ["sim.engine", "BattleEngine(", "buildTower(", "upgradeSelectedTower(",
                 "applyImpact", "applyMorale", "shotMinDamage", "shotMaxDamage", "enemyHPMultiplier:",

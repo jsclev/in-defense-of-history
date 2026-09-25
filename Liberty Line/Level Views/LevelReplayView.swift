@@ -10,14 +10,14 @@ struct LevelReplayView: View {
     let runID: UUID
     @State private var playback: LevelReplayer?
     @State private var frame: LevelReplayFrame?
-    @State private var road: CGPath?
+    @State private var sceneSetup: LevelSceneSetup?
     @State private var message = "Loading recorded level…"
     @State private var finished = false
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            if let playback, let frame, let road {
-                LevelReplayScene(setup: playback.setup, frame: frame, road: road, canvas: canvas)
+            if let playback, let frame, let sceneSetup {
+                RecordedLevelView(setup: sceneSetup, recording: playback.setup, frame: frame, canvas: canvas)
             } else { Color.black }
             Text(message).font(.system(size: 13, weight: .medium, design: .monospaced))
                 .foregroundStyle(.white).padding(.horizontal, 12).padding(.vertical, 6)
@@ -41,7 +41,7 @@ struct LevelReplayView: View {
                 speedOverride = try PlaySpeed(factor)
             }
             let replay = try LevelReplayer(dao: store.db.levelRunDao, runID: runID, playSpeedOverride: speedOverride)
-            road = try replay.setup.roadSurface()
+            sceneSetup = try LevelSceneSetup(recording: replay.setup)
             playback = replay
             guard try replay.advance(), let first = replay.frame else {
                 throw DbError.Db(message: "Recorded run has no frames")

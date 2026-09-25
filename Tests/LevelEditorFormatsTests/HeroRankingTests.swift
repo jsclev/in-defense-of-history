@@ -236,13 +236,18 @@ final class HeroRankingTests: XCTestCase {
         let dao = PlayerSettingsDAO(conn: conn)
         let authored = try dao.get()
         XCTAssertEqual(authored, PlayerSettings(debugMode: false, showDebugInfo: false,
-            showDebugLayoutGuides: false, enemyEscapeHapticsEnabled: true))
+            showDebugLayoutGuides: false, enemyEscapeHapticsEnabled: true, showGASolutionButton: true))
         var changed = authored
         changed.debugMode = true
         changed.showDebugLayoutGuides = true
         changed.enemyEscapeHapticsEnabled = false
+        changed.showGASolutionButton = false
         try dao.set(changed)
         XCTAssertEqual(try dao.get(), changed)
+        try execute("PRAGMA ignore_check_constraints=ON; UPDATE player_settings SET show_ga_solution_button=2")
+        XCTAssertThrowsError(try dao.get(), "Malformed authored button settings must not turn into a fallback")
+        try dao.set(authored)
+        try execute("PRAGMA ignore_check_constraints=OFF")
         try execute("DELETE FROM player_settings")
         XCTAssertThrowsError(try dao.get(), "No hardcoded preference fallback")
         XCTAssertThrowsError(try dao.set(authored), "Do not invent a missing seed row")

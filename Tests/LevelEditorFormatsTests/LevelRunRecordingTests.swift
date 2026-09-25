@@ -21,12 +21,19 @@ final class LevelRunRecordingTests: XCTestCase {
     @MainActor func testPlayerAndSimulatorCreateDistinctRunsAndRecordActualPurchases() throws {
         let fixture = try fixture(), dao = fixture.db.levelRunDao
         let content = try BattleTestFixture.authored(db: fixture.db)
+        let earliestStart = Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.down))
         let player = try BattleEngine(recording: .database(dao, .player), content: content,
             heroesEnabled: false, startingMoneyOverride: 100_000, seed: 123, onVictory: { _, _ in 0 })
         let sim = try GameSimulation(recording: .database(dao, .simulator), content: content,
             startingMoney: 100_000, heroesEnabled: false, seed: 123)
         let playerID = try XCTUnwrap(player.runID), simID = try XCTUnwrap(sim.runID)
         XCTAssertNotEqual(playerID, simID)
+        let startedRuns = try [playerID, simID].map { try dao.get(id: $0) }
+        for run in startedRuns {
+            XCTAssertGreaterThanOrEqual(run.startedAt, earliestStart)
+            XCTAssertLessThanOrEqual(run.startedAt, Date())
+            XCTAssertNil(run.finishedAt)
+        }
         player.selectSlot(0)
         XCTAssertNil(player.tapBuildButton(.ranged))
         XCTAssertEqual(player.tapBuildButton(.ranged), .ok)
@@ -42,7 +49,14 @@ final class LevelRunRecordingTests: XCTestCase {
         player.selectPlacedTower(atSlot: 0); player.tapUpgradePath(path.id)
         XCTAssertEqual(player.tapUpgradePath(path.id), .ok)
         XCTAssertEqual(sim.perform(.purchaseUpgrade(slot: 0, pathID: path.id)), .ok)
+        let earliestFinish = Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.down))
         player.finishRecording(status: .abandoned); sim.finishRecording(status: .abandoned)
+        for started in startedRuns {
+            let finished = try dao.get(id: started.id)
+            XCTAssertEqual(finished.startedAt, started.startedAt)
+            XCTAssertGreaterThanOrEqual(try XCTUnwrap(finished.finishedAt), earliestFinish)
+            XCTAssertLessThanOrEqual(try XCTUnwrap(finished.finishedAt), Date())
+        }
         let playerRows = try allActions(dao, playerID), simRows = try allActions(dao, simID)
         XCTAssertEqual(playerRows.filter { $0.name == "towerBuilt" }.count, 1)
         XCTAssertEqual(simRows.filter { $0.name == "towerBuilt" }.count, 1)
@@ -57,6 +71,39 @@ final class LevelRunRecordingTests: XCTestCase {
         let replay = try LevelReplayer(dao: dao, runID: playerID)
         XCTAssertTrue(try replay.advance())
         XCTAssertEqual(replay.frame?.towers.first?.upgrades, player.placedTowers.first?.upgrades)
+    }
+
+    @MainActor func testRunHistoryLoadsSavedCalendarDatesAndRejectsMalformedTimestamps() throws {
+        let fixture = try fixture(), dao = fixture.db.levelRunDao
+        let content = try BattleTestFixture.authored(db: fixture.db)
+        let sim = try GameSimulation(recording: .database(dao, .player), content: content,
+            startingMoney: nil, heroesEnabled: false, seed: 1)
+        let id = try XCTUnwrap(sim.runID)
+        sim.finishRecording(status: .abandoned)
+        let dates = [("started_at", "2026-09-25T14:30:00Z"), ("finished_at", "2026-09-25T14:45:00Z")]
+        func update(_ field: String, _ value: String) throws {
+            guard sqlite3_exec(fixture.connection,
+                "UPDATE level_run SET \(field)='\(value)' WHERE id='\(id)'", nil, nil, nil) == SQLITE_OK else {
+                throw DbError.Db(message: String(cString: sqlite3_errmsg(fixture.connection)))
+            }
+        }
+        for (field, value) in dates { try update(field, value) }
+        let run = try dao.get(id: id)
+        let listed = try XCTUnwrap(dao.runs(levelID: content.level.id).first)
+        XCTAssertEqual(run.startedAt, ISO8601DateFormatter().date(from: dates[0].1))
+        XCTAssertEqual(run.finishedAt, ISO8601DateFormatter().date(from: dates[1].1))
+        XCTAssertEqual(listed.id, id)
+        XCTAssertEqual(listed.startedAt, run.startedAt)
+        XCTAssertEqual(listed.finishedAt, run.finishedAt)
+        for (field, value) in dates {
+            try update(field, "not-a-date")
+            XCTAssertThrowsError(try dao.get(id: id)) { error in
+                XCTAssertTrue(String(describing: error).contains(id.uuidString))
+                XCTAssertTrue(String(describing: error).contains(field))
+            }
+            XCTAssertThrowsError(try dao.runs(levelID: content.level.id))
+            try update(field, value)
+        }
     }
 
     @MainActor func testEveryCommandIncludingRejectedInputsAndControlsIsRecorded() throws {

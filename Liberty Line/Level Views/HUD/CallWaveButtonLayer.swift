@@ -7,9 +7,9 @@ struct CallWaveButtonLayer: View {
     let positions: [Point]
     let waveNumber: Int
     let countdownSeconds: Int?
-    let action: () -> Void
-
-    @State private var selection = CallWaveButtonSelection()
+    let selection: CallWaveButtonSelection
+    let seconds: Double
+    let action: (Point) -> Void
 
     var body: some View {
         ZStack(alignment: .topLeading) {
@@ -18,10 +18,9 @@ struct CallWaveButtonLayer: View {
                     CallWaveButtonView(
                         layout: CallWaveButtonLayout(position: point, runtimeCanvas: runtimeCanvas),
                         waveNumber: waveNumber, countdownSeconds: countdownSeconds,
+                        seconds: seconds,
                         isSelected: selection.isSelected(point, for: waveNumber)) {
-                        if selection.tap(point, for: waveNumber) {
-                            action()
-                        }
+                        action(point)
                     }
                 }
             }

@@ -38,11 +38,11 @@ final class LevelStartingMoneyTests: XCTestCase {
         }
     }
 
-    func testCharlestonRestoresItsPreExperimentBudget() throws {
+    func testCharlestonUsesAuthored670CoinBudget() throws {
         let fixture = try fixture()
         let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
-        XCTAssertEqual(try fixture.db.levelInfoDao.getBy(id: id).startingMoney, 500)
-        XCTAssertEqual(try fixture.db.levelLoader.load(id: id).startingMoney, 500)
+        XCTAssertEqual(try fixture.db.levelInfoDao.getBy(id: id).startingMoney, 670)
+        XCTAssertEqual(try fixture.db.levelLoader.load(id: id).startingMoney, 670)
     }
 
     @MainActor func testDatabaseEditReachesReloadAndSimulationWithoutReadingMapGold() throws {

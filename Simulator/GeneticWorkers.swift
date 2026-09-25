@@ -11,6 +11,7 @@ struct GeneticWorkerConfiguration: Codable {
     let bountyFraction: Double
     let money: Int
     let maxSeconds: Double
+    let heroLoadout: GeneticHeroLoadout
 }
 
 struct GeneticBattleJob: Codable {
@@ -43,12 +44,16 @@ private struct GeneticWorkerReply: Codable {
         guard let id = try db.levelInfoDao.getIdBy(levelName: configuration.level) else {
             throw DbError.Db(message: "genetic worker: unknown level")
         }
-        let copy = try BountyExperimentDAO.contentCopy(of: db, fraction: configuration.bountyFraction)
+        try configuration.heroLoadout.validate()
+        let copy = try BountyExperimentDAO.contentCopy(of: db, fraction: configuration.bountyFraction,
+            selectedHeroIDs: configuration.heroLoadout.selectedHeroIDs,
+            heroAI: Dictionary(uniqueKeysWithValues: configuration.heroLoadout.deployments.map { ($0.heroID, $0.aiEnabled) }))
         defer { copy.close() }
         let study = try AuthoredMoneyStudy(db: copy, levelID: id)
-        let snapshot = try AuthoredMoneySweep(db: db).snapshot(study)
+        let snapshot = try study.replaySnapshot(db: db, heroesEnabled: true)
         let digest = SHA256.hash(data: snapshot).map { String(format: "%02x", $0) }.joined()
-        guard digest == configuration.contentSHA256 else {
+        guard digest == configuration.contentSHA256,
+              configuration.heroLoadout == (try GeneticHeroLoadout(content: study.battle)) else {
             throw DbError.Db(message: "genetic worker: authored content changed during startup")
         }
         var selections: [Set<MetaUpgrade>: AuthoredMoneyStudy] = [study.battle.playerUpgrades.loadout.selected: study]

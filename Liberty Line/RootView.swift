@@ -22,7 +22,7 @@ struct RootView: View {
         if arguments.contains("--tower-encyclopedia-review") || arguments.contains("--tower-demo-review") || arguments.contains("--enemy-encyclopedia-review") {
             _menuScreen = State(initialValue: .encyclopedia)
         }
-        if let flag = arguments.firstIndex(of: "--play-level") {
+        if let flag = arguments.firstIndex(of: "--play-level") ?? arguments.firstIndex(of: "--preview-level") {
             do {
                 guard arguments.indices.contains(flag + 1),
                       let number = Int(arguments[flag + 1]), number > 0 else {
@@ -34,7 +34,7 @@ struct RootView: View {
                     throw DbError.Db(message: "Requested campaign level or authored difficulty is missing")
                 }
                 _selectedNode = State(initialValue: CampaignNode(order: number, level: levels[number - 1]))
-                _playingDifficulty = State(initialValue: difficulty)
+                if arguments.contains("--play-level") { _playingDifficulty = State(initialValue: difficulty) }
             } catch { fatalError("Unable to launch campaign level: \(error)") }
         }
         #endif

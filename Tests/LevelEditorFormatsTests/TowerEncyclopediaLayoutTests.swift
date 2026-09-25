@@ -20,22 +20,28 @@ final class TowerEncyclopediaLayoutTests: XCTestCase {
                 XCTAssertGreaterThan(margin, 0, "Every scroll edge must be fully inside the play area")
                 XCTAssertLessThan(margin, play.height * 0.01, "Keep the scroll close to the play-area edges")
             }
-            for frame in [layout.contentFrame, layout.gridFrame, layout.detailFrame, layout.doneFrame] {
+            for frame in [layout.contentFrame, layout.gridFrame, layout.detailFrame, layout.doneFrame,
+                          layout.backFrame, layout.titleFrame] {
                 XCTAssertTrue(play.contains(frame), "Control frame \(frame) escapes play area \(play)")
             }
-            XCTAssertGreaterThanOrEqual(layout.cellSide, TouchTarget.minimum)
+            XCTAssertGreaterThanOrEqual(layout.cellSize.width, TouchTarget.minimum)
+            XCTAssertGreaterThanOrEqual(layout.cellSize.height, TouchTarget.minimum)
             XCTAssertEqual(layout.gridGap, 0, "Tower cells meet at shared dividers")
             XCTAssertGreaterThanOrEqual(layout.doneFrame.height, TouchTarget.minimum)
-            XCTAssertFalse(layout.gridFrame.intersects(layout.detailFrame))
+            XCTAssertEqual(layout.gridFrame.size, layout.detailFrame.size, "List and detail screens each use the full paper width")
             XCTAssertFalse(layout.gridFrame.intersects(layout.doneFrame))
-            XCTAssertFalse(layout.detailFrame.intersects(layout.doneFrame))
+            XCTAssertFalse(layout.detailFrame.intersects(layout.backFrame))
+            XCTAssertFalse(layout.titleFrame.intersects(layout.backFrame))
+            XCTAssertLessThan(layout.backFrame.maxY, layout.detailFrame.minY, "Back belongs above the details")
+            XCTAssertGreaterThanOrEqual(layout.backFrame.width, TouchTarget.minimum)
+            XCTAssertGreaterThanOrEqual(layout.backFrame.height, TouchTarget.minimum)
             XCTAssertEqual(layout.backgroundFrame.width / layout.backgroundFrame.height,
                            canvas.size.width / canvas.size.height, accuracy: 1e-9)
             XCTAssertEqual(layout.backgroundFrame.width, canvas.size.width * runtime.scaleFactor, accuracy: 1e-9)
-            XCTAssertEqual(layout.gridFrame.width, layout.cellSide * 5 + layout.gridGap * 4, accuracy: 1e-9)
-            XCTAssertEqual(layout.gridFrame.height, layout.cellSide * 6 + layout.gridGap * 5, accuracy: 1e-9)
-            XCTAssertEqual(layout.gridFrame.height, layout.contentFrame.height, accuracy: 1e-9,
-                           "The six-row grid must use the space released by removing the heading")
+            XCTAssertEqual(layout.gridFrame.width, layout.cellSize.width * 6, accuracy: 1e-9)
+            XCTAssertEqual(layout.gridFrame.height, layout.cellSize.height * 5, accuracy: 1e-9)
+            XCTAssertEqual(layout.gridFrame.width, layout.contentFrame.width, accuracy: 1e-9,
+                           "Horizontal family rows use the entire paper width")
             // The full painted wood canvas covers the device, while the scroll
             // and buttons retain the exact same map-to-view transform.
             XCTAssertTrue(layout.backgroundFrame.contains(physical))

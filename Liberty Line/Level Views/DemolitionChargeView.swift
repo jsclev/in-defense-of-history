@@ -5,6 +5,7 @@ struct DemolitionTowerView: View {
     let assetName: String
     let charge: DemolitionCharge
     let height: CGFloat
+    var virtualSeconds: Double? = nil
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var appearedAt = Date()
@@ -25,7 +26,9 @@ struct DemolitionTowerView: View {
 
     var body: some View {
         Group {
-            if charge.isReadyForPlacement {
+            if let virtualSeconds {
+                artwork(readinessPulse: reduceMotion ? 1 : Self.readinessPulse(at: virtualSeconds))
+            } else if charge.isReadyForPlacement {
                 TimelineView(.animation(minimumInterval: 1.0 / 30.0,
                     paused: reduceMotion || scenePhase != .active)) { context in
                     artwork(readinessPulse: reduceMotion ? 1 : Self.readinessPulse(
@@ -103,6 +106,7 @@ struct DemolitionSiteView: View {
     let charge: DemolitionCharge
     let radius: CGFloat
     let showBlastRadius: Bool
+    var virtualSeconds: Double? = nil
     static let kegLift: CGFloat = 8
 
     var body: some View {
@@ -114,7 +118,7 @@ struct DemolitionSiteView: View {
                     .allowsHitTesting(false)
             }
             if charge.isReady && charge.position != nil {
-                DemolitionReadyChargeView()
+                DemolitionReadyChargeView(virtualSeconds: virtualSeconds)
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel("Armed demolition charge")
                     .accessibilityHint("Automatically explodes before an enemy leaves its blast area")
@@ -151,16 +155,24 @@ struct DemolitionGroundChargeSymbol: View {
 }
 
 private struct DemolitionReadyChargeView: View {
+    var virtualSeconds: Double? = nil
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Environment(\.scenePhase) private var scenePhase
     @State private var appearedAt = Date()
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: 0.1, paused: reduceMotion || scenePhase != .active)) { context in
-            let elapsed = max(0, context.date.timeIntervalSince(appearedAt))
-            DemolitionGroundChargeSymbol(lightIsOn: reduceMotion
-                || elapsed.truncatingRemainder(dividingBy: DemolitionGroundChargeSymbol.blinkPeriod)
-                    < DemolitionGroundChargeSymbol.lightOnDuration)
+        if let virtualSeconds {
+            symbol(at: virtualSeconds)
+        } else {
+            TimelineView(.animation(minimumInterval: 0.1, paused: reduceMotion || scenePhase != .active)) { context in
+                symbol(at: max(0, context.date.timeIntervalSince(appearedAt)))
+            }
         }
+    }
+
+    private func symbol(at seconds: Double) -> some View {
+        DemolitionGroundChargeSymbol(lightIsOn: reduceMotion
+            || seconds.truncatingRemainder(dividingBy: DemolitionGroundChargeSymbol.blinkPeriod)
+                < DemolitionGroundChargeSymbol.lightOnDuration)
     }
 }

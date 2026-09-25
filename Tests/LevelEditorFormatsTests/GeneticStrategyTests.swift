@@ -13,7 +13,7 @@ final class GeneticStrategyTests: XCTestCase {
     @MainActor func testAuthoredReplayIsUnchangedByGeneticDriver() throws {
         let fixture = try fixture(), study = try study(fixture)
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
-        let old = try GameSimulation(recording: .preview, content: study.battle, startingMoney: 500, heroesEnabled: false, seed: 1776)
+        let old = try GameSimulation(recording: .preview, content: study.battle, startingMoney: 500, heroesEnabled: true, seed: 1776)
         let expected = try old.run(steps: plan.steps, maxSeconds: 1800)
         let actual = try GeneticCommander.evaluate(GeneticStrategy(plan: plan, metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected)), recording: .preview, content: study.battle,
             money: 500, seed: 1776, maxSeconds: 1800)
@@ -87,6 +87,19 @@ final class GeneticStrategyTests: XCTestCase {
         XCTAssertGreaterThan(GeneticFitness([win]), GeneticFitness([late]))
         XCTAssertGreaterThan(GeneticFitness([win]), GeneticFitness([timeout]))
         XCTAssertGreaterThan(GeneticFitness([late]), GeneticFitness([early]))
+    }
+
+    func testInitialPlanFamiliesRespectEarlyLevelTowerUnlocks() throws {
+        let fixture = try fixture()
+        let study = try AuthoredMoneyStudy(db: fixture.db,
+            levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Battle Road")))
+        XCTAssertFalse(study.towerPaths.contains { $0.type.levels[0].attackMode == .shell })
+        for family in 0..<8 {
+            let plan = try MoneyStudyPlan(study: study, placementIndex: family, upgradePolicyIndex: family % 10, seed: 1776)
+            XCTAssertFalse(plan.steps.isEmpty)
+            XCTAssertTrue(Set(plan.towerIDs).isSubset(of: Set(study.towerPaths.map { $0.type.id })))
+            try GeneticStrategy(plan: plan, metaUpgrades: []).validate(study: study)
+        }
     }
 
     @MainActor func testDatabasePriceEditsPropagateAndMissingTowerFails() throws {

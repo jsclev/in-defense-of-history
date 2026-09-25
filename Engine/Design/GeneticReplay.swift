@@ -9,6 +9,7 @@ public struct GeneticReplayDocument: Codable {
     let maxGameSeconds: Double
     let starsUsed: Int
     let bountyFraction: Double
+    let heroLoadout: GeneticHeroLoadout
     let strategy: GeneticStrategy
     let expected: GeneticEvaluation
 }
@@ -17,16 +18,19 @@ extension GeneticReplayDocument {
     /// Content must still match even though the presentation executable differs
     /// from the original CLI. Completion separately checks the entire outcome.
     @MainActor func loadStudy(db: Db, levelName: String) throws -> AuthoredMoneyStudy {
-        guard format == "genetic-replay-v5",
+        guard format == "genetic-replay-v6",
               let id = try db.levelInfoDao.getIdBy(levelName: levelName) else {
             throw DbError.Db(message: "Unsupported replay format or unknown level '\(levelName)'")
         }
-        let copy = try BountyExperimentDAO.contentCopy(of: db, fraction: bountyFraction)
+        try heroLoadout.validate()
+        let copy = try BountyExperimentDAO.contentCopy(of: db, fraction: bountyFraction,
+            selectedHeroIDs: heroLoadout.selectedHeroIDs,
+            heroAI: Dictionary(uniqueKeysWithValues: heroLoadout.deployments.map { ($0.heroID, $0.aiEnabled) }))
         defer { copy.close() }
         let study = try AuthoredMoneyStudy(db: copy, levelID: id)
-        let digest = SHA256.hash(data: try study.replaySnapshot(db: copy))
+        let digest = SHA256.hash(data: try study.replaySnapshot(db: copy, heroesEnabled: true))
             .map { String(format: "%02x", $0) }.joined()
-        guard digest == contentSHA256 else {
+        guard digest == contentSHA256, heroLoadout == (try GeneticHeroLoadout(content: study.battle)) else {
             throw DbError.Db(message: "Authored content differs from the saved replay")
         }
         try strategy.validate(study: study)

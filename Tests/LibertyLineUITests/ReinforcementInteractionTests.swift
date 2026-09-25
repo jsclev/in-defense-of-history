@@ -8,6 +8,7 @@ final class ReinforcementInteractionTests: XCTestCase {
 
     override func setUpWithError() throws {
         continueAfterFailure = false
+        XCUIDevice.shared.orientation = .landscapeRight
         app = XCUIApplication()
         app.launchArguments = ["--play-level", "15"]
         app.launch()
@@ -15,7 +16,7 @@ final class ReinforcementInteractionTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
-        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        let screenshot = XCTAttachment(screenshot: XCUIScreen.main.screenshot())
         screenshot.lifetime = .keepAlways
         add(screenshot)
         app.terminate()
@@ -40,6 +41,32 @@ final class ReinforcementInteractionTests: XCTestCase {
         expectValue("Selected", on: button)
         tapReinforcements()
         expectValue("Ready", on: button)
+    }
+
+    func testFirstTapSelectsAcrossEntireVisibleButton() {
+        let button = app.buttons["call-reinforcements"]
+        for point in [CGVector(dx: 0.1, dy: 0.1), CGVector(dx: 0.9, dy: 0.1),
+                      CGVector(dx: 0.1, dy: 0.9), CGVector(dx: 0.9, dy: 0.9)] {
+            expectValue("Ready", on: button)
+            button.coordinate(withNormalizedOffset: point).tap()
+            expectValue("Selected", on: button)
+            button.coordinate(withNormalizedOffset: point).tap()
+            expectValue("Ready", on: button)
+        }
+    }
+
+    func testFirstTapSelectsAgainAfterDeploymentCooldown() {
+        let button = app.buttons["call-reinforcements"]
+        tapReinforcements()
+        expectValue("Selected", on: button)
+        // Visible center of Charleston's lower-left road bend, clear of the
+        // hero HUD and tower slots. Deploy through the actual map gesture.
+        app.coordinate(withNormalizedOffset: CGVector(dx: 0.2, dy: 0.69)).tap()
+        XCTAssertFalse(button.isEnabled)
+        let ready = XCTNSPredicateExpectation(predicate: NSPredicate(format: "value == %@", "Ready"), object: button)
+        XCTAssertEqual(XCTWaiter.wait(for: [ready], timeout: 30), .completed)
+        tapReinforcements()
+        expectValue("Selected", on: button)
     }
 
     func testFirstTapSelectsReinforcementsWhileTowerBuildMenuIsOpen() {

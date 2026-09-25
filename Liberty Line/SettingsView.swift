@@ -42,6 +42,11 @@ struct SettingsView: View {
                            detail: "Feel feedback when an enemy escapes and you lose a life.",
                            isOn: setting(\.enemyEscapeHapticsEnabled))
 
+                    toggle("Watch GA solutions",
+                           detail: "Show the winning-strategy playback button on level previews.",
+                           isOn: setting(\.showGASolutionButton))
+                        .accessibilityIdentifier("settings-ga-solutions")
+
                     heroControls
 
                     options

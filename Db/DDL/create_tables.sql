@@ -161,7 +161,8 @@ CREATE TABLE player_settings (
     debug_mode INTEGER NOT NULL CHECK (debug_mode IN (0, 1)),
     show_debug_info INTEGER NOT NULL CHECK (show_debug_info IN (0, 1)),
     show_debug_layout_guides INTEGER NOT NULL CHECK (show_debug_layout_guides IN (0, 1)),
-    enemy_escape_haptics_enabled INTEGER NOT NULL CHECK (enemy_escape_haptics_enabled IN (0, 1))
+    enemy_escape_haptics_enabled INTEGER NOT NULL CHECK (enemy_escape_haptics_enabled IN (0, 1)),
+    show_ga_solution_button INTEGER NOT NULL CHECK (show_ga_solution_button IN (0, 1))
 );
 
 CREATE TABLE player_selected_hero (

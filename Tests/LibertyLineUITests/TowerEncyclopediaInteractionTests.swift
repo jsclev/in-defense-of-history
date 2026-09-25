@@ -91,6 +91,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
                 XCTAssertTrue(history.isSelected)
                 app.buttons["\(prefix)-encyclopedia-page-demo"].tap()
                 Thread.sleep(forTimeInterval: 1)
+                if category == "towers" { app.buttons["tower-encyclopedia-back"].tap() }
                 app.buttons["Done"].tap()
             }
         }
@@ -109,7 +110,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         let build = app.buttons["tower-build-special"]
         XCTAssertTrue(build.waitForExistence(timeout: 3))
         build.tap(); build.tap()
-        // These ordinary purchases use Charleston's unchanged 500-coin seed.
+        // These ordinary purchases use Charleston's authored campaign budget.
         for _ in 0..<2 {
             slot.tap()
             let upgrade = app.buttons["tower-upgrade-special-1"]
@@ -137,7 +138,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         add(attachment)
     }
 
-    func testWholeRosterIsVisibleInFiveColumnsAndSixRowsAndSelectsDirectly() throws {
+    func testHorizontalFamiliesOpenSeparateDetailsAndReturnToRoster() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .landscapeRight
         let app = XCUIApplication()
@@ -149,13 +150,15 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         let grid = app.otherElements["tower-encyclopedia-grid"]
         XCTAssertTrue(grid.waitForExistence(timeout: 5))
         let buttons = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "tower-entry-"))
-        // Every authored tower is visible in the complete five-by-six grid.
+        // Every authored tower is visible in the complete six-column, five-row grid.
         XCTAssertEqual(buttons.count, 30)
         XCTAssertFalse(app.staticTexts["TOWERS"].exists)
         XCTAssertEqual(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "tower-family-")).count, 0)
+        XCTAssertFalse(app.otherElements["tower-demonstration-animation"].exists)
+        let rosterFrame = grid.frame
         let frames = buttons.allElementsBoundByIndex.map(\.frame)
-        XCTAssertEqual(Set(frames.map { Int($0.midX.rounded()) }).count, 5)
-        XCTAssertEqual(Set(frames.map { Int($0.midY.rounded()) }).count, 6)
+        XCTAssertEqual(Set(frames.map { Int($0.midX.rounded()) }).count, 6)
+        XCTAssertEqual(Set(frames.map { Int($0.midY.rounded()) }).count, 5)
         for row in Dictionary(grouping: frames, by: { Int($0.midY.rounded()) }).values {
             let ordered = row.sorted { $0.minX < $1.minX }
             for (left, right) in zip(ordered, ordered.dropFirst()) {
@@ -186,10 +189,25 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
             let button = app.buttons[id]
             let expected = String(button.label.dropFirst("Level 1, ".count))
             button.tap()
-            XCTAssertTrue(button.isSelected)
+            XCTAssertFalse(grid.exists, "Details replace the roster")
+            XCTAssertFalse(app.buttons["Done"].exists)
             XCTAssertEqual(app.staticTexts["tower-selection-name"].label, expected)
             XCTAssertTrue(app.otherElements["tower-demonstration-animation"].exists)
+            let pages = app.descendants(matching: .any)["tower-encyclopedia-pages"].firstMatch
+            XCTAssertEqual(pages.frame.width, rosterFrame.width, accuracy: 1)
+            let back = app.buttons["tower-encyclopedia-back"]
+            XCTAssertTrue(back.isHittable)
+            XCTAssertGreaterThanOrEqual(back.frame.width, 44)
+            XCTAssertGreaterThanOrEqual(back.frame.height, 44)
+            let details = XCTAttachment(screenshot: app.screenshot())
+            details.name = "full-screen-" + id
+            details.lifetime = .keepAlways
+            add(details)
+            back.tap()
+            XCTAssertTrue(grid.waitForExistence(timeout: 3))
+            XCTAssertTrue(button.isSelected)
             XCTAssertTrue(buttons.allElementsBoundByIndex.allSatisfy(\.isHittable))
+            XCTAssertFalse(app.otherElements["tower-demonstration-animation"].exists)
         }
         app.buttons["Done"].tap()
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 3))
@@ -258,6 +276,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         XCTAssertTrue(detail.waitForExistence(timeout: 3))
         app.buttons["tower-encyclopedia-page-demo"].tap()
         XCTAssertTrue(animation.waitForExistence(timeout: 3))
+        app.buttons["tower-encyclopedia-back"].tap()
         app.buttons["Done"].tap()
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 3))
     }
@@ -323,6 +342,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
                 app.buttons["tower-encyclopedia-page-demo"].tap()
                 XCTAssertTrue(app.otherElements["tower-demonstration-animation"].waitForExistence(timeout: 3))
                 app.descendants(matching: .any)["tower-encyclopedia-pages"].firstMatch.swipeLeft()
+                app.buttons["tower-encyclopedia-back"].tap()
                 visited += 1
             }
         }
@@ -331,6 +351,8 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         // The final hospital entry has long copy and two upgrade paths below
         // the fold. Exercise the actual detail scroll, not a renderer snapshot.
         let detail = app.scrollViews["tower-encyclopedia-detail"]
+        app.buttons["tower-entry-supply-4-3"].tap()
+        app.buttons["tower-encyclopedia-page-details"].tap()
         let upgrade = app.staticTexts["Hospital Stations"]
         for _ in 0..<7 {
             if upgrade.isHittable { break }
@@ -338,6 +360,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         }
         XCTAssertTrue(upgrade.isHittable)
         capture("hospital-upgrades")
+        app.buttons["tower-encyclopedia-back"].tap()
         app.buttons["Done"].tap()
         XCTAssertTrue(encyclopedia.waitForExistence(timeout: 3))
     }

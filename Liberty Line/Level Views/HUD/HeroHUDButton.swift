@@ -7,6 +7,7 @@ struct HeroHUDButton: View {
     let buttonSize: CGFloat
     let isAvailable: Bool
     let isSelected: Bool
+    var isActivated = false
     let action: () -> Void
 
     private func requiredPortrait(_ name: String) -> UIImage {
@@ -40,18 +41,13 @@ struct HeroHUDButton: View {
                 }
             }
             .frame(width: buttonSize, height: buttonSize)
-            .overlay {
-                if isSelected {
-                    RoundedRectangle(cornerRadius: buttonSize * 0.08)
-                        .strokeBorder(.white, lineWidth: buttonSize * 0.04)
-                }
-            }
+            .hudActivationHighlight(isSelected || isActivated, side: buttonSize)
             .contentShape(Rectangle())
         }
-        .buttonStyle(HeroHUDButtonStyle())
+        .buttonStyle(HUDButtonStyle())
         .disabled(!isAvailable)
         .accessibilityLabel(name)
-        .accessibilityValue(isSelected ? "Selected" : "")
+        .accessibilityValue(isSelected ? "Selected" : isActivated ? "Activated" : "")
     }
 }
 
@@ -81,8 +77,4 @@ private struct PaintedHeroHUDFrameOutline: Shape {
         path.closeSubpath()
         return path
     }
-}
-
-private struct HeroHUDButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View { configuration.label }
 }

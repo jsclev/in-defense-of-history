@@ -6,6 +6,7 @@ public struct BattleContent {
     public let level: LevelInfo
     public let playSpeeds: PlaySpeedConfiguration
     public let virtualCanvas: VirtualCanvas
+    public let hudLayout: HudLayoutConfig
     public let arsenal: DesignArsenal
     public let enemies: [EnemyType]
     public let unlocks: [TowerKind: Int]
@@ -25,6 +26,7 @@ public struct BattleContent {
         level = try draft?.level ?? db.levelLoader.load(id: levelID)
         playSpeeds = try db.playSpeedDao.get()
         virtualCanvas = try db.virtualCanvasDao.get()
+        hudLayout = try db.hudLayoutDao.get()
         arsenal = try db.towerTypeDao.getDesignArsenal()
         enemies = try db.enemyTypeDao.getAll()
         guard let selected = try db.difficultyDao.getSelected() else {
@@ -62,7 +64,7 @@ public struct BattleContent {
 
     // An explicit complete snapshot constructor. No defaults or replacement
     // content: used to validate assembled inputs, including in-memory tests.
-    init(level: LevelInfo, playSpeeds: PlaySpeedConfiguration, virtualCanvas: VirtualCanvas, arsenal: DesignArsenal,
+    init(level: LevelInfo, playSpeeds: PlaySpeedConfiguration, virtualCanvas: VirtualCanvas, hudLayout: HudLayoutConfig, arsenal: DesignArsenal,
          enemies: [EnemyType], unlocks: [TowerKind: Int], reinforcementConfig: ReinforcementConfig,
          chosenHeroes: HeroSelection, deployments: [HeroDeployment], heroCombat: [UUID: HeroCombatStats],
          heroAI: [UUID: HeroAIConfiguration], heroControls: [HeroControlSetting],
@@ -70,6 +72,7 @@ public struct BattleContent {
          difficulty: Difficulty, playerUpgrades: PlayerMetaUpgradeState) throws {
         self.level = level; self.virtualCanvas = virtualCanvas; self.arsenal = arsenal
         self.playSpeeds = playSpeeds
+        self.hudLayout = hudLayout
         self.enemies = enemies; self.unlocks = unlocks; self.reinforcementConfig = reinforcementConfig
         self.chosenHeroes = chosenHeroes; self.deployments = deployments; self.heroCombat = heroCombat
         self.heroAI = heroAI; self.heroControls = heroControls
@@ -82,7 +85,7 @@ public struct BattleContent {
     /// database. All prerequisites and star accounting belong to player state.
     public func selectingMetaUpgrades(_ selected: Set<MetaUpgrade>) throws -> Self {
         if selected == playerUpgrades.loadout.selected { return self }
-        return try Self(level: level, playSpeeds: playSpeeds, virtualCanvas: virtualCanvas, arsenal: arsenal,
+        return try Self(level: level, playSpeeds: playSpeeds, virtualCanvas: virtualCanvas, hudLayout: hudLayout, arsenal: arsenal,
             enemies: enemies, unlocks: unlocks, reinforcementConfig: reinforcementConfig,
             chosenHeroes: chosenHeroes, deployments: deployments, heroCombat: heroCombat,
             heroAI: heroAI, heroControls: heroControls,

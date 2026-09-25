@@ -1,6 +1,6 @@
 /// Selection persists between taps until this wave is confirmed or replaced.
 /// All entrances share one selection so another entrance cannot confirm it.
-public struct CallWaveButtonSelection {
+public struct CallWaveButtonSelection: Codable, Equatable {
     public private(set) var waveNumber: Int?
     public private(set) var selectedPosition: Point?
     public private(set) var hasConfirmed = false

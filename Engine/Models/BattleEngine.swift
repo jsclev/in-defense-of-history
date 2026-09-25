@@ -696,6 +696,8 @@ public class BattleEngine: NSObject, ObservableObject {
     var onEvent: ((SimEvent, Double) -> Void)?
     var runRecorder: LevelRunRecorder?
     var recordingInputDepth = 0
+    @Published var hudActivationTicks: [LevelHUDControl: Int64] = [:]
+    @Published var callWaveSelection = CallWaveButtonSelection()
 
     func recordRemoval(_ walker: Walker, fate: EnemyFate) {
         guard let origin = spawnOrigins.removeValue(forKey: walker.id) else { return }

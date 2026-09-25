@@ -12,6 +12,9 @@ public struct LevelRunRecord {
     public let source: LevelRunSource
     public let playSpeed: PlaySpeed
     public let status: LevelRunStatus
+    /// Calendar dates for run history; replay pacing uses virtual ticks and playSpeed.
+    public let startedAt: Date
+    public let finishedAt: Date?
     public let lastSequence: Int64
     public let lastTick: Int64
     public let resultJSON: String?
@@ -76,6 +79,14 @@ public final class LevelRunDAO {
         }
         return Data(bytes: bytes, count: Int(sqlite3_column_bytes(stmt, index)))
     }
+    private func date(_ stmt: OpaquePointer, _ index: Int32, runID: UUID, field: String) throws -> Date {
+        guard sqlite3_column_type(stmt, index) == SQLITE_TEXT,
+              let bytes = sqlite3_column_text(stmt, index),
+              let date = ISO8601DateFormatter().date(from: String(cString: bytes)) else {
+            throw fail("\(runID): \(field) must be an ISO 8601 timestamp")
+        }
+        return date
+    }
     private func done(_ stmt: OpaquePointer) throws {
         guard sqlite3_step(stmt) == SQLITE_DONE else { throw fail("write failed") }
     }
@@ -139,7 +150,7 @@ public final class LevelRunDAO {
     }
 
     public func get(id: UUID) throws -> LevelRunRecord {
-        try statement("SELECT level_id,source,status,last_sequence,last_tick,setup,result_json,format_version,play_speed_factor FROM level_run WHERE id=?") {
+        try statement("SELECT level_id,source,status,last_sequence,last_tick,setup,result_json,format_version,play_speed_factor,started_at,finished_at FROM level_run WHERE id=?") {
             text($0, 1, id.uuidString)
             guard sqlite3_step($0) == SQLITE_ROW else { throw fail("\(id): missing run") }
             guard let levelID = UUID(uuidString: try string($0, 0)),
@@ -148,6 +159,8 @@ public final class LevelRunDAO {
                   sqlite3_column_int($0, 7) == 2,
                   [SQLITE_INTEGER, SQLITE_FLOAT].contains(sqlite3_column_type($0, 8)) else { throw fail("\(id): invalid run metadata or format") }
             return LevelRunRecord(id: id, levelID: levelID, source: source, playSpeed: try PlaySpeed(sqlite3_column_double($0, 8)), status: status,
+                startedAt: try date($0, 9, runID: id, field: "started_at"),
+                finishedAt: sqlite3_column_type($0, 10) == SQLITE_NULL ? nil : try date($0, 10, runID: id, field: "finished_at"),
                 lastSequence: sqlite3_column_int64($0, 3), lastTick: sqlite3_column_int64($0, 4),
                 resultJSON: sqlite3_column_type($0, 6) == SQLITE_NULL ? nil : try string($0, 6), setup: try data($0, 5))
         }

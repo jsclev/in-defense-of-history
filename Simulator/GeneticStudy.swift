@@ -24,6 +24,8 @@ struct GeneticStudyOptions: Codable {
     var minimumMetaCandidates = 4
     var metaAdaptationGenerations = 2
     var metaExchangeFrom: GeneticStrategy?
+    var selectedHeroIDs: [UUID]?
+    var heroAIEnabled: Bool?
 
     func starValues(earned: Int) throws -> [Int] {
         let maximum = starMaximum ?? earned
@@ -62,18 +64,21 @@ struct GeneticStudyOptions: Codable {
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
     private func write<T: Encodable>(_ value: T, to url: URL) throws { try encoder.encode(value).write(to: url, options: .atomic) }
     private func executableHash() throws -> String { hash(try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[0]))) }
-    private func load(_ name: String, bountyFraction: Double) throws -> AuthoredMoneyStudy {
+    private func load(_ name: String, bountyFraction: Double, selectedHeroIDs: [UUID]?, heroAIEnabled: Bool?) throws -> AuthoredMoneyStudy {
         guard let id = try db.levelInfoDao.getIdBy(levelName: name) else { throw DbError.Db(message: "Unknown authored level '\(name)'") }
-        let experiment = try BountyExperimentDAO.contentCopy(of: db, fraction: bountyFraction)
+        let ids = try selectedHeroIDs ?? HeroSelectionStore(dao: db.heroDao).load().ids
+        let modes = heroAIEnabled.map { enabled in Dictionary(uniqueKeysWithValues: ids.map { ($0, enabled) }) } ?? [:]
+        let experiment = try BountyExperimentDAO.contentCopy(of: db, fraction: bountyFraction,
+            selectedHeroIDs: selectedHeroIDs, heroAI: modes)
         defer { experiment.close() }
         return try AuthoredMoneyStudy(db: experiment, levelID: id)
     }
 
     func replay(levelName: String, document: String, directory: String) throws {
         let replay = try JSONDecoder().decode(GeneticReplayDocument.self, from: Data(contentsOf: URL(fileURLWithPath: document)))
-        let study = try load(levelName, bountyFraction: replay.bountyFraction)
-        let content = try AuthoredMoneySweep(db: db).snapshot(study)
-        guard replay.format == "genetic-replay-v5", replay.contentSHA256 == hash(content),
+        let study = try replay.loadStudy(db: db, levelName: levelName)
+        let content = try study.replaySnapshot(db: db, heroesEnabled: true)
+        guard replay.format == "genetic-replay-v6", replay.contentSHA256 == hash(content),
               replay.executableSHA256 == (try executableHash()) else {
             throw DbError.Db(message: "Replay content or engine executable differs from the recorded experiment; retain the original binary for older replay formats")
         }
@@ -93,7 +98,10 @@ struct GeneticStudyOptions: Codable {
     }
 
     func run(levelName: String, options: GeneticStudyOptions, directory: String) throws {
-        let study = try load(levelName, bountyFraction: options.bountyFraction)
+        let study = try load(levelName, bountyFraction: options.bountyFraction,
+            selectedHeroIDs: options.selectedHeroIDs, heroAIEnabled: options.heroAIEnabled)
+        let heroLoadout = try GeneticHeroLoadout(content: study.battle)
+        let heroNames = study.battle.chosenHeroes.heroes.map(\.shortName).joined(separator: ", ")
         let meta = try GeneticMetaSearch(player: study.battle.playerUpgrades)
         let exchangeStars = try options.metaExchangeFrom?.playerState(in: study.battle).loadout.spentStars
         let requestedStars = try exchangeStars.map { stars in
@@ -125,8 +133,11 @@ struct GeneticStudyOptions: Codable {
                 throw DbError.Db(message: "seed strategy does not match requested star groups or fixed database meta selection")
             }
         }
-        let content = try AuthoredMoneySweep(db: db).snapshot(study)
+        let content = try study.replaySnapshot(db: db, heroesEnabled: true)
         let digest = hash(content), executable = try executableHash()
+        let solutionContext = try GeneticSolutionContext(study: study, db: db, startingMoney: options.money,
+            bountyFraction: options.bountyFraction, maxGameSeconds: options.maxGameSeconds)
+        let solutionSeed = Db.authoredDatabaseURL.deletingLastPathComponent().appendingPathComponent("DML/genetic_solutions.sql")
         let output = URL(fileURLWithPath: directory, isDirectory: true)
         try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
         guard !FileManager.default.fileExists(atPath: output.appendingPathComponent("run-id.txt").path) else {
@@ -136,11 +147,12 @@ struct GeneticStudyOptions: Codable {
         let trainingSeeds = (0..<options.trainingSeeds).map { options.seed &+ UInt64($0) }
         let validationSeeds = (0..<options.validationSeeds).map { options.seed &+ 1_000_000 &+ UInt64($0) }
         let configuration: [String: Any] = [
-            "algorithm": "genetic-v6", "options": try JSONSerialization.jsonObject(with: encoder.encode(options)),
+            "algorithm": "genetic-v7", "options": try JSONSerialization.jsonObject(with: encoder.encode(options)),
             "bountyFraction": options.bountyFraction, "fixedMeta": options.fixedMeta,
             "engine": "shared-game-engine", "level": study.level.name, "contentSHA256": digest,
             "executableSHA256": executable, "buildVersion": BuildVersion.version,
-            "heroes": false, "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
+            "heroes": true, "heroLoadout": try JSONSerialization.jsonObject(with: encoder.encode(heroLoadout)),
+            "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
             "difficulty": study.difficulty.name, "earnedStars": meta.earnedStars,
             "requestedStarsUsed": requestedStars, "reachableStarsUsed": starGroups,
             "databaseSelectedUpgrades": study.battle.playerUpgrades.loadout.selected.map(\.rawValue).sorted(),
@@ -268,9 +280,9 @@ struct GeneticStudyOptions: Codable {
             try populations[stars]!.record(candidate)
             if best[stars] == nil || candidate.fitness > best[stars]!.fitness {
                 best[stars] = candidate
-                let replay = GeneticReplayDocument(format: "genetic-replay-v5", contentSHA256: digest,
+                let replay = GeneticReplayDocument(format: "genetic-replay-v6", contentSHA256: digest,
                     executableSHA256: executable, money: options.money, maxGameSeconds: options.maxGameSeconds,
-                    starsUsed: stars, bountyFraction: options.bountyFraction, strategy: strategy,
+                    starsUsed: stars, bountyFraction: options.bountyFraction, heroLoadout: heroLoadout, strategy: strategy,
                     expected: evaluations.first(where: { $0.result.outcome == .victory }) ?? evaluations[0])
                 try write(replay, to: output.appendingPathComponent("best-stars-\(stars).json"))
                 print("New best at \(stars) stars used: population candidate \(candidate.id), generation \(generation), wins \(evaluations.filter { $0.result.outcome == .victory }.count)/\(evaluations.count), mean victory lives \(candidate.fitness.meanVictoryLives)")
@@ -336,9 +348,9 @@ struct GeneticStudyOptions: Codable {
 
         do {
             try dao.begin(runID: runID, configuration: String(decoding: configData, as: UTF8.self),
-                contentSHA256: digest, plans: "{\"format\":\"genetic-v6\",\"storage\":\"Separate meta-selection subpopulations; starsUsed, complete player DNA, engine receipts and seeds in each result row\"}")
+                contentSHA256: digest, plans: "{\"format\":\"genetic-v7\",\"storage\":\"Fixed hero loadout in configuration; separate meta-selection subpopulations; starsUsed, complete player DNA, engine receipts and seeds in each result row\"}")
             try Data(runID.uuidString.utf8).write(to: output.appendingPathComponent("run-id.txt"), options: .atomic)
-            print("Started genetic study \(runID): \(study.level.name), \(options.money) coins, no heroes, \(meta.earnedStars) stars earned")
+            print("Started genetic study \(runID): \(study.level.name), \(options.money) coins, heroes \(heroNames), \(meta.earnedStars) stars earned")
             print("Stars used: \(requestedStars); population cap \(options.population) per group; up to \(options.finalists) finalists; distinct meta selections: \(!options.fixedMeta)")
             print("Bounty fraction: \(options.bountyFraction); fixed database meta selection: \(options.fixedMeta)")
             fflush(stdout)
@@ -346,7 +358,7 @@ struct GeneticStudyOptions: Codable {
                 pool = try GeneticWorkerPool(count: options.workers,
                     configuration: GeneticWorkerConfiguration(level: levelName, contentSHA256: digest,
                         executableSHA256: executable, bountyFraction: options.bountyFraction,
-                        money: options.money, maxSeconds: options.maxGameSeconds), directory: output)
+                        money: options.money, maxSeconds: options.maxGameSeconds, heroLoadout: heroLoadout), directory: output)
             }
             initial: for index in 0..<options.population {
                 for stars in starGroups {
@@ -425,6 +437,11 @@ struct GeneticStudyOptions: Codable {
             try write(populations.values.flatMap { $0.activeSelections.flatMap(\.archive) }.sorted { $0.id < $1.id }, to: output.appendingPathComponent("population.json"))
             // Freeze every group's finalists before any held-out result is seen.
             let finalists = starGroups.flatMap { populations[$0]!.finalists(limit: options.finalists, distinctSelections: !options.fixedMeta) }
+            let trainingSolutions = try db.geneticSolutionDao.saveBest(
+                populations.values.flatMap { $0.selections.flatMap(\.archive) }, runID: runID,
+                context: solutionContext, executableSHA256: executable, panel: .training,
+                expectedSamples: options.trainingSeeds, limitPerStar: options.finalists, study: study)
+            try db.geneticSolutionDao.exportSeed(to: solutionSeed)
             var samplesByID: [Int: [GeneticEvaluation]] = [:]
             func validationCheckpoint() throws -> [GeneticCandidate] {
                 let checkpoint = finalists.compactMap { candidate -> GeneticCandidate? in
@@ -458,6 +475,11 @@ struct GeneticStudyOptions: Codable {
                 fflush(stdout)
             }
             let validations = try validationCheckpoint()
+            let validatedSolutions = try db.geneticSolutionDao.saveBest(validations, runID: runID,
+                context: solutionContext, executableSHA256: executable, panel: .validation,
+                expectedSamples: options.validationSeeds, limitPerStar: options.finalists, study: study)
+            try db.geneticSolutionDao.exportSeed(to: solutionSeed)
+            print("Published \(trainingSolutions) training and \(validatedSolutions) validation candidates to genetic_solution and \(solutionSeed.path)")
             for candidate in validations {
                 print("Held-out \(candidate.starsUsed) stars used, population candidate \(candidate.id): \(candidate.evaluations.filter { $0.result.outcome == .victory }.count)/\(candidate.evaluations.count) wins")
             }
@@ -513,9 +535,10 @@ struct GeneticStudyOptions: Codable {
                         "pairedValidation": try JSONSerialization.jsonObject(with: encoder.encode(paired))])
                 }
             }
-            let summary: [String: Any] = ["format": "genetic-summary-v6", "runID": runID.uuidString,
+            let summary: [String: Any] = ["format": "genetic-summary-v7", "runID": runID.uuidString,
                 "bountyFraction": options.bountyFraction, "fixedMeta": options.fixedMeta,
-                "heroes": false, "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
+                "heroes": true, "heroLoadout": try JSONSerialization.jsonObject(with: encoder.encode(heroLoadout)),
+                "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
                 "workers": options.workers, "engineGames": completed, "uniqueGenomes": nextID, "cacheHits": cacheHits, "generations": completedGenerations,
                 "elapsedSeconds": ProcessInfo.processInfo.systemUptime - start, "contentSHA256": digest,
                 "money": options.money, "earnedStars": meta.earnedStars, "starResults": starResults,
@@ -525,7 +548,7 @@ struct GeneticStudyOptions: Codable {
             let summaryURL = output.appendingPathComponent("summary.json")
             try JSONSerialization.data(withJSONObject: summary, options: [.sortedKeys, .prettyPrinted]).write(to: summaryURL, options: .atomic)
             var report = ["# \(study.level.name) — meta-upgrade comparison", "",
-                "Run \(runID). \(options.money) starting coins; \(study.difficulty.name); heroes disabled.", "",
+                "Run \(runID). \(options.money) starting coins; \(study.difficulty.name); chosen heroes: \(heroNames).", "",
                 options.fixedMeta ? "Fixed-meta control: each row compares a battle plan using the same meta-upgrade selection." : "Each row is one population candidate chosen before validation, representing a distinct meta-upgrade selection within its stars-used group.", "",
                 "| Stars used | Population candidate ID | Wins | Average lives remaining | Minimum lives remaining | Meta upgrades |",
                 "|---|---:|---:|---:|---:|---|"]

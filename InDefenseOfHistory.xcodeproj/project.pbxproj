@@ -519,13 +519,15 @@
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
-			files = ();
+			files = (
+			);
 			inputPaths = (
 				"$(SRCROOT)/Tools/check_device_database.py",
 				"$(SRCROOT)/Db/in_defense_of_history.sqlite",
 			);
 			name = "Verify Device Database Source";
-			outputPaths = ();
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "case \"$PLATFORM_NAME\" in\n    iphoneos) /usr/bin/python3 \"$SRCROOT/Tools/check_device_database.py\" --database \"$SRCROOT/Db/in_defense_of_history.sqlite\" ;;\nesac\n";
@@ -534,14 +536,16 @@
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
-			files = ();
+			files = (
+			);
 			inputPaths = (
 				"$(SRCROOT)/Tools/check_device_database.py",
 				"$(SRCROOT)/Db/in_defense_of_history.sqlite",
 				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/in_defense_of_history.sqlite",
 			);
 			name = "Verify Bundled Device Database";
-			outputPaths = ();
+			outputPaths = (
+			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "case \"$PLATFORM_NAME\" in\n    iphoneos) /usr/bin/python3 \"$SRCROOT/Tools/check_device_database.py\" --database \"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/in_defense_of_history.sqlite\" --matches \"$SRCROOT/Db/in_defense_of_history.sqlite\" ;;\nesac\n";

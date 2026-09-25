@@ -24,6 +24,7 @@ sqlite3 -bail "$database" < DDL/create_play_speed.sql
 sqlite3 -bail "$database" < DDL/create_combat_rules.sql
 sqlite3 -bail "$database" < DDL/create_meta_upgrades.sql
 sqlite3 -bail "$database" < DDL/create_player_meta_upgrades.sql
+sqlite3 -bail "$database" < DDL/create_genetic_solutions.sql
 
 # Add all the data
 sqlite3 -bail "$database" < DML/combat_rules.sql
@@ -120,6 +121,7 @@ sqlite3 -bail "$database" < DML/Simulator/sim_enemy_type_bounty.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_melee_units.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_tower_ranges.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_tower_sweep.sql
+sqlite3 -bail "$database" < DML/genetic_solutions.sql
 
 test "$(sqlite3 "$database" 'PRAGMA integrity_check;')" = ok
 test -z "$(sqlite3 "$database" 'PRAGMA foreign_key_check;')"

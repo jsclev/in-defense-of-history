@@ -2,6 +2,7 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct LevelBriefingView: View {
+    @EnvironmentObject private var settings: PlayerSettingsStore
     let db: Db
     let virtualCanvas: VirtualCanvas
     let runtimeCanvas: RuntimeCanvas
@@ -25,6 +26,9 @@ struct LevelBriefingView: View {
 
     @State private var difficulties: [Difficulty] = []
     @State private var selected: Difficulty?
+    @State private var solution: GeneticSolution?
+    @State private var showingSolution = false
+    @State private var solutionError: String?
 
     private static let ink = Color(red: 0.16, green: 0.12, blue: 0.08)
     private static let brass = Color(red: 0.87, green: 0.72, blue: 0.35)
@@ -71,10 +75,31 @@ struct LevelBriefingView: View {
                 }
             }
             .disabled(selected == nil)
+
+            if settings.values.showGASolutionButton {
+                ReplaySymbolButton(symbol: "play.rectangle.fill", label: "Watch winning GA solution",
+                    side: max(48, min(64, 64 * metrics.scale))) {
+                        if solution != nil { showingSolution = true }
+                        else { solutionError = "No current winning solution is available for this level and difficulty." }
+                    }
+                    .accessibilityIdentifier("preview-ga-solution")
+                    .accessibilityHint("Watch the best saved strategy with its heroes and upgrades")
+                    .position(x: contentRect.minX + 40, y: footer.midY)
+            }
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear(perform: loadDifficulties)
+        .task(id: selected?.id) { loadSolution() }
+        .fullScreenCover(isPresented: $showingSolution) {
+            if let solution {
+                GeneticSolutionView(db: db, solution: solution, canvas: runtimeCanvas) { showingSolution = false }
+            }
+        }
+        .alert("Winning solution", isPresented: Binding(get: { solutionError != nil },
+            set: { if !$0 { solutionError = nil } })) {
+                Button("OK", role: .cancel) { solutionError = nil }
+            } message: { Text(solutionError ?? "") }
     }
 
     /// Two cards per row: four difficulties stacked singly would overrun a
@@ -137,6 +162,13 @@ struct LevelBriefingView: View {
         if selected == nil {
             selected = (try? db.difficultyDao.getSelected()) ?? difficulties.last
         }
+    }
+
+    private func loadSolution() {
+        solution = nil
+        guard let levelID = node.levelInfoID, let selected else { return }
+        do { solution = try GeneticSolutionPlayback.best(db: db, levelID: levelID, difficultyID: selected.id) }
+        catch { solutionError = String(describing: error) }
     }
 }
 

@@ -1,7 +1,7 @@
 import Foundation
 import CoreGraphics
 
-public enum HudLocation: String, CaseIterable, Sendable {
+public enum HudLocation: String, Codable, CaseIterable, Sendable {
     case northWest = "north_west"
     case north = "north"
     case northEast = "north_east"
@@ -21,7 +21,7 @@ public enum HudSection: String, CaseIterable, Sendable {
     case masterControls = "master_controls"
 }
 
-public struct HudLayoutConfig: Equatable, Sendable {
+public struct HudLayoutConfig: Codable, Equatable, Sendable {
     public let heroBar: HudLocation
     public let statsView: HudLocation
     public let miscView: HudLocation

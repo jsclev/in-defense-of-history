@@ -87,7 +87,7 @@ final class GeneticMetaSearchTests: XCTestCase {
             for id in selection { XCTAssertTrue(try fixture.db.playerMetaUpgradeDao.purchase(id)) }
             let playerContent = try study(fixture).battle
             XCTAssertEqual(try source.battle.selectingMetaUpgrades(Set(selection)).playerUpgrades, playerContent.playerUpgrades)
-            let player = try BattleEngine(recording: .preview, content: playerContent, heroesEnabled: false,
+            let player = try BattleEngine(recording: .preview, content: playerContent, heroesEnabled: true,
                 startingMoneyOverride: 500, seed: 9001, onVictory: { _, _ in 0 })
             player.selectSlot(0); _ = player.tapBuildButton(.ranged); _ = player.tapBuildButton(.ranged)
             player.startNextWave()

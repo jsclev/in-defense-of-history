@@ -35,7 +35,7 @@ enum BattleTestFixture {
         }
         var ledger = source.playerUpgrades.bestStarsByLevel
         ledger[level.id] = 0
-        return try BattleContent(level: level, playSpeeds: source.playSpeeds, virtualCanvas: source.virtualCanvas,
+        return try BattleContent(level: level, playSpeeds: source.playSpeeds, virtualCanvas: source.virtualCanvas, hudLayout: source.hudLayout,
             arsenal: DesignArsenal(towers: definitions, combatRules: source.arsenal.combatRules),
             enemies: enemies, unlocks: source.unlocks, reinforcementConfig: source.reinforcementConfig,
             chosenHeroes: source.chosenHeroes, deployments: [], heroCombat: source.heroCombat,

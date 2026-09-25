@@ -1,5 +1,10 @@
 # Genetic balance search by meta-upgrade spending
 
+For auditing single-family exploits and comparing damage/wave variants, use the
+separate [balance analyzer](balance_analyzer.md). It fixes authored starting
+money, disables heroes, maximizes ranged progression, and runs ranged-only
+searches alongside unrestricted controls.
+
 Build the macOS `Simulator` scheme with the normal Xcode Release configuration.
 Battles use the game's `BattleEngine` through `GeneticCommander` and
 `GameSimulation`. The search chooses player inputs; it contains no combat model.
@@ -47,7 +52,27 @@ build, tier-upgrade, and ability-purchase decisions. Decisions retain earliest
 wave/time and whether to reserve money when the engine reports `needGold`.
 Meta-upgrade selections are fixed for that candidate's entire battle.
 
-Heroes are disabled. Reinforcements are enabled in every candidate. The
+Heroes are enabled in every GA evaluation, including held-out validation and
+replay. The lineup is fixed for a run: by default it comes from `HeroDAO`'s player
+selection. `--heroes <hero-uuid[,hero-uuid]>` targets another one- or two-hero
+lineup through the DAO in the experiment's in-memory database, without changing
+the player's saved selection. Run each desired lineup separately to build
+adviser coverage. Rankings determine primary/secondary roles and the level's
+authored hero capacity determines who actually deploys.
+
+Heroes execute the shared engine's combat and their existing autonomous AI;
+database `ai_enabled` settings are respected by default. `--hero-ai on` or
+`--hero-ai off` explicitly changes only the chosen heroes in the experiment's
+in-memory database. Workers and live solution playback restore those recorded
+AI settings without changing the player's settings. The GA does not evolve hero
+movement commands or select different heroes while breeding tower plans.
+When a hero's AI is off, that hero receives no manual movement commands from
+the GA; it still fights according to the shared engine at its authored position.
+Configuration, worker handshakes, replays and shipping solutions record chosen
+IDs, deployed IDs/roles/spawns, and AI settings. Content hashes also include hero
+combat stats and AI tuning, so changed hero balance invalidates old advice.
+
+Reinforcements are enabled in every candidate. The
 `reinforcements` gene specifies which visible enemy to prioritize (nearest an
 exit, or nearest a preferred map point) and how long to hold a ready charge.
 Deployment is at that enemy's position, through the same toggle/placement
@@ -103,7 +128,7 @@ ledger, campaign money, or the authored restore preset.
 
 ## Meta-selection subpopulations and full-battle scoring
 
-`genetic-v6` searches meta selections explicitly. Within each exact stars-used
+`genetic-v7` searches meta selections explicitly with a fixed hero lineup. Within each exact stars-used
 group, `--meta-selections` (default 8) reserves equally sized subpopulations for
 different legal selections. `--population` (default 64) is the total cap per
 stars-used group. Divide it by the number of active selections and round down;
@@ -198,11 +223,59 @@ This search covers meta selections, tower purchases/timing, reinforcement
 target priority/hold time and per-wave early-call choices. It retains the
 engine's default rally/obstacle positions and the player's nearest offered
 ready-demolition-site policy. It does not search map-command locations or
-deploy heroes. Reinforcement priorities select among currently
+manual hero movement. Reinforcement priorities select among currently
 visible enemies; this first pass does not evolve arbitrary reinforcement sites
 or a separate policy for every wave.
 
 ## Results and replay
+
+Every GA run publishes its best distinct population plans per exact star spend
+to `genetic_solution` through `db.geneticSolutionDao`. `--finalists` is also the
+per-run, per-panel, per-star retention limit. Training archives (including retired
+selections) are published before validation. Held-out candidates are published
+after validation, including explicitly incomplete panels when time runs out.
+Earlier runs and other scenarios remain available; a weaker run does not erase
+an earlier winner. These are the best plans found, not a proof of global optimality.
+
+The shared `GeneticSolutionDAO.best(context:starsUsed:study:)` API returns typed
+strategies and complete evaluation evidence, ordered by the GA's fitness and
+deduplicated by strategy. Its defaults require a completed held-out panel and at
+least one victory. Training, incomplete panels and nonwinning candidates are
+available only via explicit query options. An empty result means this scenario
+still needs a solution. Each record includes source run/candidate/generation,
+executable hash, requested sample count and the exact hero loadout. Format-2
+solutions match chosen hero IDs, deployments and AI settings as well as battle
+content. Archived format-1 no-hero rows remain exportable but are excluded from
+adviser lookups; they are never relabeled as hero-enabled results.
+It does not depend on simulator history or external report files.
+
+Create the lookup `GeneticSolutionContext` from the DAO-loaded study, money,
+bounty fraction and game-time limit. Matching includes level, difficulty and a
+content hash of maps, waves, prices and tuning. Player star earnings/selections
+are excluded from this hash; the candidate retains its exact upgrade IDs and
+star cost. Campaign advisers must use the level's authored starting money and
+the authored bounty (fraction 1). Experimental budgets/bounties remain isolated.
+Changed content needs new GA runs; executable hashes retain engine provenance.
+
+The level preview's play-screen button opens the best compatible, completed
+validation winner for its selected difficulty, authored starting money and
+earned-star budget. It restores that solution's heroes, AI modes, upgrade
+selection and a winning combat seed in a disposable content context. The live
+demonstration runs the shared engine, offers pause and 0.5x/1x/2x/4x/8x controls,
+and checks its complete outcome against the saved evaluation. It awards no
+campaign progress and does not change player selections. Settings → Watch GA
+solutions controls the button; its SQLite seed is on. Normal launch refreshes
+restore the authored settings as elsewhere in the game.
+
+After each publication the DAO atomically exports the catalog to the maintained
+product seed `Db/DML/genetic_solutions.sql`. Check this file into source control
+to ship the results. `Db/create_db.sh` loads it into the bundled database after
+the level and difficulty seeds, so rebuilding no longer discards solutions.
+Only the coordinator publishes; workers continue recording ordinary battle
+results. Export failures fail the run visibly (the database publication remains
+available). Close database connections before rebuilding as usual. This change
+does not run a full search for every level; coverage comes from the GA runs made
+for each required level/difficulty/star/budget scenario.
 
 `results.md` is a readable table using **Stars used**, **Population candidate ID**,
 and **Wins**, with named meta selections. `summary.json` has one `starResults` entry per requested
@@ -219,17 +292,20 @@ Each candidate summary includes its reinforcement policy and mean deployment
 count, the early-call policy, mean actual early-call count and mean awarded
 early-call bonus. Every evaluation records successful deployments and the
 engine's manual-call receipts, including in SQLite and replay documents.
-Configurations explicitly distinguish heroes disabled, reinforcements enabled
+Configurations explicitly distinguish heroes enabled, reinforcements enabled
 and whether early calls are a permitted search dimension. Permitting calls does
 not mean every candidate chooses to use them.
 
 `best-stars-N.json` is the best training replay at exactly N stars. Full candidate
 evidence lives in `population.json`, `validation.json`, and SQLite. No single
 overall winner is selected across different spending amounts.
+Hero-enabled replays use `genetic-replay-v6` and restore their recorded lineup
+through the experiment DAO. Keep the original executable for older no-hero
+replays; they must not be evaluated as hero-enabled runs.
 
 The existing SQL-defined `simulator_run`, `money_study`, and
 `money_study_result` tables store the study through `MoneyStudyDAO`. For
-`genetic-v5` and `genetic-v6`, `placement_plan` identifies a globally unique population candidate and
+`genetic-v5`, `genetic-v6` and `genetic-v7`, `placement_plan` identifies a globally unique population candidate and
 `upgrade_policy` is 0 for training or 1 for held-out evaluation. Each result's
 `seed_results_json` contains `starsUsed`, the full DNA including `metaUpgrades`,
 explicit seeds, actual engine results, and wave-transition economy observations.

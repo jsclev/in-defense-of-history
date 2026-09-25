@@ -158,7 +158,7 @@ final class SharedBattleEngineTests: XCTestCase {
         }
     }
 
-    func testCharlestonReplayUsesAuthored500CoinsAndReducedBountyWithoutHeroes() async throws {
+    func testCharlestonReplayUsesAuthored670CoinsAndReducedBountyWithoutHeroes() async throws {
         let url = Db.authoredDatabaseURL
         let db = Db(dbPath: url.path, fullRefresh: false,
                     levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()))
@@ -166,16 +166,17 @@ final class SharedBattleEngineTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston")))
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
         try await MainActor.run {
-            XCTAssertEqual(study.level.startingMoney, 500)
+            XCTAssertEqual(study.level.startingMoney, 670)
             XCTAssertEqual(study.arsenal.combatRules.killBountyMultiplier, 0.30)
             let sim = try GameSimulation(recording: .preview, content: study.battle, startingMoney: nil, heroesEnabled: false, seed: 1776)
+            XCTAssertEqual(sim.gold, 670)
             XCTAssertTrue(sim.engine.heroPosts.isEmpty)
             let result = try sim.run(steps: plan.steps, maxSeconds: 1500)
             // This recorded plan won under the former 1.0 bounty multiplier.
-            // With the reduced authored bounty it exhausts its lives on wave 5.
+            // With the reduced authored bounty and 670 starting coins it exhausts its lives on wave 6.
             XCTAssertEqual(result.outcome, .defeat)
             XCTAssertEqual(result.livesRemaining, 0)
-            XCTAssertEqual(sim.engine.waveSchedule.nextWaveIndex, 5)
+            XCTAssertEqual(sim.engine.waveSchedule.nextWaveIndex, 6)
             let data = try JSONEncoder().encode(result)
             let report = try XCTUnwrap(JSONSerialization.jsonObject(with: data) as? [String: Any])
             XCTAssertEqual(Set(report.keys), Set(["outcome", "seconds", "livesRemaining", "goldRemaining",

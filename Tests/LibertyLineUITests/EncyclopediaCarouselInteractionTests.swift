@@ -13,6 +13,7 @@ final class EncyclopediaCarouselInteractionTests: XCTestCase {
         for category in ["tower", "enemy"] {
             app.buttons["Encyclopedia"].tap()
             app.buttons["encyclopedia-\(category == "tower" ? "towers" : "enemies")"].tap()
+            if category == "tower" { app.buttons["tower-entry-ranged-1-1"].tap() }
             let prefix = "\(category)-encyclopedia"
             let demo = app.buttons["\(prefix)-page-demo"]
             let details = app.buttons["\(prefix)-page-details"]
@@ -82,8 +83,10 @@ final class EncyclopediaCarouselInteractionTests: XCTestCase {
             assertPage(0)
 
             history.tap()
+            if category == "tower" { app.buttons["tower-encyclopedia-back"].tap() }
             app.buttons[category == "tower" ? "tower-entry-special-4-1" : "enemy-entry-regimental_drummer"].tap()
             assertPage(0, capture: "new-selection")
+            if category == "tower" { app.buttons["tower-encyclopedia-back"].tap() }
             app.buttons["Done"].tap()
             XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 3))
         }

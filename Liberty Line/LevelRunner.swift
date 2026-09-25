@@ -9,7 +9,7 @@ import CoreHaptics
 /// All battle rules and commands are inherited from the shared BattleEngine.
 @MainActor
 public final class LevelRunner: BattleEngine {
-    private(set) var mapArt: LevelMapArt
+    let sceneSetup: LevelSceneSetup
     private let db: Db
     private var runtimeCanvas: RuntimeCanvas
     private let hudLayoutConfig: HudLayoutConfig
@@ -41,21 +41,14 @@ public final class LevelRunner: BattleEngine {
         self.db = db
         self.runtimeCanvas = runtimeCanvas
         self.hudLayoutConfig = hudLayoutConfig.moving(.heroBar, to: .southWest)
-        mapArt = LevelMapArt(mapImageName: content.level.mapImageName)
         do {
+            sceneSetup = try LevelSceneSetup(content: content)
             try super.init(recording: .database(db.levelRunDao, .player), content: content, playSpeed: content.playSpeeds.player, heroesEnabled: heroesEnabled, startingMoneyOverride: replayMoney,
                 seed: replaySeed ?? UInt64.random(in: UInt64.min...UInt64.max), onVictory: onVictory)
-            heroImageAspectRatios = try Dictionary(uniqueKeysWithValues: content.deployments.map { deployment in
-                let hero = deployment.hero
-                guard let image = UIImage(named: hero.unitImageName),
-                      image.size.width > 0, image.size.height > 0 else {
-                    throw DbError.Db(message: "Missing sprite dimensions for \(hero.shortName)")
-                }
-                return (hero.id, image.size.width / image.size.height)
+            heroImageAspectRatios = Dictionary(uniqueKeysWithValues: content.deployments.map {
+                ($0.hero.id, sceneSetup.heroAspectRatio(for: $0.hero.unitImageName))
             })
-            validateHeroAsset = { name in
-                guard UIImage(named: name) != nil else { fatalError("Missing hero animation image '\(name)'") }
-            }
+            validateHeroAsset = LevelSceneSetup.validateHeroAsset
             publishesPresentation = true
             publishHeroes()
         } catch { fatalError("Database load failed: \(error)") }

@@ -2,16 +2,16 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct HudStatsView: View {
-    @EnvironmentObject private var settings: PlayerSettingsStore
-    private var showDebugInfo: Bool { settings.values.showDebugInfo }
-    @ObservedObject private var runner: LevelRunner
+    private let state: LevelHUDState
+    private let debugStatus: String?
     private let runtimeCanvas: RuntimeCanvas
     private let metrics: HudMetrics
     private let location: HudLocation
 
-    public init(runtimeCanvas: RuntimeCanvas, runner: LevelRunner, location: HudLocation = .northWest) {
+    init(runtimeCanvas: RuntimeCanvas, state: LevelHUDState, location: HudLocation = .northWest, debugStatus: String? = nil) {
         self.runtimeCanvas = runtimeCanvas
-        self.runner = runner
+        self.state = state
+        self.debugStatus = debugStatus
         self.location = location
         metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
     }
@@ -57,21 +57,21 @@ struct HudStatsView: View {
         VStack(alignment: .center, spacing: layout.spacing) {
             HStack(spacing: layout.spacing) {
                 counter(icon: "lives_icon_05", value: livesText, row: panel.lives, plateHeight: layout.plateHeight)
-                    .accessibilityLabel("Lives: \(runner.lives)")
+                    .accessibilityLabel("Lives: \(state.lives)")
                 counter(icon: "money_icon_12", value: goldText, row: panel.money, plateHeight: layout.plateHeight)
-                    .accessibilityLabel("Money: \(runner.money)")
+                    .accessibilityLabel("Money: \(state.money)")
             }
             counterText(waveText, fontSize: panel.money.fontSize)
                 .frame(width: layout.waveWidth, height: layout.plateHeight)
                 .background(.black.opacity(Self.plateOpacity), in: plate)
-                .accessibilityLabel("Wave \(runner.currentWaveNumber) of \(runner.waveCount)")
+                .accessibilityLabel("Wave \(state.wave) of \(state.waveCount)")
         }
         .frame(width: layout.size.width, height: layout.size.height)
         .scaleEffect(displayScale)
         .frame(width: width, height: height)
         .overlay(alignment: .topLeading) {
-            if showDebugInfo {
-                Text(runner.status)
+            if let debugStatus {
+                Text(debugStatus)
                     .font(.system(size: Typography.size(13 * metrics.scale)).monospaced())
                     .foregroundStyle(.white)
                     .lineLimit(3)
@@ -88,12 +88,12 @@ struct HudStatsView: View {
         RoundedRectangle(cornerRadius: 1.5 * metrics.statPlateCorner, style: .continuous)
     }
 
-    private var livesText: String { "\(runner.lives)" }
+    private var livesText: String { "\(state.lives)" }
 
-    private var waveText: String { "\(runner.currentWaveNumber) of \(runner.waveCount)" }
+    private var waveText: String { "\(state.wave) of \(state.waveCount)" }
 
     private var goldText: String {
-        let money = runner.money
+        let money = state.money
         return money >= 1000
             ? "\(money / 1000),\(String(format: "%03d", money % 1000))"
             : "\(money)"

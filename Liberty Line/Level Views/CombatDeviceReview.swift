@@ -16,7 +16,7 @@ struct CombatDeviceReview: View {
             if let runner, let canvas, let frame {
                 let projection = LevelMapArt.projection(virtualCanvas: store.virtualCanvas,
                                                        fitting: canvas.playAreaRect)
-                runner.mapArt.underlay(in: projection)
+                runner.sceneSetup.mapArt.underlay(in: projection)
                 GroundTroopLayer(presentation: frame.presentation, interpolation: 1, militia: frame.militia,
                                  sprites: MapSpriteScale(runtimeCanvas: canvas), projection: projection)
             }

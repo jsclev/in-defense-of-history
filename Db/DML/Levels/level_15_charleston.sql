@@ -10,7 +10,7 @@ INSERT INTO level_info (
     1137.0,
     julianday('1780-03-29T08:00:00-05:00'),
     julianday('1780-05-12T14:00:00-05:00'),
-    500,
+    670,
     20,
     15,
     'level_15_charleston'

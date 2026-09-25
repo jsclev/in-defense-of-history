@@ -1,5 +1,23 @@
 import SwiftUI
 
+/// Availability is shown by recorded state (selection and cooldown), not by
+/// SwiftUI fading the whole control when the replay disables interaction.
+struct HUDButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View { configuration.label }
+}
+
+extension View {
+    func hudActivationHighlight(_ active: Bool, side: CGFloat) -> some View {
+        overlay {
+            if active {
+                RoundedRectangle(cornerRadius: side * 0.08)
+                    .strokeBorder(.white, lineWidth: side * 0.04)
+                    .allowsHitTesting(false)
+            }
+        }
+    }
+}
+
 /// Fits the painted blue rim, rather than its transparent source canvas, to a
 /// HUD button. Shared by portrait and reinforcement buttons so their sizes match.
 struct PaintedHUDButtonFrame: View {
@@ -56,6 +74,6 @@ struct HudButtonView: View {
             }
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(HUDButtonStyle())
     }
 }

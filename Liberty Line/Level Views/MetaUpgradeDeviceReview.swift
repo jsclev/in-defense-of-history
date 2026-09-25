@@ -156,6 +156,7 @@ struct MetaUpgradeDeviceReview: View {
                 selected: Set(MetaUpgrade.allCases),
                 bestStarsByLevel: source.playerUpgrades.bestStarsByLevel.mapValues { _ in 3 })
             let historicalContent = try BattleContent(level: source.level, playSpeeds: source.playSpeeds, virtualCanvas: source.virtualCanvas,
+                hudLayout: source.hudLayout,
                 arsenal: source.arsenal, enemies: source.enemies, unlocks: source.unlocks,
                 reinforcementConfig: source.reinforcementConfig, chosenHeroes: source.chosenHeroes,
                 deployments: source.deployments, heroCombat: source.heroCombat,

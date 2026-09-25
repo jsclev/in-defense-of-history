@@ -37,6 +37,12 @@ final class LevelReplayer {
             throw DbError.Db(message: "level_run[\(runID)]: invalid setup")
         }
         _ = try setup.roadSurface()
+        if let layout = setup.hudLayout {
+            let positions = HudSection.allCases.map { layout.location(of: $0) }
+            guard positions.allSatisfy({ HudLocation.corners.contains($0) }), Set(positions).count == positions.count else {
+                throw DbError.Db(message: "level_run[\(runID)]: invalid recorded HUD layout")
+            }
+        }
     }
 
     private func read() throws -> LevelActionRecord? {
@@ -108,6 +114,7 @@ final class LevelReplayer {
             eventIndex += 1; eventSequence += 1
         }
         let nextFrame = try timeline.frame(at: tick)
+        try validateHUD(in: nextFrame)
         recordedSpeed = try PlaySpeed(nextFrame.speed)
         frame = nextFrame
         if tick == run.lastTick {
@@ -142,6 +149,7 @@ final class LevelReplayer {
             row = try read()
         }
         guard let nextFrame else { throw DbError.Db(message: "level_run[\(run.id)]: tick \(tick) has no presentation") }
+        try validateHUD(in: nextFrame)
         recordedSpeed = try PlaySpeed(nextFrame.speed)
         frame = nextFrame
         if row == nil {
@@ -149,6 +157,23 @@ final class LevelReplayer {
             isFinished = true
         }
         return true
+    }
+
+    private func validateHUD(in frame: LevelReplayFrame) throws {
+        guard (setup.hudLayout == nil) == (frame.hud == nil) else {
+            throw DbError.Db(message: "level_run[\(run.id)]: missing recorded HUD state or layout")
+        }
+        if let hud = frame.hud {
+            guard hud.lives == frame.lives, hud.money == frame.money,
+                  hud.waveCount == setup.level.waves.count,
+                  hud.reinforcementCooldown.remainingSeconds.isFinite,
+                  hud.reinforcementCooldown.remainingSeconds >= 0,
+                  (0...1).contains(hud.reinforcementCooldown.remainingFraction),
+                  hud.seconds.isFinite,
+                  abs(hud.seconds - Double(frame.tick) / Double(setup.ticksPerSecond)) < 1e-8 else {
+                throw DbError.Db(message: "level_run[\(run.id)]: invalid recorded HUD values at tick \(frame.tick)")
+            }
+        }
     }
 }
 

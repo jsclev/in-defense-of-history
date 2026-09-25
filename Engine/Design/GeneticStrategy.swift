@@ -283,7 +283,8 @@ public struct GeneticCommander {
     }
 
     @MainActor public static func evaluate(_ strategy: GeneticStrategy, recording: BattleRecording, content: BattleContent,
-        money: Int, seed: UInt64, maxSeconds: Double) throws -> GeneticEvaluation {
+        money: Int, seed: UInt64, maxSeconds: Double, heroesEnabled: Bool = true,
+        towerObserver: (([BattleTowerSnapshot]) -> Void)? = nil) throws -> GeneticEvaluation {
         let selection = Set(strategy.metaUpgrades)
         guard selection.count == strategy.metaUpgrades.count else {
             throw DbError.Db(message: "genetic strategy: duplicate meta upgrade ID")
@@ -291,7 +292,7 @@ public struct GeneticCommander {
         try strategy.reinforcements.validate()
         try strategy.earlyWaves.validate(waveCount: content.level.numWaves)
         let battle = try content.selectingMetaUpgrades(selection)
-        let sim = try GameSimulation(recording: recording, content: battle, startingMoney: money, heroesEnabled: false, seed: seed)
+        let sim = try GameSimulation(recording: recording, content: battle, startingMoney: money, heroesEnabled: heroesEnabled, seed: seed)
         var completed = false
         defer { if !completed { sim.finishRecording(status: .failed) } }
         var commander = Self(strategy), economy: [GeneticWaveEconomy] = []
@@ -305,6 +306,7 @@ public struct GeneticCommander {
             }
         }
         let outcome = sim.result()
+        towerObserver?(sim.towers)
         sim.finishRecording(status: outcome.outcome == .victory ? .victory : outcome.outcome == .defeat ? .defeat : .timeout)
         var evaluation = GeneticEvaluation(seed: seed, result: outcome, wavesStarted: sim.currentWave, waveEconomy: economy,
                                  reinforcementDeployments: sim.reinforcementDeployments, waveCalls: sim.waveCalls)

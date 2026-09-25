@@ -34,6 +34,7 @@ public class Db {
     public let playerMetaUpgradeDao: PlayerMetaUpgradeDAO
     public let playerSettingsDao: PlayerSettingsDAO
     public let simulatorRunDao: SimulatorRunDAO
+    public let geneticSolutionDao: GeneticSolutionDAO
     public let playSpeedDao: PlaySpeedDAO
     private let localLevelRunDao: LevelRunDAO
     private var runRecordingDatabase: Db?
@@ -129,6 +130,7 @@ public class Db {
         metaUpgradeDao = MetaUpgradeDAO(conn: conn)
         playerMetaUpgradeDao = PlayerMetaUpgradeDAO(conn: conn)
         simulatorRunDao = SimulatorRunDAO(conn: conn)
+        geneticSolutionDao = GeneticSolutionDAO(conn: conn)
         playSpeedDao = PlaySpeedDAO(conn: conn)
         localLevelRunDao = LevelRunDAO(conn: conn)
     }

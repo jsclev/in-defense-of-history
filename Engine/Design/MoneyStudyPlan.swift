@@ -45,7 +45,8 @@ public struct MoneyStudyPlan: Sendable {
         for index in slots.indices {
             // Opening defenses must be able to fight. Family mix is a strategy
             // choice, never a requirement to buy support before defending.
-            let candidates = study.towerPaths.filter { path in
+            let available = study.towerPaths.filter { index >= 3 || $0.type.levels[0].attackMode.firesProjectiles }
+            let preferred = available.filter { path in
                 guard index < 3 else { return true }
                 let mode = path.type.levels[0].attackMode
                 switch placementIndex % 4 {
@@ -54,6 +55,10 @@ public struct MoneyStudyPlan: Sendable {
                 default: return mode.firesProjectiles
                 }
             }
+            // A family preference cannot require a locked tower (for example,
+            // Battle Road has no artillery). Choose another authored, unlocked
+            // opening defense when that preferred family is unavailable.
+            let candidates = preferred.isEmpty ? available : preferred
             guard !candidates.isEmpty else { throw DbError.Db(message: "money study: no unlocked opening defense for plan \(placementIndex)") }
             paths.append(candidates[Int.random(in: candidates.indices, using: &rng)])
         }
@@ -138,4 +143,3 @@ public struct MoneyStudyPlan: Sendable {
         }
     }
 }
-

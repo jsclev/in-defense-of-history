@@ -16,17 +16,24 @@ public struct AuthoredMoneyStudy {
     public let catalog: ContentCatalog
     public let difficulty: Difficulty
     public let battle: BattleContent
+    /// Restricts the player's search choices, never the engine's combat rules.
+    public let allowedTowerKinds: Set<TowerKind>?
 
     public init(db: Db, levelID: UUID) throws {
         try self.init(battle: BattleContent(db: db, levelID: levelID))
     }
 
     public func selectingMetaUpgrades(_ selected: Set<MetaUpgrade>) throws -> Self {
-        try Self(battle: battle.selectingMetaUpgrades(selected))
+        try Self(battle: battle.selectingMetaUpgrades(selected), allowedTowerKinds: allowedTowerKinds)
     }
 
-    private init(battle: BattleContent) throws {
+    public func restrictingTowers(to kinds: Set<TowerKind>) throws -> Self {
+        try Self(battle: battle, allowedTowerKinds: kinds)
+    }
+
+    private init(battle: BattleContent, allowedTowerKinds: Set<TowerKind>? = nil) throws {
         self.battle = battle
+        self.allowedTowerKinds = allowedTowerKinds
         level = battle.level
         let levelID = level.id
         guard !level.paths.isEmpty, !level.towerSlots.isEmpty, !level.waves.isEmpty else {
@@ -41,6 +48,7 @@ public struct AuthoredMoneyStudy {
         let unlocks = battle.unlocks
         var paths: [TowerPath] = []
         for definition in arsenal.towers {
+            if let allowedTowerKinds, !allowedTowerKinds.contains(definition.kind) { continue }
             guard let maximum = unlocks[definition.kind] else {
                 throw DbError.Db(message: "level_tower_unlock[\(levelID)]: missing \(definition.kind.rawValue)")
             }

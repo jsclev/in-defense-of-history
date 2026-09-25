@@ -4,32 +4,27 @@ struct CallWaveButtonView: View {
     let layout: CallWaveButtonLayout
     let waveNumber: Int
     let countdownSeconds: Int?
+    let seconds: Double
     var isSelected = false
     let action: () -> Void
 
-    @State private var isPulsing = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        icon
-        .onTapGesture(perform: action)
-        .accessibilityElement(children: .ignore)
-        .accessibilityAddTraits(.isButton)
+        Button(action: action) {
+            icon.accessibilityHidden(true)
+        }
+        .buttonStyle(HUDButtonStyle())
         .accessibilityLabel(isSelected ? "Confirm call wave \(waveNumber)" : "Select wave \(waveNumber)")
         .accessibilityValue(countdownSeconds.map { "Starts automatically in \($0) seconds" }
                             ?? "Waiting for you to start")
         .accessibilityHint(isSelected ? "Activate to start this wave now" : "Activate to select, then activate again to call this wave")
-        .accessibilityAction { action() }
-        .onAppear {
-            withAnimation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true)) {
-                isPulsing = true
-            }
-        }
         .position(x: layout.frame.midX, y: layout.frame.midY)
     }
 
     private var icon: some View {
         CallWaveArtwork(side: layout.frame.width, isSelected: isSelected)
-        .scaleEffect(isSelected ? 1 : (isPulsing ? 1.08 : 0.94))
+        .scaleEffect(isSelected || reduceMotion ? 1 : 0.94 + 0.14 * (1 - cos(2 * .pi * seconds / 1.4)) / 2)
         .overlay(alignment: .bottomTrailing) {
             if let countdownSeconds {
                 Text("\(countdownSeconds)s")

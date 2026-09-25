@@ -56,6 +56,8 @@ private struct LevelAttemptView: View {
 
     @State private var presentationStack = PresentationStack<Presentation>()
     @State private var escapeHapticPolicy = EnemyEscapeHapticPolicy()
+    private struct ReviewRequest: Identifiable { let id: UUID }
+    @State private var reviewRequest: ReviewRequest?
 
     private var activePresentations: [Presentation] {
         var active: [Presentation] = []
@@ -94,8 +96,6 @@ private struct LevelAttemptView: View {
     }
 
     private static let rallyButtonScale: CGFloat = 0.9702
-
-    private static let towerArtworkLift = MapSpriteSizing.towerArtworkLift
 
     private var db: Db
     private var virtualCanvas: VirtualCanvas
@@ -138,41 +138,21 @@ private struct LevelAttemptView: View {
                 .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
         } interface: {
             ZStack(alignment: .topLeading) {
-                let projection = LevelMapArt.projection(
-                    virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
-
-                // Heroes < foreground map art < HUD controls < presentations.
-                HeroMapLayer(heroes: runner.heroes, runtimeCanvas: runtimeCanvas,
-                             projection: projection,
-                             onSelect: runner.selectHero)
-
-                runner.mapArt.occlusion(in: projection)
+                let projection = runner.sceneSetup.projection(in: runtimeCanvas)
 
                 LevelExitMarkersView(positions: runner.exitPositions,
                                      projection: projection,
                                      spriteSize: MapSpriteScale(runtimeCanvas: runtimeCanvas)
                                         .points(MapSpriteSizing.exitMarker))
 
-                HudView(runtimeCanvas: runtimeCanvas,
-                        db: db,
-                        runner: runner,
-                        hudLayoutConfig: hudLayoutConfig,
-                        onSpeedUp: { runner.speedUp() },
-                        onPause: runner.pause)
+                HudView(runtimeCanvas: runtimeCanvas, state: LevelHUDState(engine: runner),
+                        hudLayoutConfig: runner.content.hudLayout,
+                        input: LevelHUDInput(activate: runner.activateHUD, callWave: runner.tapCallWave),
+                        debugStatus: settings.values.showDebugInfo ? runner.status : nil)
                     .border(debugMode ? Color.cyan : Color.clear, width: debugMode ? 3 : 0)
 
                 if showDebugLayoutGuides {
                     DebugLayoutGuidesView(runtimeCanvas: runtimeCanvas)
-                }
-
-                if runner.awaitingWaveStart {
-                    CallWaveButtonLayer(runtimeCanvas: runtimeCanvas,
-                                        positions: runner.callWaveButtonPositions,
-                                        waveNumber: runner.nextWaveNumber,
-                                        countdownSeconds: runner.waveCountdownSeconds) {
-                        runner.startNextWave()
-                    }
-                    .id(runner.nextWaveNumber)
                 }
             }
         } presentations: {
@@ -197,7 +177,7 @@ private struct LevelAttemptView: View {
             }
         }
         .allowsHitTesting(!runner.isPaused)
-        .accessibilityHidden(runner.isPaused)
+        .accessibilityHidden(runner.isPaused || reviewRequest != nil)
         .overlay {
             if runner.isPaused {
                 LevelPauseView(runtimeCanvas: runtimeCanvas,
@@ -226,6 +206,7 @@ private struct LevelAttemptView: View {
             runner.playEnemyEscapeHaptic(cue)
         }
         .onAppear {
+            presentationStack.synchronize(activePresentations)
             runner.bindHeroControls(to: settings)
             #if DEBUG
             if CommandLine.arguments.contains("--capture-launch") {
@@ -253,19 +234,21 @@ private struct LevelAttemptView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active && runsAutomatically { runner.start() } else { runner.stop() }
         }
+        .fullScreenCover(item: $reviewRequest) { request in
+            ScreenGeometryGate(virtualCanvas: virtualCanvas) { canvas in
+                LevelRunReviewView(dao: db.levelRunDao, runID: request.id, canvas: canvas,
+                                   onExit: { reviewRequest = nil })
+            }
+        }
     }
 
     private func content(runtimeCanvas: RuntimeCanvas) -> some View {
 
         let safe = runtimeCanvas.safeInsetsRect
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
+        let projection = runner.sceneSetup.projection(in: runtimeCanvas)
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
-        let sprites = MapSpriteScale(runtimeCanvas: runtimeCanvas)
-        let art = runner.mapArt
-        let obstacleFeedback = runner.engineerObstacleFeedback
-        return ZStack(alignment: .topLeading) {
-            Color.black
-
+        return LevelScene(setup: runner.sceneSetup, state: LevelSceneState(engine: runner),
+                          canvas: runtimeCanvas, debugMode: debugMode, onSelectHero: runner.selectHero) {
             Group {
                 Image("tower_menu_bg")
                 Image("tower_menu_square_frame")
@@ -279,15 +262,6 @@ private struct LevelAttemptView: View {
             .hidden()
             .allowsHitTesting(false)
 
-            art.underlay(in: projection)
-
-            LevelTowerSlotsView(
-                debugMode: debugMode,
-                slotPositions: runner.slotPositions,
-                occupiedSlotIndices: Set(runner.placedTowers.map(\.slotIndex)),
-                size: CGSize(width: runner.slotSize.width, height: runner.slotSize.height),
-                projection: projection)
-
             if debugMode {
                 ForEach(runner.placedTowers) { tower in
                     if !hiddenRangeSlots.contains(tower.slotIndex),
@@ -300,71 +274,7 @@ private struct LevelAttemptView: View {
                 }
             }
 
-            ForEach(runner.placedTowers) { tower in
-                if let field = runner.engineerObstacleField(for: tower) {
-                    EngineerObstacleView(field: field, roadSurface: runner.roadSurfacePath,
-                        scale: projection.scale,
-                        selected: runner.selectedTowerSlotIndex == tower.slotIndex,
-                        isSlowingEnemies: obstacleFeedback.towerSlots.contains(tower.slotIndex))
-                        .accessibilityValue("\(Int(field.stats.slowFraction * 100)) percent slowdown")
-                        .position(projection.viewPoint(field.position))
-                }
-            }
-
-            ForEach(runner.placedTowers) { tower in
-                if let assetName = tower.kind.assetName(atLevel: tower.level,
-                                                        branch: tower.branch) {
-                    let towerHeight = tower.demolitionCharge != nil
-                        ? DemolitionTowerView.artworkHeight(
-                            slotWidth: projection.viewLength(runner.slotSize.width), assetName: assetName)
-                        : sprites.points(tower.kind.spriteHeight)
-                    let basePoint = projection.viewPoint(CGPoint(
-                        x: tower.position.x,
-                        y: tower.position.y + Self.towerArtworkLift))
-
-                    Group {
-                        if let charge = tower.demolitionCharge {
-                            DemolitionTowerView(assetName: assetName, charge: charge, height: towerHeight)
-                        } else if let sheetName = tower.kind.directionalAssetName(
-                            atLevel: tower.level, branch: tower.branch) {
-                            ArtilleryTowerSprite(sheetName: sheetName,
-                                                 fallbackName: assetName,
-                                                 facing: tower.artilleryFacing)
-                        } else {
-                            Image(assetName).resizable().scaledToFit()
-                        }
-                    }
-                        .frame(height: towerHeight)
-                        .position(
-                            x: basePoint.x,
-                            y: basePoint.y - towerHeight / 2
-                                + sprites.points(MapSpriteSizing.towerBaseLift)
-                                + towerHeight * 0.20
-                        )
-                }
-            }
-
-            ForEach(runner.artilleryImpacts) { impact in
-                Group {
-                    if impact.isDemolition {
-                        DemolitionBlastView(age: impact.age, radius: impact.radius * projection.scale)
-                    } else {
-                        ArtilleryImpactView(age: impact.age, radius: impact.radius * projection.scale)
-                    }
-                }.position(projection.viewPoint(impact.position))
-            }
-
-            GroundTroopLayer(presentation: runner.presentation, interpolation: runner.presentationAlpha,
-                             militia: runner.militia,
-                             sprites: sprites, projection: projection)
-
-            art.forestOcclusion(in: projection)
-
-            ProjectileLayer(presentation: runner.presentation, interpolation: runner.presentationAlpha,
-                            sprites: sprites, projection: projection)
-            .opacity(runner.isDefeated ? 0 : 1)
-            .animation(.easeOut(duration: 0.55), value: runner.isDefeated)
-
+        } mapOverlay: {
             ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
                 let slotTap = slotTapSize(projection: projection)
                 Button {
@@ -387,8 +297,6 @@ private struct LevelAttemptView: View {
                 .accessibilityIdentifier("tower-slot-\(index)")
                 .accessibilityLabel(runner.isSlotOccupied(index) ? "Select tower" : "Build tower")
             }
-
-            demolitionSites(projection: projection)
 
             if debugMode, Self.showSlotTapInfo {
                 ForEach(Array(runner.slotPositions.enumerated()), id: \.offset) { index, slotPosition in
@@ -429,7 +337,7 @@ private struct LevelAttemptView: View {
 
     @ViewBuilder
     private func presentationLayer(_ presentation: Presentation, runtimeCanvas: RuntimeCanvas) -> some View {
-        let projection = LevelMapArt.projection(virtualCanvas: virtualCanvas, fitting: runtimeCanvas.playAreaRect)
+        let projection = runner.sceneSetup.projection(in: runtimeCanvas)
         let playAreaScalingFactor = runtimeCanvas.scaleFactor
         switch presentation {
         case .buildMenu(let buildSlot):
@@ -479,7 +387,22 @@ private struct LevelAttemptView: View {
                     runner.dismissRallyFlag(id: id)
                 }
         case .defeat:
-            failBanner(metrics: HudMetrics(runtimeCanvas: runtimeCanvas))
+            LevelDefeatView(canvas: runtimeCanvas, onReview: {
+                // Complete any final impact animation and flush its timeline
+                // before the read-only replay opens the run.
+                runner.finishRecording(status: .defeat)
+                runner.stop()
+                guard let id = runner.runID else { fatalError("Defeated player run has no recording") }
+                reviewRequest = ReviewRequest(id: id)
+            }, onRestart: {
+                runner.finishRecording(status: .defeat)
+                runner.stop()
+                onRestart()
+            }, onHome: {
+                runner.finishRecording(status: .defeat)
+                runner.stop()
+                onExit()
+            })
         }
     }
 
@@ -600,18 +523,6 @@ private struct LevelAttemptView: View {
             .fill(.black.opacity(0.72)))
         .overlay(RoundedRectangle(cornerRadius: 5 * metrics.scale)
             .stroke(tint.opacity(0.8), lineWidth: 1))
-    }
-
-    private func demolitionSites(projection: LevelMapProjection) -> some View {
-        ForEach(runner.placedTowers) { tower in
-            if let charge = tower.demolitionCharge, let position = charge.position,
-               let tuning = runner.towerLevel(for: tower) {
-                DemolitionSiteView(charge: charge, radius: CGFloat(tuning.aoeRadius) * projection.scale,
-                    showBlastRadius: runner.selectedTowerSlotIndex == tower.slotIndex)
-                    .accessibilityIdentifier("demolition-charge-\(tower.slotIndex)")
-                    .position(projection.viewPoint(position))
-            }
-        }
     }
 
     private func dismissCatcher(runtimeCanvas: RuntimeCanvas) -> some View {
@@ -826,18 +737,6 @@ private struct LevelAttemptView: View {
             .frame(width: size.width, height: size.height)
             .position(center)
             .allowsHitTesting(false)
-    }
-
-    private func failBanner(metrics: HudMetrics) -> some View {
-        ZStack {
-            Color.black.opacity(0.45)
-            Text("Done")
-                .font(.system(size: Typography.size(104 * metrics.scale), weight: .black, design: .rounded))
-                .foregroundStyle(Color(red: 0.87, green: 0.09, blue: 0.09))
-                .shadow(color: .black.opacity(0.85), radius: 7 * metrics.scale,
-                        y: 3 * metrics.scale)
-        }
-        .allowsHitTesting(false)
     }
 
 }

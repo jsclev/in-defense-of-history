@@ -14,8 +14,12 @@ final class GeneticReplayTests: XCTestCase {
             metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
         let expected = try GeneticCommander.evaluate(strategy, recording: .preview, content: study.battle,
             money: 660, seed: 1776, maxSeconds: 1800)
-        let engine = try BattleEngine(recording: .preview, content: study.battle, heroesEnabled: false,
+        let engine = try BattleEngine(recording: .preview, content: study.battle, heroesEnabled: true,
             startingMoneyOverride: 660, seed: 1776, onVictory: { _, _ in 0 })
+        // The app supplies artwork measurements before publishing heroes. This
+        // clock-parity fixture uses explicit square images; geometry cannot
+        // alter gameplay ticks or the recorded combat/economy outcome.
+        engine.heroImageAspectRatios = Dictionary(uniqueKeysWithValues: study.battle.deployments.map { ($0.hero.id, 1) })
         engine.publishesPresentation = true
         let playback = GeneticPlayback(sim: GameSimulation(engine: engine), strategy: strategy,
             seed: 1776, maxSeconds: 1800)
@@ -42,12 +46,12 @@ final class GeneticReplayTests: XCTestCase {
             metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
         let expected = try GeneticCommander.evaluate(strategy, recording: .preview, content: study.battle,
             money: 660, seed: 1776, maxSeconds: 2)
-        let digest = SHA256.hash(data: try study.replaySnapshot(db: fixture.db))
+        let digest = SHA256.hash(data: try study.replaySnapshot(db: fixture.db, heroesEnabled: true))
             .map { String(format: "%02x", $0) }.joined()
-        let document = GeneticReplayDocument(format: "genetic-replay-v5", contentSHA256: digest,
+        let document = GeneticReplayDocument(format: "genetic-replay-v6", contentSHA256: digest,
             executableSHA256: "retained-cli-binary", money: 660, maxGameSeconds: 2,
             starsUsed: study.battle.playerUpgrades.loadout.spentStars, bountyFraction: 1,
-            strategy: strategy, expected: expected)
+            heroLoadout: try GeneticHeroLoadout(content: study.battle), strategy: strategy, expected: expected)
         XCTAssertNoThrow(try document.loadStudy(db: fixture.db, levelName: "Charleston"))
         XCTAssertEqual(sqlite3_exec(fixture.connection,
             "UPDATE tower SET cost=cost+1", nil, nil, nil), SQLITE_OK)

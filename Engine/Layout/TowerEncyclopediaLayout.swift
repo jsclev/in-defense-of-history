@@ -3,6 +3,8 @@ import CoreGraphics
 /// The encyclopedia shares the game's authored canvas and play-area projection.
 /// Wood covers the canvas; the complete scroll and its controls stay in the play area.
 public struct TowerEncyclopediaLayout {
+    public static let rows = 5
+    public static let columns = 6
     /// Dense encyclopedia cells have no price plaque and use their own shared inset.
     public static let iconInsetFraction: CGFloat = 0.04
     public let backgroundFrame: CGRect
@@ -11,10 +13,11 @@ public struct TowerEncyclopediaLayout {
     public let gridFrame: CGRect
     public let detailFrame: CGRect
     public let doneFrame: CGRect
-    public let cellSide: CGFloat
+    public let backFrame: CGRect
+    public let titleFrame: CGRect
+    public let cellSize: CGSize
     public let iconSide: CGFloat
     public let gridGap: CGFloat
-    public let columnGap: CGFloat
     public let typeScale: CGFloat
 
     public init(runtimeCanvas: RuntimeCanvas, doneAspect: CGFloat) {
@@ -27,32 +30,33 @@ public struct TowerEncyclopediaLayout {
         // Shallow roll ends leave flat paper close to the top and bottom edges.
         // Keep every grid cell inside that paper while reclaiming its height.
         let content = play.insetBy(dx: 128 * unit, dy: 32 * unit)
-        // Adjacent cells share one divider; use the full paper height for icons.
+        // Each family reads left to right. The roster and details occupy
+        // separate screens. Done stays beneath the list; details have a header.
         let gap: CGFloat = 0
-        let side = (content.height - 5 * gap) / 6
-        let gridWidth = side * 5 + gap * 4
-        let separation = 52 * unit
         let doneHeight = max(128 * unit, TouchTarget.minimum / projection.scale)
         let done = CGRect(x: content.maxX - doneHeight * doneAspect, y: content.minY,
                           width: doneHeight * doneAspect, height: doneHeight)
-        let detailBottom = done.maxY + 6 * unit
-        let details = CGRect(x: content.minX + gridWidth + separation,
-                             y: detailBottom,
-                             width: content.width - gridWidth - separation,
-                             height: content.maxY - detailBottom)
-        let grid = CGRect(x: content.minX, y: content.minY,
-                          width: gridWidth, height: side * 6 + gap * 5)
+        let bodyTop = done.maxY + 6 * unit
+        let body = CGRect(x: content.minX, y: bodyTop,
+                          width: content.width, height: content.maxY - bodyTop)
+        // Authored coordinates point upward, so maxY is the visible top edge.
+        let back = CGRect(x: content.minX, y: content.maxY - doneHeight, width: doneHeight, height: doneHeight)
+        let title = CGRect(x: back.maxX + 16 * unit, y: back.minY,
+                           width: content.width - 2 * (doneHeight + 16 * unit), height: doneHeight)
+        let cellWidth = body.width / CGFloat(Self.columns)
+        let cellHeight = body.height / CGFloat(Self.rows)
         func frame(_ rect: CGRect) -> CGRect { rect.applying(projection.viewTransform) }
         backgroundFrame = frame(CGRect(origin: .zero, size: canvas.size))
         scrollFrame = frame(scroll)
         contentFrame = frame(content)
-        gridFrame = frame(grid)
-        detailFrame = frame(details)
+        gridFrame = frame(body)
+        detailFrame = frame(CGRect(origin: content.origin, size: body.size))
         doneFrame = frame(done)
-        cellSide = projection.viewLength(side)
-        iconSide = cellSide * (1 - 2 * Self.iconInsetFraction)
+        backFrame = frame(back)
+        titleFrame = frame(title)
+        cellSize = CGSize(width: projection.viewLength(cellWidth), height: projection.viewLength(cellHeight))
+        iconSide = min(cellSize.width, cellSize.height) * (1 - 2 * Self.iconInsetFraction)
         gridGap = projection.viewLength(gap)
-        columnGap = projection.viewLength(separation)
         typeScale = runtimeCanvas.playAreaRect.height / 340
     }
 }
