@@ -24,7 +24,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
             .init(wave: 2, policy: .afterVisible(seconds: 0.1)),
             .init(wave: 4, policy: .whenEnemiesAtMost(count: 100, holdSeconds: 0))])
         var commander = GeneticCommander(GeneticStrategy(decisions: [],
-            metaUpgrades: Array(content.playerUpgrades.loadout.selected), earlyWaves: policy))
+            metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)), earlyWaves: policy))
         var selection = CallWaveButtonSelection(), sawOverlap = false
         for _ in 0..<130 {
             let previousCalls = sim.waveCalls.count, previousDeployments = sim.reinforcementDeployments.count
@@ -67,7 +67,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let fixture = try fixture()
         try execute("UPDATE level_wave SET call_button_delay=0.4,auto_start_countdown=0.8,early_call_bonus=23", fixture)
         let first = try BattleTestFixture.authored(db: fixture.db)
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(first.playerUpgrades.loadout.selected),
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(first.playerUpgrades.loadout.selected)),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 0.1))]))
         let before = try GeneticCommander.evaluate(strategy, recording: .preview, content: first, money: 660, seed: 1776, maxSeconds: 1)
         let firstCall = try XCTUnwrap(before.waveCalls.first { $0.wave == 2 })
@@ -78,7 +78,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let secondCall = try XCTUnwrap(after.waveCalls.first { $0.wave == 2 })
         XCTAssertEqual(secondCall.earlyCallBonus, 41)
         XCTAssertGreaterThan(secondCall.seconds, firstCall.seconds)
-        let copy = try JSONDecoder().decode(GeneticStrategy.self, from: JSONEncoder().encode(strategy))
+        let copy = try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: JSONEncoder().encode(strategy))
         XCTAssertEqual(after, try GeneticCommander.evaluate(copy, recording: .preview, content: changed, money: 660, seed: 1776, maxSeconds: 1.1))
         // Deletion is only in this disposable fixture; the DAO must reject it.
         try execute("PRAGMA foreign_keys=OFF; DELETE FROM level_wave WHERE level_info_id='\(changed.level.id.uuidString.lowercased())' AND wave_index=2", fixture)
@@ -93,7 +93,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
         for policy in [EarlyWaveStrategy.automatic,
                        .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 5))]),
                        .init(decisions: [.init(wave: 2, policy: .whenEnemiesAtMost(count: 0, holdSeconds: 0))])] {
-            let result = try GeneticCommander.evaluate(GeneticStrategy(decisions: [], metaUpgrades: meta,
+            let result = try GeneticCommander.evaluate(GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(meta),
                 earlyWaves: policy), recording: .preview, content: content, money: 660, seed: 1776, maxSeconds: 1.2)
             XCTAssertEqual(result.waveCalls.map(\.wave), [1])
             XCTAssertEqual(result.waveCalls[0].earlyCallBonus, 0)
@@ -111,7 +111,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let fixture = try fixture()
         try execute("UPDATE level_wave SET call_button_delay=0.2,auto_start_countdown=3.4,early_call_bonus=31", fixture)
         let content = try BattleTestFixture.authored(db: fixture.db)
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected),
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .whenCountdownAtMost(seconds: 1))]))
         let before = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 660, seed: 1776, maxSeconds: 4)
         let call = try XCTUnwrap(before.waveCalls.first { $0.wave == 2 })
@@ -131,27 +131,27 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: content.level.id)
         let meta = Array(content.playerUpgrades.loadout.selected)
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
-        let a = GeneticStrategy(plan: plan, metaUpgrades: meta)
-        let b = GeneticStrategy(plan: plan, metaUpgrades: meta,
+        let a = GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(meta))
+        let b = GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(meta),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 0)),
                                         .init(wave: 3, policy: .whenEnemiesAtMost(count: 2, holdSeconds: 3))]))
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         XCTAssertNotEqual(try encoder.encode(a), try encoder.encode(b))
         var json = try XCTUnwrap(JSONSerialization.jsonObject(with: encoder.encode(a)) as? [String: Any])
         json.removeValue(forKey: "earlyWaves")
-        XCTAssertThrowsError(try JSONDecoder().decode(GeneticStrategy.self, from: JSONSerialization.data(withJSONObject: json)))
+        XCTAssertThrowsError(try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: JSONSerialization.data(withJSONObject: json)))
         var rng = SeededRNG(seed: 100), mutant = a, sawEarly = false, sawAutomatic = false
         for _ in 0..<120 {
-            let child = GeneticStrategy.crossover(a, b, slots: study.level.towerSlots.count, rng: &rng)
+            let child = try GeneticStrategy.crossover(a, b, slots: study.level.towerSlots.count, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
             try child.validate(study: study)
             sawEarly = sawEarly || child.earlyWaves.policy(for: 2) == b.earlyWaves.policy(for: 2)
             sawAutomatic = sawAutomatic || child.earlyWaves.policy(for: 2) == .automatic
-            mutant.mutate(study: study, metaChoices: [meta], rng: &rng)
+            try mutant.mutate(study: study, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
         }
         XCTAssertTrue(sawEarly && sawAutomatic)
         XCTAssertNotEqual(mutant.earlyWaves, .automatic)
         mutant = a
-        for _ in 0..<120 { mutant.mutate(study: study, metaChoices: [meta], rng: &rng, earlyWaveCallsEnabled: false) }
+        for _ in 0..<120 { try mutant.mutate(study: study, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng, earlyWaveCallsEnabled: false) }
         XCTAssertEqual(mutant.earlyWaves, .automatic)
         for policy in [EarlyWaveStrategy.Policy.afterVisible(seconds: -1), .afterVisible(seconds: .infinity),
                        .whenEnemiesAtMost(count: -1, holdSeconds: 0)] {
@@ -168,7 +168,7 @@ final class GeneticEarlyWaveTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: content.level.id)
         let tower = try XCTUnwrap(study.towerPaths.first)
         let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: tower.type.id)), saveForPurchase: true)],
-            metaUpgrades: Array(content.playerUpgrades.loadout.selected),
+            metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)),
             earlyWaves: .init(decisions: [.init(wave: 2, policy: .afterVisible(seconds: 0))]))
         let evaluation = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 1, seed: 1776, maxSeconds: 0.5)
         XCTAssertEqual(evaluation.waveCalls.map(\.wave), [1, 2])

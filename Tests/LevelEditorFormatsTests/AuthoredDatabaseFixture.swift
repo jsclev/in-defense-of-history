@@ -4,6 +4,15 @@ import XCTest
 @testable import LevelEditorFormats
 
 final class AuthoredDatabaseFixture {
+    static let metaUpgradesFactory: MetaUpgradesFactory = {
+        let fixture = try! AuthoredDatabaseFixture()
+        return try! MetaUpgradesFactory(catalog: fixture.db.metaUpgradeDao.get())
+    }()
+    static func metaProgression(_ upgrades: [MetaUpgrade]) throws -> MetaUpgradeProgression {
+        try metaUpgradesFactory.make(selected: upgrades)
+    }
+    static var metaDecoder: JSONDecoder { MetaUpgradesFactory.decoder(catalog: metaUpgradesFactory.catalog) }
+
     static let combatRules: CombatRules = {
         let fixture = try! AuthoredDatabaseFixture()
         return try! withExtendedLifetime(fixture) { try fixture.db.combatRulesDao.get() }

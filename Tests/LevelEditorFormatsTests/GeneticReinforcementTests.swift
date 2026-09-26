@@ -21,7 +21,7 @@ final class GeneticReinforcementTests: XCTestCase {
         let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 500, heroesEnabled: false, seed: 1776)
         let player = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
             startingMoneyOverride: 500, seed: 1776, onVictory: { _, _ in 0 })
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected),
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)),
             reinforcements: .init(priority: .nearestExit, holdSeconds: 0.3))
         var commander = GeneticCommander(strategy)
         player.startNextWave()
@@ -57,8 +57,8 @@ final class GeneticReinforcementTests: XCTestCase {
     @MainActor func testSavedCandidateReplaysDeploymentsAndDatabaseRecoveryChangesPropagate() throws {
         let fixture = try fixture(), content = try BattleTestFixture.authored(db: fixture.db)
         let beforeProfile = try fixture.db.playerMetaUpgradeDao.get()
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected))
-        let copy = try JSONDecoder().decode(GeneticStrategy.self, from: JSONEncoder().encode(strategy))
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)))
+        let copy = try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: JSONEncoder().encode(strategy))
         let first = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 500, seed: 1776, maxSeconds: 15)
         let replay = try GeneticCommander.evaluate(copy, recording: .preview, content: content, money: 500, seed: 1776, maxSeconds: 15)
         XCTAssertEqual(first, replay)
@@ -97,21 +97,21 @@ final class GeneticReinforcementTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
         let meta = Array(study.battle.playerUpgrades.loadout.selected)
-        let a = GeneticStrategy(plan: plan, metaUpgrades: meta)
-        let b = GeneticStrategy(plan: plan, metaUpgrades: meta,
+        let a = GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(meta))
+        let b = GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(meta),
             reinforcements: .init(priority: .nearPoint(study.level.paths[0].point(atDistance: 200)), holdSeconds: 3))
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         XCTAssertNotEqual(try encoder.encode(a), try encoder.encode(b))
         var json = try XCTUnwrap(JSONSerialization.jsonObject(with: encoder.encode(a)) as? [String: Any])
         json.removeValue(forKey: "reinforcements")
-        XCTAssertThrowsError(try JSONDecoder().decode(GeneticStrategy.self, from: JSONSerialization.data(withJSONObject: json)))
+        XCTAssertThrowsError(try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: JSONSerialization.data(withJSONObject: json)))
         var rng = SeededRNG(seed: 100), mutant = a
         var inheritedA = false, inheritedB = false, mutated = false
         for _ in 0..<120 {
-            let child = GeneticStrategy.crossover(a, b, slots: study.level.towerSlots.count, rng: &rng)
+            let child = try GeneticStrategy.crossover(a, b, slots: study.level.towerSlots.count, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
             inheritedA = inheritedA || child.reinforcements == a.reinforcements
             inheritedB = inheritedB || child.reinforcements == b.reinforcements
-            mutant.mutate(study: study, metaChoices: [meta], rng: &rng)
+            try mutant.mutate(study: study, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
             try mutant.validate(study: study)
             mutated = mutated || mutant.reinforcements != a.reinforcements
         }
@@ -127,7 +127,7 @@ final class GeneticReinforcementTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: content.level.id)
         let tower = try XCTUnwrap(study.towerPaths.first)
         let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: tower.type.id)), saveForPurchase: true)],
-            metaUpgrades: Array(content.playerUpgrades.loadout.selected))
+            metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)))
         let result = try GeneticCommander.evaluate(strategy, recording: .preview, content: content, money: 1, seed: 1776, maxSeconds: 5)
         XCTAssertFalse(result.reinforcementDeployments.isEmpty)
     }

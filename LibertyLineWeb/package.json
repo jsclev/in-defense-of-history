@@ -1,0 +1,36 @@
+{
+  "name": "liberty-line-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20.15" },
+  "scripts": {
+    "content": "tsx tools/prepare.ts",
+    "dev": "npm run content && vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "check": "npm run typecheck && npm run test:coverage",
+    "build": "npm run check && npm run content && tsx tools/build.ts website",
+    "build:facebook": "npm run check && npm run content && tsx tools/build.ts facebook",
+    "build:all": "npm run check && npm run content && tsx tools/build.ts website && tsx tools/build.ts facebook",
+    "preview": "vite preview --outDir dist/website --host 127.0.0.1"
+  },
+  "dependencies": {
+    "phaser": "4.2.1",
+    "sql.js": "1.14.2",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.6",
+    "@types/sql.js": "1.4.11",
+    "@vitest/coverage-v8": "3.2.7",
+    "fflate": "0.8.3",
+    "jsdom": "^26.1.0",
+    "sharp": "0.35.4",
+    "tsx": "^4.20.6",
+    "typescript": "~5.9.3",
+    "vite": "6.4.3",
+    "vitest": "3.2.7"
+  }
+}

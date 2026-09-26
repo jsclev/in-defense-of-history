@@ -66,10 +66,10 @@ public class Db {
         }
     }
     
-    public init(dbPath: String, fullRefresh: Bool, levelGeoJSONDao: LevelGeoJSONDAO = LevelGeoJSONDAO()) {
+    public init(dbPath: String, fullRefresh: Bool, levelGeoJSONDao: LevelGeoJSONDAO = LevelGeoJSONDAO(), readOnly: Bool = false) {
         self.path = dbPath
         var rc: Int32
-        rc = sqlite3_open_v2(dbPath, &conn, SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX, nil)
+        rc = sqlite3_open_v2(dbPath, &conn, (readOnly ? SQLITE_OPEN_READONLY : SQLITE_OPEN_READWRITE) | SQLITE_OPEN_FULLMUTEX, nil)
         
         if (rc != SQLITE_OK) {
             let sqliteMsg = String(cString: sqlite3_errmsg(conn))
@@ -134,6 +134,8 @@ public class Db {
         playSpeedDao = PlaySpeedDAO(conn: conn)
         localLevelRunDao = LevelRunDAO(conn: conn)
     }
+
+    public var simulatorInvocationDao: SimulatorInvocationDAO { SimulatorInvocationDAO(conn: conn) }
 
     public func close() {
         if let conn = conn {

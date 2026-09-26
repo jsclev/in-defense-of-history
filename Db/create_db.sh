@@ -2,19 +2,38 @@
 set -e
 cd "$(dirname "$0")" || exit 1
 
-if [ "$#" -ne 0 ]; then
-    echo "Usage: $0" >&2
-    exit 2
-fi
-
 database=in_defense_of_history.sqlite
+sim_fresh_output=0
+if [ "$#" -ne 0 ]; then
+    if [ "$#" -ne 2 ] || [ "$1" != --output ]; then
+        echo "Usage: $0 [--output /absolute/path/to/new.sqlite]" >&2
+        exit 2
+    fi
+    database="$2"
+    sim_fresh_output=1
+    case "$database" in
+        /*) ;;
+        *) echo "--output requires an absolute path" >&2; exit 2 ;;
+    esac
+    # The installer builds a fresh database without replacing development data.
+    if [ -e "$database" ] || [ -L "$database" ]; then
+        echo "Refusing to overwrite --output database: $database" >&2
+        exit 1
+    fi
+fi
 if lsof "$database" >/dev/null 2>&1; then
     echo "ERROR: $database is currently open in another process:" >&2
     lsof "$database" >&2
     echo "Close that connection, then re-run create_db.sh." >&2
     exit 1
 fi
-rm -f "$database" "$database-wal" "$database-shm" "$database-journal"
+if [ "$sim_fresh_output" -eq 1 ]; then
+    # Reserve a new output atomically. Another caller cannot replace it between
+    # the existence check above and SQLite opening it.
+    (set -C; : > "$database") || exit 1
+else
+    rm -f "$database" "$database-wal" "$database-shm" "$database-journal"
+fi
 trap 'rm -f "$database" "$database-wal" "$database-shm" "$database-journal"' EXIT
 trap 'exit 1' HUP INT TERM
 

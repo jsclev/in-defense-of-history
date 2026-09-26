@@ -27,8 +27,7 @@ final class GeneticHeroTests: XCTestCase {
             livesRemaining: 5, goldRemaining: 10, goldEarned: 10, killed: 10, leaked: 0,
             fatesByTypeID: [:], waveMaxProgress: [], leaksByWave: []), wavesStarted: study.level.numWaves,
             waveEconomy: [], reinforcementDeployments: [], waveCalls: [])
-        let candidate = GeneticCandidate(id: 1, generation: 0, starsUsed: 0,
-            strategy: GeneticStrategy(decisions: [], metaUpgrades: []), evaluations: [sample])
+        let candidate = GeneticCandidate(id: 1, generation: 0, strategy: GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([])), evaluations: [sample])
         let value = try context(study, fixture)
         try fixture.db.geneticSolutionDao.saveBest([candidate], runID: UUID(), context: value,
             executableSHA256: String(repeating: "a", count: 64), panel: .validation,
@@ -42,7 +41,7 @@ final class GeneticHeroTests: XCTestCase {
         let hero = try XCTUnwrap(s.battle.deployments.first?.hero.id)
         try execute("UPDATE hero_combat SET hp=hp+123 WHERE hero_id='\(hero.uuidString.lowercased())'", f)
         let updated = try study(f)
-        let evaluation = try GeneticCommander.evaluate(GeneticStrategy(decisions: [], metaUpgrades: []),
+        let evaluation = try GeneticCommander.evaluate(GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([])),
             recording: .database(f.db.levelRunDao, .simulator), content: updated.battle,
             money: updated.level.startingMoney, seed: 1, maxSeconds: 1)
         let run = try f.db.levelRunDao.get(id: XCTUnwrap(evaluation.runID))
@@ -128,7 +127,7 @@ final class GeneticHeroTests: XCTestCase {
 
     @MainActor func testReplayRestoresRecordedLineupAndRejectsChangedHeroContent() throws {
         let f = try fixture(), s = try study(f)
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: [])
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([]))
         let expected = try GeneticCommander.evaluate(strategy, recording: .preview, content: s.battle,
             money: s.level.startingMoney, seed: 1, maxSeconds: 1)
         let snapshot = try s.replaySnapshot(db: f.db, heroesEnabled: true)

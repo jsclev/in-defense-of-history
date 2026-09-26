@@ -1,5 +1,21 @@
 # Database authority
 
+Standing user instruction (September 26, 2026): standalone CLI studies create a
+unique SQLite database beside `~/bin/LibertyLineSimulator` for each invocation.
+The installer builds a fresh starter with `Db/create_db.sh --output`, captures
+its maps and schema, and installs `liberty-line-simulator-{build-name}.sqlite`
+beside the CLI. The CLI derives that default input filename from its own build
+version; `--content-database` overrides it. Normal runs must not read the live
+checkout database, maps or SQL files. Start with empty simulator result tables
+and keep all workers, recordings, candidates and JSON checkpoints in the run
+database, named with the build version plus a unique invocation suffix.
+Starting money defaults to the selected level's DAO-loaded value from this
+database; an explicit `--starting-money` flag is an experiment override.
+Do not export or change the game's `Db/DML/genetic_solutions.sql` during a study;
+importing selected solutions from a run database is a separate, future workflow.
+The dedicated invocation database is the explicit exception to the desktop
+database-location rule below.
+
 The database is `Db/in_defense_of_history.sqlite`, generated exclusively by
 `Db/create_db.sh` from the authored SQL scripts. Desktop tools open that file
 in the checkout. Simulator records belong in its SQL-defined tables. Device

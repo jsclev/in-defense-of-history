@@ -1,11 +1,13 @@
 import Foundation
+import OSLog
 import CryptoKit
 
 /// Every supported balance run executes the iPhone's shared battle engine.
 @MainActor
 final class AuthoredMoneySweep {
     let db: Db
-    init(db: Db) { self.db = db }
+    private let reports: SimulatorReports
+    init(db: Db, reports: SimulatorReports) { self.db = db; self.reports = reports }
 
     private func load(_ name: String) throws -> AuthoredMoneyStudy {
         guard let id = try db.levelInfoDao.getIdBy(levelName: name) else {
@@ -20,21 +22,20 @@ final class AuthoredMoneySweep {
 
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
     private func write(_ value: Any, at url: URL) throws {
-        try JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys]).write(to: url, options: .atomic)
+        try reports.write(JSONSerialization.data(withJSONObject: value, options: [.prettyPrinted, .sortedKeys]), to: url)
     }
 
     func replay(levelName: String, placement: Int, policy: Int, money: Int,
-                seed: UInt64, maxSeconds: Double, directory: String) throws {
+                seed: UInt64, maxSeconds: Double) throws {
         let study = try load(levelName)
         let plan = try MoneyStudyPlan(study: study, placementIndex: placement, upgradePolicyIndex: policy, seed: 1776)
         let sim = try GameSimulation(recording: .database(db.levelRunDao, .simulator), content: study.battle, startingMoney: money, heroesEnabled: false, seed: seed)
         let trace = MoneyReplayTrace()
         sim.addObserver(trace)
         let result = try sim.run(steps: plan.steps, maxSeconds: maxSeconds)
-        let output = URL(fileURLWithPath: directory, isDirectory: true)
-        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        let output = reports.root
         let content = try snapshot(study)
-        try content.write(to: output.appendingPathComponent("content.json"), options: .atomic)
+        try reports.write(content, to: output.appendingPathComponent("content.json"))
         let report: [String: Any] = ["engine": "shared-game-engine", "runID": sim.runID!.uuidString, "placement": placement,
             "policy": policy, "money": money, "seed": seed, "planSeed": 1776,
             "contentSHA256": hash(content), "campaignMetaUpgrades": true,
@@ -47,7 +48,8 @@ final class AuthoredMoneySweep {
             "demolitionDetonations": sim.demolitionDetonations, "earnedMetaStars": sim.earnedMetaStars]
         let path = output.appendingPathComponent("replay-\(placement)-\(policy)-\(money)-\(seed).json")
         try write(report, at: path)
-        print("Shared game replay: \(result.outcome), \(result.seconds)s, \(result.killed) killed, \(result.leaked) leaked. \(path.path)")
+        print("Shared game replay: \(result.outcome), \(result.seconds)s, \(result.killed) killed, \(result.leaked) leaked. \(db.path)")
+        SimulatorLog.study.notice("Money replay completed; level=\(levelName, privacy: .public) outcome=\(result.outcome.rawValue, privacy: .public) seconds=\(result.seconds)")
     }
 
     private func state(_ sim: GameSimulation) -> [String: Any] {
@@ -59,7 +61,7 @@ final class AuthoredMoneySweep {
     }
 
     func run(levelName: String, grid: MoneyStudyGrid, baseSeed: UInt64,
-             workers: Int, maxSeconds: Double, calibrationRuns: Int?, directory: String) throws {
+             workers: Int, maxSeconds: Double, calibrationRuns: Int?) throws {
         guard grid.upgradePolicies == 10, workers > 0, maxSeconds.isFinite, maxSeconds > 0 else {
             throw DbError.Db(message: "money study requires ten upgrade schedules and a positive worker count")
         }
@@ -98,10 +100,9 @@ final class AuthoredMoneySweep {
             "paths": study.level.paths.count, "slots": study.level.towerSlots.count,
             "waves": study.level.waves.count, "towerVariants": Set(study.towerPaths.flatMap(\.tierIDs)).count,
             "note": "Shared game rules. Sampled command schedules; no claim of optimal play."]
-        let output = URL(fileURLWithPath: directory, isDirectory: true)
-        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
+        let output = reports.root
         try write(configuration, at: output.appendingPathComponent("configuration.json"))
-        try content.write(to: output.appendingPathComponent("content.json"), options: .atomic)
+        try reports.write(content, to: output.appendingPathComponent("content.json"))
         try write(planJSON, at: output.appendingPathComponent("plans.json"))
         let groups = grid.money.count * plans.count
         let calibration = calibrationRuns != nil
@@ -119,12 +120,13 @@ final class AuthoredMoneySweep {
                     configuration: String(decoding: JSONSerialization.data(withJSONObject: configuration, options: [.sortedKeys]), as: UTF8.self),
                     contentSHA256: digest,
                     plans: String(decoding: JSONSerialization.data(withJSONObject: planJSON, options: [.sortedKeys]), as: UTF8.self))
-                try Data(started.uuidString.utf8).write(to: output.appendingPathComponent("run-id.txt"), options: .atomic)
+                try write(["runID": started.uuidString], at: output.appendingPathComponent("run.json"))
             } catch {
                 db.simulatorRunDao.finish(id: started, status: .failed, errorMessage: String(describing: error)); throw error
             }
         }
         print("\(calibration ? "Calibration" : "Started shared-game study"): \(study.level.name), \(requested.formatted()) simulations; one serial game-engine worker")
+        SimulatorLog.study.notice("Money study started; runID=\(runID?.uuidString ?? "calibration", privacy: .public) levelID=\(study.level.id.uuidString, privacy: .public) requestedGames=\(requested)")
         print("\(study.difficulty.name) ×\(study.difficulty.enemyHPMultiplier) HP; \(study.battle.playerUpgrades.loadout.selected.count) selected campaign upgrades; heroes excluded")
         fflush(stdout)
         var completed = 0, victories = 0, defeats = 0, timeouts = 0, detonations = 0
@@ -172,6 +174,7 @@ final class AuthoredMoneySweep {
                 }
                 if now.timeIntervalSince(lastLog) >= 15 {
                     let rate = Double(completed) / elapsed
+                    SimulatorLog.study.notice("Money study progress; runID=\(runID?.uuidString ?? "calibration", privacy: .public) games=\(completed) requestedGames=\(requested) wins=\(victories) defeats=\(defeats) timeouts=\(timeouts)")
                     print(String(format: "%d/%d runs; %.1f/s, ETA %.2fh; %d wins, %d defeats, %d timeouts",
                         completed, requested, rate, Double(requested - completed) / rate / 3600, victories, defeats, timeouts))
                     fflush(stdout); lastLog = now
@@ -186,9 +189,10 @@ final class AuthoredMoneySweep {
                 }
                 let path = output.appendingPathComponent("summary.json")
                 try write(summary, at: path)
-                db.simulatorRunDao.finish(id: runID, status: .completed, reportPath: path.path)
+                db.simulatorRunDao.finish(id: runID, status: .completed, reportPath: db.path)
             }
         } catch {
+            SimulatorLog.study.error("Money study failed; runID=\(runID?.uuidString ?? "calibration", privacy: .public) games=\(completed) detail=\(String(describing: error), privacy: .private)")
             if let runID { db.simulatorRunDao.finish(id: runID, status: .failed, errorMessage: String(describing: error)) }
             throw error
         }
@@ -202,6 +206,7 @@ final class AuthoredMoneySweep {
             "demolitionDetonations": detonations, "reinforcementDeployments": reinforcementDeployments,
             "heroes": false, "reinforcementCommands": true, "earlyWaveCalls": false, "calibration": calibration]
         try write(measurement, at: output.appendingPathComponent(calibration ? "calibration.json" : "completion.json"))
+        SimulatorLog.study.notice("Money study completed; runID=\(runID?.uuidString ?? "calibration", privacy: .public) games=\(completed) wins=\(victories) defeats=\(defeats) timeouts=\(timeouts) elapsedSeconds=\(elapsed)")
         print(String(format: "Completed %d shared-game runs in %.2fs (%.1f/s): %d wins, %d defeats, %d timeouts.",
             completed, elapsed, rate, victories, defeats, timeouts))
     }

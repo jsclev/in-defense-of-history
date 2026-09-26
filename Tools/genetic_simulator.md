@@ -5,15 +5,24 @@ separate [balance analyzer](balance_analyzer.md). It fixes authored starting
 money, disables heroes, maximizes ranged progression, and runs ranged-only
 searches alongside unrestricted controls.
 
+Start a normal run with `~/bin/LibertyLineSimulator 15` (replace `15` with the level number).
+See the [CLI README](../README.md) for installation or the
+[advanced reference](simulator_cli_reference.md) for optional controls and result inspection.
 Build the macOS `Simulator` scheme with the normal Xcode Release configuration.
 Battles use the game's `BattleEngine` through `GeneticCommander` and
 `GameSimulation`. The search chooses player inputs; it contains no combat model.
 
-The current balance study's starting-money range is 590–770 coins. The separate
-`--money-study` sweep defaults to `590:770:5`; a genetic study defaults to the
-first-pass budget of 660 coins and takes one fixed `--starting-money` value, so
-compare budgets using separate genetic runs. These are experiment settings;
-campaign entry still uses the authored `level_info.starting_money` value.
+The installer builds a starter database from authored SQL and embeds its maps
+and schema in `liberty-line-simulator-<build-name>.sqlite` beside the executable.
+New studies use that build-derived input by default; `--content-database` overrides
+it. Each study creates a separate run database whose name includes the build.
+Normal runs do not read the development checkout.
+
+A genetic study defaults to the chosen level's DAO-loaded
+`level_info.starting_money`. Use `--starting-money` only for an explicit fixed-budget
+experiment. The separate `--money-study` sweep defaults to `590:770:5`;
+those budgets are experiment settings. Campaign entry continues to use authored
+starting money.
 
 Tower build, tier and ability prices are the fixed baseline for bounty studies.
 `--bounty-fraction 0.75` tests 75% of the current authored kill-bounty multiplier.
@@ -25,7 +34,7 @@ each run's content snapshot so historical results keep their original meaning.
 in-memory SQLite, changes only `combat_rules.kill_bounty_multiplier`, and reloads
 the battle through the existing DAOs. Reward amounts and rounding are still
 computed by BattleEngine. The saved game database and tower content are not
-edited. Study records still go into the authoritative database's result tables.
+edited. Study records go into the invocation database's result tables.
 
 For a controlled bounty comparison, use `--fixed-meta --star-range 40:40:1`
 when the database currently has 40 stars selected. This locks the exact upgrade
@@ -47,10 +56,26 @@ Simulator --genetic-study Charleston --starting-money 660 \
 ## Stars and candidate DNA
 
 The DAO supplies the earned-star ledger and the complete meta-upgrade catalog.
-The candidate contains both its explicit `metaUpgrades` IDs and its ordered
-build, tier-upgrade, and ability-purchase decisions. Decisions retain earliest
+Each strategy stores an immutable `MetaUpgradeProgression` containing packed
+upgrade bits and their DAO-derived cost. A candidate's `starsUsed` is derived
+from that progression; candidate construction never accepts an independent
+star count. The strategy also stores its ordered build, tier-upgrade, and
+ability-purchase decisions. Decisions retain earliest
 wave/time and whether to reserve money when the engine reports `needGold`.
 Meta-upgrade selections are fixed for that candidate's entire battle.
+
+Configure `MetaUpgradesFactory(catalog:)` once using `MetaUpgradeDAO.get()`, then
+call `factory.make(stars: n)` to produce a legal chosen progression spending
+exactly `n` stars. The seeded overload accepts an RNG and optional exclusions
+for deterministic, distinct population choices. Zero returns the empty selection;
+negative or unreachable totals fail. The factory does not need a player profile.
+Campaign entry separately checks the earned ledger through the shared player API.
+
+Worker messages and saved strategies encode the progression as canonical named
+`metaUpgrades` IDs for portability. Decode with
+`MetaUpgradesFactory.decoder(catalog:)`: missing IDs, duplicate IDs, broken
+prerequisites, and candidate `starsUsed` mismatches fail rather than reconstructing
+a loadout from a star count.
 
 Heroes are enabled in every GA evaluation, including held-out validation and
 replay. The lineup is fixed for a run: by default it comes from `HeroDAO`'s player
@@ -128,7 +153,7 @@ ledger, campaign money, or the authored restore preset.
 
 ## Meta-selection subpopulations and full-battle scoring
 
-`genetic-v7` searches meta selections explicitly with a fixed hero lineup. Within each exact stars-used
+`genetic-v8` searches factory-validated meta progressions explicitly with a fixed hero lineup. Within each exact stars-used
 group, `--meta-selections` (default 8) reserves equally sized subpopulations for
 different legal selections. `--population` (default 64) is the total cap per
 stars-used group. Divide it by the number of active selections and round down;
@@ -143,14 +168,15 @@ effects. Breeding and battle-plan mutation stay within a selection. A weak
 selection cannot be replaced until it has received its full initial plan
 capacity and `--meta-adaptation-generations` (default 2). At most one mature weak
 selection per stars-used group is replaced in a generation; the best is protected.
-Most introductions use the closest untested legal selection to the champion,
-measured by changed upgrade IDs. Every fourth generation explores an arbitrary
-untested selection. New subpopulations receive the champion's battle plan with
+Introductions first try factory crossover between selection champions. If the
+result was already visited, the factory chooses a nearest untested mutation by
+bit distance, or an arbitrary untested selection every fourth generation. All
+three paths preserve the exact authored star cost. New subpopulations receive the champion's battle plan with
 the new selection, plus fresh paired plan families. Retired selections retain
 their evidence and champions and can still reach validation.
 
-The standalone meta mutation operator also favors nearby legal selections at
-the same stars used, with occasional broader mutations. Prerequisites and costs
+The standalone meta mutation operator chooses a different nearest legal selection
+at the same stars used, or retains the original if it is the sole legal choice. Prerequisites and costs
 can require exchanging several IDs. The search does not implement purchasing
 rules to repair an invalid selection.
 
@@ -234,8 +260,8 @@ to `genetic_solution` through `db.geneticSolutionDao`. `--finalists` is also the
 per-run, per-panel, per-star retention limit. Training archives (including retired
 selections) are published before validation. Held-out candidates are published
 after validation, including explicitly incomplete panels when time runs out.
-Earlier runs and other scenarios remain available; a weaker run does not erase
-an earlier winner. These are the best plans found, not a proof of global optimality.
+Each invocation writes its own SQLite snapshot beside `LibertyLineSimulator`;
+previous invocations remain in their separate databases. These are the best plans found, not a proof of global optimality.
 
 The shared `GeneticSolutionDAO.best(context:starsUsed:study:)` API returns typed
 strategies and complete evaluation evidence, ordered by the GA's fitness and
@@ -267,18 +293,16 @@ campaign progress and does not change player selections. Settings → Watch GA
 solutions controls the button; its SQLite seed is on. Normal launch refreshes
 restore the authored settings as elsewhere in the game.
 
-After each publication the DAO atomically exports the catalog to the maintained
-product seed `Db/DML/genetic_solutions.sql`. Check this file into source control
-to ship the results. `Db/create_db.sh` loads it into the bundled database after
-the level and difficulty seeds, so rebuilding no longer discards solutions.
-Only the coordinator publishes; workers continue recording ordinary battle
-results. Export failures fail the run visibly (the database publication remains
-available). Close database connections before rebuilding as usual. This change
-does not run a full search for every level; coverage comes from the GA runs made
-for each required level/difficulty/star/budget scenario.
+Studies no longer export `Db/DML/genetic_solutions.sql`. The coordinator and all
+workers persist only in the invocation database. A separate, future importer
+will choose compatible candidates from a completed database and generate the
+game's SQL seed. `GeneticSolutionDAO.exportSeed` remains available to code/tests,
+but the simulator never calls it automatically.
 
-`results.md` is a readable table using **Stars used**, **Population candidate ID**,
-and **Wins**, with named meta selections. `summary.json` has one `starResults` entry per requested
+All JSON reports are stored in `simulator_document(name, content_json)` in the
+same database. `--report-dir` optionally exports JSON copies. Authored map bytes
+live in `simulator_map`, so workers never reread live checkout maps.
+`summary.json` has one `starResults` entry per requested
 spending amount. It includes earned/spent/unspent stars, legal loadout count,
 actual training games and distinct meta selections tested, the best training
 candidate, and separate held-out finalists with named upgrades and win/life
@@ -303,9 +327,9 @@ Hero-enabled replays use `genetic-replay-v6` and restore their recorded lineup
 through the experiment DAO. Keep the original executable for older no-hero
 replays; they must not be evaluated as hero-enabled runs.
 
-The existing SQL-defined `simulator_run`, `money_study`, and
+The invocation snapshot retains the SQL-defined `simulator_run`, `money_study`, and
 `money_study_result` tables store the study through `MoneyStudyDAO`. For
-`genetic-v5`, `genetic-v6` and `genetic-v7`, `placement_plan` identifies a globally unique population candidate and
+`genetic-v5`, `genetic-v6`, `genetic-v7` and `genetic-v8`, `placement_plan` identifies a globally unique population candidate and
 `upgrade_policy` is 0 for training or 1 for held-out evaluation. Each result's
 `seed_results_json` contains `starsUsed`, the full DNA including `metaUpgrades`,
 explicit seeds, actual engine results, and wave-transition economy observations.

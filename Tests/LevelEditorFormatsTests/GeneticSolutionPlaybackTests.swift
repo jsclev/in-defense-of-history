@@ -22,13 +22,13 @@ import SQLite3
             """, f)
         let id = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Charleston"))
         let study = try AuthoredMoneyStudy(db: f.db, levelID: id)
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: [], reinforcements: .immediate)
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([]), reinforcements: .immediate)
         let evaluation = try GeneticCommander.evaluate(strategy, recording: .preview, content: study.battle,
             money: study.level.startingMoney, seed: 919, maxSeconds: 1800)
         XCTAssertEqual(evaluation.result.outcome, .victory)
         let context = try GeneticSolutionContext(study: study, db: f.db,
             startingMoney: study.level.startingMoney, bountyFraction: 1, maxGameSeconds: 1800)
-        let candidate = GeneticCandidate(id: 1, generation: 1, starsUsed: 0, strategy: strategy, evaluations: [evaluation])
+        let candidate = GeneticCandidate(id: 1, generation: 1, strategy: strategy, evaluations: [evaluation])
         try f.db.geneticSolutionDao.saveBest([candidate], runID: UUID(), context: context,
             executableSHA256: String(repeating: "a", count: 64), panel: .validation,
             expectedSamples: 1, limitPerStar: 5, study: study)

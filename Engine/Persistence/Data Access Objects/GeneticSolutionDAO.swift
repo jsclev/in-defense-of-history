@@ -44,6 +44,7 @@ public final class GeneticSolutionDAO {
         try serializedRows(stmt).map { $0.record }
     }
     private func serializedRows(_ stmt: OpaquePointer) throws -> [(record: GeneticSolution, json: String)] {
+        let decoder = MetaUpgradesFactory.decoder(catalog: try MetaUpgradeDAO(conn: conn).get())
         var result: [(record: GeneticSolution, json: String)] = []
         var code = sqlite3_step(stmt)
         while code == SQLITE_ROW {
@@ -52,7 +53,7 @@ public final class GeneticSolutionDAO {
             }
             do {
                 let json = String(cString: raw)
-                let record = try JSONDecoder().decode(GeneticSolution.self, from: Data(json.utf8))
+                let record = try decoder.decode(GeneticSolution.self, from: Data(json.utf8))
                 try record.validate()
                 result.append((record, json))
             } catch {

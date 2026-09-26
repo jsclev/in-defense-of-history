@@ -9,16 +9,26 @@ public struct EntrancePoint: Sendable, Equatable {
 public class LevelGeoJSONDAO {
     private let bundle: Bundle
     private let directory: URL?
+    private let documents: [String: Data]?
 
     public init(bundle: Bundle = .main) {
         self.bundle = bundle
         self.directory = nil
+        self.documents = nil
     }
 
     /// Explicit GeoJSON directory for host tools/tests; never a database fallback.
     public init(directory: URL) {
         self.bundle = .main
         self.directory = directory
+        self.documents = nil
+    }
+
+    /// A simulator invocation reads only its captured maps, including workers.
+    public init(documents: [String: Data]) {
+        self.bundle = .main
+        self.directory = nil
+        self.documents = documents
     }
 
     public func getTowerSlots(mapImageName: String) throws -> [TowerSlot] {
@@ -275,6 +285,12 @@ public class LevelGeoJSONDAO {
     public func sourceData(mapImageName: String) throws -> Data { try data(mapImageName: mapImageName) }
 
     private func data(mapImageName: String) throws -> Data {
+        if let documents {
+            guard let data = documents[mapImageName] else {
+                throw LevelGeoJSONError(message: "simulator_map[\(mapImageName)].geojson is missing")
+            }
+            return data
+        }
         if let directory {
             return try Data(contentsOf: directory.appendingPathComponent(mapImageName).appendingPathExtension("geojson"))
         }

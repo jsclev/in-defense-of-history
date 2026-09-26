@@ -21,6 +21,40 @@ public class LevelInfoDAO: BaseDAO {
         super.init(conn: conn, table: "level_info", loggerName: LevelInfoDAO.self)
     }
 
+    /// Campaign numbers are authored in map identifiers, for example
+    /// `level_01_battle_road` and `level_010_fort_ann`. Padding varies; neither
+    /// display names nor chronological/database row order identify a number.
+    public func getBy(number: Int) throws -> Record {
+        guard number > 0 else {
+            throw DbError.Db(message: "Level number must be a positive integer")
+        }
+        var statement: OpaquePointer?
+        try prepare(conn: conn, stmt: &statement,
+                    sql: "SELECT id, map_image_name FROM level_info WHERE map_image_name <> ''")
+        defer { sqlite3_finalize(statement) }
+        var id: UUID?
+        var status = sqlite3_step(statement)
+        while status == SQLITE_ROW {
+            let key = try getString(stmt: statement, colIndex: 1) ?? ""
+            let parts = key.split(separator: "_", maxSplits: 2, omittingEmptySubsequences: false)
+            if parts.count == 3, parts[0] == "level", !parts[1].isEmpty, !parts[2].isEmpty,
+               parts[1].utf8.allSatisfy({ (48...57).contains($0) }), Int(parts[1]) == number {
+                guard id == nil else {
+                    throw DbError.Db(message: "level_info.map_image_name: ambiguous level number \(number)")
+                }
+                id = try getUUID(stmt: statement, colIndex: 0, msg: "level \(number) id")
+            }
+            status = sqlite3_step(statement)
+        }
+        guard status == SQLITE_DONE else {
+            throw DbError.Db(message: "Unable to read level_info.map_image_name for level \(number)")
+        }
+        guard let id else {
+            throw DbError.Db(message: "Level \(number) is unavailable: no authored level_info.map_image_name for that number")
+        }
+        return try getBy(id: id)
+    }
+
     public func getIdBy(levelName: String) throws -> UUID? {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""

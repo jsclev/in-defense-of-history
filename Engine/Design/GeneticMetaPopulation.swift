@@ -4,14 +4,32 @@ import Foundation
 public struct GeneticCandidate: Codable, Sendable {
     public let id: Int
     public let generation: Int
-    public let starsUsed: Int
+    public var metaUpgrades: MetaUpgradeProgression { strategy.metaProgression }
+    public var starsUsed: Int { metaUpgrades.spentStars }
     public let strategy: GeneticStrategy
     public let evaluations: [GeneticEvaluation]
     public var fitness: GeneticFitness { GeneticFitness(evaluations) }
 
-    public init(id: Int, generation: Int, starsUsed: Int, strategy: GeneticStrategy, evaluations: [GeneticEvaluation]) {
-        self.id = id; self.generation = generation; self.starsUsed = starsUsed
+    public init(id: Int, generation: Int, strategy: GeneticStrategy, evaluations: [GeneticEvaluation]) {
+        self.id = id; self.generation = generation
         self.strategy = strategy; self.evaluations = evaluations
+    }
+
+    private enum CodingKeys: String, CodingKey { case id, generation, starsUsed, strategy, evaluations }
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(id: try values.decode(Int.self, forKey: .id), generation: try values.decode(Int.self, forKey: .generation),
+            strategy: try values.decode(GeneticStrategy.self, forKey: .strategy),
+            evaluations: try values.decode([GeneticEvaluation].self, forKey: .evaluations))
+        guard try values.decode(Int.self, forKey: .starsUsed) == starsUsed else {
+            throw DbError.Db(message: "genetic candidate: starsUsed differs from its explicit meta upgrades")
+        }
+    }
+    public func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(id, forKey: .id); try values.encode(generation, forKey: .generation)
+        try values.encode(starsUsed, forKey: .starsUsed)
+        try values.encode(strategy, forKey: .strategy); try values.encode(evaluations, forKey: .evaluations)
     }
 
     public static func ranked(_ candidates: [Self]) -> [Self] {
@@ -24,7 +42,7 @@ public struct GeneticCandidate: Codable, Sendable {
 /// Retired selections retain their own best plans and can still reach validation.
 public struct GeneticMetaPopulation {
     public struct Selection {
-        public let upgrades: [MetaUpgrade]
+        public let upgrades: MetaUpgradeProgression
         public let introducedGeneration: Int
         public fileprivate(set) var active: Bool
         public fileprivate(set) var candidateIDs: Set<Int> = []
@@ -38,19 +56,20 @@ public struct GeneticMetaPopulation {
     public var activeSelections: [Selection] { selections.filter(\.active) }
     public var visitedKeys: Set<String> { Set(selections.map(\.key)) }
 
-    public init(selections: [[MetaUpgrade]], population: Int, minimumCandidates: Int) throws {
+    public init(selections: [MetaUpgradeProgression], population: Int, minimumCandidates: Int) throws {
         guard !selections.isEmpty, Set(selections.map(GeneticMetaSearch.key)).count == selections.count,
+              Set(selections.map(\.spentStars)).count == 1,
               minimumCandidates >= 2, population / selections.count >= minimumCandidates else {
             throw DbError.Db(message: "genetic meta population: each distinct selection needs at least \(minimumCandidates) battle plans")
         }
         plansPerSelection = population / selections.count
         self.minimumCandidates = minimumCandidates
-        self.selections = selections.map { Selection(upgrades: $0.sorted { $0.rawValue < $1.rawValue }, introducedGeneration: 0, active: true) }
+        self.selections = selections.map { Selection(upgrades: $0, introducedGeneration: 0, active: true) }
     }
 
     public mutating func record(_ candidate: GeneticCandidate) throws {
-        let key = GeneticMetaSearch.key(candidate.strategy.metaUpgrades)
-        guard let index = selections.firstIndex(where: { $0.key == key && $0.active }) else {
+        let key = candidate.metaUpgrades.key
+        guard let index = selections.firstIndex(where: { $0.key == key && $0.active && $0.upgrades == candidate.metaUpgrades }) else {
             throw DbError.Db(message: "genetic meta population: candidate has no active selection")
         }
         guard selections[index].candidateIDs.insert(candidate.id).inserted else { return }
@@ -71,14 +90,15 @@ public struct GeneticMetaPopulation {
         return ranked.last
     }
 
-    public mutating func replace(_ key: String, with selection: [MetaUpgrade], generation: Int, adaptationGenerations: Int) throws {
+    public mutating func replace(_ key: String, with selection: MetaUpgradeProgression, generation: Int, adaptationGenerations: Int) throws {
         guard let previous = weakestReplaceable(generation: generation, adaptationGenerations: adaptationGenerations),
+              previous.upgrades.spentStars == selection.spentStars,
               previous.key == key, !visitedKeys.contains(GeneticMetaSearch.key(selection)),
               let index = selections.firstIndex(where: { $0.key == key }) else {
             throw DbError.Db(message: "genetic meta population: selection replacement lacks adaptation evidence or repeats a selection")
         }
         selections[index].active = false
-        selections.append(Selection(upgrades: selection.sorted { $0.rawValue < $1.rawValue }, introducedGeneration: generation, active: true))
+        selections.append(Selection(upgrades: selection, introducedGeneration: generation, active: true))
     }
 
     /// One champion per distinct selection. Equal fitness never consumes all

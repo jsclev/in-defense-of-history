@@ -162,7 +162,7 @@ final class LevelRunRecordingTests: XCTestCase {
     @MainActor func testGeneticEvaluationsKeepEachRecordedRunID() throws {
         let fixture = try fixture(), dao = fixture.db.levelRunDao
         let content = try BattleTestFixture.authored(db: fixture.db)
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: Array(content.playerUpgrades.loadout.selected))
+        let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(content.playerUpgrades.loadout.selected)))
         let first = try GeneticCommander.evaluate(strategy, recording: .database(dao, .simulator), content: content,
             money: 500, seed: 17, maxSeconds: 1)
         let second = try GeneticCommander.evaluate(strategy, recording: .database(dao, .simulator), content: content,

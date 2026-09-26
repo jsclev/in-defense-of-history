@@ -1,11 +1,13 @@
 import Foundation
 import CryptoKit
 import Darwin
+import OSLog
 
 /// Process isolation gives each battle its own main actor. This transport owns
 /// no game rules: workers call the same commander and DAOs as serial evaluation.
 struct GeneticWorkerConfiguration: Codable {
-    let level: String
+    let runID: UUID
+    let levelID: UUID
     let contentSHA256: String
     let executableSHA256: String
     let bountyFraction: Double
@@ -32,40 +34,42 @@ private struct GeneticWorkerReply: Codable {
 
 @MainActor enum GeneticBattleWorker {
     static func run(configuration path: String) throws {
-        let configuration = try JSONDecoder().decode(GeneticWorkerConfiguration.self,
-            from: Data(contentsOf: URL(fileURLWithPath: path)))
-        let executable = try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[0]))
-        guard SHA256.hash(data: executable).map({ String(format: "%02x", $0) }).joined() == configuration.executableSHA256 else {
-            throw DbError.Db(message: "genetic worker: executable changed during startup")
-        }
-        let store = try SimulatorStore()
+        SimulatorLog.worker.info("Worker starting; pid=\(ProcessInfo.processInfo.processIdentifier)")
+        let store = try SimulatorStore(existing: URL(fileURLWithPath: path))
         defer { store.db.close() }
         let db = store.db
-        guard let id = try db.levelInfoDao.getIdBy(levelName: configuration.level) else {
-            throw DbError.Db(message: "genetic worker: unknown level")
+        let configuration = try JSONDecoder().decode(GeneticWorkerConfiguration.self,
+            from: db.simulatorInvocationDao.document(named: "worker-configuration.json"))
+        let executable = try Data(contentsOf: SimulatorStore.executableURL)
+        guard SHA256.hash(data: executable).map({ String(format: "%02x", $0) }).joined() == configuration.executableSHA256 else {
+            throw DbError.Db(message: "genetic worker: executable changed during startup")
         }
         try configuration.heroLoadout.validate()
         let copy = try BountyExperimentDAO.contentCopy(of: db, fraction: configuration.bountyFraction,
             selectedHeroIDs: configuration.heroLoadout.selectedHeroIDs,
             heroAI: Dictionary(uniqueKeysWithValues: configuration.heroLoadout.deployments.map { ($0.heroID, $0.aiEnabled) }))
         defer { copy.close() }
-        let study = try AuthoredMoneyStudy(db: copy, levelID: id)
+        let study = try AuthoredMoneyStudy(db: copy, levelID: configuration.levelID)
         let snapshot = try study.replaySnapshot(db: db, heroesEnabled: true)
         let digest = SHA256.hash(data: snapshot).map { String(format: "%02x", $0) }.joined()
         guard digest == configuration.contentSHA256,
               configuration.heroLoadout == (try GeneticHeroLoadout(content: study.battle)) else {
             throw DbError.Db(message: "genetic worker: authored content changed during startup")
         }
+        SimulatorLog.worker.notice("Worker ready; runID=\(configuration.runID.uuidString, privacy: .public) levelID=\(configuration.levelID.uuidString, privacy: .public) pid=\(ProcessInfo.processInfo.processIdentifier)")
+        let decoder = MetaUpgradesFactory.decoder(catalog: study.battle.playerUpgrades.loadout.catalog)
         var selections: [Set<MetaUpgrade>: AuthoredMoneyStudy] = [study.battle.playerUpgrades.loadout.selected: study]
         func reply(_ value: GeneticWorkerReply) throws {
             var data = try JSONEncoder().encode(value); data.append(10)
             try FileHandle.standardOutput.write(contentsOf: data)
         }
         try reply(GeneticWorkerReply(index: -1, evaluation: nil, error: nil))
+        var completedJobs = 0
         while let line = readLine() {
             try autoreleasepool {
-                let request = try JSONDecoder().decode(GeneticWorkerRequest.self, from: Data(line.utf8))
+                let request = try decoder.decode(GeneticWorkerRequest.self, from: Data(line.utf8))
                 do {
+                    SimulatorLog.worker.debug("Battle started; runID=\(configuration.runID.uuidString, privacy: .public) job=\(request.index) seed=\(request.job.seed) stars=\(request.job.strategy.metaProgression.spentStars)")
                     let selection = Set(request.job.strategy.metaUpgrades)
                     if selections[selection] == nil { selections[selection] = try study.selectingMetaUpgrades(selection) }
                     let selected = selections[selection]!
@@ -73,13 +77,17 @@ private struct GeneticWorkerReply: Codable {
                     let result = try GeneticCommander.evaluate(request.job.strategy,
                         recording: .database(db.levelRunDao, .simulator), content: selected.battle,
                         money: configuration.money, seed: request.job.seed, maxSeconds: configuration.maxSeconds)
+                    completedJobs += 1
+                    SimulatorLog.worker.debug("Battle completed; runID=\(configuration.runID.uuidString, privacy: .public) job=\(request.index) seed=\(request.job.seed) outcome=\(String(describing: result.result.outcome), privacy: .public) seconds=\(result.result.seconds)")
                     try reply(GeneticWorkerReply(index: request.index, evaluation: result, error: nil))
                 } catch {
+                    SimulatorLog.worker.error("Battle failed; runID=\(configuration.runID.uuidString, privacy: .public) job=\(request.index) seed=\(request.job.seed) detail=\(String(describing: error), privacy: .private)")
                     try reply(GeneticWorkerReply(index: request.index, evaluation: nil, error: String(describing: error)))
                     throw error
                 }
             }
         }
+        SimulatorLog.worker.notice("Worker stopped after input closed; runID=\(configuration.runID.uuidString, privacy: .public) completedJobs=\(completedJobs)")
     }
 }
 
@@ -91,7 +99,7 @@ private struct GeneticWorkerReply: Codable {
         var buffered = Data()
 
         init(configuration: URL) throws {
-            process.executableURL = URL(fileURLWithPath: CommandLine.arguments[0]).standardizedFileURL
+            process.executableURL = try SimulatorStore.executableURL
             process.arguments = ["--genetic-worker", configuration.path]
             process.standardInput = input; process.standardOutput = output
             // Diagnostics cannot corrupt the JSON response stream.
@@ -130,17 +138,23 @@ private struct GeneticWorkerReply: Codable {
         func close() {
             try? input.fileHandleForWriting.close()
             process.waitUntilExit()
+            if process.terminationStatus != 0 {
+                SimulatorLog.worker.error("Worker exited unsuccessfully; pid=\(self.process.processIdentifier) status=\(self.process.terminationStatus)")
+            }
             try? output.fileHandleForReading.close()
         }
     }
+    private let runID: UUID
     private var workers: [Worker] = []
 
-    init(count: Int, configuration: GeneticWorkerConfiguration, directory: URL) throws {
+    init(count: Int, configuration: GeneticWorkerConfiguration, db: Db) throws {
+        runID = configuration.runID
+        SimulatorLog.worker.notice("Starting worker pool; runID=\(configuration.runID.uuidString, privacy: .public) workers=\(count)")
         // Convert a closed worker pipe into a reported I/O failure, never a
         // silent coordinator exit. No worker is retried or forcibly killed.
         signal(SIGPIPE, SIG_IGN)
-        let path = directory.appendingPathComponent("worker-configuration.json")
-        try JSONEncoder().encode(configuration).write(to: path, options: .atomic)
+        let path = URL(fileURLWithPath: db.path)
+        try db.simulatorInvocationDao.saveDocument(JSONEncoder().encode(configuration), name: "worker-configuration.json")
         do {
             for _ in 0..<count {
                 let worker = try Worker(configuration: path)
@@ -149,8 +163,10 @@ private struct GeneticWorkerReply: Codable {
                 guard ready.index == -1, ready.error == nil, ready.evaluation == nil else {
                     throw DbError.Db(message: "genetic worker failed its content handshake")
                 }
+                SimulatorLog.worker.info("Worker handshake accepted; runID=\(configuration.runID.uuidString, privacy: .public) pid=\(worker.process.processIdentifier)")
             }
         } catch {
+            SimulatorLog.worker.error("Worker pool startup failed; runID=\(configuration.runID.uuidString, privacy: .public) detail=\(String(describing: error), privacy: .private)")
             close(); throw error
         }
     }
@@ -158,6 +174,7 @@ private struct GeneticWorkerReply: Codable {
     /// Bound in-flight work and return in request order, independent of which
     /// process finishes first. Breeding and scoring therefore stay deterministic.
     func evaluate(_ jobs: [GeneticBattleJob]) throws -> [GeneticEvaluation] {
+        SimulatorLog.worker.debug("Dispatching battle batch; runID=\(self.runID.uuidString, privacy: .public) jobs=\(jobs.count) workers=\(self.workers.count)")
         var results: [GeneticEvaluation] = []
         for start in stride(from: 0, to: jobs.count, by: workers.count) {
             let count = min(workers.count, jobs.count - start)
@@ -181,13 +198,18 @@ private struct GeneticWorkerReply: Codable {
                     results.append(evaluation)
                 } catch { if failure == nil { failure = error } }
             }
-            if let failure { throw failure }
+            if let failure {
+                SimulatorLog.worker.error("Worker batch failed; runID=\(self.runID.uuidString, privacy: .public) batchStart=\(start) detail=\(String(describing: failure), privacy: .private)")
+                throw failure
+            }
         }
         return results
     }
 
     func close() {
+        guard !workers.isEmpty else { return }
         for worker in workers { worker.close() }
+        SimulatorLog.worker.info("Worker pool closed; runID=\(self.runID.uuidString, privacy: .public) workers=\(self.workers.count)")
         workers.removeAll()
     }
 }

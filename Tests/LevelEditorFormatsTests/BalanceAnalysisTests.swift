@@ -88,17 +88,17 @@ final class BalanceAnalysisTests: XCTestCase {
         let upgrades = ranged.battle.playerUpgrades.loadout.selected.sorted { $0.rawValue < $1.rawValue }
         XCTAssertEqual(try ranged.selectingMetaUpgrades(Set(upgrades)).allowedTowerKinds, [.ranged])
         var rng = SeededRNG(seed: 15)
-        var previous = GeneticStrategy(plan: try MoneyStudyPlan(study: ranged, placementIndex: 0, upgradePolicyIndex: 0, seed: 15), metaUpgrades: upgrades)
+        var previous = GeneticStrategy(plan: try MoneyStudyPlan(study: ranged, placementIndex: 0, upgradePolicyIndex: 0, seed: 15), metaProgression: try AuthoredDatabaseFixture.metaProgression(upgrades))
         XCTAssertTrue(try BalanceComposition(strategy: previous, study: ranged).fillsEverySlot)
         for index in 0..<100 {
-            var candidate = GeneticStrategy(plan: try MoneyStudyPlan(study: ranged, placementIndex: index, upgradePolicyIndex: index % 10, seed: 15), metaUpgrades: upgrades)
-            candidate.mutate(study: ranged, metaChoices: [upgrades], rng: &rng, metaMutationEnabled: false)
-            candidate = GeneticStrategy.crossover(previous, candidate, slots: ranged.level.towerSlots.count, rng: &rng)
+            var candidate = GeneticStrategy(plan: try MoneyStudyPlan(study: ranged, placementIndex: index, upgradePolicyIndex: index % 10, seed: 15), metaProgression: try AuthoredDatabaseFixture.metaProgression(upgrades))
+            try candidate.mutate(study: ranged, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng, metaMutationEnabled: false)
+            candidate = try GeneticStrategy.crossover(previous, candidate, slots: ranged.level.towerSlots.count, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
             try candidate.validate(study: ranged)
             XCTAssertTrue(try BalanceComposition(strategy: candidate, study: ranged).plannedSlotsByKind.keys.allSatisfy { $0 == "ranged" })
             previous = candidate
         }
-        let mixed = GeneticStrategy(plan: try MoneyStudyPlan(study: maximum, placementIndex: 1, upgradePolicyIndex: 0, seed: 15), metaUpgrades: upgrades)
+        let mixed = GeneticStrategy(plan: try MoneyStudyPlan(study: maximum, placementIndex: 1, upgradePolicyIndex: 0, seed: 15), metaProgression: try AuthoredDatabaseFixture.metaProgression(upgrades))
         XCTAssertThrowsError(try mixed.validate(study: ranged))
         try sql("UPDATE player_meta_upgrade_selection SET is_selected=0; UPDATE player_meta_upgrade_level_stars SET best_stars=0", f)
         XCTAssertThrowsError(try BalanceAnalysis.maximizingRanged(in: study(f.db)))
@@ -107,7 +107,7 @@ final class BalanceAnalysisTests: XCTestCase {
     @MainActor func testNoHeroEvaluationRecordsNoHeroesAndEngineTowerCounts() throws {
         let f = try fixture(), s = try BalanceAnalysis.maximizingRanged(in: study(f.db)).restrictingTowers(to: [.ranged])
         let strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: s, placementIndex: 0, upgradePolicyIndex: 0, seed: 15),
-            metaUpgrades: Array(s.battle.playerUpgrades.loadout.selected))
+            metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(s.battle.playerUpgrades.loadout.selected)))
         var towers: [BattleTowerSnapshot] = []
         let result = try GeneticCommander.evaluate(strategy, recording: .database(f.db.levelRunDao, .simulator),
             content: s.battle, money: s.level.startingMoney, seed: 15, maxSeconds: 1,
@@ -120,14 +120,14 @@ final class BalanceAnalysisTests: XCTestCase {
         XCTAssertFalse(towers.isEmpty); XCTAssertTrue(towers.allSatisfy { $0.kind == .ranged })
     }
 
-    func testVerdictCannotMistakeTimeoutOrTotalDifficultyForBalance() {
+    func testVerdictCannotMistakeTimeoutOrTotalDifficultyForBalance() throws {
+        let empty = try AuthoredDatabaseFixture.metaProgression([])
         func panel(_ outcome: Outcome, mixed: Bool = false) -> BalancePanel {
             let evaluation = GeneticEvaluation(seed: 1, result: SimulationResult(outcome: outcome, seconds: 10,
                 livesRemaining: outcome == .victory ? 5 : 0, goldRemaining: 0, goldEarned: 0, killed: 0, leaked: 0,
                 fatesByTypeID: [:], waveMaxProgress: [], leaksByWave: []), wavesStarted: 1,
                 waveEconomy: [], reinforcementDeployments: [], waveCalls: [])
-            return BalancePanel(candidate: GeneticCandidate(id: 0, generation: 0, starsUsed: 0,
-                strategy: GeneticStrategy(decisions: [], metaUpgrades: []), evaluations: [evaluation]),
+            return BalancePanel(candidate: GeneticCandidate(id: 0, generation: 0, strategy: GeneticStrategy(decisions: [], metaProgression: empty), evaluations: [evaluation]),
                 builtTowersBySeed: ["1": mixed ? ["ranged": 1, "melee": 1] : ["ranged": 2]])
         }
         func verdict(_ ranged: BalancePanel, _ mixed: BalancePanel, wins: Int = 0) -> String {
@@ -149,9 +149,9 @@ final class BalanceAnalysisTests: XCTestCase {
     }
 
     func testPreferredSeedsDoNotCrowdOutDistinctPlansWithDuplicateDNA() throws {
-        let preferred = GeneticStrategy(decisions: [], metaUpgrades: [])
-        let alternative = GeneticStrategy(decisions: [], metaUpgrades: [.rangeEstimation])
-        let old = GeneticStrategy(decisions: [], metaUpgrades: [.campaignVeterans])
+        let preferred = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([]))
+        let alternative = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([.rangeEstimation]))
+        let old = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([.campaignVeterans]))
         XCTAssertEqual(try BalanceAnalysis.initialSeeds([preferred, preferred, alternative, old], limit: 2),
                        [preferred, alternative])
         XCTAssertEqual(try BalanceAnalysis.initialSeeds([preferred], limit: 0), [])

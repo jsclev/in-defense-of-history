@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Loading…</title>
+  </head>
+  <body>
+    <main id="app" aria-label="Game">
+      <header>
+        <h1 id="title"></h1>
+        <label>Battle <select id="level" aria-label="Battle" disabled></select></label>
+        <output id="stats" aria-live="polite"></output>
+      </header>
+      <div id="game" aria-label="Battlefield preview"></div>
+      <p id="status" role="status">Loading…</p>
+      <p id="error" role="alert" hidden></p>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -9,13 +9,13 @@ final class GeneticMetaPopulationTests: XCTestCase {
             fatesByTypeID: [:], waveMaxProgress: [], leaksByWave: []), wavesStarted: 15,
             waveEconomy: [], reinforcementDeployments: [], waveCalls: [])
     }
-    private func candidate(_ id: Int, selection: [MetaUpgrade], wins: Bool) -> GeneticCandidate {
-        GeneticCandidate(id: id, generation: 0, starsUsed: 1, strategy: GeneticStrategy(decisions: [], metaUpgrades: selection),
+    private func candidate(_ id: Int, selection: [MetaUpgrade], wins: Bool) throws -> GeneticCandidate {
+        GeneticCandidate(id: id, generation: 0, strategy: GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(selection)),
             evaluations: [sample(wins: wins)])
     }
 
     func testStrongSelectionCannotCrowdOutOtherSelectionsOrTakeAllFinalistSeats() throws {
-        var group = try GeneticMetaPopulation(selections: [[.rangeEstimation], [.artificerCorps]], population: 8, minimumCandidates: 4)
+        var group = try GeneticMetaPopulation(selections: try [[MetaUpgrade.rangeEstimation], [.artificerCorps]].map(AuthoredDatabaseFixture.metaProgression), population: 8, minimumCandidates: 4)
         for id in 0..<20 { try group.record(candidate(id, selection: [.rangeEstimation], wins: true)) }
         for id in 20..<24 { try group.record(candidate(id, selection: [.artificerCorps], wins: false)) }
         XCTAssertEqual(group.activeSelections.map { $0.archive.count }, [4, 4])
@@ -26,7 +26,7 @@ final class GeneticMetaPopulationTests: XCTestCase {
     }
 
     func testSelectionMustReceiveSeveralPlansAndAdaptationBeforeReplacement() throws {
-        var group = try GeneticMetaPopulation(selections: [[.rangeEstimation], [.artificerCorps]], population: 8, minimumCandidates: 4)
+        var group = try GeneticMetaPopulation(selections: try [[MetaUpgrade.rangeEstimation], [.artificerCorps]].map(AuthoredDatabaseFixture.metaProgression), population: 8, minimumCandidates: 4)
         for id in 0..<4 { try group.record(candidate(id, selection: [.rangeEstimation], wins: true)) }
         try group.record(candidate(4, selection: [.artificerCorps], wins: false))
         XCTAssertNil(group.weakestReplaceable(generation: 20, adaptationGenerations: 2))
@@ -34,14 +34,14 @@ final class GeneticMetaPopulationTests: XCTestCase {
         for id in 5..<8 { try group.record(candidate(id, selection: [.artificerCorps], wins: false)) }
         XCTAssertNil(group.weakestReplaceable(generation: 1, adaptationGenerations: 2))
         let weakest = try XCTUnwrap(group.weakestReplaceable(generation: 2, adaptationGenerations: 2))
-        XCTAssertEqual(weakest.upgrades, [.artificerCorps])
-        XCTAssertThrowsError(try group.replace(GeneticMetaSearch.key([.rangeEstimation]), with: [.localSuppliers], generation: 2, adaptationGenerations: 2))
-        try group.replace(weakest.key, with: [.localSuppliers], generation: 2, adaptationGenerations: 2)
+        XCTAssertEqual(weakest.upgrades.selected, [.artificerCorps])
+        XCTAssertThrowsError(try group.replace(GeneticMetaSearch.key(try AuthoredDatabaseFixture.metaProgression([.rangeEstimation])), with: try AuthoredDatabaseFixture.metaProgression([.localSuppliers]), generation: 2, adaptationGenerations: 2))
+        try group.replace(weakest.key, with: try AuthoredDatabaseFixture.metaProgression([.localSuppliers]), generation: 2, adaptationGenerations: 2)
         XCTAssertEqual(group.activeSelections.count, 2)
         XCTAssertEqual(group.selections.count, 3)
         XCTAssertTrue(group.finalists(limit: 8).contains { $0.strategy.metaUpgrades == [.artificerCorps] }, "Retirement must not erase tested evidence")
         XCTAssertThrowsError(try group.record(candidate(9, selection: [.artificerCorps], wins: true)))
-        XCTAssertThrowsError(try GeneticMetaPopulation(selections: [[.rangeEstimation], [.rangeEstimation]], population: 8, minimumCandidates: 4))
+        XCTAssertThrowsError(try GeneticMetaPopulation(selections: try [[MetaUpgrade.rangeEstimation], [.rangeEstimation]].map(AuthoredDatabaseFixture.metaProgression), population: 8, minimumCandidates: 4))
     }
 
     func testSmallExchangesUseOnlySharedLegalSelectionsAtExactlyTheSameStarsUsed() throws {
@@ -51,29 +51,28 @@ final class GeneticMetaPopulationTests: XCTestCase {
         let source = try XCTUnwrap(choices.first)
         let nearby = GeneticMetaSearch.nearestSelections(to: source, among: choices)
         XCTAssertFalse(nearby.isEmpty)
-        let distances = choices.filter { $0 != source }.map { Set(source).symmetricDifference(Set($0)).count }
+        let distances = choices.filter { $0 != source }.map { source.selected.symmetricDifference($0.selected).count }
         for selection in nearby {
-            XCTAssertEqual(Set(source).symmetricDifference(Set(selection)).count, distances.min())
-            XCTAssertEqual(try player.selecting(Set(selection)).loadout.spentStars, 5)
+            XCTAssertEqual(source.selected.symmetricDifference(selection.selected).count, distances.min())
+            XCTAssertEqual(try player.selecting(selection.selected).loadout.spentStars, 5)
         }
-        XCTAssertEqual(GeneticMetaSearch.nearestSelections(to: [], among: [[]]), [])
+        XCTAssertEqual(GeneticMetaSearch.nearestSelections(to: try AuthoredDatabaseFixture.metaProgression([]), among: [try AuthoredDatabaseFixture.metaProgression([])]), [])
     }
 
     func testInnerBattlePlanEvolutionPreservesItsMetaSelectionAndControlledTransferValidates() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
         var strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: study.selectingMetaUpgrades([.rangeEstimation]), placementIndex: 7,
-            upgradePolicyIndex: 2, seed: 1776), metaUpgrades: [.rangeEstimation])
+            upgradePolicyIndex: 2, seed: 1776), metaProgression: try AuthoredDatabaseFixture.metaProgression([.rangeEstimation]))
         let original = strategy
-        let changed = try original.selectingMetaUpgrades([.artificerCorps], in: study)
+        let changed = try original.selectingMetaUpgrades(try AuthoredDatabaseFixture.metaProgression([.artificerCorps]), in: study)
         XCTAssertEqual(changed.decisions, original.decisions)
         XCTAssertEqual(changed.reinforcements, original.reinforcements)
         XCTAssertEqual(changed.earlyWaves, original.earlyWaves)
-        XCTAssertThrowsError(try original.selectingMetaUpgrades([.twoGoodVolleys], in: study))
-        let choices = try XCTUnwrap(GeneticMetaSearch(player: study.battle.playerUpgrades).choicesByStars[1])
+        XCTAssertThrowsError(try original.selectingMetaUpgrades(try AuthoredDatabaseFixture.metaProgression([.twoGoodVolleys]), in: study))
         var rng = SeededRNG(seed: 19)
         for _ in 0..<100 {
-            strategy.mutate(study: study, metaChoices: choices, rng: &rng, metaMutationEnabled: false)
+            try strategy.mutate(study: study, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng, metaMutationEnabled: false)
             XCTAssertEqual(strategy.metaUpgrades, [.rangeEstimation])
             XCTAssertNoThrow(try strategy.validate(study: study))
         }
@@ -94,10 +93,9 @@ final class GeneticMetaPopulationTests: XCTestCase {
     func testValidationCheckpointsGrowWithoutDuplicatingBattlesOrChangingCandidateDNA() throws {
         let fixture = try AuthoredDatabaseFixture(), dao = try MoneyStudyDAO(db: fixture.db)
         let run = try fixture.db.simulatorRunDao.begin(levelName: "Test", focus: "meta", totalIterations: 20, outputPath: ":memory:")
-        try dao.begin(runID: run, configuration: "{\"algorithm\":\"genetic-v6\"}", contentSHA256: "test", plans: "{}")
+        try dao.begin(runID: run, configuration: "{\"algorithm\":\"genetic-v8\"}", contentSHA256: "test", plans: "{}")
         func row(panel: Int, samples: [GeneticEvaluation], selection: [MetaUpgrade] = [.rangeEstimation]) throws -> MoneyStudyResultRow {
-            let candidate = GeneticCandidate(id: 1, generation: 0, starsUsed: 1,
-                strategy: GeneticStrategy(decisions: [], metaUpgrades: selection), evaluations: samples)
+            let candidate = GeneticCandidate(id: 1, generation: 0, strategy: GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(selection)), evaluations: samples)
             let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
             return MoneyStudyResultRow(money: 660, placementPlan: 1, upgradePolicy: panel, results: samples.map(\.result),
                 evidenceJSON: String(decoding: try encoder.encode(candidate), as: UTF8.self))
@@ -115,5 +113,73 @@ final class GeneticMetaPopulationTests: XCTestCase {
         XCTAssertThrowsError(try dao.insert([row(panel: 1, samples: rewritten)], runID: run, completed: 4, rate: 1, replacingValidation: true), "A growing panel must preserve every recorded seed and outcome")
         XCTAssertThrowsError(try dao.insert([row(panel: 0, samples: two)], runID: run, completed: 4, rate: 1, replacingValidation: true))
         XCTAssertEqual(try fixture.db.simulatorRunDao.get(id: run)?.completedIterations, 3)
+    }
+
+    func testCandidateIdentityAndPersistedCostComeFromChosenUpgrades() throws {
+        let fixture = try AuthoredDatabaseFixture()
+        let factory = try MetaUpgradesFactory(catalog: fixture.db.metaUpgradeDao.get())
+        var rng = SeededRNG(seed: 671)
+        let first = try factory.make(stars: 1, using: &rng)
+        let second = try factory.make(stars: 1, excluding: [first], using: &rng)
+        let a = GeneticCandidate(id: 0, generation: 0,
+            strategy: GeneticStrategy(decisions: [], metaProgression: first), evaluations: [sample(wins: true)])
+        let b = GeneticCandidate(id: 1, generation: 0,
+            strategy: GeneticStrategy(decisions: [], metaProgression: second), evaluations: [sample(wins: true)])
+        XCTAssertEqual(a.starsUsed, b.starsUsed)
+        XCTAssertNotEqual(a.metaUpgrades.rawValue, b.metaUpgrades.rawValue)
+        let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
+        XCTAssertNotEqual(try encoder.encode(a.strategy), try encoder.encode(b.strategy), "Cache keys must include the actual choices")
+        let decoder = MetaUpgradesFactory.decoder(catalog: factory.catalog)
+        let restored = try decoder.decode(GeneticCandidate.self, from: encoder.encode(a))
+        XCTAssertEqual(restored.metaUpgrades, a.metaUpgrades)
+        XCTAssertEqual(restored.strategy, a.strategy)
+        XCTAssertEqual(restored.starsUsed, a.starsUsed)
+        XCTAssertThrowsError(try JSONDecoder().decode(GeneticCandidate.self, from: encoder.encode(a)), "A DAO catalog is required")
+
+        var json = try XCTUnwrap(JSONSerialization.jsonObject(with: encoder.encode(a)) as? [String: Any])
+        json["starsUsed"] = a.starsUsed + 1
+        XCTAssertThrowsError(try decoder.decode(GeneticCandidate.self, from: JSONSerialization.data(withJSONObject: json)))
+        json["starsUsed"] = a.starsUsed
+        var strategy = try XCTUnwrap(json["strategy"] as? [String: Any])
+        strategy.removeValue(forKey: "metaUpgrades"); json["strategy"] = strategy
+        XCTAssertThrowsError(try decoder.decode(GeneticCandidate.self, from: JSONSerialization.data(withJSONObject: json)), "Stars alone cannot recreate DNA")
+        strategy["metaUpgrades"] = ["twoGoodVolleys"]; json["strategy"] = strategy
+        XCTAssertThrowsError(try decoder.decode(GeneticCandidate.self, from: JSONSerialization.data(withJSONObject: json)))
+
+        XCTAssertEqual(sqlite3_exec(fixture.connection, "UPDATE meta_upgrade SET star_cost=2*star_cost", nil, nil, nil), SQLITE_OK)
+        let changed = try MetaUpgradesFactory(catalog: fixture.db.metaUpgradeDao.get())
+        let updated = GeneticCandidate(id: 2, generation: 0,
+            strategy: GeneticStrategy(decisions: [], metaProgression: try changed.make(selected: first.selected)),
+            evaluations: [sample(wins: true)])
+        XCTAssertEqual(updated.starsUsed, 2)
+        XCTAssertThrowsError(try MetaUpgradesFactory.decoder(catalog: changed.catalog).decode(GeneticCandidate.self, from: encoder.encode(a)))
+        var group = try GeneticMetaPopulation(selections: [first, second], population: 8, minimumCandidates: 4)
+        XCTAssertThrowsError(try group.record(updated), "Equal bits from a different cost snapshot cannot enter the population")
+        XCTAssertThrowsError(try GeneticMetaPopulation(selections: [first, factory.make(stars: 0)], population: 8, minimumCandidates: 4))
+    }
+
+    func testGAOperatorsVaryExplicitDNAAndPreserveAuthoredCostAndPrerequisites() throws {
+        let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
+        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let factory = try MetaUpgradesFactory(catalog: study.battle.playerUpgrades.loadout.catalog)
+        let a = try factory.make(selected: [.rangeEstimation, .cartridgeDrill, .gunCarriages])
+        let b = try factory.make(selected: [.campaignVeterans, .reliefCompanies, .localSuppliers])
+        let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 45)
+        let left = GeneticStrategy(plan: plan, metaProgression: a), right = GeneticStrategy(plan: plan, metaProgression: b)
+        var mutant = left, rng = SeededRNG(seed: 119), sawNewChild = false, sawMutation = false
+        for _ in 0..<120 {
+            let child = try GeneticStrategy.crossover(left, right, slots: study.level.towerSlots.count, metaFactory: factory, rng: &rng)
+            try child.validate(study: study)
+            XCTAssertEqual(child.metaProgression.spentStars, 4)
+            sawNewChild = sawNewChild || (child.metaProgression != a && child.metaProgression != b)
+            try mutant.mutate(study: study, metaFactory: factory, rng: &rng)
+            try mutant.validate(study: study)
+            XCTAssertEqual(mutant.metaProgression.spentStars, 4)
+            sawMutation = sawMutation || mutant.metaProgression != a
+        }
+        XCTAssertTrue(sawNewChild, "Crossover must combine explicit choices, rather than only pick a whole parent")
+        XCTAssertTrue(sawMutation)
+        XCTAssertEqual(left.metaProgression, a)
+        XCTAssertEqual(right.metaProgression, b)
     }
 }

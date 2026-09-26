@@ -19,20 +19,20 @@ final class GeneticMetaSearchTests: XCTestCase {
         let fixture = try fixture(), player = try fixture.db.playerMetaUpgradeDao.get()
         let search = try GeneticMetaSearch(player: player)
         XCTAssertEqual(search.earnedStars, 42)
-        XCTAssertEqual(search.choicesByStars[0], [[]])
-        XCTAssertTrue(try XCTUnwrap(search.choicesByStars[1]).contains([.rangeEstimation]))
-        XCTAssertTrue(try XCTUnwrap(search.choicesByStars[1]).contains([.artificerCorps]))
+        XCTAssertEqual(search.choicesByStars[0]?.map(\.upgrades), [[]])
+        XCTAssertTrue(try XCTUnwrap(search.choicesByStars[1]).contains { $0.selected == [.rangeEstimation] })
+        XCTAssertTrue(try XCTUnwrap(search.choicesByStars[1]).contains { $0.selected == [.artificerCorps] })
         XCTAssertNil(search.choicesByStars[43])
         for (stars, choices) in search.choicesByStars {
             for selection in choices {
-                let resolved = try player.selecting(Set(selection))
+                let resolved = try player.selecting(selection.selected)
                 XCTAssertEqual(resolved.loadout.spentStars, stars)
                 XCTAssertEqual(resolved.loadout.availableStars, player.loadout.starBudget - stars)
             }
         }
         // Replay selected purchase sequences through the actual player DAO.
         for stars in [0, 1, 3, 20, 40, 42] {
-            let selection = Set(try XCTUnwrap(search.choicesByStars[stars]?.first))
+            let selection = try XCTUnwrap(search.choicesByStars[stars]?.first).selected
             try fixture.db.playerMetaUpgradeDao.reset()
             for upgrade in player.loadout.catalog.upgrades where selection.contains(upgrade.id) {
                 XCTAssertTrue(try fixture.db.playerMetaUpgradeDao.purchase(upgrade.id))
@@ -46,32 +46,32 @@ final class GeneticMetaSearchTests: XCTestCase {
         let fixture = try fixture()
         try execute("UPDATE meta_upgrade SET star_cost=2 WHERE upgrade_key='rangeEstimation'", fixture)
         var search = try GeneticMetaSearch(player: fixture.db.playerMetaUpgradeDao.get())
-        XCTAssertFalse(try XCTUnwrap(search.choicesByStars[1]).contains([.rangeEstimation]))
-        XCTAssertTrue(try XCTUnwrap(search.choicesByStars[2]).contains([.rangeEstimation]))
+        XCTAssertFalse(try XCTUnwrap(search.choicesByStars[1]).contains { $0.selected == [.rangeEstimation] })
+        XCTAssertTrue(try XCTUnwrap(search.choicesByStars[2]).contains { $0.selected == [.rangeEstimation] })
         try fixture.db.playerMetaUpgradeDao.reset()
         try execute("UPDATE player_meta_upgrade_level_stars SET best_stars=0 WHERE profile_key='active'", fixture)
         search = try GeneticMetaSearch(player: fixture.db.playerMetaUpgradeDao.get())
         XCTAssertEqual(search.earnedStars, 0)
         XCTAssertEqual(search.choicesByStars.count, 1)
-        XCTAssertEqual(search.choicesByStars[0], [[]])
+        XCTAssertEqual(search.choicesByStars[0]?.map(\.upgrades), [[]])
         try execute("DELETE FROM meta_upgrade WHERE upgrade_key='rangeEstimation'", fixture)
         XCTAssertThrowsError(try GeneticMetaSearch(player: fixture.db.playerMetaUpgradeDao.get()))
     }
 
     func testMetaGenesAreRequiredCanonicalAndValidateThroughPlayerState() throws {
         let fixture = try fixture(), study = try study(fixture)
-        let a = GeneticStrategy(decisions: [], metaUpgrades: [.localSuppliers, .rangeEstimation])
-        let b = GeneticStrategy(decisions: [], metaUpgrades: [.rangeEstimation, .localSuppliers])
+        let a = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([.localSuppliers, .rangeEstimation]))
+        let b = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([.rangeEstimation, .localSuppliers]))
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]
         XCTAssertEqual(try encoder.encode(a), try encoder.encode(b))
-        XCTAssertNotEqual(try encoder.encode(a), try encoder.encode(GeneticStrategy(decisions: [], metaUpgrades: [.artificerCorps, .localSuppliers])))
-        XCTAssertEqual(try JSONDecoder().decode(GeneticStrategy.self, from: encoder.encode(a)), a)
-        XCTAssertThrowsError(try JSONDecoder().decode(GeneticStrategy.self, from: Data("{\"decisions\":[]}".utf8)))
-        XCTAssertThrowsError(try JSONDecoder().decode(GeneticStrategy.self, from: Data("{\"decisions\":[],\"metaUpgrades\":[\"unknown\"]}".utf8)))
-        XCTAssertThrowsError(try JSONDecoder().decode(GeneticStrategy.self, from: Data("{\"decisions\":[],\"metaUpgrades\":[\"rangeEstimation\",\"rangeEstimation\"]}".utf8)))
-        XCTAssertThrowsError(try GeneticStrategy(decisions: [], metaUpgrades: [.twoGoodVolleys]).validate(study: study))
-        XCTAssertThrowsError(try GeneticStrategy(decisions: [], metaUpgrades: MetaUpgrade.allCases).validate(study: study))
-        XCTAssertNoThrow(try GeneticStrategy(decisions: [], metaUpgrades: []).validate(study: study))
+        XCTAssertNotEqual(try encoder.encode(a), try encoder.encode(GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([.artificerCorps, .localSuppliers]))))
+        XCTAssertEqual(try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: encoder.encode(a)), a)
+        XCTAssertThrowsError(try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: Data("{\"decisions\":[]}".utf8)))
+        XCTAssertThrowsError(try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: Data("{\"decisions\":[],\"metaUpgrades\":[\"unknown\"]}".utf8)))
+        XCTAssertThrowsError(try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: Data("{\"decisions\":[],\"metaUpgrades\":[\"rangeEstimation\",\"rangeEstimation\"]}".utf8)))
+        XCTAssertThrowsError(try GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([.twoGoodVolleys])).validate(study: study))
+        XCTAssertThrowsError(try GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(MetaUpgrade.allCases)).validate(study: study))
+        XCTAssertNoThrow(try GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([])).validate(study: study))
         XCTAssertEqual(try fixture.db.playerMetaUpgradeDao.get(), study.battle.playerUpgrades)
     }
 
@@ -79,7 +79,7 @@ final class GeneticMetaSearchTests: XCTestCase {
         let fixture = try fixture(), source = try study(fixture)
         let path = try XCTUnwrap(source.towerPaths.first { $0.kind == .ranged })
         for selection: [MetaUpgrade] in [[], [.rangeEstimation], [.artificerCorps], [.rangeEstimation, .cartridgeDrill]] {
-            let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)))], metaUpgrades: selection)
+            let strategy = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)))], metaProgression: try AuthoredDatabaseFixture.metaProgression(selection))
             let before = try fixture.db.playerMetaUpgradeDao.get()
             let actual = try GeneticCommander.evaluate(strategy, recording: .preview, content: source.battle, money: 500, seed: 9001, maxSeconds: 10)
             XCTAssertEqual(try fixture.db.playerMetaUpgradeDao.get(), before, "Experiments must not mutate the player's saved progression")
@@ -109,7 +109,7 @@ final class GeneticMetaSearchTests: XCTestCase {
                        try source.battle.playerUpgrades.selecting([.artificerCorps]).loadout.spentStars)
         XCTAssertGreaterThan(try XCTUnwrap(range.buildOffers.first { $0.kind == .ranged }).cost,
                              try XCTUnwrap(discount.buildOffers.first { $0.kind == .ranged }).cost)
-        var mismatched = GeneticCommander(GeneticStrategy(decisions: [], metaUpgrades: []))
+        var mismatched = GeneticCommander(GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([])))
         XCTAssertThrowsError(try mismatched.tick(sim: range))
     }
 

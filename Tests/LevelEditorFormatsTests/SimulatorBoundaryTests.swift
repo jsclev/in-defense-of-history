@@ -33,7 +33,8 @@ final class SimulatorBoundaryTests: XCTestCase {
         }
         let sources = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { ["swift", "metal", "h", "m", "mm", "c", "cpp"].contains(($0 as NSString).pathExtension) }
-        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "GeneticWorkers.swift", "BalanceStudy.swift", "SimulatorStore.swift", "BuildVersion.swift"]),
+        // SimulatorLog owns only Apple Logger categories; no gameplay or I/O protocol.
+        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "GeneticWorkers.swift", "BalanceStudy.swift", "SimulatorStore.swift", "SimulatorLog.swift", "BuildVersion.swift"]),
                        "Every new simulator source requires a boundary audit; no alternate combat backend is permitted")
         let driverPaths = sources.map { "Simulator/" + $0 } + ["LevelEditor/SimSession.swift"]
         for path in driverPaths {
@@ -49,6 +50,7 @@ final class SimulatorBoundaryTests: XCTestCase {
         // Ownership audit: the coordinator breeds/records plans; the commander
         // chooses commands. Neither has access to mutable battle internals.
         for path in ["Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticMetaSearch.swift", "Engine/Design/GeneticMetaPopulation.swift",
+                     "Engine/Models/MetaUpgradesFactory.swift",
                      "Engine/Design/ReinforcementStrategy.swift", "Engine/Design/EarlyWaveStrategy.swift",
                      "Engine/Design/GeneticReplay.swift", "Engine/Design/BalanceAnalysis.swift",
                      "Simulator/GeneticStudy.swift", "Simulator/GeneticWorkers.swift", "Simulator/BalanceStudy.swift"] {
@@ -73,6 +75,13 @@ final class SimulatorBoundaryTests: XCTestCase {
         XCTAssertTrue(workers.contains(".database(db.levelRunDao, .simulator)"))
         XCTAssertFalse(workers.contains(".preview"))
         XCTAssertFalse(workers.contains(".terminate()"))
+        // Persistence ownership: workers reopen the coordinator's snapshot;
+        // the study may save candidates, but cannot publish game seed files.
+        XCTAssertTrue(workers.contains("SimulatorStore(existing:"))
+        XCTAssertTrue(workers.contains("db.simulatorInvocationDao.document(named:"))
+        let study = try String(contentsOf: root.appendingPathComponent("Simulator/GeneticStudy.swift"), encoding: .utf8)
+        XCTAssertFalse(study.contains("exportSeed("))
+        XCTAssertFalse(study.contains("Db.authoredDatabaseURL"))
         let reinforcement = try String(contentsOf: root.appendingPathComponent("Engine/Design/ReinforcementStrategy.swift"), encoding: .utf8)
         XCTAssertTrue(reinforcement.contains("sim.canCallReinforcements"))
         XCTAssertTrue(reinforcement.contains("sim.perform(.reinforcements(point:"))

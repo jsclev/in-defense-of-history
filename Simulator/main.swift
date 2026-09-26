@@ -1,12 +1,19 @@
 import Foundation
+import OSLog
 
 struct Options {
+    var levelNumber: Int?
     var baseSeed: UInt64 = 1776
     var showRuns = false
     var runStatusID: UUID?
-    var reportDir = FileManager.default.temporaryDirectory.appendingPathComponent("liberty-line-simulation-\(UUID().uuidString)").path
+    var reportDir: String?
+    var database: String?
+    var contentDatabase: String?
+    var seedStrategyPaths: [String] = []
+    var metaExchangePath: String?
     var benchSims = 64
     var help = false
+    var advancedHelp = false
     var moneyStudy: String?
     var moneyRange = (minimum: 590, maximum: 770, step: 5)
     var placementPlans = 100
@@ -27,7 +34,29 @@ struct Options {
 
 func printUsage() {
     print("""
-    revsim \(BuildVersion.version) — shared game engine
+    LibertyLineSimulator \(BuildVersion.version)
+
+    Usage: LibertyLineSimulator <level-number>
+    Example: ~/bin/LibertyLineSimulator 15
+
+    Starts a genetic search for that level using its database settings.
+    Runs for up to 8 hours and saves results in a new SQLite database
+    beside the executable. Keep this Terminal open and your Mac awake.
+
+    --help-advanced shows optional experiment and database controls.
+    """)
+}
+
+func printAdvancedUsage() {
+    print("""
+    LibertyLineSimulator \(BuildVersion.version) — shared game engine
+
+    Each study creates a unique SQLite database beside this executable.
+    It captures game content/maps and saves all results there; it never exports the game's SQL seed.
+    --database <path>      New study database (must not exist), or existing database for --runs/--run-status.
+    --content-database <path> Override the installed starter or use a previous run as input.
+                          Default beside this executable: liberty-line-simulator-\(BuildVersion.version).sqlite
+    --version             Print the build name used in the default database filename.
 
     --balance-study <name> Separate balance audit: no heroes, maximum ranged meta, authored money.
     --balance-scenarios <path> JSON array of damage/enemy-mix variants; baseline always runs first.
@@ -38,7 +67,7 @@ func printUsage() {
     --genetic-study <name> Evolve towers, reinforcements and early wave calls with the chosen heroes.
     --heroes <id[,id]>     Fix one or two authored hero UUIDs for this GA run (default: database selection).
     --hero-ai <on|off>     Set chosen heroes' AI for this experiment only (default: database settings).
-    --starting-money <n>   Genetic experiment budget (default 660).
+    --starting-money <n>   Override the level's authored starting money for this experiment.
     --bounty-fraction <n>  Genetic experiment fraction of authored kill bounty, 0–1 (default 1).
     --fixed-meta          Keep the exact database-selected upgrades; requires its exact star group.
     --no-early-wave-calls  Control experiment: exclude early calls from candidate generation/mutation.
@@ -55,7 +84,7 @@ func printUsage() {
     --finalists <n>        Maximum distinct meta-selection finalists per group (default 8).
     --max-evaluations <n>  Total engine-game ceiling including validation (default 50000).
     --genetic-hours <n>    Wall-time budget; reserves 15% for validation (default 8).
-    --workers <n>          Parallel shared-engine battle processes for GA (1–32, default 1).
+    --workers <n>          Parallel shared-engine battle processes for GA (1–32, default automatic, up to 4).
     --genetic-replay <path> Verify a saved best-strategy.json against the same content/engine.
 
     --money-study <name>   Run the authored level using the iPhone battle rules.
@@ -71,11 +100,12 @@ func printUsage() {
     --bench-sims <n>       Calibration sample size.
     --max-game-seconds <n> Experiment cutoff (default 1800); unfinished runs are timeouts.
     --replay-money-plan <placement:policy:money>  Trace one plan in the game engine.
-    --report-dir <path>    JSON report destination outside the source checkout.
+    --report-dir <path>    Optional JSON exports; all reports are also stored in the run database.
     --runs                Read saved run records. Old independent-engine runs
                           are not evidence of current game balance.
     --run-status <id>      Read one saved run.
-    --help                Show this help.
+    --help                Show simple usage.
+    --help-advanced       Show this reference.
 
     Each worker executes complete shared-engine ticks. Legacy alternate CPU/GPU combat implementations remain removed.
     """)
@@ -83,9 +113,16 @@ func printUsage() {
 
 func parseOptions() throws -> Options? {
     var opts = Options()
+    var suppliedWorkers = false
     var args = ArraySlice(CommandLine.arguments.dropFirst())
     while let arg = args.popFirst() {
         switch arg {
+        case "--database":
+            guard let value = args.popFirst() else { return nil }
+            opts.database = value
+        case "--content-database":
+            guard let value = args.popFirst() else { return nil }
+            opts.contentDatabase = value
         case "--balance-study":
             guard let value = args.popFirst() else { return nil }
             opts.balanceStudy = value
@@ -119,10 +156,10 @@ func parseOptions() throws -> Options? {
         case "--no-early-wave-calls": opts.genetic.earlyWaveCalls = false
         case "--seed-strategy":
             guard let path = args.popFirst() else { return nil }
-            opts.genetic.seedStrategies.append(try JSONDecoder().decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: path))))
+            opts.seedStrategyPaths.append(path)
         case "--meta-exchange-from":
             guard let path = args.popFirst() else { return nil }
-            opts.genetic.metaExchangeFrom = try JSONDecoder().decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: path)))
+            opts.metaExchangePath = path
         case "--star-range":
             guard let value = args.popFirst() else { return nil }
             let fields = value.split(separator: ":", omittingEmptySubsequences: false)
@@ -169,6 +206,7 @@ func parseOptions() throws -> Options? {
         case "--workers":
             guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
             opts.workers = n
+            suppliedWorkers = true
         case "--calibrate-money": opts.calibrateMoney = true
         case "--replay-money-plan":
             guard let v = args.popFirst() else { return nil }
@@ -190,41 +228,123 @@ func parseOptions() throws -> Options? {
             opts.benchSims = count
         case "--help", "-h":
             opts.help = true
+        case "--help-advanced":
+            opts.advancedHelp = true
         default:
-            FileHandle.standardError.write(Data("Unknown option: \(arg)\n".utf8))
-            return nil
+            guard opts.levelNumber == nil, !arg.isEmpty,
+                  arg.utf8.allSatisfy({ (48...57).contains($0) }),
+                  let number = Int(arg), number > 0 else {
+                FileHandle.standardError.write(Data("Expected one positive level number; unexpected argument: \(arg)\n".utf8))
+                return nil
+            }
+            opts.levelNumber = number
         }
+    }
+    if !suppliedWorkers, opts.levelNumber != nil || opts.geneticStudy != nil {
+        opts.workers = min(4, max(1, ProcessInfo.processInfo.activeProcessorCount - 1))
     }
     return opts
 }
 
 // Private worker entry point: transport only; all evaluation stays in the
 // shared commander/engine and all persistence stays behind DAOs.
+if CommandLine.arguments.count == 2, CommandLine.arguments[1] == "--version" {
+    print(BuildVersion.version)
+    exit(0)
+}
+if CommandLine.arguments.count == 4, CommandLine.arguments[1] == "--prepare-starter-database" {
+    do {
+        try SimulatorStore.prepareStarter(source: URL(fileURLWithPath: CommandLine.arguments[2]),
+                                          destination: URL(fileURLWithPath: CommandLine.arguments[3]))
+        exit(0)
+    } catch {
+        SimulatorLog.database.error("Starter database preparation failed: \(String(describing: error), privacy: .private)")
+        FileHandle.standardError.write(Data("Starter database error: \(error)\n".utf8))
+        exit(1)
+    }
+}
 if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--genetic-worker" {
     do {
         try MainActor.assumeIsolated { try GeneticBattleWorker.run(configuration: CommandLine.arguments[2]) }
         exit(0)
     } catch {
+        SimulatorLog.worker.error("Worker process failed: \(String(describing: error), privacy: .private)")
         FileHandle.standardError.write(Data("genetic worker error: \(error)\n".utf8))
         exit(1)
     }
 }
 
-let store: SimulatorStore
+var opts: Options
 do {
-    store = try SimulatorStore()
+    guard let parsed = try parseOptions() else {
+        SimulatorLog.cli.error("Invalid command-line arguments; expected a positive level number or valid optional controls")
+        printUsage()
+        exit(2)
+    }
+    opts = parsed
 } catch {
-    FileHandle.standardError.write(Data("revsim: unable to open the content database: \(error)\n".utf8))
-    exit(1)
-}
-
-guard let opts = try parseOptions() else {
-    printUsage()
+    SimulatorLog.cli.error("Unable to read command-line options: \(String(describing: error), privacy: .private)")
+    FileHandle.standardError.write(Data("LibertyLineSimulator: \(error)\n".utf8))
     exit(2)
 }
-if opts.help {
+if opts.advancedHelp {
+    printAdvancedUsage()
+    exit(0)
+}
+if opts.help || CommandLine.arguments.count == 1 {
     printUsage()
     exit(0)
+}
+SimulatorLog.cli.notice("CLI started; build=\(BuildVersion.version, privacy: .public) pid=\(ProcessInfo.processInfo.processIdentifier)")
+
+let store: SimulatorStore
+let reports: SimulatorReports
+var numberedLevelID: UUID?
+do {
+    let modes = [opts.geneticStudy, opts.balanceStudy, opts.moneyStudy].compactMap { $0 }.count
+        + (opts.levelNumber == nil ? 0 : 1)
+    let inspecting = opts.showRuns || opts.runStatusID != nil
+    guard modes == (inspecting ? 0 : 1) else {
+        throw DbError.Db(message: "Pass one level number, for example: LibertyLineSimulator 15. Do not combine study modes.")
+    }
+    if inspecting {
+        guard let path = opts.database else {
+            throw DbError.Db(message: "Use --database <run.sqlite> with --runs or --run-status")
+        }
+        store = try SimulatorStore(existing: URL(fileURLWithPath: path), readOnly: true)
+    } else {
+        let content = try opts.contentDatabase.map { URL(fileURLWithPath: $0) }
+            ?? SimulatorDatabase.starter(beside: SimulatorStore.executableURL, buildName: BuildVersion.version)
+        // Resolve against the installed input before creating any result file.
+        // Carry its UUID into the GA so duplicate display names cannot redirect it.
+        let numberedLevel = try opts.levelNumber.map { number in
+            let input = try SimulatorStore(existing: content, readOnly: true)
+            defer { input.db.close() }
+            return try input.db.levelInfoDao.getBy(number: number)
+        }
+        store = try SimulatorStore(destination: opts.database.map { URL(fileURLWithPath: $0) },
+                                   content: content)
+        if let level = numberedLevel, let number = opts.levelNumber {
+            numberedLevelID = level.id
+            opts.geneticStudy = level.name
+            SimulatorLog.cli.notice("Selected level; number=\(number) levelID=\(level.id.uuidString, privacy: .public) name=\(level.name, privacy: .public)")
+            print("Starting GA for level \(number): \(level.name)")
+        }
+        print("Content database: \(content.path)")
+        print("Simulator database: \(store.db.path)")
+        let decoder = MetaUpgradesFactory.decoder(catalog: try store.db.metaUpgradeDao.get())
+        opts.genetic.seedStrategies = try opts.seedStrategyPaths.map {
+            try decoder.decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: $0)))
+        }
+        if let path = opts.metaExchangePath {
+            opts.genetic.metaExchangeFrom = try decoder.decode(GeneticStrategy.self, from: Data(contentsOf: URL(fileURLWithPath: path)))
+        }
+    }
+    reports = try SimulatorReports(db: store.db, directory: inspecting ? nil : opts.reportDir)
+} catch {
+    SimulatorLog.cli.error("Simulator setup failed; requestedLevel=\(opts.levelNumber ?? 0) detail=\(String(describing: error), privacy: .private)")
+    FileHandle.standardError.write(Data("LibertyLineSimulator: \(error)\n".utf8))
+    exit(1)
 }
 
 if let name = opts.balanceStudy {
@@ -243,17 +363,20 @@ if let name = opts.balanceStudy {
         }
         configuration.money = try AuthoredMoneyStudy(db: store.db, levelID: id).level.startingMoney
         try MainActor.assumeIsolated {
-            try BalanceStudy(db: store.db).run(levelName: name, scenarios: opts.balanceScenarios,
-                options: configuration, hours: opts.balanceHours, directory: opts.reportDir)
+            try BalanceStudy(db: store.db, reports: reports).run(levelName: name, scenarios: opts.balanceScenarios,
+                options: configuration, hours: opts.balanceHours)
         }
+        SimulatorLog.cli.notice("Balance study command completed")
         exit(0)
     } catch {
+        SimulatorLog.study.error("Balance study failed; level=\(name, privacy: .public) detail=\(String(describing: error), privacy: .private)")
         FileHandle.standardError.write(Data("balance-study error: \(error)\n".utf8)); exit(1)
     }
 }
 
 if opts.moneyStudy == nil && opts.geneticStudy == nil && !opts.showRuns && opts.runStatusID == nil {
-    FileHandle.standardError.write(Data("Specify --genetic-study, --money-study, --runs or --run-status. Only the shared battle engine is available.\n".utf8))
+    SimulatorLog.cli.error("No study or inspection command selected")
+    FileHandle.standardError.write(Data("Pass a level number, for example: LibertyLineSimulator 15\n".utf8))
     exit(2)
 }
 
@@ -264,12 +387,15 @@ if let name = opts.geneticStudy {
         configuration.seed = opts.baseSeed; configuration.maxGameSeconds = opts.maxGameSeconds
         configuration.workers = opts.workers
         try MainActor.assumeIsolated {
-            let study = GeneticStudy(db: store.db)
-            if let replay = opts.geneticReplay { try study.replay(levelName: name, document: replay, directory: opts.reportDir) }
-            else { try study.run(levelName: name, options: configuration, directory: opts.reportDir) }
+            let study = GeneticStudy(db: store.db, reports: reports)
+            if let replay = opts.geneticReplay { try study.replay(levelName: name, document: replay) }
+            else if let id = numberedLevelID { try study.run(levelID: id, options: configuration) }
+            else { try study.run(levelName: name, options: configuration) }
         }
+        SimulatorLog.cli.notice("Genetic study command completed")
         exit(0)
     } catch {
+        SimulatorLog.ga.error("Genetic study command failed; level=\(name, privacy: .public) detail=\(String(describing: error), privacy: .private)")
         FileHandle.standardError.write(Data("genetic-study error: \(error)\n".utf8))
         exit(1)
     }
@@ -278,18 +404,20 @@ if let name = opts.geneticStudy {
 if let name = opts.moneyStudy {
     do {
         if let replay = opts.replayMoneyPlan {
-            try MainActor.assumeIsolated { try AuthoredMoneySweep(db: store.db).replay(levelName: name, placement: replay.placement,
-                policy: replay.policy, money: replay.money, seed: opts.baseSeed, maxSeconds: opts.maxGameSeconds, directory: opts.reportDir) }
+            try MainActor.assumeIsolated { try AuthoredMoneySweep(db: store.db, reports: reports).replay(levelName: name, placement: replay.placement,
+                policy: replay.policy, money: replay.money, seed: opts.baseSeed, maxSeconds: opts.maxGameSeconds) }
+            SimulatorLog.cli.notice("Money study replay completed")
             exit(0)
         }
         let grid = try MoneyStudyGrid(minimum: opts.moneyRange.minimum, maximum: opts.moneyRange.maximum,
             step: opts.moneyRange.step, placementPlans: opts.placementPlans,
             upgradePolicies: opts.upgradePolicies, combatSeeds: opts.moneySeeds)
-        try MainActor.assumeIsolated { try AuthoredMoneySweep(db: store.db).run(levelName: name, grid: grid, baseSeed: opts.baseSeed,
-            workers: opts.workers, maxSeconds: opts.maxGameSeconds, calibrationRuns: opts.calibrateMoney ? opts.benchSims : nil,
-            directory: opts.reportDir) }
+        try MainActor.assumeIsolated { try AuthoredMoneySweep(db: store.db, reports: reports).run(levelName: name, grid: grid, baseSeed: opts.baseSeed,
+            workers: opts.workers, maxSeconds: opts.maxGameSeconds, calibrationRuns: opts.calibrateMoney ? opts.benchSims : nil) }
+        SimulatorLog.cli.notice("Money study command completed")
         exit(0)
     } catch {
+        SimulatorLog.study.error("Money study failed; level=\(name, privacy: .public) detail=\(String(describing: error), privacy: .private)")
         FileHandle.standardError.write(Data("money-study error: \(error)\n".utf8))
         exit(1)
     }
@@ -328,7 +456,9 @@ if opts.showRuns || opts.runStatusID != nil {
                 if let message = r.errorMessage, !message.isEmpty { print("  \(message)") }
             }
         }
+        SimulatorLog.cli.info("Run inspection completed; records=\(list.count)")
     } catch {
+        SimulatorLog.cli.error("Run inspection failed: \(String(describing: error), privacy: .private)")
         print("Unable to read simulator runs: \(error)")
         exit(1)
     }

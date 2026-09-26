@@ -16,45 +16,51 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
     }
 
     public var decisions: [Decision]
-    public private(set) var metaUpgrades: [MetaUpgrade]
+    public private(set) var metaProgression: MetaUpgradeProgression
+    public var metaUpgrades: [MetaUpgrade] { metaProgression.upgrades }
     public var reinforcements: ReinforcementStrategy
     public var earlyWaves: EarlyWaveStrategy
-    public init(decisions: [Decision], metaUpgrades: [MetaUpgrade], reinforcements: ReinforcementStrategy = .immediate,
+    public init(decisions: [Decision], metaProgression: MetaUpgradeProgression, reinforcements: ReinforcementStrategy = .immediate,
                 earlyWaves: EarlyWaveStrategy = .automatic) {
         self.decisions = decisions
-        self.metaUpgrades = metaUpgrades.sorted { $0.rawValue < $1.rawValue }
+        self.metaProgression = metaProgression
         self.reinforcements = reinforcements
         self.earlyWaves = earlyWaves
     }
-    public init(plan: MoneyStudyPlan, metaUpgrades: [MetaUpgrade], reinforcements: ReinforcementStrategy = .immediate,
+    public init(plan: MoneyStudyPlan, metaProgression: MetaUpgradeProgression, reinforcements: ReinforcementStrategy = .immediate,
                 earlyWaves: EarlyWaveStrategy = .automatic) {
-        self.init(decisions: plan.steps.map { Decision(step: $0) }, metaUpgrades: metaUpgrades,
+        self.init(decisions: plan.steps.map { Decision(step: $0) }, metaProgression: metaProgression,
                   reinforcements: reinforcements, earlyWaves: earlyWaves)
     }
 
     private enum CodingKeys: String, CodingKey { case decisions, metaUpgrades, reinforcements, earlyWaves }
     public init(from decoder: Decoder) throws {
         let values = try decoder.container(keyedBy: CodingKeys.self)
-        let upgrades = try values.decode([MetaUpgrade].self, forKey: .metaUpgrades)
-        guard Set(upgrades).count == upgrades.count else {
-            throw DecodingError.dataCorruptedError(forKey: .metaUpgrades, in: values, debugDescription: "Duplicate meta upgrade ID")
-        }
-        self.init(decisions: try values.decode([Decision].self, forKey: .decisions), metaUpgrades: upgrades,
+        let progression = try values.decode(MetaUpgradeProgression.self, forKey: .metaUpgrades)
+        self.init(decisions: try values.decode([Decision].self, forKey: .decisions), metaProgression: progression,
                   reinforcements: try values.decode(ReinforcementStrategy.self, forKey: .reinforcements),
                   earlyWaves: try values.decode(EarlyWaveStrategy.self, forKey: .earlyWaves))
     }
 
-    public func playerState(in content: BattleContent) throws -> PlayerMetaUpgradeState {
-        guard Set(metaUpgrades).count == metaUpgrades.count else {
-            throw DbError.Db(message: "genetic strategy: duplicate meta upgrade ID")
-        }
-        return try content.playerUpgrades.selecting(Set(metaUpgrades))
+    public func encode(to encoder: Encoder) throws {
+        var values = encoder.container(keyedBy: CodingKeys.self)
+        try values.encode(decisions, forKey: .decisions)
+        try values.encode(metaProgression, forKey: .metaUpgrades)
+        try values.encode(reinforcements, forKey: .reinforcements)
+        try values.encode(earlyWaves, forKey: .earlyWaves)
     }
 
-    /// Keep a player's battle plan while changing only a selection accepted by
-    /// the shared player-state API. Used for controlled upgrade exchanges.
-    public func selectingMetaUpgrades(_ selection: [MetaUpgrade], in study: AuthoredMoneyStudy) throws -> Self {
-        let result = Self(decisions: decisions, metaUpgrades: selection, reinforcements: reinforcements, earlyWaves: earlyWaves)
+    public func playerState(in content: BattleContent) throws -> PlayerMetaUpgradeState {
+        let state = try content.playerUpgrades.selecting(metaProgression.selected)
+        guard state.loadout.spentStars == metaProgression.spentStars else {
+            throw DbError.Db(message: "genetic strategy: meta progression differs from DAO costs")
+        }
+        return state
+    }
+
+    /// Transfer a battle plan onto a validated progression, retaining its orders.
+    public func selectingMetaUpgrades(_ progression: MetaUpgradeProgression, in study: AuthoredMoneyStudy) throws -> Self {
+        let result = Self(decisions: decisions, metaProgression: progression, reinforcements: reinforcements, earlyWaves: earlyWaves)
         try result.validate(study: study)
         return result
     }
@@ -84,9 +90,9 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
 
     /// Inherit a whole construction/upgrade chain for each slot. Interleave those
     /// chains by their parents' relative order, never swapping their predecessors.
-    public static func crossover(_ a: Self, _ b: Self, slots: Int, rng: inout SeededRNG) -> Self {
+    public static func crossover(_ a: Self, _ b: Self, slots: Int, metaFactory: MetaUpgradesFactory, rng: inout SeededRNG) throws -> Self {
         // Index each parent's chains once, instead of scanning its complete
-        // purchase list again for every slot. Keep RNG draws and ordering exact.
+        // purchase list again for every slot.
         func chains(_ parent: Self) -> [[(Double, Decision)]] {
             var result = Array(repeating: [(Double, Decision)](), count: slots)
             for (index, decision) in parent.decisions.enumerated() {
@@ -105,14 +111,14 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
         }
         inherited.sort { $0.0 == $1.0 ? $0.1 < $1.1 : $0.0 < $1.0 }
         return Self(decisions: inherited.map { $0.2 },
-                    metaUpgrades: Bool.random(using: &rng) ? a.metaUpgrades : b.metaUpgrades,
+                    metaProgression: try metaFactory.crossover(a.metaProgression, b.metaProgression, using: &rng),
                     reinforcements: Bool.random(using: &rng) ? a.reinforcements : b.reinforcements,
                     earlyWaves: EarlyWaveStrategy.crossover(a.earlyWaves, b.earlyWaves, rng: &rng))
     }
 
-    public mutating func mutate(study: AuthoredMoneyStudy, metaChoices: [[MetaUpgrade]], rng: inout SeededRNG,
-                                earlyWaveCallsEnabled: Bool = true, metaMutationEnabled: Bool = true) {
-        precondition(!metaChoices.isEmpty)
+    public mutating func mutate(study: AuthoredMoneyStudy, metaFactory: MetaUpgradesFactory, rng: inout SeededRNG,
+                                earlyWaveCallsEnabled: Bool = true, metaMutationEnabled: Bool = true) throws {
+        _ = try metaFactory.loadout(for: metaProgression)
         let operations = (0..<(earlyWaveCallsEnabled ? 10 : 9)).filter { metaMutationEnabled || $0 != 7 }
         let operation = decisions.isEmpty ? 0 : operations[Int.random(in: operations.indices, using: &rng)]
         switch operation {
@@ -169,9 +175,7 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
             let slot = decisions[index].step.action.slot
             decisions = decisions.enumerated().filter { $0.offset < index || $0.element.step.action.slot != slot }.map(\.element)
         case 7:
-            let neighbors = GeneticMetaSearch.nearestSelections(to: metaUpgrades, among: metaChoices)
-            let choices = !neighbors.isEmpty && Int.random(in: 0..<4, using: &rng) != 0 ? neighbors : metaChoices
-            metaUpgrades = choices[Int.random(in: choices.indices, using: &rng)]
+            metaProgression = try metaFactory.mutate(metaProgression, using: &rng)
         case 8:
             reinforcements = .random(paths: study.level.paths, rng: &rng)
         default:
@@ -229,7 +233,7 @@ public struct GeneticFitness: Codable, Equatable, Comparable {
 /// wave transition, balance, tick and result belongs to GameSimulation/BattleEngine.
 public struct GeneticCommander {
     private var pending: GeneticPurchaseCursor
-    private let expectedMetaUpgrades: Set<MetaUpgrade>
+    private let expectedMetaUpgrades: MetaUpgradeProgression
     private var checkedMetaUpgrades = false
     // Player policy: after a needGold response, wait for a changed balance or a
     // successful purchase before trying again. Never calculate affordability.
@@ -238,14 +242,15 @@ public struct GeneticCommander {
     private var earlyWaves: EarlyWaveCommander
     public init(_ strategy: GeneticStrategy) {
         pending = GeneticPurchaseCursor(strategy.decisions)
-        expectedMetaUpgrades = Set(strategy.metaUpgrades)
+        expectedMetaUpgrades = strategy.metaProgression
         reinforcements = ReinforcementCommander(strategy.reinforcements)
         earlyWaves = EarlyWaveCommander(strategy.earlyWaves)
     }
 
     @MainActor public mutating func tick(sim: GameSimulation) throws {
         if !checkedMetaUpgrades {
-            guard sim.content.playerUpgrades.loadout.selected == expectedMetaUpgrades else {
+            guard sim.content.playerUpgrades.loadout.selected == expectedMetaUpgrades.selected,
+                  sim.content.playerUpgrades.loadout.spentStars == expectedMetaUpgrades.spentStars else {
                 throw DbError.Db(message: "genetic commander: battle meta upgrades do not match candidate DNA")
             }
             checkedMetaUpgrades = true
@@ -285,10 +290,7 @@ public struct GeneticCommander {
     @MainActor public static func evaluate(_ strategy: GeneticStrategy, recording: BattleRecording, content: BattleContent,
         money: Int, seed: UInt64, maxSeconds: Double, heroesEnabled: Bool = true,
         towerObserver: (([BattleTowerSnapshot]) -> Void)? = nil) throws -> GeneticEvaluation {
-        let selection = Set(strategy.metaUpgrades)
-        guard selection.count == strategy.metaUpgrades.count else {
-            throw DbError.Db(message: "genetic strategy: duplicate meta upgrade ID")
-        }
+        let selection = try strategy.playerState(in: content).loadout.selected
         try strategy.reinforcements.validate()
         try strategy.earlyWaves.validate(waveCount: content.level.numWaves)
         let battle = try content.selectingMetaUpgrades(selection)

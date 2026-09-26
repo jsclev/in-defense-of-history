@@ -11,7 +11,7 @@ final class GeneticReplayTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: id)
         let strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: study,
             placementIndex: 7, upgradePolicyIndex: 2, seed: 1776),
-            metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
+            metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
         let expected = try GeneticCommander.evaluate(strategy, recording: .preview, content: study.battle,
             money: 660, seed: 1776, maxSeconds: 1800)
         let engine = try BattleEngine(recording: .preview, content: study.battle, heroesEnabled: true,
@@ -43,7 +43,7 @@ final class GeneticReplayTests: XCTestCase {
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: id)
         let strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: study,
             placementIndex: 7, upgradePolicyIndex: 2, seed: 1776),
-            metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
+            metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
         let expected = try GeneticCommander.evaluate(strategy, recording: .preview, content: study.battle,
             money: 660, seed: 1776, maxSeconds: 2)
         let digest = SHA256.hash(data: try study.replaySnapshot(db: fixture.db, heroesEnabled: true))

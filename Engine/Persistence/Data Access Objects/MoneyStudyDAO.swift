@@ -158,7 +158,7 @@ public final class MoneyStudyDAO {
         var result: [[String: Any]] = []
         try statement("""
             SELECT COUNT(*) FROM money_study_result r JOIN money_study s USING(run_id)
-            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5','genetic-v6','genetic-v7')
+            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5','genetic-v6','genetic-v7','genetic-v8')
               AND (json_type(r.seed_results_json,'$.starsUsed') IS NOT 'integer'
                 OR json_extract(r.seed_results_json,'$.starsUsed')<0
                 OR json_type(r.seed_results_json,'$.strategy.metaUpgrades') IS NOT 'array')
@@ -173,7 +173,7 @@ public final class MoneyStudyDAO {
                    COUNT(*),SUM(r.seeds),SUM(r.victories),SUM(r.defeats),SUM(r.timeouts),
                    COUNT(DISTINCT json_extract(r.seed_results_json,'$.strategy.metaUpgrades'))
             FROM money_study_result r JOIN money_study s USING(run_id)
-            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5','genetic-v6','genetic-v7')
+            WHERE r.run_id=? AND json_extract(s.configuration_json,'$.algorithm') IN ('genetic-v2','genetic-v3','genetic-v4','genetic-v5','genetic-v6','genetic-v7','genetic-v8')
             GROUP BY json_extract(r.seed_results_json,'$.starsUsed'),r.upgrade_policy ORDER BY 1,2
             """) { stmt in
             text(stmt, 1, runID.uuidString)

@@ -25,9 +25,8 @@ final class GeneticSolutionDAOTests: XCTestCase {
             waveEconomy: [], reinforcementDeployments: [], waveCalls: [])
     }
     private func candidate(_ id: Int, wins: Int = 2, lives: Int = 10, hold: Double = 0,
-                           stars: Int = 0, selection: [MetaUpgrade] = []) -> GeneticCandidate {
-        GeneticCandidate(id: id, generation: 1, starsUsed: stars,
-            strategy: GeneticStrategy(decisions: [], metaUpgrades: selection,
+                           selection: [MetaUpgrade] = []) throws -> GeneticCandidate {
+        GeneticCandidate(id: id, generation: 1, strategy: GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression(selection),
                 reinforcements: ReinforcementStrategy(priority: .nearestExit, holdSeconds: hold)),
             evaluations: (0..<2).map { sample(UInt64($0), victory: $0 < wins, lives: lives) })
     }
@@ -45,10 +44,10 @@ final class GeneticSolutionDAOTests: XCTestCase {
 
     func testRanksByGAFitnessKeepsDistinctPlansAndSeparatesStarGroups() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f)
-        let weak = candidate(1, wins: 1), strong = candidate(2, lives: 15, hold: 1)
-        let duplicate = candidate(3, lives: 15, hold: 1)
-        let third = candidate(4, lives: 12, hold: 2)
-        let upgrade = candidate(5, stars: 1, selection: [.rangeEstimation])
+        let weak = try candidate(1, wins: 1), strong = try candidate(2, lives: 15, hold: 1)
+        let duplicate = try candidate(3, lives: 15, hold: 1)
+        let third = try candidate(4, lives: 12, hold: 2)
+        let upgrade = try candidate(5, selection: [.rangeEstimation])
         try save([weak, third, duplicate, upgrade, strong], in: f, study: s, limit: 2)
         let records = try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s)
         XCTAssertEqual(records.map { $0.candidate.id }, [2, 4])
@@ -65,14 +64,14 @@ final class GeneticSolutionDAOTests: XCTestCase {
 
     func testAdviserDefaultsExcludeTrainingPartialPanelsAndDefeatsWithoutErasingEarlierWinners() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f)
-        try save([candidate(1)], in: f, study: s, panel: .training)
-        try save([candidate(2, hold: 1)], in: f, study: s, expected: 3)
-        try save([candidate(3, wins: 0, hold: 2)], in: f, study: s)
+        try save([try candidate(1)], in: f, study: s, panel: .training)
+        try save([try candidate(2, hold: 1)], in: f, study: s, expected: 3)
+        try save([try candidate(3, wins: 0, hold: 2)], in: f, study: s)
         XCTAssertTrue(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s).isEmpty)
         XCTAssertEqual(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s,
             requireCompletePanel: false).count, 1)
-        try save([candidate(4, hold: 3)], in: f, study: s)
-        try save([candidate(5, wins: 0, hold: 4)], in: f, study: s)
+        try save([try candidate(4, hold: 3)], in: f, study: s)
+        try save([try candidate(5, wins: 0, hold: 4)], in: f, study: s)
         XCTAssertEqual(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s).map { $0.candidate.id }, [4])
         XCTAssertEqual(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s, panel: .training).count, 1)
         XCTAssertEqual(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s,
@@ -81,7 +80,7 @@ final class GeneticSolutionDAOTests: XCTestCase {
 
     func testContextSeparatesExperimentsAndContentChangesButNotPlayerProgression() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f)
-        try save([candidate(1)], in: f, study: s)
+        try save([try candidate(1)], in: f, study: s)
         for other in [try context(s, f, money: s.level.startingMoney + 1), try context(s, f, bounty: 0.5)] {
             XCTAssertTrue(try f.db.geneticSolutionDao.best(context: other, starsUsed: 0, study: s).isEmpty)
         }
@@ -101,27 +100,27 @@ final class GeneticSolutionDAOTests: XCTestCase {
 
     func testRejectsInvalidDataAndChangedEvidencePreservingPreviousPublication() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f), run = UUID()
-        let good = candidate(1)
+        let good = try candidate(1)
         try save([good], in: f, study: s, run: run)
-        let empty = GeneticCandidate(id: 2, generation: 0, starsUsed: 0, strategy: good.strategy, evaluations: [])
-        let duplicateSeed = GeneticCandidate(id: 2, generation: 0, starsUsed: 0, strategy: good.strategy,
+        let empty = GeneticCandidate(id: 2, generation: 0, strategy: good.strategy, evaluations: [])
+        let duplicateSeed = GeneticCandidate(id: 2, generation: 0, strategy: good.strategy,
             evaluations: [good.evaluations[0], good.evaluations[0]])
-        for invalid in [empty, duplicateSeed, candidate(2, stars: 1), candidate(2, hold: -1)] {
+        for invalid in [empty, duplicateSeed, try candidate(2, hold: -1)] {
             XCTAssertThrowsError(try save([invalid], in: f, study: s, run: run))
         }
         XCTAssertThrowsError(try save([good, good], in: f, study: s, run: run))
-        XCTAssertThrowsError(try save([candidate(1, hold: 3)], in: f, study: s, run: run))
-        XCTAssertThrowsError(try save([candidate(1, wins: 0)], in: f, study: s, run: run))
+        XCTAssertThrowsError(try save([try candidate(1, hold: 3)], in: f, study: s, run: run))
+        XCTAssertThrowsError(try save([try candidate(1, wins: 0)], in: f, study: s, run: run))
         XCTAssertThrowsError(try save([good], in: f, study: s, run: run, context: context(s, f, money: 1)))
         try execute("CREATE TRIGGER fail_solution BEFORE INSERT ON genetic_solution BEGIN SELECT RAISE(ABORT, 'test write failure'); END", f)
-        XCTAssertThrowsError(try save([candidate(2, hold: 2)], in: f, study: s, run: run))
+        XCTAssertThrowsError(try save([try candidate(2, hold: 2)], in: f, study: s, run: run))
         XCTAssertEqual(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s).map { $0.candidate.id }, [1],
                        "Replacement must roll back its deletion on an insert failure")
     }
 
     func testReadRejectsMissingAndMalformedRequiredPayload() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f)
-        try save([candidate(1)], in: f, study: s)
+        try save([try candidate(1)], in: f, study: s)
         try execute("UPDATE genetic_solution SET solution_json=json_remove(solution_json,'$.candidate.strategy.reinforcements')", f)
         XCTAssertThrowsError(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s))
         try execute("UPDATE genetic_solution SET solution_json=json_set(solution_json,'$.candidate.evaluations',json('[]'))", f)
@@ -132,8 +131,8 @@ final class GeneticSolutionDAOTests: XCTestCase {
 
     func testGrowingValidationAndDatabaseEditsReachTheAdviser() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f), run = UUID()
-        let plan = candidate(1)
-        let partial = GeneticCandidate(id: 1, generation: 1, starsUsed: 0, strategy: plan.strategy,
+        let plan = try candidate(1)
+        let partial = GeneticCandidate(id: 1, generation: 1, strategy: plan.strategy,
                                        evaluations: [plan.evaluations[0]])
         try save([partial], in: f, study: s, run: run)
         XCTAssertTrue(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s).isEmpty)
@@ -151,8 +150,8 @@ final class GeneticSolutionDAOTests: XCTestCase {
 
     func testSeedRebuildRoundTripsWithoutSimulatorHistoryAndExportFailureIsReported() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f), run = UUID()
-        try save([candidate(1)], in: f, study: s, run: run, panel: .training)
-        try save([candidate(1)], in: f, study: s, run: run)
+        try save([try candidate(1)], in: f, study: s, run: run, panel: .training)
+        try save([try candidate(1)], in: f, study: s, run: run)
         // Export must retain the stored evidence bytes, including formatting.
         // Codable dictionaries with non-String keys can reorder on re-encoding.
         try execute("UPDATE genetic_solution SET solution_json=solution_json || ' '", f)
@@ -166,7 +165,7 @@ final class GeneticSolutionDAOTests: XCTestCase {
         try execute(String(contentsOf: seed, encoding: .utf8), rebuilt)
         let result = try rebuilt.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s)
         XCTAssertEqual(result.map(\.runID), [run])
-        XCTAssertEqual(result[0].candidate.strategy, candidate(1).strategy)
+        XCTAssertEqual(result[0].candidate.strategy, try candidate(1).strategy)
         var statement: OpaquePointer?
         XCTAssertEqual(sqlite3_prepare_v2(rebuilt.connection,
             "SELECT count(*) FROM genetic_solution WHERE substr(solution_json,-1)=' '", -1, &statement, nil), SQLITE_OK)

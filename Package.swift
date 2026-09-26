@@ -10,6 +10,7 @@ let package = Package(
         .target(name: "LevelEditorFormats", path: ".",
                 exclude: [
                     "AGENTS.md",
+                    "README.md",
                     "Db",
                     "Images",
                     "InDefenseOfHistory.xcodeproj",

@@ -15,7 +15,7 @@ final class GeneticStrategyTests: XCTestCase {
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
         let old = try GameSimulation(recording: .preview, content: study.battle, startingMoney: 500, heroesEnabled: true, seed: 1776)
         let expected = try old.run(steps: plan.steps, maxSeconds: 1800)
-        let actual = try GeneticCommander.evaluate(GeneticStrategy(plan: plan, metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected)), recording: .preview, content: study.battle,
+        let actual = try GeneticCommander.evaluate(GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected))), recording: .preview, content: study.battle,
             money: 500, seed: 1776, maxSeconds: 1800)
         // Balance edits may change the outcome of this old plan; they must
         // never make the two input drivers apply different engine behavior.
@@ -25,8 +25,8 @@ final class GeneticStrategyTests: XCTestCase {
         XCTAssertEqual(actual.waveEconomy.map(\.wave), Array(1...old.currentWave))
         XCTAssertEqual(actual.waveCalls, old.waveCalls)
         XCTAssertEqual(actual.reinforcementDeployments, old.reinforcementDeployments)
-        let copy = try JSONDecoder().decode(GeneticStrategy.self, from: JSONEncoder().encode(GeneticStrategy(plan: plan, metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))))
-        XCTAssertEqual(copy, GeneticStrategy(plan: plan, metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected)))
+        let copy = try AuthoredDatabaseFixture.metaDecoder.decode(GeneticStrategy.self, from: JSONEncoder().encode(GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))))
+        XCTAssertEqual(copy, GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected))))
     }
 
     @MainActor func testSavingDoesNotSpendReservedIncomeOnOtherSlots() throws {
@@ -40,7 +40,7 @@ final class GeneticStrategyTests: XCTestCase {
             let strategy = GeneticStrategy(decisions: [
                 .init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id))),
                 .init(step: .init(time: 0, action: .upgrade(slot: 0)), saveForPurchase: saving),
-                .init(step: .init(time: 0, action: .build(slot: 1, towerID: path.type.id)))], metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
+                .init(step: .init(time: 0, action: .build(slot: 1, towerID: path.type.id)))], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
             let sim = try GameSimulation(recording: .preview, content: study.battle, startingMoney: cost * 2, heroesEnabled: false, seed: 1)
             var commander = GeneticCommander(strategy)
             try commander.tick(sim: sim)
@@ -53,12 +53,11 @@ final class GeneticStrategyTests: XCTestCase {
     @MainActor func testMutationAndCrossoverPreserveRealEnginePurchaseLegality() throws {
         let fixture = try fixture(), study = try study(fixture)
         var rng = SeededRNG(seed: 42)
-        var a = GeneticStrategy(plan: try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776), metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
-        var b = GeneticStrategy(plan: try MoneyStudyPlan(study: study, placementIndex: 12, upgradePolicyIndex: 6, seed: 1776), metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
-        let choices = try XCTUnwrap(GeneticMetaSearch(player: study.battle.playerUpgrades).choicesByStars[study.battle.playerUpgrades.loadout.spentStars])
+        var a = GeneticStrategy(plan: try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776), metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
+        var b = GeneticStrategy(plan: try MoneyStudyPlan(study: study, placementIndex: 12, upgradePolicyIndex: 6, seed: 1776), metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
         for iteration in 0..<160 {
-            a.mutate(study: study, metaChoices: choices, rng: &rng)
-            b = GeneticStrategy.crossover(a, b, slots: study.level.towerSlots.count, rng: &rng)
+            try a.mutate(study: study, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
+            b = try GeneticStrategy.crossover(a, b, slots: study.level.towerSlots.count, metaFactory: AuthoredDatabaseFixture.metaUpgradesFactory, rng: &rng)
             try a.validate(study: study); try b.validate(study: study)
             var executable = iteration % 2 == 0 ? a : b
             for index in executable.decisions.indices {
@@ -98,14 +97,14 @@ final class GeneticStrategyTests: XCTestCase {
             let plan = try MoneyStudyPlan(study: study, placementIndex: family, upgradePolicyIndex: family % 10, seed: 1776)
             XCTAssertFalse(plan.steps.isEmpty)
             XCTAssertTrue(Set(plan.towerIDs).isSubset(of: Set(study.towerPaths.map { $0.type.id })))
-            try GeneticStrategy(plan: plan, metaUpgrades: []).validate(study: study)
+            try GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression([])).validate(study: study)
         }
     }
 
     @MainActor func testDatabasePriceEditsPropagateAndMissingTowerFails() throws {
         let fixture = try fixture(), original = try study(fixture)
         let path = try XCTUnwrap(original.towerPaths.first { $0.kind == .ranged })
-        let genome = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)))], metaUpgrades: Array(original.battle.playerUpgrades.loadout.selected))
+        let genome = GeneticStrategy(decisions: [.init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)))], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(original.battle.playerUpgrades.loadout.selected)))
         let before = try GameSimulation(recording: .preview, content: original.battle, startingMoney: 1000, heroesEnabled: false, seed: 1)
         var commander = GeneticCommander(genome); try commander.tick(sim: before)
         XCTAssertEqual(sqlite3_exec(fixture.connection, "UPDATE tower SET cost=cost+100 WHERE tower_level=1", nil, nil, nil), SQLITE_OK)
@@ -162,7 +161,7 @@ final class GeneticStrategyTests: XCTestCase {
             .init(step: .init(time: 0, action: .build(slot: 2, towerID: path.type.id))),
             .init(step: .init(time: 0, action: .upgrade(slot: 1))),
             .init(step: .init(time: 0, action: .build(slot: 3, towerID: path.type.id)), earliestWave: 1)
-        ], metaUpgrades: Array(study.battle.playerUpgrades.loadout.selected))
+        ], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
         let sim = try GameSimulation(recording: .preview, content: study.battle,
             startingMoney: 100_000, heroesEnabled: false, seed: 95)
         let purchases = Purchases(); sim.addObserver(purchases)
@@ -178,12 +177,10 @@ final class GeneticStrategyTests: XCTestCase {
         XCTAssertEqual(purchases.events.count, 6, "Completed purchases must not be repeated")
     }
 
-    @MainActor func testEvaluationStillRejectsDuplicateMetaGenes() throws {
+    @MainActor func testDuplicateMetaGenesCannotConstructStrategyDNA() throws {
         let fixture = try fixture(), study = try study(fixture)
         let upgrade = try XCTUnwrap(study.battle.playerUpgrades.loadout.selected.first)
-        let strategy = GeneticStrategy(decisions: [], metaUpgrades: [upgrade, upgrade])
-        XCTAssertThrowsError(try GeneticCommander.evaluate(strategy, recording: .preview,
-            content: study.battle, money: 500, seed: 96, maxSeconds: 1))
+        XCTAssertThrowsError(try AuthoredDatabaseFixture.metaProgression([upgrade, upgrade]))
     }
 
 }

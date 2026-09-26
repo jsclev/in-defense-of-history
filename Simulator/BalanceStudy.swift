@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 import CryptoKit
 
 /// Ownership: experiment orchestration, GA player choices and observed result
@@ -72,16 +73,18 @@ import CryptoKit
     }
 
     private let db: Db
+    private let reports: SimulatorReports
     private let encoder: JSONEncoder = { let e = JSONEncoder(); e.outputFormatting = [.sortedKeys, .prettyPrinted]; return e }()
     private var nextID = 0, completed = 0
     private var started = ProcessInfo.processInfo.systemUptime
-    init(db: Db) { self.db = db }
+    init(db: Db, reports: SimulatorReports) { self.db = db; self.reports = reports }
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
     private func json<T: Encodable>(_ value: T) throws -> String { String(decoding: try encoder.encode(value), as: UTF8.self) }
-    private func write<T: Encodable>(_ value: T, _ url: URL) throws { try encoder.encode(value).write(to: url, options: .atomic) }
+    private func write<T: Encodable>(_ value: T, _ url: URL) throws { try reports.write(encoder.encode(value), to: url) }
 
     func run(levelName: String, scenarios variants: [BalanceScenario], options: GeneticStudyOptions,
-             hours: Double, directory: String) throws {
+             hours: Double) throws {
+        SimulatorLog.study.notice("Preparing balance study; level=\(levelName, privacy: .public) variants=\(variants.count) hours=\(hours)")
         guard hours.isFinite, hours > 0, hours <= 24, options.workers == 1,
               options.bountyFraction == 1, options.selectedHeroIDs == nil, options.heroAIEnabled == nil,
               options.metaExchangeFrom == nil, options.starMinimum == nil, options.starMaximum == nil else {
@@ -101,7 +104,8 @@ import CryptoKit
         let original = try AuthoredMoneyStudy(db: pinned, levelID: levelID)
         let baseline = try BalanceAnalysis.maximizingRanged(in: original)
         let baselineDigest = hash(try baseline.replaySnapshot(db: pinned))
-        let selected = baseline.battle.playerUpgrades.loadout.selected.sorted { $0.rawValue < $1.rawValue }
+        let metaFactory = try MetaUpgradesFactory(catalog: baseline.battle.playerUpgrades.loadout.catalog)
+        let selected = try metaFactory.make(selected: baseline.battle.playerUpgrades.loadout.selected)
         let historical = try db.geneticSolutionDao.analysisCandidates(levelID: levelID)
         var audit: [Audit] = [], seeds: [GeneticStrategy] = options.seedStrategies
         for record in historical {
@@ -115,17 +119,9 @@ import CryptoKit
             }
         }
         seeds = try seeds.map { try $0.selectingMetaUpgrades(selected, in: baseline) }
-        let output = URL(fileURLWithPath: directory, isDirectory: true).standardizedFileURL.resolvingSymlinksInPath()
-        let checkout = Db.authoredDatabaseURL.deletingLastPathComponent().deletingLastPathComponent().resolvingSymlinksInPath().path
-        guard output.path != checkout, !output.path.hasPrefix(checkout + "/") else {
-            throw DbError.Db(message: "balance reports must be outside the source checkout")
-        }
+        let output = reports.root
         let reportURL = output.appendingPathComponent("balance-report.json")
-        guard !FileManager.default.fileExists(atPath: reportURL.path) else {
-            throw DbError.Db(message: "balance study: use a new report directory")
-        }
-        try FileManager.default.createDirectory(at: output, withIntermediateDirectories: true)
-        let executable = hash(try Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[0])))
+        let executable = hash(try Data(contentsOf: SimulatorStore.executableURL))
         let scenarios = [BalanceScenario.baseline] + variants
         let stageCount = scenarios.count * 2 + variants.count
         let secondsPerStage = hours * 3600 / Double(stageCount)
@@ -137,7 +133,7 @@ import CryptoKit
         let runID = try db.simulatorRunDao.begin(levelName: levelName, focus: "balance analysis: ranged only, no heroes, maximum marksmanship",
                                                totalIterations: options.maxEvaluations, outputPath: db.path)
         var report = Report(runID: runID, level: levelName, startingMoney: baseline.level.startingMoney,
-            metaUpgrades: selected, executableSHA256: executable, search: SearchSettings(options), hours: hours,
+            metaUpgrades: selected.upgrades, executableSHA256: executable, search: SearchSettings(options), hours: hours,
             audit: audit, scenarios: [], completedEvaluations: 0, status: "running")
         try dao.begin(runID: runID, configuration: json(report),
                       contentSHA256: baselineDigest, plans: "{}")
@@ -156,7 +152,7 @@ import CryptoKit
                 defer { copy.close() }
                 let study = try BalanceAnalysis.maximizingRanged(in: AuthoredMoneyStudy(db: copy, levelID: levelID))
                 let content = try study.replaySnapshot(db: copy, heroesEnabled: false)
-                try content.write(to: output.appendingPathComponent("\(scenario.id)-content.json"), options: .atomic)
+                try reports.write(content, to: output.appendingPathComponent("\(scenario.id)-content.json"))
                 let restricted = try study.restrictingTowers(to: [.ranged])
                 let trainingSeeds = (0..<options.trainingSeeds).map { options.seed &+ UInt64($0) }
                 let validationSeeds = (0..<options.validationSeeds).map { options.seed &+ 1_000_000 &+ UInt64($0) }
@@ -171,6 +167,7 @@ import CryptoKit
                     }
                 }
                 print("Balance \(scenario.id): ranged-only search; authored money \(study.level.startingMoney), heroes off")
+                SimulatorLog.study.info("Balance scenario started; runID=\(runID.uuidString, privacy: .public) scenario=\(scenario.id, privacy: .public) money=\(study.level.startingMoney)")
                 let warmSeeds = baselineFinalists.map { $0.candidate.strategy } + seeds
                 let ranged = try search(study: restricted, seeds: warmSeeds.filter {
                     (try? BalanceComposition(strategy: $0, study: restricted)) != nil
@@ -204,17 +201,20 @@ import CryptoKit
                 try write(report, reportURL)
                 try dao.recordAdaptiveCheckpoint(runID: runID, json: json(report))
                 print("Balance \(scenario.id): \(verdict); \(completed) total games")
+                SimulatorLog.study.notice("Balance scenario saved; runID=\(runID.uuidString, privacy: .public) scenario=\(scenario.id, privacy: .public) verdict=\(verdict, privacy: .public) totalGames=\(self.completed)")
             }
             if report.status == "running" { report.status = "completed" }
             report.completedEvaluations = completed
             try write(report, reportURL)
             try dao.recordAdaptiveCheckpoint(runID: runID, json: json(report))
-            try dao.finishAdaptive(runID: runID, completed: completed, reportPath: reportURL.path)
-            print("Balance report: \(reportURL.path)")
+            try dao.finishAdaptive(runID: runID, completed: completed, reportPath: db.path)
+            SimulatorLog.study.notice("Balance study completed; runID=\(runID.uuidString, privacy: .public) status=\(report.status, privacy: .public) games=\(self.completed)")
+            print("Balance report: balance-report.json in \(db.path)")
         } catch {
+            SimulatorLog.study.error("Balance study failed; runID=\(runID.uuidString, privacy: .public) games=\(self.completed) detail=\(String(describing: error), privacy: .private)")
             report.status = "failed: \(error)"; report.completedEvaluations = completed
             try? write(report, reportURL)
-            db.simulatorRunDao.finish(id: runID, status: .failed, reportPath: reportURL.path, errorMessage: String(describing: error))
+            db.simulatorRunDao.finish(id: runID, status: .failed, reportPath: db.path, errorMessage: String(describing: error))
             throw error
         }
     }
@@ -241,7 +241,7 @@ import CryptoKit
         }
         guard !values.isEmpty else { return nil }
         let candidate = GeneticCandidate(id: nextID, generation: generation,
-            starsUsed: study.battle.playerUpgrades.loadout.spentStars, strategy: strategy, evaluations: values)
+            strategy: strategy, evaluations: values)
         nextID += 1
         let result = BalancePanel(candidate: candidate, builtTowersBySeed: counts)
         try dao.insert([MoneyStudyResultRow(money: study.level.startingMoney, placementPlan: candidate.id,
@@ -257,7 +257,8 @@ import CryptoKit
         let searchDeadline = start + seconds * 0.8, deadline = start + seconds
         let trainingCap = evaluationCap - options.finalists * validationSeeds.count
         let seedPanel = try BalanceAnalysis.initialSeeds(seeds, limit: options.population / 2)
-        let upgrades = study.battle.playerUpgrades.loadout.selected.sorted { $0.rawValue < $1.rawValue }
+        let metaFactory = try MetaUpgradesFactory(catalog: study.battle.playerUpgrades.loadout.catalog)
+        let upgrades = try metaFactory.make(selected: study.battle.playerUpgrades.loadout.selected)
         var rng = SeededRNG(seed: options.seed).fork(stream: 515)
         var archive: [GeneticCandidate] = [], seen: Set<Data> = []
         var generations = 0, trainingVictories = 0
@@ -282,7 +283,7 @@ import CryptoKit
                     else {
                         let plan = try MoneyStudyPlan(study: study, placementIndex: index,
                             upgradePolicyIndex: index % 10, seed: options.seed)
-                        strategy = GeneticStrategy(plan: plan, metaUpgrades: upgrades,
+                        strategy = GeneticStrategy(plan: plan, metaProgression: upgrades,
                             reinforcements: .random(paths: study.level.paths, rng: &rng))
                         if options.earlyWaveCalls { strategy.earlyWaves.mutate(waveCount: study.level.numWaves, rng: &rng) }
                     }
@@ -293,8 +294,8 @@ import CryptoKit
                         let b = parents[Int.random(in: parents.indices, using: &rng)]
                         return a.fitness < b.fitness ? b.strategy : a.strategy
                     }
-                    strategy = GeneticStrategy.crossover(parent(), parent(), slots: study.level.towerSlots.count, rng: &rng)
-                    strategy.mutate(study: study, metaChoices: [upgrades], rng: &rng,
+                    strategy = try GeneticStrategy.crossover(parent(), parent(), slots: study.level.towerSlots.count, metaFactory: metaFactory, rng: &rng)
+                    try strategy.mutate(study: study, metaFactory: metaFactory, rng: &rng,
                         earlyWaveCallsEnabled: options.earlyWaveCalls, metaMutationEnabled: false)
                 }
                 if !options.earlyWaveCalls { strategy.earlyWaves = .automatic }
