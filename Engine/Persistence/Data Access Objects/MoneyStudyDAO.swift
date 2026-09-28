@@ -65,6 +65,43 @@ public final class MoneyStudyDAO {
         }
     }
 
+    /// Offline recovery reads complete training panels without touching the
+    /// original study, its checkpoints, or its recordings. Rank with the same
+    /// fitness and tie breaker as the search, then remove duplicate DNA.
+    public func bestTrainingCandidates(runID: UUID, seeds: [UInt64], limit: Int) throws -> [GeneticCandidate] {
+        guard limit > 0, !seeds.isEmpty, Set(seeds).count == seeds.count else {
+            throw DbError.Db(message: "genetic import: invalid seed panel or limit")
+        }
+        let decoder = MetaUpgradesFactory.decoder(catalog: try db.metaUpgradeDao.get())
+        var candidates: [GeneticCandidate] = []
+        try statement("SELECT placement_plan,seed_results_json FROM money_study_result WHERE run_id=? AND upgrade_policy=0") { stmt in
+            text(stmt, 1, runID.uuidString)
+            var status = sqlite3_step(stmt)
+            while status == SQLITE_ROW {
+                guard let bytes = sqlite3_column_text(stmt, 1) else {
+                    throw DbError.Db(message: "genetic import: missing candidate DNA")
+                }
+                let candidate = try decoder.decode(GeneticCandidate.self, from: Data(String(cString: bytes).utf8))
+                guard candidate.id == Int(sqlite3_column_int64(stmt, 0)),
+                      candidate.evaluations.map(\.seed) == seeds else {
+                    throw DbError.Db(message: "genetic import: candidate \(candidate.id) has inconsistent identity or training seeds")
+                }
+                candidates.append(candidate)
+                status = sqlite3_step(stmt)
+            }
+            guard status == SQLITE_DONE else { throw DbError.Db(message: "genetic import: candidate read failed") }
+        }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        var seen: Set<Data> = []
+        var result: [GeneticCandidate] = []
+        for candidate in GeneticCandidate.ranked(candidates) {
+            if try seen.insert(encoder.encode(candidate.strategy)).inserted { result.append(candidate) }
+            if result.count == limit { break }
+        }
+        return result
+    }
+
     /// A time-bounded search need not consume its evaluation ceiling. Verify
     /// persisted evidence and publish actual counts instead of claiming the cap.
     public func finishAdaptive(runID: UUID, completed: Int, reportPath: String) throws {

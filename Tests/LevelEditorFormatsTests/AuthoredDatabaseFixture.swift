@@ -55,11 +55,16 @@ final class AuthoredDatabaseFixture {
         }
         sqlite3_finalize(statement)
         try execute("BEGIN")
-        for (_, _, sql) in schema { try execute(sql) }
+        // Recording schema follows the authored DDL even when the live checkout
+        // database retains historical results under an older schema.
+        let recordingSchema: Set<String> = ["level_run", "level_action", "level_run_level", "level_action_tick"]
+        for (_, name, sql) in schema where !recordingSchema.contains(name) && !name.hasPrefix("level_recording_") { try execute(sql) }
+        try execute(String(contentsOf: Db.authoredDatabaseURL.deletingLastPathComponent()
+            .appendingPathComponent("DDL/create_level_runs.sql"), encoding: .utf8))
         // Historical run output is not authored content. Preserve its schema
         // for persistence tests without copying millions of old result rows.
         let results: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result", "level_run", "level_action"]
-        for (type, name, _) in schema where type == "table" && !results.contains(name) {
+        for (type, name, _) in schema where type == "table" && !results.contains(name) && !name.hasPrefix("level_recording_") {
             let table = identifier(name)
             try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")
         }

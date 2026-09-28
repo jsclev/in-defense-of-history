@@ -8,6 +8,8 @@ import { readSlots } from '../src/content/geometry';
 import { seedDatabase } from './seed';
 import { art, native, generated } from './paths';
 import { catalogSources, emitImage } from './assets';
+import { exportPresentation, exportNavigation } from './native';
+import { emitFavicons } from './favicon';
 
 export function displayName(config: string): string {
   const matches = [...config.matchAll(/^GAME_DISPLAY_NAME\s*=\s*(.+)$/gm)];
@@ -21,12 +23,14 @@ export async function prepareContent(destination = generated): Promise<Manifest>
   await mkdir(output);
   let database: ContentDatabase | undefined;
   try {
+    await emitFavicons(join(art, 'Web/favicon.png'), output);
     const bytes = await seedDatabase();
     database = new ContentDatabase(await initSqlJs(), bytes);
     const manifest: Manifest = { version: 1,
       name: displayName(await readFile(join(native, 'GameName.xcconfig'), 'utf8')),
       database: 'content/in_defense_of_history.sqlite', images: {}, maps: {} };
     await mkdir(join(output, 'content'));
+    await writeFile(join(output, 'content/presentation.json'), JSON.stringify(await exportPresentation(database)));
     await writeFile(join(output, manifest.database), bytes);
     const sources = await catalogSources(join(art, 'LibertyLineAssets.xcassets'));
     for (let i = 0; i < sources.length; i++) {
@@ -70,6 +74,7 @@ export async function prepareContent(destination = generated): Promise<Manifest>
       manifest.images[key] = await emitImage(join(art, 'Levels', file), output, dirname(native), scratch);
     }
     manifestSchema.parse(manifest);
+    await writeFile(join(output, 'content/navigation.json'), JSON.stringify(await exportNavigation(Object.keys(manifest.maps), database.canvas().path_width)));
     await writeFile(join(output, 'content/manifest.json'), JSON.stringify(manifest));
     // Only generated output is replaced. Failed preparation preserves the last
     // build and fails the command, so it can never be packaged as a new build.

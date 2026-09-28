@@ -2,6 +2,16 @@ public struct Path: Sendable, Equatable {
     public let points: [Point]
     public let cumulative: [Double]
     public let totalLength: Double
+    private struct Segment: Sendable, Equatable {
+        let dx: Double
+        let dy: Double
+        let lengthSquared: Double
+        let lengthAlong: Double
+    }
+    // These exact subtractions/products were previously repeated for every
+    // projection. Keep division, square roots and comparisons in their original
+    // order: reciprocal multiplication or squared-gap ties can change results.
+    private let segments: [Segment]
 
     public init(points: [Point]) {
         precondition(points.count >= 2, "A path needs at least two points")
@@ -15,6 +25,11 @@ public struct Path: Sendable, Equatable {
         }
         self.cumulative = cum
         self.totalLength = total
+        self.segments = (1..<points.count).map { i in
+            let dx = points[i].x - points[i - 1].x, dy = points[i].y - points[i - 1].y
+            return Segment(dx: dx, dy: dy, lengthSquared: dx * dx + dy * dy,
+                           lengthAlong: cum[i] - cum[i - 1])
+        }
     }
 
     public func point(atDistance d: Double) -> Point {
@@ -27,9 +42,10 @@ public struct Path: Sendable, Equatable {
             if cumulative[mid] <= d { lo = mid } else { hi = mid }
         }
         let segStart = cumulative[lo]
-        let segLen = cumulative[hi] - segStart
+        let segment = segments[lo]
+        let segLen = segment.lengthAlong
         let t = segLen > 0 ? (d - segStart) / segLen : 0
-        return Point.lerp(points[lo], points[hi], t)
+        return Point(points[lo].x + segment.dx * t, points[lo].y + segment.dy * t)
     }
 
     public func nearestDistance(to target: Point) -> Double {
@@ -37,10 +53,10 @@ public struct Path: Sendable, Equatable {
         var bestGap = Double.infinity
         for i in 1..<points.count {
             let a = points[i - 1]
-            let b = points[i]
-            let dx = b.x - a.x
-            let dy = b.y - a.y
-            let segmentLengthSquared = dx * dx + dy * dy
+            let segment = segments[i - 1]
+            let dx = segment.dx
+            let dy = segment.dy
+            let segmentLengthSquared = segment.lengthSquared
             var t = 0.0
             if segmentLengthSquared > 0 {
                 t = ((target.x - a.x) * dx + (target.y - a.y) * dy) / segmentLengthSquared
@@ -49,7 +65,7 @@ public struct Path: Sendable, Equatable {
             let gap = Point(a.x + dx * t, a.y + dy * t).distance(to: target)
             if gap < bestGap {
                 bestGap = gap
-                bestDistanceAlong = cumulative[i - 1] + (cumulative[i] - cumulative[i - 1]) * t
+                bestDistanceAlong = cumulative[i - 1] + segment.lengthAlong * t
             }
         }
         return bestDistanceAlong

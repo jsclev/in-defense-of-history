@@ -3,7 +3,8 @@
 
 Routes 0/2/4 use entrance 0; routes 1/3/5 use entrance 1.
 The lower and central roads end at the bottom, the upper roads at the right.
-First run GenerateCharlestonRoutes with the current native map to produce a fresh
+Use --waves-only to preserve existing geometry while tuning the wave plan.
+For route edits, run GenerateCharlestonRoutes with the current native map to produce a fresh
 GeoJSON base and replacement routes, then pass both outputs to this script.
 The generated LineStrings are the source for SQL; marker positions are preserved.
 """
@@ -30,8 +31,9 @@ N, H, D, S = "native_warrior", "highlander", "light_dragoon", "spy"
 G, A, O, B, T = "grenadier", "royal_artillery", "mounted_officer", "foot_guards", "regimental_drummer"
 
 # Each group is (enemy, count, route, seconds after wave start, individual interval).
-# Introduce one alternate road at a time before combining all six in the finale.
-# The shortest northern routes start lightly; slow siege units use longer roads.
+# Introduce alternate roads before simultaneous, sustained infantry columns.
+# Compact regulars make shell coverage valuable at both approaches; small elite
+# and cavalry groups preserve jobs for direct fire and slowing defenses.
 PLAN = [
     ("Entrance 0: lower road", [(M,10,0,0,1.0), (R,6,0,7,1.3)]),
     ("Entrance 1: upper road", [(M,8,1,0,.95), (R,6,1,5,1.25), (L,4,0,10,.85)]),
@@ -40,14 +42,14 @@ PLAN = [
     ("Entrance 1: central road", [(M,8,3,0,.9), (F,8,0,2,1.0), (H,6,1,9,1.2), (T,1,0,3,1), (T,1,3,4,1)]),
     ("Entrance 0: central road", [(F,10,4,0,.9), (N,8,2,5,.8), (L,6,3,9,.85), (S,3,0,12,1.5)]),
     ("Entrance 1: right road", [(D,6,5,0,1.25), (R,10,2,1,.9), (J,6,3,9,1.0), (T,2,2,3,3)]),
-    ("Three-road assault", [(H,10,4,0,1.1), (F,8,3,2,1.0), (N,8,5,10,.75), (T,1,4,2,1), (T,1,3,4,1)]),
-    ("Infantry and cavalry", [(G,6,0,0,1.5), (L,8,2,3,.8), (D,6,5,10,1.0), (S,4,3,12,1.3)]),
-    ("Officers at both entrances", [(O,1,4,0,1), (O,1,5,0,1), (G,8,4,2,1.4), (F,10,5,3,.9), (N,8,2,13,.7), (T,1,4,5,1), (T,1,5,5,1)]),
-    ("Artillery on the long roads", [(A,3,4,0,3.5), (H,8,0,4,1.1), (R,10,5,1,.8), (D,6,1,13,1.0)]),
-    ("Guards at both exits", [(B,4,0,0,2.2), (G,8,1,2,1.3), (L,10,4,8,.8), (N,8,3,12,.75), (T,1,0,3,1), (T,1,1,5,1)]),
-    ("Fast flanking attack", [(B,4,5,0,2.1), (G,8,4,1,1.3), (D,10,2,9,.9), (F,8,3,10,.9), (S,2,0,17,1.3), (S,2,1,17,1.3)]),
-    ("All roads under attack", [(B,3,0,0,2.1), (B,3,1,0,2.1), (O,2,4,4,2.2), (O,2,5,4,2.2), (H,5,4,9,1.0), (H,5,5,9,1.0), (F,5,2,13,.8), (F,5,3,13,.8), (D,6,1,18,.9)]),
-    ("Final assault", [(B,4,0,0,2.2), (B,4,1,0,2.2), (A,2,4,4,3.5), (A,2,5,4,3.5), (T,1,0,6,1), (T,1,1,6,1), (G,6,2,9,1.0), (G,6,3,9,1.0), (F,6,4,13,.7), (F,6,5,13,.7), (O,1,4,13,1), (O,1,5,13,1), (D,5,2,20,.7), (D,5,3,20,.7)]),
+    ("Sustained two-front assault", [(R,48,0,0,.25), (R,48,1,0,.25), (F,6,4,12,.5), (F,6,3,12,.5), (N,6,5,16,.75)]),
+    ("Assault troops and riders", [(G,4,0,0,1.5), (R,48,0,3,.25), (R,48,1,3,.25), (L,8,2,12,.6), (D,4,5,18,1)]),
+    ("Officers lead the columns", [(O,1,4,0,1), (O,1,5,0,1), (R,40,4,2,.28), (R,40,5,2,.28), (F,8,2,16,.5), (N,6,3,20,.7)]),
+    ("The siege train advances", [(A,2,4,0,3.5), (A,2,5,0,3.5), (R,40,0,2,.28), (R,40,1,2,.28), (H,8,4,16,.8), (D,4,5,20,1)]),
+    ("Guards behind the infantry", [(R,48,0,0,.26), (R,48,1,0,.26), (B,2,0,15,2.2), (B,2,1,15,2.2), (G,4,1,18,1.3), (L,8,4,20,.6), (N,8,3,20,.65)]),
+    ("Columns and a cavalry flank", [(R,96,4,0,.26), (R,96,5,0,.26), (B,2,4,15,2.1), (B,2,5,15,2.1), (G,4,3,18,1.3), (D,6,2,20,.9), (S,2,0,23,1.3), (S,2,1,23,1.3)]),
+    ("All roads under attack", [(R,48,0,0,.25), (R,48,1,0,.25), (B,2,0,14,2.1), (B,2,1,14,2.1), (O,2,4,16,2.2), (O,2,5,16,2.2), (H,4,4,20,.8), (H,4,5,20,.8), (F,6,2,24,.5), (F,6,3,24,.5), (D,4,1,28,.9)]),
+    ("Final sustained assault", [(R,64,0,0,.25), (R,64,1,0,.25), (B,2,0,17,2.2), (B,2,1,17,2.2), (A,2,4,17,3.5), (A,2,5,17,3.5), (R,16,2,21,.25), (R,16,3,21,.25), (F,8,4,26,.4), (F,8,5,26,.4), (O,1,4,26,1), (O,1,5,26,1), (D,2,2,32,.7), (D,2,3,32,.7)]),
 ]
 # Nominal starts relative to the player's first call. Early calls shift the
 # remaining schedule relative to that wave's actual start, as WaveStartSchedule requires.
@@ -136,20 +138,28 @@ def write_routes(geo, native, routes):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--routes', type=Path, required=True, help='Replacement routes from GenerateCharlestonRoutes')
-    parser.add_argument('--geojson-base', type=Path, required=True, help='Fresh export from the same generator run')
+    parser.add_argument('--waves-only', action='store_true', help='Update wave content while preserving all geometry and markers')
+    parser.add_argument('--routes', type=Path, help='Replacement routes from GenerateCharlestonRoutes')
+    parser.add_argument('--geojson-base', type=Path, help='Fresh export from the same generator run')
     args = parser.parse_args()
     geo = ROOT / "Db/level_15_charleston.geojson"
     native = ROOT / "Db/level_15_charleston.tdmap"
-    routes = json.loads(args.routes.read_text())
-    base = json.loads(args.geojson_base.read_text())
+    if args.waves_only:
+        if args.routes or args.geojson_base:
+            parser.error('--waves-only cannot replace routes or geometry')
+        routes = json.loads(native.read_text())['draft']['enemyRoutes']
+    else:
+        if not args.routes or not args.geojson_base:
+            parser.error('Supply --waves-only, or both --routes and --geojson-base')
+        routes = json.loads(args.routes.read_text())
+        base = json.loads(args.geojson_base.read_text())
+        draft = json.loads(native.read_text())['draft']
+        for kind, points in [('spawn_point', draft['entrances']), ('goal_point', draft['exits'])]:
+            exported = [f['geometry']['coordinates'] for f in base['features'] if f['properties']['kind'] == kind]
+            assert exported == [[p['x'], p['y']] for p in points], 'Regenerate from the latest native map'
+        geo.write_text(json.dumps(base, ensure_ascii=False, indent=2) + '\n')
+        write_routes(geo, native, routes)
     assert len(routes) == 6 and [r['index'] for r in routes] == list(range(6))
-    draft = json.loads(native.read_text())['draft']
-    for kind, points in [('spawn_point', draft['entrances']), ('goal_point', draft['exits'])]:
-        exported = [f['geometry']['coordinates'] for f in base['features'] if f['properties']['kind'] == kind]
-        assert exported == [[p['x'], p['y']] for p in points], 'Regenerate from the latest native map'
-    geo.write_text(json.dumps(base, ensure_ascii=False, indent=2) + '\n')
-    write_routes(geo, native, routes)
     waves = wave_models()
     assert len(waves) == len(WAVE_IDS) == 15
     geo = ROOT / "Db/level_15_charleston.geojson"
@@ -193,7 +203,8 @@ def main():
             for line in wave['lines']:
                 line['road'] = line.pop('pathIndex')
         replace_waves(native, native_waves, native=True)
-    print(f"Authored {len(routes)} GeoJSON/SQL routes, 15 waves, {sum(sum(l['count'] for l in w['lines']) for w in waves)} enemies; final wave at 9:00.")
+    route_action = "Preserved" if args.waves_only else "Authored"
+    print(f"{route_action} {len(routes)} routes; authored 15 waves, {sum(sum(l['count'] for l in w['lines']) for w in waves)} enemies; final wave at 9:00.")
 
 
 if __name__ == "__main__":

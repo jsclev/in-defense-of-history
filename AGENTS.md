@@ -16,6 +16,14 @@ importing selected solutions from a run database is a separate, future workflow.
 The dedicated invocation database is the explicit exception to the desktop
 database-location rule below.
 
+Standing user instruction (September 26, 2026): CLI deployment starts over.
+Remove the installed `~/bin/LibertyLineSimulator` executable and all old
+build-named starter databases (including SQLite sidecars), then use the normal
+Xcode build and recreate the starter from authored SQL and maps. Refuse cleanup
+while an installation file is open; never kill processes to deploy. Preserve
+saved invocation databases and custom experiment databases unless the user
+explicitly requests their removal. Do not retain backup starters on deployment.
+
 The database is `Db/in_defense_of_history.sqlite`, generated exclusively by
 `Db/create_db.sh` from the authored SQL scripts. Desktop tools open that file
 in the checkout. Simulator records belong in its SQL-defined tables. Device
@@ -41,6 +49,27 @@ them through `CombatRulesDAO`. Pass the resulting rules into combat models;
 never introduce a parallel Swift tuning catalog or a mutable global registry.
 
 # Simulator boundary
+
+Standing user correction (September 27, 2026): do not sacrifice GA speed to
+lower storage requirements. Prefer simple, appropriately sized recording fields;
+measure throughput as well as disk savings before adopting storage changes.
+
+Standing user correction (September 27, 2026): recorded position, health and
+morale histories use 32-bit Float; Double precision is unnecessary for these
+replay values. This explicitly supersedes the earlier lossless/numeric-precision
+requirement for those stored histories. Keep combat calculations, candidate
+scoring and random seeds unchanged; preserve old recording readers.
+
+Standing user instruction (September 27, 2026): GA result quality is the purpose
+of the GA and must never be traded for disk space, speed, or convenience. Storage
+optimizations must preserve combat fidelity, numeric precision, candidate
+generation and ranking, search coverage, training seeds, held-out validation,
+and all saved evidence and replays. Do not add storage-based early stops or
+reduce search/validation effort. Additional recording or maintenance work must
+not consume the time available for candidate evaluations; matching individual
+battle outcomes alone does not establish unchanged search quality. Prefer
+explicit offline, lossless maintenance after studies finish. Verify exact
+round trips and preserve existing databases before replacing any stored data.
 
 Standing user instruction (September 20, 2026): the simulator must execute the
 same gameplay rules as the game. Use the shared BattleEngine for combat,

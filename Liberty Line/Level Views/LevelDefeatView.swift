@@ -51,6 +51,7 @@ struct ReplaySymbolButton: View {
     let symbol: String
     let label: String
     let side: CGFloat
+    var badge: Int? = nil
     let action: () -> Void
 
     var body: some View {
@@ -63,6 +64,16 @@ struct ReplaySymbolButton: View {
                     .shadow(color: CouncilPalette.ink, radius: 1, y: 2)
             }
             .frame(width: side, height: side).contentShape(Rectangle())
+            .overlay(alignment: .bottomTrailing) {
+                if let badge {
+                    Text(String(badge))
+                        .font(.system(size: side * 0.28, weight: .bold, design: .rounded))
+                        .foregroundStyle(CouncilPalette.ink)
+                        .frame(width: side * 0.38, height: side * 0.38)
+                        .background(CouncilPalette.cream, in: Circle())
+                        .allowsHitTesting(false)
+                }
+            }
             .accessibilityHidden(true)
         }
         .buttonStyle(.plain)

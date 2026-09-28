@@ -5,7 +5,8 @@ separate [balance analyzer](balance_analyzer.md). It fixes authored starting
 money, disables heroes, maximizes ranged progression, and runs ranged-only
 searches alongside unrestricted controls.
 
-Start a normal run with `~/bin/LibertyLineSimulator 15` (replace `15` with the level number).
+Start a normal run with `~/bin/LibertyLineSimulator 15 --workers 8` (replace `15` with the level number).
+`--workers N` is required for GA searches; choose an integer from 1 to 32.
 See the [CLI README](../README.md) for installation or the
 [advanced reference](simulator_cli_reference.md) for optional controls and result inspection.
 Build the macOS `Simulator` scheme with the normal Xcode Release configuration.
@@ -47,13 +48,30 @@ bounty settings. Re-enable generations to test whether players can adapt their
 purchases and reinforcement choices. Neither comparison proves impossibility.
 
 ```sh
-Simulator --genetic-study Charleston --starting-money 660 \
+Simulator --genetic-study Charleston --workers 8 --starting-money 660 \
   --star-range 0:40:10 --population 8 --generations 20 --training-seeds 3 \
   --finalists 2 --validation-seeds 16 --max-evaluations 6000 \
   --genetic-hours 1 --seed 1776 --report-dir /private/tmp/charleston-meta-search
 ```
 
 ## Stars and candidate DNA
+
+For composition counterexample searches, add `--max-towers areaOfEffect:1` to
+search defenses with zero or one artillery tower, or `--majority-tower ranged`
+to search defenses with more than half their planned towers in the ranged
+family. `--max-towers <kind:n>` can be repeated for different families. Legal
+family identifiers are `ranged`, `melee`, `areaOfEffect`, `special`, and `supply`.
+These are search constraints, not campaign construction limits or fitness bonuses.
+Explicit seeds and meta-exchange sources must satisfy the requested constraints;
+mutations and crossover offspring outside them are excluded before evaluation.
+
+Inspect `builtTowersBySeed` and `winsMeetingTowerLimits` in candidate summaries.
+They use actual purchases at the end of each battle: a planned majority may
+never be purchased. Older evaluations omit `builtTowersByKind` and cannot verify
+actual composition. Compare restricted searches with an unrestricted search
+using identical content, heroes, difficulty, money, stars, and seed panels.
+Validate frozen finalists on unseen seeds. A restricted win is a counterexample;
+failure to find one within a finite search is not proof that none exists.
 
 The DAO supplies the earned-star ledger and the complete meta-upgrade catalog.
 Each strategy stores an immutable `MetaUpgradeProgression` containing packed
@@ -211,7 +229,7 @@ effort or an incomplete panel is explicit. These observations compare adapted
 full battle plans, not universal causal effects of individual upgrades.
 
 ```sh
-Simulator --genetic-study Charleston --starting-money 660 \
+Simulator --genetic-study Charleston --workers 8 --starting-money 660 \
   --meta-exchange-from /private/tmp/candidate-strategy.json \
   --population 64 --meta-selections 8 --generations 100 \
   --finalists 8 --validation-seeds 64 --max-evaluations 10000 \
@@ -293,11 +311,14 @@ campaign progress and does not change player selections. Settings → Watch GA
 solutions controls the button; its SQLite seed is on. Normal launch refreshes
 restore the authored settings as elsewhere in the game.
 
-Studies no longer export `Db/DML/genetic_solutions.sql`. The coordinator and all
-workers persist only in the invocation database. A separate, future importer
-will choose compatible candidates from a completed database and generate the
-game's SQL seed. `GeneticSolutionDAO.exportSeed` remains available to code/tests,
-but the simulator never calls it automatically.
+Studies do not export `Db/DML/genetic_solutions.sql`. The coordinator and all
+workers persist only in the invocation database. The explicit offline
+`--import-ga-solutions` command recovers the top three distinct complete training
+panels, checks current content, reproduces their original evaluations, and runs
+the source configuration's full held-out panel before exporting a selected-level
+SQL seed. See the CLI reference for inputs and merging with other levels. It
+preserves the original run and records every new battle in a separate database;
+it never runs automatically or consumes an active study's evaluation budget.
 
 All JSON reports are stored in `simulator_document(name, content_json)` in the
 same database. `--report-dir` optionally exports JSON copies. Authored map bytes
@@ -420,7 +441,55 @@ Movie output must be a new file outside the repository. `--movie-output` writes
 a silent 2388 × 1668 H.264 MP4 and a sibling JSON report with the UUID, sequence
 and frame counts. Without that option, the native app plays the stored run.
 Database recording failures stop execution rather than silently dropping actions.
-Every attempt records its full timeline without storing a full snapshot per tick.
+Every simulator attempt records timestamped input/combat events and resolved
+simulation-state changes in `battle-events-v5` event batches. Compressed batches
+are stored directly in `level_action.event_data` BLOBs, with only `{}` in
+`payload_json`, eliminating base64 expansion and JSON wrapping. Tower-tuning
+captures and encoded metadata are reused until tower configuration or loaded
+tuning changes. Position, health and morale state tracks use 32-bit Float;
+projectile headings/distances and troop target positions use the same compact
+state representation. Observations round once before segment construction.
+An increment is retained only when it reproduces every rounded tick exactly,
+so playback does not accumulate additional rounding drift. Combat arithmetic,
+candidate scores, seeds, action payloads and clock tracks are unchanged. Numeric
+tracks use bulk binary writes, and action strings
+use length-delimited binary storage. Each block remains self-contained. The GA does not
+construct `LevelReplayFrame`, select animation sprites, or encode presentation
+tracks. Entity definitions are separated from observed numeric changes; exact
+movement increments are packed without predicting movement or rerunning rules.
+Playback constructs visual frames and animations from this data. All candidates,
+including losses, retain their events. Existing JSON-wrapped `battle-events-v1`,
+`battle-events-v2`, and `battle-events-v3` recordings remain readable, including
+databases without the BLOB column; playback never migrates historical databases.
+New recordings require the current schema generated by `Db/create_db.sh` (the
+CLI installer creates a matching fresh starter). Versions 2 and 3 store repeated
+enemy/projectile definitions once per block and keep tower definitions, aim, volley and charge preparation in
+separate catalogs. Numeric segments, changing statistics and entity references
+use bounded little-endian binary tracks inside the compressed event payload.
+Versions 2–4 retain their original Double precision; version 5 state tracks
+retain the Float bit patterns captured for each tick. Missing references,
+truncated tracks, invalid lengths and unsupported versions are errors. The
+battle ticks and recorded action order are unchanged.
+
+New writes use the original fast, lossless LZ4 compression, with self-contained
+setup and tuning. There are no storage-based scheduling caps, replay pruning,
+shared-content writes, or incremental compaction in the search path. Search and
+validation follow the configured time, generation and evaluation limits.
+Shared setup/tuning and tagged LZFSE recordings written by CLI 1.0.205 remain
+readable with content-hash verification. A historical movie already pruned by
+that version still reports its retention marker; the rollback cannot recreate it.
+
+Fixed battle geometry is cached inside each shared `BattleEngine`: rally-path
+selection and distance, shared soldier posts and ordering, and road-aligned
+engineer footprints. Cache keys follow actual rally positions, squad membership
+and size, tower placement and upgrade state. Path replacements and loaded tower
+tuning changes invalidate the affected geometry. Unit movement, damage, deaths,
+respawns and tower aim continue normally without rebuilding fixed geometry.
+`Path` also prepares immutable segment differences and lengths once, retaining
+the original projection arithmetic and nearest-path tie breaking. These caches
+are local to a battle and never carry mutable state between GA candidates.
+
+Player/editor recordings retain their full presentation timeline without storing a full snapshot per tick.
 `timeline-v1` presentation blocks pack ordered events and field tracks: constant
 values are stored once, and constant-velocity runs store a start value, virtual
 tick range and increment. A changed value or velocity starts another segment.
@@ -433,7 +502,7 @@ are packing limits, not a lower sampling rate. Playback expands
 one block at a time and never runs combat. Existing full-frame recordings remain
 readable. Storage scales with the recorded timeline, not its wall-clock speed.
 
-The recorder visits Codable state directly, reuses field paths, and serializes
+The player/editor recorder visits Codable state directly, reuses field paths, and serializes
 unchanged tower tuning and path geometry only once per block. It avoids encoding
 and reparsing a full property list on every virtual tick. Temporary Foundation
 serialization/compression objects stay within scoped autorelease pools.
@@ -492,7 +561,9 @@ Candidate DNA remains the same ordered, portable purchase plan. Execution compil
 it into per-slot chains and a small priority queue containing only each slot's next
 unfinished order. A successful purchase exposes the next order at its original
 global priority; time/wave gates and saving barriers retain their existing behavior.
-Crossover indexes parent chains once instead of rescanning each parent per slot.
+The purchase queue wakes on a changed balance, a wave transition, a pending time
+gate, or the tick following a successful purchase. Reinforcement and wave inputs
+still run every tick. Crossover indexes parent chains once instead of rescanning each parent per slot.
 
 Resolved star-upgrade studies are cached by upgrade set within one immutable
 DAO-loaded content snapshot. Reusing the same selection avoids repeated content
@@ -503,7 +574,7 @@ candidate evidence is already supplied.
 
 ## Parallel evaluation and throughput
 
-`--workers N` (1–32, default 1) runs complete GA battles in independent native
+`--workers N` (required for GA searches, 1–32, no default) runs complete GA battles in independent native
 processes. Each process uses the same executable, its own main actor, the shared
 `GeneticCommander`/`GameSimulation`/`BattleEngine`, and the authoritative database
 through DAOs. Worker startup verifies the coordinator's authored-content and
@@ -511,25 +582,33 @@ executable hashes; either changing is an error. Workers keep their validated con
 meta-loadout cache for the study. No GPU combat model is used.
 
 The coordinator freezes parent pools, breeds in deterministic order, and buffers
-at most N candidate panels. It assigns candidate IDs and scores results in that
-same order, regardless of worker completion order. Pending duplicate DNA shares
-one evaluation. Training and held-out seeds remain separate. Seed rounds use
-bounded parallel batches; every battle still ends in victory, defeat, or an
-explicit timeout. The wall-time limit stops admitting new batches, so an already
-admitted batch can finish after the deadline. Time-limited searches can naturally
+up to ceil(4 × N / training-seed-count) candidate panels (at least one).
+Serial execution saves each candidate immediately. The bounded queue gives fast
+workers more battles while slower ones finish. Candidate IDs and scores retain
+admission order, regardless of worker completion order. Pending duplicate DNA shares
+one evaluation. Training and held-out seeds remain separate. Within each admitted
+candidate panel, a free worker immediately receives the next queued battle;
+it does not wait for the other workers. The coordinator polls all result pipes,
+including partial replies, and restores request order before scoring. It still
+finishes the admitted panel before saving candidates or breeding another
+generation. Population sizes, seeds, fitness and validation coverage are unchanged.
+Every battle still ends in victory, defeat, or an explicit timeout. The wall-time
+limit stops admitting new panels, so an already admitted panel can finish after
+the deadline. Time-limited searches can naturally
 explore different numbers of candidates at different worker counts; fixed-work
 comparisons should match DNA and outcomes exactly, except recording UUIDs.
 
-Each worker records every playthrough in the existing SQL tables using bounded
+Each worker records every playthrough in the SQL tables using bounded
 recording buffers and short transactions. Connections wait up to 30 seconds for
 a writer lock; lock failures remain errors. Worker failures fail the study and
 are not automatically retried. Completed battle recordings remain available,
 including when another worker fails before its candidate panel is complete.
 Workers receive EOF on normal shutdown; no process-killing loop is used.
 
-Recordings reuse bound field tracks instead of hashing each field path on every
-tick. Repeated enemy combat-rule documents are encoded only when their values
-change. Replay retains the exact original values and every virtual tick.
+Simulator recordings compare typed state and pack timestamped changes, avoiding
+the generic per-field presentation encoder in the search loop. Playback reads
+the recorded data and never invokes the battle engine or RNG. Recording remains
+bounded and synchronous; every terminal path flushes the last events.
 
 Calibrate worker counts on the actual Mac: extra workers may hit storage or
 memory-bandwidth limits before all CPU cores help. Include database growth when

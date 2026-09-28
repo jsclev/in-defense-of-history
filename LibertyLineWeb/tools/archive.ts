@@ -2,6 +2,8 @@ import { readFile, readdir, mkdir, writeFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { zipSync, unzipSync, type Zippable } from 'fflate';
 import { manifestSchema } from '../src/content/schema';
+import { presentationSchema } from '../src/content/presentation';
+import { navigationSchema } from '../src/game/navigation';
 import { sha256 } from './assets';
 
 export async function packageDirectory(directory: string, destination: string): Promise<number> {
@@ -21,8 +23,12 @@ export async function packageDirectory(directory: string, destination: string): 
     const bytes = files[asset.url];
     if (!bytes || sha256(bytes) !== asset.sha256) throw new Error(`Missing or corrupt ZIP asset: ${asset.url}`);
   }
-  for (const path of [manifest.database, ...Object.values(manifest.maps).map(m => m.geometry)])
+  for (const path of [manifest.database, 'content/presentation.json', 'content/navigation.json', ...Object.values(manifest.maps).map(m => m.geometry)])
     if (!files[path]) throw new Error(`Missing ZIP content: ${path}`);
+  presentationSchema.parse(JSON.parse(Buffer.from(files['content/presentation.json']!).toString()));
+  const navigation = navigationSchema.parse(JSON.parse(Buffer.from(files['content/navigation.json']!).toString()));
+  for (const name of Object.keys(manifest.maps))
+    if (!navigation[name]) throw new Error(`Missing ZIP navigation: ${name}`);
   const entries: Zippable = Object.fromEntries(Object.entries(files).map(([name, bytes]) =>
     [name, [bytes, { level: /\.(png|webp|jpg|jpeg)$/.test(name) ? 0 : 6 }]]));
   const zip = zipSync(entries, { mtime: new Date(2020, 0, 1) });

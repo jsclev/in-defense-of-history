@@ -26,10 +26,12 @@ public struct HeroSelection: Sendable, Equatable {
     }
 
     public static let maxSelected = 2
-    public let primary: Hero
-    public let secondary: Hero?
+    // Keep one immutable, ranked selection. Reconstructing this array from
+    // separate role fields copied the full hero content on every HUD capture.
+    public let heroes: [Hero]
+    public var primary: Hero { heroes[0] }
+    public var secondary: Hero? { heroes.count == 2 ? heroes[1] : nil }
 
-    public var heroes: [Hero] { [primary] + (secondary.map { [$0] } ?? []) }
     public var ids: [UUID] { heroes.map(\.id) }
 
     public init(heroes: [Hero]) throws {
@@ -39,9 +41,7 @@ public struct HeroSelection: Sendable, Equatable {
         guard Set(heroes.map(\.id)).count == heroes.count else {
             throw SelectionError.duplicateHero
         }
-        let ordered = heroes.sorted(by: Self.precedes)
-        primary = ordered[0]
-        secondary = ordered.count == 2 ? ordered[1] : nil
+        self.heroes = heroes.sorted(by: Self.precedes)
     }
 
     /// Equal rankings use UUID order to keep roles stable across saves and reloads.

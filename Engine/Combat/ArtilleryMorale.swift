@@ -43,6 +43,11 @@ public struct EnemyMorale: Equatable, Sendable, Codable {
         valueBeforeImpact = rules.moraleMax
     }
 
+    /// Restore observed values without applying damage or recovery rules.
+    mutating func restoreRecordedValues(value: Double, age: Double, before: Double, direction: Double) {
+        self.value = value; impactAge = age; valueBeforeImpact = before; flinchDirection = direction
+    }
+
     public var isVisible: Bool { value < rules.moraleVisibilityThreshold }
     public var response: Double { max(0, 1 - impactAge / rules.moraleResponseDuration) }
     public var displayedValue: Double {

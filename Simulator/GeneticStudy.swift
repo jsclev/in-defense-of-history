@@ -27,6 +27,7 @@ struct GeneticStudyOptions: Codable {
     var metaExchangeFrom: GeneticStrategy?
     var selectedHeroIDs: [UUID]?
     var heroAIEnabled: Bool?
+    var towerLimits = GeneticTowerLimits()
 
     func starValues(earned: Int) throws -> [Int] {
         let maximum = starMaximum ?? earned
@@ -111,6 +112,7 @@ struct GeneticStudyOptions: Codable {
         var options = requested
         let study = try load(levelID, bountyFraction: options.bountyFraction,
             selectedHeroIDs: options.selectedHeroIDs, heroAIEnabled: options.heroAIEnabled)
+        try options.towerLimits.validate(study: study)
         let money = options.money ?? study.level.startingMoney
         options.money = money
         let heroLoadout = try GeneticHeroLoadout(content: study.battle)
@@ -124,6 +126,9 @@ struct GeneticStudyOptions: Codable {
                 throw DbError.Db(message: "meta exchange study requires its source candidate's exact stars used, without fixed-meta or additional seeds")
             }
             try options.metaExchangeFrom!.validate(study: study)
+            guard try options.towerLimits.permits(BalanceComposition(strategy: options.metaExchangeFrom!, study: study).plannedSlotsByKind) else {
+                throw DbError.Db(message: "Meta-exchange source violates the requested tower search limits")
+            }
             guard options.earlyWaveCalls || options.metaExchangeFrom!.earlyWaves.decisions.allSatisfy({ $0.policy == .automatic }) else {
                 throw DbError.Db(message: "early-wave calls are disabled but the meta-exchange source calls early")
             }
@@ -140,6 +145,9 @@ struct GeneticStudyOptions: Codable {
         SimulatorLog.ga.info("GA settings validated; levelID=\(levelID.uuidString, privacy: .public) money=\(money) earnedStars=\(meta.earnedStars) starGroups=\(starGroups.count) population=\(options.population) metaSelections=\(options.metaSelections) trainingSeeds=\(options.trainingSeeds) validationSeeds=\(options.validationSeeds) fixedMeta=\(options.fixedMeta)")
         for strategy in options.seedStrategies {
             try strategy.validate(study: study)
+            guard try options.towerLimits.permits(BalanceComposition(strategy: strategy, study: study).plannedSlotsByKind) else {
+                throw DbError.Db(message: "Seed strategy violates the requested tower search limits")
+            }
             guard options.earlyWaveCalls || strategy.earlyWaves.decisions.allSatisfy({ $0.policy == .automatic }) else {
                 throw DbError.Db(message: "early-wave calls are disabled but a seed strategy calls early")
             }
@@ -170,14 +178,14 @@ struct GeneticStudyOptions: Codable {
             "fitnessOrder": ["complete-level win rate", "victory lives", "waves reached", "survival on defeats"],
             "sampling": options.fixedMeta ? "Fixed-meta control: adapt and compare battle plans with the one database-selected upgrade selection. Full battles and separate held-out validation." : "Equal-sized subpopulations per meta selection within each stars-used population. Paired initial plan families and training seeds; protected adaptation; one finalist per qualified selection. Full battles, no early-wave pruning.",
             "controlledMetaExchange": options.metaExchangeFrom != nil,
-            "searchTimeFraction": 0.85, "placementPlanMeaning": "globally unique population candidate ID",
+            "searchTimeFraction": GeneticProgress.searchTimeFraction, "placementPlanMeaning": "globally unique population candidate ID",
             "upgradePolicyMeaning": ["0": "training panel", "1": "held-out panel"],
             "decisionScope": "meta upgrade selection; builds, upgrade branches, ability purchases, order, earliest wave/time, saving; reinforcement target priority and deliberate hold; per-wave early-call delay, visible countdown and enemy-count preference; default rally/obstacle sites and nearest ready demolition site"]
         let configData = try JSONSerialization.data(withJSONObject: configuration, options: [.sortedKeys, .prettyPrinted])
         try reports.write(configData, to: output.appendingPathComponent("configuration.json"))
         let dao = try MoneyStudyDAO(db: db)
         let start = ProcessInfo.processInfo.systemUptime
-        let deadline = start + options.hours * 3600, searchDeadline = start + options.hours * 3600 * 0.85
+        let deadline = start + options.hours * 3600, searchDeadline = start + options.hours * 3600 * GeneticProgress.searchTimeFraction
         var completed = 0, cacheHits = 0, nextID = 0, completedGenerations = 0
         var cache: [String: GeneticCandidate] = [:]
         var best: [Int: GeneticCandidate] = [:]
@@ -223,9 +231,37 @@ struct GeneticStudyOptions: Codable {
         })
         let validationReservation = targetFinalistCounts.values.reduce(0, +) * options.validationSeeds
         let trainingCap = options.maxEvaluations - validationReservation
-        var lastLog = start
         let runID = try db.simulatorRunDao.begin(levelName: study.level.name,
             focus: "genetic meta selections; \(money) coins; \(requestedStars.count) stars-used groups", totalIterations: options.maxEvaluations, outputPath: db.path)
+        var progress = GeneticProgress(runID: runID, startedAt: start, timeBudget: options.hours * 3600,
+                                       trainingLimit: trainingCap, generationLimit: options.generations)
+        var validationCompleted = 0, validationTarget = validationReservation
+        var lastProgressLog = start
+        func reportProgress(phase: GeneticProgress.Phase = .search, force: Bool = false) throws {
+            let now = ProcessInfo.processInfo.systemUptime
+            let previous = progress.latest
+            // Publish the new state only after its checkpoint write succeeds.
+            var updated = progress
+            let snapshot = updated.update(now: now, phase: phase, completedGenerations: completedGenerations,
+                trainingEvaluations: completed - validationCompleted, validationEvaluations: validationCompleted,
+                validationTarget: validationTarget)
+            let milestones = snapshot.milestones.dropFirst(previous?.milestones.count ?? 0)
+            guard force || previous?.phase != phase || !milestones.isEmpty || now - lastProgressLog >= 15 else {
+                progress = updated
+                return
+            }
+            try write(snapshot, to: output.appendingPathComponent("progress.json"))
+            progress = updated
+            print(snapshot.statusLine)
+            SimulatorLog.ga.notice("\(snapshot.statusLine, privacy: .public); runID=\(runID.uuidString, privacy: .public)")
+            for milestone in milestones {
+                let message = "GA milestone: passed \(milestone.percent)% after \(GeneticProgress.duration(milestone.elapsedSeconds))"
+                print(message)
+                SimulatorLog.ga.notice("\(message, privacy: .public); runID=\(runID.uuidString, privacy: .public)")
+            }
+            fflush(stdout)
+            lastProgressLog = now
+        }
 
         func ranked(_ candidates: [GeneticCandidate]) -> [GeneticCandidate] {
             GeneticCandidate.ranked(candidates)
@@ -250,7 +286,8 @@ struct GeneticStudyOptions: Codable {
             let selected = try selectedStudy(selection)
             let plan = try MoneyStudyPlan(study: selected,
                 placementIndex: index == 0 ? 7 : index - 1,
-                upgradePolicyIndex: index == 0 ? 2 : (index - 1) % 10, seed: options.seed)
+                upgradePolicyIndex: index == 0 ? 2 : (index - 1) % 10, seed: options.seed,
+                towerLimits: options.towerLimits)
             var policyRNG = SeededRNG(seed: options.seed &+ UInt64(index)).fork(stream: 92)
             var strategy = GeneticStrategy(plan: plan, metaProgression: selection,
                 reinforcements: index == 0 ? .immediate : .random(paths: study.level.paths, rng: &policyRNG),
@@ -270,6 +307,11 @@ struct GeneticStudyOptions: Codable {
         }
         var pending: [PendingCandidate] = []
         var pendingKeys: Set<String> = []
+        // Keep a few battles queued per worker so the ordered transport can
+        // refill a fast process while a slower battle is still running. Bound
+        // candidates by seed count; serial execution still saves immediately.
+        let candidateBatchLimit = options.workers == 1 ? 1
+            : max(1, (options.workers * 4 + options.trainingSeeds - 1) / options.trainingSeeds)
         func evaluateJobs(_ jobs: [GeneticBattleJob]) throws -> [GeneticEvaluation] {
             if let pool { return try pool.evaluate(jobs) }
             return try jobs.map { job in
@@ -300,12 +342,7 @@ struct GeneticStudyOptions: Codable {
                 print("New best at \(stars) stars used: population candidate \(candidate.id), generation \(generation), wins \(evaluations.filter { $0.result.outcome == .victory }.count)/\(evaluations.count), mean victory lives \(candidate.fitness.meanVictoryLives)")
                 fflush(stdout)
             }
-            let now = ProcessInfo.processInfo.systemUptime
-            if now - lastLog >= 15 {
-                SimulatorLog.ga.notice("Training progress; runID=\(runID.uuidString, privacy: .public) games=\(completed) candidates=\(nextID) evaluatedStarGroups=\(best.count) totalStarGroups=\(starGroups.count) elapsedSeconds=\(now - start)")
-                print("Genetic progress: \(completed) engine games, \(nextID) population candidates, \(best.count)/\(starGroups.count) stars-used groups evaluated")
-                fflush(stdout); lastLog = now
-            }
+            try reportProgress()
         }
         func flushCandidates() throws {
             guard !pending.isEmpty else { return }
@@ -320,15 +357,18 @@ struct GeneticStudyOptions: Codable {
         func evaluate(_ strategy: GeneticStrategy, generation: Int) throws -> Bool {
             let selected = try selectedStudy(strategy.metaProgression)
             try strategy.validate(study: selected)
+            guard try options.towerLimits.permits(BalanceComposition(strategy: strategy, study: study).plannedSlotsByKind) else {
+                return true // Reject this search proposal without executing or altering combat.
+            }
             let key = hash(try encoder.encode(strategy))
             if cache[key] != nil || pendingKeys.contains(key) { cacheHits += 1; return true }
             guard completed + (pending.count + 1) * trainingSeeds.count <= trainingCap,
                   ProcessInfo.processInfo.systemUptime < searchDeadline else { return false }
             pending.append(PendingCandidate(key: key, strategy: strategy, generation: generation))
             pendingKeys.insert(key)
-            // At most one candidate per worker is buffered. Parent pools were
-            // frozen before breeding; completion order never changes RNG draws.
-            if pending.count >= options.workers { try flushCandidates() }
+            // Parent pools were frozen before breeding; ordered saves preserve
+            // candidate IDs and RNG draws regardless of worker completion order.
+            if pending.count >= candidateBatchLimit { try flushCandidates() }
             return true
         }
         func brief(_ candidate: GeneticCandidate) throws -> [String: Any] {
@@ -346,6 +386,12 @@ struct GeneticStudyOptions: Codable {
                     return ["id": id.rawValue, "name": definition.title, "stars": definition.cost]
                 }, "plannedActions": candidate.strategy.decisions.count, "plannedTowerMix": towers,
                 "games": evaluations.count, "wins": evaluations.filter { $0.result.outcome == .victory }.count,
+                "winsMeetingTowerLimits": evaluations.filter {
+                    $0.result.outcome == .victory && $0.builtTowersByKind.map(options.towerLimits.permits) == true
+                }.count,
+                "builtTowersBySeed": Dictionary(uniqueKeysWithValues: evaluations.compactMap { value in
+                    value.builtTowersByKind.map { (String(value.seed), $0) }
+                }),
                 "timeouts": evaluations.filter { $0.result.outcome == .timeout }.count,
                 "reinforcementStrategy": try JSONSerialization.jsonObject(with: encoder.encode(candidate.strategy.reinforcements)),
                 "meanReinforcementDeployments": Double(evaluations.reduce(0) { $0 + $1.reinforcementDeployments.count }) / Double(evaluations.count),
@@ -366,6 +412,7 @@ struct GeneticStudyOptions: Codable {
             print("Stars used: \(requestedStars); population cap \(options.population) per group; up to \(options.finalists) finalists; distinct meta selections: \(!options.fixedMeta)")
             print("Bounty fraction: \(options.bountyFraction); fixed database meta selection: \(options.fixedMeta)")
             fflush(stdout)
+            try reportProgress(force: true)
             if options.workers > 1 {
                 pool = try GeneticWorkerPool(count: options.workers,
                     configuration: GeneticWorkerConfiguration(runID: runID, levelID: levelID, contentSHA256: digest,
@@ -384,6 +431,7 @@ struct GeneticStudyOptions: Codable {
             }
             try flushCandidates()
             if nextID > 0 { completedGenerations = 1 }
+            try reportProgress()
             SimulatorLog.ga.notice("Initial population evaluated; runID=\(runID.uuidString, privacy: .public) candidates=\(nextID) games=\(completed)")
             phase = "evolution"
             if options.generations > 1 {
@@ -455,6 +503,7 @@ struct GeneticStudyOptions: Codable {
                     try dao.recordAdaptiveCheckpoint(runID: runID, json: encoded(checkpoint))
                     try write(populations.values.flatMap { $0.activeSelections.flatMap(\.archive) }.sorted { $0.id < $1.id }, to: output.appendingPathComponent("population.json"))
                     SimulatorLog.ga.info("Generation checkpoint saved; runID=\(runID.uuidString, privacy: .public) generation=\(generation) candidates=\(nextID) games=\(completed) cacheHits=\(cacheHits)")
+                    try reportProgress()
                     if completed == before { break }
                 }
             }
@@ -468,6 +517,7 @@ struct GeneticStudyOptions: Codable {
             phase = "training-publication"
             // Freeze every group's finalists before any held-out result is seen.
             let finalists = starGroups.flatMap { populations[$0]!.finalists(limit: options.finalists, distinctSelections: !options.fixedMeta) }
+            validationTarget = finalists.count * options.validationSeeds
             let trainingSolutions = try db.geneticSolutionDao.saveBest(
                 populations.values.flatMap { $0.selections.flatMap(\.archive) }, runID: runID,
                 context: solutionContext, executableSHA256: executable, panel: .training,
@@ -475,6 +525,7 @@ struct GeneticStudyOptions: Codable {
             SimulatorLog.ga.notice("Training candidates saved; runID=\(runID.uuidString, privacy: .public) candidates=\(trainingSolutions)")
             phase = "validation"
             SimulatorLog.ga.notice("Validation started; runID=\(runID.uuidString, privacy: .public) finalists=\(finalists.count) seedsPerFinalist=\(options.validationSeeds)")
+            try reportProgress(phase: .validation)
             var samplesByID: [Int: [GeneticEvaluation]] = [:]
             func validationCheckpoint() throws -> [GeneticCandidate] {
                 let checkpoint = finalists.compactMap { candidate -> GeneticCandidate? in
@@ -500,16 +551,16 @@ struct GeneticStudyOptions: Codable {
                     let batch = Array(finalists[start..<end])
                     let samples = try evaluateJobs(batch.map { GeneticBattleJob(strategy: $0.strategy, seed: seed) })
                     for (candidate, sample) in zip(batch, samples) {
-                        samplesByID[candidate.id, default: []].append(sample); completed += 1
+                        samplesByID[candidate.id, default: []].append(sample); completed += 1; validationCompleted += 1
                     }
+                    try reportProgress(phase: .validation)
                 }
                 _ = try validationCheckpoint()
                 SimulatorLog.ga.info("Validation checkpoint saved; runID=\(runID.uuidString, privacy: .public) totalGames=\(completed) minimumSeedsPerFinalist=\(samplesByID.values.map(\.count).min() ?? 0) requestedSeeds=\(options.validationSeeds)")
-                print("Validation progress: \(completed) total battles; \(samplesByID.values.map(\.count).min() ?? 0)/\(options.validationSeeds) held-out seeds per finalist")
-                fflush(stdout)
             }
             let validations = try validationCheckpoint()
             phase = "validation-publication"
+            try reportProgress(phase: .saving)
             let validatedSolutions = try db.geneticSolutionDao.saveBest(validations, runID: runID,
                 context: solutionContext, executableSHA256: executable, panel: .validation,
                 expectedSamples: options.validationSeeds, limitPerStar: options.finalists, study: study)
@@ -585,10 +636,15 @@ struct GeneticStudyOptions: Codable {
             let summaryURL = output.appendingPathComponent("summary.json")
             try reports.write(JSONSerialization.data(withJSONObject: summary, options: [.sortedKeys, .prettyPrinted]), to: summaryURL)
             try dao.finishAdaptive(runID: runID, completed: completed, reportPath: db.path)
+            try reportProgress(phase: .completed)
             SimulatorLog.ga.notice("GA completed; runID=\(runID.uuidString, privacy: .public) games=\(completed) candidates=\(nextID) generations=\(completedGenerations) validationComplete=\(validationComplete) elapsedSeconds=\(ProcessInfo.processInfo.systemUptime - start)")
             print("Completed genetic study: \(completed) engine games across \(starGroups.count) star groups; summary.json in \(db.path)")
         } catch {
             SimulatorLog.ga.error("GA failed; runID=\(runID.uuidString, privacy: .public) phase=\(phase, privacy: .public) games=\(completed) detail=\(String(describing: error), privacy: .private)")
+            do { try reportProgress(phase: .failed) }
+            catch let progressError {
+                SimulatorLog.ga.error("Unable to save failure progress; runID=\(runID.uuidString, privacy: .public) detail=\(String(describing: progressError), privacy: .private)")
+            }
             db.simulatorRunDao.finish(id: runID, status: .failed, errorMessage: String(describing: error))
             throw error
         }

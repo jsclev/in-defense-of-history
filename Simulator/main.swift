@@ -36,13 +36,14 @@ func printUsage() {
     print("""
     LibertyLineSimulator \(BuildVersion.version)
 
-    Usage: LibertyLineSimulator <level-number>
-    Example: ~/bin/LibertyLineSimulator 15
+    Usage: LibertyLineSimulator <level-number> --workers <n>
+    Example: ~/bin/LibertyLineSimulator 15 --workers 8
 
     Starts a genetic search for that level using its database settings.
     Runs for up to 8 hours and saves results in a new SQLite database
     beside the executable. Keep this Terminal open and your Mac awake.
 
+    --workers <n> is required: choose 1–32 parallel battle processes.
     --help-advanced shows optional experiment and database controls.
     """)
 }
@@ -72,6 +73,8 @@ func printAdvancedUsage() {
     --fixed-meta          Keep the exact database-selected upgrades; requires its exact star group.
     --no-early-wave-calls  Control experiment: exclude early calls from candidate generation/mutation.
     --seed-strategy <path> Seed the GA with explicit strategy JSON (repeatable).
+    --max-towers <kind:n>  Limit a tower category in GA plans, e.g. areaOfEffect:1 (repeatable).
+    --majority-tower <kind> Search plans with more than half of their towers in this category.
     --star-range <min:max:step> Exact stars used; default the database-earned star total only.
     --population <n>       Population cap per stars-used group (default 64), divided equally among meta selections.
     --meta-selections <n>  Active meta-selection subpopulations per group (default 8).
@@ -84,8 +87,11 @@ func printAdvancedUsage() {
     --finalists <n>        Maximum distinct meta-selection finalists per group (default 8).
     --max-evaluations <n>  Total engine-game ceiling including validation (default 50000).
     --genetic-hours <n>    Wall-time budget; reserves 15% for validation (default 8).
-    --workers <n>          Parallel shared-engine battle processes for GA (1–32, default automatic, up to 4).
+    --workers <n>          Required for GA searches: parallel shared-engine battle processes (1–32; no default).
     --genetic-replay <path> Verify a saved best-strategy.json against the same content/engine.
+    --import-ga-solutions <run.sqlite> <content-starter.sqlite> <new-evidence.sqlite> <output.sql>
+                          Separate offline command: recover three training leaders, replay original
+                          evidence and run their full held-out panels before writing a selected-level seed.
 
     --money-study <name>   Run the authored level using the iPhone battle rules.
                           Current database difficulty, campaign upgrades, tower
@@ -154,6 +160,17 @@ func parseOptions() throws -> Options? {
             opts.genetic.bountyFraction = fraction
         case "--fixed-meta": opts.genetic.fixedMeta = true
         case "--no-early-wave-calls": opts.genetic.earlyWaveCalls = false
+        case "--max-towers":
+            guard let value = args.popFirst() else { return nil }
+            let fields = value.split(separator: ":", omittingEmptySubsequences: false)
+            guard fields.count == 2, let kind = TowerKind(rawValue: String(fields[0])),
+                  let maximum = Int(fields[1]), maximum >= 0,
+                  opts.genetic.towerLimits.maximumByKind[kind.rawValue] == nil else { return nil }
+            opts.genetic.towerLimits.maximumByKind[kind.rawValue] = maximum
+        case "--majority-tower":
+            guard let value = args.popFirst(), let kind = TowerKind(rawValue: value),
+                  opts.genetic.towerLimits.majorityKind == nil else { return nil }
+            opts.genetic.towerLimits.majorityKind = kind
         case "--seed-strategy":
             guard let path = args.popFirst() else { return nil }
             opts.seedStrategyPaths.append(path)
@@ -204,7 +221,10 @@ func parseOptions() throws -> Options? {
             guard let value = args.popFirst(), let seconds = Double(value), seconds.isFinite, seconds > 0 else { return nil }
             opts.maxGameSeconds = seconds
         case "--workers":
-            guard let v = args.popFirst(), let n = Int(v), n > 0 else { return nil }
+            guard let v = args.popFirst(), let n = Int(v), (1...32).contains(n) else {
+                FileHandle.standardError.write(Data("--workers requires an integer from 1 to 32.\n".utf8))
+                return nil
+            }
             opts.workers = n
             suppliedWorkers = true
         case "--calibrate-money": opts.calibrateMoney = true
@@ -240,14 +260,33 @@ func parseOptions() throws -> Options? {
             opts.levelNumber = number
         }
     }
-    if !suppliedWorkers, opts.levelNumber != nil || opts.geneticStudy != nil {
-        opts.workers = min(4, max(1, ProcessInfo.processInfo.activeProcessorCount - 1))
+    if !opts.help, !opts.advancedHelp, opts.geneticReplay == nil,
+       opts.levelNumber != nil || opts.geneticStudy != nil, !suppliedWorkers {
+        FileHandle.standardError.write(Data("Missing required --workers <n> (1–32). Example: LibertyLineSimulator 15 --workers 8\n".utf8))
+        return nil
     }
     return opts
 }
 
 // Private worker entry point: transport only; all evaluation stays in the
 // shared commander/engine and all persistence stays behind DAOs.
+if CommandLine.arguments.count >= 2, CommandLine.arguments[1] == "--import-ga-solutions" {
+    do {
+        guard CommandLine.arguments.count == 6 else {
+            throw DbError.Db(message: "Usage: --import-ga-solutions <source-run.sqlite> <current-content.sqlite> <new-evidence.sqlite> <output.sql>")
+        }
+        try MainActor.assumeIsolated {
+            try GeneticSolutionImport.run(sourceURL: URL(fileURLWithPath: CommandLine.arguments[2]),
+                contentURL: URL(fileURLWithPath: CommandLine.arguments[3]),
+                destination: URL(fileURLWithPath: CommandLine.arguments[4]),
+                seedURL: URL(fileURLWithPath: CommandLine.arguments[5]))
+        }
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("GA import failed: \(error)\n".utf8))
+        exit(1)
+    }
+}
 if CommandLine.arguments.count == 2, CommandLine.arguments[1] == "--version" {
     print(BuildVersion.version)
     exit(0)
@@ -305,7 +344,7 @@ do {
         + (opts.levelNumber == nil ? 0 : 1)
     let inspecting = opts.showRuns || opts.runStatusID != nil
     guard modes == (inspecting ? 0 : 1) else {
-        throw DbError.Db(message: "Pass one level number, for example: LibertyLineSimulator 15. Do not combine study modes.")
+        throw DbError.Db(message: "Pass one level number, for example: LibertyLineSimulator 15 --workers 8. Do not combine study modes.")
     }
     if inspecting {
         guard let path = opts.database else {
@@ -376,7 +415,7 @@ if let name = opts.balanceStudy {
 
 if opts.moneyStudy == nil && opts.geneticStudy == nil && !opts.showRuns && opts.runStatusID == nil {
     SimulatorLog.cli.error("No study or inspection command selected")
-    FileHandle.standardError.write(Data("Pass a level number, for example: LibertyLineSimulator 15\n".utf8))
+    FileHandle.standardError.write(Data("Pass a level number, for example: LibertyLineSimulator 15 --workers 8\n".utf8))
     exit(2)
 }
 
@@ -428,6 +467,9 @@ if opts.showRuns || opts.runStatusID != nil {
         let runs = store.db.simulatorRunDao
         let list = try opts.runStatusID.map { id in try runs.get(id: id).map { [$0] } ?? [] }
             ?? runs.recent(limit: 15)
+        // Older invocation databases do not contain this optional GA report.
+        let latestProgress = try? JSONDecoder().decode(GeneticProgress.Snapshot.self,
+            from: store.db.simulatorInvocationDao.document(named: "progress.json"))
         if list.isEmpty {
             print("no simulator runs recorded")
         } else {
@@ -436,23 +478,32 @@ if opts.showRuns || opts.runStatusID != nil {
             print("run id                                status      progress"
                 + "                       rate      started         level / focus")
             for r in list {
+                let progress = latestProgress?.runID == r.id ? latestProgress : nil
+                let percent = progress?.percentComplete ?? r.percentComplete
                 let bar = { () -> String in
                     let w = 16
-                    let filled = max(0, min(w, Int((r.percentComplete / 100 * Double(w)).rounded())))
+                    let filled = max(0, min(w, Int((percent / 100 * Double(w)).rounded())))
                     return String(repeating: "#", count: filled)
                         + String(repeating: ".", count: w - filled)
                 }()
-                let eta = r.estimatedSecondsRemaining.map {
+                let remaining: Double?
+                if r.status != SimulatorRunStatus.running.rawValue { remaining = nil }
+                else if let progress { remaining = progress.estimatedSecondsRemaining }
+                else { remaining = r.estimatedSecondsRemaining }
+                let eta = remaining.map {
                     $0 >= 3600 ? String(format: " eta %.1fh", $0 / 3600)
                                : String(format: " eta %.0fm", $0 / 60)
                 } ?? ""
                 print(String(format: "%@  %-10@  %@ %5.1f%%  %8.0f/s  %@  %@%@",
-                             r.id.uuidString, r.status as NSString, bar, r.percentComplete,
+                             r.id.uuidString, r.status as NSString, bar, percent,
                              r.iterationsPerSecond, df.string(from: r.startedAt),
                              "\(r.levelName)\(r.focus.isEmpty ? "" : " / " + r.focus)", eta))
-                print(String(format: "  %@ of %@ permutations%@",
-                             r.completedIterations.formatted(), r.totalIterations.formatted(),
-                             r.reportPath.map { "  report: " + $0 } ?? ""))
+                if let progress { print("  \(progress.statusLine)") }
+                else {
+                    print(String(format: "  %@ of %@ permutations%@",
+                                 r.completedIterations.formatted(), r.totalIterations.formatted(),
+                                 r.reportPath.map { "  report: " + $0 } ?? ""))
+                }
                 if let message = r.errorMessage, !message.isEmpty { print("  \(message)") }
             }
         }

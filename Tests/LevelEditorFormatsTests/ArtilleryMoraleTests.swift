@@ -2,6 +2,28 @@ import XCTest
 @testable import LevelEditorFormats
 
 final class ArtilleryMoraleTests: XCTestCase {
+    func testAuthoredArtilleryBreaksRegularsBeforeSpecialExplosives() throws {
+        let fixture = try AuthoredDatabaseFixture()
+        let arsenal = try fixture.db.towerTypeDao.getDesignArsenal()
+        let regular = try XCTUnwrap(fixture.db.enemyTypeDao.getAll().first { $0.key == "redcoat_regular" })
+        let cannon = try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 1, branch: 1)
+        let explosives = arsenal.towers.filter { $0.kind == .special }.flatMap(\.tiers)
+            .map(\.tuning).filter { $0.terrorMax > 0 }
+        XCTAssertFalse(explosives.isEmpty)
+        for explosive in explosives {
+            var cannonMorale = EnemyMorale(rules: try fixture.db.combatRulesDao.get())
+            var specialMorale = cannonMorale
+            for _ in 0..<2 {
+                cannonMorale.apply(loss: ArtilleryMoraleStrike(tuning: cannon).loss(distance: 0,
+                    discipline: regular.stats.discipline), direction: 1)
+                specialMorale.apply(loss: ArtilleryMoraleStrike(tuning: explosive).loss(distance: 0,
+                    discipline: regular.stats.discipline), direction: 1)
+            }
+            XCTAssertLessThan(cannonMorale.remainingFraction, regular.stats.moraleResponse.speedThreshold)
+            XCTAssertGreaterThan(specialMorale.remainingFraction, regular.stats.moraleResponse.speedThreshold)
+        }
+    }
+
     func testBlastUsesDistanceAndDisciplineAndStopsAtRadius() throws {
         var tuning = try AuthoredDatabaseFixture.tower(.areaOfEffect, level: 1, branch: 1)
         tuning.terrorMin = 24

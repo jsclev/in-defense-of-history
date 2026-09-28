@@ -14,14 +14,26 @@ import Combine
     @Published private(set) var speed: PlaySpeed
 
     static func best(db: Db, levelID: UUID, difficultyID: UUID) throws -> GeneticSolution? {
+        try best(db: db, levelID: levelID, difficultyID: difficultyID, limit: 1).first
+    }
+
+    static func best(db: Db, levelID: UUID, difficultyID: UUID, limit: Int) throws -> [GeneticSolution] {
+        guard limit > 0 else { throw DbError.Db(message: "genetic_solution: invalid preview limit") }
         let current = try AuthoredMoneyStudy(db: db, levelID: levelID)
         let candidates = try db.geneticSolutionDao.campaignCandidates(levelID: levelID,
             difficultyID: difficultyID, startingMoney: current.level.startingMoney,
             earnedStars: current.battle.playerUpgrades.loadout.starBudget)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        var seen: Set<Data> = []
+        var result: [GeneticSolution] = []
         for solution in candidates {
-            if try compatibleStudy(solution, db: db) != nil { return solution }
+            guard try compatibleStudy(solution, db: db) != nil else { continue }
+            guard try seen.insert(encoder.encode(solution.candidate.strategy)).inserted else { continue }
+            result.append(solution)
+            if result.count == limit { break }
         }
-        return nil
+        return result
     }
 
     private static func compatibleStudy(_ solution: GeneticSolution, db: Db) throws -> AuthoredMoneyStudy? {

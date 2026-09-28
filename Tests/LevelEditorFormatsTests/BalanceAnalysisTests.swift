@@ -3,6 +3,40 @@ import SQLite3
 @testable import LevelEditorFormats
 
 final class BalanceAnalysisTests: XCTestCase {
+    func testTowerSearchLimitsDistinguishAnActualMajorityAndArtilleryCount() throws {
+        let majority = GeneticTowerLimits(majorityKind: .ranged)
+        XCTAssertTrue(majority.permits(["ranged": 10, "melee": 4, "areaOfEffect": 5]))
+        XCTAssertFalse(majority.permits(["ranged": 9, "melee": 4, "areaOfEffect": 6]))
+        XCTAssertFalse(majority.permits(["ranged": 4, "melee": 4]))
+        XCTAssertFalse(majority.permits([:]))
+        let oneBattery = GeneticTowerLimits(maximumByKind: ["areaOfEffect": 1])
+        XCTAssertTrue(oneBattery.permits(["ranged": 8, "areaOfEffect": 1]))
+        XCTAssertTrue(oneBattery.permits(["ranged": 8]))
+        XCTAssertFalse(oneBattery.permits(["ranged": 8, "areaOfEffect": 2]))
+    }
+
+    func testConstrainedInitialPlansUseAuthoredTowersWithoutChangingBattleRules() throws {
+        let f = try fixture(), s = try study(f.db)
+        let limits = [GeneticTowerLimits(maximumByKind: ["areaOfEffect": 1]),
+                      GeneticTowerLimits(majorityKind: .ranged)]
+        for limit in limits {
+            for index in 0..<20 {
+                let plan = try MoneyStudyPlan(study: s, placementIndex: index,
+                    upgradePolicyIndex: index % 10, seed: 15, towerLimits: limit)
+                let strategy = GeneticStrategy(plan: plan,
+                    metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(s.battle.playerUpgrades.loadout.selected)))
+                try strategy.validate(study: s)
+                let counts = try BalanceComposition(strategy: strategy, study: s)
+                XCTAssertTrue(counts.fillsEverySlot)
+                XCTAssertTrue(limit.permits(counts.plannedSlotsByKind))
+            }
+        }
+        XCTAssertEqual(s.battle.enemies, try f.db.enemyTypeDao.getAll())
+        XCTAssertNil(s.allowedTowerKinds)
+        XCTAssertThrowsError(try GeneticTowerLimits(maximumByKind: ["unknown": 1]).validate(study: s))
+        XCTAssertThrowsError(try GeneticTowerLimits(maximumByKind: ["areaOfEffect": -1]).validate(study: s))
+        XCTAssertThrowsError(try GeneticTowerLimits(maximumByKind: ["ranged": 9], majorityKind: .ranged).validate(study: s))
+    }
     private func fixture() throws -> AuthoredDatabaseFixture {
         try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
     }
@@ -113,11 +147,13 @@ final class BalanceAnalysisTests: XCTestCase {
             content: s.battle, money: s.level.startingMoney, seed: 15, maxSeconds: 1,
             heroesEnabled: false, towerObserver: { towers = $0 })
         let record = try f.db.levelRunDao.get(id: XCTUnwrap(result.runID))
-        let setup = try LevelRecordingCodec.decode(LevelReplaySetup.self, from: record.setup)
+        let setup = try f.db.levelRunDao.replaySetup(record)
         XCTAssertFalse(setup.heroesEnabled); XCTAssertEqual(setup.startingMoney, s.level.startingMoney)
         let replay = try LevelReplayer(dao: f.db.levelRunDao, runID: record.id)
         XCTAssertTrue(try replay.advance()); XCTAssertEqual(replay.frame?.heroes.count, 0)
         XCTAssertFalse(towers.isEmpty); XCTAssertTrue(towers.allSatisfy { $0.kind == .ranged })
+        XCTAssertEqual(result.builtTowersByKind, ["ranged": towers.count])
+        XCTAssertLessThan(towers.count, s.level.towerSlots.count, "The report must count purchases, not every tower in the DNA")
     }
 
     func testVerdictCannotMistakeTimeoutOrTotalDifficultyForBalance() throws {

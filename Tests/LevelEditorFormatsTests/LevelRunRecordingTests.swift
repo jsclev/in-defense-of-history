@@ -133,6 +133,9 @@ final class LevelRunRecordingTests: XCTestCase {
         let content = try BattleTestFixture.authored(db: fixture.db)
         let sim = try GameSimulation(recording: .database(dao, .simulator), content: content,
             startingMoney: 1000, heroesEnabled: false, seed: 2)
+        // This comparison explicitly requests presentation from the reference
+        // engine. Production GA workers leave presentation disabled.
+        sim.engine.publishesPresentation = true
         XCTAssertEqual(sim.perform(.build(slot: 0, kind: .ranged)), .ok)
         sim.startNextWave()
         var expected: [Data] = []
@@ -226,7 +229,7 @@ final class LevelRunRecordingTests: XCTestCase {
         sim = nil
         XCTAssertEqual(try dao.get(id: id).status, .abandoned)
         XCTAssertEqual(sqlite3_exec(fixture.connection,
-            "UPDATE level_action SET presentation=x'01' WHERE run_id='\(id)' AND category='presentation'", nil, nil, nil), SQLITE_OK)
+            "UPDATE level_action SET event_data=X'00' WHERE run_id='\(id)' AND name='\(BattleEventBlock.rowName)'", nil, nil, nil), SQLITE_OK)
         let replay = try LevelReplayer(dao: dao, runID: id)
         XCTAssertThrowsError(try replay.advance())
     }

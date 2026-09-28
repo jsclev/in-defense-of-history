@@ -3,16 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="icon" href="./favicon.ico?v=3" sizes="16x16 32x32 48x48" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png?v=3" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=3" />
+    <link rel="icon" type="image/png" sizes="48x48" href="./favicon-48.png?v=3" />
     <title>Loading…</title>
   </head>
   <body>
     <main id="app" aria-label="Game">
-      <header>
-        <h1 id="title"></h1>
-        <label>Battle <select id="level" aria-label="Battle" disabled></select></label>
-        <output id="stats" aria-live="polite"></output>
-      </header>
-      <div id="game" aria-label="Battlefield preview"></div>
+      <dialog id="preview-menu" aria-labelledby="title">
+        <header><img id="pause-icon" alt="" /><h1 id="title">PAUSED</h1></header>
+        <section id="pause-actions">
+          <button id="settings" class="settings-button" aria-label="Settings"><img id="settings-icon" alt="" /></button>
+          <button id="resume" type="button">▶ Return to level</button>
+          <div class="menu-row"><button id="restart" type="button">↻ Restart level</button><button id="campaign" type="button">Main campaign</button></div>
+          <button id="haptics" class="haptics-button" aria-label="Life-loss haptics" aria-pressed="false"><svg viewBox="0 0 44 44" aria-hidden="true"><rect x="15" y="8" width="14" height="28" rx="3"/><path class="haptic-waves" d="M9 13Q3 22 9 31M35 13Q41 22 35 31"/><path d="M20 31H24"/></svg></button>
+        </section>
+        <section id="settings-actions" hidden><div id="settings-list"></div><button id="settings-done" type="button">Done</button></section>
+        <section id="campaign-actions" hidden><label>Battle <select id="level" aria-label="Battle" disabled></select></label><button id="play-level" type="button">Play level</button></section>
+        <section id="outcome-actions" hidden><div class="menu-row"><button id="retry-level" type="button">↻ Restart level</button><button id="outcome-campaign" type="button">Main campaign</button></div></section>
+        <p id="settings-error" role="alert" hidden></p>
+      </dialog>
+      <div id="game" aria-label="Battlefield"></div>
       <p id="status" role="status">Loading…</p>
       <p id="error" role="alert" hidden></p>
     </main>

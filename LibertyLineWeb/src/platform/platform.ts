@@ -3,11 +3,13 @@ export interface InstantSDK {
   initializeAsync(): Promise<void>;
   setLoadingProgress(percent: number): void;
   startGameAsync(): Promise<void>;
+  onPause(callback: () => void): void;
 }
 export interface Platform {
   initialize(): Promise<void>;
   progress(fraction: number): void;
   start(): Promise<void>;
+  onPause?(callback: () => void): () => void;
 }
 
 export function platform(target: Target, sdk?: InstantSDK): Platform {
@@ -29,6 +31,11 @@ export function platform(target: Target, sdk?: InstantSDK): Platform {
     async start() {
       if (phase !== 'loading') throw new Error('Platform must initialize before start');
       await sdk.startGameAsync(); phase = 'playing';
+    },
+    onPause(callback) {
+      let active = true;
+      sdk.onPause(() => { if (active) callback(); });
+      return () => { active = false; };
     },
   };
 }

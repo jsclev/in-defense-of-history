@@ -4,6 +4,32 @@ import SwiftUI
 
 final class LevelViewportTests: XCTestCase {
     @MainActor
+    func testTowerMenuPresentationCoversCallWaveInterface() throws {
+        // Exercise the same containers used by LevelAttemptView: call-wave
+        // buttons are interface content and tower menus are presentations.
+        // If their order flips, the red wave marker cuts through the menu.
+        let size = CGSize(width: 100, height: 100)
+        for menuVisible in [false, true, false, true] {
+            let scene = LevelViewport(size: size) {
+                Color.green
+            } interface: {
+                Color(red: 1, green: 0, blue: 0).frame(width: 20, height: 20)
+                    .position(x: 50, y: 50)
+            } presentations: {
+                if menuVisible {
+                    Color(red: 1, green: 0, blue: 1).frame(width: 40, height: 40)
+                        .position(x: 50, y: 50)
+                }
+            }
+            let renderer = ImageRenderer(content: scene)
+            renderer.scale = 1
+            let bounds = try markers(in: XCTUnwrap(renderer.cgImage))
+            let side: CGFloat = menuVisible ? 40 : 20
+            XCTAssertEqual(bounds, [CGRect(x: 50 - side / 2, y: 50 - side / 2, width: side, height: side)])
+        }
+    }
+
+    @MainActor
     func testWaveControlsCannotMoveMapWhenTheyAppearOrDisappear() throws {
         for size in [CGSize(width: 852, height: 393), CGSize(width: 1024, height: 768)] {
             // Exercise both a full-screen and a smaller safe-area proposal.

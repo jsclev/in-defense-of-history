@@ -8,6 +8,15 @@ import { z } from 'zod';
 import type { ImageAsset } from '../src/content/schema';
 
 export const sha256 = (bytes: Uint8Array): string => createHash('sha256').update(bytes).digest('hex');
+// Same alpha > 0 bounds as native TowerMenuIconArtwork. Only metadata is
+// generated: the canonical image bytes retain every pixel and all padding.
+export function alphaBounds(rgba: Uint8Array, width: number, height: number) {
+  let left = width, top = height, right = -1, bottom = -1;
+  for (let y = 0; y < height; y++) for (let x = 0; x < width; x++) if (rgba[(y * width + x) * 4 + 3]! > 0) {
+    left = Math.min(left, x); top = Math.min(top, y); right = Math.max(right, x); bottom = Math.max(bottom, y);
+  }
+  return right < left ? { x: 0, y: 0, width, height } : { x: left, y: top, width: right - left + 1, height: bottom - top + 1 };
+}
 const contentsSchema = z.object({ images: z.array(z.object({ filename: z.string().optional(),
   idiom: z.string(), scale: z.enum(['1x', '2x', '3x']).optional() })) });
 
@@ -53,6 +62,7 @@ export async function emitImage(source: string, output: string, workspace: strin
     await promisify(execFile)('/usr/bin/sips', ['-s', 'format', 'png', source, '--out', input]);
   }
   const { data, info } = await sharp(input).webp({ lossless: true, effort: 1 }).toBuffer({ resolveWithObject: true });
+  const bounds = alphaBounds(await sharp(input).ensureAlpha().raw().toBuffer(), info.width, info.height);
   // Optimized PNGs can already be smaller than lossless WebP. Keep the smaller
   // lossless representation without changing pixels, density, or composition.
   const keepPng = extname(source).toLowerCase() === '.png' && sourceBytes.length <= data.length;
@@ -63,6 +73,6 @@ export async function emitImage(source: string, output: string, workspace: strin
   await writeFile(join(output, url), encoded); // identical bytes share one file
   const rel = relative(workspace, resolve(source));
   if (rel.startsWith(`..${sep}`)) throw new Error('Art source outside shared workspace');
-  return { url, width: info.width, height: info.height, density, sha256: digest,
+  return { url, width: info.width, height: info.height, bounds, density, sha256: digest,
     source: rel.split(sep).join('/'), sourceSha256: sha256(sourceBytes) };
 }

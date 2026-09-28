@@ -17,6 +17,18 @@ final class LevelReplayer {
     private(set) var playSpeedOverride: PlaySpeed?
     private var recordedSpeed: PlaySpeed
     private var compact: Bool?
+    private var eventRecording = false
+    private var eventEncoding: String?
+    private var eventBlock: BattleEventBlock?
+    private let eventPlayback = BattleEventPlayback()
+    private var contentCache: [String: Data] = [:]
+    private func content(_ hash: String) throws -> Data {
+        if let value = contentCache[hash] { return value }
+        let value = try dao.loadContent(hash)
+        if contentCache.count >= 64 { contentCache.removeAll() }
+        contentCache[hash] = value
+        return value
+    }
     private var timeline: ReplayTimelineReader?
     private var eventIndex = 0
     private var eventSequence: Int64 = 0
@@ -32,7 +44,7 @@ final class LevelReplayer {
         run = try dao.get(id: runID)
         recordedSpeed = run.playSpeed
         guard run.status != .running else { throw DbError.Db(message: "level_run[\(runID)]: recording is still running") }
-        setup = try LevelRecordingCodec.decode(LevelReplaySetup.self, from: run.setup)
+        setup = try dao.replaySetup(run)
         guard setup.level.id == run.levelID, setup.ticksPerSecond > 0, setup.playSpeed == run.playSpeed else {
             throw DbError.Db(message: "level_run[\(runID)]: invalid setup")
         }
@@ -48,7 +60,7 @@ final class LevelReplayer {
     private func read() throws -> LevelActionRecord? {
         if let buffered { self.buffered = nil; return buffered }
         if pageIndex == page.count {
-            page = try dao.actions(runID: run.id, after: queryCursor, limit: compact == true ? 1 : 128)
+            page = try dao.actions(runID: run.id, after: queryCursor, limit: compact == true || eventRecording ? 1 : 128)
             pageIndex = 0
             if let last = page.last { queryCursor = last.sequence }
         }
@@ -71,12 +83,58 @@ final class LevelReplayer {
     @discardableResult func advance() throws -> Bool {
         if compact == nil {
             let encoding = try dao.presentationEncoding(runID: run.id)
-            guard encoding == "frame" || encoding == LevelReplayTimeline.rowName else {
+            guard encoding == "frame" || encoding == LevelReplayTimeline.rowName || BattleEventBlock.supports(encoding) else {
                 throw DbError.Db(message: "level_run[\(run.id)]: unsupported presentation encoding \(encoding)")
             }
             compact = encoding == LevelReplayTimeline.rowName
+            eventRecording = BattleEventBlock.supports(encoding)
+            if eventRecording { eventEncoding = encoding }
         }
+        if eventRecording { return try advanceEvents() }
         return try compact! ? advanceTimeline() : advanceLegacyFrames()
+    }
+
+    private func advanceEvents() throws -> Bool {
+        guard !isFinished else { return false }
+        let tick = frame.map { $0.tick + 1 } ?? 0
+        if eventBlock == nil || tick > eventBlock!.lastTick {
+            eventBlock = nil
+            while let row = try read() {
+                if row.category == "lifecycle", row.name == "started", row.tick == 0, tick == 0 {
+                    leadingEvents.append(row); continue
+                }
+                guard row.category == "event", row.name == eventEncoding, row.presentation == nil else {
+                    throw DbError.Db(message: "level_run[\(run.id)]: invalid battle event row")
+                }
+                let block = try BattleEventBlock.decode(row, resolve: content)
+                guard block.firstTick == tick, block.lastTick == row.tick, block.lastTick >= tick,
+                      block.lastTick - tick < 256,
+                      block.actions.allSatisfy({ $0.tick >= tick && $0.tick <= block.lastTick }),
+                      zip(block.actions, block.actions.dropFirst()).allSatisfy({ $0.tick <= $1.tick }) else {
+                    throw DbError.Db(message: "level_run[\(run.id)]: missing or malformed battle event block")
+                }
+                eventBlock = block; eventIndex = 0; break
+            }
+        }
+        guard let block = eventBlock else { throw DbError.Db(message: "level_run[\(run.id)]: truncated battle events") }
+        actions = leadingEvents; leadingEvents.removeAll()
+        if eventSequence == 0 { eventSequence = Int64(actions.count) }
+        while eventIndex < block.actions.count, block.actions[eventIndex].tick == tick {
+            let event = block.actions[eventIndex]
+            actions.append(LevelActionRecord(runID: run.id, sequence: eventSequence, tick: tick,
+                category: event.category, name: event.name, payloadJSON: event.payload, presentation: nil))
+            eventSequence += 1; eventIndex += 1
+        }
+        let next = try eventPlayback.frame(block: block, tick: tick, setup: setup, previous: frame)
+        try validateHUD(in: next)
+        recordedSpeed = try PlaySpeed(next.speed); frame = next
+        if tick == run.lastTick {
+            guard block.lastTick == tick, eventIndex == block.actions.count, try read() == nil else {
+                throw DbError.Db(message: "level_run[\(run.id)]: incorrect final battle event tick")
+            }
+            isFinished = true
+        }
+        return true
     }
 
     private func advanceTimeline() throws -> Bool {

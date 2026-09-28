@@ -62,6 +62,47 @@ final class GeneticSolutionDAOTests: XCTestCase {
         XCTAssertEqual(try f.db.geneticSolutionDao.best(context: c, starsUsed: 1, study: s).map { $0.candidate.id }, [5])
     }
 
+    func testOfflineRecoveryUsesGAFitnessDistinctDNAAndExactTrainingSeeds() throws {
+        let f = try fixture(), run = UUID()
+        try execute("INSERT INTO simulator_run(id,level_name,status,started_at,updated_at) VALUES('\(run)','Charleston','running','test','test')", f)
+        let dao = try MoneyStudyDAO(db: f.db)
+        try dao.begin(runID: run, configuration: "{}", contentSHA256: executable, plans: "{}")
+        let values = try [candidate(1, wins: 1), candidate(2, lives: 20, hold: 1),
+                          candidate(3, lives: 20, hold: 1), candidate(4, lives: 18, hold: 2)]
+        try dao.insert(values.map {
+            MoneyStudyResultRow(money: 670, placementPlan: $0.id, upgradePolicy: 0,
+                results: $0.evaluations.map(\.result),
+                evidenceJSON: String(decoding: try JSONEncoder().encode($0), as: UTF8.self))
+        }, runID: run, completed: 8, rate: 1)
+        let selected = try dao.bestTrainingCandidates(runID: run, seeds: [0, 1], limit: 3)
+        XCTAssertEqual(selected.map(\.id), [2, 4, 1])
+        XCTAssertEqual(selected.first?.evaluations, values[1].evaluations)
+        XCTAssertEqual(selected.first?.strategy, values[1].strategy)
+        XCTAssertThrowsError(try dao.bestTrainingCandidates(runID: run, seeds: [1, 2], limit: 3))
+        XCTAssertThrowsError(try dao.bestTrainingCandidates(runID: run, seeds: [0, 1], limit: 0))
+        try execute("UPDATE money_study_result SET seed_results_json='{}' WHERE placement_plan=2", f)
+        XCTAssertThrowsError(try dao.bestTrainingCandidates(runID: run, seeds: [0, 1], limit: 3))
+    }
+
+    @MainActor func testPreviewReturnsThreeDistinctCompatiblePlansInRankOrder() throws {
+        let f = try fixture(), s = try study(f)
+        try save([try candidate(2, lives: 20, hold: 1), try candidate(4, lives: 18, hold: 2),
+                  try candidate(5, lives: 17, hold: 3)], in: f, study: s)
+        // A second run of the same DNA cannot consume a preview choice.
+        try save([try candidate(3, lives: 20, hold: 1)], in: f, study: s)
+        try save([try candidate(6, lives: 20, hold: 4)], in: f, study: s, panel: .training)
+        try save([try candidate(7, lives: 20, hold: 5)], in: f, study: s, expected: 3)
+        let selected = try GeneticSolutionPlayback.best(db: f.db, levelID: s.level.id,
+            difficultyID: s.difficulty.id, limit: 3)
+        XCTAssertEqual(selected.count, 3)
+        XCTAssertEqual(selected.map { $0.candidate.strategy.reinforcements.holdSeconds }, [1, 2, 3])
+        XCTAssertTrue(try GeneticSolutionPlayback.best(db: f.db, levelID: s.level.id,
+            difficultyID: UUID(), limit: 3).isEmpty)
+        try execute("UPDATE tower SET cost=cost+1", f)
+        XCTAssertTrue(try GeneticSolutionPlayback.best(db: f.db, levelID: s.level.id,
+            difficultyID: s.difficulty.id, limit: 3).isEmpty)
+    }
+
     func testAdviserDefaultsExcludeTrainingPartialPanelsAndDefeatsWithoutErasingEarlierWinners() throws {
         let f = try fixture(), s = try study(f), c = try context(s, f)
         try save([try candidate(1)], in: f, study: s, panel: .training)

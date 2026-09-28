@@ -1,5 +1,40 @@
 import Foundation
 
+/// Bounds on the automated player's purchase plans, never construction rules.
+/// Actual engine purchases are reported separately: an unfinished plan is not
+/// evidence that a winning battle satisfied a minimum/majority constraint.
+public struct GeneticTowerLimits: Codable, Equatable, Sendable {
+    public var maximumByKind: [String: Int] = [:]
+    public var majorityKind: TowerKind?
+
+    public init(maximumByKind: [String: Int] = [:], majorityKind: TowerKind? = nil) {
+        self.maximumByKind = maximumByKind
+        self.majorityKind = majorityKind
+    }
+
+    public func validate(study: AuthoredMoneyStudy) throws {
+        guard maximumByKind.allSatisfy({ TowerKind(rawValue: $0.key) != nil && $0.value >= 0 }) else {
+            throw DbError.Db(message: "tower search limits: unknown category or negative maximum")
+        }
+        let available = Set(study.towerPaths.map(\.kind))
+        let slots = study.level.towerSlots.count
+        guard available.reduce(0, { $0 + min(slots, maximumByKind[$1.rawValue] ?? slots) }) >= slots else {
+            throw DbError.Db(message: "tower search limits: insufficient allowed towers for initial full-map plans")
+        }
+        if let kind = majorityKind {
+            guard available.contains(kind), (maximumByKind[kind.rawValue] ?? slots) > slots / 2 else {
+                throw DbError.Db(message: "tower search limits: majority category is locked or capped below a majority")
+            }
+        }
+    }
+
+    public func permits(_ counts: [String: Int]) -> Bool {
+        guard counts.allSatisfy({ TowerKind(rawValue: $0.key) != nil && $0.value >= 0 }),
+              maximumByKind.allSatisfy({ counts[$0.key, default: 0] <= $0.value }) else { return false }
+        return majorityKind.map { counts[$0.rawValue, default: 0] * 2 > counts.values.reduce(0, +) } ?? true
+    }
+}
+
 /// Experiment inputs, not a second combat catalog. Multipliers apply to the
 /// current DAO values; enemy keys must resolve in the authored roster.
 public struct BalanceScenario: Codable, Equatable {

@@ -96,7 +96,8 @@ private struct GeneticWorkerReply: Codable {
         let process = Process()
         let input = Pipe()
         let output = Pipe()
-        var buffered = Data()
+        var reader = WorkerReplyReader()
+        var descriptor: Int32 { output.fileHandleForReading.fileDescriptor }
 
         init(configuration: URL) throws {
             process.executableURL = try SimulatorStore.executableURL
@@ -110,30 +111,20 @@ private struct GeneticWorkerReply: Codable {
         }
         func receive() throws -> GeneticWorkerReply {
             while true {
-                if let newline = buffered.firstIndex(of: 10) {
-                    let line = buffered[..<newline]
-                    let reply = try JSONDecoder().decode(GeneticWorkerReply.self, from: line)
-                    buffered.removeSubrange(...newline)
-                    return reply
-                }
-                guard buffered.count < 16 * 1024 * 1024 else {
-                    throw DbError.Db(message: "genetic worker stopped or sent an invalid response; inspect stderr")
-                }
-                // FileHandle.read(upToCount:) can wait for the entire requested
-                // length on a pipe. POSIX read returns the available bytes so
-                // a short ready/result line cannot deadlock both processes.
-                var bytes = [UInt8](repeating: 0, count: 65_536)
-                let count = Darwin.read(output.fileHandleForReading.fileDescriptor, &bytes, bytes.count)
-                if count < 0, errno == EINTR { continue }
-                guard count > 0 else {
-                    throw DbError.Db(message: "genetic worker closed its response pipe; inspect stderr")
-                }
-                buffered.append(contentsOf: bytes.prefix(count))
+                if let reply = try receiveAvailable() { return reply }
             }
+        }
+        func receiveAvailable() throws -> GeneticWorkerReply? {
+            guard let line = try reader.readAvailable(from: descriptor) else { return nil }
+            return try JSONDecoder().decode(GeneticWorkerReply.self, from: line)
         }
         func send(_ request: GeneticWorkerRequest) throws {
             var data = try JSONEncoder().encode(request); data.append(10)
             try input.fileHandleForWriting.write(contentsOf: data)
+        }
+        func disconnect() {
+            try? input.fileHandleForWriting.close()
+            try? output.fileHandleForReading.close()
         }
         func close() {
             try? input.fileHandleForWriting.close()
@@ -174,36 +165,23 @@ private struct GeneticWorkerReply: Codable {
     /// Bound in-flight work and return in request order, independent of which
     /// process finishes first. Breeding and scoring therefore stay deterministic.
     func evaluate(_ jobs: [GeneticBattleJob]) throws -> [GeneticEvaluation] {
-        SimulatorLog.worker.debug("Dispatching battle batch; runID=\(self.runID.uuidString, privacy: .public) jobs=\(jobs.count) workers=\(self.workers.count)")
-        var results: [GeneticEvaluation] = []
-        for start in stride(from: 0, to: jobs.count, by: workers.count) {
-            let count = min(workers.count, jobs.count - start)
-            var failure: Error?
-            var sent = 0
-            for offset in 0..<count {
-                do {
-                    try workers[offset].send(GeneticWorkerRequest(index: start + offset, job: jobs[start + offset]))
-                    sent += 1
-                } catch { failure = error; break }
-            }
-            // Drain all replies in this batch before surfacing a failure, so
-            // shutdown cannot deadlock a healthy worker writing a large result.
-            for offset in 0..<sent {
-                do {
-                    let reply = try workers[offset].receive()
-                    guard reply.index == start + offset, reply.error == nil, let evaluation = reply.evaluation,
-                          evaluation.seed == jobs[start + offset].seed else {
+        SimulatorLog.worker.debug("Dispatching battle queue; runID=\(self.runID.uuidString, privacy: .public) jobs=\(jobs.count) workers=\(self.workers.count)")
+        do {
+            return try OrderedWorkerQueue.run(jobCount: jobs.count, descriptors: workers.map(\.descriptor),
+                send: { worker, index in
+                    try workers[worker].send(GeneticWorkerRequest(index: index, job: jobs[index]))
+                }, receive: { worker, index in
+                    guard let reply = try workers[worker].receiveAvailable() else { return nil }
+                    guard reply.index == index, reply.error == nil, let evaluation = reply.evaluation,
+                          evaluation.seed == jobs[index].seed else {
                         throw DbError.Db(message: "genetic worker evaluation failed: \(reply.error ?? "invalid response")")
                     }
-                    results.append(evaluation)
-                } catch { if failure == nil { failure = error } }
-            }
-            if let failure {
-                SimulatorLog.worker.error("Worker batch failed; runID=\(self.runID.uuidString, privacy: .public) batchStart=\(start) detail=\(String(describing: failure), privacy: .private)")
-                throw failure
-            }
+                    return evaluation
+                }, disconnect: { worker in workers[worker].disconnect() })
+        } catch {
+            SimulatorLog.worker.error("Worker queue failed; runID=\(self.runID.uuidString, privacy: .public) detail=\(String(describing: error), privacy: .private)")
+            throw error
         }
-        return results
     }
 
     func close() {

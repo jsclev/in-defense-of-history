@@ -83,10 +83,8 @@ final class EncyclopediaCarouselInteractionTests: XCTestCase {
             assertPage(0)
 
             history.tap()
-            if category == "tower" { app.buttons["tower-encyclopedia-back"].tap() }
-            app.buttons[category == "tower" ? "tower-entry-special-4-1" : "enemy-entry-regimental_drummer"].tap()
+            app.buttons[category == "tower" ? "tower-entry-melee-1-1" : "enemy-entry-regimental_drummer"].tap()
             assertPage(0, capture: "new-selection")
-            if category == "tower" { app.buttons["tower-encyclopedia-back"].tap() }
             app.buttons["Done"].tap()
             XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 3))
         }

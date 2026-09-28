@@ -26,9 +26,14 @@ struct LevelBriefingView: View {
 
     @State private var difficulties: [Difficulty] = []
     @State private var selected: Difficulty?
-    @State private var solution: GeneticSolution?
-    @State private var showingSolution = false
+    @State private var solutions: [GeneticSolution] = []
+    @State private var solutionPresentation: SolutionPresentation?
     @State private var solutionError: String?
+
+    private struct SolutionPresentation: Identifiable {
+        let id = UUID()
+        let solution: GeneticSolution
+    }
 
     private static let ink = Color(red: 0.16, green: 0.12, blue: 0.08)
     private static let brass = Color(red: 0.87, green: 0.72, blue: 0.35)
@@ -77,23 +82,36 @@ struct LevelBriefingView: View {
             .disabled(selected == nil)
 
             if settings.values.showGASolutionButton {
-                ReplaySymbolButton(symbol: "play.rectangle.fill", label: "Watch winning GA solution",
-                    side: max(48, min(64, 64 * metrics.scale))) {
-                        if solution != nil { showingSolution = true }
-                        else { solutionError = "No current winning solution is available for this level and difficulty." }
+                let side = max(48, min(64, 64 * metrics.scale))
+                let count = node.id == 15 ? 3 : 1
+                HStack(spacing: 12) {
+                    ForEach(0..<count, id: \.self) { index in
+                        ReplaySymbolButton(symbol: "play.fill", label: "Watch GA solution \(index + 1)",
+                            side: side, badge: count > 1 ? index + 1 : nil) {
+                                if solutions.indices.contains(index) {
+                                    solutionPresentation = SolutionPresentation(solution: solutions[index])
+                                } else {
+                                    solutionError = "No current winning solution is available for this choice and difficulty."
+                                }
+                            }
+                            .accessibilityIdentifier("preview-ga-solution-\(index + 1)")
+                            .accessibilityHint("Watch saved strategy \(index + 1) with its heroes and upgrades")
                     }
-                    .accessibilityIdentifier("preview-ga-solution")
-                    .accessibilityHint("Watch the best saved strategy with its heroes and upgrades")
-                    .position(x: contentRect.minX + 40, y: footer.midY)
+                }
+                .fixedSize()
+                .position(x: contentRect.minX + (CGFloat(count) * side + CGFloat(count - 1) * 12) / 2,
+                          y: footer.midY)
             }
         }
         .ignoresSafeArea()
         .persistentSystemOverlays(.hidden)
         .onAppear(perform: loadDifficulties)
         .task(id: selected?.id) { loadSolution() }
-        .fullScreenCover(isPresented: $showingSolution) {
-            if let solution {
-                GeneticSolutionView(db: db, solution: solution, canvas: runtimeCanvas) { showingSolution = false }
+        .fullScreenCover(item: $solutionPresentation) { presentation in
+            // The presented item carries its movie. A separate Boolean can
+            // present before the closure observes the selected solution.
+            GeneticSolutionView(db: db, solution: presentation.solution, canvas: runtimeCanvas) {
+                solutionPresentation = nil
             }
         }
         .alert("Winning solution", isPresented: Binding(get: { solutionError != nil },
@@ -165,9 +183,9 @@ struct LevelBriefingView: View {
     }
 
     private func loadSolution() {
-        solution = nil
+        solutions = []
         guard let levelID = node.levelInfoID, let selected else { return }
-        do { solution = try GeneticSolutionPlayback.best(db: db, levelID: levelID, difficultyID: selected.id) }
+        do { solutions = try GeneticSolutionPlayback.best(db: db, levelID: levelID, difficultyID: selected.id, limit: 3) }
         catch { solutionError = String(describing: error) }
     }
 }

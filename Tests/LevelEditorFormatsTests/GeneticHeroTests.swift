@@ -45,7 +45,7 @@ final class GeneticHeroTests: XCTestCase {
             recording: .database(f.db.levelRunDao, .simulator), content: updated.battle,
             money: updated.level.startingMoney, seed: 1, maxSeconds: 1)
         let run = try f.db.levelRunDao.get(id: XCTUnwrap(evaluation.runID))
-        let setup = try LevelRecordingCodec.decode(LevelReplaySetup.self, from: run.setup)
+        let setup = try f.db.levelRunDao.replaySetup(run)
         XCTAssertTrue(setup.heroesEnabled)
         XCTAssertEqual(setup.heroes.map(\.id), ids)
         XCTAssertEqual(try XCTUnwrap(setup.heroCombat[hero]).hp, try XCTUnwrap(s.battle.heroCombat[hero]).hp + 123)

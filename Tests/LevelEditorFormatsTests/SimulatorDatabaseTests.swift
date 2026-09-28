@@ -39,6 +39,7 @@ final class SimulatorDatabaseTests: XCTestCase {
             XCTAssertEqual(try scalar(db, "SELECT count(*) FROM \(table)"), 0, table)
         }
         XCTAssertEqual(try scalar(source.db, "SELECT count(*) FROM simulator_run"), 1)
+        XCTAssertEqual(try scalar(db, "SELECT count(*) FROM pragma_table_info('level_action') WHERE name='event_data' AND type='BLOB'"), 1)
         let name = "level_15_charleston"
         XCTAssertEqual(try db.levelGeoJSONDao.sourceData(mapImageName: name), try source.db.levelGeoJSONDao.sourceData(mapImageName: name))
         XCTAssertThrowsError(try db.levelGeoJSONDao.sourceData(mapImageName: "missing"))
@@ -88,6 +89,7 @@ final class SimulatorDatabaseTests: XCTestCase {
         defer { second.close() }
         XCTAssertEqual(try scalar(second, "SELECT count(*) FROM simulator_document"), 0)
         XCTAssertEqual(try scalar(second, "SELECT count(*) FROM simulator_invocation"), 1)
+        XCTAssertEqual(try scalar(second, "SELECT count(*) FROM pragma_table_info('level_action') WHERE name='event_data' AND type='BLOB'"), 1)
         XCTAssertEqual(try second.levelGeoJSONDao.sourceData(mapImageName: "level_15_charleston"), try first.levelGeoJSONDao.sourceData(mapImageName: "level_15_charleston"))
         XCTAssertEqual(try first.simulatorInvocationDao.document(named: "old.json"), Data("{\"old\":true}".utf8))
     }

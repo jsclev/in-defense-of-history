@@ -11,7 +11,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 20))
         app.buttons["Encyclopedia"].tap()
         app.buttons["encyclopedia-towers"].tap()
-        app.buttons["tower-entry-special-4-1"].tap()
+        revealTower("tower-entry-special-4-1", in: app).tap()
         let stats = app.buttons["tower-encyclopedia-page-details"]
         XCTAssertEqual(stats.label, "Stats")
         stats.tap()
@@ -77,7 +77,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
                                enabled ? "Layout guides on" : "Layout guides off")
                 Thread.sleep(forTimeInterval: 1) // Allow the native review capture to finish.
                 app.buttons["encyclopedia-\(category)"].tap()
-                let button = category == "towers" ? app.buttons["tower-entry-special-4-1"] :
+                let button = category == "towers" ? revealTower("tower-entry-special-4-1", in: app) :
                     app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "enemy-entry-")).firstMatch
                 XCTAssertTrue(button.waitForExistence(timeout: 5))
                 XCTAssertEqual(app.otherElements["encyclopedia-screen"].value as? String,
@@ -91,7 +91,6 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
                 XCTAssertTrue(history.isSelected)
                 app.buttons["\(prefix)-encyclopedia-page-demo"].tap()
                 Thread.sleep(forTimeInterval: 1)
-                if category == "towers" { app.buttons["tower-encyclopedia-back"].tap() }
                 app.buttons["Done"].tap()
             }
         }
@@ -138,7 +137,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         add(attachment)
     }
 
-    func testHorizontalFamiliesOpenSeparateDetailsAndReturnToRoster() throws {
+    func testTwoColumnsScrollAndSelectionStaysBesideTheRoster() throws {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .landscapeRight
         let app = XCUIApplication()
@@ -147,67 +146,36 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 20))
         app.buttons["Encyclopedia"].tap()
         app.buttons["encyclopedia-towers"].tap()
-        let grid = app.otherElements["tower-encyclopedia-grid"]
+        let grid = app.scrollViews["tower-encyclopedia-grid"]
         XCTAssertTrue(grid.waitForExistence(timeout: 5))
-        let buttons = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "tower-entry-"))
-        // Every authored tower is visible in the complete six-column, five-row grid.
-        XCTAssertEqual(buttons.count, 30)
-        XCTAssertFalse(app.staticTexts["TOWERS"].exists)
-        XCTAssertEqual(app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH %@", "tower-family-")).count, 0)
-        XCTAssertFalse(app.otherElements["tower-demonstration-animation"].exists)
-        let rosterFrame = grid.frame
-        let frames = buttons.allElementsBoundByIndex.map(\.frame)
-        XCTAssertEqual(Set(frames.map { Int($0.midX.rounded()) }).count, 6)
-        XCTAssertEqual(Set(frames.map { Int($0.midY.rounded()) }).count, 5)
-        for row in Dictionary(grouping: frames, by: { Int($0.midY.rounded()) }).values {
-            let ordered = row.sorted { $0.minX < $1.minX }
-            for (left, right) in zip(ordered, ordered.dropFirst()) {
-                XCTAssertEqual(left.maxX, right.minX, accuracy: 0.5,
-                               "Adjacent tower buttons must share a boundary")
-            }
-        }
-        for column in Dictionary(grouping: frames, by: { Int($0.midX.rounded()) }).values {
-            let ordered = column.sorted { $0.minY < $1.minY }
-            for (upper, lower) in zip(ordered, ordered.dropFirst()) {
-                XCTAssertEqual(upper.maxY, lower.minY, accuracy: 0.5,
-                               "Tower rows must meet without a gap")
-            }
-        }
-        for button in buttons.allElementsBoundByIndex {
-            XCTAssertTrue(button.isHittable, button.identifier)
-            XCTAssertGreaterThanOrEqual(button.frame.width, 44)
-            XCTAssertGreaterThanOrEqual(button.frame.height, 44)
-            XCTAssertTrue(grid.frame.insetBy(dx: -0.5, dy: -0.5).contains(button.frame))
-        }
-        let initial = XCTAttachment(screenshot: app.screenshot())
-        initial.name = "complete-tower-grid-on-colonial-scroll"
-        initial.lifetime = .keepAlways
-        add(initial)
-        // Cross family and tier boundaries without opening any intermediate menu.
-        for id in ["tower-entry-special-4-1", "tower-entry-supply-4-3", "tower-entry-special-4-3",
-                   "tower-entry-areaOfEffect-4-4", "tower-entry-ranged-1-1"] {
-            let button = app.buttons[id]
-            let expected = String(button.label.dropFirst("Level 1, ".count))
+        let ranged = app.buttons["tower-entry-ranged-1-1"].frame
+        let melee = app.buttons["tower-entry-melee-1-1"].frame
+        let nextLevel = app.buttons["tower-entry-ranged-2-1"].frame
+        XCTAssertEqual(ranged.minY, melee.minY, accuracy: 1)
+        XCTAssertEqual(ranged.minX, nextLevel.minX, accuracy: 1)
+        XCTAssertGreaterThan(nextLevel.minY, ranged.minY)
+        XCTAssertGreaterThan(melee.minX, ranged.minX)
+        XCTAssertFalse(app.buttons["tower-entry-supply-4-3"].isHittable)
+
+        for id in ["tower-entry-special-4-1", "tower-entry-supply-4-3", "tower-entry-ranged-1-1"] {
+            let button = revealTower(id, in: app)
+            let expected = String(button.label.split(separator: ",", maxSplits: 1)[1]).trimmingCharacters(in: .whitespaces)
+            let frameBeforeTap = button.frame
             button.tap()
-            XCTAssertFalse(grid.exists, "Details replace the roster")
-            XCTAssertFalse(app.buttons["Done"].exists)
-            XCTAssertEqual(app.staticTexts["tower-selection-name"].label, expected)
-            XCTAssertTrue(app.otherElements["tower-demonstration-animation"].exists)
-            let pages = app.descendants(matching: .any)["tower-encyclopedia-pages"].firstMatch
-            XCTAssertEqual(pages.frame.width, rosterFrame.width, accuracy: 1)
-            let back = app.buttons["tower-encyclopedia-back"]
-            XCTAssertTrue(back.isHittable)
-            XCTAssertGreaterThanOrEqual(back.frame.width, 44)
-            XCTAssertGreaterThanOrEqual(back.frame.height, 44)
-            let details = XCTAttachment(screenshot: app.screenshot())
-            details.name = "full-screen-" + id
-            details.lifetime = .keepAlways
-            add(details)
-            back.tap()
-            XCTAssertTrue(grid.waitForExistence(timeout: 3))
+            XCTAssertTrue(grid.exists)
             XCTAssertTrue(button.isSelected)
-            XCTAssertTrue(buttons.allElementsBoundByIndex.allSatisfy(\.isHittable))
-            XCTAssertFalse(app.otherElements["tower-demonstration-animation"].exists)
+            XCTAssertEqual(button.frame.minY, frameBeforeTap.minY, accuracy: 1,
+                           "Selection must not jump the roster")
+            XCTAssertEqual(app.staticTexts["tower-selection-name"].label, expected)
+            let pages = app.descendants(matching: .any)["tower-encyclopedia-pages"].firstMatch
+            XCTAssertGreaterThan(pages.frame.minX, grid.frame.maxX)
+            XCTAssertTrue(app.otherElements["tower-demonstration-animation"].exists)
+            XCTAssertTrue(app.buttons["Done"].isHittable)
+            XCTAssertFalse(app.buttons["tower-encyclopedia-back"].exists)
+            let attachment = XCTAttachment(screenshot: app.screenshot())
+            attachment.name = "split-" + id
+            attachment.lifetime = .keepAlways
+            add(attachment)
         }
         app.buttons["Done"].tap()
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 3))
@@ -222,7 +190,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 20))
         app.buttons["Encyclopedia"].tap()
         app.buttons["encyclopedia-towers"].tap()
-        app.buttons["tower-entry-areaOfEffect-4-1"].tap()
+        revealTower("tower-entry-areaOfEffect-4-1", in: app).tap()
         let animation = app.otherElements["tower-demonstration-animation"]
         XCTAssertTrue(animation.waitForExistence(timeout: 5))
 
@@ -276,7 +244,6 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         XCTAssertTrue(detail.waitForExistence(timeout: 3))
         app.buttons["tower-encyclopedia-page-demo"].tap()
         XCTAssertTrue(animation.waitForExistence(timeout: 3))
-        app.buttons["tower-encyclopedia-back"].tap()
         app.buttons["Done"].tap()
         XCTAssertTrue(app.buttons["Encyclopedia"].waitForExistence(timeout: 3))
     }
@@ -308,10 +275,10 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         for (family, branches) in families {
             let entries = [(1, 1), (2, 1), (3, 1)] + branches.map { (4, $0) }
             for (level, branch) in entries {
-                let list = app.otherElements["tower-encyclopedia-grid"]
-                let row = app.buttons["tower-entry-\(family)-\(level)-\(branch)"]
+                let list = app.scrollViews["tower-encyclopedia-grid"]
+                let row = revealTower("tower-entry-\(family)-\(level)-\(branch)", in: app)
                 XCTAssertTrue(row.isHittable)
-                XCTAssertTrue(list.frame.contains(row.frame), "Every tower must fit without scrolling")
+                XCTAssertTrue(list.frame.contains(row.frame), "Scrolling must fully reveal the selected tower")
                 let name = String(row.label.dropFirst("Level \(level), ".count))
                 row.tap()
                 XCTAssertTrue(app.otherElements["tower-demonstration-animation"].waitForExistence(timeout: 3))
@@ -342,7 +309,6 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
                 app.buttons["tower-encyclopedia-page-demo"].tap()
                 XCTAssertTrue(app.otherElements["tower-demonstration-animation"].waitForExistence(timeout: 3))
                 app.descendants(matching: .any)["tower-encyclopedia-pages"].firstMatch.swipeLeft()
-                app.buttons["tower-encyclopedia-back"].tap()
                 visited += 1
             }
         }
@@ -351,7 +317,7 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         // The final hospital entry has long copy and two upgrade paths below
         // the fold. Exercise the actual detail scroll, not a renderer snapshot.
         let detail = app.scrollViews["tower-encyclopedia-detail"]
-        app.buttons["tower-entry-supply-4-3"].tap()
+        revealTower("tower-entry-supply-4-3", in: app).tap()
         app.buttons["tower-encyclopedia-page-details"].tap()
         let upgrade = app.staticTexts["Hospital Stations"]
         for _ in 0..<7 {
@@ -360,8 +326,20 @@ final class TowerEncyclopediaInteractionTests: XCTestCase {
         }
         XCTAssertTrue(upgrade.isHittable)
         capture("hospital-upgrades")
-        app.buttons["tower-encyclopedia-back"].tap()
         app.buttons["Done"].tap()
         XCTAssertTrue(encyclopedia.waitForExistence(timeout: 3))
     }
+
+    private func revealTower(_ id: String, in app: XCUIApplication) -> XCUIElement {
+        let list = app.scrollViews["tower-encyclopedia-grid"]
+        let button = app.buttons[id]
+        for _ in 0..<24 {
+            if button.isHittable && list.frame.insetBy(dx: -1, dy: -1).contains(button.frame) { return button }
+            if button.exists && button.frame.minY < list.frame.minY { list.swipeDown() }
+            else { list.swipeUp() }
+        }
+        XCTFail("Unable to scroll to \(id)")
+        return button
+    }
+
 }

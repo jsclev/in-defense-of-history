@@ -138,10 +138,11 @@ final class CombatDatabaseAuthorityTests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture()
         for table in ["tower"] {
             try execute("SAVEPOINT authored", fixture)
-            // A mode change must also author compatible service upgrades.
+            // A mode change must also author compatible services and presentation.
             try execute("""
                 UPDATE \(table) SET attack_mode='solidShot', turn_rate_degrees=17, tower_range=300, fire_interval=1;
                 UPDATE tower_upgrade_rank SET effects_json='[{"attribute":"turnRate","delta":1}]';
+                UPDATE tower_history SET presentation_kind='standard', strategy_text=NULL, inclusion_reason=NULL;
                 """, fixture)
             let values = try fixture.db.towerTypeDao.getDesignArsenal().towers.flatMap(\.tiers).map(\.tuning)
             XCTAssertFalse(values.isEmpty)

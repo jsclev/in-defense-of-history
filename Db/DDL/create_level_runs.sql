@@ -18,6 +18,8 @@ CREATE INDEX level_run_level ON level_run(level_id, started_at);
 -- Sequence orders physical records. Presentation rows are bounded timeline-v1
 -- blocks of virtual-time value segments and ordered input/combat events. Legacy
 -- frame rows remain readable. Playback never reruns gameplay or RNG.
+-- Simulator event batches store their compressed bytes directly in event_data.
+-- Historical base64 JSON batches remain readable with event_data NULL.
 CREATE TABLE level_action (
     run_id TEXT NOT NULL REFERENCES level_run(id),
     sequence INTEGER NOT NULL CHECK (sequence >= 0),
@@ -26,6 +28,9 @@ CREATE TABLE level_action (
     name TEXT NOT NULL CHECK (length(name) > 0),
     payload_json TEXT NOT NULL CHECK (json_valid(payload_json)),
     presentation BLOB,
+    event_data BLOB CHECK (event_data IS NULL OR
+        (typeof(event_data) = 'blob' AND length(event_data) > 0 AND
+         category = 'event' AND name IN ('battle-events-v3','battle-events-v4','battle-events-v5') AND payload_json = '{}')),
     CHECK ((category = 'presentation') = (presentation IS NOT NULL)),
     PRIMARY KEY (run_id, sequence)
 );

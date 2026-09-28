@@ -68,7 +68,7 @@ private struct GeneticSolutionPlayer: View {
                 .allowsHitTesting(false)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Live winning strategy")
-                .accessibilityValue("Tick \(engine.timer.tick)")
+                .accessibilityValue("Candidate \(playback.solution.candidate.id), tick \(engine.timer.tick)")
                 .accessibilityIdentifier("ga-battlefield")
             HudView(runtimeCanvas: canvas, state: LevelHUDState(engine: engine),
                     hudLayoutConfig: engine.content.hudLayout, showsAuxiliaryControls: false)

@@ -11,9 +11,6 @@ struct EnemyEncyclopediaView: View {
     @State private var page = 0
     @State private var reviewElapsed: Double?
     @State private var sceneFrame = CGRect.zero
-    private static let ink = Color(red: 0.045, green: 0.095, blue: 0.13)
-    private static let paper = Color(red: 0.97, green: 0.91, blue: 0.76)
-    private static let gold = Color(red: 0.91, green: 0.69, blue: 0.32)
 
     init(entries: [EnemyEncyclopediaEntry], rules: CombatRules, demonstrations: EnemyDemonstrationCatalog,
          runtimeCanvas: RuntimeCanvas, onExit: @escaping () -> Void) {
@@ -39,76 +36,60 @@ struct EnemyEncyclopediaView: View {
     }
 
     var body: some View {
-        let padding = HudSizing.hudPadding.resolved(at: HudScale(playableHeight: runtimeCanvas.playAreaRect.height).value)
-        // Encyclopedia controls belong inside the authored play area, including
-        // on phones whose HUD is allowed to extend into the side gutters.
-        let play = runtimeCanvas.playAreaRect.intersection(runtimeCanvas.safeInsetsRect)
-            .insetBy(dx: padding, dy: padding)
-        let doneSize = DoneButtonLayout(runtimeCanvas: runtimeCanvas, aspect: DoneButton.aspect).frame.size
-        let footer = CGRect(x: play.maxX - doneSize.width, y: play.maxY - doneSize.height,
-                            width: doneSize.width, height: doneSize.height)
-        let rect = CGRect(x: play.minX, y: play.minY, width: play.width,
-                          height: max(0, footer.minY - padding - play.minY))
-        let scale = min(1.5, max(1, rect.height / 340))
-        ZStack(alignment: .topLeading) {
-            Image("hero_screen_background").resizable().scaledToFill()
-                .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height)
-                .clipped().overlay(Color.black.opacity(0.22))
-            HStack(spacing: 8 * scale) {
-                roster(scale: scale).frame(width: rect.width * 0.42)
-                pages(scale: scale).frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-            .foregroundStyle(Self.paper)
-            .frame(width: rect.width, height: rect.height)
-            .position(x: rect.midX, y: rect.midY)
-            DoneButton(runtimeCanvas: runtimeCanvas, action: onExit, frame: footer)
+        EncyclopediaScreen(runtimeCanvas: runtimeCanvas, selectionTitle: entry.enemy.name,
+                           titleIdentifier: "enemy-detail-name", onExit: onExit) { layout in
+            roster(layout: layout)
+        } details: { layout in
+            pages(scale: layout.typeScale)
         }
-        .ignoresSafeArea()
-        .persistentSystemOverlays(.hidden)
         .onChange(of: selection) { _, _ in page = 0 }
         #if DEBUG
         .task { await captureReview() }
         #endif
     }
 
-    private func roster(scale: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: 4 * scale) {
-            title("Enemies", scale: scale).padding(.horizontal, 12 * scale).padding(.top, 8 * scale)
-            ScrollViewReader { proxy in
-                ScrollView {
-                    LazyVStack(spacing: 3 * scale) {
-                        ForEach(entries) { item in
-                            Button { selection = item.id } label: {
-                                HStack(spacing: 8 * scale) {
-                                    Image(uiImage: DemonstrationArtwork.image(item.enemy.imageName))
-                                        .resizable().interpolation(.high).scaledToFit()
-                                        .frame(width: 38 * scale, height: 42 * scale)
-                                        .accessibilityHidden(true)
-                                    Text(item.enemy.name).font(.custom("Baskerville-Bold", size: 17 * scale))
-                                        .fixedSize(horizontal: false, vertical: true)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+    private func roster(layout: TowerEncyclopediaLayout) -> some View {
+        let scale = layout.typeScale
+        return ScrollViewReader { proxy in
+            ScrollView(.vertical) {
+                LazyVGrid(columns: Array(repeating: GridItem(.fixed(layout.cellSize.width), spacing: layout.gridGap),
+                                         count: TowerEncyclopediaLayout.columns), spacing: layout.gridGap) {
+                    ForEach(entries) { item in
+                        Button { selection = item.id } label: {
+                            Image(uiImage: DemonstrationArtwork.image(item.enemy.imageName))
+                                .resizable().interpolation(.high).scaledToFit()
+                                .frame(height: 54 * scale)
+                                .frame(width: layout.cellSize.width, height: layout.cellSize.height)
+                                .background(EncyclopediaStyle.ink.opacity(0.06))
+                                .overlay {
+                                    Rectangle().strokeBorder(EncyclopediaStyle.ink.opacity(0.65), lineWidth: 0.75 * scale)
+                                    if selection == item.id {
+                                        Rectangle()
+                                            .strokeBorder(EncyclopediaStyle.selection, lineWidth: 2.5 * scale)
+                                            .padding(1.25 * scale)
+                                    }
                                 }
-                                .padding(.horizontal, 8 * scale).padding(.vertical, 3 * scale)
-                                .frame(minHeight: 48 * scale)
-                                .background(selection == item.id ? Color.white.opacity(0.13) : .clear,
-                                            in: RoundedRectangle(cornerRadius: 8))
-                                .overlay(RoundedRectangle(cornerRadius: 8)
-                                    .strokeBorder(selection == item.id ? Self.gold : .clear, lineWidth: 2))
                                 .contentShape(Rectangle())
-                            }
-                            .buttonStyle(.plain)
-                            .id(item.id)
-                            .accessibilityLabel(item.enemy.name)
-                            .accessibilityAddTraits(selection == item.id ? [.isSelected] : [])
-                            .accessibilityIdentifier("enemy-entry-\(item.enemy.key)")
+                                .accessibilityHidden(true)
                         }
-                    }.padding(4 * scale)
+                        .buttonStyle(.plain)
+                        .id(item.id)
+                        .accessibilityLabel(item.enemy.name)
+                        .accessibilityAddTraits(selection == item.id ? [.isSelected] : [])
+                        .accessibilityIdentifier("enemy-entry-\(item.enemy.key)")
+                    }
                 }
-                .accessibilityIdentifier("enemy-encyclopedia-list")
-                .onChange(of: selection) { _, id in proxy.scrollTo(id, anchor: .center) }
             }
+            .accessibilityLabel("All enemies")
+            .accessibilityIdentifier("enemy-encyclopedia-list")
+            #if DEBUG
+            .onChange(of: selection) { _, id in
+                if CommandLine.arguments.contains("--enemy-encyclopedia-review") {
+                    proxy.scrollTo(id, anchor: .center)
+                }
+            }
+            #endif
         }
-        .background(Self.ink.opacity(0.96), in: RoundedRectangle(cornerRadius: 12))
     }
 
     private func pages(scale: CGFloat) -> some View {
@@ -124,23 +105,20 @@ struct EnemyEncyclopediaView: View {
             .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { sceneFrame = $0 }
             .accessibilityIdentifier("enemy-encyclopedia-pages")
             EncyclopediaCarouselIndicators(selection: $page, detailTitle: "Tactics",
-                scale: scale, ink: Self.paper, accent: Self.gold, identifierPrefix: "enemy-encyclopedia")
+                scale: scale, ink: EncyclopediaStyle.ink, accent: EncyclopediaStyle.accent, identifierPrefix: "enemy-encyclopedia")
         }
-        .background(Self.ink.opacity(0.97), in: RoundedRectangle(cornerRadius: 12))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private func strategy(scale: CGFloat) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12 * scale) {
-                title(entry.enemy.name, scale: scale).accessibilityIdentifier("enemy-detail-name")
                 copy(entry.enemy.description, scale: scale)
                 title("Facing this enemy", scale: scale)
                 copy(entry.strategy, scale: scale).accessibilityIdentifier("enemy-detail-strategy")
                 title("Base stats", scale: scale)
                 ForEach(EnemyEncyclopediaStats(enemy: entry.enemy, rules: rules).rows) { stat in
                     HStack(alignment: .top, spacing: 12) {
-                        Text(stat.label).foregroundStyle(Self.paper.opacity(0.82))
+                        Text(stat.label).foregroundStyle(EncyclopediaStyle.ink.opacity(0.82))
                         Spacer(minLength: 4)
                         Text(stat.value).fontWeight(.semibold).monospacedDigit().multilineTextAlignment(.trailing)
                     }
@@ -148,7 +126,7 @@ struct EnemyEncyclopediaView: View {
                     .accessibilityIdentifier("enemy-stat-\(stat.id)")
                 }
                 copy("Base enemy values before difficulty scaling. The demonstration uses your selected difficulty and upgrades. Distances use map units. Cover reduces melee damage; explosive weapons apply their own cover penetration. Discipline reduces artillery morale shock.", scale: scale)
-                    .foregroundStyle(Self.paper.opacity(0.72))
+                    .foregroundStyle(EncyclopediaStyle.ink.opacity(0.72))
             }
             .padding(14 * scale).frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -165,7 +143,7 @@ struct EnemyEncyclopediaView: View {
                         Image(systemName: "book.closed").font(.system(size: 20 * scale, weight: .semibold))
                             .frame(width: 44 * scale, height: 44 * scale)
                     }
-                    .foregroundStyle(Self.gold)
+                    .foregroundStyle(EncyclopediaStyle.accent)
                     .accessibilityLabel("Historical source: \(entry.sourceTitle)")
                     .accessibilityIdentifier("enemy-history-source")
                 }
@@ -175,7 +153,7 @@ struct EnemyEncyclopediaView: View {
                 title("History and game rules", scale: scale)
                 copy(entry.adaptation, scale: scale).accessibilityIdentifier("enemy-history-adaptation")
                 Link(entry.sourceTitle, destination: entry.sourceURL)
-                    .font(.system(size: 14 * scale, weight: .semibold)).foregroundStyle(Self.gold)
+                    .font(.system(size: 14 * scale, weight: .semibold)).foregroundStyle(EncyclopediaStyle.accent)
                     .frame(minHeight: 44 * scale, alignment: .leading)
                     .accessibilityIdentifier("enemy-history-source-title")
             }
@@ -186,7 +164,7 @@ struct EnemyEncyclopediaView: View {
 
     private func title(_ text: String, scale: CGFloat) -> some View {
         Text(text).font(.custom("Baskerville-Bold", size: 20 * scale))
-            .foregroundStyle(Self.gold).accessibilityAddTraits(.isHeader)
+            .foregroundStyle(EncyclopediaStyle.accent).accessibilityAddTraits(.isHeader)
     }
 
     private func copy(_ text: String, scale: CGFloat) -> some View {
@@ -289,6 +267,7 @@ private struct EnemyDemonstrationPage: View {
                 playing.toggle()
             } label: {
                 Image(systemName: playing ? "pause.fill" : "play.fill")
+                    .foregroundStyle(EncyclopediaStyle.paper)
                     .frame(width: 44, height: 44).background(.black.opacity(0.6), in: Circle())
             }
             .buttonStyle(.plain).padding(8)

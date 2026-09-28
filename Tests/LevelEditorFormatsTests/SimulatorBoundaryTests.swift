@@ -11,10 +11,11 @@ final class SimulatorBoundaryTests: XCTestCase {
         let simulator = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { $0.hasSuffix(".swift") }.map { "Simulator/" + $0 }
         let paths = simulator + ["Engine/Design/AuthoredMoneyStudy.swift", "Engine/Design/AuthoredMoneyStudy+Replay.swift",
-            "Engine/Design/GeneticStrategy.swift", "Engine/Design/BalanceAnalysis.swift",
+            "Engine/Design/GeneticStrategy.swift", "Engine/Design/OrderedWorkerQueue.swift", "Engine/Design/BalanceAnalysis.swift",
             "Engine/Design/GeneticReplay.swift", "Engine/Design/GeneticSolution.swift",
             "Engine/Design/GeneticHeroLoadout.swift", "Engine/Design/GeneticSolutionPlayback.swift", "Engine/Models/GameSimulation.swift",
             "Engine/Models/BattleEngine+Recording.swift", "Engine/Models/LevelRecording.swift",
+            "Engine/Models/BattleEventLog.swift", "Engine/Models/BattleEventPlayback.swift",
             "Engine/Models/LevelReplayTimeline.swift", "Engine/Models/ReplayTimelineEncoder.swift", "Engine/Models/LevelReplayer.swift"]
         for path in paths {
             let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
@@ -34,7 +35,7 @@ final class SimulatorBoundaryTests: XCTestCase {
         let sources = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { ["swift", "metal", "h", "m", "mm", "c", "cpp"].contains(($0 as NSString).pathExtension) }
         // SimulatorLog owns only Apple Logger categories; no gameplay or I/O protocol.
-        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "GeneticWorkers.swift", "BalanceStudy.swift", "SimulatorStore.swift", "SimulatorLog.swift", "BuildVersion.swift"]),
+        XCTAssertEqual(Set(sources), Set(["main.swift", "AuthoredMoneySweep.swift", "GeneticStudy.swift", "GeneticWorkers.swift", "GeneticSolutionImport.swift", "BalanceStudy.swift", "SimulatorStore.swift", "SimulatorLog.swift", "BuildVersion.swift"]),
                        "Every new simulator source requires a boundary audit; no alternate combat backend is permitted")
         let driverPaths = sources.map { "Simulator/" + $0 } + ["LevelEditor/SimSession.swift"]
         for path in driverPaths {
@@ -50,10 +51,12 @@ final class SimulatorBoundaryTests: XCTestCase {
         // Ownership audit: the coordinator breeds/records plans; the commander
         // chooses commands. Neither has access to mutable battle internals.
         for path in ["Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticMetaSearch.swift", "Engine/Design/GeneticMetaPopulation.swift",
+                     "Engine/Design/GeneticProgress.swift",
+                     "Engine/Design/OrderedWorkerQueue.swift",
                      "Engine/Models/MetaUpgradesFactory.swift",
                      "Engine/Design/ReinforcementStrategy.swift", "Engine/Design/EarlyWaveStrategy.swift",
                      "Engine/Design/GeneticReplay.swift", "Engine/Design/BalanceAnalysis.swift",
-                     "Simulator/GeneticStudy.swift", "Simulator/GeneticWorkers.swift", "Simulator/BalanceStudy.swift"] {
+                     "Simulator/GeneticStudy.swift", "Simulator/GeneticWorkers.swift", "Simulator/GeneticSolutionImport.swift", "Simulator/BalanceStudy.swift"] {
             let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
             for forbidden in ["sim.engine", "BattleEngine(", "buildTower(", "upgradeSelectedTower(",
                 "applyImpact", "applyMorale", "shotMinDamage", "shotMaxDamage", "enemyHPMultiplier:",
@@ -107,6 +110,17 @@ final class SimulatorBoundaryTests: XCTestCase {
         XCTAssertTrue(source.contains("engine.simulationResult()"))
         let game = try String(contentsOf: root.appendingPathComponent("Liberty Line/LevelRunner.swift"), encoding: .utf8)
         XCTAssertTrue(game.contains("class LevelRunner: BattleEngine"))
+    }
+
+    func testEventRecorderDoesNotConstructFramesAndPlaybackDoesNotRunCombat() throws {
+        let recorder = try String(contentsOf: root.appendingPathComponent("Engine/Models/BattleEventLog.swift"), encoding: .utf8)
+        for forbidden in ["LevelReplayFrame(", "publishMilitia(", "publishHeroes(", ".sample(alpha:", "assetName(facing:"] {
+            XCTAssertFalse(recorder.contains(forbidden), forbidden)
+        }
+        let playback = try String(contentsOf: root.appendingPathComponent("Engine/Models/BattleEventPlayback.swift"), encoding: .utf8)
+        for forbidden in ["BattleEngine(", "GameSimulation(", "GeneticCommander(", "advanceBattleTick(", "SeededRNG("] {
+            XCTAssertFalse(playback.contains(forbidden), forbidden)
+        }
     }
 
     func testCommandDriverCannotBypassPlayerHandlersOrSupplySeparateTuning() throws {

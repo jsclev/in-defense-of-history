@@ -20,7 +20,7 @@ export function projection(canvas: Canvas, width: number, height: number,
   const x = playArea.x - canvas.play_area_x * scale;
   const y = playArea.y - (canvas.canvas_height - canvas.play_area_y - canvas.play_area_height) * scale;
   return {
-    scale, physicalRect: { x: 0, y: 0, width, height }, safeRect, playArea,
+    canvas, scale, physicalRect: { x: 0, y: 0, width, height }, safeRect, playArea,
     point: (px: number, py: number) => ({ x: x + px * scale, y: y + (canvas.canvas_height - py) * scale }),
     inverse: (px: number, py: number) => ({ x: (px - x) / scale, y: canvas.canvas_height - (py - y) / scale }),
     image: { x, y, width: canvas.canvas_width * scale, height: canvas.canvas_height * scale },

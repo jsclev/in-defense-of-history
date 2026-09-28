@@ -7,6 +7,7 @@ export const imageSchema = z.object({
   url: localPath, width: positive.int(), height: positive.int(),
   sha256: z.string().regex(/^[a-f0-9]{64}$/), source: z.string().min(1),
   sourceSha256: z.string().regex(/^[a-f0-9]{64}$/), density: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+  bounds: z.object({ x: z.number().int().nonnegative(), y: z.number().int().nonnegative(), width: positive.int(), height: positive.int() }).optional(),
 });
 export const manifestSchema = z.object({
   version: z.literal(1), name: z.string().trim().min(1), database: localPath,

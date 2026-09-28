@@ -118,6 +118,21 @@ final class HeroRankingTests: XCTestCase {
         }
     }
 
+    func testSelectedRosterHasIndependentValueSemanticsAndConsistentRoles() throws {
+        let selected = try HeroDAO(conn: conn).getSelectedHeroes()
+        let original = selected.heroes
+        XCTAssertEqual(original, [selected.primary, try XCTUnwrap(selected.secondary)])
+        var returned = selected.heroes
+        returned.reverse()
+        returned.removeLast()
+        XCTAssertEqual(selected.heroes, original, "Consumers must not mutate the canonical selection")
+        let remaining = try selected.toggling(selected.primary)
+        XCTAssertEqual(remaining.heroes, [try XCTUnwrap(selected.secondary)])
+        XCTAssertEqual(remaining.primary, selected.secondary)
+        XCTAssertNil(remaining.secondary)
+        XCTAssertEqual(selected.heroes, original, "Replacing a selection must not change an earlier snapshot")
+    }
+
     func testOneOrTwoHeroesAlwaysHaveRankingDerivedRoles() throws {
         let dao = HeroDAO(conn: conn)
         let seeded = try dao.getSelectedHeroes()

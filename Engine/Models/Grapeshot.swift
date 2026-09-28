@@ -3,7 +3,7 @@ import CoreGraphics
 
 /// A short-lived, straight shot. A volley can hit several enemies, but each
 /// enemy takes at most one pellet's damage from that volley.
-public struct GrapeshotFlight: Sendable, Codable {
+public struct GrapeshotFlight: Sendable, Codable, Equatable {
     public let volleyID: Int
     public var remainingDistance: CGFloat
 

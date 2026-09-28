@@ -28,6 +28,8 @@ it('assembles portable content from existing sources with no parallel catalog', 
   const dir = await mkdtemp(join(tmpdir(), 'liberty-line-orchestration-')); cleanup.push(dir);
   const destination = join(dir, 'bundle');
   const manifest = await prepareContent(destination);
+  for (const file of ['favicon.ico', 'favicon-16.png', 'favicon-32.png', 'favicon-48.png'])
+    expect((await readFile(join(destination, file))).length).toBeGreaterThan(0);
   expect(catalogSources).toHaveBeenCalledWith(join(art, 'LibertyLineAssets.xcassets'));
   expect(Object.keys(manifest.maps).length).toBeGreaterThan(1);
   for (const file of await readdir(join(art, 'Levels')))
@@ -38,11 +40,11 @@ it('assembles portable content from existing sources with no parallel catalog', 
     expect(JSON.parse(await readFile(join(destination, map.geometry), 'utf8')).type).toBe('FeatureCollection');
     for (const key of [...map.underlay, ...map.occlusion]) expect(manifest.images[key]).toBeDefined();
   }
-});
+}, 90000); // Includes normal Swift compilation and all-map native geometry export.
 it('fails a missing source without replacing a prior successful output', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'liberty-line-failed-build-')); cleanup.push(dir);
   const destination = join(dir, 'bundle'); await mkdir(destination); await writeFile(join(destination, 'previous'), 'unchanged');
   vi.mocked(emitImage).mockRejectedValueOnce(new Error('missing canonical source'));
   await expect(prepareContent(destination)).rejects.toThrow('missing canonical source');
   expect(await readFile(join(destination, 'previous'), 'utf8')).toBe('unchanged');
-});
+}, 90000);

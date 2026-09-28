@@ -4,6 +4,8 @@ import SwiftUI
 /// receive that same rectangle, but none can resize it through their content.
 /// In particular, removing a full-screen control must never resize/recenter
 /// the map in its parent.
+/// Keep presentations above the interface: build/upgrade menus must cover
+/// call-wave controls, including their hit targets, wherever they overlap.
 public struct LevelViewport<MapContent: View, InterfaceContent: View, PresentationContent: View>: View {
     private let size: CGSize
     private let map: MapContent

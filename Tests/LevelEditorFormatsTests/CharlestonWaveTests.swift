@@ -104,8 +104,26 @@ final class CharlestonWaveTests: XCTestCase {
             XCTAssertFalse(CallWaveButtonPosition.visiblePositions(draft.callWaveButtons,
                 forPathIndices: Set(wave.spawns.map(\.pathIndex))).isEmpty)
         }
-        XCTAssertEqual(total, 414)
+        XCTAssertEqual(total, 1219)
         XCTAssertEqual(start, 540)
         XCTAssertTrue(schedule.allWavesStarted)
+    }
+
+    func testLateColumnsApplySimultaneousPressureFromBothEntrances() throws {
+        let data = try Data(contentsOf: root.appendingPathComponent("Db/level_15_charleston.geojson"))
+        let waves = try LevelGeoJSON(data: data).collection.waves
+        let fixture = try AuthoredDatabaseFixture()
+        let regular = try XCTUnwrap(fixture.db.enemyTypeDao.getAll().first { $0.key == "redcoat_regular" })
+        XCTAssertLessThan(regular.stats.discipline, 1, "The main columns must be vulnerable to morale damage")
+        for wave in waves.dropFirst(7) {
+            let columns = wave.lines.filter { $0.foe == regular.key && $0.count >= 32 }
+            XCTAssertEqual(columns.count, 2)
+            XCTAssertEqual(Set(columns.map { $0.pathIndex % 2 }), [0, 1], "Each entrance needs artillery coverage")
+            XCTAssertEqual(columns.first?.delay, columns.last?.delay)
+            XCTAssertTrue(columns.allSatisfy { $0.every <= 0.3 })
+        }
+        let dragoons = try XCTUnwrap(fixture.db.enemyTypeDao.getAll().first { $0.key == "light_dragoon" })
+        XCTAssertTrue(dragoons.has(.rideDown), "Cavalry must still bypass melee and hero blocking")
+        XCTAssertTrue(waves.suffix(3).contains { $0.lines.contains { $0.foe == dragoons.key } })
     }
 }

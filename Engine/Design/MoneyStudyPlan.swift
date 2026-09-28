@@ -32,7 +32,9 @@ public struct MoneyStudyPlan: Sendable {
     }
 
     public init(study: AuthoredMoneyStudy, placementIndex: Int,
-                upgradePolicyIndex: Int, seed: UInt64) throws {
+                upgradePolicyIndex: Int, seed: UInt64,
+                towerLimits: GeneticTowerLimits = .init()) throws {
+        try towerLimits.validate(study: study)
         guard placementIndex >= 0, (0..<10).contains(upgradePolicyIndex) else {
             throw DbError.Db(message: "money study: unsupported placement or upgrade policy index")
         }
@@ -42,10 +44,18 @@ public struct MoneyStudyPlan: Sendable {
         var slots = Array(study.level.towerSlots.indices)
         slots.shuffle(using: &rng)
         var paths: [AuthoredMoneyStudy.TowerPath] = []
+        var kindCounts: [String: Int] = [:]
         for index in slots.indices {
             // Opening defenses must be able to fight. Family mix is a strategy
             // choice, never a requirement to buy support before defending.
-            let available = study.towerPaths.filter { index >= 3 || $0.type.levels[0].attackMode.firesProjectiles }
+            let mustChooseMajority = towerLimits.majorityKind.map {
+                slots.count / 2 + 1 - kindCounts[$0.rawValue, default: 0] >= slots.count - index
+            } ?? false
+            let available = study.towerPaths.filter { path in
+                (index >= 3 || path.type.levels[0].attackMode.firesProjectiles)
+                    && kindCounts[path.kind.rawValue, default: 0] < (towerLimits.maximumByKind[path.kind.rawValue] ?? slots.count)
+                    && (!mustChooseMajority || path.kind == towerLimits.majorityKind)
+            }
             let preferred = available.filter { path in
                 guard index < 3 else { return true }
                 let mode = path.type.levels[0].attackMode
@@ -60,7 +70,9 @@ public struct MoneyStudyPlan: Sendable {
             // opening defense when that preferred family is unavailable.
             let candidates = preferred.isEmpty ? available : preferred
             guard !candidates.isEmpty else { throw DbError.Db(message: "money study: no unlocked opening defense for plan \(placementIndex)") }
-            paths.append(candidates[Int.random(in: candidates.indices, using: &rng)])
+            let chosen = candidates[Int.random(in: candidates.indices, using: &rng)]
+            paths.append(chosen)
+            kindCounts[chosen.kind.rawValue, default: 0] += 1
         }
         // Score the routes actually used by the opening/upcoming waves; shared
         // stretches on unused alternative routes must not dominate placement.

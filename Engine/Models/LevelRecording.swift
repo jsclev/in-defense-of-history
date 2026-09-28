@@ -9,6 +9,23 @@ public enum BattleRecording {
 }
 
 enum LevelRecordingCodec {
+    // Versioned envelope; pre-envelope recordings are always LZ4.
+    private static let magic = Data("LLRC1".utf8)
+    static func decompress(_ data: Data) throws -> Data {
+        if data.starts(with: magic) {
+            guard data.count > magic.count + 1, data[magic.count] <= 1 else {
+                throw DbError.Db(message: "recording: invalid compression envelope")
+            }
+            let algorithm: NSData.CompressionAlgorithm = data[magic.count] == 1 ? .lzfse : .lz4
+            return try (Data(data.dropFirst(magic.count + 1)) as NSData).decompressed(using: algorithm) as Data
+        }
+        return try (data as NSData).decompressed(using: .lz4) as Data
+    }
+    static func decodeCanonical<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
+        let decoder = JSONDecoder()
+        decoder.nonConformingFloatDecodingStrategy = .convertFromString(positiveInfinity: "+Infinity", negativeInfinity: "-Infinity", nan: "NaN")
+        return try decoder.decode(type, from: data)
+    }
     static func encode<T: Encodable>(_ value: T) throws -> Data {
         try autoreleasepool {
             let encoder = PropertyListEncoder(); encoder.outputFormat = .binary
@@ -17,7 +34,7 @@ enum LevelRecordingCodec {
     }
     static func decode<T: Decodable>(_ type: T.Type, from data: Data) throws -> T {
         try autoreleasepool {
-            try PropertyListDecoder().decode(type, from: (data as NSData).decompressed(using: .lz4) as Data)
+            try PropertyListDecoder().decode(type, from: decompress(data))
         }
     }
     static func json<T: Encodable>(_ value: T) throws -> String {
@@ -92,6 +109,35 @@ struct LevelReplaySetup: Codable {
             elements.append(RoadElement(type: element.type.rawValue, points: (0..<count).map { element.points[$0] }))
         }
         road = elements
+    }
+
+    /// Compatibility reader for shared setup content written by CLI 1.0.205.
+    /// New recordings use the original self-contained setup above.
+    struct Content: Decodable {
+        let level: LevelInfo
+        let virtualCanvas: VirtualCanvas
+        /// Absent only in recordings made before HUD capture was introduced.
+        let hudLayout: HudLayoutConfig?
+        let towers: [Tower]
+        let enemies: [EnemyType]
+        let difficulty: Difficulty
+        let selectedMetaUpgrades: [MetaUpgrade]
+        let heroes: [Hero]
+        let heroCombat: [UUID: HeroCombatStats]
+        let reinforcementConfig: ReinforcementConfig
+        let startingMoney: Int
+        let heroesEnabled: Bool
+        let road: [RoadElement]
+        let ticksPerSecond: Int
+        let playSpeed: PlaySpeed
+    }
+    init(content: Content, seed: UInt64) {
+        level = content.level; virtualCanvas = content.virtualCanvas; hudLayout = content.hudLayout
+        towers = content.towers; enemies = content.enemies; difficulty = content.difficulty
+        selectedMetaUpgrades = content.selectedMetaUpgrades; heroes = content.heroes
+        heroCombat = content.heroCombat; reinforcementConfig = content.reinforcementConfig
+        self.seed = seed; startingMoney = content.startingMoney; heroesEnabled = content.heroesEnabled
+        road = content.road; ticksPerSecond = content.ticksPerSecond; playSpeed = content.playSpeed
     }
 
     func roadSurface() throws -> CGPath {
@@ -172,12 +218,16 @@ struct LevelReplayFrame: Codable {
 }
 
 final class LevelRunRecorder {
+    let captureCache = BattleEventCaptureCache()
     let dao: LevelRunDAO
     let id: UUID
+    let recordsEvents: Bool
     private(set) var sequence: Int64 = -1
     private var pending: [ReplayTimelineEvent] = []
     private var timeline = ReplayTimelineBuilder()
     private var pendingFrame: LevelReplayFrame?
+    private var pendingState: BattleEventState?
+    private var eventBlock: BattleEventBlock?
     private var bufferedRows: [PendingLevelAction] = []
     private var bufferedBytes = 0
     private(set) var finished = false
@@ -185,6 +235,7 @@ final class LevelRunRecorder {
 
     init(dao: LevelRunDAO, source: LevelRunSource, setup: LevelReplaySetup) throws {
         self.dao = dao
+        recordsEvents = source == .simulator
         id = try dao.begin(levelID: setup.level.id, source: source, playSpeed: setup.playSpeed, setup: LevelRecordingCodec.encode(setup))
     }
     func action(tick: Int64, category: String, name: String, payload: [String: String]) throws {
@@ -203,6 +254,7 @@ final class LevelRunRecorder {
         }
     }
     func frame(_ frame: LevelReplayFrame) throws {
+        precondition(!recordsEvents, "Simulator recordings must not capture presentation frames")
         guard !finished else { return }
         guard frame.tick >= lastTick else { throw DbError.Db(message: "level_run[\(id)]: frame time went backwards") }
         if let previous = pendingFrame, previous.tick != frame.tick {
@@ -214,6 +266,18 @@ final class LevelRunRecorder {
         // but encode only its final visible pose, as playback has always done.
         pendingFrame = frame
     }
+    func state(_ state: BattleEventState) throws {
+        precondition(recordsEvents)
+        guard !finished else { return }
+        guard state.tick >= lastTick else { throw DbError.Db(message: "level_run[\(id)]: state time went backwards") }
+        if let previous = pendingState, previous.tick != state.tick {
+            if eventBlock == nil { eventBlock = BattleEventBlock(firstTick: previous.tick) }
+            try eventBlock!.append(previous)
+            if eventBlock!.lastTick - eventBlock!.firstTick >= 255 || pending.count >= 512 { try flush() }
+        }
+        lastTick = state.tick
+        pendingState = state
+    }
     deinit {
         if !finished {
             do { try finish(status: .abandoned, tick: lastTick, result: nil) }
@@ -221,6 +285,18 @@ final class LevelRunRecorder {
         }
     }
     private func flush() throws {
+        if recordsEvents {
+            guard var block = eventBlock else { return }
+            let count = pending.prefix { $0.tick <= block.lastTick }.count
+            block.actions = Array(pending.prefix(count))
+            let data = try block.compressedData()
+            bufferedRows.append(PendingLevelAction(tick: block.lastTick, category: "event",
+                name: BattleEventBlock.rowName, payload: "{}", eventData: data))
+            bufferedBytes += data.count
+            if bufferedRows.count >= 4 || bufferedBytes >= 512 * 1024 { try persist() }
+            pending.removeFirst(count); eventBlock = nil
+            return
+        }
         guard let end = timeline.lastTick else { return }
         let count = pending.prefix { $0.tick <= end }.count
         let block = try timeline.finish(events: Array(pending.prefix(count)))
@@ -242,6 +318,10 @@ final class LevelRunRecorder {
     func finish(status: LevelRunStatus, tick: Int64, result: SimulationResult?) throws {
         guard !finished else { return }
         try action(tick: tick, category: "lifecycle", name: status.rawValue, payload: [:])
+        if let state = pendingState {
+            if eventBlock == nil { eventBlock = BattleEventBlock(firstTick: state.tick) }
+            try eventBlock!.append(state); pendingState = nil
+        }
         if let frame = pendingFrame { try timeline.append(frame); pendingFrame = nil }
         try flush()
         try persist()

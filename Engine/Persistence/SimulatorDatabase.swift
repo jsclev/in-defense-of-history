@@ -4,7 +4,7 @@ import SQLite3
 /// Creates an independent content snapshot with empty, SQL-defined result tables.
 /// Never writes to the source database or replaces an existing destination.
 public enum SimulatorDatabase {
-    private static let history: Set<String> = ["simulator_run", "sweep_row", "money_study",
+    private static let history: Set<String> = ["level_recording_content", "level_recording_reference", "level_recording_retention", "simulator_run", "sweep_row", "money_study",
         "money_study_result", "level_run", "level_action", "genetic_solution",
         "simulator_invocation", "simulator_map", "simulator_document"]
 

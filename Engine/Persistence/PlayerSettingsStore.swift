@@ -32,7 +32,7 @@ public final class PlayerSettingsStore: ObservableObject {
                 battle.setHeroAIEnabled(control.aiEnabled, for: control.id)
             }
         }
-        let battleSubscription = battle.$heroAIEnabled.sink { [weak self] modes in
+        let battleSubscription = battle.heroAIChanges.sink { [weak self] modes in
             guard !applyingSettings, let self else { return }
             writingSettings = true
             defer { writingSettings = false }

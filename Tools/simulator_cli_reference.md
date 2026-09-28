@@ -2,7 +2,7 @@
 
 ## Logging
 
-Logging is always available with the normal `~/bin/LibertyLineSimulator 15`
+Logging is always available with the normal `~/bin/LibertyLineSimulator 15 --workers 8`
 command. The CLI uses Apple's [Swift Logger API](https://developer.apple.com/documentation/os/logger)
 and unified logging, with subsystem **`com.zippyzen.td.simulator`**.
 In macOS Console, start streaming and filter for that subsystem. Enable info
@@ -42,13 +42,48 @@ These operational logs live in the macOS unified log store. Simulation results
 and checkpoints still live in the invocation's SQLite database.
 See Apple's [logging guidance](https://developer.apple.com/documentation/os/generating-log-messages-from-your-code).
 
+## GA recording storage
+
+Every candidate keeps its complete recording and evaluation evidence. New
+recordings use self-contained setup and event blocks with lossless LZ4
+compression. There are no database-size or free-space scheduling caps, replay
+pruning, shared-content writes, or automatic compaction during the search.
+The normal search time, generation, and evaluation limits still apply.
+Historical shared/LZFSE recordings from CLI 1.0.205 remain readable.
+
+## Progress estimates
+
+Terminal output and GA notice logs show estimated percent complete, elapsed
+time, estimated time remaining, the current phase, completed generations and
+battle counts. Updates occur every 15 seconds between completed work batches,
+when phases change, and whenever a 10% milestone is first observed. A slow
+in-flight battle batch can delay the next update. Milestone times record the
+first observation after a batch; they do not invent an exact crossing time.
+
+During search, progress follows whichever limit is closest: search time,
+training battle allowance, or completed generations. Search accounts for 85%
+of the indicator, validation for 14%, and saving the results for the final 1%.
+Validation uses its actual finalist/seed count and remaining time budget.
+Percentages never decrease. ETA uses observed throughput and generation timing,
+capped by the remaining wall-time budget; it can change as later battles take
+more or less time. Before measurements are available, ETA says it is estimating.
+
+100% means the run finished and saved its results. It does not imply optimality,
+a winning candidate, or a full validation panel when the budget expired early.
+Check the summary's `validationComplete` field for that last distinction.
+Failed runs retain their last percentage instead of claiming completion.
+
+The `progress.json` document in `simulator_document` stores the latest estimate
+and every milestone's elapsed time. `--runs` and `--run-status` show the same
+estimate for new GA runs; older run databases retain their existing display.
+
 ## Installation and experiments
 
 `LibertyLineSimulator` is the game's standalone macOS command-line simulator.
 It runs the shared `BattleEngine` without a graphical interface. The installer
 builds Xcode's `Simulator` target and installs it under this name.
 
-For **level 15 (Charleston)**, `LibertyLineSimulator 15` runs the genetic
+For **level 15 (Charleston)**, `LibertyLineSimulator 15 --workers 8` runs the genetic
 algorithm (GA), evaluates candidate strategies, and automatically saves the best
 plans it finds to the **`genetic_solution`** table in a **new SQLite database
 unique to that invocation**, beside `~/bin/LibertyLineSimulator`.
@@ -86,10 +121,19 @@ It installs the matching pair:
 - **`~/bin/liberty-line-simulator-<build-name>.sqlite`** — the starter database
 
 The build name is the CLI's full version, such as `1.0.165`, read directly from
-its `--version` output. Rebuilding produces a new named starter; previous starters
-and run databases are retained. The installed executable is replaced only after
-its new starter is ready. Building the starter does not rebuild or copy the live
-development database.
+its `--version` output. Every deployment first removes the installed executable
+and all previous build-named starter databases, including `-wal`, `-shm` and
+`-journal` sidecars. It then builds the executable and generates a fresh starter
+from authored SQL and maps. No previous starter content or results are imported.
+The new pair is installed only after the starter passes validation. If building
+or generation fails, the previous installation is already removed; resolve the
+reported error and deploy again.
+
+Finish active runs and close starter databases before deployment. The installer
+checks all removal targets and refuses to proceed if any are in use; it does not
+stop processes. Saved invocation databases (`*-run-*.sqlite` and their sidecars)
+and custom experiment databases are preserved. Building the starter does not
+rebuild or copy the live development database.
 
 ```sh
 SIM="$HOME/bin/LibertyLineSimulator"
@@ -115,16 +159,17 @@ the installed starter, through `LevelInfoDAO`. Charleston currently has 670 coin
 There is no hardcoded starting-money default. Omit `--starting-money` for normal
 campaign conditions; use that flag only for an intentional experiment.
 
-For normal use, only the level number is needed: `~/bin/LibertyLineSimulator 15`.
-Optional overrides can follow it. For example, to reduce CPU load and request a
+For normal use, supply the level number and required worker count:
+`~/bin/LibertyLineSimulator 15 --workers 8`. `--workers` accepts integers from
+1 to 32 and has no default. Optional overrides can follow it. For example, to reduce CPU load and request a
 shorter run:
 
 ```sh
 "$SIM" 15 --workers 2 --genetic-hours 0.25
 ```
 
-Without overrides, the GA uses up to four workers (leaving a CPU core available)
-and an eight-hour budget. This runs locally in the foreground. Keep the Mac awake and the Terminal session
+The GA uses the worker count you specify and defaults to an eight-hour budget.
+This runs locally in the foreground. Keep the Mac awake and the Terminal session
 open. At startup it prints the exact database path, for example:
 
 ```text
@@ -248,15 +293,38 @@ are saved before validation; validation candidates are saved after that phase,
 including partial panels when the normal budget expires. No manual SQL insert
 is needed. The CLI prints the published counts and the database path.
 
-The simulator **does not update `Db/DML/genetic_solutions.sql`** or the deployed
-game database. Keep the finished `.sqlite` file beside the executable (or archive
-it elsewhere) for the later import workflow. That future tool will select the
-best compatible solutions from a run database and generate the SQL seed used
-by `Db/create_db.sh`. That import command is not implemented yet.
+Studies **do not update `Db/DML/genetic_solutions.sql`** or the deployed game
+database. Keep the original run database, including failed runs with saved
+candidates. A separate offline command can recover three distinct training
+leaders and validate them for the game's preview:
+
+```sh
+"$SIM" --import-ga-solutions source-run.sqlite current-content-starter.sqlite \
+  new-validation-evidence.sqlite selected-solutions.sql
+```
+
+The current-content starter must be generated from the game's current authored
+SQL and maps using the normal starter preparation command. Import reads the
+source without changing it, ranks complete training panels with the GA's own
+fitness/tie breaker, and freezes three distinct plans before validation. It
+requires an exact content match, reproduces every saved training evaluation,
+and runs the entire recorded held-out seed panel using the shared engine.
+All new battle recordings and full results go into the new evidence database;
+the original study's failed/completed status remains unchanged. The SQL output
+is written only after all three panels finish and each plan has a victory.
+It contains the selected level's training and validation records. Merge this
+selection into the game's SQL seed while retaining other levels' records, then
+rebuild the game database with `Db/create_db.sh`.
 
 The snapshot records the battle content used by the search. Subsequent changes
 to maps, waves, costs or combat tuning can make a solution incompatible with the
-current game; the future importer must preserve and check that provenance.
+current game; the importer rejects those mismatches.
 
 See [the GA reference](genetic_simulator.md) for replay, strategy seeding,
 fitness, and meta-selection details, or run `"$SIM" --help-advanced` for all CLI flags.
+
+To audit tower diversity, run separate searches with `--max-towers areaOfEffect:1`
+and `--majority-tower ranged`, alongside an unrestricted control. These constrain
+the automated player's plans without changing game rules. Summaries include
+`builtTowersBySeed` and `winsMeetingTowerLimits`; use those actual purchases
+instead of planned tower counts when checking a winning defense's composition.

@@ -3,6 +3,33 @@ import SQLite3
 @testable import LevelEditorFormats
 
 @MainActor final class GeneticSolutionPlaybackTests: XCTestCase {
+    func testShippingCharlestonTopThreeMatchPreviewAndReplayToVictory() throws {
+        let f = try AuthoredDatabaseFixture(levelGeoJSONDao:
+            LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
+        let levelID = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let study = try AuthoredMoneyStudy(db: f.db, levelID: levelID)
+        let candidates = try f.db.geneticSolutionDao.campaignCandidates(levelID: levelID,
+            difficultyID: study.difficulty.id, startingMoney: study.level.startingMoney,
+            earnedStars: study.battle.playerUpgrades.loadout.starBudget)
+        let top = try XCTUnwrap(candidates.first)
+        let selected = try GeneticSolutionPlayback.best(db: f.db,
+            levelID: levelID, difficultyID: study.difficulty.id, limit: 3)
+        XCTAssertEqual(selected.count, 3)
+        XCTAssertEqual(selected.first?.runID, top.runID)
+        XCTAssertEqual(selected.first?.candidate.id, top.candidate.id)
+        XCTAssertEqual(Set(selected.map { $0.candidate.id }).count, 3)
+        for solution in selected {
+            XCTAssertTrue(solution.validationComplete)
+            XCTAssertEqual(solution.expectedSamples, 64)
+            let player = try GeneticSolutionPlayback(solution: solution, db: f.db)
+            player.setSpeed(try PlaySpeed(8))
+            while !player.isFinished { try player.advance(wallSeconds: 0.19) }
+            XCTAssertEqual(player.engine.outcome, .victory)
+            XCTAssertEqual(player.engine.simulationResult(), player.expected.result)
+            print("Shipping Charleston preview verified: run \(solution.runID), candidate \(solution.candidate.id), seed \(player.expected.seed), lives \(player.expected.result.livesRemaining)")
+        }
+    }
+
     private func execute(_ sql: String, _ f: AuthoredDatabaseFixture) throws {
         guard sqlite3_exec(f.connection, sql, nil, nil, nil) == SQLITE_OK else {
             throw DbError.Db(message: String(cString: sqlite3_errmsg(f.connection)))

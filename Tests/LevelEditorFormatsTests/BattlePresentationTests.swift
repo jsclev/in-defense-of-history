@@ -100,10 +100,14 @@ final class BattlePresentationTests: XCTestCase {
         let root = URL(fileURLWithPath: #filePath).deletingLastPathComponent()
             .deletingLastPathComponent().deletingLastPathComponent()
         for path in ["Liberty Line/Level Views/LevelMapView.swift",
+                     "Liberty Line/Level Views/LevelScene.swift",
                      "Liberty Line/Level Views/TowerDemonstrationPage.swift",
                      "Liberty Line/Level Views/MoraleDeviceReview.swift"] {
             let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
-            XCTAssertTrue(source.contains("GroundTroopLayer(presentation:"), path)
+            let rendering = path.hasSuffix("LevelMapView.swift")
+                ? "LevelScene(setup: runner.sceneSetup, state: LevelSceneState(engine: runner)"
+                : "GroundTroopLayer(presentation:"
+            XCTAssertTrue(source.contains(rendering), path)
             for forbidden in ["EnemyMoraleSprite(", "UnitHealthBar(", "drawUnits(", "enemy.hp /", "walker.hp /",
                               "enemy.morale.remainingFraction", "point(atDistance:"] {
                 XCTAssertFalse(source.contains(forbidden), "\(path) bypasses shared presentation: \(forbidden)")

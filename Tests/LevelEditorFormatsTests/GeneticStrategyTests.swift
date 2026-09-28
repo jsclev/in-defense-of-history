@@ -177,6 +177,36 @@ final class GeneticStrategyTests: XCTestCase {
         XCTAssertEqual(purchases.events.count, 6, "Completed purchases must not be repeated")
     }
 
+    @MainActor func testIdlePurchasesWakeOnExactScheduledTickAndChangedIncome() throws {
+        let fixture = try fixture(), study = try study(fixture)
+        let path = try XCTUnwrap(study.towerPaths.first { $0.kind == .ranged })
+        let sim = try GameSimulation(recording: .preview, content: study.battle,
+            startingMoney: 0, heroesEnabled: false, seed: 95)
+        let cost = try XCTUnwrap(sim.buildOffers.first { $0.kind == .ranged }).cost
+        let scheduled = 0.137 // Deliberately between simulation ticks.
+        let strategy = GeneticStrategy(decisions: [
+            .init(step: .init(time: 0, action: .build(slot: 0, towerID: path.type.id)), saveForPurchase: true),
+            .init(step: .init(time: scheduled, action: .build(slot: 1, towerID: path.type.id)))
+        ], metaProgression: try AuthoredDatabaseFixture.metaProgression(Array(study.battle.playerUpgrades.loadout.selected)))
+        var commander = GeneticCommander(strategy)
+        try commander.tick(sim: sim)
+        try commander.tick(sim: sim)
+        XCTAssertTrue(sim.towers.isEmpty)
+        sim.engine.money = cost * 2
+        try commander.tick(sim: sim)
+        XCTAssertEqual(sim.towers.map(\.slot), [0], "New income must wake the saving order immediately")
+        while sim.time < scheduled {
+            try commander.tick(sim: sim)
+            XCTAssertEqual(sim.towers.count, 1)
+            sim.step()
+        }
+        try commander.tick(sim: sim)
+        XCTAssertEqual(sim.towers.map(\.slot), [0, 1], "Time gates must wake on their first eligible tick")
+        XCTAssertEqual(sim.gold, 0)
+        for _ in 0..<5 { sim.step(); try commander.tick(sim: sim) }
+        XCTAssertEqual(sim.towers.count, 2)
+    }
+
     @MainActor func testDuplicateMetaGenesCannotConstructStrategyDNA() throws {
         let fixture = try fixture(), study = try study(fixture)
         let upgrade = try XCTUnwrap(study.battle.playerUpgrades.loadout.selected.first)

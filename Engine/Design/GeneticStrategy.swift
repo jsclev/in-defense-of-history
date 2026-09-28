@@ -188,6 +188,8 @@ public struct GeneticStrategy: Codable, Equatable, Sendable {
 /// discounted or cashed out as a win, and leftover money cannot outweigh victory.
 public struct GeneticEvaluation: Codable, Sendable, Equatable {
     public var runID: UUID? = nil
+    /// Engine-observed final purchases. Nil identifies older recorded evidence.
+    public var builtTowersByKind: [String: Int]? = nil
     public let seed: UInt64
     public let result: SimulationResult
     public let wavesStarted: Int
@@ -238,6 +240,9 @@ public struct GeneticCommander {
     // Player policy: after a needGold response, wait for a changed balance or a
     // successful purchase before trying again. Never calculate affordability.
     private var purchases = 0
+    private var purchaseMoney: Int?
+    private var purchaseWave: Int?
+    private var nextPurchaseTime = -Double.infinity
     private var reinforcements: ReinforcementCommander
     private var earlyWaves: EarlyWaveCommander
     public init(_ strategy: GeneticStrategy) {
@@ -255,27 +260,35 @@ public struct GeneticCommander {
             }
             checkedMetaUpgrades = true
         }
-        pending.beginTick()
-        while let index = pending.pop() {
-            let decision = pending.decisions[index]
-            guard decision.step.time <= sim.time, decision.earliestWave <= sim.currentWave else { continue }
-            let slot = pending.slots[index]
-            let result: BuildResult
-            if let waiting = pending.waiting[slot], waiting.money == sim.gold, waiting.purchases == purchases {
-                // Reuse the engine's previous needGold response until money or
-                // a completed purchase changes. No price rule is duplicated.
-                if decision.saveForPurchase { break }
-                continue
-            } else { result = sim.execute(decision.step.action) }
-            switch result {
-            case .ok:
-                pending.complete(index); purchases += 1
-            case .needGold:
-                pending.waiting[slot] = (sim.gold, purchases)
-            case .invalid:
-                throw DbError.Db(message: "Engine rejected genetic command: \(decision.step.action)")
+        if purchaseMoney != sim.gold || purchaseWave != sim.currentWave || sim.time >= nextPurchaseTime {
+            let previousPurchases = purchases
+            pending.beginTick()
+            while let index = pending.pop() {
+                let decision = pending.decisions[index]
+                guard decision.step.time <= sim.time, decision.earliestWave <= sim.currentWave else { continue }
+                let slot = pending.slots[index]
+                let result: BuildResult
+                if let waiting = pending.waiting[slot], waiting.money == sim.gold, waiting.purchases == purchases {
+                    // Reuse the engine's previous needGold response until money or
+                    // a completed purchase changes. No price rule is duplicated.
+                    if decision.saveForPurchase { break }
+                    continue
+                } else { result = sim.execute(decision.step.action) }
+                switch result {
+                case .ok:
+                    pending.complete(index); purchases += 1
+                case .needGold:
+                    pending.waiting[slot] = (sim.gold, purchases)
+                case .invalid:
+                    throw DbError.Db(message: "Engine rejected genetic command: \(decision.step.action)")
+                }
+                if result == .needGold && decision.saveForPurchase { break }
             }
-            if result == .needGold && decision.saveForPurchase { break }
+            // A later purchase may unblock an earlier order on the next tick,
+            // even when its price was zero. Otherwise only observed money,
+            // wave and time gates can change the pending commands' eligibility.
+            purchaseMoney = sim.gold; purchaseWave = sim.currentWave
+            nextPurchaseTime = purchases == previousPurchases ? pending.nextTime(after: sim.time) : -.infinity
         }
         finishInputs(sim: sim)
         try reinforcements.tick(sim: sim)
@@ -313,6 +326,7 @@ public struct GeneticCommander {
         var evaluation = GeneticEvaluation(seed: seed, result: outcome, wavesStarted: sim.currentWave, waveEconomy: economy,
                                  reinforcementDeployments: sim.reinforcementDeployments, waveCalls: sim.waveCalls)
         evaluation.runID = sim.runID
+        evaluation.builtTowersByKind = Dictionary(grouping: sim.towers, by: { $0.kind.rawValue }).mapValues(\.count)
         completed = true
         return evaluation
     }
@@ -347,6 +361,14 @@ private struct GeneticPurchaseCursor {
         self.slots = slots; self.next = next; self.heads = heads
         waiting = Array(repeating: nil, count: heads.count)
         heap.reserveCapacity(heads.count)
+    }
+    func nextTime(after time: Double) -> Double {
+        var result = Double.infinity
+        for head in heads where head >= 0 {
+            let scheduled = decisions[head].step.time
+            if scheduled > time { result = min(result, scheduled) }
+        }
+        return result
     }
     mutating func beginTick() {
         heap.removeAll(keepingCapacity: true)

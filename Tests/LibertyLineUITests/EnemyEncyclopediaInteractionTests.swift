@@ -19,6 +19,16 @@ final class EnemyEncyclopediaInteractionTests: XCTestCase {
             attachment.name = name; attachment.lifetime = .keepAlways
             add(attachment)
         }
+        XCTAssertFalse(app.staticTexts["Enemies"].exists)
+        let roster = app.scrollViews["enemy-encyclopedia-list"]
+        let first = app.buttons["enemy-entry-loyalist_militia"].frame
+        let second = app.buttons["enemy-entry-regimental_drummer"].frame
+        let third = app.buttons["enemy-entry-redcoat_regular"].frame
+        XCTAssertEqual(first.minY, second.minY, accuracy: 1)
+        XCTAssertGreaterThan(second.minX, first.minX)
+        XCTAssertEqual(first.minX, third.minX, accuracy: 1)
+        XCTAssertGreaterThan(third.minY, first.minY)
+        XCTAssertFalse(app.buttons["enemy-entry-foot_guards"].isHittable)
         for key in keys {
             let list = app.scrollViews["enemy-encyclopedia-list"]
             let row = app.buttons["enemy-entry-\(key)"]
@@ -30,6 +40,14 @@ final class EnemyEncyclopediaInteractionTests: XCTestCase {
             XCTAssertGreaterThanOrEqual(row.frame.height, 44)
             let name = row.label
             row.tap()
+            XCTAssertTrue(row.isSelected)
+            XCTAssertTrue(roster.exists)
+            let pages = app.descendants(matching: .any)["enemy-encyclopedia-pages"].firstMatch
+            XCTAssertGreaterThan(pages.frame.minX, roster.frame.maxX)
+            let heading = app.staticTexts["enemy-detail-name"]
+            XCTAssertEqual(heading.label, name)
+            XCTAssertLessThan(heading.frame.maxY, pages.frame.minY)
+            XCTAssertEqual(roster.staticTexts.count, 0, "Enemy roster tiles contain artwork only")
             let animation = app.otherElements["enemy-demonstration-animation"]
             XCTAssertTrue(animation.waitForExistence(timeout: 5), key)
             capture(key + "-demonstration")

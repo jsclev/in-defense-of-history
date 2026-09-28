@@ -2,6 +2,7 @@ import XCTest
 import SQLite3
 @testable import LevelEditorFormats
 
+/// Compatibility coverage for existing player/editor presentation timelines.
 final class CompactRecordingTests: XCTestCase {
     private func fixture() throws -> AuthoredDatabaseFixture {
         try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
@@ -27,7 +28,7 @@ final class CompactRecordingTests: XCTestCase {
         var level = BattleTestFixture.level(enemy: enemy, slots: [])
         level.paths = [Path(points: [Point(0, 0), Point(100, 0), Point(100, 200), Point(4000, 200)])]
         let content = try BattleTestFixture.content(level: level, enemies: [enemy], base: base)
-        let sim = try GameSimulation(recording: .database(dao, .simulator), content: content,
+        let sim = try GameSimulation(recording: .database(dao, .player), content: content,
             startingMoney: nil, heroesEnabled: false, seed: 12)
         sim.startNextWave()
         var expected = [try bytes(LevelReplayFrame(sim.engine))]
@@ -93,7 +94,7 @@ final class CompactRecordingTests: XCTestCase {
         var rowCounts: [Int] = [], byteCounts: [Int] = []
         var reference: [CGPoint]?
         for factor in [1.0, 2.0, 1_000_000_000.0] {
-            let sim = try GameSimulation(recording: .database(dao, .simulator), content: content, playSpeed: PlaySpeed(factor),
+            let sim = try GameSimulation(recording: .database(dao, .player), content: content, playSpeed: PlaySpeed(factor),
                 startingMoney: nil, heroesEnabled: false, seed: 34)
             sim.startNextWave()
             for _ in 0..<300 { sim.step() }
@@ -137,7 +138,7 @@ final class CompactRecordingTests: XCTestCase {
     @MainActor func testCombatHeroesAndReinforcementsReplayExactlyAcrossBlocks() throws {
         let fixture = try fixture(), dao = fixture.db.levelRunDao
         let content = try BattleTestFixture.authored(db: fixture.db)
-        let sim = try GameSimulation(recording: .database(dao, .simulator), content: content,
+        let sim = try GameSimulation(recording: .database(dao, .player), content: content,
             startingMoney: 100_000, heroesEnabled: true, seed: 91)
         for (slot, offer) in sim.buildOffers.enumerated() {
             XCTAssertEqual(sim.perform(.build(slot: slot, kind: offer.kind)), .ok)
@@ -179,7 +180,7 @@ final class CompactRecordingTests: XCTestCase {
 
     @MainActor func testManySameTickInputsRemainOrderedWithoutRepeatedSnapshots() throws {
         let fixture = try fixture(), dao = fixture.db.levelRunDao
-        let sim = try GameSimulation(recording: .database(dao, .simulator), content: BattleTestFixture.authored(db: fixture.db),
+        let sim = try GameSimulation(recording: .database(dao, .player), content: BattleTestFixture.authored(db: fixture.db),
             startingMoney: 1, heroesEnabled: false, seed: 92)
         for _ in 0..<600 { XCTAssertEqual(sim.perform(.build(slot: 0, kind: .ranged)), .needGold) }
         sim.step(); sim.finishRecording(status: .timeout)
@@ -235,14 +236,14 @@ final class CompactRecordingTests: XCTestCase {
         var level = BattleTestFixture.level(enemy: enemy, slots: [])
         level.paths = [Path(points: [Point(0, 0), Point(4000, 0)])]
         let content = try BattleTestFixture.content(level: level, enemies: [enemy], base: base)
-        let sim = try GameSimulation(recording: .database(dao, .simulator), content: content,
+        let sim = try GameSimulation(recording: .database(dao, .player), content: content,
             startingMoney: nil, heroesEnabled: false, seed: 93)
         sim.startNextWave()
         for _ in 0..<900 { sim.step() }
         sim.finishRecording(status: .timeout)
         let id = try XCTUnwrap(sim.runID), saved = try rows(dao, id)
         XCTAssertEqual(saved.count, 5, "Start row plus four complete timeline blocks")
-        XCTAssertEqual(counter.begins, 2, "Start transaction plus one four-block batch")
+        XCTAssertEqual(counter.begins, 2, "Start row and one four-block batch")
         let replay = try LevelReplayer(dao: dao, runID: id)
         var count = 0
         while try replay.advance() { count += 1 }
@@ -252,7 +253,7 @@ final class CompactRecordingTests: XCTestCase {
 
     @MainActor func testCachedTowerContentChangesWithinARecordingBlock() throws {
         let fixture = try fixture(), dao = fixture.db.levelRunDao
-        let sim = try GameSimulation(recording: .database(dao, .simulator), content: BattleTestFixture.authored(db: fixture.db),
+        let sim = try GameSimulation(recording: .database(dao, .player), content: BattleTestFixture.authored(db: fixture.db),
             startingMoney: 100_000, heroesEnabled: false, seed: 94)
         XCTAssertEqual(sim.perform(.build(slot: 0, kind: .ranged)), .ok)
         sim.startNextWave()

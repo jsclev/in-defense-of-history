@@ -1,0 +1,43 @@
+import { expect, it } from 'vitest';
+import { BattleClock, fireTicks, ReinforcementSchedule, ticks, WaveSchedule } from '../src/game/schedules';
+import type { Wave } from '../src/data/contracts';
+const wave = (delay: number, countdown: number, bonus: number) => ({ call_button_delay: delay, auto_start_countdown: countdown, early_call_bonus: bonus } as Wave);
+it('retains bounded catch-up, preserves fractional speed changes and discards paused wall time', () => {
+  let now = 0; const clock = new BattleClock(1, () => now);
+  now = 50; expect(clock.due()).toBe(1); expect(clock.alpha).toBeCloseTo(.5); clock.tick++;
+  expect(clock.setSpeed(2)).toBe(true); expect(clock.alpha).toBeCloseTo(.5);
+  now += 10; expect(clock.due()).toBe(1); clock.tick++;
+  now += 1000; expect(clock.due()).toBe(8); clock.tick += 8; expect(clock.due()).toBe(8);
+  clock.resync(); expect(clock.due()).toBe(0);
+  expect(clock.setSpeed(1e9)).toBe(true); now += 10000; expect(clock.due()).toBe(8);
+  expect(clock.setSpeed(1)).toBe(true); expect(clock.due()).toBe(0);
+  for (const invalid of [NaN, Infinity, 0, .009, 1e9 + 1]) expect(clock.setSpeed(invalid)).toBe(false);
+  now -= 100; expect(clock.due()).toBe(0); expect(clock.alpha).toBeGreaterThanOrEqual(0);
+  expect(fireTicks(0)).toBe(1); expect(fireTicks(.05)).toBe(2); expect(ticks(.001)).toBe(1);
+});
+it('requires persistent same-entrance confirmation, handles reveal/automatic boundaries, and rewards each early call once', () => {
+  const schedule = new WaveSchedule([wave(99, 99, 500), wave(1.01, 2.01, 17), wave(0, 0, 21)]);
+  const a = { x: 1, y: 2 }, b = { x: 3, y: 4 };
+  expect(schedule.state(99999)).toEqual({ kind: 'manual', seconds: null });
+  expect(schedule.start(100, false)).toBeNull();
+  expect(schedule.tap(a, 100)).toBeNull(); expect(schedule.tap(b, 10000)).toBeNull();
+  expect(schedule.tap(b, 10000)!.bonus).toBe(0);
+  expect(schedule.tap(a, 10030)).toBeNull(); expect(schedule.selected).toBeNull();
+  expect(schedule.state(10031)).toEqual({ kind: 'countdown', seconds: 3 });
+  expect(schedule.start(10031, false)).toBeNull();
+  expect(schedule.tap(a, 10031)).toBeNull(); expect(schedule.tap(a, 10032)!.bonus).toBe(17);
+  expect(schedule.state(10032).kind).toBe('due'); expect(schedule.start(10032, true)).toBeNull();
+  expect(schedule.start(10032, false)!.bonus).toBe(0);
+  expect(schedule.state(1e6).kind).toBe('finished'); expect(schedule.start(1e6, false)).toBeNull();
+});
+it('starts cooldown on successful placement and expires independent, potentially overlapping squads', () => {
+  const schedule = new ReinforcementSchedule({ id: 1, time_to_live_seconds: 2.01, cooldown_seconds: .01 });
+  expect(schedule.cooldown(0)).toEqual({ seconds: 0, fraction: 0 });
+  expect(schedule.deploy(-1, 0)).toBe(true); expect(schedule.deploy(-2, 0)).toBe(false);
+  expect(schedule.cooldown(0)).toEqual({ seconds: 1, fraction: 1 });
+  expect(schedule.deploy(-1, 1)).toBe(false); expect(schedule.deploy(-2, 1)).toBe(true);
+  expect(schedule.expire(60)).toEqual([]); expect(schedule.expire(61)).toEqual([-1]);
+  expect(schedule.expire(62)).toEqual([-2]); expect(schedule.expire(1e6)).toEqual([]);
+  const longer = new ReinforcementSchedule({ id: 1, time_to_live_seconds: 1, cooldown_seconds: 2 });
+  longer.deploy(-1, 0); expect(longer.expire(30)).toEqual([-1]); expect(longer.cooldown(30)).toEqual({ seconds: 1, fraction: .5 });
+});

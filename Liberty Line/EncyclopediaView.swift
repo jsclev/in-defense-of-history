@@ -171,7 +171,6 @@ private struct TowerEncyclopediaView: View {
     @State private var familyID: UUID
     @State private var tierID: UUID
     @State private var detailPage = 0
-    @State private var showingDetails = false
     @State private var reviewElapsed: Double?
     @State private var reviewSceneFrame = CGRect.zero
     #if DEBUG
@@ -182,9 +181,6 @@ private struct TowerEncyclopediaView: View {
     @State private var reviewContentFrame = CGRect.zero
     #endif
 
-    private static let ink = Color(red: 0.22, green: 0.12, blue: 0.055)
-    private static let paper = Color(red: 0.97, green: 0.88, blue: 0.66)
-    private static let gold = Color(red: 0.48, green: 0.23, blue: 0.07)
 
     init(arsenal: DesignArsenal, demonstrations: TowerDemonstrationCatalog, runtimeCanvas: RuntimeCanvas,
          onExit: @escaping () -> Void) {
@@ -199,10 +195,6 @@ private struct TowerEncyclopediaView: View {
                 fatalError("tower_type[\(kind.rawValue)]: missing encyclopedia family")
             }
             return definition
-        }
-        guard families.count == TowerEncyclopediaLayout.rows,
-              families.allSatisfy({ $0.tiers.count <= TowerEncyclopediaLayout.columns }) else {
-            fatalError("tower_type.level_layout: encyclopedia requires five families with at most six entries each")
         }
         self.families = families
         // DAO validation guarantees every family has a first tier.
@@ -231,67 +223,14 @@ private struct TowerEncyclopediaView: View {
     }
 
     var body: some View {
-        let layout = TowerEncyclopediaLayout(runtimeCanvas: runtimeCanvas, doneAspect: DoneButton.aspect)
-        let scale = layout.typeScale
-        ZStack(alignment: .topLeading) {
-            Image(uiImage: DemonstrationArtwork.image("tower_encyclopedia_background"))
-                .resizable().interpolation(.high)
-                .frame(width: layout.backgroundFrame.width, height: layout.backgroundFrame.height)
-                .position(x: layout.backgroundFrame.midX, y: layout.backgroundFrame.midY)
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
-
-            Image(uiImage: DemonstrationArtwork.image("tower_encyclopedia_scroll"))
-                .resizable().interpolation(.high)
-                .frame(width: layout.scrollFrame.width, height: layout.scrollFrame.height)
-                .position(x: layout.scrollFrame.midX, y: layout.scrollFrame.midY)
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
-
-            if showingDetails {
-                detailPages(scale: scale)
-                    .foregroundStyle(Self.ink)
-                    .frame(width: layout.detailFrame.width, height: layout.detailFrame.height)
-                    .position(x: layout.detailFrame.midX, y: layout.detailFrame.midY)
-                    .accessibilityIdentifier("tower-encyclopedia-details-screen")
-
-                Text(tier.details.name)
-                    .font(.custom("Baskerville-Bold", size: 23 * scale))
-                    .foregroundStyle(Self.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                    .frame(width: layout.titleFrame.width, height: layout.titleFrame.height)
-                    .position(x: layout.titleFrame.midX, y: layout.titleFrame.midY)
-                    .accessibilityAddTraits(.isHeader)
-                    .accessibilityIdentifier("tower-selection-name")
-
-                Button {
-                    showingDetails = false
-                } label: {
-                    Image(systemName: "arrow.left")
-                        .font(.system(size: 25 * scale, weight: .bold))
-                        .foregroundStyle(Self.ink)
-                        .frame(width: layout.backFrame.width, height: layout.backFrame.height)
-                        .background(Self.paper, in: Circle())
-                        .overlay { Circle().strokeBorder(Self.gold, lineWidth: 2 * scale) }
-                        .contentShape(Circle())
-                }
-                .buttonStyle(EncyclopediaButtonStyle())
-                .position(x: layout.backFrame.midX, y: layout.backFrame.midY)
-                .accessibilityLabel("Back to towers")
-                .accessibilityIdentifier("tower-encyclopedia-back")
-            } else {
-                towerGrid(cellSize: layout.cellSize, iconSide: layout.iconSide, gap: layout.gridGap, scale: scale)
-                    .frame(width: layout.gridFrame.width, height: layout.gridFrame.height)
-                    .position(x: layout.gridFrame.midX, y: layout.gridFrame.midY)
-
-                DoneButton(runtimeCanvas: runtimeCanvas, action: onExit, frame: layout.doneFrame)
-            }
+        EncyclopediaScreen(runtimeCanvas: runtimeCanvas, selectionTitle: tier.details.name,
+                           titleIdentifier: "tower-selection-name", onExit: onExit) { layout in
+            towerGrid(cellSize: layout.cellSize, iconSide: layout.iconSide,
+                      gap: layout.gridGap, scale: layout.typeScale)
+        } details: { layout in
+            detailPages(scale: layout.typeScale)
+                .accessibilityIdentifier("tower-encyclopedia-details-screen")
         }
-        .frame(width: runtimeCanvas.physicalRect.width, height: runtimeCanvas.physicalRect.height,
-               alignment: .topLeading)
-        .ignoresSafeArea()
-        .persistentSystemOverlays(.hidden)
         .onChange(of: tierID) { _, _ in detailPage = 0 }
         #if DEBUG
         .task { await captureDeviceReview() }
@@ -306,7 +245,7 @@ private struct TowerEncyclopediaView: View {
                     .id(tierID)
                     .aspectRatio(demonstration.bounds.width / demonstration.bounds.height, contentMode: .fit)
                     .overlay {
-                        Rectangle().strokeBorder(Self.gold, lineWidth: 1.5 * scale)
+                        Rectangle().strokeBorder(EncyclopediaStyle.accent, lineWidth: 1.5 * scale)
                             .allowsHitTesting(false)
                             .accessibilityHidden(true)
                     }
@@ -318,59 +257,50 @@ private struct TowerEncyclopediaView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .accessibilityIdentifier("tower-encyclopedia-pages")
             EncyclopediaCarouselIndicators(selection: $detailPage, detailTitle: "Stats",
-                scale: scale, ink: Self.ink, accent: Self.gold, identifierPrefix: "tower-encyclopedia")
+                scale: scale, ink: EncyclopediaStyle.ink, accent: EncyclopediaStyle.accent, identifierPrefix: "tower-encyclopedia")
         }
-        .background(Self.paper.opacity(0.24), in: RoundedRectangle(cornerRadius: 8))
-        .clipShape(RoundedRectangle(cornerRadius: 8))
         #if DEBUG
         .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { reviewContentFrame = $0 }
         #endif
     }
 
     private func towerGrid(cellSize: CGSize, iconSide: CGFloat, gap: CGFloat, scale: CGFloat) -> some View {
-        Grid(horizontalSpacing: gap, verticalSpacing: gap) {
-            ForEach(families, id: \.id) { definition in
-                GridRow {
-                    ForEach(0..<TowerEncyclopediaLayout.columns, id: \.self) { column in
-                        if column < definition.tiers.count {
-                            towerButton(definition.tiers[column], family: definition, cellSize: cellSize,
-                                        iconSide: iconSide, scale: scale)
-                        } else {
-                            // An unauthored position is empty, never a fabricated tower.
-                            Color.clear.frame(width: cellSize.width, height: cellSize.height)
-                                .accessibilityHidden(true)
+        ScrollViewReader { proxy in
+            ScrollView(.vertical) {
+                VStack(spacing: 12 * scale) {
+                    // Pair families across the page; levels descend within each
+                    // column, followed by the next pair of authored families.
+                    ForEach(Array(stride(from: 0, to: families.count, by: TowerEncyclopediaLayout.columns)), id: \.self) { start in
+                        HStack(alignment: .top, spacing: gap) {
+                            ForEach(families[start..<min(start + TowerEncyclopediaLayout.columns, families.count)], id: \.id) { definition in
+                                VStack(spacing: gap) {
+                                    ForEach(definition.tiers, id: \.id) { entry in
+                                        towerButton(entry, family: definition, cellSize: cellSize,
+                                                    iconSide: iconSide, scale: scale)
+                                            .id(entry.id)
+                                    }
+                                }
+                            }
+                            if start + 1 == families.count {
+                                Color.clear.frame(width: cellSize.width, height: cellSize.height)
+                                    .accessibilityHidden(true)
+                            }
                         }
                     }
                 }
             }
-        }
-        .overlay {
-            // Draw each shared boundary once, without separate button rims.
-            GeometryReader { geometry in
-                SwiftUI.Path { path in
-                    for column in 1..<TowerEncyclopediaLayout.columns {
-                        let x = CGFloat(column) * cellSize.width
-                        path.move(to: CGPoint(x: x, y: 0))
-                        path.addLine(to: CGPoint(x: x, y: geometry.size.height))
-                    }
-                    for row in 1..<families.count {
-                        let y = CGFloat(row) * cellSize.height
-                        path.move(to: CGPoint(x: 0, y: y))
-                        path.addLine(to: CGPoint(x: geometry.size.width, y: y))
-                    }
+            .accessibilityLabel("All towers")
+            .accessibilityIdentifier("tower-encyclopedia-grid")
+            #if DEBUG
+            .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { reviewListFrame = $0 }
+            .onChange(of: tierID) { _, id in
+                if CommandLine.arguments.contains("--tower-encyclopedia-review") ||
+                    CommandLine.arguments.contains("--tower-demo-review") {
+                    proxy.scrollTo(id, anchor: .center)
                 }
-                .stroke(Self.ink.opacity(0.8), lineWidth: 1.25 * scale)
-                Rectangle().strokeBorder(Self.ink.opacity(0.8), lineWidth: 1.25 * scale)
             }
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
+            #endif
         }
-        .accessibilityElement(children: .contain)
-        .accessibilityLabel("All towers")
-        .accessibilityIdentifier("tower-encyclopedia-grid")
-        #if DEBUG
-        .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { reviewListFrame = $0 }
-        #endif
     }
 
     private func towerButton(_ entry: DesignArsenal.Tier, family definition: DesignArsenal.Definition,
@@ -384,16 +314,16 @@ private struct TowerEncyclopediaView: View {
             detailPage = 0
             familyID = definition.id
             tierID = entry.id
-            showingDetails = true
         } label: {
             ZStack {
                 EncyclopediaTowerCellBackground(kind: definition.kind, level: entry.level)
                 Image(uiImage: artwork)
                     .resizable().interpolation(.high).scaledToFit()
                     .frame(width: iconSide, height: iconSide)
+                Rectangle().strokeBorder(EncyclopediaStyle.ink.opacity(0.65), lineWidth: 0.75 * scale)
                 if selected {
                     Rectangle()
-                        .strokeBorder(Color(red: 1, green: 0.77, blue: 0.20), lineWidth: 2.5 * scale)
+                        .strokeBorder(EncyclopediaStyle.selection, lineWidth: 2.5 * scale)
                         .padding(1.25 * scale)
                 }
             }
@@ -423,7 +353,7 @@ private struct TowerEncyclopediaView: View {
             VStack(alignment: .leading, spacing: 16 * scale) {
                 Text("\(tier.level == 1 ? "Build" : "Upgrade") cost: \(tier.tuning.cost) coins")
                     .font(.system(size: 15 * scale, weight: .semibold))
-                    .foregroundStyle(Self.gold)
+                    .foregroundStyle(EncyclopediaStyle.accent)
                     .accessibilityIdentifier("tower-stat-cost")
                 baseStats(scale: scale)
 
@@ -455,14 +385,14 @@ private struct TowerEncyclopediaView: View {
         .scrollIndicatorsFlash(onAppear: true)
         .accessibilityIdentifier("tower-encyclopedia-detail")
         .clipped()
-        .background(Self.paper.opacity(0.24), in: RoundedRectangle(cornerRadius: 8))
+        .background(EncyclopediaStyle.paper.opacity(0.24), in: RoundedRectangle(cornerRadius: 8))
     }
 
     private func baseStats(scale: CGFloat) -> some View {
         VStack(alignment: .leading, spacing: 8 * scale) {
             ForEach(TowerEncyclopediaStat.values(for: tier.tuning)) { stat in
                 HStack(alignment: .firstTextBaseline, spacing: 12) {
-                    Text(stat.label).foregroundStyle(Self.ink.opacity(0.85))
+                    Text(stat.label).foregroundStyle(EncyclopediaStyle.ink.opacity(0.85))
                     Spacer(minLength: 6)
                     Text(stat.value).fontWeight(.semibold).monospacedDigit()
                 }
@@ -472,7 +402,7 @@ private struct TowerEncyclopediaView: View {
             }
             Text("Before optional upgrades and support bonuses. Distances use map units.")
                 .font(.system(size: 12 * scale))
-                .foregroundStyle(Self.ink.opacity(0.7))
+                .foregroundStyle(EncyclopediaStyle.ink.opacity(0.7))
         }
     }
 
@@ -507,7 +437,7 @@ private struct TowerEncyclopediaView: View {
                     .frame(minHeight: 44 * scale, alignment: .leading)
                     .contentShape(Rectangle())
                 }
-                .foregroundStyle(Self.gold)
+                .foregroundStyle(EncyclopediaStyle.accent)
                 .padding(.top, 12 * scale)
                 .accessibilityLabel("Historical source: \(tier.history.sourceTitle)")
                 .accessibilityHint("Opens the source website")
@@ -529,7 +459,7 @@ private struct TowerEncyclopediaView: View {
     private func sectionTitle(_ title: String, scale: CGFloat) -> some View {
         Text(title)
             .font(.custom("Baskerville-Bold", size: 20 * scale))
-            .foregroundStyle(Self.gold)
+            .foregroundStyle(EncyclopediaStyle.accent)
             .accessibilityAddTraits(.isHeader)
     }
 
@@ -543,7 +473,7 @@ private struct TowerEncyclopediaView: View {
                 VStack(alignment: .leading, spacing: 3 * scale) {
                     Text("Rank \(rank.rank) · \(rank.cost) coins")
                         .font(.system(size: 13 * scale, weight: .semibold))
-                        .foregroundStyle(Self.gold)
+                        .foregroundStyle(EncyclopediaStyle.accent)
                     Text(rank.description)
                         .font(.system(size: 15 * scale))
                         .fixedSize(horizontal: false, vertical: true)
@@ -553,7 +483,7 @@ private struct TowerEncyclopediaView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12 * scale)
-        .background(Self.ink.opacity(0.06), in: RoundedRectangle(cornerRadius: 8))
+        .background(EncyclopediaStyle.ink.opacity(0.06), in: RoundedRectangle(cornerRadius: 8))
     }
 
     #if DEBUG
@@ -614,7 +544,6 @@ private struct TowerEncyclopediaView: View {
                 try png.write(to: directory.appendingPathComponent(filename))
             }
             try capture("tower-list.png")
-            showingDetails = true
             for definition in families {
                 if supplyReview && definition.kind != .supply { continue }
                 if comparisonReview && definition.kind != .ranged { continue }
@@ -654,11 +583,11 @@ private struct TowerEncyclopediaView: View {
                         throw NSError(domain: "TowerEncyclopediaReview", code: 7,
                                       userInfo: [NSLocalizedDescriptionKey: "Tower encyclopedia extends outside the authored play area"])
                     }
-                    guard families.flatMap(\.tiers).allSatisfy({ entry in
-                        guard let frame = reviewRowFrames[entry.id] else { return false }
-                        return frame.width >= TouchTarget.minimum && frame.height >= TouchTarget.minimum
-                            && reviewListFrame.insetBy(dx: -0.5, dy: -0.5).contains(frame)
-                    }) else {
+                    guard let selectedFrame = reviewRowFrames[entry.id],
+                          selectedFrame.width >= TouchTarget.minimum,
+                          selectedFrame.height >= TouchTarget.minimum,
+                          reviewListFrame.insetBy(dx: -0.5, dy: -0.5).contains(selectedFrame),
+                          reviewListFrame.maxX < reviewContentFrame.minX else {
                         throw NSError(domain: "TowerEncyclopediaReview", code: 3,
                                       userInfo: [NSLocalizedDescriptionKey: "Tower grid cells are clipped or below minimum touch size"])
                     }
@@ -762,7 +691,7 @@ private struct TowerEncyclopediaView: View {
                                     "towerImageHeight": projection.towerHeight,
                                     "enemyImageHeight": projection.unitHeight,
                                     "firstShotSeconds": demo.frames.first(where: { $0.shots > 0 }).map { $0.seconds as Any } ?? NSNull(),
-                                    "gridEntriesVisible": families.flatMap(\.tiers).count,
+                                    "gridEntriesVisible": reviewRowFrames.values.filter { reviewListFrame.contains($0) }.count,
                                     "gridIcon": iconName(for: entry, kind: definition.kind),
                                     "rowHeight": reviewRowFrames[entry.id]!.height,
                                     "history": entry.history.description,
@@ -786,7 +715,6 @@ private struct TowerEncyclopediaView: View {
             }
             detailPage = 0
             if layoutReview {
-                showingDetails = false
                 try await Task.sleep(for: .milliseconds(200))
                 try capture("tower-list-return.png")
             }
@@ -795,7 +723,7 @@ private struct TowerEncyclopediaView: View {
                                         "rangedComparisonReview": comparisonReview,
                                         "framingReview": framingReview,
                                         "layoutReview": layoutReview,
-                                        "gridColumns": TowerEncyclopediaLayout.columns, "gridRows": families.count,
+                                        "gridColumns": TowerEncyclopediaLayout.columns, "familyCount": families.count,
                                         "gridIconSide": layout.iconSide,
                                         "gridIconInsetFraction": TowerEncyclopediaLayout.iconInsetFraction,
                                         "scrollFrame": [layout.scrollFrame.minX, layout.scrollFrame.minY,

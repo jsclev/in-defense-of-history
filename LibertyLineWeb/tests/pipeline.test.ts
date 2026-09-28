@@ -4,18 +4,44 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import sharp from 'sharp';
 import { unzipSync } from 'fflate';
-import { catalogSources, emitImage, selectRendition, sha256 } from '../tools/assets';
+import { alphaBounds, catalogSources, emitImage, selectRendition, sha256 } from '../tools/assets';
+
+it('exports precise alpha bounds without dropping faint pixels or inventing bounds for an empty image',()=>{
+  const pixels=new Uint8Array(4*5*4);pixels[(1*5+2)*4+3]=1;pixels[(3*5+3)*4+3]=255;
+  expect(alphaBounds(pixels,5,4)).toEqual({x:2,y:1,width:2,height:3});
+  expect(alphaBounds(new Uint8Array(4*5*4),5,4)).toEqual({x:0,y:0,width:5,height:4});
+});
 import { packageDirectory } from '../tools/archive';
 import { displayName } from '../tools/content';
 import { webConfig } from '../tools/config';
 import type { Manifest } from '../src/content/schema';
 import type { Plugin } from 'vite';
+import { presentation } from './fixtures';
+import { art as artRoot } from '../tools/paths';
 
 const cleanup: string[] = [];
 async function scratch() { const dir = await mkdtemp(join(tmpdir(), 'liberty-line-test-')); cleanup.push(dir); return dir; }
 afterEach(async () => { for (const dir of cleanup.splice(0)) await rm(dir, { recursive: true, force: true }); });
 
 describe('single source art pipeline', () => {
+  it.each([
+    {name:'tower_slot_build_flag',logical:32,hotspot:[5,12]},
+    {name:'tower_slot_upgrade',logical:43,hotspot:[22,4]},
+  ])('keeps $name transparent at every canonical density with the hotspot on its artwork',async({name,logical,hotspot})=>{
+    const folder=join(artRoot,`LibertyLineAssets.xcassets/${name}.imageset`);
+    const catalog=JSON.parse(await readFile(join(folder,'Contents.json'),'utf8')) as {images:{filename:string;scale:string}[]};
+    expect(catalog.images.map(i=>i.scale)).toEqual(['1x','2x','3x']);
+    for(const entry of catalog.images){
+      const side=logical*Number.parseInt(entry.scale),{data,info}=await sharp(join(folder,entry.filename)).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+      expect([info.width,info.height]).toEqual([side,side]);
+      for(const index of [0,side-1,side*(side-1),side*side-1])expect(data[index*4+3]).toBe(0);
+      // The cursor's click point stays on the visible hammer head or arrow tip.
+      const density=Number.parseInt(entry.scale);
+      expect(data[(hotspot[1]!*density*side+hotspot[0]!*density)*4+3]).toBeGreaterThan(128);
+      const covered=Array.from(data).filter((_,i)=>i%4===3).filter(a=>a>0).length/(side*side);
+      expect(covered).toBeGreaterThan(.2);expect(covered).toBeLessThan(.6);
+    }
+  });
   const image = (scale: string, filename = `sprite-${scale}.png`) => ({ scale, filename, idiom: 'universal' });
   it('uses one common density and keeps one-density images', () => {
     expect(selectRendition({ images: [image('1x'), image('2x'), image('3x')] }, 'sprite')).toEqual({ filename: 'sprite-2x.png', density: 2 });
@@ -61,6 +87,7 @@ describe('portable ZIP', () => {
       a: { url: 'art/a.png', width: 1, height: 1, density: 1, source: 'fixture', sha256: sha256(data), sourceSha256: sha256(data) },
     } };
     for (const [name, bytes] of Object.entries({ 'index.html': '<html></html>', 'content/manifest.json': JSON.stringify(manifest),
+      'content/presentation.json': JSON.stringify(await presentation()), 'content/navigation.json': '{}',
       'content/seed.sqlite': data, 'art/a.png': data })) await writeFile(join(output, name), bytes);
     return { dir, output, destination: join(dir, 'releases/game.zip') };
   }
@@ -68,15 +95,27 @@ describe('portable ZIP', () => {
     const { output, destination } = await bundle();
     await packageDirectory(output, destination);
     const one = await readFile(destination);
-    expect(Object.keys(unzipSync(one)).sort()).toEqual(['art/a.png', 'content/manifest.json', 'content/seed.sqlite', 'index.html']);
+    expect(Object.keys(unzipSync(one)).sort()).toEqual(['art/a.png', 'content/manifest.json', 'content/navigation.json', 'content/presentation.json', 'content/seed.sqlite', 'index.html']);
     await packageDirectory(output, destination); expect(await readFile(destination)).toEqual(one);
-  });
+  }, 90000); // The first bundle compiles the actual native presentation exporter.
   it('rejects missing assets and symlinks', async () => {
     const { output, destination } = await bundle();
     await rm(join(output, 'art/a.png'));
     await expect(packageDirectory(output, destination)).rejects.toThrow('Missing or corrupt');
     await symlink(join(output, 'index.html'), join(output, 'link.html'));
     await expect(packageDirectory(output, destination)).rejects.toThrow('symlinks');
+  });
+  it('rejects omitted or malformed native presentation/navigation exports', async () => {
+    const { output, destination } = await bundle();
+    await rm(join(output, 'content/presentation.json'));
+    await expect(packageDirectory(output, destination)).rejects.toThrow('presentation.json');
+    await writeFile(join(output, 'content/presentation.json'), '{}');
+    await expect(packageDirectory(output, destination)).rejects.toThrow();
+    await writeFile(join(output, 'content/presentation.json'), JSON.stringify(await presentation()));
+    const file = join(output, 'content/manifest.json'), manifest = JSON.parse(await readFile(file, 'utf8')) as Manifest;
+    manifest.maps.fixture = { geometry: 'content/map.geojson', underlay: ['a'], occlusion: [] };
+    await writeFile(file, JSON.stringify(manifest)); await writeFile(join(output, 'content/map.geojson'), '{}');
+    await expect(packageDirectory(output, destination)).rejects.toThrow('Missing ZIP navigation: fixture');
   });
 });
 

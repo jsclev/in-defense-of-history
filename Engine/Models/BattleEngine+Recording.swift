@@ -17,9 +17,13 @@ extension BattleEngine {
     /// Both direct UI handlers and the simulator command adapter cross here.
     /// Nested handlers are part of one input; combat events remain separate.
     func recordingInput<T>(_ name: String, _ fields: [String: String] = [:], _ body: () -> T) -> T {
-        guard let recorder = runRecorder, !recorder.finished, recordingInputDepth == 0 else { return body() }
+        guard recordingInputDepth == 0 else { return body() }
         recordingInputDepth += 1
         defer { recordingInputDepth -= 1 }
+        // Preview and paused controls need the same single UI invalidation as
+        // recorded inputs. Nested purchase/selection handlers belong to it.
+        notifyPresentationWillChange()
+        guard let recorder = runRecorder, !recorder.finished else { return body() }
         var fields = fields
         fields["selectedSlot"] = selectedSlotIndex.map(String.init)
         fields["selectedTower"] = selectedTowerSlotIndex.map(String.init)
@@ -50,9 +54,29 @@ extension BattleEngine {
 
     func recordFrame() {
         guard let recorder = runRecorder, !recorder.finished else { return }
+        if recorder.recordsEvents {
+            recording { try recorder.state(BattleEventState(self, cache: recorder.captureCache)) }
+            return
+        }
         // Native and headless runs record the same canonical pose at tick end.
         publishMilitia(); publishHeroes()
         recording { try recorder.frame(LevelReplayFrame(self)) }
+    }
+
+    /// Capture target coordinates before projectile resolution can remove the
+    /// target. These are facts for later animation, not a facing/sprite choice.
+    func captureFacingTargets() {
+        guard runRecorder?.recordsEvents == true else { return }
+        let enemies = Dictionary(uniqueKeysWithValues: walkers.map { ($0.id, $0.position) })
+        recordedFacingTargets.removeAll(keepingCapacity: true)
+        for (slot, garrison) in garrisonsBySlot {
+            for (index, unit) in garrison.units.enumerated() where unit.state == .fighting {
+                recordedFacingTargets[BattleEventUnitKey(hero: false, id: slot * 8 + index)] = enemies[unit.targetSpawnID]
+            }
+        }
+        for (index, post) in heroPosts.enumerated() where post.unit.state == .fighting {
+            recordedFacingTargets[BattleEventUnitKey(hero: true, id: index)] = enemies[post.unit.targetSpawnID]
+        }
     }
 
     public func finishRecording(status: LevelRunStatus) {
