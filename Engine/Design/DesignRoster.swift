@@ -7,7 +7,7 @@ public enum Foe: String, CaseIterable, Sendable {
     case lightInfantry = "light_infantry"
     case hessianJager = "hessian_jager"
     case hessianFusilier = "hessian_fusilier"
-    case nativeWarrior = "native_warrior"
+    case queensRanger = "queens_ranger"
     case highlander = "highlander"
     case lightDragoon = "light_dragoon"
     case spy = "spy"
@@ -15,6 +15,9 @@ public enum Foe: String, CaseIterable, Sendable {
     case royalArtillery = "royal_artillery"
     case mountedOfficer = "mounted_officer"
     case footGuards = "foot_guards"
+    case howeAssault = "howe_assault"
+    case hillRearguard = "hill_rearguard"
+    case clintonSiege = "clinton_siege"
 
     public var id: UUID {
         switch self {
@@ -24,7 +27,7 @@ public enum Foe: String, CaseIterable, Sendable {
         case .lightInfantry: return UUID(uuidString: "59cffa58-a230-4b83-b6e4-00cd84175ad1")!
         case .hessianJager: return UUID(uuidString: "e8e182d1-c209-4cdd-8f8d-8d95de3fe167")!
         case .hessianFusilier: return UUID(uuidString: "7c014dae-5896-4b32-896e-f95555833e1e")!
-        case .nativeWarrior: return UUID(uuidString: "b3e0cd5e-0128-46eb-a2c3-fe193d728228")!
+        case .queensRanger: return UUID(uuidString: "b3e0cd5e-0128-46eb-a2c3-fe193d728228")!
         case .highlander: return UUID(uuidString: "414fd1af-c633-4780-b513-b70f13018cd3")!
         case .lightDragoon: return UUID(uuidString: "ef3a782a-58db-4ac8-b372-0745a27669b0")!
         case .spy: return UUID(uuidString: "9ba1961d-cb79-4e0b-a6cd-6806d115813e")!
@@ -32,6 +35,9 @@ public enum Foe: String, CaseIterable, Sendable {
         case .royalArtillery: return UUID(uuidString: "f00dd278-0466-4bd5-b454-9c5a3dc964ec")!
         case .mountedOfficer: return UUID(uuidString: "48cf0732-a2a6-4271-b631-232a70c263ce")!
         case .footGuards: return UUID(uuidString: "8dc553a0-c688-470d-ae0a-f2a0cfa04f45")!
+        case .howeAssault: return UUID(uuidString: "df3c681f-3dfc-5b0a-a412-2bda75e0bfa7")!
+        case .hillRearguard: return UUID(uuidString: "7df9377b-c140-578a-8085-3d5c35a9b7e0")!
+        case .clintonSiege: return UUID(uuidString: "78259b8a-81de-5a1f-9aa7-918754acbb5d")!
         }
     }
 }

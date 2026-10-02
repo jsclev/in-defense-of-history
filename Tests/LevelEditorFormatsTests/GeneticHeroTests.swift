@@ -148,14 +148,14 @@ final class GeneticHeroTests: XCTestCase {
     func testLegacyNoHeroRowsCannotServeAdviceAndNewRowsRequireHeroMetadata() throws {
         let f = try fixture(), s = try study(f), c = try save(in: f, study: s)
         XCTAssertNotEqual(sqlite3_exec(f.connection,
-            "UPDATE genetic_solution SET solution_json=json_remove(solution_json,'$.context.heroLoadout')", nil, nil, nil), SQLITE_OK)
-        try execute("UPDATE genetic_solution SET solution_json=json_remove(json_set(solution_json,'$.formatVersion',1,'$.heroesEnabled',json('false')),'$.context.heroLoadout')", f)
+            "UPDATE ga_run SET heroes_enabled=0", nil, nil, nil), SQLITE_OK)
+        try execute("UPDATE ga_run SET format_version=1,heroes_enabled=0; DELETE FROM ga_hero", f)
         XCTAssertTrue(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s).isEmpty,
                       "Even a matching hash must never promote a no-hero result")
         let seed = FileManager.default.temporaryDirectory.appendingPathComponent("legacy-heroes-\(UUID()).sql")
         defer { try? FileManager.default.removeItem(at: seed) }
         XCTAssertNoThrow(try f.db.geneticSolutionDao.exportSeed(to: seed))
-        try execute("PRAGMA ignore_check_constraints=ON; UPDATE genetic_solution SET solution_json=json_set(solution_json,'$.formatVersion',2,'$.heroesEnabled',json('true'))", f)
+        try execute("UPDATE ga_run SET format_version=2,heroes_enabled=1", f)
         XCTAssertThrowsError(try f.db.geneticSolutionDao.best(context: c, starsUsed: 0, study: s))
     }
 }

@@ -14,16 +14,18 @@ final class EnemyContentTests: XCTestCase {
             let original = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()).type(.redcoatRegular)
             XCTAssertFalse(original.description.isEmpty)
             let statement = """
-                UPDATE enemy_type SET enemy_type_name='Renamed test enemy',
+                UPDATE enemy_type SET enemy_type_name='Renamed test enemy', enemy_type_long_name='Full renamed test enemy',
                 enemy_type_description='Revised test description.' WHERE id='\(original.id.uuidString.lowercased())'
                 """
             XCTAssertEqual(sqlite3_exec(conn, statement, nil, nil, nil), SQLITE_OK)
             let updated = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()).type(.redcoatRegular)
             XCTAssertEqual(updated.name, "Renamed test enemy")
+            XCTAssertEqual(updated.longName, "Full renamed test enemy")
             XCTAssertEqual(updated.description, "Revised test description.")
             XCTAssertEqual(updated.key, original.key)
             XCTAssertEqual(updated.id, original.id)
             XCTAssertEqual(updated.imageName, original.imageName)
+            XCTAssertEqual(updated.iconImageName, original.iconImageName)
             XCTAssertEqual(updated.stats, original.stats)
             XCTAssertEqual(updated.traits, original.traits)
             XCTAssertEqual(try JSONDecoder().decode(EnemyType.self, from: JSONEncoder().encode(updated)), updated)
@@ -32,12 +34,59 @@ final class EnemyContentTests: XCTestCase {
 
     func testSchemaAndLoaderRejectMissingCopy() throws {
         try withDatabase { db, conn in
-            for column in ["enemy_type_name", "enemy_type_description", "image_name", "enemy_type_key"] {
+            for column in ["enemy_type_name", "enemy_type_long_name", "enemy_type_description", "image_name", "icon_image_name", "enemy_type_key"] {
                 XCTAssertEqual(sqlite3_exec(conn, "UPDATE enemy_type SET \(column)='   '", nil, nil, nil), SQLITE_CONSTRAINT)
+                XCTAssertEqual(sqlite3_exec(conn, "UPDATE enemy_type SET \(column)=NULL", nil, nil, nil), SQLITE_CONSTRAINT)
             }
             // Even a malformed database with checks bypassed must not invent text.
             XCTAssertEqual(sqlite3_exec(conn, "PRAGMA ignore_check_constraints=ON; UPDATE enemy_type SET enemy_type_description='   ';", nil, nil, nil), SQLITE_OK)
             XCTAssertThrowsError(try db.enemyTypeDao.getAll())
+        }
+    }
+
+    func testMalformedFullNameAndIconFailWithEnemyAndFieldDiagnostic() throws {
+        for field in ["enemy_type_long_name", "icon_image_name"] {
+            for mutation in [
+                "PRAGMA ignore_check_constraints=ON; UPDATE enemy_type SET \(field)='   '",
+                "ALTER TABLE enemy_type RENAME TO original_enemy_type; CREATE TABLE enemy_type AS SELECT * FROM original_enemy_type; UPDATE enemy_type SET \(field)=NULL",
+                "ALTER TABLE enemy_type DROP COLUMN \(field)"
+            ] {
+                try withDatabase { db, conn in
+                    XCTAssertEqual(sqlite3_exec(conn, mutation, nil, nil, nil), SQLITE_OK)
+                    XCTAssertThrowsError(try db.enemyTypeDao.getAll()) { error in
+                        let message = String(describing: error)
+                        XCTAssertTrue(message.contains("enemy_type"), message)
+                        XCTAssertTrue(message.contains(field), message)
+                        XCTAssertTrue(Foe.allCases.contains { message.contains($0.id.uuidString) }, message)
+                    }
+                }
+            }
+        }
+    }
+
+    func testOldRecordedEnemyNamesRemainReadableAndNewRecordingsKeepBoth() throws {
+        try withDatabase { db, _ in
+            let enemy = try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()).type(.howeAssault)
+            var json = try XCTUnwrap(JSONSerialization.jsonObject(with: JSONEncoder().encode(enemy)) as? [String: Any])
+            XCTAssertEqual(json["longName"] as? String, enemy.longName)
+            XCTAssertEqual(json["iconImageName"] as? String, enemy.iconImageName)
+            XCTAssertNotEqual(enemy.name, enemy.longName)
+            json.removeValue(forKey: "longName")
+            json.removeValue(forKey: "iconImageName")
+            let old = try JSONDecoder().decode(EnemyType.self, from: JSONSerialization.data(withJSONObject: json))
+            XCTAssertEqual(old.name, enemy.name)
+            XCTAssertEqual(old.longName, old.name)
+            XCTAssertEqual(old.iconImageName, old.imageName)
+            XCTAssertEqual(old.stats, enemy.stats)
+            for malformed in [NSNull(), "   "] as [Any] {
+                json["longName"] = malformed
+                XCTAssertThrowsError(try JSONDecoder().decode(EnemyType.self, from: JSONSerialization.data(withJSONObject: json)))
+            }
+            json["longName"] = enemy.longName
+            for malformed in [NSNull(), "   "] as [Any] {
+                json["iconImageName"] = malformed
+                XCTAssertThrowsError(try JSONDecoder().decode(EnemyType.self, from: JSONSerialization.data(withJSONObject: json)))
+            }
         }
     }
 
@@ -57,13 +106,11 @@ final class EnemyContentTests: XCTestCase {
                     SAVEPOINT missing_enemy;
                     DELETE FROM enemy_type WHERE id='\(foe.id.uuidString.lowercased())';
                     """, nil, nil, nil), SQLITE_OK)
-                let remaining = try db.enemyTypeDao.getAll()
-                XCTAssertFalse(remaining.isEmpty)
-                XCTAssertFalse(remaining.contains { $0.id == foe.id })
-                XCTAssertThrowsError(try DesignRoster(enemyTypes: remaining), foe.rawValue) {
+                // A missing reserve target fails in the DAO before the design
+                // roster is constructed; either boundary must identify it.
+                XCTAssertThrowsError(try DesignRoster(enemyTypes: db.enemyTypeDao.getAll()), foe.rawValue) {
                     let message = String(describing: $0)
                     XCTAssertTrue(message.contains(foe.rawValue), message)
-                    XCTAssertTrue(message.contains(foe.id.uuidString), message)
                 }
                 XCTAssertEqual(sqlite3_exec(conn, "ROLLBACK TO missing_enemy; RELEASE missing_enemy",
                                            nil, nil, nil), SQLITE_OK)
@@ -102,7 +149,8 @@ final class EnemyContentTests: XCTestCase {
                 level.numWaves = 1
                 for remaining in [enemies.filter { $0.id != foe.id }, []] {
                     XCTAssertThrowsError(try BattleTestFixture.content(level: level, enemies: remaining, base: base)) {
-                        XCTAssertTrue(String(describing: $0).contains(foe.id.uuidString))
+                        let message = String(describing: $0)
+                        XCTAssertTrue(message.contains(foe.id.uuidString) || message.contains(foe.rawValue), message)
                     }
                 }
             }

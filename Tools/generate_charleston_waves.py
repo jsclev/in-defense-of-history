@@ -27,7 +27,7 @@ WAVE_IDS = [
     "0f43d15d-27d1-500c-94cd-8bf4c9c148c6",
 ]
 M, R, L, J, F = "loyalist_militia", "redcoat_regular", "light_infantry", "hessian_jager", "hessian_fusilier"
-N, H, D, S = "native_warrior", "highlander", "light_dragoon", "spy"
+N, H, D, S = "queens_ranger", "highlander", "light_dragoon", "spy"
 G, A, O, B, T = "grenadier", "royal_artillery", "mounted_officer", "foot_guards", "regimental_drummer"
 
 # Each group is (enemy, count, route, seconds after wave start, individual interval).
@@ -49,7 +49,7 @@ PLAN = [
     ("Guards behind the infantry", [(R,48,0,0,.26), (R,48,1,0,.26), (B,2,0,15,2.2), (B,2,1,15,2.2), (G,4,1,18,1.3), (L,8,4,20,.6), (N,8,3,20,.65)]),
     ("Columns and a cavalry flank", [(R,96,4,0,.26), (R,96,5,0,.26), (B,2,4,15,2.1), (B,2,5,15,2.1), (G,4,3,18,1.3), (D,6,2,20,.9), (S,2,0,23,1.3), (S,2,1,23,1.3)]),
     ("All roads under attack", [(R,48,0,0,.25), (R,48,1,0,.25), (B,2,0,14,2.1), (B,2,1,14,2.1), (O,2,4,16,2.2), (O,2,5,16,2.2), (H,4,4,20,.8), (H,4,5,20,.8), (F,6,2,24,.5), (F,6,3,24,.5), (D,4,1,28,.9)]),
-    ("Final sustained assault", [(R,64,0,0,.25), (R,64,1,0,.25), (B,2,0,17,2.2), (B,2,1,17,2.2), (A,2,4,17,3.5), (A,2,5,17,3.5), (R,16,2,21,.25), (R,16,3,21,.25), (F,8,4,26,.4), (F,8,5,26,.4), (O,1,4,26,1), (O,1,5,26,1), (D,2,2,32,.7), (D,2,3,32,.7)]),
+    ("Final sustained assault", [(R,64,0,0,.25), (R,64,1,0,.25), (B,2,0,17,2.2), (B,2,1,17,2.2), (A,2,4,17,3.5), (A,2,5,17,3.5), (R,16,2,21,.25), (R,16,3,21,.25), (F,8,4,26,.4), (F,8,5,26,.4), (O,1,4,26,1), (O,1,5,26,1), (D,2,2,32,.7), (D,2,3,32,.7), ("clinton_siege",1,4,38,1)]),
 ]
 # Nominal starts relative to the player's first call. Early calls shift the
 # remaining schedule relative to that wave's actual start, as WaveStartSchedule requires.

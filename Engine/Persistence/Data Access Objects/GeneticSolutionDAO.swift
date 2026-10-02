@@ -9,7 +9,6 @@ public final class GeneticSolutionDAO {
     private let encoder: JSONEncoder = {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]; return encoder
     }()
-    private static let columns = "run_id,candidate_id,panel,level_info_id,difficulty_id,starting_money,bounty_fraction,max_game_seconds,content_sha256,stars_used,solution_json"
 
     init(conn: OpaquePointer?) { self.conn = conn }
 
@@ -41,29 +40,18 @@ public final class GeneticSolutionDAO {
         return result
     }
     private func rows(_ stmt: OpaquePointer) throws -> [GeneticSolution] {
-        try serializedRows(stmt).map { $0.record }
-    }
-    private func serializedRows(_ stmt: OpaquePointer) throws -> [(record: GeneticSolution, json: String)] {
-        let decoder = MetaUpgradesFactory.decoder(catalog: try MetaUpgradeDAO(conn: conn).get())
-        var result: [(record: GeneticSolution, json: String)] = []
+        let store = try GeneticStore(conn: conn)
+        var result: [GeneticSolution] = []
         var code = sqlite3_step(stmt)
         while code == SQLITE_ROW {
-            guard let raw = sqlite3_column_text(stmt, 0) else {
-                throw DbError.Db(message: "genetic_solution: NULL solution_json")
+            guard let rawRun = sqlite3_column_text(stmt, 0), let runID = UUID(uuidString: String(cString: rawRun)),
+                  let rawPanel = sqlite3_column_text(stmt, 2), let panel = GeneticSolutionPanel(rawValue: String(cString: rawPanel)) else {
+                throw DbError.Db(message: "genetic_solution: invalid run_id/panel")
             }
-            do {
-                let json = String(cString: raw)
-                let record = try decoder.decode(GeneticSolution.self, from: Data(json.utf8))
-                try record.validate()
-                result.append((record, json))
-            } catch {
-                throw DbError.Db(message: "genetic_solution: invalid solution_json: \(error)")
-            }
+            result.append(try store.solution(runID: runID, candidateID: Int(sqlite3_column_int64(stmt, 1)), panel: panel))
             code = sqlite3_step(stmt)
         }
-        guard code == SQLITE_DONE else {
-            throw DbError.Db(message: "genetic_solution read: \(String(cString: sqlite3_errmsg(conn)))")
-        }
+        guard code == SQLITE_DONE else { throw DbError.Db(message: "genetic_solution: read failed") }
         return result
     }
 
@@ -97,7 +85,7 @@ public final class GeneticSolutionDAO {
         // An interrupted run with no evaluated candidates cannot erase content.
         guard !best.isEmpty else { return 0 }
         return try transaction {
-            let previous = try statement("SELECT solution_json FROM genetic_solution WHERE run_id=?") {
+            let previous = try statement("SELECT run_id,candidate_id,panel FROM ga_solution_details WHERE run_id=?") {
                 text($0, 1, runID.uuidString); return try rows($0)
             }
             guard previous.allSatisfy({ $0.context == context && $0.executableSHA256 == executableSHA256 }) else {
@@ -121,21 +109,11 @@ public final class GeneticSolutionDAO {
             try statement("DELETE FROM genetic_solution WHERE run_id=? AND panel=?") {
                 text($0, 1, runID.uuidString); text($0, 2, panel.rawValue); try execute($0)
             }
-            try statement("INSERT INTO genetic_solution(\(Self.columns)) VALUES(?,?,?,?,?,?,?,?,?,?,?)") { stmt in
-                for record in best {
-                    text(stmt, 1, runID.uuidString)
-                    sqlite3_bind_int64(stmt, 2, Int64(record.candidate.id))
-                    text(stmt, 3, panel.rawValue); text(stmt, 4, context.levelID.uuidString.lowercased())
-                    text(stmt, 5, context.difficultyID.uuidString.lowercased())
-                    sqlite3_bind_int64(stmt, 6, Int64(context.startingMoney))
-                    sqlite3_bind_double(stmt, 7, context.bountyFraction)
-                    sqlite3_bind_double(stmt, 8, context.maxGameSeconds)
-                    text(stmt, 9, context.contentSHA256)
-                    sqlite3_bind_int64(stmt, 10, Int64(record.candidate.starsUsed))
-                    text(stmt, 11, String(decoding: try encoder.encode(record), as: UTF8.self))
-                    try execute(stmt)
-                    sqlite3_reset(stmt); sqlite3_clear_bindings(stmt)
-                }
+            let store = try GeneticStore(conn: conn)
+            for record in best {
+                try store.ensureRun(record)
+                try store.saveCandidate(record.candidate, runID: runID, panel: panel, expected: expectedSamples)
+                try store.sql.insert("genetic_solution", "run_id,candidate_id,panel", [runID, record.candidate.id, panel.rawValue])
             }
             return best.count
         }
@@ -153,10 +131,10 @@ public final class GeneticSolutionDAO {
             throw DbError.Db(message: "genetic_solution: invalid lookup context/starsUsed/limit")
         }
         let found = try statement("""
-            SELECT solution_json FROM genetic_solution
+            SELECT run_id,candidate_id,panel FROM ga_solution_details
             WHERE level_info_id=? AND difficulty_id=? AND starting_money=? AND bounty_fraction=?
               AND max_game_seconds=? AND content_sha256=? AND stars_used=? AND panel=?
-              AND json_extract(solution_json,'$.formatVersion')=2
+              AND format_version=2
             """) {
             text($0, 1, context.levelID.uuidString.lowercased()); text($0, 2, context.difficultyID.uuidString.lowercased())
             sqlite3_bind_int64($0, 3, Int64(context.startingMoney)); sqlite3_bind_double($0, 4, context.bountyFraction)
@@ -183,10 +161,10 @@ public final class GeneticSolutionDAO {
     public func campaignCandidates(levelID: UUID, difficultyID: UUID, startingMoney: Int,
                                    earnedStars: Int) throws -> [GeneticSolution] {
         let found = try statement("""
-            SELECT solution_json FROM genetic_solution
+            SELECT run_id,candidate_id,panel FROM ga_solution_details
             WHERE level_info_id=? AND difficulty_id=? AND starting_money=? AND bounty_fraction=1
               AND stars_used<=? AND panel='validation'
-              AND json_extract(solution_json,'$.formatVersion')=2
+              AND format_version=2
             """) {
             text($0, 1, levelID.uuidString.lowercased())
             text($0, 2, difficultyID.uuidString.lowercased())
@@ -209,7 +187,7 @@ public final class GeneticSolutionDAO {
     /// of current balance: the auditor records their contexts and reruns DNA.
     public func analysisCandidates(levelID: UUID, limit: Int = 50) throws -> [GeneticSolution] {
         guard (1...1000).contains(limit) else { throw DbError.Db(message: "genetic_solution: invalid audit limit") }
-        let found = try statement("SELECT solution_json FROM genetic_solution WHERE level_info_id=?") {
+        let found = try statement("SELECT run_id,candidate_id,panel FROM ga_solution_details WHERE level_info_id=?") {
             text($0, 1, levelID.uuidString.lowercased()); return try rows($0)
         }
         return try distinctRanked(found, limit: limit)
@@ -232,24 +210,199 @@ public final class GeneticSolutionDAO {
         return result
     }
 
+    /// Publish the existing held-out ranking without reranking demonstration runs.
+    public func validatedCandidates(runID: UUID, limit: Int) throws -> [GeneticSolution] {
+        guard limit > 0 else { throw DbError.Db(message: "genetic_solution: invalid publication limit") }
+        let found = try statement("SELECT run_id,candidate_id,panel FROM ga_panel WHERE run_id=? AND panel='validation' AND sample_count=expected_samples") {
+            text($0, 1, runID.uuidString); return try rows($0)
+        }
+        return try distinctRanked(found.filter { $0.validationComplete && $0.victories > 0 }, limit: limit)
+    }
+
+    /// Keep authored advice for other levels when replacing one level's catalog.
+    public func copyCatalog(from source: GeneticSolutionDAO, excludingLevelID: UUID) throws {
+        let records = try source.statement("SELECT run_id,candidate_id,panel FROM ga_solution_details WHERE level_info_id<>?") {
+            source.text($0, 1, excludingLevelID.uuidString.lowercased()); return try source.rows($0)
+        }
+        try transaction {
+            let store = try GeneticStore(conn: conn)
+            for record in records {
+                try store.ensureRun(record)
+                try store.saveCandidate(record.candidate, runID: record.runID, panel: record.panel, expected: record.expectedSamples)
+                try store.sql.insert("genetic_solution", "run_id,candidate_id,panel", [record.runID, record.candidate.id, record.panel.rawValue])
+            }
+        }
+    }
+
+    public func recordingID(for solution: GeneticSolution) throws -> UUID {
+        try solution.validate()
+        return try statement("SELECT level_run_id,seed FROM genetic_solution_recording WHERE run_id=? AND candidate_id=? AND panel=?") {
+            text($0, 1, solution.runID.uuidString); sqlite3_bind_int64($0, 2, Int64(solution.candidate.id))
+            text($0, 3, solution.panel.rawValue)
+            guard sqlite3_step($0) == SQLITE_ROW, let raw = sqlite3_column_text($0, 0),
+                  let id = UUID(uuidString: String(cString: raw)), let seedText = sqlite3_column_text($0, 1),
+                  let seed = UInt64(String(cString: seedText)), solution.candidate.evaluations.contains(where: { $0.seed == seed }) else {
+                throw DbError.Db(message: "genetic_solution[\(solution.runID)/\(solution.candidate.id)]: missing or invalid playback recording")
+            }
+            let run = try LevelRunDAO(conn: conn).get(id: id)
+            guard run.levelID == solution.context.levelID, run.source == .simulator,
+                  [.victory, .defeat, .timeout].contains(run.status) else {
+                throw DbError.Db(message: "genetic_solution: playback recording does not match the solution")
+            }
+            return id
+        }
+    }
+
+    /// Fail before spending an evaluation budget on an old starter schema.
+    public func requireRecordingStorage() throws {
+        do {
+            try statement("SELECT run_id FROM ga_run LIMIT 0") { try execute($0) }
+            try statement("""
+                SELECT run_id,candidate_id,panel,seed,level_run_id,outcome,lives_remaining,
+                       waves_started,seconds,matches_evaluation
+                FROM genetic_solution_recording LIMIT 0
+                """) { try execute($0) }
+        } catch {
+            throw DbError.Db(message: "GA playback storage requires a fresh starter generated by Db/create_db.sh and the CLI installer: \(error)")
+        }
+    }
+
+    /// One demonstration per retained plan, after all evaluations are saved.
+    /// Prefer the held-out panel for each star group; if validation never ran
+    /// for a group, retain the explicit training label on its demonstrations.
+    public func recordingCandidates(runID: UUID) throws -> [GeneticSolution] {
+        let found = try statement("SELECT run_id,candidate_id,panel FROM ga_solution_details WHERE run_id=?") {
+            text($0, 1, runID.uuidString); return try rows($0)
+        }
+        return try Dictionary(grouping: found, by: { $0.candidate.starsUsed }).keys.sorted().flatMap { stars in
+            let group = found.filter { $0.candidate.starsUsed == stars }
+            let validation = group.filter { $0.panel == .validation }
+            return try distinctRanked(validation.isEmpty ? group.filter { $0.panel == .training } : validation,
+                                      limit: group.count)
+        }
+    }
+
+    /// Link the completed rerun and its own result; never update original fitness evidence.
+    /// Differences from the original evaluation are allowed and made explicit.
+    @discardableResult
+    public func saveRecording(for solution: GeneticSolution, evaluation: GeneticEvaluation) throws -> Bool {
+        try solution.validate()
+        guard let recordingID = evaluation.runID, evaluation.result.seconds.isFinite,
+              let original = solution.candidate.evaluations.first(where: { $0.seed == evaluation.seed }) else {
+            throw DbError.Db(message: "genetic_solution_recording: missing recording or original evaluation seed")
+        }
+        let run = try LevelRunDAO(conn: conn).get(id: recordingID)
+        guard run.source == .simulator, run.levelID == solution.context.levelID,
+              run.status.rawValue == evaluation.result.outcome.rawValue else {
+            throw DbError.Db(message: "genetic_solution_recording: recording has the wrong level, source or terminal status")
+        }
+        let matches = evaluation == original && (original.builtTowersByKind == nil
+            || evaluation.builtTowersByKind == original.builtTowersByKind)
+        try transaction {
+            let saved = try statement("SELECT run_id,candidate_id,panel FROM ga_solution_details WHERE run_id=? AND candidate_id=? AND panel=?") {
+                text($0, 1, solution.runID.uuidString)
+                sqlite3_bind_int64($0, 2, Int64(solution.candidate.id)); text($0, 3, solution.panel.rawValue)
+                return try rows($0)
+            }
+            guard saved.count == 1, saved[0].context == solution.context,
+                  saved[0].candidate.strategy == solution.candidate.strategy,
+                  saved[0].candidate.evaluations == solution.candidate.evaluations else {
+                throw DbError.Db(message: "genetic_solution_recording: retained solution changed or is missing")
+            }
+            try statement("""
+                INSERT INTO genetic_solution_recording
+                    (run_id,candidate_id,panel,seed,level_run_id,outcome,lives_remaining,waves_started,seconds,matches_evaluation)
+                VALUES(?,?,?,?,?,?,?,?,?,?)
+                """) {
+                text($0, 1, solution.runID.uuidString); sqlite3_bind_int64($0, 2, Int64(solution.candidate.id))
+                text($0, 3, solution.panel.rawValue); text($0, 4, String(evaluation.seed))
+                text($0, 5, recordingID.uuidString); text($0, 6, evaluation.result.outcome.rawValue)
+                sqlite3_bind_int64($0, 7, Int64(evaluation.result.livesRemaining))
+                sqlite3_bind_int64($0, 8, Int64(evaluation.wavesStarted))
+                sqlite3_bind_double($0, 9, evaluation.result.seconds)
+                sqlite3_bind_int($0, 10, matches ? 1 : 0); try execute($0)
+            }
+        }
+        return matches
+    }
+
     /// Maintained product seed, not a diagnostic export. Serialize publishers
     /// with the DB write lock so concurrent runs cannot overwrite a newer seed.
     /// A file error is propagated; callers must not report publication success.
     public func exportSeed(to url: URL) throws {
         try transaction {
-            let records = try statement("SELECT solution_json FROM genetic_solution ORDER BY run_id,panel,stars_used,candidate_id") { try serializedRows($0) }
-            func quote(_ text: String) -> String { "'" + text.replacingOccurrences(of: "'", with: "''") + "'" }
-            var lines = ["-- Shipping GA solutions. Generated through GeneticSolutionDAO; consumed by create_db.sh.", "BEGIN;", "DELETE FROM genetic_solution;"]
-            for (record, json) in records {
-                let c = record.context
-                let values = [quote(record.runID.uuidString), String(record.candidate.id), quote(record.panel.rawValue),
-                    quote(c.levelID.uuidString.lowercased()), quote(c.difficultyID.uuidString.lowercased()), String(c.startingMoney),
-                    String(c.bountyFraction), String(c.maxGameSeconds), quote(c.contentSHA256), String(record.candidate.starsUsed),
-                    quote(json)]
-                lines.append("INSERT INTO genetic_solution(\(Self.columns)) VALUES(\(values.joined(separator: ",")));")
+            let store = try GeneticStore(conn: conn)
+            // Validate every retained record before publishing a product seed.
+            _ = try statement("SELECT run_id,candidate_id,panel FROM genetic_solution") { try rows($0) }
+            let runFilter = "run_id IN (SELECT run_id FROM genetic_solution)"
+            let candidateFilter = "(run_id,candidate_id) IN (SELECT run_id,candidate_id FROM genetic_solution)"
+            let strategyFilter = "strategy_id IN (SELECT strategy_id FROM ga_candidate WHERE \(candidateFilter))"
+            let panelFilter = "(run_id,candidate_id,panel) IN (SELECT run_id,candidate_id,panel FROM genetic_solution)"
+            let evaluationFilter = "evaluation_id IN (SELECT evaluation_id FROM ga_evaluation WHERE \(panelFilter))"
+            let tables = [("ga_run", runFilter), ("ga_hero", runFilter), ("ga_strategy", strategyFilter)]
+                + ["ga_decision", "ga_meta_upgrade", "ga_early_wave", "ga_tactical_order"].map { ($0, strategyFilter) }
+                + [("ga_candidate", candidateFilter), ("ga_panel", panelFilter), ("ga_evaluation", panelFilter)]
+                + ["ga_enemy_fate", "ga_wave_progress", "ga_wave_leak", "ga_wave_economy", "ga_reinforcement_deployment", "ga_wave_call", "ga_built_tower", "ga_placement_plan", "ga_placement", "ga_playstyle", "ga_playstyle_purchase", "ga_playstyle_tower", "ga_playstyle_route", "ga_tactical_action"].map { ($0, evaluationFilter) }
+                + [("genetic_solution", "1")]
+            let runs = try store.sql.rows("SELECT DISTINCT run_id FROM genetic_solution ORDER BY run_id").map { try Self.quote($0.string("run_id")) }
+            var lines = ["-- Relational shipping GA catalog; generated through GeneticSolutionDAO.", "PRAGMA foreign_keys=ON;", "BEGIN;",
+                         "DELETE FROM genetic_solution;", "DELETE FROM ga_run WHERE run_id IN (\(runs.joined(separator: ","))); "]
+            for (table, filter) in tables {
+                if table.hasPrefix("ga_tactical"), !store.hasTacticalStorage { continue }
+                if table.hasPrefix("ga_placement"), !store.hasPlacementStorage { continue }
+                if table.hasPrefix("ga_playstyle"), !store.hasPlaystyleStorage { continue }
+                let columns = try store.sql.rows("PRAGMA table_info(\(table))").map { try $0.string("name") }
+                for row in try store.sql.rows("SELECT * FROM \(table) WHERE \(filter) ORDER BY \(columns[0])") {
+                    let values = try columns.map { key -> String in
+                        switch row.fields[key] {
+                        case .null: return "NULL"
+                        case let .text(value): return Self.quote(value)
+                        case let .integer(value): return String(value)
+                        case let .real(value): return String(value) // Double round-trip, not SQLite quote()'s rounded decimal.
+                        default: throw row.invalid(key)
+                        }
+                    }
+                    lines.append("INSERT INTO \(table)(\(columns.joined(separator: ","))) VALUES(\(values.joined(separator: ",")));")
+                }
             }
             lines.append("COMMIT;\n")
             try lines.joined(separator: "\n").write(to: url, atomically: true, encoding: .utf8)
+        }
+    }
+    private static func quote(_ value: String) -> String { "'" + value.replacingOccurrences(of: "'", with: "''") + "'" }
+
+    /// Stream one authored SQL file per demonstration. BLOBs use SQLite's exact
+    /// hex literals; no extra compression, JSON wrapping or whole-catalog buffer.
+    public func exportRecordingSeeds(for solutions: [GeneticSolution], directory: URL) throws {
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        for solution in solutions {
+            let id = try recordingID(for: solution)
+            let url = directory.appendingPathComponent("candidate-\(solution.candidate.id).sql")
+            try Data().write(to: url, options: .withoutOverwriting)
+            let file = try FileHandle(forWritingTo: url)
+            defer { try? file.close() }
+            func write(_ line: String) throws { try file.write(contentsOf: Data((line + "\n").utf8)) }
+            try write("-- Retained GA demonstration, regenerated from candidate \(solution.candidate.id).\nBEGIN;")
+            let tables = [
+                ("level_run", "id,level_id,source,play_speed_factor,started_at,finished_at,status,last_sequence,last_tick,format_version,setup,result_json", "id"),
+                ("level_action", "run_id,sequence,tick,category,name,payload_json,presentation,event_data", "run_id"),
+                ("genetic_solution_recording", "run_id,candidate_id,panel,seed,level_run_id,outcome,lives_remaining,waves_started,seconds,matches_evaluation", "level_run_id")
+            ]
+            for (table, columns, key) in tables {
+                let expressions = columns.split(separator: ",").map { "quote(\($0))" }.joined(separator: " || ',' || ")
+                let order = table == "level_action" ? " ORDER BY sequence" : ""
+                try statement("SELECT \(expressions) FROM \(table) WHERE \(key)=?\(order)") {
+                    text($0, 1, id.uuidString)
+                    var code = sqlite3_step($0)
+                    while code == SQLITE_ROW {
+                        guard let values = sqlite3_column_text($0, 0) else { throw DbError.Db(message: "genetic recording export: missing values") }
+                        try write("INSERT INTO \(table)(\(columns)) VALUES(\(String(cString: values)));")
+                        code = sqlite3_step($0)
+                    }
+                    guard code == SQLITE_DONE else { throw DbError.Db(message: "genetic recording export failed") }
+                }
+            }
+            try write("COMMIT;")
         }
     }
 }

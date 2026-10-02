@@ -50,46 +50,36 @@ struct EnemyEncyclopediaView: View {
 
     private func roster(layout: TowerEncyclopediaLayout) -> some View {
         let scale = layout.typeScale
-        return ScrollViewReader { proxy in
-            ScrollView(.vertical) {
-                LazyVGrid(columns: Array(repeating: GridItem(.fixed(layout.cellSize.width), spacing: layout.gridGap),
-                                         count: TowerEncyclopediaLayout.columns), spacing: layout.gridGap) {
-                    ForEach(entries) { item in
-                        Button { selection = item.id } label: {
-                            Image(uiImage: DemonstrationArtwork.image(item.enemy.imageName))
-                                .resizable().interpolation(.high).scaledToFit()
-                                .frame(height: 54 * scale)
-                                .frame(width: layout.cellSize.width, height: layout.cellSize.height)
-                                .background(EncyclopediaStyle.ink.opacity(0.06))
-                                .overlay {
-                                    Rectangle().strokeBorder(EncyclopediaStyle.ink.opacity(0.65), lineWidth: 0.75 * scale)
-                                    if selection == item.id {
-                                        Rectangle()
-                                            .strokeBorder(EncyclopediaStyle.selection, lineWidth: 2.5 * scale)
-                                            .padding(1.25 * scale)
-                                    }
+        return ScrollView(.vertical) {
+            LazyVGrid(columns: Array(repeating: GridItem(.fixed(layout.cellSize.width), spacing: layout.gridGap),
+                                     count: TowerEncyclopediaLayout.columns), spacing: layout.gridGap) {
+                ForEach(entries) { item in
+                    Button { selection = item.id } label: {
+                        Image(uiImage: DemonstrationArtwork.image(item.enemy.iconImageName))
+                            .resizable().interpolation(.high).scaledToFit()
+                            .frame(height: 61.182 * scale)
+                            .frame(width: layout.cellSize.width, height: layout.cellSize.height)
+                            .background(EncyclopediaStyle.ink.opacity(0.06))
+                            .overlay {
+                                Rectangle().strokeBorder(EncyclopediaStyle.ink.opacity(0.65), lineWidth: 0.75 * scale)
+                                if selection == item.id {
+                                    Rectangle()
+                                        .strokeBorder(EncyclopediaStyle.selection, lineWidth: 2.5 * scale)
+                                        .padding(1.25 * scale)
                                 }
-                                .contentShape(Rectangle())
-                                .accessibilityHidden(true)
-                        }
-                        .buttonStyle(.plain)
-                        .id(item.id)
-                        .accessibilityLabel(item.enemy.name)
-                        .accessibilityAddTraits(selection == item.id ? [.isSelected] : [])
-                        .accessibilityIdentifier("enemy-entry-\(item.enemy.key)")
+                            }
+                            .contentShape(Rectangle())
+                            .accessibilityHidden(true)
                     }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(item.enemy.name)
+                    .accessibilityAddTraits(selection == item.id ? [.isSelected] : [])
+                    .accessibilityIdentifier("enemy-entry-\(item.enemy.key)")
                 }
             }
-            .accessibilityLabel("All enemies")
-            .accessibilityIdentifier("enemy-encyclopedia-list")
-            #if DEBUG
-            .onChange(of: selection) { _, id in
-                if CommandLine.arguments.contains("--enemy-encyclopedia-review") {
-                    proxy.scrollTo(id, anchor: .center)
-                }
-            }
-            #endif
         }
+        .accessibilityLabel("All enemies")
+        .accessibilityIdentifier("enemy-encyclopedia-list")
     }
 
     private func pages(scale: CGFloat) -> some View {
@@ -104,7 +94,7 @@ struct EnemyEncyclopediaView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { sceneFrame = $0 }
             .accessibilityIdentifier("enemy-encyclopedia-pages")
-            EncyclopediaCarouselIndicators(selection: $page, detailTitle: "Tactics",
+            EncyclopediaCarouselIndicators(selection: $page, detailTitle: "Stats",
                 scale: scale, ink: EncyclopediaStyle.ink, accent: EncyclopediaStyle.accent, identifierPrefix: "enemy-encyclopedia")
         }
     }
@@ -112,8 +102,12 @@ struct EnemyEncyclopediaView: View {
     private func strategy(scale: CGFloat) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12 * scale) {
+                if entry.enemy.longName != entry.enemy.name {
+                    title(entry.enemy.longName, scale: scale)
+                        .accessibilityIdentifier("enemy-detail-long-name")
+                }
                 copy(entry.enemy.description, scale: scale)
-                title("Facing this enemy", scale: scale)
+                title("Strategy", scale: scale)
                 copy(entry.strategy, scale: scale).accessibilityIdentifier("enemy-detail-strategy")
                 title("Base stats", scale: scale)
                 ForEach(EnemyEncyclopediaStats(enemy: entry.enemy, rules: rules).rows) { stat in
@@ -136,26 +130,15 @@ struct EnemyEncyclopediaView: View {
     private func history(scale: CGFloat) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12 * scale) {
-                HStack {
-                    title("History", scale: scale)
-                    Spacer()
-                    Link(destination: entry.sourceURL) {
-                        Image(systemName: "book.closed").font(.system(size: 20 * scale, weight: .semibold))
-                            .frame(width: 44 * scale, height: 44 * scale)
-                    }
-                    .foregroundStyle(EncyclopediaStyle.accent)
-                    .accessibilityLabel("Historical source: \(entry.sourceTitle)")
-                    .accessibilityIdentifier("enemy-history-source")
+                if entry.enemy.longName != entry.enemy.name {
+                    title(entry.enemy.longName, scale: scale)
+                        .accessibilityIdentifier("enemy-history-long-name")
                 }
                 copy(entry.history, scale: scale).accessibilityIdentifier("enemy-history-description")
                 title("Why we included it", scale: scale)
                 copy(entry.inclusionReason, scale: scale).accessibilityIdentifier("enemy-history-inclusion")
                 title("History and game rules", scale: scale)
                 copy(entry.adaptation, scale: scale).accessibilityIdentifier("enemy-history-adaptation")
-                Link(entry.sourceTitle, destination: entry.sourceURL)
-                    .font(.system(size: 14 * scale, weight: .semibold)).foregroundStyle(EncyclopediaStyle.accent)
-                    .frame(minHeight: 44 * scale, alignment: .leading)
-                    .accessibilityIdentifier("enemy-history-source-title")
             }
             .padding(14 * scale).frame(maxWidth: .infinity, alignment: .leading)
         }
@@ -198,16 +181,40 @@ struct EnemyEncyclopediaView: View {
                 ((view as? UIScrollView).map { [$0] } ?? []) + view.subviews.flatMap(scrollViews)
             }
             var records: [[String: Any]] = []
-            for item in entries {
+            let requestedKey = CommandLine.arguments.first(where: { $0.hasPrefix("--enemy-review-key=") })?
+                .dropFirst("--enemy-review-key=".count)
+            let subjects = entries.filter { requestedKey == nil || $0.enemy.key == String(requestedKey!) }
+            guard !subjects.isEmpty else { throw NSError(domain: "EnemyReview", code: 3) }
+            for item in subjects {
                 selection = item.id; page = 0; reviewElapsed = 2
                 try await Task.sleep(for: .milliseconds(250))
+                // Review captures must include the selected tile as well as
+                // its animation. Normal browsing retains its scroll position.
+                if let index = entries.firstIndex(where: { $0.id == item.id }),
+                   let roster = scrollViews(window).first(where: {
+                       $0.convert($0.bounds, to: window).maxX <= sceneFrame.minX + 1
+                           && $0.contentSize.height > $0.bounds.height
+                   }) {
+                    let rows = (entries.count + TowerEncyclopediaLayout.columns - 1) / TowerEncyclopediaLayout.columns
+                    let row = index / TowerEncyclopediaLayout.columns
+                    let center = (CGFloat(row) + 0.5) * roster.contentSize.height / CGFloat(rows)
+                    let offset = min(max(0, center - roster.bounds.height / 2),
+                                     max(0, roster.contentSize.height - roster.bounds.height))
+                    roster.setContentOffset(CGPoint(x: 0, y: offset), animated: false)
+                    try await Task.sleep(for: .milliseconds(150))
+                }
                 let recording = try demonstrations.recording(enemyID: item.id)
                 try capture(item.enemy.key + "-demo")
+                var samples: [[String: Any]] = []
                 if CommandLine.arguments.contains("--enemy-demo-review") {
                     for index in 0..<Int(ceil(recording.loopDuration * 8)) {
                         reviewElapsed = Double(index) / 8
                         try await Task.sleep(for: .milliseconds(35))
-                        try capture(String(format: "%@-frame-%04d", item.enemy.key, index), crop: sceneFrame)
+                        let name = String(format: "%@-frame-%04d", item.enemy.key, index)
+                        try capture(name, crop: sceneFrame)
+                        let frame = recording.frames[recording.frameIndex(at: Double(index) / 8)]
+                        samples.append(["file": name + ".png", "seconds": Double(index) / 8,
+                            "concealedIDs": frame.presentation.walkers.filter(\.isConcealed).map(\.id)])
                     }
                 }
                 for detail in 1...2 {
@@ -226,9 +233,13 @@ struct EnemyEncyclopediaView: View {
                         }
                     }
                 }
-                records.append(["key": item.enemy.key, "asset": item.enemy.imageName,
+                records.append(["key": item.enemy.key, "asset": item.enemy.imageName, "iconAsset": item.enemy.iconImageName,
                                 "duration": recording.loopDuration, "escaped": recording.escaped,
-                                "frames": recording.frames.count, "source": item.sourceURL.absoluteString])
+                                "frames": recording.frames.count, "source": item.sourceURL.absoluteString,
+                                "screenScale": window.screen.scale,
+                                "unitHeight": DemonstrationProjection(bounds: recording.bounds,
+                                    size: sceneFrame.size, virtualCanvas: recording.virtualCanvas).unitHeight,
+                                "samples": samples])
             }
             try JSONSerialization.data(withJSONObject: records, options: [.prettyPrinted, .sortedKeys])
                 .write(to: directory.appendingPathComponent("result.json"))

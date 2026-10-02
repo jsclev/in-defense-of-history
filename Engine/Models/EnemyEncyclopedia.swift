@@ -33,7 +33,8 @@ struct EnemyEncyclopediaStats {
             Row(label: "Discipline", value: percent(stats.discipline)),
             Row(label: "Kill reward", value: "\(rules.killReward(baseBounty: stats.gold)) coins"),
             Row(label: "Lives lost at exit", value: "\(stats.livesCost)"),
-            Row(label: "Infantry can block", value: enemy.has(.rideDown) ? "No" : "Yes"),
+            Row(label: "Infantry can block", value: enemy.has(.rideDown) ? "No"
+                : enemy.concealmentRules != nil ? "When revealed" : "Yes"),
             Row(label: "Slows at morale", value: "≤ \(percent(stats.moraleResponse.speedThreshold))"),
             Row(label: "Speed when shaken", value: percent(stats.moraleResponse.speedMultiplier)),
             Row(label: "Weaker hits at morale", value: "≤ \(percent(stats.moraleResponse.attackThreshold))"),

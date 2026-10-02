@@ -10,10 +10,13 @@ final class LevelReplayPlayback: ObservableObject {
     @Published private(set) var frame: LevelReplayFrame
     @Published private(set) var isPaused = false
     @Published private(set) var isFinished: Bool
+    @Published private(set) var speed: PlaySpeed
 
     var setup: LevelReplaySetup { replay.setup }
+    var outcome: LevelRunStatus { replay.run.status }
 
     init(dao: LevelRunDAO, runID: UUID, speed: PlaySpeed) throws {
+        self.speed = speed
         replay = try LevelReplayer(dao: dao, runID: runID, playSpeedOverride: speed)
         guard try replay.advance(), let first = replay.frame else {
             throw DbError.Db(message: "level_run[\(runID)]: missing initial replay frame")
@@ -25,6 +28,13 @@ final class LevelReplayPlayback: ObservableObject {
     func togglePause() {
         guard !isFinished else { return }
         isPaused.toggle()
+    }
+
+    func setSpeed(_ speed: PlaySpeed) {
+        // Preserve accumulated virtual time when changing the wall-clock rate.
+        pendingSeconds *= self.speed.factor / speed.factor
+        self.speed = speed
+        replay.setPlaySpeedOverride(speed)
     }
 
     func advance(wallSeconds: Double) throws {

@@ -59,7 +59,7 @@ final class EnemyMoraleResponseTests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture()
         let db = fixture.db
         let all = try db.enemyTypeDao.getAll()
-        XCTAssertEqual(all.count, 14)
+        XCTAssertEqual(Set(all.map(\.id)), Set(Foe.allCases.map(\.id)))
         XCTAssertTrue(all.allSatisfy { $0.stats.moraleResponse == AuthoredDatabaseFixture.moraleResponse })
         let connection = fixture.connection
         XCTAssertEqual(sqlite3_exec(connection, "UPDATE enemy_type SET morale_speed_threshold=0.3, morale_attack_threshold=0.6 WHERE enemy_type_key='\(Foe.redcoatRegular.rawValue)'", nil, nil, nil), SQLITE_OK)

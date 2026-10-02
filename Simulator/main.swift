@@ -36,13 +36,14 @@ func printUsage() {
     print("""
     LibertyLineSimulator \(BuildVersion.version)
 
-    Usage: LibertyLineSimulator <level-number> --workers <n>
-    Example: ~/bin/LibertyLineSimulator 15 --workers 8
+    Usage: LibertyLineSimulator --level <number> --workers <n>
+    Example: ~/bin/LibertyLineSimulator --level 15 --workers 8
 
     Starts a genetic search for that level using its database settings.
-    Runs for up to 8 hours and saves results in a new SQLite database
+    Searches until the quality goal qualifies; saves results in a new SQLite database
     beside the executable. Keep this Terminal open and your Mac awake.
 
+    --level <number> is required: choose a positive authored level number.
     --workers <n> is required: choose 1–32 parallel battle processes.
     --help-advanced shows optional experiment and database controls.
     """)
@@ -58,6 +59,7 @@ func printAdvancedUsage() {
     --content-database <path> Override the installed starter or use a previous run as input.
                           Default beside this executable: liberty-line-simulator-\(BuildVersion.version).sqlite
     --version             Print the build name used in the default database filename.
+    --level <number>      Run the GA for this positive authored level number.
 
     --balance-study <name> Separate balance audit: no heroes, maximum ranged meta, authored money.
     --balance-scenarios <path> JSON array of damage/enemy-mix variants; baseline always runs first.
@@ -79,19 +81,29 @@ func printAdvancedUsage() {
     --population <n>       Population cap per stars-used group (default 64), divided equally among meta selections.
     --meta-selections <n>  Active meta-selection subpopulations per group (default 8).
     --meta-min-candidates <n> Minimum distinct battle plans before a selection qualifies (default 4).
-    --meta-adaptation-generations <n> Protect a new selection for this many generations (default 2).
+    --meta-adaptation-generations <n> Protect a new selection for this many generations (default 12).
     --meta-exchange-from <path> Compare a candidate's meta selection with nearby legal selections at the same stars used; adapt all battle plans equally.
-    --generations <n>      Maximum generations including the initial one (default 300).
+    --generations <n>      Optional generation ceiling, including the initial one (default: unlimited).
     --training-seeds <n>   Complete games per candidate (default 3).
     --validation-seeds <n> Unseen seeds per frozen finalist (default 64).
-    --finalists <n>        Maximum distinct meta-selection finalists per group (default 8).
-    --max-evaluations <n>  Total engine-game ceiling including validation (default 50000).
-    --genetic-hours <n>    Wall-time budget; reserves 15% for validation (default 8).
+    --finalists <n>        Maximum validated battle plans per group (default 8).
+    --max-evaluations <n>  Optional total battle ceiling including validation (default: unlimited).
+    --minimum-training-battles <n> Minimum actual training battles per star group (default 1000000).
+    --stability-battles <n> Further training battles without improvement (default 250000).
+    --stability-generations <n> Generations without improvement (default 1000).
+    --goal-solutions <n>   Reliable, mutually distinct winning strategies required (default 3).
+    --genetic-hours <n>    Optional wall-time guardrail; no deadline by default.
     --workers <n>          Required for GA searches: parallel shared-engine battle processes (1–32; no default).
     --genetic-replay <path> Verify a saved best-strategy.json against the same content/engine.
     --import-ga-solutions <run.sqlite> <content-starter.sqlite> <new-evidence.sqlite> <output.sql>
-                          Separate offline command: recover three training leaders, replay original
+                          Separate offline command: select three diverse training winners, replay original
                           evidence and run their full held-out panels before writing a selected-level seed.
+    --ship-ga-solutions <run.sqlite> <authored-content.sqlite> <new-evidence.sqlite> <output.sql> <new-recordings-directory>
+                          Select three diverse complete held-out winners and generate one playback per solution.
+    --recover-ga-placements <migrated-copy.sqlite>
+                          Recover explicit placement fields from existing stored tower changes, without running battles.
+    --audit-ga-diversity <run.sqlite>
+                          Compare saved training and validation winners using candidate data only; no battles or writes.
 
     --money-study <name>   Run the authored level using the iPhone battle rules.
                           Current database difficulty, campaign upgrades, tower
@@ -106,7 +118,7 @@ func printAdvancedUsage() {
     --bench-sims <n>       Calibration sample size.
     --max-game-seconds <n> Experiment cutoff (default 1800); unfinished runs are timeouts.
     --replay-money-plan <placement:policy:money>  Trace one plan in the game engine.
-    --report-dir <path>    Optional JSON exports; all reports are also stored in the run database.
+    --report-dir <path>    Optional JSON exports; GA records live in relational tables.
     --runs                Read saved run records. Old independent-engine runs
                           are not evidence of current game balance.
     --run-status <id>      Read one saved run.
@@ -123,6 +135,14 @@ func parseOptions() throws -> Options? {
     var args = ArraySlice(CommandLine.arguments.dropFirst())
     while let arg = args.popFirst() {
         switch arg {
+        case "--level":
+            guard opts.levelNumber == nil, let value = args.popFirst(), !value.isEmpty,
+                  value.utf8.allSatisfy({ (48...57).contains($0) }),
+                  let number = Int(value), number > 0 else {
+                FileHandle.standardError.write(Data("--level requires one positive integer and may only be specified once.\n".utf8))
+                return nil
+            }
+            opts.levelNumber = number
         case "--database":
             guard let value = args.popFirst() else { return nil }
             opts.database = value
@@ -183,12 +203,16 @@ func parseOptions() throws -> Options? {
             guard fields.count == 3, let minimum = Int(fields[0]), let maximum = Int(fields[1]),
                   let step = Int(fields[2]), minimum >= 0, maximum >= minimum, step > 0 else { return nil }
             opts.genetic.starMinimum = minimum; opts.genetic.starMaximum = maximum; opts.genetic.starStep = step
-        case "--starting-money", "--population", "--generations", "--training-seeds", "--validation-seeds", "--finalists", "--max-evaluations", "--meta-selections", "--meta-min-candidates", "--meta-adaptation-generations":
+        case "--minimum-training-battles", "--stability-battles", "--stability-generations", "--goal-solutions", "--starting-money", "--population", "--generations", "--training-seeds", "--validation-seeds", "--finalists", "--max-evaluations", "--meta-selections", "--meta-min-candidates", "--meta-adaptation-generations":
             guard let value = args.popFirst(), let number = Int(value), number > 0 else { return nil }
             switch arg {
             case "--starting-money": opts.genetic.money = number; opts.suppliedStartingMoney = true
             case "--population": opts.genetic.population = number
             case "--generations": opts.genetic.generations = number
+            case "--minimum-training-battles": opts.genetic.stopping!.minimumTrainingBattles = number
+            case "--stability-battles": opts.genetic.stopping!.stabilityBattles = number
+            case "--stability-generations": opts.genetic.stopping!.stabilityGenerations = number
+            case "--goal-solutions": opts.genetic.stopping!.solutions = number
             case "--training-seeds": opts.genetic.trainingSeeds = number
             case "--validation-seeds": opts.genetic.validationSeeds = number
             case "--finalists": opts.genetic.finalists = number
@@ -251,18 +275,13 @@ func parseOptions() throws -> Options? {
         case "--help-advanced":
             opts.advancedHelp = true
         default:
-            guard opts.levelNumber == nil, !arg.isEmpty,
-                  arg.utf8.allSatisfy({ (48...57).contains($0) }),
-                  let number = Int(arg), number > 0 else {
-                FileHandle.standardError.write(Data("Expected one positive level number; unexpected argument: \(arg)\n".utf8))
-                return nil
-            }
-            opts.levelNumber = number
+            FileHandle.standardError.write(Data("Unexpected argument: \(arg). Select a level with --level <number>.\n".utf8))
+            return nil
         }
     }
     if !opts.help, !opts.advancedHelp, opts.geneticReplay == nil,
        opts.levelNumber != nil || opts.geneticStudy != nil, !suppliedWorkers {
-        FileHandle.standardError.write(Data("Missing required --workers <n> (1–32). Example: LibertyLineSimulator 15 --workers 8\n".utf8))
+        FileHandle.standardError.write(Data("Missing required --workers <n> (1–32). Example: LibertyLineSimulator --level 15 --workers 8\n".utf8))
         return nil
     }
     return opts
@@ -270,6 +289,53 @@ func parseOptions() throws -> Options? {
 
 // Private worker entry point: transport only; all evaluation stays in the
 // shared commander/engine and all persistence stays behind DAOs.
+if CommandLine.arguments.count >= 2, CommandLine.arguments[1] == "--recover-ga-placements" {
+    do {
+        guard CommandLine.arguments.count == 3 else {
+            throw DbError.Db(message: "Usage: --recover-ga-placements <migrated-copy.sqlite>")
+        }
+        let db = try SimulatorDatabase.open(URL(fileURLWithPath: CommandLine.arguments[2]))
+        defer { db.close() }
+        let count = try GeneticStudyDAO(db: db).recoverRecordedPlacements()
+        print("Recovered \(count) placement profiles from existing stored tower changes. No battles executed; original fitness preserved.")
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("GA placement recovery failed: \(error)\n".utf8))
+        exit(1)
+    }
+}
+if CommandLine.arguments.count >= 2, CommandLine.arguments[1] == "--audit-ga-diversity" {
+    do {
+        guard CommandLine.arguments.count == 3 else {
+            throw DbError.Db(message: "Usage: --audit-ga-diversity <source-run.sqlite>")
+        }
+        try MainActor.assumeIsolated {
+            try GeneticSolutionImport.auditDiversity(sourceURL: URL(fileURLWithPath: CommandLine.arguments[2]))
+        }
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("GA diversity audit failed: \(error)\n".utf8))
+        exit(1)
+    }
+}
+if CommandLine.arguments.count >= 2, CommandLine.arguments[1] == "--ship-ga-solutions" {
+    do {
+        guard CommandLine.arguments.count == 7 else {
+            throw DbError.Db(message: "Usage: --ship-ga-solutions <source-run.sqlite> <authored-content.sqlite> <new-evidence.sqlite> <output.sql> <new-recordings-directory>")
+        }
+        try MainActor.assumeIsolated {
+            try GeneticSolutionImport.ship(sourceURL: URL(fileURLWithPath: CommandLine.arguments[2]),
+                contentURL: URL(fileURLWithPath: CommandLine.arguments[3]),
+                destination: URL(fileURLWithPath: CommandLine.arguments[4]),
+                seedURL: URL(fileURLWithPath: CommandLine.arguments[5]),
+                recordingsURL: URL(fileURLWithPath: CommandLine.arguments[6]))
+        }
+        exit(0)
+    } catch {
+        FileHandle.standardError.write(Data("GA publication failed: \(error)\n".utf8))
+        exit(1)
+    }
+}
 if CommandLine.arguments.count >= 2, CommandLine.arguments[1] == "--import-ga-solutions" {
     do {
         guard CommandLine.arguments.count == 6 else {
@@ -316,7 +382,7 @@ if CommandLine.arguments.count == 3, CommandLine.arguments[1] == "--genetic-work
 var opts: Options
 do {
     guard let parsed = try parseOptions() else {
-        SimulatorLog.cli.error("Invalid command-line arguments; expected a positive level number or valid optional controls")
+        SimulatorLog.cli.error("Invalid command-line arguments; expected --level <number> or valid optional controls")
         printUsage()
         exit(2)
     }
@@ -344,7 +410,7 @@ do {
         + (opts.levelNumber == nil ? 0 : 1)
     let inspecting = opts.showRuns || opts.runStatusID != nil
     guard modes == (inspecting ? 0 : 1) else {
-        throw DbError.Db(message: "Pass one level number, for example: LibertyLineSimulator 15 --workers 8. Do not combine study modes.")
+        throw DbError.Db(message: "Pass --level <number>, for example: LibertyLineSimulator --level 15 --workers 8. Do not combine study modes.")
     }
     if inspecting {
         guard let path = opts.database else {
@@ -415,7 +481,7 @@ if let name = opts.balanceStudy {
 
 if opts.moneyStudy == nil && opts.geneticStudy == nil && !opts.showRuns && opts.runStatusID == nil {
     SimulatorLog.cli.error("No study or inspection command selected")
-    FileHandle.standardError.write(Data("Pass a level number, for example: LibertyLineSimulator 15 --workers 8\n".utf8))
+    FileHandle.standardError.write(Data("Pass --level <number>, for example: LibertyLineSimulator --level 15 --workers 8\n".utf8))
     exit(2)
 }
 
@@ -467,9 +533,8 @@ if opts.showRuns || opts.runStatusID != nil {
         let runs = store.db.simulatorRunDao
         let list = try opts.runStatusID.map { id in try runs.get(id: id).map { [$0] } ?? [] }
             ?? runs.recent(limit: 15)
-        // Older invocation databases do not contain this optional GA report.
-        let latestProgress = try? JSONDecoder().decode(GeneticProgress.Snapshot.self,
-            from: store.db.simulatorInvocationDao.document(named: "progress.json"))
+        // Legacy databases can be converted offline with Tools/ga_relational.py.
+        let latestProgress = try? GeneticStudyDAO(db: store.db).progress()
         if list.isEmpty {
             print("no simulator runs recorded")
         } else {

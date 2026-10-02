@@ -29,11 +29,22 @@ struct TowerDemonstrationPage: View {
 struct TowerDemonstrationScene: View {
     let demo: TowerDemonstration
     let elapsed: Double
+    private let heroAspectRatios: [String: CGFloat]
     private let gold = Color(red: 1, green: 0.77, blue: 0.32)
     private let green = Color(red: 0.45, green: 0.95, blue: 0.43)
     private var index: Int { demo.frameIndex(at: elapsed) }
     private var frame: TowerDemonstration.Frame { demo.frames[index] }
     private var phase: Double { max(0, elapsed).truncatingRemainder(dividingBy: demo.loopDuration) }
+
+    init(demo: TowerDemonstration, elapsed: Double) {
+        self.demo = demo; self.elapsed = elapsed
+        var ratios: [String: CGFloat] = [:]
+        for hero in demo.frames.first!.heroes {
+            let image = DemonstrationArtwork.image(hero.baseAssetName)
+            ratios[hero.baseAssetName] = image.size.width / image.size.height
+        }
+        heroAspectRatios = ratios
+    }
 
     var body: some View {
         GeometryReader { geometry in
@@ -63,9 +74,17 @@ struct TowerDemonstrationScene: View {
                     .position(projection.point(impact.position))
                 }
                 GroundTroopLayer(presentation: frame.presentation, interpolation: demo.interpolation(at: elapsed),
-                                 militia: frame.soldiers, sprites: projection.sprites, projection: projection.projection)
+                                 militia: frame.soldiers, sprites: projection.sprites, projection: projection.projection,
+                                 seconds: frame.seconds)
                 ProjectileLayer(presentation: frame.presentation, interpolation: demo.interpolation(at: elapsed),
                                 sprites: projection.sprites, projection: projection.projection)
+                HeroMapLayer(heroes: frame.displayedHeroes(alpha: demo.interpolation(at: elapsed)),
+                    sprites: projection.sprites, projection: projection.projection,
+                    aspectRatio: { name in
+                        guard let ratio = heroAspectRatios[name] else { preconditionFailure("Missing demonstration hero artwork: \(name)") }
+                        return ratio
+                    }, onSelect: { _ in })
+                    .allowsHitTesting(false)
                 Canvas { context, _ in drawSupport(context, projection: projection) }
             }
         }

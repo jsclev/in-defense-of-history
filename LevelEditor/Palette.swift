@@ -66,7 +66,7 @@ enum Palette {
         .lightInfantry: .pink,
         .hessianJager: .green,
         .hessianFusilier: Color(red: 0.55, green: 0.05, blue: 0.15),
-        .nativeWarrior: Color(red: 0.85, green: 0.55, blue: 0.1),
+        .queensRanger: Color(red: 0.15, green: 0.65, blue: 0.3),
         .highlander: Color(red: 0.05, green: 0.45, blue: 0.3),
         .lightDragoon: .yellow,
         .spy: Color(white: 0.2),

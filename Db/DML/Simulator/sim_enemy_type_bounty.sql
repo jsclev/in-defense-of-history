@@ -7,7 +7,7 @@ INSERT INTO sim_enemy_type_bounty (id, enemy_type_id, min_bounty, max_bounty) VA
 ('5e0eb001-0000-4000-8000-000000000004', '59cffa58-a230-4b83-b6e4-00cd84175ad1', 14.0, 23.0),  -- light_infantry (18)
 ('5e0eb001-0000-4000-8000-000000000005', 'e8e182d1-c209-4cdd-8f8d-8d95de3fe167', 17.0, 28.0),  -- hessian_jager (22)
 ('5e0eb001-0000-4000-8000-000000000006', '7c014dae-5896-4b32-896e-f95555833e1e', 15.0, 25.0),  -- hessian_fusilier (20)
-('5e0eb001-0000-4000-8000-000000000007', 'b3e0cd5e-0128-46eb-a2c3-fe193d728228', 15.0, 25.0),  -- native_warrior (20)
+('5e0eb001-0000-4000-8000-000000000007', 'b3e0cd5e-0128-46eb-a2c3-fe193d728228', 15.0, 25.0),  -- queens_ranger (20)
 ('5e0eb001-0000-4000-8000-000000000008', '414fd1af-c633-4780-b513-b70f13018cd3', 23.0, 38.0),  -- highlander (30)
 ('5e0eb001-0000-4000-8000-000000000009', 'ef3a782a-58db-4ac8-b372-0745a27669b0', 26.0, 44.0),  -- light_dragoon (35)
 ('5e0eb001-0000-4000-8000-00000000000a', '9ba1961d-cb79-4e0b-a6cd-6806d115813e', 19.0, 31.0),  -- spy (25)
@@ -15,3 +15,8 @@ INSERT INTO sim_enemy_type_bounty (id, enemy_type_id, min_bounty, max_bounty) VA
 ('5e0eb001-0000-4000-8000-00000000000c', 'f00dd278-0466-4bd5-b454-9c5a3dc964ec', 45.0, 75.0),  -- royal_artillery (60)
 ('5e0eb001-0000-4000-8000-00000000000d', '48cf0732-a2a6-4271-b631-232a70c263ce', 38.0, 63.0),  -- mounted_officer (50)
 ('5e0eb001-0000-4000-8000-00000000000e', '8dc553a0-c688-470d-ae0a-f2a0cfa04f45', 56.0, 94.0);  -- foot_guards (75)
+
+INSERT INTO sim_enemy_type_bounty (id, enemy_type_id, min_bounty, max_bounty) VALUES
+('5e0eb001-0000-4000-8000-00000000000f', 'df3c681f-3dfc-5b0a-a412-2bda75e0bfa7', 187.5, 312.5), -- howe_assault
+('5e0eb001-0000-4000-8000-000000000010', '7df9377b-c140-578a-8085-3d5c35a9b7e0', 300.0, 500.0), -- hill_rearguard
+('5e0eb001-0000-4000-8000-000000000011', '78259b8a-81de-5a1f-9aa7-918754acbb5d', 450.0, 750.0); -- clinton_siege

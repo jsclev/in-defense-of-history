@@ -5,14 +5,14 @@ struct GeneticSolutionView: View {
     let solution: GeneticSolution
     let canvas: RuntimeCanvas
     let onExit: () -> Void
-    @State private var playback: GeneticSolutionPlayback?
+    @State private var playback: LevelReplayPlayback?
     @State private var setup: LevelSceneSetup?
     @State private var error: String?
 
     var body: some View {
         Group {
             if let playback, let setup {
-                GeneticSolutionPlayer(playback: playback, engine: playback.engine,
+                GeneticSolutionPlayer(playback: playback, solution: solution,
                     setup: setup, canvas: canvas, onExit: onExit)
             } else {
                 ZStack {
@@ -33,13 +33,9 @@ struct GeneticSolutionView: View {
         .task {
             guard playback == nil, error == nil else { return }
             do {
-                let player = try GeneticSolutionPlayback(solution: solution, db: db)
-                let scene = try LevelSceneSetup(content: player.engine.content)
-                player.engine.heroImageAspectRatios = Dictionary(uniqueKeysWithValues:
-                    player.engine.content.deployments.map { ($0.hero.id, scene.heroAspectRatio(for: $0.hero.unitImageName)) })
-                player.engine.validateHeroAsset = LevelSceneSetup.validateHeroAsset
-                player.engine.publishesPresentation = true
-                player.engine.advance(ticks: 0, interpolation: 0)
+                let runID = try db.geneticSolutionDao.recordingID(for: solution)
+                let player = try LevelReplayPlayback(dao: db.levelRunDao, runID: runID, speed: PlaySpeed(1))
+                let scene = try LevelSceneSetup(recording: player.setup)
                 setup = scene
                 playback = player
             } catch { self.error = String(describing: error) }
@@ -48,8 +44,8 @@ struct GeneticSolutionView: View {
 }
 
 private struct GeneticSolutionPlayer: View {
-    @ObservedObject var playback: GeneticSolutionPlayback
-    @ObservedObject var engine: BattleEngine
+    @ObservedObject var playback: LevelReplayPlayback
+    let solution: GeneticSolution
     let setup: LevelSceneSetup
     let canvas: RuntimeCanvas
     let onExit: () -> Void
@@ -63,26 +59,26 @@ private struct GeneticSolutionPlayer: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
-            LevelScene(setup: setup, state: LevelSceneState(engine: engine), canvas: canvas,
-                       groundOverlay: { EmptyView() }, mapOverlay: { EmptyView() })
+            LevelScene(setup: setup, frame: playback.frame, ticksPerSecond: playback.setup.ticksPerSecond, canvas: canvas)
                 .allowsHitTesting(false)
                 .accessibilityElement(children: .ignore)
-                .accessibilityLabel("Live winning strategy")
-                .accessibilityValue("Candidate \(playback.solution.candidate.id), tick \(engine.timer.tick)")
+                .accessibilityLabel("Recorded winning strategy")
+                .accessibilityValue("Candidate \(solution.candidate.id), tick \(playback.frame.tick)")
                 .accessibilityIdentifier("ga-battlefield")
-            HudView(runtimeCanvas: canvas, state: LevelHUDState(engine: engine),
-                    hudLayoutConfig: engine.content.hudLayout, showsAuxiliaryControls: false)
+            if let hud = playback.frame.hud, let layout = playback.setup.hudLayout {
+                HudView(runtimeCanvas: canvas, state: hud, hudLayoutConfig: layout, showsAuxiliaryControls: false)
+            }
             if let error {
                 Text(error).foregroundStyle(CouncilPalette.cream).padding(20).background(CouncilPanel())
                     .frame(width: min(480, canvas.safeInsetsRect.width - 32))
                     .position(x: canvas.safeInsetsRect.midX, y: canvas.safeInsetsRect.midY)
             } else if playback.isFinished {
-                Image(systemName: "checkmark.seal.fill")
+                Image(systemName: playback.outcome == .victory ? "checkmark.seal.fill" : "flag.checkered")
                     .font(.system(size: 64, weight: .bold))
                     .symbolRenderingMode(.palette)
                     .foregroundStyle(CouncilPalette.ink, CouncilPalette.gold)
-                    .accessibilityLabel("Winning solution verified")
-                    .accessibilityIdentifier("ga-victory")
+                    .accessibilityLabel(playback.outcome == .victory ? "Recorded victory" : "Recorded solution finished")
+                    .accessibilityIdentifier(playback.outcome == .victory ? "ga-victory" : "ga-finished")
                     .position(x: canvas.safeInsetsRect.midX, y: canvas.safeInsetsRect.midY)
             }
             controls

@@ -27,7 +27,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('6d8412ac-fae8-44f6-86ef-c70c2ba1b012', 'f7867c64-4663-49c8-a85f-7f7908ab0b99', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('0bab854b-57a9-4f6d-b3ac-0947611a33a6', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (
     SELECT id FROM enemy_type
@@ -35,15 +35,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('76078c2b-6d25-4f7a-8803-b1d1fce9c8da', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('eeb1662b-546d-4126-9a23-6ef84d71ac76', '9b3dde17-9fb3-4279-8f11-ac0f8e7bdc59', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('7bd14f21-94de-4925-89ea-7805c7723e71', 'effa0c5f-2ae5-4089-896e-23777602eedd', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('2f478b75-db42-4a63-92ce-05e0b3b9397a', 'effa0c5f-2ae5-4089-896e-23777602eedd', (
     SELECT id FROM enemy_type
@@ -95,7 +95,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('1ccb92d1-0327-449d-9a92-12e8ceb2e77c', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('7f2a07f4-3f49-4b77-9b8f-3769f65e2707', '2cb1dfcf-9bb5-4f32-b8fb-54f0956c6c7e', (
     SELECT id FROM enemy_type
@@ -215,7 +215,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('13b86fb8-b040-4f60-9089-ab9449e3d52a', 'a009f343-02eb-4e3c-8914-4f8e500a4226', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('8b77d995-51c1-44f5-bf45-e15fb08f574f', 'a23434f1-32ab-4698-9c0c-57932f611081', (
     SELECT id FROM enemy_type
@@ -223,11 +223,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('7be8a940-1057-4992-905c-45c4f54956d9', 'a23434f1-32ab-4698-9c0c-57932f611081', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('a2d878c2-c242-4f89-814b-afdd4e01c34f', 'a23434f1-32ab-4698-9c0c-57932f611081', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('66968866-f342-4546-948f-45848c9130d3', '7ca53816-ce72-4d3e-8b2e-721a013522ba', (
     SELECT id FROM enemy_type
@@ -275,7 +275,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('139276a8-e53f-45f3-86e1-7ee917cca699', '559051a0-b358-409e-89c6-310b7870063f', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('2ea938f4-54d4-49c6-bc1b-ee83f4e67f21', '559051a0-b358-409e-89c6-310b7870063f', (
     SELECT id FROM enemy_type
@@ -291,7 +291,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('2ad8f4e5-dac0-44de-b5b6-a25923bf4099', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('fc9afb97-fb08-479c-87a9-a8abf328cf9a', '9c4755fd-8ce6-431c-9c04-446d78c86639', (
     SELECT id FROM enemy_type
@@ -399,7 +399,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('a8c35094-64e1-4574-91a0-5784dd761ea1', '6ce1bade-9567-483b-b0ee-1944d4fe779c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('87be80a1-e5f7-4490-a44d-1b228f62d08a', '465a774d-28d4-4c69-a4d5-7c9c6540118f', (
     SELECT id FROM enemy_type
@@ -459,7 +459,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('fcdbff84-adf8-49c6-bb28-c89bf52c5eb8', 'ad91ef30-b91b-40b8-8094-dc66798854f2', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('409d3673-aaff-4b85-8321-8d377937b7ab', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
     SELECT id FROM enemy_type
@@ -471,7 +471,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('3ea4d1a3-f3df-45b3-9b02-72dee0330289', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('33cfac65-d718-4c1a-a2c0-034c7f398ef0', 'a16e084a-a027-4871-b32d-9b804e87a6e3', (
     SELECT id FROM enemy_type
@@ -547,7 +547,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('d89d853f-d726-4af1-bdd6-aef8ab68de69', '8e271718-7fe1-4f3d-81b1-819e27ee4eed', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('75fbebfa-ef6c-4809-bcd1-2f681dfaf187', '3ef0c005-7b8e-493a-81c6-1ff91a01f223', (
     SELECT id FROM enemy_type
@@ -607,7 +607,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('d13507bc-0e2d-4202-bc8a-4fb580741c3e', 'd169d4ae-5842-43c8-88c5-48a32cd40e81', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('347b2578-e3e1-4a87-b4cf-ab021ba73e95', '3c6b891a-1966-470d-b462-90508b93572b', (
     SELECT id FROM enemy_type
@@ -619,7 +619,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('7e69c8c9-278a-431a-952d-fad926b487d6', '3c6b891a-1966-470d-b462-90508b93572b', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('acc2aa88-6c64-4ca8-9db0-5efcae22b77d', '3c6b891a-1966-470d-b462-90508b93572b', (
     SELECT id FROM enemy_type
@@ -695,7 +695,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('969560a1-5700-4c34-bfbd-b065ea7795f1', '53fd2b34-890c-434f-8215-0559448ed8d6', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('a85f89ac-7f41-4372-b983-a49dfd6b4153', '9d0e2176-f203-4728-b834-ef343fd93372', (
     SELECT id FROM enemy_type
@@ -751,7 +751,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('75bfb1b1-c74f-4ee5-af68-b6c3a67735c0', '36a27d95-19fd-47af-bf1a-cf48c0a06397', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('24abfa20-dbc5-402e-88e1-815db0bdd6e4', 'a0644a38-cefb-4585-ae16-3d0801e0ee15', (
     SELECT id FROM enemy_type
@@ -811,7 +811,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('db31a391-352b-4406-8116-3fe8fe235238', 'e7e29910-ca19-4d22-87d4-1da6c4fdc2bf', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('88c4f65d-f43b-45af-91a7-6f0b32957330', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (
     SELECT id FROM enemy_type
@@ -819,15 +819,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('07816ce9-6df2-41d0-bc21-79789b298155', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('c28cd616-6ff4-4b76-82d2-ac20306c9522', '9a938b11-5372-4ab9-bbec-ca2e3ab09ced', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('519e8e1e-6739-420d-8b23-a999122cf561', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('6670898e-967d-442b-b666-3af1b1e54447', 'd5dd5c24-4e0b-4e7c-8aad-7bbc73780541', (
     SELECT id FROM enemy_type
@@ -879,7 +879,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('a6f21a25-cab2-4603-83c4-a0a23e7cbd2a', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('1e392df0-333b-43ef-9bc9-b503984cf118', 'fd0955be-0ac7-49ac-9f84-20894446516d', (
     SELECT id FROM enemy_type
@@ -995,7 +995,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('2fc84d3d-fef6-4d0f-9fc4-9bd6f44e5376', '2c277555-6082-4401-8e8a-c3cb55d6c802', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('1f5f9d47-aed4-476a-a754-f4d40f40d1b8', '885838f2-364e-44bf-be0f-4dfc0361a12b', (
     SELECT id FROM enemy_type
@@ -1003,15 +1003,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('4e418092-f95d-4477-8c32-8966ea05b4d7', '885838f2-364e-44bf-be0f-4dfc0361a12b', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('cb4929af-749f-44b7-8e54-ebe00baa7270', '885838f2-364e-44bf-be0f-4dfc0361a12b', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('b46a9bca-744f-4d7d-a825-3337eda42f9f', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('63cac5c6-8f5a-41b1-8de0-c73440778d8d', 'df323b4d-2f6d-4e75-8614-94c7894f22a7', (
     SELECT id FROM enemy_type
@@ -1063,7 +1063,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('8864132e-675c-4c98-97f6-7501b3929127', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('b78ee95a-dabe-4e50-9324-6ecac2836b66', '6e2389e7-a1a9-444d-85d5-5826e09015d0', (
     SELECT id FROM enemy_type
@@ -1183,7 +1183,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('6d344ed0-b627-4be9-a7da-6156dd7a7263', '2f6b165c-44a7-45cc-97a2-3b9e4f34d60f', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('db34436d-235a-470c-995d-768dfe9fc1d3', '026c399e-554c-44a8-b78c-a76999e8f781', (
     SELECT id FROM enemy_type
@@ -1191,11 +1191,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('482e8b3a-3c81-4afd-b790-e902d57ebaca', '026c399e-554c-44a8-b78c-a76999e8f781', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('06bcdada-0e3b-4c5f-bd68-af50b1bb5cef', '026c399e-554c-44a8-b78c-a76999e8f781', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('205a07e1-91da-4cb5-a0cb-b87219b04897', '996b03fa-0f5f-488b-87ab-e7497edb5490', (
     SELECT id FROM enemy_type
@@ -1243,7 +1243,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('0fd5a048-0a01-435f-8635-f6676a448f09', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('752c0db0-df17-439c-a7d6-1d8c186339a8', 'fbd81e63-7866-431d-b63b-0b63ce1ffa2c', (
     SELECT id FROM enemy_type
@@ -1259,7 +1259,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('6698e0a4-99be-448e-b292-fa62b0257744', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('8678971a-a6ff-4838-b0d7-a32ed1c1136e', '70d1fb8e-55bc-4173-b00b-0ee6f9ce1ae5', (
     SELECT id FROM enemy_type
@@ -1359,7 +1359,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('603e5038-8362-40c5-9e9e-86c8c1647845', 'e2adb93a-0d6f-411f-8622-9fdd4dcad2b5', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('87b9d96d-dd91-4719-bfd7-65b2466d45e7', '31e83569-cc40-4f1b-9428-aeb5c64790af', (
     SELECT id FROM enemy_type
@@ -1367,7 +1367,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('24a222dc-5faf-45c7-8fb5-3728d77794d0', '31e83569-cc40-4f1b-9428-aeb5c64790af', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('b60a44d8-81e0-471b-939f-3ea3cc544cc5', '31e83569-cc40-4f1b-9428-aeb5c64790af', (
     SELECT id FROM enemy_type
@@ -1375,7 +1375,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 6, 5.5, 0.70, 0),
 ('34fd2304-739b-4b68-9f0d-d122728e1346', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('776f2bc2-7304-479e-b771-50455ae28710', 'd9ad570c-5c1c-489a-a40f-cfe12c816881', (
     SELECT id FROM enemy_type
@@ -1427,7 +1427,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('6fd9cd2c-ba2d-470c-9a46-a8cd20e1ebfa', '2832b647-32e5-40c3-84d9-18715d6c555a', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('fc2e8fa2-1f2b-41c0-aad7-00f113c9387b', '2832b647-32e5-40c3-84d9-18715d6c555a', (
     SELECT id FROM enemy_type
@@ -1499,7 +1499,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('bc5586c9-9cb1-45bc-b831-2f0b8f6af926', '686f3fcd-e6a9-4a2f-b464-bb8d9f7dd118', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('bb6a76d9-caec-4103-ab4f-c4d8d4c8e411', '667b2c48-28d0-4b39-810e-b8c20f61603c', (
     SELECT id FROM enemy_type
@@ -1563,7 +1563,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('4ba5b39c-9d12-4e14-aa60-27fecd7d860f', '8fc03a8f-d6df-404c-a713-53629e264cfe', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('5f460ba5-b792-4020-89a2-5a90b49fdf00', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (
     SELECT id FROM enemy_type
@@ -1571,11 +1571,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('d8628028-94cf-4427-98fd-4181b62497e3', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('63aed009-9e9c-4608-8195-fc49f71c3ec1', '270ffbd5-10a7-4d90-b266-2918db03ed0a', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('d23708dd-0426-40fa-b296-5903643227d4', '9832ff8e-d187-41a0-bb35-f9e2094d0593', (
     SELECT id FROM enemy_type
@@ -1615,7 +1615,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('8d7fb283-df79-4f57-b10e-a2cf554215d3', 'c972bc10-91b5-4e4d-bf76-4525935a603d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('d53a3b38-8279-4bb6-8d91-1d483f1d5689', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
     SELECT id FROM enemy_type
@@ -1627,7 +1627,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('1cc2b6c1-b2f2-412b-ab69-e9637dadb855', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('ac42a656-d17b-4f22-9606-79088425d4fb', 'c1d6f185-545e-47b1-be98-8da0a2310744', (
     SELECT id FROM enemy_type
@@ -1643,7 +1643,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('eeb5075d-7f05-4ec6-9eba-49b77aa0208e', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('1bc11513-bd55-4c69-8a50-084ea3b80088', '5fb7d945-224a-4b57-a5ae-cec8e8049089', (
     SELECT id FROM enemy_type
@@ -1719,7 +1719,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('303728b6-bb0c-4edd-a272-a8ac89ce04b4', '35078aca-309d-4407-a41b-7a63b1f8cd20', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('26d1c418-e83d-4833-8a6f-039111e2478f', '06f52b41-cf3e-4c76-96a1-b659ede40584', (
     SELECT id FROM enemy_type
@@ -1727,15 +1727,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('5848914e-113d-4c1b-b916-cb10ceab59cd', '06f52b41-cf3e-4c76-96a1-b659ede40584', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('49737cec-5704-4b6b-8d9b-e46c98d877b1', '06f52b41-cf3e-4c76-96a1-b659ede40584', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('e2f47c09-3340-4b0f-a0b0-011039b807e4', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('31bd66c3-3d9b-4f88-b1ff-cea3fdec7a96', 'e4860988-12cb-4211-aac5-0d7eaf25b11c', (
     SELECT id FROM enemy_type
@@ -1787,7 +1787,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('80e05f8b-219a-4fe5-ad86-ebc5232c50db', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('1c20cef1-0801-4db1-a622-765c16fd82d9', '0e87123a-0d35-437b-ada5-108ada6f9cd4', (
     SELECT id FROM enemy_type
@@ -1903,7 +1903,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 1),
 ('3b2571c6-b8fd-4112-9c50-d6ed9af17272', 'e94535ab-cef8-4532-9437-d1ee2b02eb34', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 1),
 ('7cf2dbcc-d172-424b-a3ac-6c4324829b59', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (
     SELECT id FROM enemy_type
@@ -1911,7 +1911,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 2),
 ('c7d43494-2d23-40d7-b8c6-e1f2d0c4c876', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 2),
 ('ae82b04c-3104-4a27-9023-d858227cf644', '478f5deb-76ac-450c-8586-16e83dfcbbc1', (
     SELECT id FROM enemy_type
@@ -1919,7 +1919,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 6, 5.5, 0.70, 2),
 ('3b8e4d8c-8a2c-4a34-9136-5b26b2dc0e9f', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 2),
 ('db263c0f-5617-4e9b-8b33-afea2d516f73', '3ae09f31-6d2b-437a-8f89-9598a38e3459', (
     SELECT id FROM enemy_type
@@ -2039,7 +2039,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 3),
 ('d8c49701-e8ba-46a7-a268-a4d15754eb72', 'b0f8dc01-28d9-4c03-8992-0629093d6a02', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 3),
 ('631eb1fc-c8f2-4c1c-9bfa-2ebd45ece16e', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
     SELECT id FROM enemy_type
@@ -2051,7 +2051,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 3),
 ('9c9f9770-35ff-4ea1-98ec-e0b3958db61a', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 3),
 ('712011d8-a1d7-496e-a71c-f1c6c49d5a62', '22bcb548-8013-4d8e-9572-f07ef2ca03b4', (
     SELECT id FROM enemy_type
@@ -2127,7 +2127,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('a45aece9-0b7d-469d-aecb-6b4326cc6e55', 'e929f52a-3a36-4b23-b732-154226bd5790', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('7151b420-248f-49a4-bc69-2e1636fd0255', '220fc62a-f821-4e8d-a4aa-be29c19a7f78', (
     SELECT id FROM enemy_type
@@ -2183,7 +2183,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('6245655e-1884-462b-87eb-6da6c703a537', 'ad3f100f-0c7a-45fe-98d5-e83d97b1b6c7', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('28afd92e-7e7a-4e22-9d52-b941283ca7d7', '7e675b27-0b0b-4de1-8c7d-647f01324dd2', (
     SELECT id FROM enemy_type
@@ -2251,7 +2251,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('33330a96-17de-40c2-bb8d-0ce6a3aaa00d', 'f03ad0eb-7921-4dff-870a-b19f27a46bdd', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('ae0dafb3-1d30-4d1c-a4f7-bba4ca44eb99', '1914b37d-748c-44df-8991-e008f0134224', (
     SELECT id FROM enemy_type
@@ -2307,7 +2307,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('5f8a1c64-b085-4889-96fe-e752fbe83dcc', 'e53f71f3-412e-46e1-a85d-511568c850a6', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('cf56f20f-9212-4d12-b1c4-8b4630e3050c', '28857f77-6769-40b2-a4df-577329ee11a0', (
     SELECT id FROM enemy_type
@@ -2367,7 +2367,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('5e6f77df-704c-4c91-8c93-8b281b892284', '54473831-c73f-4e86-a096-18787e0934f3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('b056256d-3ee6-4029-852f-053a9ee2af9b', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (
     SELECT id FROM enemy_type
@@ -2375,15 +2375,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('bd0e4817-3a31-490c-9e73-a6d6dc3e1987', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('ea76ae37-3f90-42a9-b2bc-0fe2c474f204', '211f488f-30b2-4aa4-bdfd-651e0bb7e915', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('fc372844-7867-4238-b4fb-101d86933568', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('6a67b9da-1201-4f48-a7a1-d5883f03d31c', '60c8f026-461f-4450-8991-abe3c2cdb4d8', (
     SELECT id FROM enemy_type
@@ -2435,7 +2435,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('0d08a4a7-d49c-46a5-9b68-370a90b88454', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('1a896900-c91b-465b-a072-a2a5f0c5e47a', '6bd0025e-aa76-4aa1-a265-514b4fc47416', (
     SELECT id FROM enemy_type
@@ -2555,7 +2555,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('5d185448-be37-4877-8f35-98176c5d14ef', 'b0fe9eba-6ec0-4ffb-a408-4151b546595f', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('a65aafad-69d5-48d6-a871-e5b22e50fd8f', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (
     SELECT id FROM enemy_type
@@ -2563,11 +2563,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('2f526cc7-4765-42c9-9174-2775ae8f74ad', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('eec3fd59-a35a-4885-8613-b0e130cc4204', '8a9b4907-e77d-4bb6-a478-01a7e720f1e3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('998d4e23-461d-4e31-a9f9-37859e2a6c59', 'f201dd7b-1fbf-4165-a2ef-253f4a8c1314', (
     SELECT id FROM enemy_type
@@ -2615,7 +2615,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('d6d28975-dfaf-423f-b2c2-da7d31562db7', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('7f75e834-77cd-496d-af87-0c8b3f106539', 'f2c3acca-91c0-4b2a-a977-7517271c929d', (
     SELECT id FROM enemy_type
@@ -2631,7 +2631,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('b58b4df3-0243-4263-b8c4-1d2928762713', '6aaa8559-9c12-429a-a478-b76f223697f6', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('8e0591ce-f02e-43da-8e7b-25f38bf6a9b7', '6aaa8559-9c12-429a-a478-b76f223697f6', (
     SELECT id FROM enemy_type
@@ -2731,7 +2731,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('8715f26e-429e-4b1a-a1ba-79b6c92c84d6', '44560c8e-4db0-43b4-a895-10760275a09e', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('8b6e5453-7902-4e07-9dca-a8306bea797d', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (
     SELECT id FROM enemy_type
@@ -2739,7 +2739,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('9b94861d-871b-4350-afe7-75708ab4e34f', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('af3ebcd1-0812-4bd1-8ca0-b69490c971e3', 'd07a2e14-c08d-485c-be66-a41f85633aa5', (
     SELECT id FROM enemy_type
@@ -2747,7 +2747,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 6, 5.5, 0.70, 0),
 ('ad791b78-5f50-40f8-aa8e-87a0fc39ea8a', 'be95356a-f320-41e9-b5b0-447621dec054', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('2a57a52d-e1e3-4610-9175-4d5a9f798dce', 'be95356a-f320-41e9-b5b0-447621dec054', (
     SELECT id FROM enemy_type
@@ -2799,7 +2799,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('4a1e09dc-dbaf-4595-afa9-7906ac26f5b2', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('e9c18116-6597-454a-afa5-cf8988370ce8', '6b4c2833-dd88-4e72-9021-9aeb06a2ee96', (
     SELECT id FROM enemy_type
@@ -2871,7 +2871,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('e95b7492-1067-46b2-a2d6-3553147c8c09', '22899a54-e635-4e59-910d-8b029c51cbba', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('58ef6f46-b3ed-4fa2-aad6-a7753a15cbaa', '5fe8ee6a-483c-4032-aeb3-05d58e3035e2', (
     SELECT id FROM enemy_type
@@ -2939,7 +2939,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('2ddb1c23-59dd-4025-824c-5152fc96adea', '1faa5e36-4589-47fc-a04a-06388a24af0c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('9db6007c-70df-4a15-b2dd-a8bfe916e700', '2ec0ad20-4965-4179-9fd9-828256c65fbc', (
     SELECT id FROM enemy_type
@@ -2999,7 +2999,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('5489291d-31c8-43d6-b759-c4e70ac043be', '49debdf1-af45-454b-901d-e455d0133b40', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('c2fc6fc7-b5bc-4285-b2ec-3ea6dcf28226', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
     SELECT id FROM enemy_type
@@ -3011,7 +3011,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('fd947e6d-7b54-4892-89be-ac0687cd3098', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('bd0cf48b-a00f-40a1-9141-6ee3f1f77ea0', '29f993de-8ef0-4fbf-8064-8584dc0e311b', (
     SELECT id FROM enemy_type
@@ -3087,7 +3087,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('38609b87-d7bb-43d5-8b27-d05405c54aea', '1a504f45-448a-440e-9b89-a22ae914d368', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('156960b4-1d33-455b-97c5-a9177c175978', '289a1dbd-7f60-49b5-ad1b-900b68dbe2cc', (
     SELECT id FROM enemy_type
@@ -3143,7 +3143,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('cb43d780-63e2-4eba-868f-caf61a5c8e4e', '9e2514d5-4213-4a7f-94dc-8f1567fdab12', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('9d7de43f-8af8-44f2-a78f-5ecaabb3b4f1', '08db1a02-b3a0-41ac-ab23-6aa7906124f5', (
     SELECT id FROM enemy_type
@@ -3207,7 +3207,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('5844ded9-d83b-420a-a5af-d8a7c7d81668', 'd2978720-ca52-472b-9300-68c0f8360e6a', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('21c8b748-e7bc-40c8-922c-3e1b6be20eee', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (
     SELECT id FROM enemy_type
@@ -3215,11 +3215,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('2671689d-add8-4170-ad92-9c63959c7bf9', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('70eaea52-b6d8-49f0-bf67-fd8cc5a03506', 'e4906f11-8a4a-4fe8-b11d-73def5a7462e', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('e031d0a4-7edc-4ceb-a683-122050869a58', 'ce4db129-e6c8-45b8-9c5c-fd3e10b5f09a', (
     SELECT id FROM enemy_type
@@ -3259,7 +3259,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('047a5fac-a56f-413a-aee9-4073ff32ffd7', 'e296d33c-8c29-401b-a9c3-91d6148712fa', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('50aadc9b-c210-4c73-8050-f31514c78c66', '0218aeda-1725-4a6d-91a9-03532e51280c', (
     SELECT id FROM enemy_type
@@ -3271,7 +3271,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('a13a8722-6a70-4f8c-b799-01a2b1768977', '0218aeda-1725-4a6d-91a9-03532e51280c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('205219cd-9a80-49bc-a4b5-3a60dfa0b3fe', '0218aeda-1725-4a6d-91a9-03532e51280c', (
     SELECT id FROM enemy_type
@@ -3287,7 +3287,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('2482d4f5-b06b-4afd-a6df-43c58149b6ce', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('c8c5c9b3-b1a5-45f4-8030-e8ab0426183b', 'a1931f5a-299c-4878-b0b7-06d2d6a88430', (
     SELECT id FROM enemy_type
@@ -3363,7 +3363,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('f6fc46be-628c-4124-b326-36486cb08372', 'c4257ab8-6241-4399-9ad0-5a94e8d1d5ef', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('5c8b94df-0292-4f8f-b695-5ef4ffd87086', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (
     SELECT id FROM enemy_type
@@ -3371,15 +3371,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('80bd3b5f-baba-4bcc-afbc-a18fbe10e61e', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('427b0b07-80bb-44d0-ba80-6ec13c597a5a', '57bbf326-5e3b-4ebd-a981-1f8803a39771', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('c033a03c-e08b-4e3f-a1be-024a06d542fe', '31c64363-1703-481a-a4af-20fa5d65016d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('0a316b82-b56a-45ab-8ebe-e8c900402a86', '31c64363-1703-481a-a4af-20fa5d65016d', (
     SELECT id FROM enemy_type
@@ -3431,7 +3431,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('c7f7cb80-463a-4f0a-a868-bc00b6d80c00', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('25c73b95-efbe-4ef0-a24a-04266a7b1017', 'd24d7421-8e3a-4dd0-a488-812536296ed0', (
     SELECT id FROM enemy_type
@@ -3555,7 +3555,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('8014e9f2-0061-4d22-aab7-cb398b329c27', '7ac144d8-bbc2-4c3c-8327-947d5a53ddc3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('7110fffb-0ffb-4649-a093-8efb79293007', 'ad5dfe6d-ab13-4d28-a6de-922a1ce143c5', (
     SELECT id FROM enemy_type
@@ -3615,7 +3615,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('02dd64d6-ed50-4719-9610-622b1df8ae04', '88a7edb5-205a-45c7-bb9e-7e022eccffad', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('d1b1cc23-df09-48c2-9276-c9c65a6e3642', 'e784ce78-343f-41f8-9320-62892464faee', (
     SELECT id FROM enemy_type
@@ -3627,7 +3627,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('f2bf440d-0c59-4011-aba0-d9b2583e198d', 'e784ce78-343f-41f8-9320-62892464faee', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('3588bf59-0f56-48e0-995c-bc01b059e8d1', 'e784ce78-343f-41f8-9320-62892464faee', (
     SELECT id FROM enemy_type
@@ -3699,7 +3699,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('c0c195af-219a-4161-81e6-f0e39be4019e', 'b8041cb7-8197-4f37-b39c-3a0b85af190f', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('60fde7f0-2e8c-4c11-86e3-0cee7053ec49', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (
     SELECT id FROM enemy_type
@@ -3707,11 +3707,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('d7c78208-07fc-4d15-b240-6d5c351be422', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('beb2ac94-128b-44c3-8dc7-4b3db07a0375', '4a237c06-7b0a-4267-a2f9-a83267c284b8', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('dd367893-dcad-4d23-958d-e6023654c0d6', '6c53f019-02d1-4082-b919-8629c45da8f2', (
     SELECT id FROM enemy_type
@@ -3759,7 +3759,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('622c5ed8-20ed-4399-b2d0-09dbd09a0fb6', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('5997305a-d8d2-4278-a253-f083ec72e52e', 'bb2e7868-429e-4e15-b5ef-9dbf5e1a93d3', (
     SELECT id FROM enemy_type
@@ -3775,7 +3775,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('2a8706d9-b374-43fc-ae5e-20c209ba21ef', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('97106732-da59-4aac-94a7-21b2b7df837d', '7657bad4-1ab1-4d58-a702-9cf98b483a3d', (
     SELECT id FROM enemy_type
@@ -3883,7 +3883,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('33212fce-1ac7-4516-9119-7b9a5924cd47', '543f65df-9b01-48f0-a9c2-40ef0b95f47c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('8bfd15cb-dad7-4818-945f-944e60903b39', 'c83244db-78b0-43f3-ac9e-9404059c0be1', (
     SELECT id FROM enemy_type
@@ -3939,7 +3939,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('9b5834dc-cc80-41b5-959d-b432d82590dd', '3ce17652-108b-45ec-9fbe-ac0af38bd80d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('9b88b5cb-e493-4520-895a-64940258921f', '35e08da8-2565-44ec-a43d-09a963054876', (
     SELECT id FROM enemy_type
@@ -3999,7 +3999,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('f5baad4b-8b8d-49db-949d-945886b206ed', '699e5dd9-7299-4951-bff2-2e309a0c7724', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('f77f3eb9-803a-4b94-9e4f-83c067be20b6', '6586567f-b575-4e69-afc9-979c9af8b646', (
     SELECT id FROM enemy_type
@@ -4007,7 +4007,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('28217671-6728-467f-a8d9-df26ed49de20', '6586567f-b575-4e69-afc9-979c9af8b646', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('14c337d7-1514-4ad9-8f4b-fa0a8ee5df27', '6586567f-b575-4e69-afc9-979c9af8b646', (
     SELECT id FROM enemy_type
@@ -4015,7 +4015,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 6, 5.5, 0.70, 0),
 ('6e5f6b8b-8dd4-4dfb-8e12-f3a5fbc7e836', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('06b04e47-7b8b-45cc-ab5b-c3529a367362', 'cf8bd5e8-0f10-440d-b6a2-932709a6def8', (
     SELECT id FROM enemy_type
@@ -4135,7 +4135,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('4f2e308b-f7de-4829-8b4d-aab21e43c0fb', '93a0ad66-da98-4a9a-8edf-791297c000ac', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('91d156e6-09ab-4cc4-a0d9-f93f72515dbf', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
     SELECT id FROM enemy_type
@@ -4147,7 +4147,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('29eb8b1f-6c28-4b9f-9683-999b5919d1e6', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('6eb3e632-e8fb-4d17-abd6-ec8d8ec2bea7', '8cb9a6b6-c8e3-4002-8d4d-ef60ff6b5648', (
     SELECT id FROM enemy_type
@@ -4219,7 +4219,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('2dc449d5-a203-47bd-ac81-b4081567345b', 'b7bddb98-c3ad-40af-bcd9-5b885b300d9d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('d82c0f48-0048-4bc3-b01b-1b1efd3b6b95', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (
     SELECT id FROM enemy_type
@@ -4227,11 +4227,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('81140697-d900-4fda-b0b5-6159c0465496', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('ef99c068-7d82-4646-a69e-383bf38785de', '338d74c6-30e5-4791-9b65-2daa7fbeaa52', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('f2019484-2705-4286-b6da-0fb91593cc61', '53f9f9ee-09ca-4c29-906d-1667c13a1a10', (
     SELECT id FROM enemy_type
@@ -4271,7 +4271,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('4ce69834-d089-4936-bb3d-1f7645e24ae0', 'fccd5c6f-f88a-4d73-a000-e4f3c6508672', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('62cedd9c-1177-4f89-873d-f69736157124', '9febc13b-740c-4c85-bf96-9a7699904582', (
     SELECT id FROM enemy_type
@@ -4283,7 +4283,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('fe801849-1cd2-4281-ad10-859d1d1b153d', '9febc13b-740c-4c85-bf96-9a7699904582', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('ea0bb5d3-e963-460d-8605-f1d5ca3a9501', '9febc13b-740c-4c85-bf96-9a7699904582', (
     SELECT id FROM enemy_type
@@ -4299,7 +4299,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('34a30687-45a1-4f52-a952-3eba5898971a', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('143121b8-dc48-40a1-8e85-e3896cb230e6', 'fd9befb5-2117-44d7-9ef6-ac47fb486400', (
     SELECT id FROM enemy_type
@@ -4375,7 +4375,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('cdcfd201-8df2-4d28-a0b0-836e58935edd', 'e1364ec0-a657-4d5a-987d-4a88e125d586', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('8b6828a3-6267-4680-a5e8-c60ddee4d711', '74a6bef4-5cf4-49eb-913a-b277177153ef', (
     SELECT id FROM enemy_type
@@ -4383,15 +4383,15 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('f59c95a5-db18-4a78-8cb5-b5e98d3bb4a9', '74a6bef4-5cf4-49eb-913a-b277177153ef', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('693217a8-f5da-4d6d-bc42-8a70c8971416', '74a6bef4-5cf4-49eb-913a-b277177153ef', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('f1f32193-a4f8-45b1-840f-cc9adaa44902', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('9d9d6a80-f68f-48a7-b997-4c24d57eac60', '27c4a37f-cca6-40c6-9f35-eda64f9aa332', (
     SELECT id FROM enemy_type
@@ -4443,7 +4443,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('36d99157-81aa-4c59-a494-0ce25da4e240', '69c806fa-7158-4564-9a07-3359867ab0d2', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('9763faab-e1e7-4407-a9b5-b8e23ea0c24d', '69c806fa-7158-4564-9a07-3359867ab0d2', (
     SELECT id FROM enemy_type
@@ -4675,7 +4675,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('d3396549-69fc-413d-8ec3-a188ed8e86b4', 'c05bba27-247e-488e-a219-88eac2a2cbb0', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('627f7fd6-349a-4148-8f14-620a0abf889e', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (
     SELECT id FROM enemy_type
@@ -4683,11 +4683,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('bc92f8f5-7c1b-46ae-87fb-3177db5c4f65', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('13d3f196-f88c-4e1e-9282-c8027c6084e8', 'df8b74c1-f879-4a98-a3ce-e08b82bf813d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('2b088588-1a51-4268-8b84-622a7385ed7b', 'fc753843-b359-448c-acb5-fe6bfa188e04', (
     SELECT id FROM enemy_type
@@ -4727,7 +4727,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('d2f34260-437b-4486-b1eb-b568a1915332', '96f93775-3a47-48e0-b6d3-82e80c52fe1d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('2bdea9c8-dbb6-4b29-bb42-27c7f9ca52d8', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
     SELECT id FROM enemy_type
@@ -4739,7 +4739,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('1fb48923-8b75-4a9b-871f-7d18c5dc08ea', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('76bcfa44-acd2-4ef5-bade-7467d849c147', '9c15768e-dd0d-4e98-a5c4-a1e36cc5f814', (
     SELECT id FROM enemy_type
@@ -4755,7 +4755,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('e4823c88-465f-4d39-b41f-7dd2fd617cf4', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('7abe7e71-38d2-46d8-add6-30d2fe18d6f8', '5deb66b8-a9db-42d8-a1ca-cb9ecf1a19e4', (
     SELECT id FROM enemy_type
@@ -4835,7 +4835,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('b9dc6ed1-2118-4f6a-9f26-705fd0d9dbcb', '0c3b61ce-d435-4ca2-90e8-08ae0db8f869', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('f84e72df-cc45-4df0-b479-9d026d15a87c', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (
     SELECT id FROM enemy_type
@@ -4843,11 +4843,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('9f73cfdb-aeef-429f-a6ce-8efd30124848', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('d7bcf13e-fddc-45e6-bdac-d90c9e0d8d4c', '9d394406-8e3b-4323-8b9a-e3c985deb9eb', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('2f707037-b21e-4464-a0c6-7a1c31ddc46e', '8de16a86-208f-4993-9703-c4d47ffe7606', (
     SELECT id FROM enemy_type
@@ -4895,7 +4895,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('03430c5f-db76-4dd4-8d29-3fc681c195aa', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('131590cd-313e-4e0b-9ad4-bae7c224d322', 'cf6db06c-1bbb-45af-bd62-f8f055a54c77', (
     SELECT id FROM enemy_type
@@ -4911,7 +4911,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('e9ef7d90-2a41-459f-b8d6-5c1b5fc40d4c', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('df3ee2b3-c781-4d46-80bc-b692e7055f6b', 'c517b0e6-6064-422d-9eaa-5f4d7daa6d05', (
     SELECT id FROM enemy_type
@@ -5015,7 +5015,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('4ce82a13-78ef-46fb-91d7-dc65503e010d', 'a7c8caca-d958-40b9-bb83-fbe97a905efe', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('c6e94cf4-bdec-4eac-919e-dfc4f30065b2', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (
     SELECT id FROM enemy_type
@@ -5023,11 +5023,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('e2052850-580f-4fdf-b380-f34d7ca05450', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('6973bc44-d3c4-492c-9a2b-4ab45fd241e5', '5827a60a-39ad-44e5-8d26-e28fda0b7679', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('48250c1f-10d8-47c4-8841-f9f6062367d5', '9d761e85-91dc-4fec-89cb-f91f027e9b87', (
     SELECT id FROM enemy_type
@@ -5067,7 +5067,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('e1e98a21-b60d-47bc-819b-c301816f3ece', '2fea27be-a856-4178-8e5c-b7b7400bc77c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('8b58ad44-503f-489c-88a9-e8b85a67cc41', '58300b65-0edc-4ba2-a430-d890b69258d1', (
     SELECT id FROM enemy_type
@@ -5079,7 +5079,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('488c269d-199a-445e-8600-616da3f1f059', '58300b65-0edc-4ba2-a430-d890b69258d1', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('f628a691-4e48-4af5-8516-0595128606db', '58300b65-0edc-4ba2-a430-d890b69258d1', (
     SELECT id FROM enemy_type
@@ -5095,7 +5095,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('29a72974-6437-4dd4-9c32-971d3442e434', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('b30a4241-d706-426a-bcea-04615f111749', 'c4f4d37b-02cd-4e93-a633-2318d8a4b2e0', (
     SELECT id FROM enemy_type
@@ -5175,7 +5175,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('ea70572a-d7ff-4756-8269-09dc018d6a7e', 'ab76b92c-9c22-4483-ad36-1c5216d8d546', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('048b2f85-3e1b-4165-a35a-9918b39bdfc8', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (
     SELECT id FROM enemy_type
@@ -5183,11 +5183,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('f64be090-0b67-4072-b196-9be406805d47', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('3169055d-2160-473c-adfe-4be4da2f9c25', '1a20eeb0-72ae-445b-864a-0a14cc66addc', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('ded015e8-c976-4cfb-a494-4916aa39182f', 'c65af715-b69f-4cf2-a338-2dead270c603', (
     SELECT id FROM enemy_type
@@ -5227,7 +5227,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('adb66a47-e788-44ca-b374-dc8a07151b6d', '7138f074-0ed4-441b-b355-b569a0079449', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('7060c158-c21e-464f-bc58-1d30542e1238', 'e0667058-465e-4f6c-848a-1c4608a19870', (
     SELECT id FROM enemy_type
@@ -5239,7 +5239,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('5a55ad78-7627-4e2b-8d5d-21c0e11974b6', 'e0667058-465e-4f6c-848a-1c4608a19870', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('1c586f88-0e0a-4c3b-8846-6bbc9c97cfdf', 'e0667058-465e-4f6c-848a-1c4608a19870', (
     SELECT id FROM enemy_type
@@ -5255,7 +5255,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('4e5bcdec-1e04-4965-b256-19f88f8d4bae', '708fb15a-01aa-44eb-9760-23d53986caa4', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('43733c09-d613-4dac-aee7-ca5fdacb6a93', '708fb15a-01aa-44eb-9760-23d53986caa4', (
     SELECT id FROM enemy_type
@@ -5319,7 +5319,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('97ea9d97-a2ee-40f3-8842-d06fb79df340', '43e72179-bae1-462d-a08c-01f7b7454b3d', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('5e2381b0-1572-42da-b716-9922782b4638', '43e72179-bae1-462d-a08c-01f7b7454b3d', (
     SELECT id FROM enemy_type
@@ -5447,7 +5447,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('bdc15140-68b9-4e2d-be14-926bd2c5ba1d', '43269e50-d8be-48c1-90ce-ac51bbbfbaae', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('a9a859ab-b071-495e-aed9-74885908257d', '85c91f43-928b-4898-b0c0-611d3c9f6922', (
     SELECT id FROM enemy_type
@@ -5455,11 +5455,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('08772b9e-3853-4069-96dc-be63ceff403f', '85c91f43-928b-4898-b0c0-611d3c9f6922', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('1816a573-fc57-458c-a421-206fca4825a0', '85c91f43-928b-4898-b0c0-611d3c9f6922', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('363214ee-96b3-4bdd-9b8a-7a6796433b37', 'f7cc91e1-0ceb-47a7-a4cc-0535a2b9a3c9', (
     SELECT id FROM enemy_type
@@ -5507,7 +5507,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('05685faf-85f8-43a0-b79d-5848571c1170', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('975dcc39-9b59-4178-a43b-81b6681c47c1', '746fb1a9-cb6f-47d5-a66e-74bea9fa7b61', (
     SELECT id FROM enemy_type
@@ -5523,7 +5523,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('2abfc6b9-c06a-4bf0-8d91-cfa876c4c540', '52bfff3b-2930-4cae-90e8-4244258d6868', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('a6b0d0e1-420a-42ad-ae28-eed860948cbf', '52bfff3b-2930-4cae-90e8-4244258d6868', (
     SELECT id FROM enemy_type
@@ -5631,7 +5631,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('a154d4e1-311c-4e9b-9f00-439d195c9b04', '44bc5f73-063c-4bec-8bcf-20f192c7bbfd', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('42665e71-36ab-4e70-ab79-d42d76a1b32d', '69395dce-6445-46b6-a102-ed5b1e4e3bfc', (
     SELECT id FROM enemy_type
@@ -5687,7 +5687,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('6e1e2d7a-9b44-4759-865e-2b181224251d', 'ea5f8f68-aadb-4e59-b666-9b3275075d34', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('abdeb08a-d2a9-48c4-9427-d81d4e805f26', '3ade7512-3d03-42fd-bf82-742b42c8fff4', (
     SELECT id FROM enemy_type
@@ -5755,7 +5755,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('50f8c0b4-a416-4d99-ad3f-debbd7a71126', '69eba23a-7741-4460-80cb-b248e0a3893e', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('e03e944c-bbfe-47ed-bc49-961c647c2d76', '68be29a6-75df-488e-be7d-9e0f0bb811f9', (
     SELECT id FROM enemy_type
@@ -5815,7 +5815,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('0d2eed88-1a6e-4737-9879-4e3e3cca4b59', '8868fdcb-be86-41e5-a043-8da087b206bc', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('35b7c3c5-7d40-4d01-b8a2-3ca9b9f1740e', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
     SELECT id FROM enemy_type
@@ -5827,7 +5827,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('6dcb7bb2-9a52-4a13-8be2-e13a7ae32afa', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('ef4e9d88-f166-4637-82f6-0424020844e5', '58bec795-38e0-4b68-a8b3-fbf315aefaf2', (
     SELECT id FROM enemy_type
@@ -5899,7 +5899,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('f818485d-8c57-4a4b-97dd-95f0e7a9cfe2', 'b6d2b8d1-ebc3-4847-9046-69a840b333b2', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('02a823f1-cff1-4665-9cb9-bb455c2fb9c3', '357061f7-e4d5-420d-814e-84507ba4c98c', (
     SELECT id FROM enemy_type
@@ -5907,11 +5907,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('6ce9cee7-d97b-4a08-b666-792863c0313f', '357061f7-e4d5-420d-814e-84507ba4c98c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('b273c17e-bc8d-41c9-b71d-0e6236ae709b', '357061f7-e4d5-420d-814e-84507ba4c98c', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('4f819e07-cbb3-4f90-b012-1df84e9876d6', '6f581332-18eb-480f-a738-cd5b66b8884c', (
     SELECT id FROM enemy_type
@@ -5951,7 +5951,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('7877c78b-9a4a-4b33-a4af-012485f3b001', '43e336fd-8e0b-4b05-ae0c-bfed8270ba81', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('f394a84c-d6cc-46a0-bb53-a62e47177097', '2b253a98-5606-47ed-a2f1-645681304afd', (
     SELECT id FROM enemy_type
@@ -5963,7 +5963,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('dba483b8-da77-41f0-84d5-5dba3996124e', '2b253a98-5606-47ed-a2f1-645681304afd', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('db75870d-95f3-4934-a18f-2482fa586d48', '2b253a98-5606-47ed-a2f1-645681304afd', (
     SELECT id FROM enemy_type
@@ -5979,7 +5979,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('3e0de4d1-a13c-4b90-aff8-8157470aceca', 'f949b508-3380-4623-8e52-9ee48026e79a', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('1f5c5dca-cd8f-432c-9691-4f38a4ee4629', 'f949b508-3380-4623-8e52-9ee48026e79a', (
     SELECT id FROM enemy_type
@@ -6063,7 +6063,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('de1b9158-d308-415a-acab-eb8dffe1180c', 'e46e26e5-3f55-4ac1-a29c-c4dcf0b1c22e', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('c890d726-4246-42de-a995-1ca8fa03c29e', '9e95d3dc-1d6e-45cf-a506-afc3b516b59d', (
     SELECT id FROM enemy_type
@@ -6119,7 +6119,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('65df0509-c05c-4fde-a765-753857654152', 'fb52c50b-ce62-40bc-a9c1-3dacbb3b5489', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('db02edcb-6b78-44fb-a7e3-a79d66cff7b4', '98f292eb-ff6a-4fd9-a2f9-25976853ca10', (
     SELECT id FROM enemy_type
@@ -6183,7 +6183,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('04c8369b-22b7-4774-be8d-488ede6e3ade', '83327df1-98bf-4684-a484-223b457e31bd', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('c89a48ae-c323-45a3-92c2-3f6d1d127c91', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (
     SELECT id FROM enemy_type
@@ -6191,11 +6191,11 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 4, 0.0, 0.70, 0),
 ('d8344402-b9bb-42de-80b6-75b43b585d10', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 3, 0.0, 0.70, 0),
 ('a104a0f1-df9d-43b0-a16d-8e107249a7ab', 'b3333a7d-bbef-4aaf-b11f-a28349741e04', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.0, 0.60, 0),
 ('390f8964-d499-4d84-b053-3cd5e20c35a3', '68c612f4-77d8-4c58-b384-8928a2f4baae', (
     SELECT id FROM enemy_type
@@ -6235,7 +6235,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('a8d79126-aabf-4777-92d7-85414bf39864', 'fdd58f13-1ed1-4c1b-964f-40fcee488c09', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('d0d28619-2c45-4a63-bdb2-b632d7a3b175', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
     SELECT id FROM enemy_type
@@ -6247,7 +6247,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('bcedbb46-afe9-4c87-ae29-0680c25b7a92', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('a17fcd9c-ad28-41a7-935d-8ab3b1792c66', 'e18cac77-aa09-45b4-853f-ce22c481cae7', (
     SELECT id FROM enemy_type
@@ -6263,7 +6263,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 0, 2, 0.0, 1.00, 0),
 ('2833f518-66db-4707-81f4-9b86bfb2e25b', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 0, 5, 0.0, 0.60, 0),
 ('0bf0e2c2-deaa-4400-97ea-5426f0022da2', '3ff346c2-3181-43bc-9dae-bafd2d104e74', (
     SELECT id FROM enemy_type
@@ -6347,7 +6347,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 4, 6.0, 0.70, 0),
 ('786c0afc-123a-4806-a7d6-f01b405977ed', '856715d7-d80a-45d4-9174-3afe149d628a', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 3, 6.0, 0.70, 0),
 ('5c562610-d703-4973-988e-0c8b01046822', '24f97233-4124-4eab-b358-7c6d5942e332', (
     SELECT id FROM enemy_type
@@ -6407,7 +6407,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 2, 2, 5.5, 1.00, 0),
 ('c74fe3e5-be3e-4663-ad32-5ade6f243230', '0ea391d5-caf7-468c-bf72-295997de09f3', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 2, 5, 5.5, 0.60, 0),
 ('22b9c433-0de2-4113-9ec3-4398fb28a137', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
     SELECT id FROM enemy_type
@@ -6419,7 +6419,7 @@ INSERT INTO level_wave_enemy_spawn (
 ), 1, 2, 5.5, 1.00, 0),
 ('16feb15c-4555-42ab-bcb8-0388cc1fdf62', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
     SELECT id FROM enemy_type
-    WHERE enemy_type_key = 'native_warrior'
+    WHERE enemy_type_key = 'queens_ranger'
 ), 1, 5, 5.5, 0.60, 0),
 ('d2563b0f-f94d-4483-8fb5-03026e364244', 'a45a5f88-cf5d-495e-9e0e-8789d71a0ce2', (
     SELECT id FROM enemy_type

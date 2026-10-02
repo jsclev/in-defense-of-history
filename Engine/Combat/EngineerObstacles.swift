@@ -71,12 +71,19 @@ public struct EngineerObstacleField: Sendable, Equatable, Codable {
     /// Strongest wins: overlapping engineers cannot immobilize a whole lane.
     public static func movementMultiplier(at point: CGPoint, retreating: Bool,
                                           fields: [EngineerObstacleField]) -> Double {
-        guard !retreating else { return 1 }
-        let strongest = fields.reduce(0.0) { slow, field in
-            guard field.contains(point)
-            else { return slow }
-            return max(slow, field.stats.slowFraction)
+        movementEffect(at: point, retreating: retreating, fields: fields).multiplier
+    }
+
+    /// Same strongest-field rule, with provenance for observation. Equal fields
+    /// credit the first source once; attribution never changes movement.
+    public static func movementEffect(at point: CGPoint, retreating: Bool,
+                                      fields: [EngineerObstacleField]) -> (multiplier: Double, fieldIndex: Int?) {
+        guard !retreating else { return (1, nil) }
+        var strongest = 0.0, owner: Int?
+        for (index, field) in fields.enumerated() where field.contains(point) {
+            if field.stats.slowFraction > strongest { owner = index }
+            strongest = max(strongest, field.stats.slowFraction)
         }
-        return 1 - strongest
+        return (1 - strongest, owner)
     }
 }

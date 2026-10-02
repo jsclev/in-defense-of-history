@@ -57,17 +57,25 @@ final class AuthoredDatabaseFixture {
         try execute("BEGIN")
         // Recording schema follows the authored DDL even when the live checkout
         // database retains historical results under an older schema.
-        let recordingSchema: Set<String> = ["level_run", "level_action", "level_run_level", "level_action_tick"]
-        for (_, name, sql) in schema where !recordingSchema.contains(name) && !name.hasPrefix("level_recording_") { try execute(sql) }
+        let recordingSchema: Set<String> = ["level_run", "level_action", "level_run_level", "level_action_tick", "genetic_solution_recording"]
+        for (_, name, sql) in schema where !recordingSchema.contains(name) && !name.hasPrefix("level_recording_") && !name.hasPrefix("ga_") && !name.hasPrefix("genetic_solution") { try execute(sql) }
         try execute(String(contentsOf: Db.authoredDatabaseURL.deletingLastPathComponent()
             .appendingPathComponent("DDL/create_level_runs.sql"), encoding: .utf8))
+        for file in ["create_genetic_solutions.sql", "create_genetic_placements.sql", "create_genetic_playstyles.sql", "create_genetic_studies.sql", "create_genetic_fitness.sql"] {
+            try execute(String(contentsOf: Db.authoredDatabaseURL.deletingLastPathComponent()
+                .appendingPathComponent("DDL/" + file), encoding: .utf8))
+        }
         // Historical run output is not authored content. Preserve its schema
         // for persistence tests without copying millions of old result rows.
-        let results: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result", "level_run", "level_action"]
-        for (type, name, _) in schema where type == "table" && !results.contains(name) && !name.hasPrefix("level_recording_") {
+        let results: Set<String> = ["simulator_run", "sweep_row", "money_study", "money_study_result", "level_run", "level_action", "genetic_solution_recording"]
+        for (type, name, _) in schema where type == "table" && !results.contains(name) && !name.hasPrefix("level_recording_") && !name.hasPrefix("ga_") && !name.hasPrefix("genetic_solution") {
             let table = identifier(name)
             try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")
         }
+        try execute(String(contentsOf: Db.authoredDatabaseURL.deletingLastPathComponent()
+            .appendingPathComponent("DML/genetic_solutions.sql"), encoding: .utf8)
+            .replacingOccurrences(of: "PRAGMA foreign_keys=ON;", with: "")
+            .replacingOccurrences(of: "BEGIN;", with: "").replacingOccurrences(of: "COMMIT;", with: ""))
         try execute("COMMIT; DETACH DATABASE authored;")
     }
 }

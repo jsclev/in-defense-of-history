@@ -109,7 +109,7 @@ struct LevelSceneState {
         heroes = frame.heroes.map { hero in
             LevelSceneSetup.validateHeroAsset(hero.assetName)
             return BattleEngine.HeroSoldier(id: hero.id, assetName: hero.assetName,
-                baseAssetName: hero.baseAssetName, imageAspectRatio: setup.heroAspectRatio(for: hero.baseAssetName),
+                baseAssetName: hero.baseAssetName,
                 position: hero.position, hp: hero.hp, maxHP: hero.maxHP, isSelected: hero.isSelected)
         }
         impacts = frame.impacts
@@ -153,7 +153,7 @@ struct LevelScene<GroundOverlay: View, MapOverlay: View>: View {
                 }.position(projection.viewPoint(impact.position))
             }
             GroundTroopLayer(presentation: state.presentation, interpolation: state.interpolation,
-                militia: state.militia, sprites: sprites, projection: projection)
+                militia: state.militia, sprites: sprites, projection: projection, seconds: state.seconds)
             setup.mapArt.forestOcclusion(in: projection)
             ProjectileLayer(presentation: state.presentation, interpolation: state.interpolation,
                 sprites: sprites, projection: projection)
@@ -161,7 +161,8 @@ struct LevelScene<GroundOverlay: View, MapOverlay: View>: View {
                 .animation(.easeOut(duration: 0.55), value: state.isDefeated)
             mapOverlay()
             demolitionSites(in: projection)
-            HeroMapLayer(heroes: state.heroes, runtimeCanvas: canvas, projection: projection,
+            HeroMapLayer(heroes: state.heroes, sprites: sprites, projection: projection,
+                aspectRatio: setup.heroAspectRatio,
                 onSelect: { onSelectHero?($0) })
                 .allowsHitTesting(onSelectHero != nil)
             setup.mapArt.occlusion(in: projection)

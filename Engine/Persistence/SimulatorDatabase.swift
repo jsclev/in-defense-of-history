@@ -5,8 +5,12 @@ import SQLite3
 /// Never writes to the source database or replaces an existing destination.
 public enum SimulatorDatabase {
     private static let history: Set<String> = ["level_recording_content", "level_recording_reference", "level_recording_retention", "simulator_run", "sweep_row", "money_study",
-        "money_study_result", "level_run", "level_action", "genetic_solution",
+        "money_study_result", "level_run", "level_action", "genetic_solution", "genetic_solution_recording",
         "simulator_invocation", "simulator_map", "simulator_document"]
+
+    static func isHistoryTable(_ name: String) -> Bool {
+        history.contains(name) || name.hasPrefix("ga_")
+    }
 
     public static func starter(beside executable: URL, buildName: String) -> URL {
         executable.deletingLastPathComponent().appendingPathComponent("liberty-line-simulator-\(buildName).sqlite")
@@ -58,7 +62,7 @@ public enum SimulatorDatabase {
             var tables: [String] = []
             while sqlite3_step(stmt) == SQLITE_ROW { tables.append(String(cString: sqlite3_column_text(stmt, 0))) }
             sqlite3_finalize(stmt)
-            for name in tables where history.contains(name) { try execute("DELETE FROM \(identifier(name))") }
+            for name in tables where Self.isHistoryTable(name) { try execute("DELETE FROM \(identifier(name))") }
         } else {
             var attach: OpaquePointer?
             guard sqlite3_prepare_v2(target, "ATTACH DATABASE ? AS authored", -1, &attach, nil) == SQLITE_OK else {
@@ -84,7 +88,7 @@ public enum SimulatorDatabase {
             sqlite3_finalize(stmt)
             guard statusRow == SQLITE_DONE, !definitions.isEmpty else { throw DbError.Db(message: "simulator snapshot: empty or unreadable source schema") }
             for (_, _, sql) in definitions { try execute(sql) }
-            for (type, name, _) in definitions where type == "table" && !history.contains(name) {
+            for (type, name, _) in definitions where type == "table" && !Self.isHistoryTable(name) {
                 let table = identifier(name)
                 try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")
             }

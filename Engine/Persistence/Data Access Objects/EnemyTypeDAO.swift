@@ -61,12 +61,41 @@ public class EnemyTypeDAO: BaseDAO {
                           shock.isFinite, shock >= 0 else {
                         throw record.invalid("traits.commandAura", "has invalid radius, disciplineBonus or deathShock")
                     }
+                case let .concealment(rules):
+                    for (field, value) in [("duration", rules.duration), ("visibleInterval", rules.visibleInterval),
+                                           ("troopRadius", rules.troopRadius), ("heroRevealRadius", rules.heroRevealRadius)] {
+                        guard value.isFinite, value > 0, value <= Double(Int32.max) / Double(SimClock.ticksPerSecond) else {
+                            throw record.invalid("traits.concealment.\(field)", "must be finite and positive within the tick clock range")
+                        }
+                    }
+                    guard rules.opacity.isFinite, rules.opacity > 0, rules.opacity < 1 else {
+                        throw record.invalid("traits.concealment.opacity", "must be between zero and one, exclusive")
+                    }
+                case let .boss(rules):
+                    if let issue = rules.validationIssue {
+                        throw record.invalid("traits.boss.\(issue.field)", issue.reason)
+                    }
+                case let .reinforcementCall(rules):
+                    if let field = rules.invalidField {
+                        throw record.invalid("traits.reinforcementCall.\(field)", "must contain a valid finite reserve and positive timing")
+                    }
                 default: break
                 }
             }
+            guard traits.filter({ if case .concealment = $0 { return true }; return false }).count <= 1 else {
+                throw record.invalid("traits.concealment", "must not be duplicated")
+            }
+            guard traits.filter({ if case .boss = $0 { return true }; return false }).count <= 1 else {
+                throw record.invalid("traits.boss", "must not be duplicated")
+            }
+            guard traits.filter({ if case .reinforcementCall = $0 { return true }; return false }).count <= 1 else {
+                throw record.invalid("traits.reinforcementCall", "must not be duplicated")
+            }
             return EnemyType(id: id, key: try record.text("enemy_type_key"),
-                name: try record.text("enemy_type_name"), description: try record.text("enemy_type_description"),
+                name: try record.text("enemy_type_name"), longName: try record.text("enemy_type_long_name"),
+                description: try record.text("enemy_type_description"),
                 imageName: try record.text("image_name"),
+                iconImageName: try record.text("icon_image_name"),
                 stats: EnemyStats(
                     maxHP: try record.number("max_hp", minimum: 0, strictlyGreater: true),
                     speed: try record.number("speed", minimum: 0),
@@ -84,6 +113,7 @@ public class EnemyTypeDAO: BaseDAO {
                 traits: traits)
         }
         guard !roster.isEmpty else { throw DbError.Db(message: "enemy_type: missing authored roster") }
+        try EnemyReinforcementCallRules.validateReferences(in: roster)
         return roster
     }
 }

@@ -22831,7 +22831,7 @@
           "every": 1.2
         },
         {
-          "foe": "native_warrior",
+          "foe": "queens_ranger",
           "count": 7,
           "pathIndex": 0,
           "delay": 10,
@@ -22932,7 +22932,7 @@
           "every": 0.9
         },
         {
-          "foe": "native_warrior",
+          "foe": "queens_ranger",
           "count": 8,
           "pathIndex": 2,
           "delay": 5,
@@ -23025,7 +23025,7 @@
           "every": 0.5
         },
         {
-          "foe": "native_warrior",
+          "foe": "queens_ranger",
           "count": 6,
           "pathIndex": 5,
           "delay": 16,
@@ -23118,7 +23118,7 @@
           "every": 0.5
         },
         {
-          "foe": "native_warrior",
+          "foe": "queens_ranger",
           "count": 6,
           "pathIndex": 3,
           "delay": 20,
@@ -23225,7 +23225,7 @@
           "every": 0.6
         },
         {
-          "foe": "native_warrior",
+          "foe": "queens_ranger",
           "count": 8,
           "pathIndex": 3,
           "delay": 20,
@@ -23485,6 +23485,13 @@
           "pathIndex": 3,
           "delay": 32,
           "every": 0.7
+        },
+        {
+          "foe": "clinton_siege",
+          "count": 1,
+          "pathIndex": 4,
+          "delay": 38,
+          "every": 1
         }
       ]
     }

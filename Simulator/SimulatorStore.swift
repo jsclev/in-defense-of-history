@@ -55,10 +55,11 @@ final class SimulatorStore {
     }
 }
 
-/// JSON checkpoints live in SQLite. File exports are an explicit convenience.
+/// Non-GA reports may use the generic document store. GA persistence uses
+/// typed DAOs; its JSON reports are explicit external exports only.
 final class SimulatorReports {
     private let db: Db
-    private let exports: Bool
+    let exports: Bool
     let root: URL
 
     init(db: Db, directory: String?) throws {
@@ -79,6 +80,13 @@ final class SimulatorReports {
             }
             try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
         }
+    }
+
+    /// GA records are saved through typed DAOs. Reports are optional external files.
+    func export(_ data: Data, to url: URL) throws {
+        guard exports else { return }
+        guard url.path.hasPrefix(root.path + "/") else { throw DbError.Db(message: "Report is outside its invocation directory") }
+        try data.write(to: url, options: .atomic)
     }
 
     func write(_ data: Data, to url: URL) throws {

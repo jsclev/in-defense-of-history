@@ -5,7 +5,7 @@ separate [balance analyzer](balance_analyzer.md). It fixes authored starting
 money, disables heroes, maximizes ranged progression, and runs ranged-only
 searches alongside unrestricted controls.
 
-Start a normal run with `~/bin/LibertyLineSimulator 15 --workers 8` (replace `15` with the level number).
+Start a normal run with `~/bin/LibertyLineSimulator --level 15 --workers 8` (replace `15` with the level number).
 `--workers N` is required for GA searches; choose an integer from 1 to 32.
 See the [CLI README](../README.md) for installation or the
 [advanced reference](simulator_cli_reference.md) for optional controls and result inspection.
@@ -18,6 +18,27 @@ and schema in `liberty-line-simulator-<build-name>.sqlite` beside the executable
 New studies use that build-derived input by default; `--content-database` overrides
 it. Each study creates a separate run database whose name includes the build.
 Normal runs do not read the development checkout.
+
+Enemy behavior, including Queen's Rangers' concealment, runs inside the shared
+battle engine even when playback recording is disabled. Hidden Rangers keep
+moving, cannot take damage or be blocked by troops, and living nearby heroes
+reveal them under the same DAO-authored rules as the game. These consequences
+therefore enter the GA's original battle results and fitness. Adding a unit or
+changing its behavior requires rebuilding the CLI and starter before a new
+study; existing executables and captured run databases do not acquire later
+source or content edits. Historical results retain their original meaning.
+
+Training and held-out validation save compact evaluation evidence without
+playback recording. Once those panels and the retained solution catalog are
+saved, the coordinator reruns one original seed per retained plan to create its
+demonstration. It prefers a winning seed using the existing fitness order, with
+a stable seed tie-break. This phase runs after evaluation; its results never
+replace fitness evidence or change rankings. `genetic_solution_recording`
+contains queryable candidate/seed/recording links, actual rerun results and a
+`matches_evaluation` flag. Differences are allowed and reported. The configured
+finalist count is unchanged. For each star group, recorded plans come from the
+saved validation panel, or the saved training panel when no validation sample
+was completed. Existing historical playback readers remain available.
 
 A genetic study defaults to the chosen level's DAO-loaded
 `level_info.starting_money`. Use `--starting-money` only for an explicit fixed-budget
@@ -171,7 +192,7 @@ ledger, campaign money, or the authored restore preset.
 
 ## Meta-selection subpopulations and full-battle scoring
 
-`genetic-v8` searches factory-validated meta progressions explicitly with a fixed hero lineup. Within each exact stars-used
+`genetic-v13` searches factory-validated meta progressions explicitly with a fixed hero lineup. Within each exact stars-used
 group, `--meta-selections` (default 8) reserves equally sized subpopulations for
 different legal selections. `--population` (default 64) is the total cap per
 stars-used group. Divide it by the number of active selections and round down;
@@ -180,32 +201,30 @@ The selection count is limited by the legal combinations and
 `--meta-min-candidates` (default 4). Legality and prices continue to come from
 shared player-state APIs and the DAO catalog.
 
-Initial subpopulations receive matching plan-family indices and reinforcement /
-early-call random streams. Placement heuristics read each selection's real
-effects. Breeding and battle-plan mutation stay within a selection. A weak
-selection cannot be replaced until it has received its full initial plan
-capacity and `--meta-adaptation-generations` (default 2). At most one mature weak
-selection per stars-used group is replaced in a generation; the best is protected.
-Introductions first try factory crossover between selection champions. If the
-result was already visited, the factory chooses a nearest untested mutation by
-bit distance, or an arbitrary untested selection every fourth generation. All
-three paths preserve the exact authored star cost. New subpopulations receive the champion's battle plan with
-the new selection, plus fresh paired plan families. Retired selections retain
-their evidence and champions and can still reach validation.
+Initial subpopulations use independently drawn plan dimensions and random streams.
+Only controlled meta exchanges deliberately pair their plan inputs. A weak
+selection gets its full initial capacity and `--meta-adaptation-generations`
+(default 12) before replacement. At most one mature weak selection per stars-used
+group is replaced per generation; the best is protected. New legal selections
+come from factory crossover, nearest untested mutation or an arbitrary untested
+selection every fourth generation, always at the exact authored star cost.
+New groups receive a plan from an archived behavior champion (including retired
+groups), plus independent fresh plans. Retirement never erases original results
+or finalist eligibility.
 
 The standalone meta mutation operator chooses a different nearest legal selection
 at the same stars used, or retains the original if it is the sole legal choice. Prerequisites and costs
 can require exchanging several IDs. The search does not implement purchasing
 rules to repair an invalid selection.
 
-`--finalists` (default 8) caps distinct meta selections per stars-used group.
-One frozen champion represents each qualified selection, with at least the
-requested minimum number of distinct training candidates. A group with one
-legal selection needs only one finalist. Underexplored selections remain in the
-report but cannot qualify. Too few qualified finalists makes validation incomplete.
-The explicit `--fixed-meta` control retains its earlier behavior: several frozen
-battle-plan finalists may share the one fixed selection. The distinct-selection
-rule applies to meta searches and controlled upgrade exchanges.
+`--finalists` (default 8) caps frozen battle plans per stars-used group.
+Selections must have the requested minimum number of distinct training candidates
+before their plans can qualify. Modern creative profiles reserve one third of
+the panel for different successful upgrade selections, then emphasize opening
+and playstyle variety. Several plans may share an upgrade selection, including
+in ordinary meta searches. Underexplored selections remain in the report but
+cannot qualify. Legacy candidates without playstyle profiles retain the older
+one-champion-per-selection behavior unless `--fixed-meta` is specified.
 
 ### Controlled upgrade exchanges
 
@@ -256,7 +275,8 @@ Fitness ranks full-level win rate, lives retained in victories, waves reached,
 and survival on defeats. There is no greedy per-wave reward, early-wave pruning,
 or claim that a failed search proves impossibility. Timeouts remain timeouts.
 
-The first 85% of the wall-time budget is available for search. Training visits
+When explicitly supplied, the first 85% of the wall-time guardrail is available
+for search. By default there is no deadline. Training visits
 star groups in round-robin order. Every group's finalists are frozen before
 held-out results are observed, and validation visits those finalists in seed
 rounds. Validation never feeds back into breeding. Global limits can leave
@@ -265,8 +285,8 @@ A full-score training result is not a guarantee of success on other seeds.
 
 This search covers meta selections, tower purchases/timing, reinforcement
 target priority/hold time and per-wave early-call choices. It retains the
-engine's default rally/obstacle positions and the player's nearest offered
-ready-demolition-site policy. It does not search map-command locations or
+candidate's evolved rally/obstacle and repeated demolition route targets.
+It does not evolve
 manual hero movement. Reinforcement priorities select among currently
 visible enemies; this first pass does not evolve arbitrary reinforcement sites
 or a separate policy for every wave.
@@ -313,15 +333,29 @@ restore the authored settings as elsewhere in the game.
 
 Studies do not export `Db/DML/genetic_solutions.sql`. The coordinator and all
 workers persist only in the invocation database. The explicit offline
-`--import-ga-solutions` command recovers the top three distinct complete training
-panels, checks current content, reproduces their original evaluations, and runs
+`--import-ga-solutions` command considers all complete training winners using
+`GeneticSolutionDiversitySelector`. It keeps one strongest reliable winner and
+chooses alternatives by maximum minimum playstyle difference against every
+selected plan. Opening composition, actual investment, participating mechanics,
+development, spatial coverage, workload and recovery margin remain distinct
+metrics. Original fitness is preserved and breaks novelty ties. The old position
+and five-build rules are preferences rather than selection vetoes. It checks current content, reproduces original evaluations, and runs
 the source configuration's full held-out panel before exporting a selected-level
 SQL seed. See the CLI reference for inputs and merging with other levels. It
-preserves the original run and records every new battle in a separate database;
+preserves the original run and saves compact results in a separate database;
 it never runs automatically or consumes an active study's evaluation budget.
+Publication fails if fewer than three qualify, including if the held-out candidates
+fail the final data-only diversity check. Initial builds are successful purchases
+before wave one, captured during the original evaluation. The first five successful
+later builds are saved in order. Missing legacy placement data is unknown; time-zero
+orders and intended future branches must never be substituted. No replay or battle
+execution is involved in comparison. The separate
+`--ship-ga-solutions` command searches for a complete compatible set among held-out
+winners, including another reliable baseline when the global champion blocks
+coverage, before creating only their three demonstration recordings.
 
-All JSON reports are stored in `simulator_document(name, content_json)` in the
-same database. `--report-dir` optionally exports JSON copies. Authored map bytes
+GA studies use relational `ga_*` tables; `--report-dir` optionally exports JSON
+reports. Those exports are not stored as duplicate JSON documents in SQLite. Authored map bytes
 live in `simulator_map`, so workers never reread live checkout maps.
 `summary.json` has one `starResults` entry per requested
 spending amount. It includes earned/spent/unspent stars, legal loadout count,
@@ -342,26 +376,33 @@ and whether early calls are a permitted search dimension. Permitting calls does
 not mean every candidate chooses to use them.
 
 `best-stars-N.json` is the best training replay at exactly N stars. Full candidate
-evidence lives in `population.json`, `validation.json`, and SQLite. No single
+evidence lives in `ga_candidate`, `ga_panel`, `ga_evaluation` and their child
+tables. `population.json` and `validation.json` are optional external exports. No single
 overall winner is selected across different spending amounts.
 Hero-enabled replays use `genetic-replay-v6` and restore their recorded lineup
 through the experiment DAO. Keep the original executable for older no-hero
 replays; they must not be evaluated as hero-enabled runs.
 
-The invocation snapshot retains the SQL-defined `simulator_run`, `money_study`, and
-`money_study_result` tables store the study through `MoneyStudyDAO`. For
-`genetic-v5`, `genetic-v6`, `genetic-v7` and `genetic-v8`, `placement_plan` identifies a globally unique population candidate and
-`upgrade_policy` is 0 for training or 1 for held-out evaluation. Each result's
-`seed_results_json` contains `starsUsed`, the full DNA including `metaUpgrades`,
-explicit seeds, actual engine results, and wave-transition economy observations.
-`MoneyStudyDAO.geneticSummaryByStars` keeps spend groups and evaluation panels
-separate. Older fixed-loadout records are excluded from that aggregation.
-V6 persists validation panels and database progress after every complete seed
-round, and at finalization for any partial round. A checkpoint can only grow a
-held-out panel with unchanged candidate DNA; it cannot overwrite training data.
-v2/v3/v4 star-group records remain readable under their original run IDs. v2 has
-no reinforcement commands; v3 has reinforcements but no bounty experiment field.
-v4 has no early-call gene or receipt trace. v5 requires both explicitly.
+`GeneticStudyDAO` saves configuration, seed panels, candidates, progress and
+population membership in SQL-defined `ga_*` tables. Strategies have ordered
+build actions, selected meta-upgrade rows, reinforcement fields and per-wave
+policies. Each original evaluation has explicit outcome columns and related
+rows for enemy fates, wave progress/leaks/economy, reinforcements, calls and
+actual built towers. `ga_candidate_fitness` exposes the existing fitness order.
+`genetic_solution` retains candidate/panel keys without duplicating the evidence.
+
+Validation checkpoints append new samples only after verifying all earlier DNA
+and evidence. Original results remain separate from post-selection demonstration
+results. Checkpoint membership is saved as candidate IDs, not repeated genomes.
+The authored DDL is in `Db/DDL/create_genetic_solutions.sql` and
+`Db/DDL/create_genetic_studies.sql`; runtime code never creates tables.
+
+See [GA SQL queries](../Db/Queries/GA/README.md) for top solutions, candidate
+actions, per-seed evidence, paired comparisons, progress and retention.
+`Tools/ga_relational.py old.sqlite new.sqlite` converts completed legacy v8
+studies to a new file, verifies exact candidate/evaluation and playback round
+trips, and preserves the original. Non-GA money/balance studies keep their
+separate formats; they are not used to store new GA solutions.
 
 The immutable content snapshot includes the earned-star ledger, all upgrade
 costs, prerequisites, IDs, names and effects, plus the original selected loadout
@@ -457,8 +498,9 @@ use length-delimited binary storage. Each block remains self-contained. The GA d
 construct `LevelReplayFrame`, select animation sprites, or encode presentation
 tracks. Entity definitions are separated from observed numeric changes; exact
 movement increments are packed without predicting movement or rerunning rules.
-Playback constructs visual frames and animations from this data. All candidates,
-including losses, retain their events. Existing JSON-wrapped `battle-events-v1`,
+Playback constructs visual frames and animations from this data. This recorder
+is used for retained-solution reruns and explicitly requested recordings;
+routine GA evaluations do not invoke it. Existing JSON-wrapped `battle-events-v1`,
 `battle-events-v2`, and `battle-events-v3` recordings remain readable, including
 databases without the BLOB column; playback never migrates historical databases.
 New recordings require the current schema generated by `Db/create_db.sh` (the
@@ -574,6 +616,49 @@ candidate evidence is already supplied.
 
 ## Parallel evaluation and throughput
 
+The default GA has no wall-clock, generation, or battle ceiling. Completion
+requires **all** of these conditions in **every** requested star-spend group:
+
+- At least 1,000,000 actual training battles, excluding cached duplicate DNA.
+- At least 250,000 training battles and 1,000 generations since the latest
+  fitness improvement, winning-niche improvement/discovery, or exploration restart.
+- Three reliable winning strategies that satisfy the existing all-pairs opening
+  and observed combat-role diversity gates.
+- A frozen assessment on 64 held-out seeds: each selected strategy wins at least
+  90% of its panel, and every pair differs meaningfully on at least 90% of seeds.
+
+The battle floor is **not** a cap or a claim of exhaustive search. These are
+initial, configurable policy values, not proof of optimality or player enjoyment.
+`--minimum-training-battles 100000000` or `1000000000` raises the floor to 100
+million or one billion per group. `--stability-battles`, `--stability-generations`,
+and `--goal-solutions` configure the other requirements. Larger counters are
+supported; billion-battle throughput and memory use have not been qualified.
+
+Stable training without the required winning variety starts another exploration
+window. Failed qualification also resumes training and preserves its full evidence.
+Every later frozen assessment uses a new, non-overlapping held-out seed panel;
+held-out fitness never enters breeding or the training convergence tracker.
+Repeated candidates must also meet reliability across all their earlier held-out
+evidence, and pairs must meet diversity across all shared assessed seeds. A lucky
+fresh panel cannot erase earlier failed evidence.
+An empty generation requests fresh plans and never establishes convergence.
+
+`--generations`, `--max-evaluations`, and `--genetic-hours` are optional resource
+guardrails for explicitly bounded experiments. Stored zero values mean no ceiling.
+A battle cap includes training and all qualification attempts, with a final panel
+reserved. An explicit time cap reserves 15% for final assessment; in-flight work
+and subsequent demonstration recording may extend runtime. Historical positive
+limits retain their meaning. Resource exhaustion is reported as **quality goal
+not achieved**, even when the final assessment panel is complete.
+
+The successful stopping reason is `quality-qualified`. `time-budget`,
+`generation-limit`, and `evaluation-budget` identify resource exhaustion.
+`ga_stopping_policy` stores the chosen requirements, `ga_search_goal` stores
+training effort/stability, and `ga_qualification` plus `ga_qualification_seed`
+retain every attempt and its panel. Rejected attempt evidence uses separate
+`ga_run` IDs; the final panel is also published under the study ID for existing
+readers. Actual-battle totals exclude that publication copy.
+
 `--workers N` (required for GA searches, 1–32, no default) runs complete GA battles in independent native
 processes. Each process uses the same executable, its own main actor, the shared
 `GeneticCommander`/`GameSimulation`/`BattleEngine`, and the authoritative database
@@ -598,21 +683,117 @@ the deadline. Time-limited searches can naturally
 explore different numbers of candidates at different worker counts; fixed-work
 comparisons should match DNA and outcomes exactly, except recording UUIDs.
 
-Each worker records every playthrough in the SQL tables using bounded
-recording buffers and short transactions. Connections wait up to 30 seconds for
-a writer lock; lock failures remain errors. Worker failures fail the study and
-are not automatically retried. Completed battle recordings remain available,
-including when another worker fails before its candidate panel is complete.
-Workers receive EOF on normal shutdown; no process-killing loop is used.
+Workers evaluate battles without playback recorders and return compact results
+to the coordinator. Worker failures fail the study and are not automatically
+retried. Completed candidate evidence remains saved. Workers receive EOF after
+evaluation, before the coordinator records the retained solutions; no
+process-killing loop is used. Database connections wait up to 30 seconds for a
+writer lock; lock failures remain errors.
 
-Simulator recordings compare typed state and pack timestamped changes, avoiding
-the generic per-field presentation encoder in the search loop. Playback reads
+Retained-solution recordings compare typed state and pack timestamped changes.
+The search loop does not serialize or compress playback state. Playback reads
 the recorded data and never invokes the battle engine or RNG. Recording remains
 bounded and synchronous; every terminal path flushes the last events.
 
-Calibrate worker counts on the actual Mac: extra workers may hit storage or
-memory-bandwidth limits before all CPU cores help. Include database growth when
-budgeting an overnight run; faster evaluation also writes recordings faster.
-Reserve space for held-out validation and other work. Do not extrapolate brief
-timeout fixtures as full-level throughput. Longer or winning plans can cost more
-than the initial population's early defeats.
+Calibrate worker counts on the actual Mac: extra workers may hit CPU or memory
+bandwidth limits before all cores help. Include compact evidence, checkpoints
+and final demonstration recordings when budgeting disk space. Do not extrapolate
+brief timeout fixtures as full-level throughput. Longer or winning plans can
+cost more evaluation time than the initial population's early defeats.
+
+Legacy candidates without playstyle evidence compete at equal fitness on recorded opening diversity,
+then following placements and construction decisions. Exact ties permit newer
+candidates to enter while preserving the original best champion, population
+capacity, fitness components and evaluation budgets. Held-out finalist selection
+uses the same tie policy while retaining one finalist per qualified meta selection.
+
+Creative playstyle evidence (`genetic-v10` and later) is stored in `ga_playstyle`,
+`ga_playstyle_purchase`, `ga_playstyle_tower` and `ga_playstyle_route`. These
+record successful purchases and paid prices, authored tier/ability identities,
+opening/one-third/two-thirds/final samples, observed damage/shots/blocking time/
+engineer slowing time/supply income/detonations, route coverage, and player action counts. Unknown
+legacy evidence stays absent. `candidate_playstyles.sql` exposes this evidence.
+
+Selection uses `GeneticDefenseComparison` through the dedicated selector. It
+requires all of the following; a high score in another dimension cannot rescue
+a failed condition:
+
+- Less than 60% shared visible opening AND shared paid opening defense. Match
+  the same family one-to-one
+  at the same slot or equivalent nearby route coverage, using maximum-weight
+  assignment. Divide shared cost by the smaller defense budget so adding extras
+  cannot dilute an existing core. Check the entire visible layout separately
+  from the participating defense; idle and income-only towers cannot dilute the
+  defense, and identical visible layouts fail even if different subsets act.
+- At least 40% turnover in the paid, participating opening family mix.
+- A material change in damage or control roles during both the first and second
+  thirds of the waves. Damage-family turnover must reach 40%, or blocking/slowing
+  family turnover must reach 50% with at least 0.5 enemy-seconds per second from
+  a different control family. Keep damage, blocking and slowing in separate units.
+  Use interval increments for the middle waves, not cumulative early activity.
+
+Nearby coverage requires at least 80% common route identities and no more than
+8% route-progress separation on each common path; it is a geometric proxy, not
+proof of enemy interception. Family attribution avoids crediting earlier damage
+to a later upgrade. Missing phase/control evidence is unknown and cannot qualify.
+Novelty is the weakest of visible-opening difference, opening-core difference,
+opening-family turnover, early
+role difference and middle role difference. Investment, branches, workload and
+risk remain available as diagnostics; they cannot offset these hard gates.
+This intentionally conservative movie-screening policy rejects even mechanically
+useful additions when the viewer would still see the same dominant opening.
+
+Publication chooses the strongest reliable baseline that permits a complete
+compatible set and backtracks around dead ends. Every selected pair must qualify
+on at least 90% of matching held-out seeds; eligible candidates need at least 90%
+wins. Original fitness and evidence remain unchanged. No simulation or replay
+is used for comparison. Demonstration recording is a separate publication step.
+These policy thresholds are not proof of fun; player feedback is authoritative.
+
+`genetic-v13` keeps every candidate eligible for finalist selection. The working
+parent pool is bounded, but a separate persistent archive keeps the strongest
+candidate in every observed behavior niche. Two of every three breeding slots
+are allocated to the least-bred niches; the remaining third develops the global
+champion. Improved niche champions inherit the niche's visit count. Local mates
+must have similar opening and investment mixes, and crossover inherits opening
+slot chains together. Retired meta selections remain in the full finalist pool
+and may donate plans to new selections. `ga_population_niche` records champions
+and allocated offspring; `search_coverage.sql` exposes both archives.
+
+Fresh plans draw family, opening size, placement policy, upgrade cadence, delay
+and investment depth independently. Normal meta groups use independent streams;
+controlled meta-exchange experiments retain deliberately paired inputs. Families
+are sampled uniformly before branches so extra authored branches do not bias
+family probability. Fresh introductions occupy the actual last offspring slot
+every eighth generation, and enter evaluation without another mutation pass.
+
+Mutation targets successful purchases from original training evidence 75% of
+the time when available; the remainder explores dormant orders. Replacement
+chains retain their original global priorities and triggers. Coordinated opening
+changes can cross fitness valleys. Rally points, engineer obstacle sites and
+repeated demolition targets are evolved route-target preferences and execute via
+normal player commands. Actual accepted positions are stored per seed in
+`ga_tactical_action`; DNA is in `ga_tactical_order`. Old DNA retains historical
+automatic sites, and missing old tactical evidence remains unknown.
+
+Finalists are drawn from every qualified selection's complete candidate pool,
+not its parent seats. The global champion remains first. Three quarters of the
+finalist cap prefer the best training win-rate band; up to a quarter may explore
+other styles with at least one training win. Return fewer finalists when the
+archive cannot supply more distinct observed niches; never pad with behavior
+clones. Meta coverage also skips an already represented niche. This small-panel
+uncertainty allowance does not relax the independent held-out publication gate.
+One third of seats first seek successful meta-selection coverage. All finalists
+are frozen before any held-out result arrives. Fitness, combat precision,
+training seeds and held-out seeds remain unchanged.
+
+Recorded upgrade DNA uses `MetaUpgradesFactory.restore` against a fresh DAO
+catalog. Do not construct a search factory per saved candidate: its initializer
+enumerates every legal progression. Single-selection validation preserves the
+same prerequisites, costs and error handling without that enumeration.
+
+Population checkpoints append newly evaluated membership instead of deleting and
+rewriting the entire historical population each generation. Parent/archive seats,
+behavior champions and breeding visits still update each checkpoint; all original
+candidates and evaluation records remain available. Failed checkpoint transactions
+do not advance the in-memory append cursor.

@@ -7,7 +7,7 @@ final class BattleObservationTests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao:
             LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
         let content = try BattleTestFixture.authored(db: fixture.db)
-        for destination in [BattleRecording.preview, .database(fixture.db.levelRunDao, .simulator),
+        for destination in [BattleRecording.preview, .evaluation, .database(fixture.db.levelRunDao, .simulator),
                             .database(fixture.db.levelRunDao, .player)] {
             let battle = try BattleEngine(recording: destination, content: content, heroesEnabled: true,
                 startingMoneyOverride: 1000, seed: 1776, onVictory: { _, _ in 0 })
@@ -30,7 +30,6 @@ final class BattleObservationTests: XCTestCase {
         let content = try BattleTestFixture.authored()
         let battle = try BattleEngine(recording: .preview, content: content, heroesEnabled: true,
             startingMoneyOverride: 1000, seed: 1776, onVictory: { _, _ in 0 })
-        battle.heroImageAspectRatios = Dictionary(uniqueKeysWithValues: content.deployments.map { ($0.hero.id, 1) })
         battle.publishesPresentation = true
         var ticksBeforeChanges: [Int64] = []
         var moneyBeforeChanges: [Int] = []
@@ -58,7 +57,6 @@ final class BattleObservationTests: XCTestCase {
         let content = try BattleTestFixture.authored()
         let battle = try BattleEngine(recording: .preview, content: content, heroesEnabled: true,
             startingMoneyOverride: nil, seed: 1776, onVictory: { _, _ in 0 })
-        battle.heroImageAspectRatios = Dictionary(uniqueKeysWithValues: content.deployments.map { ($0.hero.id, 1) })
         battle.publishesPresentation = true
         var notifications = 0
         let subscription = battle.objectWillChange.sink { notifications += 1 }

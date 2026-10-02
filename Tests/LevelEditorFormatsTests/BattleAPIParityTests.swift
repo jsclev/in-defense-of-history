@@ -24,7 +24,6 @@ final class BattleAPIParityTests: XCTestCase {
         let content = try BattleTestFixture.authored()
         let sim = try GameSimulation(recording: .preview, content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776)
         let player = try GameSimulation(recording: .preview, content: content, startingMoney: 1000, heroesEnabled: true, seed: 1776).engine
-        player.heroImageAspectRatios = Dictionary(uniqueKeysWithValues: content.deployments.map { ($0.hero.id, 1) })
         player.publishesPresentation = true
         for (slot, kind) in [(17, TowerKind.ranged), (14, .areaOfEffect), (4, .melee), (0, .supply)] {
             XCTAssertEqual(sim.perform(.build(slot: slot, kind: kind)), .ok)

@@ -2,58 +2,6 @@ import Foundation
 import CryptoKit
 import OSLog
 
-struct GeneticStudyOptions: Codable {
-    var money: Int?
-    var workers = 1
-    var population = 64 // Per exact star-spend group.
-    var generations = 300
-    var trainingSeeds = 3
-    var validationSeeds = 64
-    var finalists = 8 // Per exact star-spend group.
-    var maxEvaluations = 50_000
-    var hours = 8.0
-    var maxGameSeconds = 1800.0
-    var seed: UInt64 = 1776
-    var starMinimum: Int?
-    var starMaximum: Int?
-    var starStep = 1
-    var bountyFraction = 1.0
-    var fixedMeta = false
-    var earlyWaveCalls = true
-    var seedStrategies: [GeneticStrategy] = []
-    var metaSelections = 8
-    var minimumMetaCandidates = 4
-    var metaAdaptationGenerations = 2
-    var metaExchangeFrom: GeneticStrategy?
-    var selectedHeroIDs: [UUID]?
-    var heroAIEnabled: Bool?
-    var towerLimits = GeneticTowerLimits()
-
-    func starValues(earned: Int) throws -> [Int] {
-        let maximum = starMaximum ?? earned
-        let minimum = starMinimum ?? maximum
-        guard minimum >= 0, maximum >= minimum, maximum <= earned, starStep > 0,
-              (maximum - minimum) % starStep == 0 else {
-            throw DbError.Db(message: "genetic study: star range must be exact nonnegative steps within the database's \(earned) earned stars")
-        }
-        return Array(stride(from: minimum, through: maximum, by: starStep))
-    }
-
-    func validate(groups: Int) throws {
-        guard (money == nil || money! > 0), (1...32).contains(workers), (4...1024).contains(population), (1...100_000).contains(generations),
-              (1...1000).contains(trainingSeeds), (1...10_000).contains(validationSeeds),
-              (1...population).contains(finalists),
-              (1...1024).contains(metaSelections), (2...population).contains(minimumMetaCandidates),
-              metaAdaptationGenerations >= 2,
-              maxEvaluations >= groups * (population * trainingSeeds + finalists * validationSeeds),
-              bountyFraction.isFinite, (0...1).contains(bountyFraction), seedStrategies.count <= population,
-              hours.isFinite, hours > 0, hours <= 24, maxGameSeconds.isFinite, maxGameSeconds > 0 else {
-            throw DbError.Db(message: "genetic study: invalid budget; evaluation ceiling must cover initial populations and validation for all \(groups) reachable star groups")
-        }
-    }
-}
-
-
 /// Search coordination and recording only. All battle evaluation goes through
 /// GeneticCommander -> GameSimulation -> the game's player-facing engine APIs.
 @MainActor final class GeneticStudy {
@@ -63,9 +11,11 @@ struct GeneticStudyOptions: Codable {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.sortedKeys]; return encoder
     }()
     init(db: Db, reports: SimulatorReports) { self.db = db; self.reports = reports }
-    private func encoded<T: Encodable>(_ value: T) throws -> String { String(decoding: try encoder.encode(value), as: UTF8.self) }
     private func hash(_ data: Data) -> String { SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined() }
-    private func write<T: Encodable>(_ value: T, to url: URL) throws { try reports.write(encoder.encode(value), to: url) }
+    private func write<T: Encodable>(_ value: T, to url: URL) throws {
+        guard reports.exports else { return }
+        try reports.export(encoder.encode(value), to: url)
+    }
     private func executableHash() throws -> String { hash(try Data(contentsOf: SimulatorStore.executableURL)) }
     private func load(_ id: UUID, bountyFraction: Double, selectedHeroIDs: [UUID]?, heroAIEnabled: Bool?) throws -> AuthoredMoneyStudy {
         let ids = try selectedHeroIDs ?? HeroSelectionStore(dao: db.heroDao).load().ids
@@ -109,6 +59,7 @@ struct GeneticStudyOptions: Codable {
 
     func run(levelID: UUID, options requested: GeneticStudyOptions) throws {
         SimulatorLog.ga.notice("Preparing GA; levelID=\(levelID.uuidString, privacy: .public) build=\(BuildVersion.version, privacy: .public)")
+        try db.geneticSolutionDao.requireRecordingStorage()
         var options = requested
         let study = try load(levelID, bountyFraction: options.bountyFraction,
             selectedHeroIDs: options.selectedHeroIDs, heroAIEnabled: options.heroAIEnabled)
@@ -161,34 +112,41 @@ struct GeneticStudyOptions: Codable {
         let solutionContext = try GeneticSolutionContext(study: study, db: db, startingMoney: money,
             bountyFraction: options.bountyFraction, maxGameSeconds: options.maxGameSeconds)
         let output = reports.root
-        try reports.write(content, to: output.appendingPathComponent("content.json"))
+        try reports.export(content, to: output.appendingPathComponent("content.json"))
         let trainingSeeds = (0..<options.trainingSeeds).map { options.seed &+ UInt64($0) }
-        let validationSeeds = (0..<options.validationSeeds).map { options.seed &+ 1_000_000 &+ UInt64($0) }
-        let configuration: [String: Any] = [
-            "algorithm": "genetic-v8", "options": try JSONSerialization.jsonObject(with: encoder.encode(options)),
-            "bountyFraction": options.bountyFraction, "fixedMeta": options.fixedMeta,
-            "engine": "shared-game-engine", "level": study.level.name, "contentSHA256": digest,
-            "executableSHA256": executable, "buildVersion": BuildVersion.version,
-            "heroes": true, "heroLoadout": try JSONSerialization.jsonObject(with: encoder.encode(heroLoadout)),
-            "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
-            "difficulty": study.difficulty.name, "earnedStars": meta.earnedStars,
-            "requestedStarsUsed": requestedStars, "reachableStarsUsed": starGroups,
-            "databaseSelectedUpgrades": study.battle.playerUpgrades.loadout.selected.map(\.rawValue).sorted(),
-            "trainingSeeds": trainingSeeds, "validationSeeds": validationSeeds,
-            "fitnessOrder": ["complete-level win rate", "victory lives", "waves reached", "survival on defeats"],
-            "sampling": options.fixedMeta ? "Fixed-meta control: adapt and compare battle plans with the one database-selected upgrade selection. Full battles and separate held-out validation." : "Equal-sized subpopulations per meta selection within each stars-used population. Paired initial plan families and training seeds; protected adaptation; one finalist per qualified selection. Full battles, no early-wave pruning.",
-            "controlledMetaExchange": options.metaExchangeFrom != nil,
-            "searchTimeFraction": GeneticProgress.searchTimeFraction, "placementPlanMeaning": "globally unique population candidate ID",
-            "upgradePolicyMeaning": ["0": "training panel", "1": "held-out panel"],
-            "decisionScope": "meta upgrade selection; builds, upgrade branches, ability purchases, order, earliest wave/time, saving; reinforcement target priority and deliberate hold; per-wave early-call delay, visible countdown and enemy-count preference; default rally/obstacle sites and nearest ready demolition site"]
-        let configData = try JSONSerialization.data(withJSONObject: configuration, options: [.sortedKeys, .prettyPrinted])
-        try reports.write(configData, to: output.appendingPathComponent("configuration.json"))
-        let dao = try MoneyStudyDAO(db: db)
+        guard let policy = options.stopping else {
+            throw DbError.Db(message: "new genetic studies require an explicit quality stopping policy")
+        }
+        var validationSeeds = policy.validationSeeds(base: options.seed, trainingCount: options.trainingSeeds,
+            count: options.validationSeeds, attempt: 0)
+        if reports.exports {
+            let configuration: [String: Any] = [
+                "algorithm": "genetic-v13", "options": try JSONSerialization.jsonObject(with: encoder.encode(options)),
+                "bountyFraction": options.bountyFraction, "fixedMeta": options.fixedMeta,
+                "engine": "shared-game-engine", "level": study.level.name, "contentSHA256": digest,
+                "executableSHA256": executable, "buildVersion": BuildVersion.version,
+                "recordingPolicy": "retained-solutions-after-evaluation",
+                "heroes": true, "heroLoadout": try JSONSerialization.jsonObject(with: encoder.encode(heroLoadout)),
+                "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
+                "difficulty": study.difficulty.name, "earnedStars": meta.earnedStars,
+                "requestedStarsUsed": requestedStars, "reachableStarsUsed": starGroups,
+                "databaseSelectedUpgrades": study.battle.playerUpgrades.loadout.selected.map(\.rawValue).sorted(),
+                "trainingSeeds": trainingSeeds, "validationSeeds": validationSeeds,
+                "fitnessOrder": ["complete-level win rate", "victory lives", "waves reached", "survival on defeats"],
+                "sampling": options.fixedMeta ? "Fixed-meta control: adapt and compare battle plans with the one database-selected upgrade selection. Full battles and separate held-out validation." : "Equal-sized subpopulations per meta selection within each stars-used population. Independent initial plans and shared training seeds; persistent best-per-behavior archives with allocated offspring; finalists drawn from every evaluated candidate. Controlled meta exchanges retain one finalist per qualified selection. Full battles, no early-wave pruning.",
+                "controlledMetaExchange": options.metaExchangeFrom != nil,
+                "searchTimeFraction": GeneticProgress.searchTimeFraction, "placementPlanMeaning": "globally unique population candidate ID",
+                "upgradePolicyMeaning": ["0": "training panel", "1": "held-out panel"],
+                "decisionScope": "meta upgrade selection; builds, upgrade branches, ability purchases, order, earliest wave/time, saving; reinforcement target priority and deliberate hold; per-wave early-call delay, visible countdown and enemy-count preference; evolved rally, obstacle and demolition route targets through shared player commands"]
+            let configData = try JSONSerialization.data(withJSONObject: configuration, options: [.sortedKeys, .prettyPrinted])
+            try reports.export(configData, to: output.appendingPathComponent("configuration.json"))
+        }
+        let dao = try GeneticStudyDAO(db: db)
         let start = ProcessInfo.processInfo.systemUptime
-        let deadline = start + options.hours * 3600, searchDeadline = start + options.hours * 3600 * GeneticProgress.searchTimeFraction
         var completed = 0, cacheHits = 0, nextID = 0, completedGenerations = 0
         var cache: [String: GeneticCandidate] = [:]
         var best: [Int: GeneticCandidate] = [:]
+        var convergence = GeneticSearchConvergence(policy: policy, stars: starGroups)
         var populations: [Int: GeneticMetaPopulation] = [:]
         var rng = SeededRNG(seed: options.seed).fork(stream: 91)
         for stars in starGroups {
@@ -225,16 +183,17 @@ struct GeneticStudyOptions: Codable {
             populations[stars] = try GeneticMetaPopulation(selections: selected, population: options.population,
                                                           minimumCandidates: options.minimumMetaCandidates)
         }
-        let targetFinalistCounts = Dictionary(uniqueKeysWithValues: starGroups.map { stars in
-            (stars, options.fixedMeta ? options.finalists : (options.metaExchangeFrom == nil
-                ? min(options.finalists, choicesByStars[stars]!.count) : populations[stars]!.selections.count))
+        var targetFinalistCounts = Dictionary(uniqueKeysWithValues: starGroups.map { stars in
+            // Creative finalists can share upgrades, including a zero-star run
+            // with only one legal upgrade choice. Reserve their complete panels.
+            (stars, options.metaExchangeFrom == nil ? options.finalists : populations[stars]!.selections.count)
         })
         let validationReservation = targetFinalistCounts.values.reduce(0, +) * options.validationSeeds
-        let trainingCap = options.maxEvaluations - validationReservation
+        let budget = GeneticSearchBudget(options: options, startedAt: start, validationReservation: validationReservation)
         let runID = try db.simulatorRunDao.begin(levelName: study.level.name,
             focus: "genetic meta selections; \(money) coins; \(requestedStars.count) stars-used groups", totalIterations: options.maxEvaluations, outputPath: db.path)
         var progress = GeneticProgress(runID: runID, startedAt: start, timeBudget: options.hours * 3600,
-                                       trainingLimit: trainingCap, generationLimit: options.generations)
+                                       trainingLimit: budget.trainingLimit, generationLimit: budget.generationLimit, qualitySearch: true)
         var validationCompleted = 0, validationTarget = validationReservation
         var lastProgressLog = start
         func reportProgress(phase: GeneticProgress.Phase = .search, force: Bool = false) throws {
@@ -250,9 +209,12 @@ struct GeneticStudyOptions: Codable {
                 progress = updated
                 return
             }
+            try dao.saveProgress(snapshot)
+            try dao.saveGoalProgress(runID: runID, convergence: convergence)
             try write(snapshot, to: output.appendingPathComponent("progress.json"))
             progress = updated
             print(snapshot.statusLine)
+            if phase == .search { print(convergence.description(generation: completedGenerations)) }
             SimulatorLog.ga.notice("\(snapshot.statusLine, privacy: .public); runID=\(runID.uuidString, privacy: .public)")
             for milestone in milestones {
                 let message = "GA milestone: passed \(milestone.percent)% after \(GeneticProgress.duration(milestone.elapsedSeconds))"
@@ -276,27 +238,21 @@ struct GeneticStudyOptions: Codable {
             selectedStudies[key] = selected
             return selected
         }
-        func initialStrategy(selection: MetaUpgradeProgression, index: Int, transferred: GeneticStrategy? = nil) throws -> GeneticStrategy {
-            if let source = options.metaExchangeFrom, index == 0 { return try source.selectingMetaUpgrades(selection, in: study) }
-            if let transferred, index == 0 { return try transferred.selectingMetaUpgrades(selection, in: study) }
+        func initialStrategy(selection: MetaUpgradeProgression, index: Int, transferred: GeneticStrategy? = nil, fresh: Bool = false) throws -> GeneticStrategy {
+            if !fresh, let source = options.metaExchangeFrom, index == 0 { return try source.selectingMetaUpgrades(selection, in: study) }
+            if !fresh, let transferred, index == 0 { return try transferred.selectingMetaUpgrades(selection, in: study) }
             let seeds = options.seedStrategies.filter { $0.metaProgression == selection }
-            if index < seeds.count { return seeds[index] }
-            // Every selection starts with the same plan-family indices and input
-            // policy random stream. Placement heuristics read its actual effects.
+            if !fresh, index < seeds.count { return seeds[index] }
             let selected = try selectedStudy(selection)
-            let plan = try MoneyStudyPlan(study: selected,
-                placementIndex: index == 0 ? 7 : index - 1,
-                upgradePolicyIndex: index == 0 ? 2 : (index - 1) % 10, seed: options.seed,
-                towerLimits: options.towerLimits)
-            var policyRNG = SeededRNG(seed: options.seed &+ UInt64(index)).fork(stream: 92)
-            var strategy = GeneticStrategy(plan: plan, metaProgression: selection,
-                reinforcements: index == 0 ? .immediate : .random(paths: study.level.paths, rng: &policyRNG),
-                earlyWaves: options.earlyWaveCalls && index > 0
-                    ? .random(waveCount: study.level.numWaves, rng: &policyRNG) : .automatic)
-            if index > 0 && index % 3 == 0 {
-                for i in strategy.decisions.indices { strategy.decisions[i].saveForPurchase = true }
+            // Controlled meta experiments deliberately pair input plans. Normal
+            // search consumes an independent stream across births/selections.
+            if options.metaExchangeFrom != nil {
+                var paired = SeededRNG(seed: options.seed &+ UInt64(index)).fork(stream: 92)
+                return try GeneticStrategyFactory.make(study: selected, selection: selection,
+                    towerLimits: options.towerLimits, earlyWaveCalls: options.earlyWaveCalls, rng: &paired)
             }
-            return strategy
+            return try GeneticStrategyFactory.make(study: selected, selection: selection,
+                towerLimits: options.towerLimits, earlyWaveCalls: options.earlyWaveCalls, rng: &rng)
         }
         var pool: GeneticWorkerPool?
         defer { pool?.close() }
@@ -315,21 +271,27 @@ struct GeneticStudyOptions: Codable {
         func evaluateJobs(_ jobs: [GeneticBattleJob]) throws -> [GeneticEvaluation] {
             if let pool { return try pool.evaluate(jobs) }
             return try jobs.map { job in
-                try GeneticCommander.evaluate(job.strategy, recording: .database(db.levelRunDao, .simulator),
+                try GeneticCommander.evaluate(job.strategy, recording: .evaluation,
                     content: selectedStudy(job.strategy.metaProgression).battle,
                     money: money, seed: job.seed, maxSeconds: options.maxGameSeconds)
             }
         }
         func save(_ item: PendingCandidate, evaluations: [GeneticEvaluation]) throws {
+            guard evaluations.allSatisfy({ $0.placementPlan?.playstyle != nil }) else {
+                throw DbError.Db(message: "genetic study: worker omitted original placement/playstyle evidence")
+            }
+            guard evaluations.allSatisfy({ $0.placementPlan!.playstyle!.towers.allSatisfy { $0.slowingSeconds != nil } }) else {
+                throw DbError.Db(message: "genetic study: worker omitted control activity evidence")
+            }
             let key = item.key, strategy = item.strategy, generation = item.generation
             let stars = strategy.metaProgression.spentStars
             let candidate = GeneticCandidate(id: nextID, generation: generation, strategy: strategy, evaluations: evaluations)
             nextID += 1; completed += evaluations.count
-            try dao.insert([MoneyStudyResultRow(money: money, placementPlan: candidate.id,
-                upgradePolicy: 0, results: evaluations.map(\.result), evidenceJSON: try encoded(candidate))], runID: runID, completed: completed,
-                rate: Double(completed) / max(0.001, ProcessInfo.processInfo.systemUptime - start))
+            try dao.insert([candidate], runID: runID, panel: .training, expectedSamples: options.trainingSeeds,
+                completed: completed, rate: Double(completed) / max(0.001, ProcessInfo.processInfo.systemUptime - start))
             cache[key] = candidate
             try populations[stars]!.record(candidate)
+            convergence.observe(candidate)
             SimulatorLog.ga.debug("Candidate recorded; runID=\(runID.uuidString, privacy: .public) candidate=\(candidate.id) generation=\(generation) stars=\(stars) games=\(evaluations.count) winRate=\(candidate.fitness.winRate)")
             if best[stars] == nil || candidate.fitness > best[stars]!.fitness {
                 best[stars] = candidate
@@ -362,8 +324,8 @@ struct GeneticStudyOptions: Codable {
             }
             let key = hash(try encoder.encode(strategy))
             if cache[key] != nil || pendingKeys.contains(key) { cacheHits += 1; return true }
-            guard completed + (pending.count + 1) * trainingSeeds.count <= trainingCap,
-                  ProcessInfo.processInfo.systemUptime < searchDeadline else { return false }
+            guard budget.trainingStopReason(now: ProcessInfo.processInfo.systemUptime, completed: completed,
+                                            pending: pending.count * trainingSeeds.count) == nil else { return false }
             pending.append(PendingCandidate(key: key, strategy: strategy, generation: generation))
             pendingKeys.insert(key)
             // Parent pools were frozen before breeding; ordered saves preserve
@@ -404,13 +366,17 @@ struct GeneticStudyOptions: Codable {
 
         var phase = "initial-population"
         do {
-            try dao.begin(runID: runID, configuration: String(decoding: configData, as: UTF8.self),
-                contentSHA256: digest, plans: "{\"format\":\"genetic-v8\",\"storage\":\"Fixed hero loadout in configuration; separate meta-selection subpopulations; starsUsed, complete player DNA, engine receipts and seeds in each result row\"}")
+            try dao.begin(runID: runID, context: solutionContext, executableSHA256: executable,
+                snapshotSHA256: digest, buildVersion: BuildVersion.version, options: options,
+                requestedStars: requestedStars, reachableStars: starGroups, earnedStars: meta.earnedStars,
+                databaseUpgrades: active.selected.sorted { $0.rawValue < $1.rawValue },
+                trainingSeeds: trainingSeeds, validationSeeds: validationSeeds)
             try write(["runID": runID.uuidString], to: output.appendingPathComponent("run.json"))
             SimulatorLog.ga.notice("GA started; runID=\(runID.uuidString, privacy: .public) levelID=\(levelID.uuidString, privacy: .public) level=\(study.level.name, privacy: .public) money=\(money) workers=\(options.workers) hours=\(options.hours) maxEvaluations=\(options.maxEvaluations)")
             print("Started genetic study \(runID): \(study.level.name), \(money) coins, heroes \(heroNames), \(meta.earnedStars) stars earned")
-            print("Stars used: \(requestedStars); population cap \(options.population) per group; up to \(options.finalists) finalists; distinct meta selections: \(!options.fixedMeta)")
+            print("Stars used: \(requestedStars); population cap \(options.population) per group; up to \(options.finalists) finalists; creative finalists with meta-selection coverage")
             print("Bounty fraction: \(options.bountyFraction); fixed database meta selection: \(options.fixedMeta)")
+            print("Search limits: \(budget.generationLimit.map(String.init) ?? "unlimited") generations; \(budget.evaluationLimit.map(String.init) ?? "unlimited") total battles; \(options.hours > 0 ? GeneticProgress.duration(options.hours * 3600 * GeneticProgress.searchTimeFraction) : "unlimited") search time. Budget exhaustion does not establish solution quality.")
             fflush(stdout)
             try reportProgress(force: true)
             if options.workers > 1 {
@@ -434,10 +400,38 @@ struct GeneticStudyOptions: Codable {
             try reportProgress()
             SimulatorLog.ga.notice("Initial population evaluated; runID=\(runID.uuidString, privacy: .public) candidates=\(nextID) games=\(completed)")
             phase = "evolution"
-            if options.generations > 1 {
-                for generation in 1..<options.generations {
-                    guard nextID > 0, completed + trainingSeeds.count <= trainingCap,
-                          ProcessInfo.processInfo.systemUptime < searchDeadline else { break }
+            var recovery = GeneticSearchRecovery()
+            recovery.completedGeneration(newEvaluations: completed)
+            var generation = completedGenerations
+            var attempt = 0
+            var qualificationHistory = GeneticQualificationHistory()
+            var searchStopReason = ""
+            var finalists: [GeneticCandidate] = []
+            var validations: [GeneticCandidate] = []
+            var validationComplete = false
+            func frozenFinalists() -> [GeneticCandidate] {
+                starGroups.flatMap { populations[$0]!.finalists(limit: options.finalists,
+                    distinctSelections: !options.fixedMeta, controlledMetaExchange: options.metaExchangeFrom != nil) }
+            }
+            func qualifies(_ candidates: [GeneticCandidate], samples: Int, history: [Int: GeneticCandidate] = [:]) throws -> Bool {
+                try starGroups.allSatisfy { stars in
+                    try policy.qualifyingSet(candidates.filter { $0.starsUsed == stars }, samples: samples, history: history).count == policy.solutions
+                }
+            }
+            while true {
+                phase = "evolution"
+                var readyForQualification = false
+                while budget.searchStopReason(now: ProcessInfo.processInfo.systemUptime,
+                                              generations: generation, completed: completed) == nil {
+                    if convergence.ready(generation: generation) {
+                        if try qualifies(frozenFinalists(), samples: options.trainingSeeds) {
+                            readyForQualification = true
+                            break
+                        }
+                        convergence.restartExploration(generation: generation)
+                        recovery.completedGeneration(newEvaluations: 0)
+                        print("Stable training results lack the required winning variety; continuing fresh exploration.")
+                    }
                     var transferred: [String: GeneticStrategy] = [:]
                     if !options.fixedMeta && options.metaExchangeFrom == nil {
                         for stars in starGroups {
@@ -460,13 +454,25 @@ struct GeneticStudyOptions: Codable {
                             try populations[stars]!.replace(weakest.key, with: selection, generation: generation,
                                                              adaptationGenerations: options.metaAdaptationGenerations)
                             SimulatorLog.ga.debug("Introduced meta selection; runID=\(runID.uuidString, privacy: .public) generation=\(generation) stars=\(stars) upgrades=\(selection.selected.count)")
-                            transferred[GeneticMetaSearch.key(selection)] = champion.strategy
+                            // Transfer a local strategy, not always the global champion.
+                            let donors = group.selections.flatMap { $0.behaviorChampions.values }
+                                .sorted { $0.id < $1.id }
+                            transferred[GeneticMetaSearch.key(selection)] = donors.isEmpty ? champion.strategy
+                                : donors[Int.random(in: donors.indices, using: &rng)].strategy
                         }
                     }
                     // Freeze parent pools before breeding. Children stay in the
                     // same meta selection; its battle plan gets time to adapt.
-                    let parentsByStars = populations.mapValues { group in
-                        Dictionary(uniqueKeysWithValues: group.activeSelections.map { ($0.key, $0.archive) })
+                    var parentsByStars: [Int: [String: [GeneticCandidate]]] = [:]
+                    var matesByStars: [Int: [String: [GeneticCandidate]]] = [:]
+                    for stars in starGroups {
+                        let group = populations[stars]!
+                        for selection in group.activeSelections {
+                            let count = group.plansPerSelection - max(1, group.plansPerSelection / 4)
+                            parentsByStars[stars, default: [:]][selection.key] = populations[stars]!.breedingParents(key: selection.key, count: count)
+                            let champions = selection.behaviorChampions.values.sorted { $0.id < $1.id }
+                            matesByStars[stars, default: [:]][selection.key] = champions.isEmpty ? selection.archive : champions
+                        }
                     }
                     let before = completed
                     breeding: for index in 0..<options.population {
@@ -477,18 +483,30 @@ struct GeneticStudyOptions: Codable {
                                 let introductions = parents.isEmpty
                                 guard index < (introductions ? capacity : capacity - max(1, capacity / 4)) else { continue }
                                 var child: GeneticStrategy
-                                if introductions {
+                                if recovery.needsFreshGeneration {
+                                    child = try initialStrategy(selection: selection.upgrades, index: generation + index, fresh: true)
+                                } else if introductions {
                                     child = try initialStrategy(selection: selection.upgrades, index: index, transferred: transferred[selection.key])
                                 } else {
-                                    func parent() -> GeneticStrategy {
-                                        let samples = (0..<3).map { _ in parents[Int.random(in: parents.indices, using: &rng)] }
-                                        return ranked(samples)[0].strategy
-                                    }
-                                    child = Bool.random(using: &rng)
-                                        ? try GeneticStrategy.crossover(parent(), parent(), slots: study.level.towerSlots.count, metaFactory: metaFactory, rng: &rng) : parent()
-                                    for _ in 0..<Int.random(in: 1...4, using: &rng) {
-                                        try child.mutate(study: study, metaFactory: metaFactory, rng: &rng,
-                                                     earlyWaveCallsEnabled: options.earlyWaveCalls, metaMutationEnabled: false)
+                                    let offspringCount = capacity - max(1, capacity / 4)
+                                    if GeneticBreedingDiversity.introducesFreshPlan(index: index, offspringCount: offspringCount, generation: generation) {
+                                        child = try initialStrategy(selection: selection.upgrades, index: generation + index)
+                                    } else {
+                                        let primary = parents[index % parents.count]
+                                        let mates = GeneticBreedingDiversity.matingPool(for: primary, parents: matesByStars[stars]![selection.key]!)
+                                        let mate = mates[Int.random(in: mates.indices, using: &rng)]
+                                        let opening = Set((primary.placementPlan?.initial ?? []).map(\.slot)
+                                            + (mate.placementPlan?.initial ?? []).map(\.slot))
+                                        child = Bool.random(using: &rng)
+                                            ? try GeneticStrategy.crossover(primary.strategy, mate.strategy,
+                                                slots: study.level.towerSlots.count, metaFactory: metaFactory, rng: &rng,
+                                                preservingOpening: opening)
+                                            : primary.strategy
+                                        for _ in 0..<Int.random(in: 1...4, using: &rng) {
+                                            try child.mutate(study: study, metaFactory: metaFactory, rng: &rng,
+                                                earlyWaveCallsEnabled: options.earlyWaveCalls, metaMutationEnabled: false,
+                                                evidence: primary.evaluations)
+                                        }
                                     }
                                 }
                                 guard try evaluate(child, generation: generation) else { break breeding }
@@ -497,68 +515,104 @@ struct GeneticStudyOptions: Codable {
                     }
                     try flushCandidates()
                     completedGenerations = generation + 1
-                    let checkpoint = Dictionary(uniqueKeysWithValues: populations.map { stars, group in
-                        (String(stars), Dictionary(uniqueKeysWithValues: group.activeSelections.map { ($0.key, $0.archive.map(\.id)) }))
-                    })
-                    try dao.recordAdaptiveCheckpoint(runID: runID, json: encoded(checkpoint))
+                    try dao.checkpoint(runID: runID, populations: populations, generations: completedGenerations, nextID: nextID, cacheHits: cacheHits)
                     try write(populations.values.flatMap { $0.activeSelections.flatMap(\.archive) }.sorted { $0.id < $1.id }, to: output.appendingPathComponent("population.json"))
                     SimulatorLog.ga.info("Generation checkpoint saved; runID=\(runID.uuidString, privacy: .public) generation=\(generation) candidates=\(nextID) games=\(completed) cacheHits=\(cacheHits)")
                     try reportProgress()
-                    if completed == before { break }
+                    recovery.completedGeneration(newEvaluations: completed - before)
+                    if recovery.needsFreshGeneration {
+                        SimulatorLog.ga.notice("No new candidates this generation; fresh exploration next; runID=\(runID.uuidString, privacy: .public) generation=\(generation)")
+                    }
+                    generation += 1
                 }
+                try dao.checkpoint(runID: runID, populations: populations, generations: completedGenerations, nextID: nextID, cacheHits: cacheHits)
+                let resourceReason = budget.searchStopReason(now: ProcessInfo.processInfo.systemUptime,
+                    generations: completedGenerations, completed: completed)
+                guard readyForQualification || resourceReason != nil else {
+                    throw DbError.Db(message: "search ended without quality readiness or an explicit resource limit")
+                }
+                // Freeze before seeing this attempt's entirely fresh held-out panel.
+                finalists = frozenFinalists()
+                targetFinalistCounts = Dictionary(uniqueKeysWithValues: starGroups.map { stars in
+                    (stars, finalists.filter { $0.starsUsed == stars }.count)
+                })
+                validationSeeds = policy.validationSeeds(base: options.seed, trainingCount: options.trainingSeeds,
+                    count: options.validationSeeds, attempt: attempt)
+                let evidenceID = try dao.beginQualification(runID: runID, attempt: attempt,
+                    context: solutionContext, executableSHA256: executable,
+                    trainingBattles: completed - validationCompleted, generations: completedGenerations, seeds: validationSeeds)
+                validationTarget = validationCompleted + finalists.count * options.validationSeeds
+                phase = "validation"
+                print("Frozen qualification attempt \(attempt + 1): \(finalists.count) candidates, \(options.validationSeeds) fresh held-out seeds each.")
+                try reportProgress(phase: .validation)
+                var samplesByID: [Int: [GeneticEvaluation]] = [:]
+                func validationCheckpoint() throws -> [GeneticCandidate] {
+                    let checkpoint = finalists.compactMap { candidate -> GeneticCandidate? in
+                        guard let samples = samplesByID[candidate.id], !samples.isEmpty else { return nil }
+                        return GeneticCandidate(id: candidate.id, generation: candidate.generation,
+                            strategy: candidate.strategy, evaluations: samples)
+                    }
+                    for candidate in checkpoint {
+                        try dao.saveEvidence(candidate, runID: evidenceID, panel: .validation, expectedSamples: options.validationSeeds)
+                    }
+                    try write(checkpoint, to: output.appendingPathComponent("validation.json"))
+                    return checkpoint
+                }
+                // Round-robin validation gives every star group the same seed panel,
+                // including partial panels when the global wall-time budget expires.
+                validation: for seed in validationSeeds {
+                    for start in stride(from: 0, to: finalists.count, by: options.workers) {
+                        guard budget.evaluationLimit.map({ completed < $0 }) ?? true,
+                              budget.deadline.map({ ProcessInfo.processInfo.systemUptime < $0 }) ?? true else { break validation }
+                        let available = budget.evaluationLimit.map { $0 - completed } ?? options.workers
+                        let end = min(finalists.count, start + options.workers, start + available)
+                        let batch = Array(finalists[start..<end])
+                        let samples = try evaluateJobs(batch.map { GeneticBattleJob(strategy: $0.strategy, seed: seed) })
+                        for (candidate, sample) in zip(batch, samples) {
+                            samplesByID[candidate.id, default: []].append(sample); completed += 1; validationCompleted += 1
+                        }
+                        try reportProgress(phase: .validation)
+                    }
+                    _ = try validationCheckpoint()
+                    SimulatorLog.ga.info("Validation checkpoint saved; runID=\(runID.uuidString, privacy: .public) totalGames=\(completed) minimumSeedsPerFinalist=\(samplesByID.values.map(\.count).min() ?? 0) requestedSeeds=\(options.validationSeeds)")
+                }
+                validations = try validationCheckpoint()
+                validationComplete = !starGroups.isEmpty && starGroups.allSatisfy { stars in
+                    let tested = validations.filter { $0.starsUsed == stars }
+                    let expected = targetFinalistCounts[stars] ?? 0
+                    return expected > 0 && tested.count == expected && tested.allSatisfy { $0.evaluations.count == options.validationSeeds }
+                }
+                try qualificationHistory.append(validations)
+                let qualified = try readyForQualification && validationComplete
+                    && qualifies(validations, samples: options.validationSeeds, history: qualificationHistory.candidates)
+                let exhausted = resourceReason ?? budget.searchStopReason(now: ProcessInfo.processInfo.systemUptime,
+                    generations: completedGenerations, completed: completed)
+                try dao.finishQualification(evidenceID: evidenceID,
+                    status: qualified ? "qualified" : (exhausted == nil ? "rejected" : "resource-limit"))
+                if qualified || exhausted != nil {
+                    searchStopReason = qualified ? "quality-qualified" : exhausted!
+                    try dao.finalValidationSeeds(runID: runID, seeds: validationSeeds)
+                    try dao.insert(validations, runID: runID, panel: .validation, expectedSamples: options.validationSeeds,
+                        completed: completed, rate: Double(completed) / max(0.001, ProcessInfo.processInfo.systemUptime - start))
+                    break
+                }
+                // No held-out fitness enters the breeding populations. The next
+                // frozen assessment uses a disjoint seed panel; this one stays saved.
+                attempt += 1
+                convergence.restartExploration(generation: generation)
+                recovery.completedGeneration(newEvaluations: 0)
+                print("Qualification rejected; evidence retained. Resuming training with fresh exploration.")
+                try reportProgress(force: true)
             }
-            try write(populations.values.flatMap { $0.activeSelections.flatMap(\.archive) }.sorted { $0.id < $1.id }, to: output.appendingPathComponent("population.json"))
-            let searchStopReason: String
-            if ProcessInfo.processInfo.systemUptime >= searchDeadline { searchStopReason = "time-budget" }
-            else if completed + trainingSeeds.count > trainingCap { searchStopReason = "evaluation-budget" }
-            else if completedGenerations >= options.generations { searchStopReason = "generation-limit" }
-            else { searchStopReason = "no-new-candidates" }
-            SimulatorLog.ga.notice("Training ended; runID=\(runID.uuidString, privacy: .public) reason=\(searchStopReason, privacy: .public) generations=\(completedGenerations) games=\(completed) candidates=\(nextID)")
-            phase = "training-publication"
-            // Freeze every group's finalists before any held-out result is seen.
-            let finalists = starGroups.flatMap { populations[$0]!.finalists(limit: options.finalists, distinctSelections: !options.fixedMeta) }
-            validationTarget = finalists.count * options.validationSeeds
-            let trainingSolutions = try db.geneticSolutionDao.saveBest(
-                populations.values.flatMap { $0.selections.flatMap(\.archive) }, runID: runID,
+            try dao.saveGoalProgress(runID: runID, convergence: convergence)
+            try write(populations.values.flatMap { $0.activeSelections.flatMap(\.archive) }.sorted { $0.id < $1.id },
+                to: output.appendingPathComponent("population.json"))
+            print(searchStopReason == "quality-qualified"
+                ? "Quality goal qualified after training convergence and held-out assessment."
+                : "Resource limit reached (\(searchStopReason)); quality goal NOT achieved.")
+            let trainingSolutions = try db.geneticSolutionDao.saveBest(Array(cache.values), runID: runID,
                 context: solutionContext, executableSHA256: executable, panel: .training,
                 expectedSamples: options.trainingSeeds, limitPerStar: options.finalists, study: study)
-            SimulatorLog.ga.notice("Training candidates saved; runID=\(runID.uuidString, privacy: .public) candidates=\(trainingSolutions)")
-            phase = "validation"
-            SimulatorLog.ga.notice("Validation started; runID=\(runID.uuidString, privacy: .public) finalists=\(finalists.count) seedsPerFinalist=\(options.validationSeeds)")
-            try reportProgress(phase: .validation)
-            var samplesByID: [Int: [GeneticEvaluation]] = [:]
-            func validationCheckpoint() throws -> [GeneticCandidate] {
-                let checkpoint = finalists.compactMap { candidate -> GeneticCandidate? in
-                    guard let samples = samplesByID[candidate.id], !samples.isEmpty else { return nil }
-                    return GeneticCandidate(id: candidate.id, generation: candidate.generation,
-                        strategy: candidate.strategy, evaluations: samples)
-                }
-                let rows = try checkpoint.map { candidate in
-                    MoneyStudyResultRow(money: money, placementPlan: candidate.id, upgradePolicy: 1,
-                        results: candidate.evaluations.map(\.result), evidenceJSON: try encoded(candidate))
-                }
-                try dao.insert(rows, runID: runID, completed: completed,
-                    rate: Double(completed) / max(0.001, ProcessInfo.processInfo.systemUptime - start), replacingValidation: true)
-                try write(checkpoint, to: output.appendingPathComponent("validation.json"))
-                return checkpoint
-            }
-            // Round-robin validation gives every star group the same seed panel,
-            // including partial panels when the global wall-time budget expires.
-            validation: for seed in validationSeeds {
-                for start in stride(from: 0, to: finalists.count, by: options.workers) {
-                    guard completed < options.maxEvaluations, ProcessInfo.processInfo.systemUptime < deadline else { break validation }
-                    let end = min(finalists.count, start + options.workers, start + options.maxEvaluations - completed)
-                    let batch = Array(finalists[start..<end])
-                    let samples = try evaluateJobs(batch.map { GeneticBattleJob(strategy: $0.strategy, seed: seed) })
-                    for (candidate, sample) in zip(batch, samples) {
-                        samplesByID[candidate.id, default: []].append(sample); completed += 1; validationCompleted += 1
-                    }
-                    try reportProgress(phase: .validation)
-                }
-                _ = try validationCheckpoint()
-                SimulatorLog.ga.info("Validation checkpoint saved; runID=\(runID.uuidString, privacy: .public) totalGames=\(completed) minimumSeedsPerFinalist=\(samplesByID.values.map(\.count).min() ?? 0) requestedSeeds=\(options.validationSeeds)")
-            }
-            let validations = try validationCheckpoint()
             phase = "validation-publication"
             try reportProgress(phase: .saving)
             let validatedSolutions = try db.geneticSolutionDao.saveBest(validations, runID: runID,
@@ -569,76 +623,114 @@ struct GeneticStudyOptions: Codable {
             for candidate in validations {
                 print("Held-out \(candidate.starsUsed) stars used, population candidate \(candidate.id): \(candidate.evaluations.filter { $0.result.outcome == .victory }.count)/\(candidate.evaluations.count) wins")
             }
-            let persisted = try dao.geneticSummaryByStars(runID: runID)
-            let starResults: [[String: Any]] = try requestedStars.map { stars in
-                let tested = validations.filter { $0.starsUsed == stars }
-                let reachable = meta.choicesByStars[stars] != nil
-                let expected = targetFinalistCounts[stars] ?? 0
-                let complete = reachable && expected > 0 && tested.count == expected && tested.allSatisfy { $0.evaluations.count == options.validationSeeds }
-                let selections: [[String: Any]] = try (populations[stars]?.selections ?? []).map { selection in
-                    let heldOut = tested.first { $0.strategy.metaProgression == selection.upgrades }
-                    return ["metaUpgrades": selection.upgrades.upgrades.map(\.rawValue),
-                        "selectedMetaUpgrades": selection.upgrades.upgrades.map { study.battle.playerUpgrades.loadout.catalog[$0].title },
-                        "activeAtEnd": selection.active, "introducedGeneration": selection.introducedGeneration,
-                        "trainingCandidates": selection.candidateIDs.count,
-                        "trainingBattles": selection.candidateIDs.count * options.trainingSeeds,
-                        "minimumSearchComplete": selection.candidateIDs.count >= options.minimumMetaCandidates,
-                        "bestTraining": try selection.archive.first.map(brief) as Any? ?? NSNull(),
-                        "validation": try heldOut.map(brief) as Any? ?? NSNull(),
-                        "validationCandidates": try tested.filter { $0.strategy.metaProgression == selection.upgrades }.map(brief)]
-                }
-                return ["starsUsed": stars, "earnedStars": meta.earnedStars, "unspentStars": meta.earnedStars - stars,
-                    "legalMetaLoadouts": meta.choicesByStars[stars]?.count ?? 0,
-                    "searchedMetaLoadouts": populations[stars]?.selections.filter { !$0.candidateIDs.isEmpty }.count ?? 0,
-                    "plansPerMetaSelection": populations[stars]?.plansPerSelection ?? 0,
-                    "metaSelectionResults": selections, "expectedFinalists": expected,
-                    "expectedDistinctFinalists": options.fixedMeta ? min(1, expected) : expected,
-                    "status": !reachable ? "no_legal_loadout" : (best[stars] == nil ? "not_evaluated" : (complete ? "validation_complete" : "validation_incomplete")),
-                    "training": persisted.first { ($0["starsUsed"] as? Int) == stars && ($0["panel"] as? Int) == 0 } ?? [:],
-                    "bestTraining": try best[stars].map(brief) as Any? ?? NSNull(),
-                    "bestReplay": best[stars].map { _ in "best-stars-\(stars).json" } as Any? ?? NSNull(),
-                    "validation": try tested.map(brief), "validationComplete": complete]
-            }
-            var exchanges: [[String: Any]] = []
-            if let source = options.metaExchangeFrom,
-               let baseline = validations.first(where: { $0.strategy.metaProgression == source.metaProgression }) {
-                let group = populations[baseline.starsUsed]!
-                for alternative in validations where alternative.id != baseline.id {
-                    let common = Set(baseline.evaluations.map(\.seed)).intersection(alternative.evaluations.map(\.seed))
-                    guard !common.isEmpty else { continue }
-                    let paired = try GeneticPairedComparison(baseline: baseline.evaluations.filter { common.contains($0.seed) },
-                        alternative: alternative.evaluations.filter { common.contains($0.seed) })
-                    let original = source.metaProgression.selected, changed = alternative.metaUpgrades.selected
-                    func names(_ values: Set<MetaUpgrade>) -> [String] {
-                        values.sorted { $0.rawValue < $1.rawValue }.map { study.battle.playerUpgrades.loadout.catalog[$0].title }
+            var summary: [String: Any] = [:]
+            if reports.exports {
+                let persisted = try dao.geneticSummaryByStars(runID: runID)
+                let starResults: [[String: Any]] = try requestedStars.map { stars in
+                    let tested = validations.filter { $0.starsUsed == stars }
+                    let reachable = meta.choicesByStars[stars] != nil
+                    let expected = targetFinalistCounts[stars] ?? 0
+                    let complete = reachable && expected > 0 && tested.count == expected && tested.allSatisfy { $0.evaluations.count == options.validationSeeds }
+                    let selections: [[String: Any]] = try (populations[stars]?.selections ?? []).map { selection in
+                        let heldOut = tested.first { $0.strategy.metaProgression == selection.upgrades }
+                        return ["metaUpgrades": selection.upgrades.upgrades.map(\.rawValue),
+                            "selectedMetaUpgrades": selection.upgrades.upgrades.map { study.battle.playerUpgrades.loadout.catalog[$0].title },
+                            "activeAtEnd": selection.active, "introducedGeneration": selection.introducedGeneration,
+                            "trainingCandidates": selection.candidateIDs.count,
+                            "trainingBattles": selection.candidateIDs.count * options.trainingSeeds,
+                            "minimumSearchComplete": selection.candidateIDs.count >= options.minimumMetaCandidates,
+                            "bestTraining": try selection.archive.first.map(brief) as Any? ?? NSNull(),
+                            "validation": try heldOut.map(brief) as Any? ?? NSNull(),
+                            "validationCandidates": try tested.filter { $0.strategy.metaProgression == selection.upgrades }.map(brief)]
                     }
-                    let baselineCount = group.selections.first { $0.upgrades == baseline.strategy.metaProgression }!.candidateIDs.count
-                    let alternativeCount = group.selections.first { $0.upgrades == alternative.strategy.metaProgression }!.candidateIDs.count
-                    exchanges.append(["starsUsed": baseline.starsUsed, "baselinePopulationCandidateID": baseline.id,
-                        "alternativePopulationCandidateID": alternative.id, "removedUpgrades": names(original.subtracting(changed)),
-                        "addedUpgrades": names(changed.subtracting(original)), "baselineTrainingCandidates": baselineCount,
-                        "alternativeTrainingCandidates": alternativeCount, "equalTrainingCandidateCounts": baselineCount == alternativeCount,
-                        "pairedValidation": try JSONSerialization.jsonObject(with: encoder.encode(paired))])
+                    return ["starsUsed": stars, "earnedStars": meta.earnedStars, "unspentStars": meta.earnedStars - stars,
+                        "legalMetaLoadouts": meta.choicesByStars[stars]?.count ?? 0,
+                        "searchedMetaLoadouts": populations[stars]?.selections.filter { !$0.candidateIDs.isEmpty }.count ?? 0,
+                        "plansPerMetaSelection": populations[stars]?.plansPerSelection ?? 0,
+                        "metaSelectionResults": selections, "expectedFinalists": expected,
+                        "expectedDistinctFinalists": options.fixedMeta ? min(1, expected) : expected,
+                        "status": !reachable ? "no_legal_loadout" : (best[stars] == nil ? "not_evaluated" : (complete ? "validation_complete" : "validation_incomplete")),
+                        "training": persisted.first { ($0["starsUsed"] as? Int) == stars && ($0["panel"] as? Int) == 0 } ?? [:],
+                        "bestTraining": try best[stars].map(brief) as Any? ?? NSNull(),
+                        "bestReplay": best[stars].map { _ in "best-stars-\(stars).json" } as Any? ?? NSNull(),
+                        "validation": try tested.map(brief), "validationComplete": complete]
                 }
+                var exchanges: [[String: Any]] = []
+                if let source = options.metaExchangeFrom,
+                   let baseline = validations.first(where: { $0.strategy.metaProgression == source.metaProgression }) {
+                    let group = populations[baseline.starsUsed]!
+                    for alternative in validations where alternative.id != baseline.id {
+                        let common = Set(baseline.evaluations.map(\.seed)).intersection(alternative.evaluations.map(\.seed))
+                        guard !common.isEmpty else { continue }
+                        let paired = try GeneticPairedComparison(baseline: baseline.evaluations.filter { common.contains($0.seed) },
+                            alternative: alternative.evaluations.filter { common.contains($0.seed) })
+                        let original = source.metaProgression.selected, changed = alternative.metaUpgrades.selected
+                        func names(_ values: Set<MetaUpgrade>) -> [String] {
+                            values.sorted { $0.rawValue < $1.rawValue }.map { study.battle.playerUpgrades.loadout.catalog[$0].title }
+                        }
+                        let baselineCount = group.selections.first { $0.upgrades == baseline.strategy.metaProgression }!.candidateIDs.count
+                        let alternativeCount = group.selections.first { $0.upgrades == alternative.strategy.metaProgression }!.candidateIDs.count
+                        exchanges.append(["starsUsed": baseline.starsUsed, "baselinePopulationCandidateID": baseline.id,
+                            "alternativePopulationCandidateID": alternative.id, "removedUpgrades": names(original.subtracting(changed)),
+                            "addedUpgrades": names(changed.subtracting(original)), "baselineTrainingCandidates": baselineCount,
+                            "alternativeTrainingCandidates": alternativeCount, "equalTrainingCandidateCounts": baselineCount == alternativeCount,
+                            "pairedValidation": try JSONSerialization.jsonObject(with: encoder.encode(paired))])
+                    }
+                }
+                summary = ["format": "genetic-summary-v7", "runID": runID.uuidString,
+                    "bountyFraction": options.bountyFraction, "fixedMeta": options.fixedMeta,
+                    "heroes": true, "heroLoadout": try JSONSerialization.jsonObject(with: encoder.encode(heroLoadout)),
+                    "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
+                    "workers": options.workers, "engineGames": completed, "uniqueGenomes": nextID, "cacheHits": cacheHits, "generations": completedGenerations,
+                    "elapsedSeconds": ProcessInfo.processInfo.systemUptime - start, "contentSHA256": digest,
+                    "money": money, "earnedStars": meta.earnedStars, "starResults": starResults,
+                    "controlledMetaExchange": options.metaExchangeFrom != nil, "metaExchangeComparisons": exchanges,
+                    "validationComplete": validationComplete,
+                    "note": "Grouped by exact stars used. Each meta selection has its own adapting battle plans. Creative finalists reserve coverage of qualified meta selections and may include multiple different battle plans with the same upgrades. Coverage and search effort are reported per selection. Absence of wins is not proof of impossibility. Final validation never feeds back into the search. Planned tower composition is intent, not a receipt of purchases completed in battle."]
             }
             phase = "summary"
-            let validationComplete = !starGroups.isEmpty && starResults.filter { ($0["legalMetaLoadouts"] as? Int ?? 0) > 0 }.allSatisfy { $0["validationComplete"] as? Bool == true }
-            let summary: [String: Any] = ["format": "genetic-summary-v7", "runID": runID.uuidString,
-                "bountyFraction": options.bountyFraction, "fixedMeta": options.fixedMeta,
-                "heroes": true, "heroLoadout": try JSONSerialization.jsonObject(with: encoder.encode(heroLoadout)),
-                "reinforcementCommands": true, "earlyWaveCalls": options.earlyWaveCalls,
-                "workers": options.workers, "engineGames": completed, "uniqueGenomes": nextID, "cacheHits": cacheHits, "generations": completedGenerations,
-                "elapsedSeconds": ProcessInfo.processInfo.systemUptime - start, "contentSHA256": digest,
-                "money": money, "earnedStars": meta.earnedStars, "starResults": starResults,
-                "controlledMetaExchange": options.metaExchangeFrom != nil, "metaExchangeComparisons": exchanges,
-                "validationComplete": validationComplete,
-                "note": "Grouped by exact stars used. Each meta selection has its own adapting battle plans. Meta-search finalists represent distinct qualified selections; explicit fixed-meta controls compare battle plans with one selection. Coverage and search effort are reported per selection. Absence of wins is not proof of impossibility. Final validation never feeds back into the search. Planned tower composition is intent, not a receipt of purchases completed in battle."]
+            let evaluationSeconds = ProcessInfo.processInfo.systemUptime - start
+            try dao.saveSummary(runID: runID, stopReason: searchStopReason, validationComplete: validationComplete,
+                evaluationSeconds: evaluationSeconds, recordingSeconds: 0, totalSeconds: evaluationSeconds,
+                cacheHits: cacheHits, generations: completedGenerations, candidates: nextID, recordings: 0)
             let summaryURL = output.appendingPathComponent("summary.json")
-            try reports.write(JSONSerialization.data(withJSONObject: summary, options: [.sortedKeys, .prettyPrinted]), to: summaryURL)
-            try dao.finishAdaptive(runID: runID, completed: completed, reportPath: db.path)
+            if reports.exports { try reports.export(JSONSerialization.data(withJSONObject: summary, options: [.sortedKeys, .prettyPrinted]), to: summaryURL) }
+            // The search and held-out panels are now frozen. Demonstrations
+            // use their own recordings and cannot consume evaluation budget,
+            // change rankings, or replace original candidate evidence.
+            pool?.close(); pool = nil
+            phase = "recording"
+            let recordingStarted = ProcessInfo.processInfo.systemUptime
+            let retained = try db.geneticSolutionDao.recordingCandidates(runID: runID)
+            try reportProgress(phase: .recording)
+            print("Recording \(retained.count) retained solutions after evaluation; original fitness results are unchanged.")
+            for (index, solution) in retained.enumerated() {
+                let original = try solution.recordingEvaluation()
+                let actual = try GeneticCommander.evaluate(solution.candidate.strategy,
+                    recording: .database(db.levelRunDao, .simulator),
+                    content: selectedStudy(solution.candidate.strategy.metaProgression).battle,
+                    money: money, seed: original.seed, maxSeconds: options.maxGameSeconds)
+                let matches = try db.geneticSolutionDao.saveRecording(for: solution, evaluation: actual)
+                print("Playback \(index + 1)/\(retained.count): candidate \(solution.candidate.id), \(solution.panel.rawValue), seed \(original.seed), \(actual.result.outcome.rawValue); original evaluation \(matches ? "matched" : "differs (fitness unchanged)").")
+                try reportProgress(phase: .recording)
+            }
+            summary["recordingPolicy"] = "retained-solutions-after-evaluation"
+            summary["playbackRecordings"] = retained.count
+            summary["playbackRecordingSeconds"] = ProcessInfo.processInfo.systemUptime - recordingStarted
+            summary["totalElapsedSeconds"] = ProcessInfo.processInfo.systemUptime - start
+            if reports.exports { try reports.export(JSONSerialization.data(withJSONObject: summary, options: [.sortedKeys, .prettyPrinted]), to: summaryURL) }
+            try dao.saveSummary(runID: runID, stopReason: searchStopReason, validationComplete: validationComplete,
+                evaluationSeconds: evaluationSeconds, recordingSeconds: ProcessInfo.processInfo.systemUptime - recordingStarted,
+                totalSeconds: ProcessInfo.processInfo.systemUptime - start, cacheHits: cacheHits,
+                generations: completedGenerations, candidates: nextID, recordings: retained.count)
+            try dao.finish(runID: runID, completed: completed)
             try reportProgress(phase: .completed)
             SimulatorLog.ga.notice("GA completed; runID=\(runID.uuidString, privacy: .public) games=\(completed) candidates=\(nextID) generations=\(completedGenerations) validationComplete=\(validationComplete) elapsedSeconds=\(ProcessInfo.processInfo.systemUptime - start)")
-            print("Completed genetic study: \(completed) engine games across \(starGroups.count) star groups; summary.json in \(db.path)")
+            let starBudgets = starGroups.map(String.init).joined(separator: ", ")
+            let budgetDescription = starGroups.count == 1
+                ? "a \(starBudgets)-star meta progression budget"
+                : "meta progression budgets of \(starBudgets) stars"
+            print("Genetic study ended (\(searchStopReason)): \(completed) evaluation games using \(budgetDescription), \(retained.count) playback recordings; relational results in \(db.path)")
         } catch {
             SimulatorLog.ga.error("GA failed; runID=\(runID.uuidString, privacy: .public) phase=\(phase, privacy: .public) games=\(completed) detail=\(String(describing: error), privacy: .private)")
             do { try reportProgress(phase: .failed) }

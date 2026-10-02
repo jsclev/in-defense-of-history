@@ -7,6 +7,22 @@ final class SimulatorBoundaryTests: XCTestCase {
         URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
     }
 
+    func testCandidateDiversityComparisonHasNoSimulationOrReplayDependency() throws {
+        for path in ["Engine/Design/GeneticDefenseComparison.swift", "Engine/Design/GeneticSolutionDiversitySelector.swift", "Engine/Design/GeneticPlacementPlan.swift", "Engine/Design/GeneticPlaystyle.swift"] {
+            let source = try String(contentsOf: root.appendingPathComponent(path), encoding: .utf8)
+            for forbidden in ["GameSimulation", "BattleEngine", "GeneticCommander", "BattleContent",
+                              "SimulationObserver", "LevelReplayer", "recordingEvaluation", "stepPaced"] {
+                XCTAssertFalse(source.contains(forbidden), "\(path) must compare saved data only: \(forbidden)")
+            }
+        }
+        let source = try String(contentsOf: root.appendingPathComponent("Simulator/GeneticSolutionImport.swift"), encoding: .utf8)
+        let audit = try XCTUnwrap(source.components(separatedBy: "static func auditDiversity").last?
+            .components(separatedBy: "private struct Configuration").first)
+        for forbidden in ["GeneticCommander", "GameSimulation", "AuthoredMoneyStudy", "recordingEvaluation", "contentCopy"] {
+            XCTAssertFalse(audit.contains(forbidden), "Archive comparison must read saved data only: \(forbidden)")
+        }
+    }
+
     func testSimulatorDatabaseAccessStaysBehindDAOs() throws {
         let simulator = try FileManager.default.contentsOfDirectory(atPath: root.appendingPathComponent("Simulator").path)
             .filter { $0.hasSuffix(".swift") }.map { "Simulator/" + $0 }
@@ -50,7 +66,7 @@ final class SimulatorBoundaryTests: XCTestCase {
     func testGeneticSearchOwnsOnlyPlayerIntentAndWholeBattleScoring() throws {
         // Ownership audit: the coordinator breeds/records plans; the commander
         // chooses commands. Neither has access to mutable battle internals.
-        for path in ["Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticMetaSearch.swift", "Engine/Design/GeneticMetaPopulation.swift",
+        for path in ["Engine/Design/GeneticStrategy.swift", "Engine/Design/GeneticTactics.swift", "Engine/Design/GeneticStrategyFactory.swift", "Engine/Design/GeneticMetaSearch.swift", "Engine/Design/GeneticMetaPopulation.swift",
                      "Engine/Design/GeneticProgress.swift",
                      "Engine/Design/OrderedWorkerQueue.swift",
                      "Engine/Models/MetaUpgradesFactory.swift",
@@ -75,13 +91,14 @@ final class SimulatorBoundaryTests: XCTestCase {
         XCTAssertTrue(workers.contains("GeneticCommander.evaluate("))
         XCTAssertTrue(workers.contains("digest == configuration.contentSHA256"))
         XCTAssertTrue(workers.contains("configuration.executableSHA256"))
-        XCTAssertTrue(workers.contains(".database(db.levelRunDao, .simulator)"))
+        XCTAssertTrue(workers.contains("recording: .evaluation"))
+        XCTAssertFalse(workers.contains(".database(db.levelRunDao, .simulator)"))
         XCTAssertFalse(workers.contains(".preview"))
         XCTAssertFalse(workers.contains(".terminate()"))
         // Persistence ownership: workers reopen the coordinator's snapshot;
         // the study may save candidates, but cannot publish game seed files.
         XCTAssertTrue(workers.contains("SimulatorStore(existing:"))
-        XCTAssertTrue(workers.contains("db.simulatorInvocationDao.document(named:"))
+        XCTAssertTrue(workers.contains("GeneticStudyDAO(db: db).workerConfiguration()"))
         let study = try String(contentsOf: root.appendingPathComponent("Simulator/GeneticStudy.swift"), encoding: .utf8)
         XCTAssertFalse(study.contains("exportSeed("))
         XCTAssertFalse(study.contains("Db.authoredDatabaseURL"))

@@ -5,7 +5,7 @@ extension BattleEngine {
 
     func startRecording(_ destination: BattleRecording, seed: UInt64, heroesEnabled: Bool) throws {
         switch destination {
-        case .preview: return
+        case .evaluation, .preview: return
         case let .database(dao, source):
             runRecorder = try LevelRunRecorder(dao: dao, source: source,
                 setup: LevelReplaySetup(engine: self, seed: seed, heroesEnabled: heroesEnabled))
@@ -16,7 +16,7 @@ extension BattleEngine {
 
     /// Both direct UI handlers and the simulator command adapter cross here.
     /// Nested handlers are part of one input; combat events remain separate.
-    func recordingInput<T>(_ name: String, _ fields: [String: String] = [:], _ body: () -> T) -> T {
+    func recordingInput<T>(_ name: String, _ fields: @autoclosure () -> [String: String] = [:], _ body: () -> T) -> T {
         guard recordingInputDepth == 0 else { return body() }
         recordingInputDepth += 1
         defer { recordingInputDepth -= 1 }
@@ -24,7 +24,7 @@ extension BattleEngine {
         // recorded inputs. Nested purchase/selection handlers belong to it.
         notifyPresentationWillChange()
         guard let recorder = runRecorder, !recorder.finished else { return body() }
-        var fields = fields
+        var fields = fields()
         fields["selectedSlot"] = selectedSlotIndex.map(String.init)
         fields["selectedTower"] = selectedTowerSlotIndex.map(String.init)
         fields["selectedHero"] = selectedHeroIndex.map(String.init)
@@ -47,9 +47,9 @@ extension BattleEngine {
         onEvent?(event, time)
     }
 
-    func recordCombat(_ name: String, _ fields: [String: String]) {
+    func recordCombat(_ name: String, _ fields: @autoclosure () -> [String: String]) {
         guard let recorder = runRecorder, !recorder.finished else { return }
-        recording { try recorder.action(tick: timer.tick, category: "event", name: name, payload: fields) }
+        recording { try recorder.action(tick: timer.tick, category: "event", name: name, payload: fields()) }
     }
 
     func recordFrame() {

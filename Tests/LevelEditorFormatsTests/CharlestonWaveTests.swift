@@ -104,7 +104,7 @@ final class CharlestonWaveTests: XCTestCase {
             XCTAssertFalse(CallWaveButtonPosition.visiblePositions(draft.callWaveButtons,
                 forPathIndices: Set(wave.spawns.map(\.pathIndex))).isEmpty)
         }
-        XCTAssertEqual(total, 1219)
+        XCTAssertEqual(total, 1220)
         XCTAssertEqual(start, 540)
         XCTAssertTrue(schedule.allWavesStarted)
     }

@@ -20,6 +20,15 @@ import CoreGraphics
 /// Purchases, placement validation, combat, movement, auras and income all run
 /// through the same handlers as play. Only composition and playback are staged.
 @MainActor struct TowerDemonstration {
+    /// Observed engine identities for enemy studies with escorts or reserves.
+    /// This evidence is separate from presentation; it never drives combat.
+    struct EnemyStudy {
+        let subjectTypeID: UUID
+        let spawnedTypes: [Int: UUID]
+        let removed: [Int: EnemyFate]
+    }
+    var enemyStudy: EnemyStudy? = nil
+
     enum Lesson: String {
         case singleTargets, blast, grapeshot, piercing, blocking, slowing
         case demolition, income, attackSupport, healing
@@ -35,6 +44,8 @@ import CoreGraphics
         let killed: Set<Int>
         let towers: [PlacedTower]
         let soldiers: [BattleEngine.MilitiaSoldier]
+        let heroes: [BattleEngine.HeroSoldier]
+        let heroPoses: [Int: HeroWalkPose]
         let impacts: [BattleEngine.ArtilleryImpact]
         let obstacles: [EngineerObstacleField]
         let blocked: Set<Int>
@@ -45,6 +56,17 @@ import CoreGraphics
         let rallies: [Int: CGPoint]
         let waveIncome: Int
         let money: Int
+
+        func displayedHeroes(alpha: Double) -> [BattleEngine.HeroSoldier] {
+            heroes.map { hero in
+                guard let pose = heroPoses[hero.id] else { preconditionFailure("Missing demonstration hero pose") }
+                let sample = pose.sample(alpha: alpha)
+                return BattleEngine.HeroSoldier(id: hero.id, assetName: sample.assetName,
+                    baseAssetName: hero.baseAssetName,
+                    position: CGPoint(x: sample.position.x, y: sample.position.y),
+                    hp: hero.hp, maxHP: hero.maxHP, isSelected: hero.isSelected)
+            }
+        }
     }
 
     let virtualCanvas: VirtualCanvas
@@ -281,7 +303,8 @@ import CoreGraphics
             previousHP = Dictionary(uniqueKeysWithValues: game.militia.map { ($0.id, $0.hp) })
             return Frame(seconds: game.elapsedTime, presentation: game.presentation, shots: game.shotsBySlot[0, default: 0],
                 shotsBySlot: game.shotsBySlot, killed: killed, towers: game.placedTowers,
-                soldiers: game.militia, impacts: game.artilleryImpacts, obstacles: game.engineerObstacleFields,
+                soldiers: game.militia, heroes: game.heroes, heroPoses: game.heroPoses,
+                impacts: game.artilleryImpacts, obstacles: game.engineerObstacleFields,
                 blocked: game.blockedWalkerIDs,
                 blockingPairs: Dictionary(uniqueKeysWithValues: game.garrisonsBySlot.flatMap { slot, garrison in
                     garrison.units.enumerated().compactMap { index, unit in

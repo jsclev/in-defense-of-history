@@ -125,7 +125,6 @@ public class BattleEngine: NSObject, ObservableObject {
 
     var chosenHeroes: HeroSelection?
     var heroSelection: HeroSelection?
-    var heroImageAspectRatios: [UUID: CGFloat] = [:]
 
     var primaryHero: Hero? { heroSelection?.primary }
     var secondaryHero: Hero? { heroSelection?.secondary }
@@ -230,9 +229,18 @@ public class BattleEngine: NSObject, ObservableObject {
         let income = TowerSupportSource.income(supportSources)
         money += income
         goldEarned += income
+        for tower in placedTowers {
+            if let tuning = towerLevel(for: tower), tuning.support.incomePerWave > 0 {
+                supplyIncomeBySlot[tower.slotIndex, default: 0] += tuning.support.incomePerWave
+            }
+        }
     }
 
     var damageTotalBySlot: [Int: Double] = [:]
+    var blockingSecondsBySlot: [Int: Double] = [:]
+    var slowingSecondsBySlot: [Int: Double] = [:]
+    var supplyIncomeBySlot: [Int: Int] = [:]
+    var demolitionDetonationsBySlot: [Int: Int] = [:]
     var targetingSecondsBySlot: [Int: Double] = [:]
     var lastStatsTick: Int64 = 0
 
@@ -397,6 +405,15 @@ public class BattleEngine: NSObject, ObservableObject {
         var morale: EnemyMorale
         var position: CGPoint = .zero
         var pathDistance: Double = 0
+        // Optional for ordinary enemies and for recordings predating concealment.
+        var concealment: EnemyConcealment? = nil
+        // Nil decodes recordings authored before boss/reinforcement mechanics.
+        var boss: EnemyBoss? = nil
+        var reinforcementCall: EnemyReinforcementCall? = nil
+        var presentationScale: Double { boss?.rules.renderScale ?? 1 }
+        var hasAreaMeleeAttack: Bool { (boss?.rules.meleeSplashRadius ?? 0) > 0 }
+        var isConcealed: Bool { concealment?.isHidden == true }
+        var presentationOpacity: Double { isConcealed ? concealment!.rules.opacity : 1 }
         var meleeDamageRange: ClosedRange<Double> {
             let multiplier = moraleResponse.damageMultiplier(morale: morale.value, maximum: morale.rules.moraleMax)
             return (damageMin * multiplier)...(damageMax * multiplier)
@@ -416,7 +433,6 @@ public class BattleEngine: NSObject, ObservableObject {
         let id: Int
         let assetName: String
         let baseAssetName: String
-        let imageAspectRatio: CGFloat
         var position: CGPoint
         var hp: Double
         var health: UnitHealth { UnitHealth(current: hp, maximum: maxHP) }
@@ -530,7 +546,7 @@ public class BattleEngine: NSObject, ObservableObject {
                   let tuning = towerLevel(for: placedTowers[index]), tuning.engineerObstacles != nil else { return .invalid }
             defer { dismissMenu() }
             let origin = placedTowers[index].position
-            guard tuning.attackRange.contains(requested, from: origin),
+            guard BattleTacticalTargeting.contains(requested, from: origin, kind: .obstacles, tuning: tuning),
                   let site = tuning.attackRange.nearestPathPoint(to: requested, from: origin, paths: paths) else { return .invalid }
             placedTowers[index].engineerObstaclePosition = site
             return .ok
@@ -555,7 +571,7 @@ public class BattleEngine: NSObject, ObservableObject {
                   let index = placedTowers.firstIndex(where: { $0.slotIndex == slot }),
                   let tuning = towerLevel(for: placedTowers[index]) else { return .invalid }
             let origin = placedTowers[index].position
-            guard tuning.attackRange.contains(requested, from: origin),
+            guard BattleTacticalTargeting.contains(requested, from: origin, kind: .demolition, tuning: tuning),
                   let point = tuning.attackRange.nearestPathPoint(to: requested, from: origin, paths: paths)
             else {
 
@@ -586,6 +602,7 @@ public class BattleEngine: NSObject, ObservableObject {
                   charge.detonate() else { return false }
             placedTowers[index].demolitionCharge = charge
             demolitionDetonations += 1
+            demolitionDetonationsBySlot[slot, default: 0] += 1
             let blast = Projectile(id: nextProjectileID, kind: .areaOfEffect, position: position,
                 heading: 0, damage: random.double(in: tuning.shotMinDamage...max(tuning.shotMinDamage, tuning.shotMaxDamage)),
                 targetID: -1, slotIndex: slot, speed: 0, splashRadius: CGFloat(tuning.aoeRadius),
@@ -618,7 +635,7 @@ public class BattleEngine: NSObject, ObservableObject {
             guard let charge = tower.demolitionCharge, charge.isReady, charge.position != nil,
                   let tuning = towerLevel(for: tower) else { continue }
             let enemyAboutToExit = walkers.contains { walker in
-                guard walker.hp > 0 else { return false }
+                guard walker.hp > 0, !walker.isConcealed else { return false }
                 var morale = walker.morale
                 let secondsAlive = max(0, nowTicks - Double(walker.spawnTick)) * SimClock.dt
                 let slow = EngineerObstacleField.movementMultiplier(at: walker.position,
@@ -636,7 +653,7 @@ public class BattleEngine: NSObject, ObservableObject {
     func advanceWalkers(seconds: Double, nowTicks: Double) {
         guard seconds.isFinite, seconds > 0, !paths.isEmpty, !isCleared, !isDefeated else { return }
         var remaining = seconds
-        let fields = engineerObstacleFields
+        let obstacleGeometry = fixedObstacleGeometry(), fields = obstacleGeometry.fields
         while remaining > 0, !isDefeated {
             let dt = min(remaining, SimClock.dt)
             let stepEndTicks = nowTicks - (remaining - dt) / SimClock.dt
@@ -645,10 +662,13 @@ public class BattleEngine: NSObject, ObservableObject {
             var marching: [Walker] = []
             for var walker in walkers {
                 let secondsAlive = max(0, stepEndTicks - Double(walker.spawnTick)) * SimClock.dt
-                let slow = EngineerObstacleField.movementMultiplier(at: walker.position,
+                let slowing = EngineerObstacleField.movementEffect(at: walker.position,
                     retreating: false, fields: fields)
-                let travel = walker.morale.advance(seconds: min(dt, secondsAlive), baseSpeed: walker.speed * slow,
+                let travel = walker.morale.advance(seconds: min(dt, secondsAlive), baseSpeed: walker.speed * slowing.multiplier,
                     response: walker.moraleResponse, blocked: blockedWalkerIDs.contains(walker.id))
+                if travel > 0, let fieldIndex = slowing.fieldIndex {
+                    slowingSecondsBySlot[obstacleGeometry.slots[fieldIndex], default: 0] += min(dt, secondsAlive)
+                }
                 let distance = walker.pathDistance + travel
                 let path = paths[min(max(walker.pathIndex, 0), paths.count - 1)]
                 if path.totalLength > 0, distance >= path.totalLength {
@@ -698,9 +718,8 @@ public class BattleEngine: NSObject, ObservableObject {
             guard acceptsPlayerInput, isPlacingRallyPoint, let slot = selectedTowerSlotIndex else { return .invalid }
             var result = BuildResult.invalid
             if let tower = placedTower(atSlot: slot),
-               let melee = towerLevel(for: tower)?.meleeUnit,
-               hypot(point.x - tower.position.x, point.y - tower.position.y)
-                   <= CGFloat(melee.rallyPointRadius) {
+               let tuning = towerLevel(for: tower),
+               BattleTacticalTargeting.contains(point, from: tower.position, kind: .rally, tuning: tuning) {
                 setRallyPoint(slot: slot, to: point)
                 result = .ok
                 if let placed = rallyPointsBySlot[slot] {
@@ -1448,41 +1467,21 @@ public class BattleEngine: NSObject, ObservableObject {
             guard let type = enemyTypesByID[next.enemyTypeID] else {
                 fatalError("Missing enemy_type[\(next.enemyTypeID)] in battle content")
             }
-            spawnOrigins[nextWalkerID] = (type.id, next.wave)
-            emit(.enemySpawned(spawnID: nextWalkerID, typeID: type.id), Double(timer.tick) * SimClock.dt)
-            let stats = type.stats
-            let maxHP = stats.maxHP * enemyHPMultiplier
-            walkers.append(Walker(
-                id: nextWalkerID,
-                assetName: type.imageName,
-                speed: stats.speed,
-                maxHP: maxHP,
-                hp: maxHP,
-                bounty: stats.gold, livesCost: stats.livesCost,
-                damageMin: stats.damageMin,
-                damageMax: stats.damageMax,
-                cover: stats.cover,
-                blockImmune: type.traits.contains(.rideDown),
-                spawnTick: next.tick,
-                pathIndex: next.pathIndex,
-                discipline: stats.discipline,
-                moraleResponse: stats.moraleResponse,
-                morale: EnemyMorale(rules: combatRules),
-                position: {
-                    let point = paths[min(max(next.pathIndex, 0), paths.count - 1)].point(atDistance: 0)
-                    return CGPoint(x: point.x, y: point.y)
-                }()
-            ))
-            nextWalkerID += 1
+            spawnEnemy(type: type, pathIndex: next.pathIndex, wave: next.wave, spawnTick: next.tick)
         }
 
         let gameDt = SimClock.dt
+        advanceEnemyConcealment()
         advanceArtilleryImpacts(seconds: gameDt)
         advanceWalkers(seconds: gameDt, nowTicks: Double(timer.tick))
 
         guard !isDefeated else { return }
+        advanceEnemyConcealment()
         stepHeroAI()
         stepMilitia()
+        advanceEnemyBosses()
+        advanceEnemyReinforcementCalls()
+        revealEnemiesNearHeroes()
 
         if waveSchedule.allWavesStarted && pendingSpawns.isEmpty && walkers.isEmpty && !isCleared {
             isCleared = true
@@ -1499,6 +1498,35 @@ public class BattleEngine: NSObject, ObservableObject {
         updateCombat(gameDt: gameDt)
     }
 
+    /// All wave and reserve arrivals use this same construction and identity
+    /// bookkeeping; the default distance is the path entrance.
+    @discardableResult
+    func spawnEnemy(type: EnemyType, pathIndex: Int, wave: Int, spawnTick: Int64,
+                    pathDistance: Double = 0) -> Int {
+        precondition(paths.indices.contains(pathIndex), "Enemy spawn references an invalid path")
+        let id = nextWalkerID
+        spawnOrigins[id] = (type.id, wave)
+        emit(.enemySpawned(spawnID: id, typeID: type.id), Double(timer.tick) * SimClock.dt)
+        let stats = type.stats
+        let maxHP = stats.maxHP * enemyHPMultiplier
+        let point = paths[pathIndex].point(atDistance: pathDistance)
+        walkers.append(Walker(
+            id: id, assetName: type.imageName, speed: stats.speed,
+            maxHP: maxHP, hp: maxHP, bounty: stats.gold, livesCost: stats.livesCost,
+            damageMin: stats.damageMin, damageMax: stats.damageMax, cover: stats.cover,
+            blockImmune: type.traits.contains(.rideDown), spawnTick: spawnTick,
+            pathIndex: pathIndex, discipline: stats.discipline,
+            moraleResponse: stats.moraleResponse, morale: EnemyMorale(rules: combatRules),
+            position: CGPoint(x: point.x, y: point.y), pathDistance: pathDistance,
+            concealment: type.concealmentRules.map { EnemyConcealment(rules: $0, spawnTick: timer.tick) },
+            boss: type.bossRules.map { EnemyBoss(rules: $0, spawnTick: timer.tick,
+                meleeInterval: combatRules.enemySwingInterval) },
+            reinforcementCall: type.reinforcementCallRules.map { EnemyReinforcementCall(rules: $0, spawnTick: timer.tick) }
+        ))
+        nextWalkerID += 1
+        return id
+    }
+
     func stepMilitia() {
         guard timer.tick > lastMilitiaTick else { return }
         let dueTicks = min(Int(timer.tick - lastMilitiaTick), 8)
@@ -1507,7 +1535,7 @@ public class BattleEngine: NSObject, ObservableObject {
             blockedWalkerIDs.removeAll()
             return
         }
-        let needsPoses = publishesPresentation || runRecorder?.recordsEvents != true
+        let needsPoses = publishesPresentation || runRecorder?.recordsEvents == false
         if needsPoses {
             for (id, post) in heroPosts.enumerated() where post.unit.state != .dead && heroPoses[id] == nil {
                 heroPoses[id] = HeroWalkPose(baseAssetName: post.assetName, position: post.unit.position)
@@ -1752,7 +1780,7 @@ public class BattleEngine: NSObject, ObservableObject {
             let march = geometry.marches[slot]!
 
             var free: [(spawnID: Int, position: Point)] = []
-            for w in walkers where !w.blockImmune && !claimed.contains(w.id)
+            for w in walkers where !w.blockImmune && !w.isConcealed && !claimed.contains(w.id)
                 && !killedIDs.contains(w.id) {
                 free.append((w.id, Point(Double(w.position.x), Double(w.position.y))))
             }
@@ -1762,7 +1790,7 @@ public class BattleEngine: NSObject, ObservableObject {
                 TowerSupportSource.heal(&unit, maximumHP: melee.hp, seconds: dt, sources: sources)
                 var targetPos: Point? = nil
                 if unit.targetSpawnID >= 0, !killedIDs.contains(unit.targetSpawnID),
-                   let wi = indexByWalkerID[unit.targetSpawnID] {
+                   let wi = indexByWalkerID[unit.targetSpawnID], !walkers[wi].isConcealed {
                     targetPos = Point(Double(walkers[wi].position.x),
                                       Double(walkers[wi].position.y))
                 }
@@ -1812,7 +1840,7 @@ public class BattleEngine: NSObject, ObservableObject {
                             BattleGeometry.fireTicks(combatRules.enemySwingInterval)
                     }
                     if !killedIDs.contains(targetSpawnID),
-                       let wi = indexByWalkerID[targetSpawnID] {
+                       let wi = indexByWalkerID[targetSpawnID], !walkers[wi].isConcealed {
                         var w = walkers[wi]
                         let roll = random.double(in: melee.damageRange) * metaUpgrades.meleeDamageMultiplier(
                             moraleFraction: w.morale.value / w.morale.rules.moraleMax)
@@ -1841,12 +1869,13 @@ public class BattleEngine: NSObject, ObservableObject {
 
                 if unit.state == .fighting, unit.targetSpawnID >= 0,
                    !killedIDs.contains(unit.targetSpawnID),
-                   let wi = indexByWalkerID[unit.targetSpawnID] {
+                   let wi = indexByWalkerID[unit.targetSpawnID], !walkers[wi].isConcealed {
                     blockedWalkerIDs.insert(unit.targetSpawnID)
+                    blockingSecondsBySlot[slot, default: 0] += dt
                     var swing = g.enemySwingTicks[unit.targetSpawnID]
                         ?? BattleGeometry.fireTicks(combatRules.enemySwingInterval)
                     swing -= 1
-                    if swing <= 0 {
+                    if swing <= 0 && !walkers[wi].hasAreaMeleeAttack {
                         let w = walkers[wi]
                         let hpBefore = unit.hp
                         unit.hp -= random.double(in: w.meleeDamageRange)
@@ -1945,6 +1974,8 @@ public class BattleEngine: NSObject, ObservableObject {
                 if !killedIDs.contains(targetSpawnID),
                    let wi = indexByWalkerID[targetSpawnID] {
                     var w = walkers[wi]
+                    // Heroes always see the enemy; contact exposes it before damage.
+                    w.concealment?.reveal(at: timer.tick)
                     let roll = random.double(in: post.combat.damageRange(attackSpread: combatRules.meleeAttackSpread))
                     let hpBefore = w.hp
                     w.hp -= roll * (1.0 - w.cover)
@@ -1975,7 +2006,7 @@ public class BattleEngine: NSObject, ObservableObject {
                 var swing = post.enemySwingTicks[post.unit.targetSpawnID]
                     ?? BattleGeometry.fireTicks(combatRules.enemySwingInterval)
                 swing -= 1
-                if swing <= 0 {
+                if swing <= 0 && !walkers[wi].hasAreaMeleeAttack {
                     let w = walkers[wi]
                     let hpBefore = post.unit.hp
                     post.unit.hp -= random.double(in: w.meleeDamageRange)
@@ -2015,7 +2046,6 @@ public class BattleEngine: NSObject, ObservableObject {
                 id: i,
                 assetName: sample.assetName,
                 baseAssetName: post.assetName,
-                imageAspectRatio: heroImageAspectRatios[post.hero.id]!,
                 position: CGPoint(x: sample.position.x, y: sample.position.y),
                 hp: post.unit.hp,
                 maxHP: post.combat.hp,
@@ -2212,6 +2242,7 @@ public class BattleEngine: NSObject, ObservableObject {
                 let end = flight.advance(from: start, heading: projectile.heading,
                                          speed: projectile.speed, seconds: gameDt)
                 let targets = walkers.compactMap { walker -> (id: Int, position: CGPoint)? in
+                    guard !walker.isConcealed else { return nil }
                     if let boundary = projectile.firingBoundary, let origin = projectile.firingOrigin,
                        !boundary.contains(walker.position, from: origin) { return nil }
                     return (walker.id, bodyPoint(walker))
@@ -2238,6 +2269,7 @@ public class BattleEngine: NSObject, ObservableObject {
                 let end = CGPoint(x: projectile.position.x + cos(projectile.heading) * distance,
                                   y: projectile.position.y + sin(projectile.heading) * distance)
                 let hit = walkers.compactMap { walker -> (id: Int, fraction: CGFloat)? in
+                    guard !walker.isConcealed else { return nil }
                     if let boundary = projectile.firingBoundary, let origin = projectile.firingOrigin,
                        !boundary.contains(walker.position, from: origin) { return nil }
                     guard !grapeshotHits[flight.volleyID, default: []].contains(walker.id),
@@ -2283,7 +2315,7 @@ public class BattleEngine: NSObject, ObservableObject {
             let aim: CGPoint
             if let impact = projectile.impactPoint {
                 aim = impact
-            } else if let target = walkers.first(where: { $0.id == projectile.targetID }) {
+            } else if let target = walkers.first(where: { $0.id == projectile.targetID && !$0.isConcealed }) {
                 aim = bodyPoint(target)
             } else { continue }
             let dx = aim.x - projectile.position.x
@@ -2310,7 +2342,7 @@ public class BattleEngine: NSObject, ObservableObject {
     }
 
     func damageWalker(id: Int, damage: Double, slotIndex: Int) {
-        guard let index = walkers.firstIndex(where: { $0.id == id }) else { return }
+        guard let index = walkers.firstIndex(where: { $0.id == id }), !walkers[index].isConcealed else { return }
         damageTotalBySlot[slotIndex, default: 0] += min(walkers[index].hp, damage)
         recordCombat("projectileHit", ["slot": String(slotIndex), "enemy": String(id), "damage": String(min(walkers[index].hp, damage)), "hpAfter": String(walkers[index].hp - damage)])
         walkers[index].hp -= damage
@@ -2326,7 +2358,7 @@ public class BattleEngine: NSObject, ObservableObject {
     }
 
     func targetCandidates() -> [TargetCandidate] {
-        walkers.map { walker in
+        walkers.filter { !$0.isConcealed }.map { walker in
             TargetCandidate(id: walker.id,
                             position: Point(Double(walker.position.x),
                                             Double(walker.position.y)),
@@ -2362,7 +2394,7 @@ public class BattleEngine: NSObject, ObservableObject {
             } else {
                 isHit = walker.id == projectile.targetID
             }
-            if isHit {
+            if isHit && !walker.isConcealed {
                 if let strike = projectile.moraleStrike {
                     applyMorale(strike, to: &walker, at: point)
                 }
@@ -2389,6 +2421,7 @@ public class BattleEngine: NSObject, ObservableObject {
 
     func applyMorale(_ strike: ArtilleryMoraleStrike, to walker: inout Walker,
                              at point: CGPoint) {
+        guard !walker.isConcealed else { return }
         let loss = strike.loss(distance: Double(distanceFrom(point, to: walker)),
                                discipline: walker.discipline)
         walker.morale.apply(loss: loss, direction: walker.position.x < point.x ? -1 : 1)

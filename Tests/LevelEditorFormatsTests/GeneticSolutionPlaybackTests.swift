@@ -3,6 +3,31 @@ import SQLite3
 @testable import LevelEditorFormats
 
 @MainActor final class GeneticSolutionPlaybackTests: XCTestCase {
+    func testShippingRecordingsAreLinkedReadOnlyAndReachTheirSavedOutcome() throws {
+        let url = Db.authoredDatabaseURL
+        let db = Db(dbPath: url.path, fullRefresh: false,
+            levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()), readOnly: true)
+        defer { db.close() }
+        let levelID = try XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let selected = try GeneticSolutionPlayback.best(db: db, levelID: levelID,
+            difficultyID: db.difficultyDao.requireSelected().id, limit: 3)
+        XCTAssertEqual(selected.count, 3)
+        var ids: Set<UUID> = []
+        for solution in selected {
+            let id = try db.geneticSolutionDao.recordingID(for: solution)
+            XCTAssertTrue(ids.insert(id).inserted)
+            let run = try db.levelRunDao.get(id: id)
+            let playback = try LevelReplayPlayback(dao: db.levelRunDao, runID: id, speed: PlaySpeed(8))
+            XCTAssertEqual(playback.setup.selectedMetaUpgrades.sorted { $0.rawValue < $1.rawValue },
+                           solution.candidate.strategy.metaUpgrades.sorted { $0.rawValue < $1.rawValue })
+            while !playback.isFinished { try playback.advance(wallSeconds: 0.19) }
+            XCTAssertEqual(playback.frame.tick, run.lastTick)
+            XCTAssertEqual(playback.frame.outcome?.rawValue, run.status.rawValue)
+            XCTAssertEqual(playback.outcome, .victory)
+        }
+        XCTAssertEqual(sqlite3_total_changes(db.conn), 0, "Shipping playback must never write to the database")
+    }
+
     func testShippingCharlestonTopThreeMatchPreviewAndReplayToVictory() throws {
         let f = try AuthoredDatabaseFixture(levelGeoJSONDao:
             LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))

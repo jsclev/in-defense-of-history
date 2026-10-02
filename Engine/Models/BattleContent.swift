@@ -94,6 +94,7 @@ public struct BattleContent {
     }
 
     private func validate() throws {
+        try EnemyReinforcementCallRules.validateReferences(in: enemies)
         for deployment in deployments {
             guard heroAI[deployment.hero.id] != nil else {
                 throw DbError.Db(message: "hero_ai[\(deployment.hero.id)]: missing configuration")

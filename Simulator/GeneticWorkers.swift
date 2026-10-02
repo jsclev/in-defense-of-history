@@ -5,17 +5,6 @@ import OSLog
 
 /// Process isolation gives each battle its own main actor. This transport owns
 /// no game rules: workers call the same commander and DAOs as serial evaluation.
-struct GeneticWorkerConfiguration: Codable {
-    let runID: UUID
-    let levelID: UUID
-    let contentSHA256: String
-    let executableSHA256: String
-    let bountyFraction: Double
-    let money: Int
-    let maxSeconds: Double
-    let heroLoadout: GeneticHeroLoadout
-}
-
 struct GeneticBattleJob: Codable {
     let strategy: GeneticStrategy
     let seed: UInt64
@@ -38,8 +27,7 @@ private struct GeneticWorkerReply: Codable {
         let store = try SimulatorStore(existing: URL(fileURLWithPath: path))
         defer { store.db.close() }
         let db = store.db
-        let configuration = try JSONDecoder().decode(GeneticWorkerConfiguration.self,
-            from: db.simulatorInvocationDao.document(named: "worker-configuration.json"))
+        let configuration = try GeneticStudyDAO(db: db).workerConfiguration()
         let executable = try Data(contentsOf: SimulatorStore.executableURL)
         guard SHA256.hash(data: executable).map({ String(format: "%02x", $0) }).joined() == configuration.executableSHA256 else {
             throw DbError.Db(message: "genetic worker: executable changed during startup")
@@ -75,7 +63,7 @@ private struct GeneticWorkerReply: Codable {
                     let selected = selections[selection]!
                     try request.job.strategy.validate(study: selected)
                     let result = try GeneticCommander.evaluate(request.job.strategy,
-                        recording: .database(db.levelRunDao, .simulator), content: selected.battle,
+                        recording: .evaluation, content: selected.battle,
                         money: configuration.money, seed: request.job.seed, maxSeconds: configuration.maxSeconds)
                     completedJobs += 1
                     SimulatorLog.worker.debug("Battle completed; runID=\(configuration.runID.uuidString, privacy: .public) job=\(request.index) seed=\(request.job.seed) outcome=\(String(describing: result.result.outcome), privacy: .public) seconds=\(result.result.seconds)")
@@ -145,7 +133,7 @@ private struct GeneticWorkerReply: Codable {
         // silent coordinator exit. No worker is retried or forcibly killed.
         signal(SIGPIPE, SIG_IGN)
         let path = URL(fileURLWithPath: db.path)
-        try db.simulatorInvocationDao.saveDocument(JSONEncoder().encode(configuration), name: "worker-configuration.json")
+        // Workers read the immutable relational study configuration.
         do {
             for _ in 0..<count {
                 let worker = try Worker(configuration: path)

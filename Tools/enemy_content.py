@@ -29,7 +29,8 @@ def check(rows):
     files = subprocess.check_output(
         ["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], cwd=ROOT
     ).decode().split("\0")
-    copy = [row[column] for row in rows for column in ("enemy_type_name", "enemy_type_description")]
+    copy = sorted({row[column] for row in rows for column in
+                   ("enemy_type_name", "enemy_type_long_name", "enemy_type_description")})
     patterns = [(value, re.compile(r"(['\"])" + re.escape(value).replace("'", "(?:'|'')") + r"\1"))
                 for value in copy]
     for relative in sorted(set(files)):
@@ -44,7 +45,7 @@ def check(rows):
             for match in pattern.finditer(text):
                 line = text.count("\n", 0, match.start()) + 1
                 failures.append(f"{relative}:{line}: duplicate enemy display copy {value!r}")
-        if path.suffix == ".sql" and re.search(r"enemy_type_name\s*=\s*'", text):
+        if path.suffix == ".sql" and re.search(r"enemy_type_(?:name|long_name)\s*=\s*'", text):
             failures.append(f"{relative}: wave/content references must use enemy_type_key or id")
     with sqlite3.connect(f"file:{ROOT / 'Db/in_defense_of_history.sqlite'}?mode=ro", uri=True) as db:
         db.row_factory = sqlite3.Row
@@ -53,7 +54,7 @@ def check(rows):
         failures.append("Bundled enemy roster differs from its authored seed; rebuild Db/create_db.sh.")
     if failures:
         raise SystemExit("\n".join(failures))
-    print(f"Verified {len(rows)} enemy types: one authored name and description each; no duplicate display literals; bundled data matches.")
+    print(f"Verified {len(rows)} enemy types: authored short and long names and descriptions; no duplicate display literals; bundled data matches.")
 
 
 def main():

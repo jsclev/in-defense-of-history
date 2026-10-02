@@ -6,6 +6,27 @@ public enum BuildResult: String, Codable, Sendable, Equatable {
     case invalid
 }
 
+public enum BattleTacticalKind: String, Codable, CaseIterable, Sendable { case rally, obstacles, demolition }
+
+/// Shared placement geometry for player handlers and read-only input planning.
+/// The normal command still owns state, readiness, road snapping and acceptance.
+public enum BattleTacticalTargeting {
+    public static func supports(_ kind: BattleTacticalKind, tuning: TowerLevel) -> Bool {
+        switch kind {
+        case .rally: return tuning.meleeUnit != nil
+        case .obstacles: return tuning.engineerObstacles != nil
+        case .demolition: return tuning.demolitionPreparationSeconds != nil
+        }
+    }
+    public static func contains(_ point: CGPoint, from origin: CGPoint, kind: BattleTacticalKind, tuning: TowerLevel) -> Bool {
+        if kind == .rally {
+            guard let melee = tuning.meleeUnit else { return false }
+            return hypot(point.x - origin.x, point.y - origin.y) <= CGFloat(melee.rallyPointRadius)
+        }
+        return tuning.attackRange.contains(point, from: origin)
+    }
+}
+
 /// Player intent only. The battle engine owns validation and every side effect.
 public enum BattleCommand: Codable, Sendable {
     case build(slot: Int, kind: TowerKind)
@@ -30,6 +51,14 @@ public struct BattleTowerSnapshot {
     public let tuning: TowerLevel
     public let damage: Double
     public let upgrades: TowerUpgradeProgress
+    public let shots: Int
+    public let blockingSeconds: Double
+    public let slowingSeconds: Double
+    public let income: Int
+    public let detonations: Int
+    public var rallyPoint: Point? = nil
+    public var obstaclePoint: Point? = nil
+    public var demolitionPoint: Point? = nil
 }
 
 public struct BattleEnemySnapshot {
@@ -124,7 +153,15 @@ extension BattleEngine {
             return BattleTowerSnapshot(slot: tower.slotIndex, kind: tower.kind, level: tower.level,
                 branch: tower.branch, name: towerName(for: tower.kind, atLevel: tower.level, branch: tower.branch),
                 position: Point(tower.position.x, tower.position.y), tuning: tuning,
-                damage: damageTotalBySlot[tower.slotIndex, default: 0], upgrades: tower.upgrades)
+                damage: damageTotalBySlot[tower.slotIndex, default: 0], upgrades: tower.upgrades,
+                shots: shotsBySlot[tower.slotIndex, default: 0],
+                blockingSeconds: blockingSecondsBySlot[tower.slotIndex, default: 0],
+                slowingSeconds: slowingSecondsBySlot[tower.slotIndex, default: 0],
+                income: supplyIncomeBySlot[tower.slotIndex, default: 0],
+                detonations: demolitionDetonationsBySlot[tower.slotIndex, default: 0],
+                rallyPoint: rallyPointsBySlot[tower.slotIndex].map { Point($0.x, $0.y) },
+                obstaclePoint: tower.engineerObstaclePosition.map { Point($0.x, $0.y) },
+                demolitionPoint: tower.demolitionCharge?.position.map { Point($0.x, $0.y) })
         }
     }
 

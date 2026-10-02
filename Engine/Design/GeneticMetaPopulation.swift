@@ -7,12 +7,40 @@ public struct GeneticCandidate: Codable, Sendable {
     public var metaUpgrades: MetaUpgradeProgression { strategy.metaProgression }
     public var starsUsed: Int { metaUpgrades.spentStars }
     public let strategy: GeneticStrategy
+    /// The same representative seed used for a demonstration; fitness ranking
+    /// still uses every evaluation. Legacy candidates explicitly report nil.
+    public var representativeEvaluation: GeneticEvaluation? {
+        evaluations.sorted {
+            let a = GeneticFitness([$0]), b = GeneticFitness([$1])
+            return a == b ? $0.seed < $1.seed : a > b
+        }.first
+    }
+    public var placementPlan: GeneticPlacementPlan? { representativeEvaluation?.placementPlan }
+    public func requirePlacementPlan() throws -> GeneticPlacementPlan {
+        guard let plan = placementPlan else {
+            throw DbError.Db(message: "candidate \(id): original opening/placement data is missing; time-zero orders are not an opening layout")
+        }
+        return plan
+    }
     public let evaluations: [GeneticEvaluation]
-    public var fitness: GeneticFitness { GeneticFitness(evaluations) }
+    private let cachedFitness: GeneticFitness?
+    public var fitness: GeneticFitness {
+        // Invalid/empty incoming records must reach the DAO's throwing
+        // validation; constructing one must not terminate the process.
+        guard let cachedFitness else { preconditionFailure("Cannot rank an empty evaluation panel") }
+        return cachedFitness
+    }
+    /// Immutable derived cache, never serialized as a second source of evidence.
+    public let behaviorDescriptor: GeneticPlaystyle.Descriptor?
 
     public init(id: Int, generation: Int, strategy: GeneticStrategy, evaluations: [GeneticEvaluation]) {
         self.id = id; self.generation = generation
         self.strategy = strategy; self.evaluations = evaluations
+        cachedFitness = evaluations.isEmpty ? nil : GeneticFitness(evaluations)
+        behaviorDescriptor = evaluations.sorted {
+            let a = GeneticFitness([$0]), b = GeneticFitness([$1])
+            return a == b ? $0.seed < $1.seed : a > b
+        }.first?.placementPlan?.playstyle?.descriptor
     }
 
     private enum CodingKeys: String, CodingKey { case id, generation, starsUsed, strategy, evaluations }
@@ -47,6 +75,11 @@ public struct GeneticMetaPopulation {
         public fileprivate(set) var active: Bool
         public fileprivate(set) var candidateIDs: Set<Int> = []
         public fileprivate(set) var archive: [GeneticCandidate] = []
+        /// Complete training pool. The small working parent pool is never the
+        /// source of validation eligibility.
+        public fileprivate(set) var candidates: [GeneticCandidate] = []
+        public fileprivate(set) var behaviorChampions: [String: GeneticCandidate] = [:]
+        public fileprivate(set) var breedingVisits: [String: Int] = [:]
         public var key: String { GeneticMetaSearch.key(upgrades) }
     }
 
@@ -73,7 +106,35 @@ public struct GeneticMetaPopulation {
             throw DbError.Db(message: "genetic meta population: candidate has no active selection")
         }
         guard selections[index].candidateIDs.insert(candidate.id).inserted else { return }
-        selections[index].archive = Array(GeneticCandidate.ranked(selections[index].archive + [candidate]).prefix(plansPerSelection))
+        selections[index].candidates.append(candidate)
+        if let niche = candidate.behaviorDescriptor?.niche {
+            let previous = selections[index].behaviorChampions[niche]
+            if previous == nil || candidate.fitness > previous!.fitness {
+                selections[index].behaviorChampions[niche] = candidate
+            }
+        }
+        selections[index].archive = GeneticBreedingDiversity.select(selections[index].archive + [candidate], limit: plansPerSelection)
+    }
+
+    /// Allocate actual offspring, not just seats on a list. Two of every three
+    /// births go to the least-bred observed niches, each using its own best plan.
+    /// Visits survive improvements to a niche champion and generation changes.
+    public mutating func breedingParents(key: String, count: Int) -> [GeneticCandidate] {
+        guard let index = selections.firstIndex(where: { $0.key == key }), count > 0,
+              let best = selections[index].archive.first else { return [] }
+        guard !selections[index].behaviorChampions.isEmpty else { return selections[index].archive }
+        var result: [GeneticCandidate] = []
+        for birth in 0..<count {
+            if birth % 3 == 0 { result.append(best); continue }
+            let niche = selections[index].behaviorChampions.keys.min { a, b in
+                let x = selections[index].breedingVisits[a, default: 0]
+                let y = selections[index].breedingVisits[b, default: 0]
+                return x == y ? a < b : x < y
+            }!
+            result.append(selections[index].behaviorChampions[niche]!)
+            selections[index].breedingVisits[niche, default: 0] += 1
+        }
+        return result
     }
 
     public func weakestReplaceable(generation: Int, adaptationGenerations: Int) -> Selection? {
@@ -101,15 +162,21 @@ public struct GeneticMetaPopulation {
         selections.append(Selection(upgrades: selection, introducedGeneration: generation, active: true))
     }
 
-    /// One champion per distinct selection. Equal fitness never consumes all
-    /// finalist seats with clones of one meta selection. Underexplored selections
+    /// Creative profiles preserve upgrade coverage while allowing different plans
+    /// with the same upgrades. Legacy profiles retain distinct selections. Underexplored selections
     /// stay visible in reporting but cannot claim a qualified validation result.
-    public func finalists(limit: Int, distinctSelections: Bool = true) -> [GeneticCandidate] {
+    public func finalists(limit: Int, distinctSelections: Bool = true,
+                          controlledMetaExchange: Bool = false) -> [GeneticCandidate] {
         let qualified = selections.filter { $0.candidateIDs.count >= minimumCandidates }
+        if controlledMetaExchange {
+            // A controlled exchange must test each qualified upgrade selection,
+            // including losers, rather than selecting only winning playstyles.
+            return Array(GeneticCandidate.ranked(qualified.compactMap { $0.archive.first }).prefix(max(0, limit)))
+        }
         // Explicit fixed-meta controls compare several battle plans with one
-        // selection. Ordinary meta searches always use distinct champions.
-        let candidates = distinctSelections ? qualified.compactMap { $0.archive.first } : qualified.flatMap(\.archive)
-        return Array(GeneticCandidate.ranked(candidates).prefix(limit))
+        // selection. Modern profiles also protect opening-role coverage.
+        return GeneticBreedingDiversity.select(qualified.flatMap(\.candidates), limit: limit,
+            distinctMetaSelections: distinctSelections, creativeFinalists: true)
     }
 
     public var best: GeneticCandidate? { GeneticCandidate.ranked(selections.compactMap { $0.archive.first }).first }

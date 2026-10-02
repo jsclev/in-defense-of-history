@@ -35,3 +35,22 @@ CREATE TABLE level_action (
     PRIMARY KEY (run_id, sequence)
 );
 CREATE INDEX level_action_tick ON level_action(run_id, tick, sequence);
+
+-- Demonstrations generated only after GA selection. Original fitness evidence
+-- stays in genetic_solution; rerun results never replace or rank that evidence.
+CREATE TABLE genetic_solution_recording (
+    run_id TEXT NOT NULL,
+    candidate_id INTEGER NOT NULL,
+    panel TEXT NOT NULL CHECK (panel IN ('training', 'validation')),
+    -- Seeds are UInt64, including values above SQLite's signed integer range.
+    seed TEXT NOT NULL CHECK (length(seed) BETWEEN 1 AND 20 AND seed NOT GLOB '*[^0-9]*'),
+    level_run_id TEXT NOT NULL UNIQUE REFERENCES level_run(id),
+    outcome TEXT NOT NULL CHECK (outcome IN ('victory', 'defeat', 'timeout')),
+    lives_remaining INTEGER NOT NULL CHECK (lives_remaining >= 0),
+    waves_started INTEGER NOT NULL CHECK (waves_started >= 0),
+    seconds REAL NOT NULL CHECK (seconds >= 0),
+    matches_evaluation INTEGER NOT NULL CHECK (matches_evaluation IN (0, 1)),
+    PRIMARY KEY (run_id, candidate_id, panel),
+    FOREIGN KEY (run_id, candidate_id, panel)
+        REFERENCES genetic_solution(run_id, candidate_id, panel) ON DELETE CASCADE
+);

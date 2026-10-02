@@ -27,6 +27,11 @@ public struct GeneticHeroLoadout: Codable, Equatable, Sendable {
         try validate()
     }
 
+    init(selectedHeroIDs: [UUID], deployments: [Deployment]) throws {
+        self.selectedHeroIDs = selectedHeroIDs; self.deployments = deployments
+        try validate()
+    }
+
     func validate() throws {
         guard (1...HeroSelection.maxSelected).contains(selectedHeroIDs.count),
               Set(selectedHeroIDs).count == selectedHeroIDs.count,

@@ -35,7 +35,7 @@ final class SimulatorDatabaseTests: XCTestCase {
         defer { db.close() }
         XCTAssertEqual(try scalar(db, "SELECT count(*) FROM level_info"), try scalar(source.db, "SELECT count(*) FROM level_info"))
         XCTAssertEqual(try scalar(db, "SELECT count(*) FROM simulator_map"), try scalar(source.db, "SELECT count(DISTINCT map_image_name) FROM level_info WHERE map_image_name <> ''"))
-        for table in ["simulator_run", "money_study", "money_study_result", "level_run", "level_action", "genetic_solution", "simulator_document"] {
+        for table in ["simulator_run", "money_study", "money_study_result", "level_run", "level_action", "genetic_solution", "genetic_solution_recording", "simulator_document"] {
             XCTAssertEqual(try scalar(db, "SELECT count(*) FROM \(table)"), 0, table)
         }
         XCTAssertEqual(try scalar(source.db, "SELECT count(*) FROM simulator_run"), 1)

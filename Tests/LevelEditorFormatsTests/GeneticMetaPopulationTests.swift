@@ -25,6 +25,27 @@ final class GeneticMetaPopulationTests: XCTestCase {
         XCTAssertEqual(group.selections[1].candidateIDs.count, 4, "Cache reuse must not invent additional search effort")
     }
 
+    func testEqualFitnessDiversityReplacesOldClonesWithoutSacrificingChampionOrFitness() throws {
+        let selection = try AuthoredDatabaseFixture.metaProgression([])
+        let tower = UUID()
+        func value(_ id: Int, slot: Int, wins: Bool = true) -> GeneticCandidate {
+            var evaluation = sample(wins: wins)
+            evaluation.placementPlan = GeneticPlacementPlan(initial: [.init(slot: slot, towerID: tower)], subsequent: [])
+            return GeneticCandidate(id: id, generation: id, strategy: GeneticStrategy(decisions: [], metaProgression: selection), evaluations: [evaluation])
+        }
+        var group = try GeneticMetaPopulation(selections: [selection], population: 4, minimumCandidates: 2)
+        for id in 0..<4 { try group.record(value(id, slot: 0)) }
+        try group.record(value(100, slot: 8))
+        XCTAssertEqual(group.best?.id, 0, "Original highest-ranked champion stays protected")
+        XCTAssertTrue(group.selections[0].archive.contains { $0.id == 100 }, "A late equally fit new opening must enter breeding")
+        try group.record(value(101, slot: 9, wins: false))
+        XCTAssertFalse(group.selections[0].archive.contains { $0.id == 101 }, "Novelty never outranks fitness")
+        try group.record(value(102, slot: 8))
+        XCTAssertTrue(group.selections[0].archive.contains { $0.id == 102 }, "Exact ties allow neutral turnover rather than freezing old IDs")
+        XCTAssertEqual(group.selections[0].archive.count, 4)
+        XCTAssertEqual(group.selections[0].candidateIDs.count, 7, "Every evaluated candidate remains recorded")
+    }
+
     func testSelectionMustReceiveSeveralPlansAndAdaptationBeforeReplacement() throws {
         var group = try GeneticMetaPopulation(selections: try [[MetaUpgrade.rangeEstimation], [.artificerCorps]].map(AuthoredDatabaseFixture.metaProgression), population: 8, minimumCandidates: 4)
         for id in 0..<4 { try group.record(candidate(id, selection: [.rangeEstimation], wins: true)) }

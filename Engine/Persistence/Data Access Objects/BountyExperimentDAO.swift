@@ -55,8 +55,8 @@ public final class BountyExperimentDAO {
                 for (_, _, sql) in schema { try execute(sql) }
                 // Retain SQL-defined result tables but not historical output.
                 let history: Set<String> = ["level_recording_content", "level_recording_reference", "level_recording_retention", "simulator_run", "sweep_row", "money_study", "money_study_result", "level_run", "level_action",
-                    "genetic_solution", "simulator_invocation", "simulator_document", "simulator_map"]
-                for (type, name, _) in schema where type == "table" && !history.contains(name) {
+                    "genetic_solution", "genetic_solution_recording", "simulator_invocation", "simulator_document", "simulator_map"]
+                for (type, name, _) in schema where type == "table" && !history.contains(name) && !name.hasPrefix("ga_") {
                     let table = "\"" + name.replacingOccurrences(of: "\"", with: "\"\"") + "\""
                     try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")
                 }

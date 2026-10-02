@@ -7,9 +7,12 @@ CREATE TABLE campaign (
 CREATE TABLE enemy_type (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     enemy_type_key TEXT NOT NULL UNIQUE CHECK (LENGTH(TRIM(enemy_type_key)) > 0),
+    -- Compact labels and full detail names are independently authored.
     enemy_type_name TEXT NOT NULL UNIQUE CHECK (LENGTH(TRIM(enemy_type_name)) > 0),
+    enemy_type_long_name TEXT NOT NULL CHECK (LENGTH(TRIM(enemy_type_long_name)) > 0),
     enemy_type_description TEXT NOT NULL CHECK (LENGTH(TRIM(enemy_type_description)) > 0),
     image_name TEXT NOT NULL CHECK (LENGTH(TRIM(image_name)) > 0),
+    icon_image_name TEXT NOT NULL CHECK (LENGTH(TRIM(icon_image_name)) > 0),
     max_hp REAL NOT NULL,
     speed REAL NOT NULL,
     cover REAL NOT NULL,

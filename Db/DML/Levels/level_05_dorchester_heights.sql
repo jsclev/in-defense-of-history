@@ -12,7 +12,7 @@ INSERT INTO level_info (
     julianday('1776-03-05T07:00:00-05:00'),
     350,
     20,
-    15,
+    9,
     'level_005_dorchester_heights'
 );
 

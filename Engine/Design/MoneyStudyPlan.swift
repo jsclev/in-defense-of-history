@@ -33,7 +33,9 @@ public struct MoneyStudyPlan: Sendable {
 
     public init(study: AuthoredMoneyStudy, placementIndex: Int,
                 upgradePolicyIndex: Int, seed: UInt64,
-                towerLimits: GeneticTowerLimits = .init()) throws {
+                towerLimits: GeneticTowerLimits = .init(), openingKind: TowerKind? = nil,
+                openingCount: Int? = nil, upgradesPerBuild requestedCadence: Int? = nil,
+                decisionDelay requestedDelay: Double? = nil, partialInvestments: Bool = false) throws {
         try towerLimits.validate(study: study)
         guard placementIndex >= 0, (0..<10).contains(upgradePolicyIndex) else {
             throw DbError.Db(message: "money study: unsupported placement or upgrade policy index")
@@ -52,12 +54,17 @@ public struct MoneyStudyPlan: Sendable {
                 slots.count / 2 + 1 - kindCounts[$0.rawValue, default: 0] >= slots.count - index
             } ?? false
             let available = study.towerPaths.filter { path in
-                (index >= 3 || path.type.levels[0].attackMode.firesProjectiles)
+                (partialInvestments || openingKind != nil || index >= 3 || path.type.levels[0].attackMode.firesProjectiles)
                     && kindCounts[path.kind.rawValue, default: 0] < (towerLimits.maximumByKind[path.kind.rawValue] ?? slots.count)
                     && (!mustChooseMajority || path.kind == towerLimits.majorityKind)
             }
             let preferred = available.filter { path in
-                guard index < 3 else { return true }
+                if let openingKind, index < (openingCount ?? 4) {
+                    // Explicit creative seed families include blockers and supply.
+                    // Interleave a fighting tower; the engine still decides costs.
+                    return index % 3 == 2 ? path.type.levels[0].attackMode.firesProjectiles : path.kind == openingKind
+                }
+                guard !partialInvestments, index < 3 else { return true }
                 let mode = path.type.levels[0].attackMode
                 switch placementIndex % 4 {
                 case 0: return mode == .direct
@@ -70,7 +77,15 @@ public struct MoneyStudyPlan: Sendable {
             // opening defense when that preferred family is unavailable.
             let candidates = preferred.isEmpty ? available : preferred
             guard !candidates.isEmpty else { throw DbError.Db(message: "money study: no unlocked opening defense for plan \(placementIndex)") }
-            let chosen = candidates[Int.random(in: candidates.indices, using: &rng)]
+            // A family with more authored branches must not receive more random
+            // opening slots merely because it has more catalog rows.
+            var choices = candidates
+            if partialInvestments {
+                let kinds = Array(Set(candidates.map(\.kind))).sorted { $0.rawValue < $1.rawValue }
+                let kind = kinds[Int.random(in: kinds.indices, using: &rng)]
+                choices = candidates.filter { $0.kind == kind }
+            }
+            let chosen = choices[Int.random(in: choices.indices, using: &rng)]
             paths.append(chosen)
             kindCounts[chosen.kind.rawValue, default: 0] += 1
         }
@@ -106,10 +121,12 @@ public struct MoneyStudyPlan: Sendable {
         var chains: [[ScriptedBuildOrder.Action]] = []
         for (index, path) in paths.enumerated() {
             var chain: [ScriptedBuildOrder.Action] = [.build(slot: slots[index], towerID: path.type.id)]
-            for tier in path.type.levels.indices {
+            let tiers = partialInvestments ? Int.random(in: 1...path.type.levels.count, using: &rng) : path.type.levels.count
+            for tier in 0..<tiers {
                 if tier > 0 { chain.append(.upgrade(slot: slots[index])) }
                 for upgrade in path.type.levels[tier].upgradePaths.sorted(by: { $0.slot < $1.slot }) {
-                    for _ in upgrade.ranks {
+                    let ranks = partialInvestments ? Int.random(in: 0...upgrade.ranks.count, using: &rng) : upgrade.ranks.count
+                    for _ in 0..<ranks {
                         chain.append(.purchaseUpgrade(slot: slots[index], pathID: upgrade.id))
                     }
                 }
@@ -119,8 +136,8 @@ public struct MoneyStudyPlan: Sendable {
         // Five different opening sizes, each tested both with quick upgrades
         // and with a longer delay between decisions. These are player policies,
         // not tower tuning, and never alter an authored price or ability.
-        let opening = min(slots.count, 2 + upgradePolicyIndex % 5)
-        let decisionDelay = upgradePolicyIndex < 5 ? 0.5 : 5.0
+        let opening = min(slots.count, max(1, openingCount ?? (2 + upgradePolicyIndex % 5)))
+        let decisionDelay = requestedDelay ?? (upgradePolicyIndex < 5 ? 0.5 : 5.0)
         var cursors = Array(repeating: 0, count: slots.count)
         var actions: [ScriptedBuildOrder.Action] = []
         for index in 0..<opening {
@@ -129,7 +146,7 @@ public struct MoneyStudyPlan: Sendable {
         }
         var built = opening
         var upgradesSinceBuild = 0
-        let upgradesPerBuild = 1 + upgradePolicyIndex % 5
+        let upgradesPerBuild = requestedCadence ?? (1 + upgradePolicyIndex % 5)
         while let unfinished = chains.indices.first(where: { cursors[$0] < chains[$0].count }) {
             if built < slots.count && upgradesSinceBuild >= upgradesPerBuild {
                 actions.append(chains[built][0])

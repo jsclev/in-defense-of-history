@@ -1,10 +1,11 @@
 import Foundation
 import CoreGraphics
 
-/// Every production driver must choose its recording destination explicitly.
-/// Isolated encyclopedia scenes and unit fixtures are not level playthroughs.
+/// Every driver chooses whether its output needs a playback recording.
 public enum BattleRecording {
     case database(LevelRunDAO, LevelRunSource)
+    /// Fitness evaluation keeps compact results without constructing a recorder.
+    case evaluation
     case preview
 }
 

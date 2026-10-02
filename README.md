@@ -3,29 +3,28 @@
 Run this in Terminal to search for **level 15 (Charleston)** solutions:
 
 ```sh
-~/bin/LibertyLineSimulator 15 --workers 8
+~/bin/LibertyLineSimulator --level 15 --workers 8
 ```
 
-Replace `15` with the level number you want. `--workers` is required; choose
+Set `--level` to the level number you want. `--workers` is required; choose
 an integer from 1 to 32 for the number of parallel battle processes.
 
-The simulator runs the genetic algorithm locally for up to eight hours, using
-the number of CPU workers you specify. It loads starting money, difficulty, heroes and the star
-budget from its database, and searches tower plans and explicit meta upgrades.
-Keep the Terminal open and your Mac awake. It can finish earlier when it reaches
-its generation or evaluation limit; time limits are checked between batches.
+The simulator runs the genetic algorithm locally using the CPU workers you
+specify. It loads starting money, difficulty, heroes and the star budget from its
+database, and searches tower plans and explicit meta upgrades. Keep the Terminal
+open and your Mac awake.
 
-Progress appears automatically in Terminal and the GA logs, for example:
+There is no default time, generation or battle ceiling. Completion requires the
+configured minimum training effort, stability, and reliable, distinct winners on
+held-out seeds. Explicit resource limits can end a run with the quality goal unmet.
+See the [stopping policy](Tools/simulator_cli_reference.md#search-stopping-policy)
+for the requirements and optional limits.
 
-```text
-GA progress: ~20.0% | elapsed 1h 36m 0s | about 6h 24m 0s remaining | search | generations 0 | battles 100
-GA milestone: passed 20% after 1h 36m 0s
-```
-
-The percentage estimates completion of the run, including validation and saving
-results. It updates about every 15 seconds between completed work batches and at
-each 10% milestone. Estimates can change as battle speed changes; 100% appears
-after results have been saved. It does not measure how close a strategy is to optimal.
+Progress appears automatically in Terminal and the GA logs. It reports elapsed
+time, generations, actual battle counts and each group's effort/stability counters.
+Completion time is unknown while the quality search continues; no percentage or
+ETA is claimed. Updates occur about every 15 seconds between completed work
+batches and when phases change.
 
 Each invocation prints the path to a new, dedicated SQLite database beside
 `~/bin/LibertyLineSimulator`. Results, recordings and checkpoints go into that

@@ -86,7 +86,9 @@ public final class MetaUpgradesFactory: Sendable {
         }
     }
 
-    fileprivate static func restore(_ upgrades: [MetaUpgrade], catalog: MetaUpgradeCatalog) throws -> MetaUpgradeProgression {
+    /// Validate one recorded selection against the current DAO catalog. Reading
+    /// DNA does not require enumerating the entire legal breeding search space.
+    public static func restore(_ upgrades: [MetaUpgrade], catalog: MetaUpgradeCatalog) throws -> MetaUpgradeProgression {
         try validateBitOrder()
         guard Set(upgrades).count == upgrades.count else {
             throw DbError.Db(message: "meta upgrade progression: duplicate upgrade ID")

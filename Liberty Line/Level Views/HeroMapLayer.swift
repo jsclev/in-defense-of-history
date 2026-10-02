@@ -3,16 +3,16 @@ import SwiftUI
 /// Hero art and selection controls. Positions are published by the movement model.
 struct HeroMapLayer: View {
     let heroes: [LevelRunner.HeroSoldier]
-    let runtimeCanvas: RuntimeCanvas
+    let sprites: MapSpriteScale
     let projection: LevelMapProjection
+    let aspectRatio: (String) -> CGFloat
     let onSelect: (Int) -> Void
 
     var body: some View {
-        let sprites = MapSpriteScale(runtimeCanvas: runtimeCanvas)
         ZStack(alignment: .topLeading) {
             ForEach(heroes) { hero in
                 let footprint = HeroSpriteFootprint(baseAssetName: hero.baseAssetName,
-                    aspectRatio: hero.imageAspectRatio, playableHeight: runtimeCanvas.playAreaRect.height)
+                    aspectRatio: aspectRatio(hero.baseAssetName), playableHeight: sprites.playableHeightOnScreen)
                 let spriteHeight = footprint.size.height
                 let groundInset = footprint.groundInset
                 let footPoint = projection.viewPoint(hero.position)

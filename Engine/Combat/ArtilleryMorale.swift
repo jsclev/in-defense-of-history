@@ -88,6 +88,13 @@ public struct EnemyMorale: Equatable, Sendable, Codable {
         return true
     }
 
+    /// Commanders supply actual morale recovery, including during the normal
+    /// recovery delay. The existing continuous morale bar follows this value.
+    public mutating func rally(amount: Double) {
+        guard amount.isFinite, amount > 0 else { return }
+        value = min(rules.moraleMax, value + amount)
+    }
+
     public mutating func advance(seconds: Double) {
         guard seconds.isFinite, seconds > 0 else { return }
         let previousAge = impactAge

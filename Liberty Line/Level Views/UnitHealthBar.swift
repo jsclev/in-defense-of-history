@@ -5,9 +5,10 @@ struct UnitHealthBar: View {
     let width: CGFloat
     let height: CGFloat
     var fill: Color = .green
+    var showsWhenFull: Bool = false
 
     var body: some View {
-        if health.isDamaged {
+        if health.isDamaged || showsWhenFull {
             ZStack(alignment: .leading) {
                 Capsule().fill(Color.red)
                 Capsule().fill(fill)

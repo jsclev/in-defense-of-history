@@ -12,7 +12,7 @@ INSERT INTO level_info (
     julianday('1777-07-08T12:30:00-05:00'),
     400,
     20,
-    15,
+    12,
     'level_010_fort_ann'
 );
 

@@ -35,6 +35,13 @@ public struct GeneticSolutionContext: Codable, Equatable, Sendable {
         try validate()
     }
 
+    init(levelID: UUID, difficultyID: UUID, startingMoney: Int, bountyFraction: Double,
+         maxGameSeconds: Double, contentSHA256: String, heroLoadout: GeneticHeroLoadout?) {
+        self.levelID = levelID; self.difficultyID = difficultyID; self.startingMoney = startingMoney
+        self.bountyFraction = bountyFraction; self.maxGameSeconds = maxGameSeconds
+        self.contentSHA256 = contentSHA256; self.heroLoadout = heroLoadout
+    }
+
     func validate() throws {
         try heroLoadout?.validate()
         guard startingMoney > 0, bountyFraction.isFinite, (0...1).contains(bountyFraction),
@@ -66,6 +73,17 @@ public struct GeneticSolution: Codable, Sendable {
 
     public var validationComplete: Bool { panel == .validation && candidate.evaluations.count == expectedSamples }
     public var victories: Int { candidate.evaluations.filter { $0.result.outcome == .victory }.count }
+
+    /// Pick one original seed for a demonstration without changing the panel
+    /// that ranked this solution. Prefer a victory, then the existing fitness
+    /// order; a stable seed tie-break makes the choice independent of row order.
+    public func recordingEvaluation() throws -> GeneticEvaluation {
+        try validate()
+        guard let evaluation = candidate.representativeEvaluation else {
+            throw DbError.Db(message: "candidate \(candidate.id): missing evaluations")
+        }
+        return evaluation
+    }
 
     func validate() throws {
         let record = "genetic_solution[\(runID)/\(candidate.id)/\(panel.rawValue)]"

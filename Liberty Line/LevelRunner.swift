@@ -45,9 +45,6 @@ public final class LevelRunner: BattleEngine {
             sceneSetup = try LevelSceneSetup(content: content)
             try super.init(recording: .database(db.levelRunDao, .player), content: content, playSpeed: content.playSpeeds.player, heroesEnabled: heroesEnabled, startingMoneyOverride: replayMoney,
                 seed: replaySeed ?? UInt64.random(in: UInt64.min...UInt64.max), onVictory: onVictory)
-            heroImageAspectRatios = Dictionary(uniqueKeysWithValues: content.deployments.map {
-                ($0.hero.id, sceneSetup.heroAspectRatio(for: $0.hero.unitImageName))
-            })
             validateHeroAsset = LevelSceneSetup.validateHeroAsset
             publishesPresentation = true
             publishHeroes()

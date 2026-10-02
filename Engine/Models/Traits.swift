@@ -10,6 +10,12 @@ public enum Trait: Sendable, Equatable {
 
     case commandAura(radius: Double, disciplineBonus: Double, deathShock: Double)
 
+    case concealment(EnemyConcealmentRules)
+
+    case boss(EnemyBossRules)
+
+    case reinforcementCall(EnemyReinforcementCallRules)
+
     case skirmish
     case marksman
     case saboteur
@@ -47,6 +53,9 @@ extension Trait: Codable {
                 disciplineBonus: try c.decode(Double.self, forKey: .disciplineBonus),
                 deathShock: try c.decode(Double.self, forKey: .deathShock)
             )
+        case "concealment": self = .concealment(try EnemyConcealmentRules(from: decoder))
+        case "boss": self = .boss(try EnemyBossRules(from: decoder))
+        case "reinforcementCall": self = .reinforcementCall(try EnemyReinforcementCallRules(from: decoder))
         case "skirmish": self = .skirmish
         case "marksman": self = .marksman
         case "saboteur": self = .saboteur
@@ -79,6 +88,15 @@ extension Trait: Codable {
             try c.encode(radius, forKey: .radius)
             try c.encode(bonus, forKey: .disciplineBonus)
             try c.encode(shock, forKey: .deathShock)
+        case let .concealment(rules):
+            try c.encode("concealment", forKey: .type)
+            try rules.encode(to: encoder)
+        case let .boss(rules):
+            try c.encode("boss", forKey: .type)
+            try rules.encode(to: encoder)
+        case let .reinforcementCall(rules):
+            try c.encode("reinforcementCall", forKey: .type)
+            try rules.encode(to: encoder)
         case .skirmish: try c.encode("skirmish", forKey: .type)
         case .marksman: try c.encode("marksman", forKey: .type)
         case .saboteur: try c.encode("saboteur", forKey: .type)

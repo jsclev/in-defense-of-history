@@ -2,7 +2,7 @@
 
 ## Logging
 
-Logging is always available with the normal `~/bin/LibertyLineSimulator 15 --workers 8`
+Logging is always available with the normal `~/bin/LibertyLineSimulator --level 15 --workers 8`
 command. The CLI uses Apple's [Swift Logger API](https://developer.apple.com/documentation/os/logger)
 and unified logging, with subsystem **`com.zippyzen.td.simulator`**.
 In macOS Console, start streaming and filter for that subsystem. Enable info
@@ -44,36 +44,75 @@ See Apple's [logging guidance](https://developer.apple.com/documentation/os/gene
 
 ## GA recording storage
 
-Every candidate keeps its complete recording and evaluation evidence. New
-recordings use self-contained setup and event blocks with lossless LZ4
+Every candidate keeps its compact evaluation evidence. Playback is generated
+only for retained solutions after evaluation. Those recordings use
+self-contained setup and event blocks with lossless LZ4
 compression. There are no database-size or free-space scheduling caps, replay
 pruning, shared-content writes, or automatic compaction during the search.
-The normal search time, generation, and evaluation limits still apply.
+Time, generation and evaluation ceilings apply only when explicitly supplied.
 Historical shared/LZFSE recordings from CLI 1.0.205 remain readable.
+
+## Search stopping policy
+
+The default GA has no wall-clock, generation, or battle ceiling. Completion
+requires **all** of these conditions in **every** requested star-spend group:
+
+- At least 1,000,000 actual training battles, excluding cached duplicate DNA.
+- At least 250,000 training battles and 1,000 generations since the latest
+  fitness improvement, winning-niche improvement/discovery, or exploration restart.
+- Three reliable winning strategies that satisfy the existing all-pairs opening
+  and observed combat-role diversity gates.
+- A frozen assessment on 64 held-out seeds: each selected strategy wins at least
+  90% of its panel, and every pair differs meaningfully on at least 90% of seeds.
+
+The battle floor is **not** a cap or a claim of exhaustive search. These are
+initial, configurable policy values, not proof of optimality or player enjoyment.
+`--minimum-training-battles 100000000` or `1000000000` raises the floor to 100
+million or one billion per group. `--stability-battles`, `--stability-generations`,
+and `--goal-solutions` configure the other requirements. Larger counters are
+supported; billion-battle throughput and memory use have not been qualified.
+
+Stable training without the required winning variety starts another exploration
+window. Failed qualification also resumes training and preserves its full evidence.
+Every later frozen assessment uses a new, non-overlapping held-out seed panel;
+held-out fitness never enters breeding or the training convergence tracker.
+Repeated candidates must also meet reliability across all their earlier held-out
+evidence, and pairs must meet diversity across all shared assessed seeds. A lucky
+fresh panel cannot erase earlier failed evidence.
+An empty generation requests fresh plans and never establishes convergence.
+
+`--generations`, `--max-evaluations`, and `--genetic-hours` are optional resource
+guardrails for explicitly bounded experiments. Stored zero values mean no ceiling.
+A battle cap includes training and all qualification attempts, with a final panel
+reserved. An explicit time cap reserves 15% for final assessment; in-flight work
+and subsequent demonstration recording may extend runtime. Historical positive
+limits retain their meaning. Resource exhaustion is reported as **quality goal
+not achieved**, even when the final assessment panel is complete.
+
+The successful stopping reason is `quality-qualified`. `time-budget`,
+`generation-limit`, and `evaluation-budget` identify resource exhaustion.
+`ga_stopping_policy` stores the chosen requirements, `ga_search_goal` stores
+training effort/stability, and `ga_qualification` plus `ga_qualification_seed`
+retain every attempt and its panel. Rejected attempt evidence uses separate
+`ga_run` IDs; the final panel is also published under the study ID for existing
+readers. Actual-battle totals exclude that publication copy.
 
 ## Progress estimates
 
-Terminal output and GA notice logs show estimated percent complete, elapsed
-time, estimated time remaining, the current phase, completed generations and
-battle counts. Updates occur every 15 seconds between completed work batches,
-when phases change, and whenever a 10% milestone is first observed. A slow
-in-flight battle batch can delay the next update. Milestone times record the
-first observation after a batch; they do not invent an exact crossing time.
+For a quality search, output reports elapsed time, actual battle
+counts, generations, and each group's minimum-effort and stability counters.
+Completion time is unknown: no fabricated percentage or ETA is shown. Updates
+occur every 15 seconds between work batches and at phase changes. A slow batch
+can delay an update.
 
-During search, progress follows whichever limit is closest: search time,
-training battle allowance, or completed generations. Search accounts for 85%
-of the indicator, validation for 14%, and saving the results for the final 1%.
-Validation uses its actual finalist/seed count and remaining time budget.
-Percentages never decrease. ETA uses observed throughput and generation timing,
-capped by the remaining wall-time budget; it can change as later battles take
-more or less time. Before measurements are available, ETA says it is estimating.
+Explicit resource guardrails do not create a predictable quality completion time.
+The quality search therefore suppresses percentages and ETA even with such limits:
+failed assessments can return to training repeatedly. 100% means execution and
+saving finished; only `quality-qualified` means the configured quality goal was
+met. `validationComplete` describes panel completeness, not reliability,
+diversity or quality-goal success. Legacy budget-only progress remains readable.
 
-100% means the run finished and saved its results. It does not imply optimality,
-a winning candidate, or a full validation panel when the budget expired early.
-Check the summary's `validationComplete` field for that last distinction.
-Failed runs retain their last percentage instead of claiming completion.
-
-The `progress.json` document in `simulator_document` stores the latest estimate
+The `ga_progress` and `ga_progress_milestone` tables store the latest estimate
 and every milestone's elapsed time. `--runs` and `--run-status` show the same
 estimate for new GA runs; older run databases retain their existing display.
 
@@ -83,7 +122,7 @@ estimate for new GA runs; older run databases retain their existing display.
 It runs the shared `BattleEngine` without a graphical interface. The installer
 builds Xcode's `Simulator` target and installs it under this name.
 
-For **level 15 (Charleston)**, `LibertyLineSimulator 15 --workers 8` runs the genetic
+For **level 15 (Charleston)**, `LibertyLineSimulator --level 15 --workers 8` runs the genetic
 algorithm (GA), evaluates candidate strategies, and automatically saves the best
 plans it finds to the **`genetic_solution`** table in a **new SQLite database
 unique to that invocation**, beside `~/bin/LibertyLineSimulator`.
@@ -160,12 +199,12 @@ There is no hardcoded starting-money default. Omit `--starting-money` for normal
 campaign conditions; use that flag only for an intentional experiment.
 
 For normal use, supply the level number and required worker count:
-`~/bin/LibertyLineSimulator 15 --workers 8`. `--workers` accepts integers from
+`~/bin/LibertyLineSimulator --level 15 --workers 8`. `--workers` accepts integers from
 1 to 32 and has no default. Optional overrides can follow it. For example, to reduce CPU load and request a
 shorter run:
 
 ```sh
-"$SIM" 15 --workers 2 --genetic-hours 0.25
+"$SIM" --level 15 --workers 2 --genetic-hours 0.25
 ```
 
 The GA uses the worker count you specify and defaults to an eight-hour budget.
@@ -183,11 +222,20 @@ All workers use that one run database. The snapshot includes the schema, content
 player settings and level maps, and begins with empty result tables. The starter
 is opened read-only; new results never modify it or the game's SQL seeds.
 
-The database is the complete run artifact: battle recordings, candidate DNA,
-training/validation evidence, configuration, maps, and JSON checkpoints all live
-inside it. Long searches can generate large databases because they retain the
-battle recordings. SQLite may create a temporary `-journal` file during writes;
-a normally closed run is a single `.sqlite` file.
+The database is the complete run artifact: candidate DNA, training/validation
+evidence, configuration, maps, checkpoints and retained-solution recordings all
+live inside it. Routine training and validation battles do not generate playback
+data. After evaluation and selection, the coordinator reruns one original seed
+per retained solution with recording enabled. The configured finalist limit
+still applies per star group. Validation candidates are preferred; a group with
+no validation samples gets explicitly labeled training demonstrations.
+
+These final recordings run after the evaluation budget and never change fitness
+or candidate rankings. `genetic_solution_recording` links each demonstration to
+its candidate and original seed, and stores its actual outcome and a comparison
+flag. A difference is reported, not substituted into the original evidence.
+SQLite may create a temporary `-journal` file during writes; a normally closed
+run is a single `.sqlite` file.
 
 To choose the new file yourself, add `--database "$HOME/bin/my-charleston-run.sqlite"`.
 It **must not exist**; the CLI refuses to overwrite or append another study to it.
@@ -208,8 +256,8 @@ sqlite3 -readonly -header -column "$SIM_SOURCE" \
 JSON files are optional: add `--report-dir /path/to/new-empty-directory` to export
 copies outside the source checkout. The reports are still saved in SQLite.
 
-- **Time:** `--genetic-hours 8` allocates up to eight hours, reserving 15% for
-  held-out validation. Generation or evaluation limits can end the run earlier;
+- **Time (optional):** no deadline by default. `--genetic-hours 8` allocates up to eight hours, reserving 15% for
+  held-out validation. Explicit generation or evaluation limits can end the run earlier;
   time limits are checked between work batches. Use `--genetic-hours 0.25` for
   a short trial, which may leave validation incomplete.
 - **CPU:** `--workers 4` runs four local battle processes. Use `1` or `2` for
@@ -250,43 +298,86 @@ commands open the existing database read-only and create no new database.
 Completion of a run alone does not establish that validation finished or that
 any candidate won.
 
-JSON reports are rows of `simulator_document`, keyed by `name`. For example:
-
-```sh
-sqlite3 -readonly "$SIM_DB" \
-  "SELECT content_json FROM simulator_document WHERE name = 'summary.json';"
-```
-
-Check `validationComplete` and the win counts in `summary.json`. Other documents
-include `configuration.json`, `content.json`, `population.json`, `validation.json`,
-and `best-stars-N.json`. The latter is the best **training** replay at that spend,
-not necessarily a validated winner. Checkpoints appear as their phases finish;
-a running search may not have `summary.json` yet.
-
-To inspect the persisted Charleston catalog, run:
+GA configuration, candidates, original evaluations, checkpoints and progress
+are relational tables. Optional `--report-dir` JSON files are exports only.
+See [GA SQL queries](../Db/Queries/GA/README.md) for the complete query set.
 
 ```sh
 sqlite3 -readonly -header -column "$SIM_DB" <<'SQL'
-SELECT g.run_id, g.candidate_id, g.panel, g.stars_used, g.starting_money,
-       json_array_length(g.solution_json, '$.candidate.evaluations') AS games,
-       json_extract(g.solution_json, '$.expectedSamples') AS expected_games,
-       (SELECT count(*)
-          FROM json_each(g.solution_json, '$.candidate.evaluations') AS e
-         WHERE json_extract(e.value, '$.result.outcome') = 'victory') AS wins
-  FROM genetic_solution AS g
-  JOIN level_info AS l ON l.id = g.level_info_id
- WHERE l.map_image_name = 'level_15_charleston'
- ORDER BY g.run_id, g.panel, g.stars_used, g.candidate_id;
+SELECT * FROM ga_study_overview;
+SELECT f.* FROM ga_candidate_fitness f
+ WHERE panel='validation' AND panel_complete=1
+ ORDER BY run_id,stars_used,win_rate DESC,mean_victory_lives DESC,
+          mean_waves_started DESC,mean_survival_seconds DESC,candidate_id;
 SQL
 ```
 
-This shows the Charleston candidates saved by this invocation. A
-validation row has completed its panel when `games = expected_games`. Campaign
-playback also needs a win, an affordable star cost, the current difficulty and
-authored money/bounty, compatible hero-enabled data, and matching battle content.
-Old or experimental rows can remain in the table without being playable advice.
+Run `Db/Queries/GA/top_solutions.sql` as-is to see the three Charleston solutions
+selected for the phone; no parameter binding is needed. Edit its literal run ID,
+star budget and `LIMIT` for another selection. Never compare different seed
+panels or scenarios as though they were one experiment. `ga_summary` records
+whether the configured held-out search completed. A complete panel need not
+contain a win. Campaign playback additionally requires an affordable star cost,
+the current difficulty and authored money/bounty, compatible heroes, matching
+content, and a separately linked demonstration.
+
+For a legacy v8 database, first convert to a new file:
+
+```sh
+python3 Tools/ga_relational.py old-run.sqlite new-relational-run.sqlite
+```
+
+The original remains untouched. New CLI study/status/import operations use the
+relational schema. Keep older executables for historical replay formats.
 
 ## 4. Keep the run database for later import
+
+To ship three diverse winners from a completed run, scan the original held-out
+ranking and generate just three demonstration recordings:
+
+```sh
+"$SIM" --ship-ga-solutions source-run.sqlite /absolute/path/to/Db/in_defense_of_history.sqlite \
+  new-publication-evidence.sqlite selected-solutions.sql new-recordings-directory
+```
+
+This preserves original candidate IDs, seeds, validation panels and fitness.
+`GeneticSolutionDiversitySelector.selectCompleteSet` chooses the strongest reliable
+baseline that permits three compatible plans, then favors the greatest minimum
+playstyle difference against every selected plan. It backtracks when a greedy
+choice would prevent a complete set. Original fitness remains unchanged and breaks novelty ties.
+The comparison uses saved openings, time-weighted actual investment, participating
+tower mechanics, development, route coverage, workload and recovery margins.
+The old 75% position and five-build checks are preferences, not vetoes.
+
+`GeneticPlacementPlan` stores successful pre-wave-one builds and the first five
+later builds. Its optional `GeneticPlaystyle` adds successful purchases and
+phase samples. `ga_placement*` and `ga_playstyle*` tables hold this evidence in
+normal SQL columns. Comparison never executes a battle or playback. Missing
+legacy evidence remains unknown; publishing new creative recommendations requires
+complete playstyle evidence. Publication fails rather than padding duplicates.
+
+For a quick greedy diagnostic of the saved archive (a shortfall here does not
+prove that no other three-plan combination exists):
+
+```sh
+"$SIM" --audit-ga-diversity source-run.sqlite
+```
+
+That read-only command scans validation and training rankings separately, using
+fitness columns and saved placement/playstyle rows (using the representative seed for its diagnostic ranking). Training winners
+still require full held-out validation before publication; its results must not
+be treated as validated solutions or mixed into the held-out ranking.
+
+After selection, publication checks current authored battle content, records one representative seed per
+solution, and verifies each recording can be read to completion. Demonstration
+differences are stored separately. The catalog SQL preserves advice for other
+levels. Install that SQL as `Db/DML/genetic_solutions.sql` and the three recording
+SQL files as `Db/DML/GeneticRecordings/*.sql`, then run `Db/create_db.sh` before
+the normal device build. Phone previews read those recordings without running
+combat. Device database validation permits only three linked demonstrations,
+rejects unrelated research history, and caps the bundle database at 128 MiB.
+The app target excludes SQL source files from its resources; only the generated
+SQLite database carries these recordings to the phone.
 
 Candidate publication into this run database is automatic: training candidates
 are saved before validation; validation candidates are saved after that phase,
@@ -306,12 +397,14 @@ leaders and validate them for the game's preview:
 The current-content starter must be generated from the game's current authored
 SQL and maps using the normal starter preparation command. Import reads the
 source without changing it, ranks complete training panels with the GA's own
-fitness/tie breaker, and freezes three distinct plans before validation. It
+fitness/tie breaker, and freezes three winners selected by the same creative
+composition and pairwise placement policy before validation. It
 requires an exact content match, reproduces every saved training evaluation,
 and runs the entire recorded held-out seed panel using the shared engine.
-All new battle recordings and full results go into the new evidence database;
+New compact battle results go into the new evidence database;
 the original study's failed/completed status remains unchanged. The SQL output
-is written only after all three panels finish and each plan has a victory.
+is written only after all three panels finish, each plan has a victory, and
+the held-out candidates still pass the same data-only diversity check.
 It contains the selected level's training and validation records. Merge this
 selection into the game's SQL seed while retaining other levels' records, then
 rebuild the game database with `Db/create_db.sh`.
@@ -328,3 +421,88 @@ and `--majority-tower ranged`, alongside an unrestricted control. These constrai
 the automated player's plans without changing game rules. Summaries include
 `builtTowersBySeed` and `winsMeetingTowerLimits`; use those actual purchases
 instead of planned tower counts when checking a winning defense's composition.
+
+Creative playstyle evidence (`genetic-v10` and later) is stored in `ga_playstyle`,
+`ga_playstyle_purchase`, `ga_playstyle_tower` and `ga_playstyle_route`. These
+record successful purchases and paid prices, authored tier/ability identities,
+opening/one-third/two-thirds/final samples, observed damage/shots/blocking time/
+engineer slowing time/supply income/detonations, route coverage, and player action counts. Unknown
+legacy evidence stays absent. `candidate_playstyles.sql` exposes this evidence.
+
+Selection uses `GeneticDefenseComparison` through the dedicated selector. It
+requires all of the following; a high score in another dimension cannot rescue
+a failed condition:
+
+- Less than 60% shared visible opening AND shared paid opening defense. Match
+  the same family one-to-one
+  at the same slot or equivalent nearby route coverage, using maximum-weight
+  assignment. Divide shared cost by the smaller defense budget so adding extras
+  cannot dilute an existing core. Check the entire visible layout separately
+  from the participating defense; idle and income-only towers cannot dilute the
+  defense, and identical visible layouts fail even if different subsets act.
+- At least 40% turnover in the paid, participating opening family mix.
+- A material change in damage or control roles during both the first and second
+  thirds of the waves. Damage-family turnover must reach 40%, or blocking/slowing
+  family turnover must reach 50% with at least 0.5 enemy-seconds per second from
+  a different control family. Keep damage, blocking and slowing in separate units.
+  Use interval increments for the middle waves, not cumulative early activity.
+
+Nearby coverage requires at least 80% common route identities and no more than
+8% route-progress separation on each common path; it is a geometric proxy, not
+proof of enemy interception. Family attribution avoids crediting earlier damage
+to a later upgrade. Missing phase/control evidence is unknown and cannot qualify.
+Novelty is the weakest of visible-opening difference, opening-core difference,
+opening-family turnover, early
+role difference and middle role difference. Investment, branches, workload and
+risk remain available as diagnostics; they cannot offset these hard gates.
+This intentionally conservative movie-screening policy rejects even mechanically
+useful additions when the viewer would still see the same dominant opening.
+
+Publication chooses the strongest reliable baseline that permits a complete
+compatible set and backtracks around dead ends. Every selected pair must qualify
+on at least 90% of matching held-out seeds; eligible candidates need at least 90%
+wins. Original fitness and evidence remain unchanged. No simulation or replay
+is used for comparison. Demonstration recording is a separate publication step.
+These policy thresholds are not proof of fun; player feedback is authoritative.
+
+`genetic-v13` keeps every candidate eligible for finalist selection. The working
+parent pool is bounded, but a separate persistent archive keeps the strongest
+candidate in every observed behavior niche. Two of every three breeding slots
+are allocated to the least-bred niches; the remaining third develops the global
+champion. Improved niche champions inherit the niche's visit count. Local mates
+must have similar opening and investment mixes, and crossover inherits opening
+slot chains together. Retired meta selections remain in the full finalist pool
+and may donate plans to new selections. `ga_population_niche` records champions
+and allocated offspring; `search_coverage.sql` exposes both archives.
+
+Fresh plans draw family, opening size, placement policy, upgrade cadence, delay
+and investment depth independently. Normal meta groups use independent streams;
+controlled meta-exchange experiments retain deliberately paired inputs. Families
+are sampled uniformly before branches so extra authored branches do not bias
+family probability. Fresh introductions occupy the actual last offspring slot
+every eighth generation, and enter evaluation without another mutation pass.
+
+Mutation targets successful purchases from original training evidence 75% of
+the time when available; the remainder explores dormant orders. Replacement
+chains retain their original global priorities and triggers. Coordinated opening
+changes can cross fitness valleys. Rally points, engineer obstacle sites and
+repeated demolition targets are evolved route-target preferences and execute via
+normal player commands. Actual accepted positions are stored per seed in
+`ga_tactical_action`; DNA is in `ga_tactical_order`. Old DNA retains historical
+automatic sites, and missing old tactical evidence remains unknown.
+
+Finalists are drawn from every qualified selection's complete candidate pool,
+not its parent seats. The global champion remains first. Three quarters of the
+finalist cap prefer the best training win-rate band; up to a quarter may explore
+other styles with at least one training win. Return fewer finalists when the
+archive cannot supply more distinct observed niches; never pad with behavior
+clones. Meta coverage also skips an already represented niche. This small-panel
+uncertainty allowance does not relax the independent held-out publication gate.
+One third of seats first seek successful meta-selection coverage. All finalists
+are frozen before any held-out result arrives. Fitness, combat precision,
+training seeds and held-out seeds remain unchanged.
+
+Recorded upgrade DNA uses `MetaUpgradesFactory.restore` against a fresh DAO
+catalog. Do not construct a search factory per saved candidate: its initializer
+enumerates every legal progression. Single-selection validation preserves the
+same prerequisites, costs and error handling without that enumeration.

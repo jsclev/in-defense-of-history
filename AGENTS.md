@@ -1,3 +1,14 @@
+# Establish necessity before optimizing
+
+Standing user instruction (September 28, 2026): before implementing or
+optimizing work, establish whether it is needed for the user's actual goal.
+Identify what consumes the output and what would fail without it. Do not treat
+the current implementation as proof of a requirement. Challenge unnecessary
+computation, recording and retention before optimizing their encoding, storage
+layout or speed. The GA storage investigation spent time optimizing playback
+histories that candidate fitness evaluation did not need; do not repeat that
+mistake.
+
 # Database authority
 
 Standing user instruction (September 26, 2026): standalone CLI studies create a
@@ -7,7 +18,7 @@ its maps and schema, and installs `liberty-line-simulator-{build-name}.sqlite`
 beside the CLI. The CLI derives that default input filename from its own build
 version; `--content-database` overrides it. Normal runs must not read the live
 checkout database, maps or SQL files. Start with empty simulator result tables
-and keep all workers, recordings, candidates and JSON checkpoints in the run
+and keep all workers, recordings, candidates and relational checkpoints in the run
 database, named with the build version plus a unique invocation suffix.
 Starting money defaults to the selected level's DAO-loaded value from this
 database; an explicit `--starting-money` flag is an experiment override.
@@ -49,6 +60,47 @@ them through `CombatRulesDAO`. Pass the resulting rules into combat models;
 never introduce a parallel Swift tuning catalog or a mutable global registry.
 
 # Simulator boundary
+
+Standing user correction (September 29, 2026): player-facing GA suggestions
+should inspire fun, creative ways to win, not demonstrate absolute mathematical
+optimality. Three artillery-and-ranged openings are too similar even when their
+positions and purchase sequences differ. Use the
+`/Users/john/.codex/skills/creative-ga-solutions/SKILL.md` skill for solution
+comparison and recommendation selection. Prioritize meaningful playstyle
+coverage among eligible winners, compare against every selected suggestion,
+and preserve original fitness as evidence. This supersedes treating the earlier
+fitness-first, previous-selection-only scan as the product goal.
+
+Keep the dedicated diversity selector and compare stored candidate data only.
+Never simulate or replay a battle to compare candidates; extend the candidate
+representation when required observations are missing. Keep every evaluated
+candidate and its evidence, including losers. The former 75% opening and
+five-placement checks are soft preferences, never selection vetoes. Capture
+successful purchases, phase activity, investment, spatial coverage and workload
+in the relational playstyle tables. Keep competitive playstyle champions during
+breeding and select varied finalists before held-out validation.
+Report missing variety rather than padding the selection with near-duplicates.
+
+Further September 29 correction: the artillery/engineer openings with extra
+musket, militia or supply towers (candidates 10585, 11442 and 12886) were also
+rejected as effectively identical movies. A shared dominant opening defense is
+a veto; extra families, later upgrades or additive novelty scores cannot rescue
+it. Require substantial opening change and sustained observed combat-role change.
+Keep these actual rejected candidates as regression cases. Numerical thresholds
+are recommendation policy, never proof the player will find a set interesting.
+
+Standing user clarification (September 28, 2026): routine GA candidate and
+held-out evaluations do not need full playback recordings. Preserve candidate
+strategies, seeds, original evaluation results, compact evidence and search
+checkpoints. After selection, rerun only the retained solutions to generate
+playback recordings. Differences between those demonstrations and the original
+evaluations are acceptable; keep original fitness results authoritative and
+store demonstration results separately. The user's top-five example does not
+change the configured search or validation counts. This supersedes the earlier
+requirement to capture and retain every evaluation's exact playback history;
+combat fidelity, search coverage and held-out validation remain required.
+Existing saved databases and recordings remain protected from deletion unless
+the user authorizes their removal.
 
 Standing user correction (September 27, 2026): do not sacrifice GA speed to
 lower storage requirements. Prefer simple, appropriately sized recording fields;

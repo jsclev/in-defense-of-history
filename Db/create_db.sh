@@ -44,6 +44,10 @@ sqlite3 -bail "$database" < DDL/create_combat_rules.sql
 sqlite3 -bail "$database" < DDL/create_meta_upgrades.sql
 sqlite3 -bail "$database" < DDL/create_player_meta_upgrades.sql
 sqlite3 -bail "$database" < DDL/create_genetic_solutions.sql
+sqlite3 -bail "$database" < DDL/create_genetic_placements.sql
+sqlite3 -bail "$database" < DDL/create_genetic_playstyles.sql
+sqlite3 -bail "$database" < DDL/create_genetic_studies.sql
+sqlite3 -bail "$database" < DDL/create_genetic_fitness.sql
 
 # Add all the data
 sqlite3 -bail "$database" < DML/combat_rules.sql
@@ -113,6 +117,7 @@ sqlite3 -bail "$database" < DML/level_02_bunker_hill_waves.sql
 sqlite3 -bail "$database" < DML/level_12_kettle_creek_waves.sql
 sqlite3 -bail "$database" < DML/level_13_new_haven_waves.sql
 sqlite3 -bail "$database" < DML/level_15_charleston_waves.sql
+sqlite3 -bail "$database" < DML/campaign_boss_spawns.sql
 sqlite3 -bail "$database" < DML/Heroes/01_Israel_Putnam.sql
 sqlite3 -bail "$database" < DML/Heroes/02_Henry_Knox.sql
 sqlite3 -bail "$database" < DML/Heroes/03_Louis_Duportail.sql
@@ -141,6 +146,10 @@ sqlite3 -bail "$database" < DML/Simulator/sim_melee_units.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_tower_ranges.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_tower_sweep.sql
 sqlite3 -bail "$database" < DML/genetic_solutions.sql
+for recording_seed in DML/GeneticRecordings/*.sql; do
+    [ -f "$recording_seed" ] || continue
+    sqlite3 -bail "$database" < "$recording_seed"
+done
 
 test "$(sqlite3 "$database" 'PRAGMA integrity_check;')" = ok
 test -z "$(sqlite3 "$database" 'PRAGMA foreign_key_check;')"

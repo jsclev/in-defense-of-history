@@ -2,6 +2,16 @@ import XCTest
 @testable import LevelEditorFormats
 
 final class GeneticProgressTests: XCTestCase {
+    func testDefaultTimeBudgetIgnoresFormerGenerationAndBattleCeilings() throws {
+        var progress = GeneticProgress(runID: UUID(), startedAt: 0, timeBudget: 28_800,
+                                       trainingLimit: nil, generationLimit: nil)
+        let snapshot = progress.update(now: 1800, phase: .search, completedGenerations: 1000,
+            trainingEvaluations: 150_000, validationEvaluations: 0, validationTarget: 512)
+        XCTAssertEqual(snapshot.percentComplete, 6.25, accuracy: 0.0001)
+        XCTAssertEqual(try XCTUnwrap(snapshot.estimatedSecondsRemaining), 22_680 + 512.0 / (150_000.0 / 1800), accuracy: 0.0001)
+        XCTAssertTrue(snapshot.milestones.isEmpty)
+    }
+
     private func tracker(hours: Double = 8, evaluations: Int = 49_488, generations: Int = 300) -> GeneticProgress {
         GeneticProgress(runID: UUID(), startedAt: 100, timeBudget: hours * 3600,
                         trainingLimit: evaluations, generationLimit: generations)
@@ -52,6 +62,11 @@ final class GeneticProgressTests: XCTestCase {
             trainingEvaluations: 100, validationEvaluations: 100, validationTarget: 100)
         XCTAssertEqual(saving.percentComplete, 99)
         XCTAssertNil(saving.estimatedSecondsRemaining)
+        let recording = progress.update(now: 221, phase: .recording, completedGenerations: 1,
+            trainingEvaluations: 100, validationEvaluations: 100, validationTarget: 100)
+        XCTAssertEqual(recording.percentComplete, 99)
+        XCTAssertTrue(recording.statusLine.contains("recording retained solutions"))
+        XCTAssertEqual(recording.trainingEvaluations + recording.validationEvaluations, 200)
         let completed = progress.update(now: 223, phase: .completed, completedGenerations: 1,
             trainingEvaluations: 100, validationEvaluations: 100, validationTarget: 100)
         XCTAssertEqual(completed.percentComplete, 100)

@@ -58,4 +58,4 @@ trap - EXIT HUP INT TERM
 
 printf '\nInstalled Release CLI: %s\n' "$sim_destination"
 printf 'Installed starter database: %s\n' "$sim_database"
-printf 'Start level 15 with: "%s" 15 --workers 8\n' "$sim_destination"
+printf 'Start level 15 with: "%s" --level 15 --workers 8\n' "$sim_destination"

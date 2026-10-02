@@ -126,7 +126,7 @@ import CryptoKit
         let stageCount = scenarios.count * 2 + variants.count
         let secondsPerStage = hours * 3600 / Double(stageCount)
         let evaluationsPerStage = options.maxEvaluations / stageCount
-        guard evaluationsPerStage >= options.population * options.trainingSeeds + options.finalists * options.validationSeeds else {
+        guard options.maxEvaluations == 0 || evaluationsPerStage >= options.population * options.trainingSeeds + options.finalists * options.validationSeeds else {
             throw DbError.Db(message: "balance study: max-evaluations must cover initial population and validation in each of \(stageCount) stages")
         }
         let dao = try MoneyStudyDAO(db: db)
@@ -225,7 +225,8 @@ import CryptoKit
         try strategy.validate(study: study)
         var values: [GeneticEvaluation] = [], counts: [String: [String: Int]] = [:]
         for seed in seeds {
-            guard ProcessInfo.processInfo.systemUptime < deadline, completed < options.maxEvaluations else { break }
+            guard ProcessInfo.processInfo.systemUptime < deadline,
+                  options.maxEvaluations == 0 || completed < options.maxEvaluations else { break }
             var built: [String: Int] = [:]
             let value = try GeneticCommander.evaluate(strategy, recording: .database(db.levelRunDao, .simulator),
                 content: study.battle, money: study.level.startingMoney, seed: seed, maxSeconds: options.maxGameSeconds,
@@ -255,7 +256,7 @@ import CryptoKit
                         seconds: Double, evaluationCap: Int) throws -> Search {
         let start = ProcessInfo.processInfo.systemUptime, initialCount = completed
         let searchDeadline = start + seconds * 0.8, deadline = start + seconds
-        let trainingCap = evaluationCap - options.finalists * validationSeeds.count
+        let trainingCap: Int? = evaluationCap == 0 ? nil : evaluationCap - options.finalists * validationSeeds.count
         let seedPanel = try BalanceAnalysis.initialSeeds(seeds, limit: options.population / 2)
         let metaFactory = try MetaUpgradesFactory(catalog: study.battle.playerUpgrades.loadout.catalog)
         let upgrades = try metaFactory.make(selected: study.battle.playerUpgrades.loadout.selected)
@@ -271,12 +272,13 @@ import CryptoKit
                 if panel.candidate.evaluations.count == trainingSeeds.count { archive.append(panel.candidate) }
             }
         }
-        for generation in 0..<options.generations {
+        var generation = 0
+        while options.generations == 0 || generation < options.generations {
             let parents = Array(GeneticCandidate.ranked(archive).prefix(options.population))
             var filled = 0
             for index in 0..<options.population {
                 guard ProcessInfo.processInfo.systemUptime < searchDeadline,
-                      completed - initialCount + trainingSeeds.count <= trainingCap else { break }
+                      trainingCap.map({ completed - initialCount + trainingSeeds.count <= $0 }) ?? true else { break }
                 var strategy: GeneticStrategy
                 if generation == 0 {
                     if index < seedPanel.count { strategy = seedPanel[index] }
@@ -305,6 +307,7 @@ import CryptoKit
             if let best = GeneticCandidate.ranked(archive).first {
                 print("  generation \(generation + 1): \(archive.count) plans, best training win rate \(best.fitness.winRate)")
             }
+            generation += 1
         }
         let frozen = Array(GeneticCandidate.ranked(archive).prefix(options.finalists))
         var finalists: [BalancePanel] = []
@@ -316,6 +319,6 @@ import CryptoKit
         }
         return Search(requestedGenerations: options.generations, completedGenerations: generations,
             distinctTrainingCandidates: archive.count, trainingVictories: trainingVictories,
-            stoppedByLimit: generations < options.generations, finalists: finalists)
+            stoppedByLimit: options.generations == 0 || generations < options.generations, finalists: finalists)
     }
 }

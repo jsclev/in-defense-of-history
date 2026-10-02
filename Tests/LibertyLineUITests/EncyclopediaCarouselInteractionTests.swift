@@ -21,7 +21,7 @@ final class EncyclopediaCarouselInteractionTests: XCTestCase {
             let indicators = [demo, details, history]
             XCTAssertTrue(demo.waitForExistence(timeout: 5))
             XCTAssertEqual(demo.label, "Demonstration")
-            XCTAssertEqual(details.label, category == "tower" ? "Stats" : "Tactics")
+            XCTAssertEqual(details.label, "Stats")
             XCTAssertEqual(history.label, "History")
             XCTAssertFalse(app.buttons["\(prefix)-swipe"].exists)
             let carousel = app.otherElements["\(prefix)-carousel"]

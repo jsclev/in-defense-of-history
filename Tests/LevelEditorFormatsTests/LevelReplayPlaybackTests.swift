@@ -65,4 +65,22 @@ final class LevelReplayPlaybackTests: XCTestCase {
         XCTAssertFalse(reopened.isFinished)
         XCTAssertFalse(reopened.isPaused)
     }
+
+    @MainActor func testChangingPlaybackSpeedPreservesFractionalVirtualTime() throws {
+        let (fixture, id, frames) = try recording()
+        let writes = sqlite3_total_changes(fixture.connection)
+        let playback = try LevelReplayPlayback(dao: fixture.db.levelRunDao, runID: id, speed: PlaySpeed(1))
+        try playback.advance(wallSeconds: SimClock.dt * 0.5)
+        playback.togglePause()
+        playback.setSpeed(try PlaySpeed(8))
+        try playback.advance(wallSeconds: 10)
+        XCTAssertEqual(playback.frame.tick, 0)
+        playback.togglePause()
+        try playback.advance(wallSeconds: SimClock.dt / 16)
+        XCTAssertEqual(try encoded(playback.frame), try encoded(frames[1]))
+        playback.setSpeed(try PlaySpeed(0.5))
+        try playback.advance(wallSeconds: SimClock.dt * 2)
+        XCTAssertEqual(try encoded(playback.frame), try encoded(frames[2]))
+        XCTAssertEqual(sqlite3_total_changes(fixture.connection), writes)
+    }
 }

@@ -662,6 +662,7 @@
 				EXCLUDED_SOURCE_FILE_NAMES = (
 					"$(inherited)",
 					"*.tdmap",
+					"*.sql",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Liberty Line/Info.plist";
@@ -703,6 +704,7 @@
 				EXCLUDED_SOURCE_FILE_NAMES = (
 					"$(inherited)",
 					"*.tdmap",
+					"*.sql",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Liberty Line/Info.plist";
