@@ -13,6 +13,25 @@ final class AuthoredDatabaseFixture {
     }
     static var metaDecoder: JSONDecoder { MetaUpgradesFactory.decoder(catalog: metaUpgradesFactory.catalog) }
 
+    private static func geneticSeedURL() throws -> URL {
+        let directory: URL
+        if let path = ProcessInfo.processInfo.environment["LIBERTY_LINE_GENETIC_SEEDS"] {
+            guard path.hasPrefix("/") else {
+                throw DbError.Db(message: "LIBERTY_LINE_GENETIC_SEEDS must name an absolute directory outside the source repository")
+            }
+            directory = URL(fileURLWithPath: path, isDirectory: true)
+        } else {
+            directory = Db.authoredDatabaseURL.deletingLastPathComponent()
+                .deletingLastPathComponent().deletingLastPathComponent()
+                .appendingPathComponent("in-defense-of-history-data/GeneticSolutions", isDirectory: true)
+        }
+        let seed = directory.appendingPathComponent("genetic_solutions.sql")
+        guard FileManager.default.isReadableFile(atPath: seed.path) else {
+            throw DbError.Db(message: "Missing generated GA catalog at \(seed.path). Restore the external GeneticSolutions data or set LIBERTY_LINE_GENETIC_SEEDS.")
+        }
+        return seed
+    }
+
     static let combatRules: CombatRules = {
         let fixture = try! AuthoredDatabaseFixture()
         return try! withExtendedLifetime(fixture) { try fixture.db.combatRulesDao.get() }
@@ -72,8 +91,8 @@ final class AuthoredDatabaseFixture {
             let table = identifier(name)
             try execute("INSERT INTO main.\(table) SELECT * FROM authored.\(table)")
         }
-        try execute(String(contentsOf: Db.authoredDatabaseURL.deletingLastPathComponent()
-            .appendingPathComponent("DML/genetic_solutions.sql"), encoding: .utf8)
+        // The selected catalog is generated study output kept outside Git.
+        try execute(String(contentsOf: Self.geneticSeedURL(), encoding: .utf8)
             .replacingOccurrences(of: "PRAGMA foreign_keys=ON;", with: "")
             .replacingOccurrences(of: "BEGIN;", with: "").replacingOccurrences(of: "COMMIT;", with: ""))
         try execute("COMMIT; DETACH DATABASE authored;")

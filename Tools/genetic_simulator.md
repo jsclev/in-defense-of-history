@@ -331,7 +331,11 @@ campaign progress and does not change player selections. Settings → Watch GA
 solutions controls the button; its SQLite seed is on. Normal launch refreshes
 restore the authored settings as elsewhere in the game.
 
-Studies do not export `Db/DML/genetic_solutions.sql`. The coordinator and all
+Studies do not export the shipping GA catalog or recordings. Generated shipping
+exports live outside Git in `../in-defense-of-history-data/GeneticSolutions`,
+with `genetic_solutions.sql` and `GeneticRecordings/*.sql` imported by
+`Db/create_db.sh`. Use `--genetic-seeds /absolute/path/to/GeneticSolutions` for a
+different external directory. The coordinator and all
 workers persist only in the invocation database. The explicit offline
 `--import-ga-solutions` command considers all complete training winners using
 `GeneticSolutionDiversitySelector`. It keeps one strongest reliable winner and

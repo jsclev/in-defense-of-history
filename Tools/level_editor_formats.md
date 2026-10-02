@@ -154,7 +154,8 @@ set `LIBERTY_LINE_GEOJSON_DIRECTORY` when running with exports elsewhere.
 `TowerSlotLoadingTests` checks all bundled maps, stable ordering and identity,
 invalid input, missing files, and re-exporting through the actual shared loader
 with no SQL slot table. Physical-iPhone evidence for this migration is in
-`reports/tower-slots-geojson-2026-09-10`.
+`../database-archives/repo-cleanup-2026-10-02-a0f3fa3/Tools/reports/tower-slots-geojson-2026-09-10`
+(relative to the repository root).
 
 The game reads button centers directly from the bundled GeoJSON through
 `LevelGeoJSONDAO`. `CallWaveButtonLayout` projects canonical coordinates through

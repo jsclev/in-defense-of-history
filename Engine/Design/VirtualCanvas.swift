@@ -111,7 +111,8 @@ public struct VirtualCanvas: Codable, Equatable, Sendable {
 
     /// Largest verified landscape home-indicator / full-screen width ratio:
     /// iPad mini (6th generation), 315 pt / 1133 pt. See the measurement report
-    /// in Tools/reports/bottom-center-occlusion-2026-09-09.
+    /// outside the repository in ../database-archives/repo-cleanup-2026-10-02-a0f3fa3/
+    /// Tools/reports/bottom-center-occlusion-2026-09-09.
     public static let homeIndicatorScreenWidthFraction: CGFloat = 315.0 / 1133.0
 
     /// Authored geometry uses the full virtual canvas as its screen reference.

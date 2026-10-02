@@ -6,6 +6,7 @@ struct EnemyEncyclopediaView: View {
     let rules: CombatRules
     let demonstrations: EnemyDemonstrationCatalog
     let runtimeCanvas: RuntimeCanvas
+    let isReviewSession: Bool
     let onExit: () -> Void
     @State private var selection: UUID
     @State private var page = 0
@@ -13,12 +14,13 @@ struct EnemyEncyclopediaView: View {
     @State private var sceneFrame = CGRect.zero
 
     init(entries: [EnemyEncyclopediaEntry], rules: CombatRules, demonstrations: EnemyDemonstrationCatalog,
-         runtimeCanvas: RuntimeCanvas, onExit: @escaping () -> Void) {
+         runtimeCanvas: RuntimeCanvas, isReviewSession: Bool, onExit: @escaping () -> Void) {
         precondition(!entries.isEmpty, "enemy_encyclopedia: missing authored roster")
         self.entries = entries
         self.rules = rules
         self.demonstrations = demonstrations
         self.runtimeCanvas = runtimeCanvas
+        self.isReviewSession = isReviewSession
         self.onExit = onExit
         _selection = State(initialValue: entries[0].id)
     }
@@ -44,7 +46,7 @@ struct EnemyEncyclopediaView: View {
         }
         .onChange(of: selection) { _, _ in page = 0 }
         #if DEBUG
-        .task { await captureReview() }
+        .task { if isReviewSession { await captureReview() } }
         #endif
     }
 
@@ -244,6 +246,8 @@ struct EnemyEncyclopediaView: View {
             try JSONSerialization.data(withJSONObject: records, options: [.prettyPrinted, .sortedKeys])
                 .write(to: directory.appendingPathComponent("result.json"))
             selection = entries[0].id; page = 0; reviewElapsed = nil
+        } catch is CancellationError {
+            // Leaving the initial review visit is ordinary navigation.
         } catch {
             try? String(describing: error).write(to: directory.appendingPathComponent("failure.txt"), atomically: true, encoding: .utf8)
         }

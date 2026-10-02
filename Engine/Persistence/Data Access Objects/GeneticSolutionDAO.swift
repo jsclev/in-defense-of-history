@@ -371,8 +371,9 @@ public final class GeneticSolutionDAO {
     }
     private static func quote(_ value: String) -> String { "'" + value.replacingOccurrences(of: "'", with: "''") + "'" }
 
-    /// Stream one authored SQL file per demonstration. BLOBs use SQLite's exact
-    /// hex literals; no extra compression, JSON wrapping or whole-catalog buffer.
+    /// Stream one generated SQL export per demonstration. Keep exports outside Git.
+    /// BLOBs use SQLite's exact hex literals; no extra compression, JSON wrapping
+    /// or whole-catalog buffer.
     public func exportRecordingSeeds(for solutions: [GeneticSolution], directory: URL) throws {
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
         for solution in solutions {

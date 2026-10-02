@@ -66,7 +66,8 @@ The phone fixture grows from 45.84pt and reaches the occlusion's bottom edge
 from the HUD top. The narrow minimum fixture shrinks because the previous row
 extended left of its reserved corner after applying the HUD margin. The new
 row fits the entire pair and gap inside the combined bounds. See
-`reports/master-controls-fit-2026-09-09` for tests and fresh native-size renders.
+`../database-archives/repo-cleanup-2026-10-02-a0f3fa3/Tools/reports/master-controls-fit-2026-09-09`
+(relative to the repository root) for tests and fresh native-size renders.
 
 ## Values in the original September 8 review
 

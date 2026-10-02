@@ -21,7 +21,7 @@ placement cancellation, and the subsequent destination command. A dead or
 missing hero cannot change selection; another hero dying cannot shift a portrait
 to the wrong unit.
 
-`python3 Tools/check_hero_selection.py --output Tools/reports/hero-selection-2026-09-08`
+`python3 Tools/check_hero_selection.py --output "$(mktemp -d /tmp/td-hero-selection.XXXXXX)"`
 compiles the current production HUD views and runner selection methods, then
 sends pointer events to both SwiftUI portrait buttons in a macOS test window.
 It compares resulting state with direct map selection, including switching,
@@ -40,7 +40,9 @@ the 12.0889pt HUD margin reaches exactly the occlusion's 155.9467pt right edge.
 Other screen/safe-area shapes are computed from the same geometry.
 The 874×402pt phone fixture with a 750×382pt safe area now permits 58.446pt
 buttons, spanning the full reduced occlusion height; the old extra width cap
-limited them to 54.7533pt. See `reports/hero-bar-fit-2026-09-09`.
+limited them to 54.7533pt. See
+`../database-archives/repo-cleanup-2026-10-02-a0f3fa3/Tools/reports/hero-bar-fit-2026-09-09`
+(relative to the repository root).
 
 `HudView` keeps this row at the lower-left HUD anchor independently of its other
 rows, and normalizes the hero-bar layout slot to southwest. The fixed viewport,
@@ -59,6 +61,7 @@ lifetime, and viewport stability. The production runner method harness covers
 HUD arming/cancellation, invalid paths, cooldown rejection, reavailability and
 expiry cleanup. The iPhone build passes. Production SwiftUI HUD renders with
 fixture game state keep the map marker and other HUD controls fixed across six
-states; see `reports/hero-hud-2026-09-08` and the data repo's
+states; see `../database-archives/repo-cleanup-2026-10-02-a0f3fa3/Tools/reports/hero-hud-2026-09-08`
+(relative to the repository root) and the data repo's
 `ArtReadability/reports/hero-hud-2026-09-08`. Physical-device gameplay was not
 measured.

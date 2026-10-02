@@ -10,4 +10,3 @@ public struct GeneticWorkerConfiguration: Codable {
     public let maxSeconds: Double
     public let heroLoadout: GeneticHeroLoadout
 }
-

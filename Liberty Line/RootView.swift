@@ -4,7 +4,7 @@ import SwiftUI
 struct RootView: View {
     @State private var selectedNode: CampaignNode?
     @State private var playingDifficulty: Difficulty?
-    @State private var menuScreen: MenuScreen?
+    @State private var menuPresentation: MenuPresentation?
     @State private var configuringHudLayout = false
     @State private var hudLayoutConfig: HudLayoutConfig
 
@@ -19,8 +19,17 @@ struct RootView: View {
         // A launch shortcut enters the ordinary campaign view. Hero control,
         // difficulty, upgrades and starting money still come from SQLite.
         let arguments = CommandLine.arguments
-        if arguments.contains("--tower-encyclopedia-review") || arguments.contains("--tower-demo-review") || arguments.contains("--enemy-encyclopedia-review") {
-            _menuScreen = State(initialValue: .encyclopedia)
+        let reviewCategory: EncyclopediaSession.Category?
+        if arguments.contains("--enemy-encyclopedia-review") {
+            reviewCategory = .enemies
+        } else if arguments.contains("--tower-encyclopedia-review") || arguments.contains("--tower-demo-review") {
+            reviewCategory = .towers
+        } else {
+            reviewCategory = nil
+        }
+        if let reviewCategory {
+            _menuPresentation = State(initialValue: MenuPresentation(.encyclopedia, db: store.db,
+                initialCategory: reviewCategory))
         }
         if let flag = arguments.firstIndex(of: "--play-level") ?? arguments.firstIndex(of: "--preview-level") {
             do {
@@ -63,19 +72,20 @@ struct RootView: View {
                     self.playingDifficulty = difficulty
                 }
             }
-        } else if menuScreen == .upgrades {
+        } else if case .screen(.upgrades) = menuPresentation {
             MetaUpgradesView(upgrades: store.metaUpgrades, runtimeCanvas: runtimeCanvas) {
-                self.menuScreen = nil
+                self.menuPresentation = nil
             }
-        } else if menuScreen == .heroes {
+        } else if case .screen(.heroes) = menuPresentation {
             HeroesView(db: store.db, runtimeCanvas: runtimeCanvas) {
-                self.menuScreen = nil
+                self.menuPresentation = nil
             }
-        } else if menuScreen == .encyclopedia {
-            EncyclopediaView(db: store.db, runtimeCanvas: runtimeCanvas) {
-                self.menuScreen = nil
+        } else if case let .encyclopedia(session) = menuPresentation {
+            EncyclopediaView(session: session, runtimeCanvas: runtimeCanvas) {
+                self.menuPresentation = nil
             }
-        } else if menuScreen == .settings {
+            .id(session.id)
+        } else if case .screen(.settings) = menuPresentation {
             if configuringHudLayout {
                 HudLayoutConfigView(db: store.db,
                                     runtimeCanvas: runtimeCanvas,
@@ -86,20 +96,40 @@ struct RootView: View {
             } else {
                 SettingsView(runtimeCanvas: runtimeCanvas,
                              onConfigureHudLayout: { configuringHudLayout = true }) {
-                    self.menuScreen = nil
+                    self.menuPresentation = nil
                 }
             }
-        } else if let menuScreen {
+        } else if case let .screen(menuScreen) = menuPresentation {
             MenuPlaceholderView(menuScreen: menuScreen, runtimeCanvas: runtimeCanvas) {
-                self.menuScreen = nil
+                self.menuPresentation = nil
             }
         } else {
             CampaignMapView(
                 playerProgress: store.metaUpgrades,
                 onSelectNode: { selectedNode = $0 },
-                onSelectMenu: { menuScreen = $0 },
+                onSelectMenu: { menuPresentation = MenuPresentation($0, db: store.db) },
                 virtualCanvas: store.virtualCanvas, db: store.db, runtimeCanvas: runtimeCanvas
             )
+        }
+    }
+
+    /// Both button taps and review launches construct the destination here.
+    /// The encyclopedia cannot be presented with a previous or partial session.
+    @MainActor
+    private enum MenuPresentation {
+        case screen(MenuScreen)
+        case encyclopedia(EncyclopediaSession)
+
+        init(_ screen: MenuScreen, db: Db, initialCategory: EncyclopediaSession.Category? = nil) {
+            if screen == .encyclopedia {
+                do {
+                    self = .encyclopedia(try EncyclopediaSession(db: db, initialCategory: initialCategory))
+                } catch {
+                    fatalError("Invalid authored encyclopedia content: \(error)")
+                }
+            } else {
+                self = .screen(screen)
+            }
         }
     }
 }

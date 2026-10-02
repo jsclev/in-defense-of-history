@@ -25,7 +25,7 @@ WITH ranked AS (
     SELECT evaluation_id,tower_id,COUNT(*) AS quantity FROM initial GROUP BY evaluation_id,tower_id
 ), later AS (
     SELECT evaluation_id,slot,tower_id,ordinal+1 AS placement_number
-    FROM ga_placement WHERE phase='subsequent' 
+    FROM ga_placement WHERE phase='subsequent'
 ), counts AS (
     SELECT p.*,
       (SELECT COUNT(*) FROM initial a WHERE a.evaluation_id=p.placement_evaluation_id

@@ -4,17 +4,57 @@ cd "$(dirname "$0")" || exit 1
 
 database=in_defense_of_history.sqlite
 sim_fresh_output=0
-if [ "$#" -ne 0 ]; then
-    if [ "$#" -ne 2 ] || [ "$1" != --output ]; then
-        echo "Usage: $0 [--output /absolute/path/to/new.sqlite]" >&2
-        exit 2
-    fi
-    database="$2"
-    sim_fresh_output=1
-    case "$database" in
-        /*) ;;
-        *) echo "--output requires an absolute path" >&2; exit 2 ;;
+genetic_seed_directory=${LIBERTY_LINE_GENETIC_SEEDS-"$(cd ../.. && pwd)/in-defense-of-history-data/GeneticSolutions"}
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --output|--genetic-seeds)
+            if [ "$#" -lt 2 ]; then
+                echo "$1 requires an absolute path" >&2
+                exit 2
+            fi
+            case "$2" in
+                /*) ;;
+                *) echo "$1 requires an absolute path" >&2; exit 2 ;;
+            esac
+            if [ "$1" = --output ]; then
+                database="$2"
+                sim_fresh_output=1
+            else
+                genetic_seed_directory="$2"
+            fi
+            shift 2
+            ;;
+        *)
+            echo "Usage: $0 [--output /absolute/path/to/new.sqlite] [--genetic-seeds /absolute/path/to/GeneticSolutions]" >&2
+            exit 2
+            ;;
     esac
+done
+case "$genetic_seed_directory" in
+    /*) ;;
+    *) echo "LIBERTY_LINE_GENETIC_SEEDS requires an absolute path" >&2; exit 2 ;;
+esac
+# Generated catalogs and playback data live outside source control. Validate
+# their location before replacing the existing database.
+if [ ! -r "$genetic_seed_directory/genetic_solutions.sql" ]; then
+    echo "Missing generated GA catalog: $genetic_seed_directory/genetic_solutions.sql" >&2
+    echo "Set --genetic-seeds or LIBERTY_LINE_GENETIC_SEEDS to the external GeneticSolutions directory." >&2
+    exit 1
+fi
+recording_seed_count=0
+for recording_seed in "$genetic_seed_directory"/GeneticRecordings/*.sql; do
+    [ -f "$recording_seed" ] || continue
+    if [ ! -r "$recording_seed" ]; then
+        echo "Unreadable GA recording: $recording_seed" >&2
+        exit 1
+    fi
+    recording_seed_count=$((recording_seed_count + 1))
+done
+if [ "$recording_seed_count" -eq 0 ]; then
+    echo "Missing generated GA recordings: $genetic_seed_directory/GeneticRecordings/*.sql" >&2
+    exit 1
+fi
+if [ "$sim_fresh_output" -eq 1 ]; then
     # The installer builds a fresh database without replacing development data.
     if [ -e "$database" ] || [ -L "$database" ]; then
         echo "Refusing to overwrite --output database: $database" >&2
@@ -145,8 +185,8 @@ sqlite3 -bail "$database" < DML/Simulator/sim_enemy_type_bounty.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_melee_units.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_tower_ranges.sql
 sqlite3 -bail "$database" < DML/Simulator/sim_tower_sweep.sql
-sqlite3 -bail "$database" < DML/genetic_solutions.sql
-for recording_seed in DML/GeneticRecordings/*.sql; do
+sqlite3 -bail "$database" < "$genetic_seed_directory/genetic_solutions.sql"
+for recording_seed in "$genetic_seed_directory"/GeneticRecordings/*.sql; do
     [ -f "$recording_seed" ] || continue
     sqlite3 -bail "$database" < "$recording_seed"
 done

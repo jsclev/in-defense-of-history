@@ -371,9 +371,15 @@ be treated as validated solutions or mixed into the held-out ranking.
 After selection, publication checks current authored battle content, records one representative seed per
 solution, and verifies each recording can be read to completion. Demonstration
 differences are stored separately. The catalog SQL preserves advice for other
-levels. Install that SQL as `Db/DML/genetic_solutions.sql` and the three recording
-SQL files as `Db/DML/GeneticRecordings/*.sql`, then run `Db/create_db.sh` before
-the normal device build. Phone previews read those recordings without running
+levels. Keep these generated exports outside the source repository in
+`../in-defense-of-history-data/GeneticSolutions`: the catalog is
+`genetic_solutions.sql` and the three recording SQL files are
+`GeneticRecordings/*.sql`. Run `Db/create_db.sh` before the normal device build;
+it requires the external catalog and recording exports before rebuilding. To use another
+external directory, pass `--genetic-seeds /absolute/path/to/GeneticSolutions`.
+Database creation, installation and host tests also accept the absolute
+`LIBERTY_LINE_GENETIC_SEEDS` environment override for other checkout layouts. These exports
+must not be committed to Git. Phone previews read those recordings without running
 combat. Device database validation permits only three linked demonstrations,
 rejects unrelated research history, and caps the bundle database at 128 MiB.
 The app target excludes SQL source files from its resources; only the generated
@@ -384,7 +390,7 @@ are saved before validation; validation candidates are saved after that phase,
 including partial panels when the normal budget expires. No manual SQL insert
 is needed. The CLI prints the published counts and the database path.
 
-Studies **do not update `Db/DML/genetic_solutions.sql`** or the deployed game
+Studies **do not update the external shipping catalog** or the deployed game
 database. Keep the original run database, including failed runs with saved
 candidates. A separate offline command can recover three distinct training
 leaders and validate them for the game's preview:
@@ -406,7 +412,8 @@ the original study's failed/completed status remains unchanged. The SQL output
 is written only after all three panels finish, each plan has a victory, and
 the held-out candidates still pass the same data-only diversity check.
 It contains the selected level's training and validation records. Merge this
-selection into the game's SQL seed while retaining other levels' records, then
+selection into the external `GeneticSolutions/genetic_solutions.sql` catalog
+while retaining other levels' records, then
 rebuild the game database with `Db/create_db.sh`.
 
 The snapshot records the battle content used by the search. Subsequent changes

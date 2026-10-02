@@ -22,10 +22,16 @@ and keep all workers, recordings, candidates and relational checkpoints in the r
 database, named with the build version plus a unique invocation suffix.
 Starting money defaults to the selected level's DAO-loaded value from this
 database; an explicit `--starting-money` flag is an experiment override.
-Do not export or change the game's `Db/DML/genetic_solutions.sql` during a study;
+Do not export or change the game's external `GeneticSolutions/genetic_solutions.sql` during a study;
 importing selected solutions from a run database is a separate, future workflow.
 The dedicated invocation database is the explicit exception to the desktop
 database-location rule below.
+
+Generated GA catalogs and playback SQL belong in the sibling
+`../in-defense-of-history-data/GeneticSolutions` directory, outside this Git
+repository. `Db/create_db.sh` reads them there; `--genetic-seeds` or
+`LIBERTY_LINE_GENETIC_SEEDS` supplies an alternate absolute directory. Keep
+diagnostic reports, logs, compiled probes and caches outside the repository too.
 
 Standing user instruction (September 26, 2026): CLI deployment starts over.
 Remove the installed `~/bin/LibertyLineSimulator` executable and all old

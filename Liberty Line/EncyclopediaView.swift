@@ -3,20 +3,18 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct EncyclopediaView: View {
     @EnvironmentObject private var settings: PlayerSettingsStore
-    let db: Db
+    let session: EncyclopediaSession
     let runtimeCanvas: RuntimeCanvas
     let onExit: () -> Void
 
-    enum Category {
-        case towers, enemies
-    }
+    @State private var selectedCategory: EncyclopediaSession.Category?
 
-    @State private var selectedCategory: Category?
-    @State private var arsenal: DesignArsenal?
-    @State private var demonstrations: TowerDemonstrationCatalog?
-    @State private var enemies: [EnemyEncyclopediaEntry]?
-    @State private var enemyDemonstrations: EnemyDemonstrationCatalog?
-    @State private var rules: CombatRules?
+    init(session: EncyclopediaSession, runtimeCanvas: RuntimeCanvas, onExit: @escaping () -> Void) {
+        self.session = session
+        self.runtimeCanvas = runtimeCanvas
+        self.onExit = onExit
+        _selectedCategory = State(initialValue: session.initialCategory)
+    }
 
     private static let layoutSize = CGSize(width: 3840, height: 2160)
     private static let titleFrame = CGRect(x: 1220, y: 8, width: 1400, height: 622)
@@ -25,12 +23,13 @@ struct EncyclopediaView: View {
 
     var body: some View {
         Group {
-            if selectedCategory == .towers, let arsenal, let demonstrations {
-                TowerEncyclopediaView(arsenal: arsenal, demonstrations: demonstrations, runtimeCanvas: runtimeCanvas,
-                    onExit: onExit)
-            } else if selectedCategory == .enemies, let enemies, let enemyDemonstrations, let rules {
-                EnemyEncyclopediaView(entries: enemies, rules: rules, demonstrations: enemyDemonstrations,
-                    runtimeCanvas: runtimeCanvas, onExit: onExit)
+            if selectedCategory == .towers {
+                TowerEncyclopediaView(arsenal: session.arsenal, demonstrations: session.demonstrations, runtimeCanvas: runtimeCanvas,
+                    isReviewSession: session.initialCategory == .towers, onExit: onExit)
+            } else if selectedCategory == .enemies {
+                EnemyEncyclopediaView(entries: session.enemies, rules: session.arsenal.combatRules,
+                    demonstrations: session.enemyDemonstrations,
+                    runtimeCanvas: runtimeCanvas, isReviewSession: session.initialCategory == .enemies, onExit: onExit)
             } else {
                 categoryPicker
             }
@@ -47,22 +46,6 @@ struct EncyclopediaView: View {
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("encyclopedia-screen")
         .accessibilityValue(settings.values.showDebugLayoutGuides ? "Layout guides on" : "Layout guides off")
-        .onAppear {
-            guard arsenal == nil else { return }
-            do {
-                arsenal = try db.towerTypeDao.getDesignArsenal()
-                demonstrations = TowerDemonstrationCatalog(db: db)
-                enemies = try db.enemyTypeDao.getEncyclopedia()
-                enemyDemonstrations = EnemyDemonstrationCatalog(db: db)
-                rules = try db.combatRulesDao.get()
-            }
-            catch { fatalError("Invalid authored encyclopedia content: \(error)") }
-            #if DEBUG
-            if CommandLine.arguments.contains("--tower-encyclopedia-review") ||
-                CommandLine.arguments.contains("--tower-demo-review") { selectedCategory = .towers }
-            if CommandLine.arguments.contains("--enemy-encyclopedia-review") { selectedCategory = .enemies }
-            #endif
-        }
         #if DEBUG
         .task(id: selectedCategory) { await captureGuidesReview() }
         #endif
@@ -141,10 +124,10 @@ struct EncyclopediaView: View {
                       y: origin.y + frame.midY * scale)
     }
 
-    private func categoryButton(_ category: Category, asset: String, frame: CGRect,
+    private func categoryButton(_ category: EncyclopediaSession.Category, asset: String, frame: CGRect,
                                 scale: CGFloat, origin: CGPoint) -> some View {
         Button {
-            selectedCategory = selectedCategory == category ? nil : category
+            selectedCategory = category
         } label: {
             Image(selectedCategory == category ? asset + "_selected" : asset)
                 .resizable()
@@ -166,6 +149,7 @@ private struct TowerEncyclopediaView: View {
     let families: [DesignArsenal.Definition]
     let demonstrations: TowerDemonstrationCatalog
     let runtimeCanvas: RuntimeCanvas
+    let isReviewSession: Bool
     let onExit: () -> Void
 
     @State private var familyID: UUID
@@ -183,10 +167,11 @@ private struct TowerEncyclopediaView: View {
 
 
     init(arsenal: DesignArsenal, demonstrations: TowerDemonstrationCatalog, runtimeCanvas: RuntimeCanvas,
-         onExit: @escaping () -> Void) {
+         isReviewSession: Bool, onExit: @escaping () -> Void) {
         self.arsenal = arsenal
         self.demonstrations = demonstrations
         self.runtimeCanvas = runtimeCanvas
+        self.isReviewSession = isReviewSession
         self.onExit = onExit
         // Match the established build-menu order: ranged, melee, artillery,
         // special, supply. All content still comes from the authored arsenal.
@@ -233,7 +218,7 @@ private struct TowerEncyclopediaView: View {
         }
         .onChange(of: tierID) { _, _ in detailPage = 0 }
         #if DEBUG
-        .task { await captureDeviceReview() }
+        .task { if isReviewSession { await captureDeviceReview() } }
         #endif
     }
 
@@ -294,8 +279,7 @@ private struct TowerEncyclopediaView: View {
             #if DEBUG
             .onGeometryChange(for: CGRect.self) { $0.frame(in: .global) } action: { reviewListFrame = $0 }
             .onChange(of: tierID) { _, id in
-                if CommandLine.arguments.contains("--tower-encyclopedia-review") ||
-                    CommandLine.arguments.contains("--tower-demo-review") {
+                if isReviewSession {
                     proxy.scrollTo(id, anchor: .center)
                 }
             }
@@ -755,6 +739,8 @@ private struct TowerEncyclopediaView: View {
                                         "density": window.screen.scale]
             try JSONSerialization.data(withJSONObject: report, options: [.prettyPrinted, .sortedKeys])
                 .write(to: directory.appendingPathComponent("result.json"))
+        } catch is CancellationError {
+            // Leaving the initial review visit is ordinary navigation.
         } catch {
             fatalError("Tower encyclopedia device review failed: \(error)")
         }

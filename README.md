@@ -55,6 +55,15 @@ before deploying; the installer refuses to remove files that are in use.
 Keep the new starter beside the executable. Saved run databases are preserved;
 each invocation copies the fresh starter into its own new database.
 
+Generated GA catalog and playback exports live outside the source repository in
+`../in-defense-of-history-data/GeneticSolutions`. Database creation imports
+`genetic_solutions.sql` and `GeneticRecordings/*.sql` from that directory and
+requires the catalog and recording exports before rebuilding. To use another external location,
+pass `--genetic-seeds /absolute/path/to/GeneticSolutions` to `Db/create_db.sh`,
+or set `LIBERTY_LINE_GENETIC_SEEDS` for database creation, installation and host
+tests from a different checkout layout. Keep generated
+catalogs, recordings, study databases and diagnostic reports out of Git.
+
 Let a run finish to save its validated candidates. Ctrl-C stops it early and
 retains already committed data, but may leave validation unfinished. Keep the
 finished database for the later game-import workflow.

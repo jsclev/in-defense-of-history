@@ -55,7 +55,8 @@ All 15 bundled maps have explicit points. The migration reused previously
 recorded pair/minimum positions for levels 1–14 and the corrected Charleston
 positions, verifying their source exit coordinates against each map. Provenance
 and coordinates are recorded in
-`reports/hero-geojson-only-2026-09-10/map-migration.json`. Historical placement
+`../database-archives/repo-cleanup-2026-10-02-a0f3fa3/Tools/reports/hero-geojson-only-2026-09-10/map-migration.json`
+(relative to the repository root). Historical placement
 algorithms and their reports are superseded.
 
 ## Verification
@@ -72,5 +73,5 @@ points are honored. No Simulator is used.
 
 ```sh
 python3 Tools/check_hero_exits_on_device.py --device PHYSICAL_IPHONE_ID \
-  --all-levels --custom-starts --output Tools/reports/hero-geojson-only/device
+  --all-levels --custom-starts --output "$(mktemp -d /tmp/td-hero-geojson.XXXXXX)"
 ```

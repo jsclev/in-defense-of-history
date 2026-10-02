@@ -65,7 +65,7 @@ Validation:
 
 ```sh
 swift test --scratch-path /tmp/td-presentation-tests --filter 'ReinforcementTests|LevelViewportTests|PresentationStackTests'
-python3 Tools/check_reinforcement_runner.py --output Tools/reports/reinforcements-2026-09-08
+python3 Tools/check_reinforcement_runner.py --output "$(mktemp -d /tmp/td-reinforcements.XXXXXX)"
 ```
 
 The runner probe extracts the current deployment/expiration/publishing methods
