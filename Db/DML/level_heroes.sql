@@ -6,7 +6,7 @@ INSERT INTO level_hero (id, level_info_id, hero_id, enemy_path_index) VALUES
     (
         SELECT li.id FROM level_info AS li
         INNER JOIN campaign AS c ON li.campaign_id = c.id
-        WHERE li.level_name = 'Charleston' AND c.campaign_name = 'Main'
+        WHERE li.level_name = 'Yorktown' AND c.campaign_name = 'Main'
     ),
     (SELECT id FROM hero WHERE short_name = 'George Washington'),
     0
@@ -16,7 +16,7 @@ INSERT INTO level_hero (id, level_info_id, hero_id, enemy_path_index) VALUES
     (
         SELECT li.id FROM level_info AS li
         INNER JOIN campaign AS c ON li.campaign_id = c.id
-        WHERE li.level_name = 'Charleston' AND c.campaign_name = 'Main'
+        WHERE li.level_name = 'Yorktown' AND c.campaign_name = 'Main'
     ),
     (SELECT id FROM hero WHERE short_name = 'Henry Knox'),
     1

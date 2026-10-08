@@ -41,7 +41,7 @@ final class BalanceAnalysisTests: XCTestCase {
         try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
     }
     private func study(_ db: Db) throws -> AuthoredMoneyStudy {
-        try AuthoredMoneyStudy(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        try AuthoredMoneyStudy(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Yorktown")))
     }
     private func sql(_ text: String, _ f: AuthoredDatabaseFixture) throws {
         guard sqlite3_exec(f.connection, text, nil, nil, nil) == SQLITE_OK else {

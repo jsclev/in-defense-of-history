@@ -135,6 +135,7 @@ sqlite3 -bail "$database" < DML/Levels/level_38_kings_mountain.sql
 sqlite3 -bail "$database" < DML/Levels/level_39_cowpens.sql
 sqlite3 -bail "$database" < DML/Levels/level_40_guilford_courthouse.sql
 sqlite3 -bail "$database" < DML/Levels/level_41_eutaw_springs.sql
+sqlite3 -bail "$database" < DML/level_replay_identities.sql
 sqlite3 -bail "$database" < DML/level_tower_unlocks.sql
 sqlite3 -bail "$database" < DML/encyclopedia_demo.sql
 sqlite3 -bail "$database" < DML/enemy_types.sql

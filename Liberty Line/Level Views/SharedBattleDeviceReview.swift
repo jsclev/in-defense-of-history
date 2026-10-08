@@ -29,8 +29,8 @@ struct SharedBattleDeviceReview: View {
                                      userInfo: [NSLocalizedDescriptionKey: message]) }
         }
         do {
-            guard let id = try store.db.levelInfoDao.getIdBy(levelName: "Charleston") else {
-                throw DbError.Db(message: "Missing Charleston for shared battle verification")
+            guard let id = try store.db.levelInfoDao.getIdBy(levelName: "Yorktown") else {
+                throw DbError.Db(message: "Missing Yorktown for shared battle verification")
             }
             // Exercise AI through the same live SQLite-backed settings as the
             // pause screen, before both adapters load their battle snapshots.

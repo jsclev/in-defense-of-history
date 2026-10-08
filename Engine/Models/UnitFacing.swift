@@ -30,10 +30,25 @@ public enum UnitFacing: Int, CaseIterable, Sendable {
     }
 }
 
+/// Deployment identity, independent of combat stats and tower upgrades.
+/// Tower slots are nonnegative; summoned garrisons have stable negative slots
+/// and keep that sign in the soldier IDs written to historical recordings.
+public enum MeleeUnitFamily: String, Codable, CaseIterable, Sendable {
+    case towerMilitia = "militia_soldier"
+    case reinforcement = "reinforcement_soldier"
+
+    public init(garrisonSlot: Int) {
+        self = garrisonSlot < 0 ? .reinforcement : .towerMilitia
+    }
+
+    public init(recordedSoldierID: Int) {
+        self = recordedSoldierID < 0 ? .reinforcement : .towerMilitia
+    }
+}
+
 public enum MeleeWalkCycle {
-    public static let frameCount = 64
+    public static let frameCount = 6
     public static let cycleDistance: Double = 48
-    public static let standingFrame = 16
     public static let walkingThreshold: Double = 0.5
 
     public static func interpolatedPhase(currentPhase: Double,
@@ -47,12 +62,53 @@ public enum MeleeWalkCycle {
             .truncatingRemainder(dividingBy: cycleDistance)
     }
 
-    public static func assetName(facing: UnitFacing,
+    public static func assetName(family: MeleeUnitFamily, facing: UnitFacing,
                                  walkPhase: Double,
                                  isWalking: Bool) -> String {
+        guard isWalking else { return MeleeAttackCycle.assetName(family: family, facing: facing, frame: 0) }
+        let phase = (walkPhase.truncatingRemainder(dividingBy: cycleDistance) + cycleDistance)
+            .truncatingRemainder(dividingBy: cycleDistance)
         let pitch = cycleDistance / Double(frameCount)
-        let frame = isWalking ? Int(walkPhase / pitch) % frameCount : standingFrame
-        return "militia_soldier_walk_\(facing.assetSuffix)_\(frame)"
+        let frame = min(frameCount - 1, Int(phase / pitch))
+        return "\(family.rawValue)_walk_\(facing.assetSuffix)_\(frame)"
+    }
+}
+
+/// Presentation only. The engine's authored swing countdown remains the sole
+/// clock for damage. Contact is shown on that tick, followed by recovery, a
+/// quiet guard, and anticipation of the next real swing.
+public enum MeleeAttackCycle {
+    public static let frameCount = 6
+
+    public static func assetName(family: MeleeUnitFamily, facing: UnitFacing, frame: Int) -> String {
+        precondition((0..<frameCount).contains(frame))
+        return "\(family.rawValue)_attack_\(facing.assetSuffix)_\(frame)"
+    }
+
+    public static func assetName(family: MeleeUnitFamily, facing: UnitFacing, walkPhase: Double,
+                                 isWalking: Bool, isFighting: Bool,
+                                 swingTicksLeft: Int, attackInterval: Double,
+                                 alpha: Double = 1) -> String {
+        // Travelling and spacing use actual steps rather than playing attacks
+        // while the soldier slides between positions.
+        if isWalking {
+            return MeleeWalkCycle.assetName(family: family, facing: facing, walkPhase: walkPhase, isWalking: true)
+        }
+        let intervalTicks = BattleGeometry.fireTicks(attackInterval)
+        let elapsed = max(0, Double(intervalTicks - swingTicksLeft)
+                          - (1 - min(max(alpha, 0), 1))) * SimClock.dt
+        let poseSeconds = min(0.09, Double(intervalTicks) * SimClock.dt / 8)
+        // Recovery survives a killing blow or disengagement; anticipation
+        // requires an opponent so a waiting soldier never attacks empty air.
+        if swingTicksLeft > 0, elapsed < poseSeconds * 3 {
+            return assetName(family: family, facing: facing, frame: 3 + min(2, Int(elapsed / poseSeconds)))
+        }
+        if isFighting {
+            let remaining = (Double(swingTicksLeft) + (1 - min(max(alpha, 0), 1))) * SimClock.dt
+            if remaining <= poseSeconds { return assetName(family: family, facing: facing, frame: 2) }
+            if remaining <= poseSeconds * 2 { return assetName(family: family, facing: facing, frame: 1) }
+        }
+        return assetName(family: family, facing: facing, frame: 0)
     }
 }
 

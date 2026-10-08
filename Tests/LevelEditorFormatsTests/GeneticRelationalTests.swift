@@ -5,7 +5,7 @@ import SQLite3
 final class GeneticRelationalTests: XCTestCase {
     private func setup() throws -> (AuthoredDatabaseFixture, AuthoredMoneyStudy, UUID, GeneticSolutionContext) {
         let f = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let id = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let study = try AuthoredMoneyStudy(db: f.db, levelID: id)
         let context = try GeneticSolutionContext(study: study, db: f.db, startingMoney: study.level.startingMoney, bountyFraction: 1, maxGameSeconds: 1800)
         return (f,study,UUID(),context)

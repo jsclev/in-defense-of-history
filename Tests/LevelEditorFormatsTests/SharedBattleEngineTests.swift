@@ -7,7 +7,7 @@ final class SharedBattleEngineTests: XCTestCase {
         let db = Db(dbPath: url.path, fullRefresh: false,
                     levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()))
         defer { db.close() }
-        return try BattleContent(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        return try BattleContent(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Yorktown")))
     }
 
     @MainActor private func walker(_ game: BattleEngine, id: Int = 0, position: CGPoint = .zero) throws -> BattleEngine.Walker {
@@ -163,7 +163,7 @@ final class SharedBattleEngineTests: XCTestCase {
         let db = Db(dbPath: url.path, fullRefresh: false,
                     levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()))
         defer { db.close() }
-        let study = try AuthoredMoneyStudy(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let study = try AuthoredMoneyStudy(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Yorktown")))
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
         try await MainActor.run {
             XCTAssertEqual(study.level.startingMoney, 670)

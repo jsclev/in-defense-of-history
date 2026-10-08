@@ -124,6 +124,8 @@ struct BattleEventUnit: Codable, Equatable {
     let hero: Bool
     let baseAsset: String
     let maxHP: Double
+    /// Absent in historical recordings, which did not record melee swings.
+    var attackInterval: Double? = nil
 }
 
 struct BattleEventStatus: Codable, Equatable {
@@ -257,21 +259,26 @@ struct BattleEventState {
         projectileNumbers = projectileValues
         var unitDefinitions: [BattleEventUnit] = [], unitValues: [Double] = []
         let unitCount = engine.garrisonsBySlot.values.reduce(engine.heroPosts.count) { $0 + $1.units.count }
-        unitDefinitions.reserveCapacity(unitCount); unitValues.reserveCapacity(unitCount * 7)
-        func unit(id: Int, hero: Bool, asset: String, unit: MilitiaUnit, maxHP: Double, respawned: Bool) {
+        unitDefinitions.reserveCapacity(unitCount); unitValues.reserveCapacity(unitCount * 8)
+        func unit(id: Int, hero: Bool, asset: String, unit: MilitiaUnit, maxHP: Double,
+                  respawned: Bool, attackInterval: Double? = nil) {
             let key = BattleEventUnitKey(hero: hero, id: id)
             let target = engine.recordedFacingTargets[key]
-            unitDefinitions.append(BattleEventUnit(id: id, hero: hero, baseAsset: asset, maxHP: maxHP))
+            unitDefinitions.append(BattleEventUnit(id: id, hero: hero, baseAsset: asset,
+                                                   maxHP: maxHP, attackInterval: attackInterval))
             unitValues += [unit.position.x, unit.position.y, unit.hp, target == nil ? 0 : 1,
-                           target?.x ?? 0, target?.y ?? 0, respawned ? 1 : 0]
+                           target?.x ?? 0, target?.y ?? 0, respawned ? 1 : 0,
+                           Double(unit.swingTicksLeft)]
         }
         for slot in engine.garrisonsBySlot.keys.sorted() {
             guard let garrison = engine.garrisonsBySlot[slot],
                   let resolved = engine.garrisonMelee(slot: slot, garrison: garrison) else { continue }
             for (index, soldier) in garrison.units.enumerated() where soldier.state != .dead {
                 let id = slot * 8 + index
-                unit(id: id, hero: false, asset: "", unit: soldier, maxHP: resolved.stats.hp,
-                     respawned: engine.militiaRespawnedIDs.contains(id))
+                unit(id: id, hero: false, asset: MeleeUnitFamily(garrisonSlot: slot).rawValue,
+                     unit: soldier, maxHP: resolved.stats.hp,
+                     respawned: engine.militiaRespawnedIDs.contains(id),
+                     attackInterval: resolved.stats.attackInterval)
             }
         }
         for (id, post) in engine.heroPosts.enumerated() where post.unit.state != .dead {

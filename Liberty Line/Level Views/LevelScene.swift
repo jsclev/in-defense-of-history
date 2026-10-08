@@ -128,6 +128,7 @@ struct LevelScene<GroundOverlay: View, MapOverlay: View>: View {
     let state: LevelSceneState
     let canvas: RuntimeCanvas
     var debugMode = false
+    var exitPositions: [CGPoint] = []
     var onSelectHero: ((Int) -> Void)? = nil
     @ViewBuilder var groundOverlay: () -> GroundOverlay
     @ViewBuilder var mapOverlay: () -> MapOverlay
@@ -161,11 +162,14 @@ struct LevelScene<GroundOverlay: View, MapOverlay: View>: View {
                 .animation(.easeOut(duration: 0.55), value: state.isDefeated)
             mapOverlay()
             demolitionSites(in: projection)
+            setup.mapArt.occlusion(in: projection)
+            // Keep crowns clear of endpoint foliage, with heroes standing over them.
+            LevelExitMarkersView(positions: exitPositions, projection: projection,
+                                 spriteSize: sprites.points(MapSpriteSizing.exitMarker))
             HeroMapLayer(heroes: state.heroes, sprites: sprites, projection: projection,
                 aspectRatio: setup.heroAspectRatio,
                 onSelect: { onSelectHero?($0) })
                 .allowsHitTesting(onSelectHero != nil)
-            setup.mapArt.occlusion(in: projection)
         }
         .frame(width: canvas.physicalRect.width, height: canvas.physicalRect.height, alignment: .topLeading)
     }

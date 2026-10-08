@@ -10,7 +10,7 @@ final class GeneticSolutionDAOTests: XCTestCase {
         try execute("PRAGMA foreign_keys=ON; DELETE FROM genetic_solution;", fixture)
         return fixture
     }
-    private func study(_ fixture: AuthoredDatabaseFixture, level: String = "Charleston") throws -> AuthoredMoneyStudy {
+    private func study(_ fixture: AuthoredDatabaseFixture, level: String = "Yorktown") throws -> AuthoredMoneyStudy {
         try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: level)))
     }
     private func context(_ study: AuthoredMoneyStudy, _ fixture: AuthoredDatabaseFixture, money: Int? = nil,

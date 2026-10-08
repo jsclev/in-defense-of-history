@@ -14,8 +14,13 @@ extension AuthoredMoneyStudy {
              "prerequisite": definition.prerequisite.map { $0.rawValue as Any } ?? NSNull(),
              "parameters": Dictionary(uniqueKeysWithValues: definition.parameters.map { ($0.key.rawValue, $0.value) })]
         }
+        // A presentation rename must not invalidate otherwise identical saved
+        // evidence. Keep the original authored name, without excluding any
+        // gameplay fields or relaxing the existing full-content comparison.
+        var replayLevel = try json(level) as! [String: Any]
+        replayLevel["name"] = try db.levelInfoDao.getReplayIdentityName(id: level.id)
         var content: [String: Any] = [
-            "engine": "shared-game-engine", "level": try json(level),
+            "engine": "shared-game-engine", "level": replayLevel,
             "mapGeoJSON": try JSONSerialization.jsonObject(with: db.levelGeoJSONDao.sourceData(mapImageName: level.mapImageName)),
             "unlocks": Dictionary(uniqueKeysWithValues: battle.unlocks.map { ($0.key.rawValue, $0.value) }),
             "canvas": try json(battle.virtualCanvas),

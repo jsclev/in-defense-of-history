@@ -31,29 +31,33 @@ N, H, D, S = "queens_ranger", "highlander", "light_dragoon", "spy"
 G, A, O, B, T = "grenadier", "royal_artillery", "mounted_officer", "foot_guards", "regimental_drummer"
 
 # Each group is (enemy, count, route, seconds after wave start, individual interval).
-# Introduce alternate roads before simultaneous, sustained infantry columns.
-# Compact regulars make shell coverage valuable at both approaches; small elite
-# and cavalry groups preserve jobs for direct fire and slowing defenses.
+# Introduce routes and active specialist mechanics before combining them.
+# Routes 1 and 3 are short: the first concealed and mounted packets use longer
+# approaches. Compact regulars still reward artillery; covered skirmishers,
+# disciplined elites, and riders give direct fire and blocking distinct jobs.
+# Drummers and spies are ordinary bodies here, not unimplemented support powers.
 PLAN = [
-    ("Entrance 0: lower road", [(M,10,0,0,1.0), (R,6,0,7,1.3)]),
-    ("Entrance 1: upper road", [(M,8,1,0,.95), (R,6,1,5,1.25), (L,4,0,10,.85)]),
-    ("Both entrances", [(R,8,0,0,1.0), (F,6,1,3,1.2), (N,7,0,10,.8)]),
-    ("Entrance 0: upper road", [(L,8,2,0,.8), (J,6,0,5,1.0), (R,8,1,8,.95), (T,1,2,2,1)]),
-    ("Entrance 1: central road", [(M,8,3,0,.9), (F,8,0,2,1.0), (H,6,1,9,1.2), (T,1,0,3,1), (T,1,3,4,1)]),
-    ("Entrance 0: central road", [(F,10,4,0,.9), (N,8,2,5,.8), (L,6,3,9,.85), (S,3,0,12,1.5)]),
-    ("Entrance 1: right road", [(D,6,5,0,1.25), (R,10,2,1,.9), (J,6,3,9,1.0), (T,2,2,3,3)]),
-    ("Sustained two-front assault", [(R,48,0,0,.25), (R,48,1,0,.25), (F,6,4,12,.5), (F,6,3,12,.5), (N,6,5,16,.75)]),
-    ("Assault troops and riders", [(G,4,0,0,1.5), (R,48,0,3,.25), (R,48,1,3,.25), (L,8,2,12,.6), (D,4,5,18,1)]),
-    ("Officers lead the columns", [(O,1,4,0,1), (O,1,5,0,1), (R,40,4,2,.28), (R,40,5,2,.28), (F,8,2,16,.5), (N,6,3,20,.7)]),
-    ("The siege train advances", [(A,2,4,0,3.5), (A,2,5,0,3.5), (R,40,0,2,.28), (R,40,1,2,.28), (H,8,4,16,.8), (D,4,5,20,1)]),
-    ("Guards behind the infantry", [(R,48,0,0,.26), (R,48,1,0,.26), (B,2,0,15,2.2), (B,2,1,15,2.2), (G,4,1,18,1.3), (L,8,4,20,.6), (N,8,3,20,.65)]),
-    ("Columns and a cavalry flank", [(R,96,4,0,.26), (R,96,5,0,.26), (B,2,4,15,2.1), (B,2,5,15,2.1), (G,4,3,18,1.3), (D,6,2,20,.9), (S,2,0,23,1.3), (S,2,1,23,1.3)]),
-    ("All roads under attack", [(R,48,0,0,.25), (R,48,1,0,.25), (B,2,0,14,2.1), (B,2,1,14,2.1), (O,2,4,16,2.2), (O,2,5,16,2.2), (H,4,4,20,.8), (H,4,5,20,.8), (F,6,2,24,.5), (F,6,3,24,.5), (D,4,1,28,.9)]),
-    ("Final sustained assault", [(R,64,0,0,.25), (R,64,1,0,.25), (B,2,0,17,2.2), (B,2,1,17,2.2), (A,2,4,17,3.5), (A,2,5,17,3.5), (R,16,2,21,.25), (R,16,3,21,.25), (F,8,4,26,.4), (F,8,5,26,.4), (O,1,4,26,1), (O,1,5,26,1), (D,2,2,32,.7), (D,2,3,32,.7), ("clinton_siege",1,4,38,1)]),
+    ("Lower-road reconnaissance", [(M,12,0,0,.9), (R,6,0,11,1.1)]),
+    ("Upper-road landing", [(M,10,1,0,.9), (R,8,1,9,1), (L,4,0,15,1.3)]),
+    ("Crossing infantry", [(R,12,0,0,.65), (F,8,1,5,1), (L,8,2,14,.9)]),
+    ("Central-road skirmish", [(R,16,1,0,.6), (M,10,3,5,.75), (T,2,1,6,5), (J,6,2,16,1.1)]),
+    ("Concealed advance", [(R,14,0,0,.55), (R,14,3,4,.65), (F,8,1,10,.9), (N,4,2,20,2)]),
+    ("Highland pressure", [(R,18,4,0,.55), (R,18,1,5,.6), (H,6,3,16,1.4), (L,4,2,22,1)]),
+    ("The cavalry road", [(R,22,2,0,.5), (R,22,3,5,.55), (F,6,0,14,.9), (D,4,5,22,2)]),
+    ("First reserve signal", [(R,26,4,0,.45), (R,26,5,4,.5), (O,1,4,8,1), (J,5,3,18,1.1), (M,4,0,26,.8)]),
+    ("Assault and infiltration", [(G,6,4,0,1.8), (R,26,0,3,.4), (R,26,1,6,.45), (H,6,3,20,1.3), (N,6,2,28,1.5)]),
+    ("Divided command", [(R,30,4,0,.4), (R,30,5,3,.45), (O,1,4,7,1), (F,8,0,12,.8), (O,1,5,17,1), (J,6,1,23,1), (D,4,2,32,1.6)]),
+    ("The siege train", [(A,2,4,0,5), (R,32,0,3,.35), (R,32,1,6,.4), (G,6,3,12,1.5), (H,8,2,23,1.1), (F,8,5,30,.75)]),
+    ("Guards and outriders", [(B,2,0,0,3), (B,2,1,4,3), (R,36,4,2,.35), (R,36,5,5,.4), (N,6,2,16,1.6), (J,8,3,23,.9), (D,6,5,32,1.3)]),
+    ("Relief columns", [(R,40,0,0,.3), (R,40,1,4,.35), (O,2,4,7,12), (F,8,4,12,.7), (G,6,3,18,1.5), (H,6,5,27,1.1), (N,6,2,34,1.4)]),
+    ("The siege closes", [(A,2,4,0,5), (A,2,5,3,5), (R,44,4,2,.3), (R,44,5,6,.35), (B,2,0,15,3), (B,2,1,18,3), (L,8,2,26,.8), (S,2,0,28,2), (S,2,1,31,2), (D,8,3,35,1.2)]),
+    # The boss enters early on the longest road, with separated escort pulses
+    # through second 50. No concealed packet competes with the final blocker task.
+    ("Clinton's siege detachment", [(R,40,0,0,.3), (R,40,1,4,.35), ("clinton_siege",1,4,8,1), (B,4,4,13,3), (F,8,5,18,.8), (O,2,5,21,12), (R,12,2,30,.4), (R,12,3,34,.45), (D,6,3,42,1.5), (J,4,1,47,1)]),
 ]
 # Nominal starts relative to the player's first call. Early calls shift the
 # remaining schedule relative to that wave's actual start, as WaveStartSchedule requires.
-STARTS = [0,32,66,100,135,171,208,246,285,325,366,408,451,495,540]
+STARTS = [0,32,66,102,140,180,222,266,312,358,406,454,502,550,600]
 
 
 def wave_models():
@@ -204,7 +208,8 @@ def main():
                 line['road'] = line.pop('pathIndex')
         replace_waves(native, native_waves, native=True)
     route_action = "Preserved" if args.waves_only else "Authored"
-    print(f"{route_action} {len(routes)} routes; authored 15 waves, {sum(sum(l['count'] for l in w['lines']) for w in waves)} enemies; final wave at 9:00.")
+    minutes, seconds = divmod(STARTS[-1], 60)
+    print(f"{route_action} {len(routes)} routes; authored 15 waves, {sum(sum(l['count'] for l in w['lines']) for w in waves)} enemies; final wave at {minutes}:{seconds:02d}.")
 
 
 if __name__ == "__main__":

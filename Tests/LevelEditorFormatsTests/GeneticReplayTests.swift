@@ -89,7 +89,7 @@ final class GeneticReplayTests: XCTestCase {
     @MainActor func testVisiblePlaybackBatchesMatchHeadlessEvaluation() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao:
             LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: id)
         let strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: study,
             placementIndex: 7, upgradePolicyIndex: 2, seed: 1776),
@@ -120,7 +120,7 @@ final class GeneticReplayTests: XCTestCase {
     @MainActor func testReplayRejectsChangedAndMissingAuthoredContent() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao:
             LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let study = try AuthoredMoneyStudy(db: fixture.db, levelID: id)
         let strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: study,
             placementIndex: 7, upgradePolicyIndex: 2, seed: 1776),
@@ -133,12 +133,12 @@ final class GeneticReplayTests: XCTestCase {
             executableSHA256: "retained-cli-binary", money: 660, maxGameSeconds: 2,
             starsUsed: study.battle.playerUpgrades.loadout.spentStars, bountyFraction: 1,
             heroLoadout: try GeneticHeroLoadout(content: study.battle), strategy: strategy, expected: expected)
-        XCTAssertNoThrow(try document.loadStudy(db: fixture.db, levelName: "Charleston"))
+        XCTAssertNoThrow(try document.loadStudy(db: fixture.db, levelName: "Yorktown"))
         XCTAssertEqual(sqlite3_exec(fixture.connection,
             "UPDATE tower SET cost=cost+1", nil, nil, nil), SQLITE_OK)
-        XCTAssertThrowsError(try document.loadStudy(db: fixture.db, levelName: "Charleston"))
+        XCTAssertThrowsError(try document.loadStudy(db: fixture.db, levelName: "Yorktown"))
         XCTAssertEqual(sqlite3_exec(fixture.connection,
             "DELETE FROM combat_rules", nil, nil, nil), SQLITE_OK)
-        XCTAssertThrowsError(try document.loadStudy(db: fixture.db, levelName: "Charleston"))
+        XCTAssertThrowsError(try document.loadStudy(db: fixture.db, levelName: "Yorktown"))
     }
 }

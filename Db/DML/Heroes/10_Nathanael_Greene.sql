@@ -11,7 +11,7 @@ INSERT INTO hero (
         INNER JOIN level_info AS li ON lw.level_info_id = li.id
         INNER JOIN campaign AS c ON li.campaign_id = c.id
         WHERE
-            li.level_name = 'Charleston' AND c.campaign_name = 'Main'
+            li.level_name = 'Yorktown' AND c.campaign_name = 'Main'
             AND lw.wave_index = 1
     ),
     'A patient strategist who wears the enemy down and never stays beaten.',

@@ -50,16 +50,22 @@ sprite positions are discarded, their enemies are released, and the published
 sprite list updates even when the last group disappears. Tower garrisons and
 heroes remain. A group's dead/respawning members cannot return after its expiry.
 
-The lower-left HUD button shows rounded-up seconds remaining in a badge that moves
-from top to bottom. A dark overlay recedes down the icon; the icon stays gray
-during cooldown and returns to color when ready. The frame retains its color.
-The button stays disabled throughout cooldown, and the runner independently
-rejects repeat calls without changing any deadlines. Tap the HUD button to arm
+The lower-left HUD button shows a semi-transparent black swipe over its colored
+icon during cooldown. The shade clears from top to bottom as time elapses and
+disappears when ready. The frame retains its color.
+Screen readers receive rounded-up seconds remaining. Tap the HUD button to arm
 placement, then tap a path to deploy. Tapping the button again cancels without
 starting cooldown. Invalid destinations do not deploy or spend the cooldown.
 Ordinary path taps do nothing. The temporary destination layer leaves the HUD
 corners tappable and is removed on placement/cancellation. Countdown rendering
 stays within the fixed HUD button bounds.
+
+The native button tracks touches throughout cooldown and checks availability
+on release. A press that starts just before readiness can therefore select on
+release; an earlier tap does nothing and never queues a call or resets the timer.
+The engine independently rejects unavailable deployments. Touch-down brightens
+an available button; the white outline belongs only to active placement, so
+cancelling removes it immediately.
 
 Validation:
 

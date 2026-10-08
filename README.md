@@ -1,6 +1,6 @@
 # Liberty Line Simulator
 
-Run this in Terminal to search for **level 15 (Charleston)** solutions:
+Run this in Terminal to search for **level 15 (Yorktown)** solutions:
 
 ```sh
 ~/bin/LibertyLineSimulator --level 15 --workers 8

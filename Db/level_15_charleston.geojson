@@ -22767,730 +22767,681 @@
       "lines": [
         {
           "foe": "loyalist_militia",
-          "count": 10,
+          "count": 12,
           "pathIndex": 0,
           "delay": 0,
-          "every": 1.0
+          "every": 0.9
         },
         {
           "foe": "redcoat_regular",
           "count": 6,
           "pathIndex": 0,
-          "delay": 7,
-          "every": 1.3
+          "delay": 11,
+          "every": 1.1
         }
       ]
     },
     {
-      "breather": 18.5,
+      "breather": 15.5,
       "callButtonDelay": 19,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
           "foe": "loyalist_militia",
-          "count": 8,
+          "count": 10,
           "pathIndex": 1,
           "delay": 0,
-          "every": 0.95
+          "every": 0.9
         },
         {
           "foe": "redcoat_regular",
-          "count": 6,
+          "count": 8,
           "pathIndex": 1,
-          "delay": 5,
-          "every": 1.25
+          "delay": 9,
+          "every": 1
         },
         {
           "foe": "light_infantry",
           "count": 4,
           "pathIndex": 0,
-          "delay": 10,
-          "every": 0.85
+          "delay": 15,
+          "every": 1.3
         }
       ]
     },
     {
-      "breather": 21.45,
+      "breather": 15.1,
       "callButtonDelay": 21,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
           "foe": "redcoat_regular",
-          "count": 8,
+          "count": 12,
           "pathIndex": 0,
           "delay": 0,
-          "every": 1.0
+          "every": 0.65
         },
         {
           "foe": "hessian_fusilier",
-          "count": 6,
+          "count": 8,
           "pathIndex": 1,
-          "delay": 3,
-          "every": 1.2
+          "delay": 5,
+          "every": 1
         },
-        {
-          "foe": "queens_ranger",
-          "count": 7,
-          "pathIndex": 0,
-          "delay": 10,
-          "every": 0.8
-        }
-      ]
-    },
-    {
-      "breather": 19.2,
-      "callButtonDelay": 21,
-      "autoStartCountdown": 13,
-      "earlyCallBonus": 13,
-      "lines": [
         {
           "foe": "light_infantry",
           "count": 8,
           "pathIndex": 2,
-          "delay": 0,
-          "every": 0.8
-        },
-        {
-          "foe": "regimental_drummer",
-          "count": 1,
-          "pathIndex": 2,
-          "delay": 2,
-          "every": 1
-        },
-        {
-          "foe": "hessian_jager",
-          "count": 6,
-          "pathIndex": 0,
-          "delay": 5,
-          "every": 1.0
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 8,
-          "pathIndex": 1,
-          "delay": 8,
-          "every": 0.95
-        }
-      ]
-    },
-    {
-      "breather": 20.35,
-      "callButtonDelay": 22,
-      "autoStartCountdown": 13,
-      "earlyCallBonus": 13,
-      "lines": [
-        {
-          "foe": "loyalist_militia",
-          "count": 8,
-          "pathIndex": 3,
-          "delay": 0,
+          "delay": 14,
           "every": 0.9
-        },
-        {
-          "foe": "hessian_fusilier",
-          "count": 8,
-          "pathIndex": 0,
-          "delay": 2,
-          "every": 1.0
-        },
-        {
-          "foe": "regimental_drummer",
-          "count": 1,
-          "pathIndex": 0,
-          "delay": 3,
-          "every": 1
-        },
-        {
-          "foe": "regimental_drummer",
-          "count": 1,
-          "pathIndex": 3,
-          "delay": 4,
-          "every": 1
-        },
-        {
-          "foe": "highlander",
-          "count": 6,
-          "pathIndex": 1,
-          "delay": 9,
-          "every": 1.2
         }
       ]
     },
     {
-      "breather": 21.0,
+      "breather": 15.7,
       "callButtonDelay": 23,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "hessian_fusilier",
-          "count": 10,
-          "pathIndex": 4,
-          "delay": 0,
-          "every": 0.9
-        },
-        {
-          "foe": "queens_ranger",
-          "count": 8,
-          "pathIndex": 2,
-          "delay": 5,
-          "every": 0.8
-        },
-        {
-          "foe": "light_infantry",
-          "count": 6,
-          "pathIndex": 3,
-          "delay": 9,
-          "every": 0.85
-        },
-        {
-          "foe": "spy",
-          "count": 3,
-          "pathIndex": 0,
-          "delay": 12,
-          "every": 1.5
-        }
-      ]
-    },
-    {
-      "breather": 22.0,
-      "callButtonDelay": 24,
-      "autoStartCountdown": 13,
-      "earlyCallBonus": 13,
-      "lines": [
-        {
-          "foe": "light_dragoon",
-          "count": 6,
-          "pathIndex": 5,
-          "delay": 0,
-          "every": 1.25
-        },
-        {
           "foe": "redcoat_regular",
+          "count": 16,
+          "pathIndex": 1,
+          "delay": 0,
+          "every": 0.6
+        },
+        {
+          "foe": "loyalist_militia",
           "count": 10,
-          "pathIndex": 2,
-          "delay": 1,
-          "every": 0.9
+          "pathIndex": 3,
+          "delay": 5,
+          "every": 0.75
         },
         {
           "foe": "regimental_drummer",
           "count": 2,
-          "pathIndex": 2,
-          "delay": 3,
-          "every": 3
+          "pathIndex": 1,
+          "delay": 6,
+          "every": 5
         },
         {
           "foe": "hessian_jager",
           "count": 6,
-          "pathIndex": 3,
-          "delay": 9,
-          "every": 1.0
+          "pathIndex": 2,
+          "delay": 16,
+          "every": 1.1
         }
       ]
     },
     {
-      "breather": 24.0,
+      "breather": 16.5,
       "callButtonDelay": 25,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
           "foe": "redcoat_regular",
-          "count": 48,
+          "count": 14,
           "pathIndex": 0,
           "delay": 0,
-          "every": 0.25
+          "every": 0.55
         },
         {
           "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 1,
-          "delay": 0,
-          "every": 0.25
-        },
-        {
-          "foe": "hessian_fusilier",
-          "count": 6,
-          "pathIndex": 4,
-          "delay": 12,
-          "every": 0.5
-        },
-        {
-          "foe": "hessian_fusilier",
-          "count": 6,
+          "count": 14,
           "pathIndex": 3,
-          "delay": 12,
-          "every": 0.5
+          "delay": 4,
+          "every": 0.65
+        },
+        {
+          "foe": "hessian_fusilier",
+          "count": 8,
+          "pathIndex": 1,
+          "delay": 10,
+          "every": 0.9
         },
         {
           "foe": "queens_ranger",
-          "count": 6,
-          "pathIndex": 5,
-          "delay": 16,
-          "every": 0.75
-        }
-      ]
-    },
-    {
-      "breather": 19.25,
-      "callButtonDelay": 26,
-      "autoStartCountdown": 13,
-      "earlyCallBonus": 13,
-      "lines": [
-        {
-          "foe": "grenadier",
           "count": 4,
-          "pathIndex": 0,
-          "delay": 0,
-          "every": 1.5
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 0,
-          "delay": 3,
-          "every": 0.25
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 1,
-          "delay": 3,
-          "every": 0.25
-        },
-        {
-          "foe": "light_infantry",
-          "count": 8,
           "pathIndex": 2,
-          "delay": 12,
-          "every": 0.6
-        },
-        {
-          "foe": "light_dragoon",
-          "count": 4,
-          "pathIndex": 5,
-          "delay": 18,
-          "every": 1
+          "delay": 20,
+          "every": 2
         }
       ]
     },
     {
-      "breather": 19,
+      "breather": 14,
       "callButtonDelay": 27,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
-          "foe": "mounted_officer",
-          "count": 1,
+          "foe": "redcoat_regular",
+          "count": 18,
           "pathIndex": 4,
           "delay": 0,
-          "every": 1
-        },
-        {
-          "foe": "mounted_officer",
-          "count": 1,
-          "pathIndex": 5,
-          "delay": 0,
-          "every": 1
+          "every": 0.55
         },
         {
           "foe": "redcoat_regular",
-          "count": 40,
-          "pathIndex": 4,
-          "delay": 2,
-          "every": 0.28
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 40,
-          "pathIndex": 5,
-          "delay": 2,
-          "every": 0.28
-        },
-        {
-          "foe": "hessian_fusilier",
-          "count": 8,
-          "pathIndex": 2,
-          "delay": 16,
-          "every": 0.5
-        },
-        {
-          "foe": "queens_ranger",
-          "count": 6,
-          "pathIndex": 3,
-          "delay": 20,
-          "every": 0.7
-        }
-      ]
-    },
-    {
-      "breather": 17.5,
-      "callButtonDelay": 28,
-      "autoStartCountdown": 13,
-      "earlyCallBonus": 13,
-      "lines": [
-        {
-          "foe": "royal_artillery",
-          "count": 2,
-          "pathIndex": 4,
-          "delay": 0,
-          "every": 3.5
-        },
-        {
-          "foe": "royal_artillery",
-          "count": 2,
-          "pathIndex": 5,
-          "delay": 0,
-          "every": 3.5
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 40,
-          "pathIndex": 0,
-          "delay": 2,
-          "every": 0.28
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 40,
+          "count": 18,
           "pathIndex": 1,
-          "delay": 2,
-          "every": 0.28
+          "delay": 5,
+          "every": 0.6
         },
         {
           "foe": "highlander",
-          "count": 8,
-          "pathIndex": 4,
+          "count": 6,
+          "pathIndex": 3,
           "delay": 16,
-          "every": 0.8
+          "every": 1.4
         },
         {
-          "foe": "light_dragoon",
+          "foe": "light_infantry",
           "count": 4,
-          "pathIndex": 5,
-          "delay": 20,
+          "pathIndex": 2,
+          "delay": 22,
           "every": 1
         }
       ]
     },
     {
-      "breather": 19,
+      "breather": 17,
       "callButtonDelay": 29,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
           "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 0,
-          "delay": 0,
-          "every": 0.26
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 1,
-          "delay": 0,
-          "every": 0.26
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 0,
-          "delay": 15,
-          "every": 2.2
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 1,
-          "delay": 15,
-          "every": 2.2
-        },
-        {
-          "foe": "grenadier",
-          "count": 4,
-          "pathIndex": 1,
-          "delay": 18,
-          "every": 1.3
-        },
-        {
-          "foe": "light_infantry",
-          "count": 8,
-          "pathIndex": 4,
-          "delay": 20,
-          "every": 0.6
-        },
-        {
-          "foe": "queens_ranger",
-          "count": 8,
-          "pathIndex": 3,
-          "delay": 20,
-          "every": 0.65
-        }
-      ]
-    },
-    {
-      "breather": 18.45,
-      "callButtonDelay": 30,
-      "autoStartCountdown": 13,
-      "earlyCallBonus": 13,
-      "lines": [
-        {
-          "foe": "redcoat_regular",
-          "count": 96,
-          "pathIndex": 4,
-          "delay": 0,
-          "every": 0.26
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 96,
-          "pathIndex": 5,
-          "delay": 0,
-          "every": 0.26
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 4,
-          "delay": 15,
-          "every": 2.1
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 5,
-          "delay": 15,
-          "every": 2.1
-        },
-        {
-          "foe": "grenadier",
-          "count": 4,
-          "pathIndex": 3,
-          "delay": 18,
-          "every": 1.3
-        },
-        {
-          "foe": "light_dragoon",
-          "count": 6,
+          "count": 22,
           "pathIndex": 2,
-          "delay": 20,
+          "delay": 0,
+          "every": 0.5
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 22,
+          "pathIndex": 3,
+          "delay": 5,
+          "every": 0.55
+        },
+        {
+          "foe": "hessian_fusilier",
+          "count": 6,
+          "pathIndex": 0,
+          "delay": 14,
           "every": 0.9
         },
         {
-          "foe": "spy",
-          "count": 2,
-          "pathIndex": 0,
-          "delay": 23,
-          "every": 1.3
-        },
-        {
-          "foe": "spy",
-          "count": 2,
-          "pathIndex": 1,
-          "delay": 23,
-          "every": 1.3
+          "foe": "light_dragoon",
+          "count": 4,
+          "pathIndex": 5,
+          "delay": 22,
+          "every": 2
         }
       ]
     },
     {
-      "breather": 19.3,
+      "breather": 16,
       "callButtonDelay": 31,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
           "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 0,
+          "count": 26,
+          "pathIndex": 4,
           "delay": 0,
-          "every": 0.25
+          "every": 0.45
         },
         {
           "foe": "redcoat_regular",
-          "count": 48,
-          "pathIndex": 1,
-          "delay": 0,
-          "every": 0.25
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 0,
-          "delay": 14,
-          "every": 2.1
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 1,
-          "delay": 14,
-          "every": 2.1
-        },
-        {
-          "foe": "mounted_officer",
-          "count": 2,
-          "pathIndex": 4,
-          "delay": 16,
-          "every": 2.2
-        },
-        {
-          "foe": "mounted_officer",
-          "count": 2,
+          "count": 26,
           "pathIndex": 5,
-          "delay": 16,
-          "every": 2.2
-        },
-        {
-          "foe": "highlander",
-          "count": 4,
-          "pathIndex": 4,
-          "delay": 20,
-          "every": 0.8
-        },
-        {
-          "foe": "highlander",
-          "count": 4,
-          "pathIndex": 5,
-          "delay": 20,
-          "every": 0.8
-        },
-        {
-          "foe": "hessian_fusilier",
-          "count": 6,
-          "pathIndex": 2,
-          "delay": 24,
+          "delay": 4,
           "every": 0.5
         },
         {
-          "foe": "hessian_fusilier",
-          "count": 6,
+          "foe": "mounted_officer",
+          "count": 1,
+          "pathIndex": 4,
+          "delay": 8,
+          "every": 1
+        },
+        {
+          "foe": "hessian_jager",
+          "count": 5,
           "pathIndex": 3,
-          "delay": 24,
-          "every": 0.5
+          "delay": 18,
+          "every": 1.1
         },
         {
-          "foe": "light_dragoon",
+          "foe": "loyalist_militia",
           "count": 4,
-          "pathIndex": 1,
-          "delay": 28,
-          "every": 0.9
+          "pathIndex": 0,
+          "delay": 26,
+          "every": 0.8
         }
       ]
     },
     {
-      "breather": 14.3,
-      "callButtonDelay": 32,
+      "breather": 17.6,
+      "callButtonDelay": 33,
+      "autoStartCountdown": 13,
+      "earlyCallBonus": 13,
+      "lines": [
+        {
+          "foe": "grenadier",
+          "count": 6,
+          "pathIndex": 4,
+          "delay": 0,
+          "every": 1.8
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 26,
+          "pathIndex": 0,
+          "delay": 3,
+          "every": 0.4
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 26,
+          "pathIndex": 1,
+          "delay": 6,
+          "every": 0.45
+        },
+        {
+          "foe": "highlander",
+          "count": 6,
+          "pathIndex": 3,
+          "delay": 20,
+          "every": 1.3
+        },
+        {
+          "foe": "queens_ranger",
+          "count": 6,
+          "pathIndex": 2,
+          "delay": 28,
+          "every": 1.5
+        }
+      ]
+    },
+    {
+      "breather": 10.5,
+      "callButtonDelay": 33,
       "autoStartCountdown": 13,
       "earlyCallBonus": 13,
       "lines": [
         {
           "foe": "redcoat_regular",
-          "count": 64,
-          "pathIndex": 0,
-          "delay": 0,
-          "every": 0.25
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 64,
-          "pathIndex": 1,
-          "delay": 0,
-          "every": 0.25
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 0,
-          "delay": 17,
-          "every": 2.2
-        },
-        {
-          "foe": "foot_guards",
-          "count": 2,
-          "pathIndex": 1,
-          "delay": 17,
-          "every": 2.2
-        },
-        {
-          "foe": "royal_artillery",
-          "count": 2,
+          "count": 30,
           "pathIndex": 4,
-          "delay": 17,
-          "every": 3.5
-        },
-        {
-          "foe": "royal_artillery",
-          "count": 2,
-          "pathIndex": 5,
-          "delay": 17,
-          "every": 3.5
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 16,
-          "pathIndex": 2,
-          "delay": 21,
-          "every": 0.25
-        },
-        {
-          "foe": "redcoat_regular",
-          "count": 16,
-          "pathIndex": 3,
-          "delay": 21,
-          "every": 0.25
-        },
-        {
-          "foe": "hessian_fusilier",
-          "count": 8,
-          "pathIndex": 4,
-          "delay": 26,
+          "delay": 0,
           "every": 0.4
         },
         {
-          "foe": "hessian_fusilier",
-          "count": 8,
+          "foe": "redcoat_regular",
+          "count": 30,
           "pathIndex": 5,
-          "delay": 26,
-          "every": 0.4
+          "delay": 3,
+          "every": 0.45
         },
         {
           "foe": "mounted_officer",
           "count": 1,
           "pathIndex": 4,
-          "delay": 26,
+          "delay": 7,
           "every": 1
+        },
+        {
+          "foe": "hessian_fusilier",
+          "count": 8,
+          "pathIndex": 0,
+          "delay": 12,
+          "every": 0.8
         },
         {
           "foe": "mounted_officer",
           "count": 1,
           "pathIndex": 5,
-          "delay": 26,
+          "delay": 17,
+          "every": 1
+        },
+        {
+          "foe": "hessian_jager",
+          "count": 6,
+          "pathIndex": 1,
+          "delay": 23,
           "every": 1
         },
         {
           "foe": "light_dragoon",
-          "count": 2,
+          "count": 4,
           "pathIndex": 2,
           "delay": 32,
-          "every": 0.7
+          "every": 1.6
+        }
+      ]
+    },
+    {
+      "breather": 11.2,
+      "callButtonDelay": 35,
+      "autoStartCountdown": 13,
+      "earlyCallBonus": 13,
+      "lines": [
+        {
+          "foe": "royal_artillery",
+          "count": 2,
+          "pathIndex": 4,
+          "delay": 0,
+          "every": 5
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 32,
+          "pathIndex": 0,
+          "delay": 3,
+          "every": 0.35
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 32,
+          "pathIndex": 1,
+          "delay": 6,
+          "every": 0.4
+        },
+        {
+          "foe": "grenadier",
+          "count": 6,
+          "pathIndex": 3,
+          "delay": 12,
+          "every": 1.5
+        },
+        {
+          "foe": "highlander",
+          "count": 8,
+          "pathIndex": 2,
+          "delay": 23,
+          "every": 1.1
+        },
+        {
+          "foe": "hessian_fusilier",
+          "count": 8,
+          "pathIndex": 5,
+          "delay": 30,
+          "every": 0.75
+        }
+      ]
+    },
+    {
+      "breather": 12.75,
+      "callButtonDelay": 35,
+      "autoStartCountdown": 13,
+      "earlyCallBonus": 13,
+      "lines": [
+        {
+          "foe": "foot_guards",
+          "count": 2,
+          "pathIndex": 0,
+          "delay": 0,
+          "every": 3
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 36,
+          "pathIndex": 4,
+          "delay": 2,
+          "every": 0.35
+        },
+        {
+          "foe": "foot_guards",
+          "count": 2,
+          "pathIndex": 1,
+          "delay": 4,
+          "every": 3
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 36,
+          "pathIndex": 5,
+          "delay": 5,
+          "every": 0.4
+        },
+        {
+          "foe": "queens_ranger",
+          "count": 6,
+          "pathIndex": 2,
+          "delay": 16,
+          "every": 1.6
+        },
+        {
+          "foe": "hessian_jager",
+          "count": 8,
+          "pathIndex": 3,
+          "delay": 23,
+          "every": 0.9
         },
         {
           "foe": "light_dragoon",
-          "count": 2,
-          "pathIndex": 3,
+          "count": 6,
+          "pathIndex": 5,
           "delay": 32,
+          "every": 1.3
+        }
+      ]
+    },
+    {
+      "breather": 9.5,
+      "callButtonDelay": 35,
+      "autoStartCountdown": 13,
+      "earlyCallBonus": 13,
+      "lines": [
+        {
+          "foe": "redcoat_regular",
+          "count": 40,
+          "pathIndex": 0,
+          "delay": 0,
+          "every": 0.3
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 40,
+          "pathIndex": 1,
+          "delay": 4,
+          "every": 0.35
+        },
+        {
+          "foe": "mounted_officer",
+          "count": 2,
+          "pathIndex": 4,
+          "delay": 7,
+          "every": 12
+        },
+        {
+          "foe": "hessian_fusilier",
+          "count": 8,
+          "pathIndex": 4,
+          "delay": 12,
           "every": 0.7
+        },
+        {
+          "foe": "grenadier",
+          "count": 6,
+          "pathIndex": 3,
+          "delay": 18,
+          "every": 1.5
+        },
+        {
+          "foe": "highlander",
+          "count": 6,
+          "pathIndex": 5,
+          "delay": 27,
+          "every": 1.1
+        },
+        {
+          "foe": "queens_ranger",
+          "count": 6,
+          "pathIndex": 2,
+          "delay": 34,
+          "every": 1.4
+        }
+      ]
+    },
+    {
+      "breather": 7.0,
+      "callButtonDelay": 35,
+      "autoStartCountdown": 13,
+      "earlyCallBonus": 13,
+      "lines": [
+        {
+          "foe": "royal_artillery",
+          "count": 2,
+          "pathIndex": 4,
+          "delay": 0,
+          "every": 5
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 44,
+          "pathIndex": 4,
+          "delay": 2,
+          "every": 0.3
+        },
+        {
+          "foe": "royal_artillery",
+          "count": 2,
+          "pathIndex": 5,
+          "delay": 3,
+          "every": 5
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 44,
+          "pathIndex": 5,
+          "delay": 6,
+          "every": 0.35
+        },
+        {
+          "foe": "foot_guards",
+          "count": 2,
+          "pathIndex": 0,
+          "delay": 15,
+          "every": 3
+        },
+        {
+          "foe": "foot_guards",
+          "count": 2,
+          "pathIndex": 1,
+          "delay": 18,
+          "every": 3
+        },
+        {
+          "foe": "light_infantry",
+          "count": 8,
+          "pathIndex": 2,
+          "delay": 26,
+          "every": 0.8
+        },
+        {
+          "foe": "spy",
+          "count": 2,
+          "pathIndex": 0,
+          "delay": 28,
+          "every": 2
+        },
+        {
+          "foe": "spy",
+          "count": 2,
+          "pathIndex": 1,
+          "delay": 31,
+          "every": 2
+        },
+        {
+          "foe": "light_dragoon",
+          "count": 8,
+          "pathIndex": 3,
+          "delay": 35,
+          "every": 1.2
+        }
+      ]
+    },
+    {
+      "breather": 6.6,
+      "callButtonDelay": 37,
+      "autoStartCountdown": 13,
+      "earlyCallBonus": 13,
+      "lines": [
+        {
+          "foe": "redcoat_regular",
+          "count": 40,
+          "pathIndex": 0,
+          "delay": 0,
+          "every": 0.3
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 40,
+          "pathIndex": 1,
+          "delay": 4,
+          "every": 0.35
         },
         {
           "foe": "clinton_siege",
           "count": 1,
           "pathIndex": 4,
-          "delay": 38,
+          "delay": 8,
+          "every": 1
+        },
+        {
+          "foe": "foot_guards",
+          "count": 4,
+          "pathIndex": 4,
+          "delay": 13,
+          "every": 3
+        },
+        {
+          "foe": "hessian_fusilier",
+          "count": 8,
+          "pathIndex": 5,
+          "delay": 18,
+          "every": 0.8
+        },
+        {
+          "foe": "mounted_officer",
+          "count": 2,
+          "pathIndex": 5,
+          "delay": 21,
+          "every": 12
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 12,
+          "pathIndex": 2,
+          "delay": 30,
+          "every": 0.4
+        },
+        {
+          "foe": "redcoat_regular",
+          "count": 12,
+          "pathIndex": 3,
+          "delay": 34,
+          "every": 0.45
+        },
+        {
+          "foe": "light_dragoon",
+          "count": 6,
+          "pathIndex": 3,
+          "delay": 42,
+          "every": 1.5
+        },
+        {
+          "foe": "hessian_jager",
+          "count": 4,
+          "pathIndex": 1,
+          "delay": 47,
           "every": 1
         }
       ]

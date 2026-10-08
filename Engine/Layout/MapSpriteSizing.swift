@@ -92,6 +92,8 @@ public enum MapSpriteSizing {
 
     public static let walker = SpriteHeight(mapPixels: 58.04)
     public static let meleeUnit = SpriteHeight(mapPixels: 55.26)
+    /// One shared sole baseline for the complete melee animation canvas.
+    public static let meleeGroundInsetFraction: CGFloat = 16.0 / 286.0
     // A 25.6-point calibration unit at minimum size. The exit view accounts
     // for the crown's cropped bounds while preserving face scale. The visible
     // crown is centered on the authored exit point.

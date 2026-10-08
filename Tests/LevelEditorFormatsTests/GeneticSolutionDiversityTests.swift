@@ -167,7 +167,7 @@ final class GeneticSolutionDiversityTests: XCTestCase {
 
     @MainActor func testOpeningContainsOnlySuccessfulBuildsAndUsesStartingTowerIdentity() throws {
         let f = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let level = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let level = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let study = try AuthoredMoneyStudy(db: f.db, levelID: level)
         let family = try XCTUnwrap(study.battle.arsenal.towers.first { $0.kind == .ranged })
         let base = try XCTUnwrap(family.tiers.first { $0.level == 1 })

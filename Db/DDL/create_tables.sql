@@ -244,6 +244,13 @@ CREATE TABLE level_info (
     map_image_name TEXT NOT NULL DEFAULT ''
 );
 
+-- Replay fingerprints retain the authored name used when a level's content
+-- identity was established, even if its player-facing name later changes.
+CREATE TABLE level_replay_identity (
+    level_info_id TEXT PRIMARY KEY NOT NULL REFERENCES level_info (id),
+    level_name TEXT NOT NULL CHECK (LENGTH(TRIM(level_name)) > 0)
+);
+
 CREATE TABLE level_tower_unlock (
     id TEXT PRIMARY KEY NOT NULL CHECK (LENGTH(id) = 36),
     level_info_id TEXT NOT NULL REFERENCES level_info (id),

@@ -24,7 +24,7 @@ final class GeneticSearchCoverageTests: XCTestCase {
     private func setup() throws -> (AuthoredDatabaseFixture, AuthoredMoneyStudy) {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
         return try (fixture, AuthoredMoneyStudy(db: fixture.db,
-            levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))))
+            levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))))
     }
     func testRecordedUpgradeRestoreKeepsTheFactorysExactValidation() throws {
         let (fixture, study) = try setup(); _ = fixture

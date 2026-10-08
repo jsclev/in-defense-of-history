@@ -10,7 +10,7 @@ final class GeneticHeroTests: XCTestCase {
         try execute("DELETE FROM genetic_solution", fixture)
         return fixture
     }
-    private func study(_ fixture: AuthoredDatabaseFixture, level: String = "Charleston") throws -> AuthoredMoneyStudy {
+    private func study(_ fixture: AuthoredDatabaseFixture, level: String = "Yorktown") throws -> AuthoredMoneyStudy {
         try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: level)))
     }
     private func context(_ study: AuthoredMoneyStudy, _ fixture: AuthoredDatabaseFixture) throws -> GeneticSolutionContext {
@@ -139,10 +139,10 @@ final class GeneticHeroTests: XCTestCase {
             heroLoadout: try GeneticHeroLoadout(content: s.battle), strategy: strategy, expected: expected)
         let solo = [s.battle.chosenHeroes.primary.id]
         try f.db.heroDao.setSelectedHeroes(solo)
-        XCTAssertEqual(try document.loadStudy(db: f.db, levelName: "Charleston").battle.chosenHeroes.ids, s.battle.chosenHeroes.ids)
+        XCTAssertEqual(try document.loadStudy(db: f.db, levelName: "Yorktown").battle.chosenHeroes.ids, s.battle.chosenHeroes.ids)
         XCTAssertEqual(try f.db.heroDao.getSelectedHeroIds(), solo)
         try execute("UPDATE hero_combat SET hp=hp+1", f)
-        XCTAssertThrowsError(try document.loadStudy(db: f.db, levelName: "Charleston"))
+        XCTAssertThrowsError(try document.loadStudy(db: f.db, levelName: "Yorktown"))
     }
 
     func testLegacyNoHeroRowsCannotServeAdviceAndNewRowsRequireHeroMetadata() throws {

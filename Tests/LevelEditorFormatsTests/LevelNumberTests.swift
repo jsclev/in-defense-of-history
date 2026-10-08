@@ -11,7 +11,7 @@ final class LevelNumberTests: XCTestCase {
 
     func testAuthoredNumbersSupportBothExistingPaddingConventions() throws {
         let fixture = try AuthoredDatabaseFixture()
-        for (number, name) in [(1, "Battle Road"), (2, "Bunker Hill"), (10, "Fort Ann"), (15, "Charleston")] {
+        for (number, name) in [(1, "Battle Road"), (2, "Bunker Hill"), (10, "Fort Ann"), (15, "Yorktown")] {
             XCTAssertEqual(try fixture.db.levelInfoDao.getBy(number: number).name, name)
         }
         let ids = try (1...15).map { try fixture.db.levelInfoDao.getBy(number: $0).id }

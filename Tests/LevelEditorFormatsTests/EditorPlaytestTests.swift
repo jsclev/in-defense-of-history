@@ -14,7 +14,7 @@ final class EditorPlaytestTests: XCTestCase {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao:
             LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
         let id = try fixture.db.levelInfoDao.getIdForEditorDocument(named: file.draft.name)
-        XCTAssertEqual(id, try fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        XCTAssertEqual(id, try fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         XCTAssertEqual(sqlite3_exec(fixture.connection, "UPDATE level_info SET starting_money=777 WHERE id='\(id.uuidString.lowercased())'", nil, nil, nil), SQLITE_OK)
         let session = try SimSession(draft: file.draft, db: fixture.db, virtualCanvas: file.canvas)
         XCTAssertEqual(session.sim.gold, 777)

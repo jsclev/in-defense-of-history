@@ -51,7 +51,7 @@ final class SimulatorDatabaseTests: XCTestCase {
         let root = try directory()
         let first = try snapshot(source: source.db, destination: root.appendingPathComponent("first.sqlite"), arguments: [])
         defer { first.close() }
-        let id = try XCTUnwrap(source.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(source.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let before = try first.levelInfoDao.getBy(id: id).startingMoney
         XCTAssertEqual(sqlite3_exec(source.connection, "UPDATE level_info SET starting_money=starting_money+17", nil, nil, nil), SQLITE_OK)
         let second = try snapshot(source: source.db, destination: root.appendingPathComponent("second.sqlite"), arguments: [])

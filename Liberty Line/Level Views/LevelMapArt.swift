@@ -3,7 +3,7 @@ import SwiftUI
 /// The layered map art for a level, resolved by the Levels naming
 /// convention. Above the base terrain image a level may ship road art
 /// ("<map>_path"), an overlay ("<map>_overlay"), and occlusion art drawn
-/// over everything that moves ("<map>_forest_occlusion", then
+/// over enemy troops ("<map>_forest_occlusion", then
 /// "<map>_occlusion") so enemies stay hidden before they enter and after
 /// they leave. A level gains a layer by adding an asset with the matching
 /// name — no code or schema change — and a level without one simply has
@@ -73,7 +73,7 @@ struct LevelMapArt {
         layer(forestOcclusionImage, in: projection)
     }
 
-    /// Tier 3 — entrance/exit occlusion, above heroes and below exit markers
+    /// Tier 3 — entrance/exit occlusion, below exit markers, heroes,
     /// and HUD controls.
     @ViewBuilder func occlusion(in projection: LevelMapProjection) -> some View {
         layer(occlusionImage, in: projection)

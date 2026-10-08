@@ -21,9 +21,17 @@ final class ReinforcementSliderTests: XCTestCase {
                 bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue))
             context.draw(image, in: CGRect(x: 0, y: 0, width: image.width, height: image.height))
         }
-        return (0..<image.height).filter { y in
+        let rows = (0..<image.height).filter { y in
             pixels[(y * image.width + image.width / 2) * 4] < 220
         }
+        if let middle = rows.dropFirst(rows.count / 2).first {
+            let index = (middle * image.width + image.width / 2) * 4
+            XCTAssertEqual(Double(pixels[index]), 255 * 0.45, accuracy: 2,
+                           "The swipe must be semi-transparent black, leaving the icon visible")
+            XCTAssertEqual(pixels[index], pixels[index + 1])
+            XCTAssertEqual(pixels[index], pixels[index + 2])
+        }
+        return rows
     }
 
     @MainActor func testActualSliderRevealsExactlyTheElapsedFractionAndKeepsItsBottomFixed() throws {

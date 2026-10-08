@@ -248,6 +248,118 @@ extension LevelRunner {
         let militia: [MilitiaSoldier]
     }
 
+    struct MeleeAnimationReview {
+        struct Sample {
+            let frame: CombatReviewFrame
+            let metadata: [String: Any]
+        }
+        let scene: LevelSceneSetup
+        let samples: [Sample]
+        let firstImpactIndex: Int
+        let metadata: [String: Any]
+    }
+
+    /// A disposable staged encounter: all content and combat rules come from
+    /// the database, and ordinary commands/ticks produce every saved pose.
+    /// This preview never creates a player recording or changes player state.
+    static func makeMeleeAnimationReview(db: Db) throws -> MeleeAnimationReview {
+        let settings = try db.encyclopediaDemoDao.get()
+        let authored = try db.levelInfoDao.getBy(id: settings.contextLevelID)
+        let canvas = try db.virtualCanvasDao.get()
+        let center = CGPoint(x: canvas.playAreaRect.midX, y: canvas.playAreaRect.midY)
+        func world(_ x: Double, _ y: Double) -> Point { Point(center.x + x, center.y + y) }
+        let roads = [[world(-260, 0), world(600, 0)],
+                     [world(-260, -250), world(600, -250)]]
+        let geometry: [String: Any] = ["type": "FeatureCollection", "features": roads.map { road in
+            ["type": "Feature", "properties": ["category": "gameplay", "kind": "enemy_path", "widthPx": canvas.pathWidth],
+             "geometry": ["type": "LineString", "coordinates": road.map { [$0.x, $0.y] }]]
+        }]
+        let movement = try HeroMovementArea(geoJSON: JSONSerialization.data(withJSONObject: geometry),
+                                           defaultPathWidth: canvas.pathWidth)
+        let wave = Wave(startTime: 0,
+            spawns: roads.indices.map { SpawnEntry(enemyTypeID: Foe.redcoatRegular.id,
+                                                  count: 3, interval: 0.6, pathIndex: $0) },
+            callButtonDelay: 0, autoStartCountdown: 0, earlyCallBonus: 0)
+        let level = LevelInfo(id: authored.id, name: authored.name, campaign: authored.campaign,
+            startedAt: authored.startedAt, endedAt: authored.endedAt, startingMoney: authored.startingMoney,
+            numStartingLives: authored.numStartingLives, numWaves: 1, playArea: authored.playArea,
+            mapImageName: authored.mapImageName, paths: roads.map { Path(points: $0) },
+            towerSlots: [TowerSlot(id: UUID(), position: world(0, 140))], waves: [wave])
+        let draft = BattleDraft(level: level, heroes: try LevelHeroConfiguration(heroCount: 0, spawns: []),
+            movementArea: movement, callButtons: [CallWaveButtonPosition(position: roads[0][0])],
+            exits: roads.map { $0[1] })
+        let content = try BattleContent(db: db, levelID: authored.id, draft: draft)
+        let game = try BattleEngine(recording: .preview, content: content, heroesEnabled: false,
+            startingMoneyOverride: nil, seed: 1776, onVictory: { _, _ in 0 })
+        game.publishesPresentation = true
+        for command in [BattleCommand.build(slot: 0, kind: .melee),
+                        .rally(slot: 0, point: world(0, 0)),
+                        .reinforcements(point: world(0, -250)), .startWave] {
+            guard game.perform(command) == .ok else {
+                throw DbError.Db(message: "Melee animation review command failed: \(command)")
+            }
+        }
+        var samples: [MeleeAnimationReview.Sample] = []
+        var firstImpactIndex: Int?
+        var firstImpactTick: Int64?
+        var previousDamage = 0.0
+        var hitTicks: [Int64] = []
+        var previousDamageBySlot: [Int: Double] = [:]
+        var familyHitTicks: [String: [Int64]] = [:]
+        for _ in 0..<(SimClock.ticksPerSecond * 20) {
+            game.advance(ticks: 1, interpolation: 1)
+            let damage = game.damageTotalBySlot.values.reduce(0, +)
+            for (slot, damage) in game.damageTotalBySlot where damage > previousDamageBySlot[slot, default: 0] {
+                familyHitTicks[MeleeUnitFamily(garrisonSlot: slot).rawValue, default: []].append(game.timer.tick)
+            }
+            previousDamageBySlot = game.damageTotalBySlot
+            if damage > previousDamage {
+                hitTicks.append(game.timer.tick)
+                if firstImpactIndex == nil {
+                    firstImpactIndex = samples.count
+                    firstImpactTick = game.timer.tick
+                }
+            }
+            previousDamage = damage
+            let unitsByID = Dictionary(uniqueKeysWithValues: game.garrisonsBySlot.flatMap { slot, garrison in
+                garrison.units.enumerated().map { (slot * 8 + $0.offset, $0.element) }
+            })
+            let soldiers: [[String: Any]] = game.militia.map { soldier in
+                let unit = unitsByID[soldier.id]!
+                return ["id": soldier.id, "assetName": soldier.assetName, "family": soldier.family.rawValue,
+                        "x": soldier.position.x, "y": soldier.position.y, "hp": soldier.hp,
+                        "state": String(describing: unit.state), "targetSpawnID": unit.targetSpawnID,
+                        "swingTicksLeft": unit.swingTicksLeft]
+            }
+            let enemies: [[String: Any]] = game.walkers.map {
+                ["id": $0.id, "assetName": $0.assetName, "x": $0.position.x, "y": $0.position.y, "hp": $0.hp]
+            }
+            samples.append(MeleeAnimationReview.Sample(
+                frame: CombatReviewFrame(seconds: Double(game.timer.tick) * SimClock.dt,
+                                         presentation: game.presentation, militia: game.militia),
+                metadata: ["tick": game.timer.tick, "seconds": Double(game.timer.tick) * SimClock.dt,
+                           "soldiers": soldiers, "enemies": enemies, "meleeDamageTotal": damage]))
+            if let firstImpactTick, game.timer.tick >= firstImpactTick + Int64(SimClock.ticksPerSecond * 4) { break }
+            if firstImpactIndex == nil, samples.count > SimClock.ticksPerSecond { samples.removeFirst() }
+        }
+        guard let firstImpactIndex, hitTicks.count >= 3,
+              MeleeUnitFamily.allCases.allSatisfy({ family in
+                  familyHitTicks[family.rawValue, default: []].count >= 3
+                  && samples.contains { $0.frame.militia.contains { $0.family == family && $0.assetName.contains("_walk_") } }
+                  && samples.contains { $0.frame.militia.contains { $0.family == family && $0.assetName.contains("_attack_") && $0.assetName.hasSuffix("_3") } }
+              }) else {
+            throw DbError.Db(message: "Melee animation review did not capture both families walking and landing three real attack ticks")
+        }
+        return MeleeAnimationReview(scene: try LevelSceneSetup(content: content), samples: samples,
+            firstImpactIndex: firstImpactIndex,
+            metadata: ["ticksPerSecond": SimClock.ticksPerSecond, "hitTicks": hitTicks,
+                       "familyHitTicks": familyHitTicks, "families": MeleeUnitFamily.allCases.map(\.rawValue),
+                       "seed": 1776, "sourceLevelID": authored.id.uuidString,
+                       "sourceLevelName": authored.name, "frameCount": samples.count,
+                       "firstImpactIndex": firstImpactIndex, "recording": "preview",
+                       "captureKind": "Native device render of consecutive shared-engine ticks; not wall-frame pacing"])
+    }
+
     func verifyMoraleCombatOnDevice() throws -> (checks: [String: Any], frames: [CombatReviewFrame]) {
         func require(_ condition: Bool, _ message: String) throws {
             if !condition { throw NSError(domain: "MoraleCombatReview", code: 1,

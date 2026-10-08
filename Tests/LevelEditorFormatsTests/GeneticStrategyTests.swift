@@ -7,7 +7,7 @@ final class GeneticStrategyTests: XCTestCase {
         try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
     }
     private func study(_ fixture: AuthoredDatabaseFixture) throws -> AuthoredMoneyStudy {
-        try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
     }
 
     @MainActor func testAuthoredReplayIsUnchangedByGeneticDriver() throws {

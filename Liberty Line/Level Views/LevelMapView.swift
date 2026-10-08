@@ -138,13 +138,6 @@ private struct LevelAttemptView: View {
                 .border(debugMode ? Color.orange : Color.clear, width: debugMode ? 3 : 0)
         } interface: {
             ZStack(alignment: .topLeading) {
-                let projection = runner.sceneSetup.projection(in: runtimeCanvas)
-
-                LevelExitMarkersView(positions: runner.exitPositions,
-                                     projection: projection,
-                                     spriteSize: MapSpriteScale(runtimeCanvas: runtimeCanvas)
-                                        .points(MapSpriteSizing.exitMarker))
-
                 HudView(runtimeCanvas: runtimeCanvas, state: LevelHUDState(engine: runner),
                         hudLayoutConfig: runner.content.hudLayout,
                         input: LevelHUDInput(activate: runner.activateHUD, callWave: runner.tapCallWave),
@@ -248,7 +241,8 @@ private struct LevelAttemptView: View {
         let projection = runner.sceneSetup.projection(in: runtimeCanvas)
         let metrics = HudMetrics(runtimeCanvas: runtimeCanvas)
         return LevelScene(setup: runner.sceneSetup, state: LevelSceneState(engine: runner),
-                          canvas: runtimeCanvas, debugMode: debugMode, onSelectHero: runner.selectHero) {
+                          canvas: runtimeCanvas, debugMode: debugMode,
+                          exitPositions: runner.exitPositions, onSelectHero: runner.selectHero) {
             Group {
                 Image("tower_menu_bg")
                 Image("tower_menu_square_frame")

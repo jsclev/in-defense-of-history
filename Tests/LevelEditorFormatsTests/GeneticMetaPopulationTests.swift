@@ -82,7 +82,7 @@ final class GeneticMetaPopulationTests: XCTestCase {
 
     func testInnerBattlePlanEvolutionPreservesItsMetaSelectionAndControlledTransferValidates() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
         var strategy = GeneticStrategy(plan: try MoneyStudyPlan(study: study.selectingMetaUpgrades([.rangeEstimation]), placementIndex: 7,
             upgradePolicyIndex: 2, seed: 1776), metaProgression: try AuthoredDatabaseFixture.metaProgression([.rangeEstimation]))
         let original = strategy
@@ -181,7 +181,7 @@ final class GeneticMetaPopulationTests: XCTestCase {
 
     func testGAOperatorsVaryExplicitDNAAndPreserveAuthoredCostAndPrerequisites() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
         let factory = try MetaUpgradesFactory(catalog: study.battle.playerUpgrades.loadout.catalog)
         let a = try factory.make(selected: [.rangeEstimation, .cartridgeDrill, .gunCarriages])
         let b = try factory.make(selected: [.campaignVeterans, .reliefCompanies, .localSuppliers])

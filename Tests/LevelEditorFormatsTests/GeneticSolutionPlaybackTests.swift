@@ -8,7 +8,7 @@ import SQLite3
         let db = Db(dbPath: url.path, fullRefresh: false,
             levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()), readOnly: true)
         defer { db.close() }
-        let levelID = try XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let levelID = try XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let selected = try GeneticSolutionPlayback.best(db: db, levelID: levelID,
             difficultyID: db.difficultyDao.requireSelected().id, limit: 3)
         XCTAssertEqual(selected.count, 3)
@@ -31,7 +31,7 @@ import SQLite3
     func testShippingCharlestonTopThreeMatchPreviewAndReplayToVictory() throws {
         let f = try AuthoredDatabaseFixture(levelGeoJSONDao:
             LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let levelID = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let levelID = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let study = try AuthoredMoneyStudy(db: f.db, levelID: levelID)
         let candidates = try f.db.geneticSolutionDao.campaignCandidates(levelID: levelID,
             difficultyID: study.difficulty.id, startingMoney: study.level.startingMoney,
@@ -72,7 +72,7 @@ import SQLite3
             UPDATE level_wave SET call_button_delay=0,auto_start_countdown=0;
             UPDATE level_wave_enemy_spawn SET num_enemies=1,spawn_time_since_previous_spawn=0;
             """, f)
-        let id = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(f.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         let study = try AuthoredMoneyStudy(db: f.db, levelID: id)
         let strategy = GeneticStrategy(decisions: [], metaProgression: try AuthoredDatabaseFixture.metaProgression([]), reinforcements: .immediate)
         let evaluation = try GeneticCommander.evaluate(strategy, recording: .preview, content: study.battle,

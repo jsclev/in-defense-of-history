@@ -28,7 +28,10 @@ final class BattleEventPlayback {
         }
         let step = Int64(clock[0]), advances = animationTick != nil && animationTick != step
         let units = try block.units.value(at: tick), values = try block.unitNumbers.values(at: tick)
-        guard values.count == units.count * 7, values.allSatisfy(\.isFinite),
+        // Old event recordings have seven values and no swing clock. Their
+        // recorded movement still plays; new records also preserve real hits.
+        let unitStride = values.count == units.count * 8 ? 8 : 7
+        guard values.count == units.count * unitStride, values.allSatisfy(\.isFinite),
               Set(units.map { "\($0.hero):\($0.id)" }).count == units.count else {
             throw DbError.Db(message: "battle events: invalid unit data at tick \(tick)")
         }
@@ -36,7 +39,7 @@ final class BattleEventPlayback {
         var militia: [BattleEngine.MilitiaSoldier] = [], heroes: [LevelReplayFrame.Hero] = []
         var presentMilitia: Set<Int> = [], presentHeroes: Set<Int> = []
         for (index, unit) in units.enumerated() {
-            let offset = index * 7
+            let offset = index * unitStride
             let position = Point(values[offset], values[offset + 1])
             let hasTarget = values[offset + 3], respawned = values[offset + 6]
             guard (hasTarget == 0 || hasTarget == 1), (respawned == 0 || respawned == 1),
@@ -58,6 +61,17 @@ final class BattleEventPlayback {
                     baseAssetName: unit.baseAsset, position: CGPoint(x: sample.position.x, y: sample.position.y),
                     hp: values[offset + 2], maxHP: unit.maxHP, isSelected: state.selectedHero == unit.id))
             } else {
+                let family: MeleeUnitFamily
+                if unit.baseAsset.isEmpty {
+                    // Historical events used an empty base asset for both
+                    // groups. Their recorded identity retains deployment kind.
+                    family = MeleeUnitFamily(recordedSoldierID: unit.id)
+                } else if let recorded = MeleeUnitFamily(rawValue: unit.baseAsset),
+                          recorded == MeleeUnitFamily(recordedSoldierID: unit.id) {
+                    family = recorded
+                } else {
+                    throw DbError.Db(message: "battle events: invalid melee family '\(unit.baseAsset)' for unit \(unit.id) at tick \(tick)")
+                }
                 presentMilitia.insert(unit.id)
                 var pose = militiaPoses[unit.id] ?? MilitiaPose(position: position)
                 if advances {
@@ -69,13 +83,29 @@ final class BattleEventPlayback {
                     if pose.walking {
                         pose.facing = UnitFacing(dx: dx, dy: dy)
                         pose.phase = (pose.phase + moved).truncatingRemainder(dividingBy: MeleeWalkCycle.cycleDistance)
-                    } else if hasTarget == 1 {
-                        pose.facing = UnitFacing(dx: target.x - position.x, dy: target.y - position.y)
                     }
                 }
+                if hasTarget == 1, target != position {
+                    pose.facing = UnitFacing(dx: target.x - position.x, dy: target.y - position.y)
+                }
                 pose.position = position; militiaPoses[unit.id] = pose
+                let assetName: String
+                if unitStride == 8 {
+                    let swing = values[offset + 7]
+                    guard let interval = unit.attackInterval, interval.isFinite, interval > 0,
+                          interval < Double(Int.max) / Double(SimClock.ticksPerSecond),
+                          swing >= 0, swing < Double(Int.max), swing.rounded(.down) == swing else {
+                        throw DbError.Db(message: "battle events: invalid melee swing for unit \(unit.id) at tick \(tick)")
+                    }
+                    assetName = MeleeAttackCycle.assetName(family: family, facing: pose.facing, walkPhase: pose.phase,
+                        isWalking: pose.walking, isFighting: hasTarget == 1,
+                        swingTicksLeft: Int(swing), attackInterval: interval)
+                } else {
+                    assetName = MeleeWalkCycle.assetName(family: family, facing: pose.facing,
+                        walkPhase: pose.phase, isWalking: pose.walking)
+                }
                 militia.append(BattleEngine.MilitiaSoldier(id: unit.id,
-                    assetName: MeleeWalkCycle.assetName(facing: pose.facing, walkPhase: pose.phase, isWalking: pose.walking),
+                    assetName: assetName,
                     position: CGPoint(x: position.x, y: position.y), hp: values[offset + 2], maxHP: unit.maxHP))
             }
         }

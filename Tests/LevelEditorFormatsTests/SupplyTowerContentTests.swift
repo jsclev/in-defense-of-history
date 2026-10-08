@@ -19,7 +19,7 @@ final class SupplyTowerContentTests: XCTestCase {
             "Quartermaster's Depot", "Ordnance Depot", "Field Hospital"])
         for level in try fixture.db.levelInfoDao.getCampaignLevels(campaignName: "Main") {
             let unlocks = try fixture.db.towerUnlockDao.getUnlocksFor(levelInfoId: level.id)
-            XCTAssertEqual(unlocks["supply"], level.name == "Charleston" ? 4 : 0)
+            XCTAssertEqual(unlocks["supply"], level.name == "Yorktown" ? 4 : 0)
         }
         for profile in ["coarse", "fine"] {
             let tuning = try fixture.db.simTowerSweepDao.get(profile: profile)

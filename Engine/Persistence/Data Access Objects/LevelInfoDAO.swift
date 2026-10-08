@@ -55,6 +55,29 @@ public class LevelInfoDAO: BaseDAO {
         return try getBy(id: id)
     }
 
+    /// Historical name retained only for strict replay/content fingerprints.
+    /// Display names continue to come from level_info.level_name.
+    public func getReplayIdentityName(id: UUID) throws -> String {
+        let record = "level_replay_identity[\(id.uuidString.lowercased())].level_name"
+        var statement: OpaquePointer?
+        try prepare(conn: conn, stmt: &statement,
+                    sql: "SELECT level_name FROM level_replay_identity WHERE level_info_id = ?")
+        defer { sqlite3_finalize(statement) }
+        guard sqlite3_bind_text(statement, 1, id.uuidString.lowercased(), -1, SQLITE_TRANSIENT) == SQLITE_OK else {
+            throw DbError.Db(message: "\(record): unable to bind level identity")
+        }
+        guard sqlite3_step(statement) == SQLITE_ROW,
+              sqlite3_column_type(statement, 0) == SQLITE_TEXT,
+              let name = try getString(stmt: statement, colIndex: 0),
+              !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            throw DbError.Db(message: "\(record): missing or invalid authored replay identity")
+        }
+        guard sqlite3_step(statement) == SQLITE_DONE else {
+            throw DbError.Db(message: "\(record): unable to finish reading replay identity")
+        }
+        return name
+    }
+
     public func getIdBy(levelName: String) throws -> UUID? {
         var stmt: OpaquePointer?
         let sql = getCleanedSql("""

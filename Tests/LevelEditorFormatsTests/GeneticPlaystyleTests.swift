@@ -227,7 +227,7 @@ final class GeneticPlaystyleTests: XCTestCase {
     }
     @MainActor func testCaptureRoundTripsAndDoesNotChangeSharedEngineOutcome() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
         let progression = try AuthoredDatabaseFixture.metaProgression([])
         let plan = try MoneyStudyPlan(study: study,placementIndex:7,upgradePolicyIndex:2,seed:1776,openingKind:.melee)
         let strategy = GeneticStrategy(plan:plan,metaProgression:progression)
@@ -254,7 +254,7 @@ final class GeneticPlaystyleTests: XCTestCase {
     }
     @MainActor func testCreativeSeedingIncludesEveryUnlockedTowerFamilyInOpenings() throws {
         let fixture = try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
-        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
         for kind in Set(study.towerPaths.map(\.kind)) {
             let plan = try MoneyStudyPlan(study:study,placementIndex:0,upgradePolicyIndex:2,seed:1776,openingKind:kind)
             guard case let .build(_,id) = plan.steps[0].action else { return XCTFail("Opening must build") }

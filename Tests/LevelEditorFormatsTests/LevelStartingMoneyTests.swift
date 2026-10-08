@@ -40,14 +40,14 @@ final class LevelStartingMoneyTests: XCTestCase {
 
     func testCharlestonUsesAuthored670CoinBudget() throws {
         let fixture = try fixture()
-        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         XCTAssertEqual(try fixture.db.levelInfoDao.getBy(id: id).startingMoney, 670)
         XCTAssertEqual(try fixture.db.levelLoader.load(id: id).startingMoney, 670)
     }
 
     @MainActor func testDatabaseEditReachesReloadAndSimulationWithoutReadingMapGold() throws {
         let fixture = try fixture()
-        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         for money in [617, 943, Int(Int32.max) + 11] {
             try execute("UPDATE level_info SET starting_money=\(money) WHERE id='\(id.uuidString.lowercased())'", fixture)
             // The map's legacy editor metadata still says 500. Neither a
@@ -78,7 +78,7 @@ final class LevelStartingMoneyTests: XCTestCase {
 
     func testDAORejectsCorruptValuesWithRecordAndFieldDiagnostics() throws {
         let fixture = try fixture()
-        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston"))
+        let id = try XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown"))
         // Remove constraints only in disposable memory to exercise the reader.
         try execute("""
             PRAGMA foreign_keys=OFF;

@@ -5,7 +5,7 @@ INSERT INTO level_info (
 ) VALUES (
     '4ca73a47-98f6-41b6-815d-c2c797aa746e',
     'f589a28f-54d8-4791-851c-a307f252151a',
-    'Charleston',
+    'Yorktown',
     1207.0,
     1137.0,
     julianday('1780-03-29T08:00:00-05:00'),

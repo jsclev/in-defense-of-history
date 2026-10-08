@@ -5,7 +5,7 @@ import XCTest
 /// implemented here, and the authored database is never modified.
 enum BattleTestFixture {
     static func authored(db: Db? = nil) throws -> BattleContent {
-        if let db { return try BattleContent(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Charleston"))) }
+        if let db { return try BattleContent(db: db, levelID: XCTUnwrap(db.levelInfoDao.getIdBy(levelName: "Yorktown"))) }
         let url = Db.authoredDatabaseURL
         let connection = Db(dbPath: url.path, fullRefresh: false,
                             levelGeoJSONDao: LevelGeoJSONDAO(directory: url.deletingLastPathComponent()))

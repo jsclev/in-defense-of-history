@@ -94,7 +94,7 @@ final class GeneticReinforcementTests: XCTestCase {
 
     func testReinforcementGenesAreExplicitAndEvolveWithCandidate() throws {
         let fixture = try fixture()
-        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        let study = try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
         let plan = try MoneyStudyPlan(study: study, placementIndex: 7, upgradePolicyIndex: 2, seed: 1776)
         let meta = Array(study.battle.playerUpgrades.loadout.selected)
         let a = GeneticStrategy(plan: plan, metaProgression: try AuthoredDatabaseFixture.metaProgression(meta))

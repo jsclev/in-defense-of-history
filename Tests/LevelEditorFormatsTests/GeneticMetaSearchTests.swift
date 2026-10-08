@@ -7,7 +7,7 @@ final class GeneticMetaSearchTests: XCTestCase {
         try AuthoredDatabaseFixture(levelGeoJSONDao: LevelGeoJSONDAO(directory: Db.authoredDatabaseURL.deletingLastPathComponent()))
     }
     private func study(_ fixture: AuthoredDatabaseFixture) throws -> AuthoredMoneyStudy {
-        try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Charleston")))
+        try AuthoredMoneyStudy(db: fixture.db, levelID: XCTUnwrap(fixture.db.levelInfoDao.getIdBy(levelName: "Yorktown")))
     }
     private func execute(_ sql: String, _ fixture: AuthoredDatabaseFixture) throws {
         guard sqlite3_exec(fixture.connection, sql, nil, nil, nil) == SQLITE_OK else {

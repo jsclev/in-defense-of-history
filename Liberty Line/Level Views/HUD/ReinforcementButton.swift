@@ -9,7 +9,12 @@ struct ReinforcementButton: View {
     var isActivated = false
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            // Keep tracking a finger that lands just before the cooldown ends.
+            // A disabled Button discards that press even if it is ready when
+            // the finger lifts. Check eligibility on release; never queue calls.
+            if isAvailable { action() }
+        } label: {
             ZStack {
                 PaintedHUDButtonFrame(buttonSize: buttonSize)
                 Image("action_icon_call_reinforcements")
@@ -22,11 +27,10 @@ struct ReinforcementButton: View {
                 }
             }
             .frame(width: buttonSize.width, height: buttonSize.height)
-            .hudActivationHighlight(isSelected || isActivated, side: buttonSize.width)
+            .hudActivationHighlight(isSelected, side: buttonSize.width)
             .contentShape(Rectangle())
         }
-        .buttonStyle(HUDButtonStyle())
-        .disabled(!isAvailable)
+        .buttonStyle(ReinforcementButtonStyle(isAvailable: isAvailable, isActivated: isActivated))
         .accessibilityLabel("Call reinforcements")
         .accessibilityIdentifier("call-reinforcements")
         .accessibilityValue(isSelected ? "Selected" : cooldown.isReady ? "Ready" : "\(cooldown.displaySeconds) seconds remaining")
@@ -34,5 +38,17 @@ struct ReinforcementButton: View {
 
     private var cooldownOverlay: some View {
         ReinforcementCooldownOverlay(buttonSize: buttonSize, remainingFraction: cooldown.remainingFraction)
+    }
+}
+
+private struct ReinforcementButtonStyle: ButtonStyle {
+    let isAvailable: Bool
+    let isActivated: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        // A press is visible immediately; only selection owns the white border,
+        // so cancelling does not leave a misleading selected outline behind.
+        configuration.label
+            .brightness(isAvailable && (configuration.isPressed || isActivated) ? 0.12 : 0)
     }
 }

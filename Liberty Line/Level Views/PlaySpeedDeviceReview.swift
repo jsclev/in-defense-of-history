@@ -28,7 +28,7 @@ struct PlaySpeedDeviceReview: View {
             if !condition { throw DbError.Db(message: "Play speed review: \(message)") }
         }
         do {
-            let id = try store.db.levelInfoDao.getIdBy(levelName: "Charleston")!
+            let id = try store.db.levelInfoDao.getIdBy(levelName: "Yorktown")!
             let content = try BattleContent(db: store.db, levelID: id)
             let player = LevelRunner(db: store.db, content: content, runtimeCanvas: canvas,
                 hudLayoutConfig: store.hudLayoutConfig, replaySeed: 1776)

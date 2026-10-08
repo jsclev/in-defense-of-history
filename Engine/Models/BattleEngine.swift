@@ -427,6 +427,60 @@ public class BattleEngine: NSObject, ObservableObject {
         var hp: Double
         var health: UnitHealth { UnitHealth(current: hp, maximum: maxHP) }
         var maxHP: Double
+        var family: MeleeUnitFamily { MeleeUnitFamily(recordedSoldierID: id) }
+
+        // Full-frame recordings made before the new six-pose art stored the
+        // old 64-frame index directly. Version this wire value so replay can
+        // migrate it without retaining obsolete artwork in the app bundle.
+        // Version 3 also distinguishes summoned troops from tower soldiers.
+        private let animationVersion: Int
+        private enum CodingKeys: CodingKey {
+            case id, assetName, position, hp, maxHP, animationVersion
+        }
+
+        init(id: Int, assetName: String, position: CGPoint, hp: Double, maxHP: Double) {
+            self.id = id; self.assetName = assetName; self.position = position
+            self.hp = hp; self.maxHP = maxHP; animationVersion = 3
+        }
+
+        init(from decoder: Decoder) throws {
+            let values = try decoder.container(keyedBy: CodingKeys.self)
+            id = try values.decode(Int.self, forKey: .id)
+            position = try values.decode(CGPoint.self, forKey: .position)
+            hp = try values.decode(Double.self, forKey: .hp)
+            maxHP = try values.decode(Double.self, forKey: .maxHP)
+            let name = try values.decode(String.self, forKey: .assetName)
+            let family = MeleeUnitFamily(recordedSoldierID: id)
+            if let version = try values.decodeIfPresent(Int.self, forKey: .animationVersion) {
+                guard version == 2 || version == 3 else {
+                    throw DecodingError.dataCorruptedError(forKey: .animationVersion, in: values,
+                        debugDescription: "Unsupported militia animation version \(version)")
+                }
+                let parts = name.split(separator: "_")
+                let expectedFamily = version == 2 ? MeleeUnitFamily.towerMilitia : family
+                guard parts.count == 5, parts[0...1].joined(separator: "_") == expectedFamily.rawValue,
+                      (parts[2] == "walk" || parts[2] == "attack"),
+                      UnitFacing.allCases.contains(where: { $0.assetSuffix == parts[3] }),
+                      let frame = Int(parts[4]), (0..<MeleeWalkCycle.frameCount).contains(frame),
+                      name == "\(expectedFamily.rawValue)_\(parts[2])_\(parts[3])_\(frame)" else {
+                    throw DecodingError.dataCorruptedError(forKey: .assetName, in: values,
+                        debugDescription: "Invalid \(family.rawValue) animation frame '\(name)'")
+                }
+                assetName = family.rawValue + "_" + parts[2...4].joined(separator: "_")
+            } else {
+                let parts = name.split(separator: "_")
+                guard parts.count == 5, parts[0...2].joined(separator: "_") == "militia_soldier_walk",
+                      let facing = UnitFacing.allCases.first(where: { $0.assetSuffix == parts[3] }),
+                      let frame = Int(parts[4]), (0..<64).contains(frame) else {
+                    throw DecodingError.dataCorruptedError(forKey: .assetName, in: values,
+                        debugDescription: "Unknown legacy militia frame '\(name)'")
+                }
+                assetName = MeleeWalkCycle.assetName(family: family, facing: facing,
+                    walkPhase: Double(frame) / 64 * MeleeWalkCycle.cycleDistance,
+                    isWalking: frame != 16)
+            }
+            animationVersion = 3
+        }
     }
 
     struct HeroSoldier: Identifiable, Codable {
@@ -1581,7 +1635,8 @@ public class BattleEngine: NSObject, ObservableObject {
                 pose.facing = UnitFacing(dx: dx, dy: dy)
                 pose.walkPhase = (pose.walkPhase + moved)
                     .truncatingRemainder(dividingBy: MeleeWalkCycle.cycleDistance)
-            } else if let target = combatTargets[id] {
+            }
+            if let target = combatTargets[id], target != cur {
                 pose.facing = UnitFacing(dx: target.x - cur.x, dy: target.y - cur.y)
             }
             poses[id] = pose
@@ -2117,9 +2172,11 @@ public class BattleEngine: NSObject, ObservableObject {
                     cycleDistance: MeleeWalkCycle.cycleDistance)
                 out.append(MilitiaSoldier(
                     id: id,
-                    assetName: MeleeWalkCycle.assetName(facing: pose.facing,
-                                                        walkPhase: renderedPhase,
-                                                        isWalking: pose.isWalking),
+                    assetName: MeleeAttackCycle.assetName(family: MeleeUnitFamily(garrisonSlot: slot), facing: pose.facing,
+                        walkPhase: renderedPhase, isWalking: pose.isWalking,
+                        isFighting: u.state == .fighting,
+                        swingTicksLeft: u.swingTicksLeft, attackInterval: melee.attackInterval,
+                        alpha: alpha),
                     position: CGPoint(x: prev.x + (cur.x - prev.x) * alpha,
                                       y: prev.y + (cur.y - prev.y) * alpha),
                     hp: u.hp,

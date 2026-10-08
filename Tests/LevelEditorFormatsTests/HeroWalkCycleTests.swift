@@ -44,8 +44,8 @@ final class HeroWalkCycleTests: XCTestCase {
     func testOtherHeroAndMilitiaPlaybackRemainIndependent() {
         XCTAssertEqual(HeroWalkCycle.assetName(baseAssetName: "hero_unit_daniel_morgan",
             facing: .east, walkPhase: 9.45, isWalking: true), "hero_unit_daniel_morgan_walk_e_2")
-        XCTAssertEqual(MeleeWalkCycle.assetName(facing: .east, walkPhase: 6, isWalking: true),
-            "militia_soldier_walk_e_8")
+        XCTAssertEqual(MeleeWalkCycle.assetName(family: .towerMilitia, facing: .east, walkPhase: 6, isWalking: true),
+            "militia_soldier_walk_e_0")
         XCTAssertEqual(HeroWalkCycle.assetName(baseAssetName: "hero_unit_nathanael_greene",
             facing: .east, walkPhase: 20, isWalking: true), "hero_unit_nathanael_greene")
     }

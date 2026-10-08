@@ -67,23 +67,23 @@ INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level) 
 INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level) VALUES
 ('60750eaf-2063-401c-bc17-24a98cd69342', (
     SELECT id FROM level_info
-    WHERE level_name = 'Charleston'
+    WHERE level_name = 'Yorktown'
 ), 'ranged', 4),
 ('f32c3a19-6e40-4261-8e06-a377556904e1', (
     SELECT id FROM level_info
-    WHERE level_name = 'Charleston'
+    WHERE level_name = 'Yorktown'
 ), 'melee', 4),
 ('7d9b1c25-4e83-49f6-9b12-8a5c3e07d514', (
     SELECT id FROM level_info
-    WHERE level_name = 'Charleston'
+    WHERE level_name = 'Yorktown'
 ), 'areaOfEffect', 4),
 ('2f6a8e91-7c04-4b3d-a6e8-1d92c5b4f037', (
     SELECT id FROM level_info
-    WHERE level_name = 'Charleston'
+    WHERE level_name = 'Yorktown'
 ), 'special', 4),
 ('a7c2fdb4-08e1-4659-b2e0-86c75f140935', (
     SELECT id FROM level_info
-    WHERE level_name = 'Charleston'
+    WHERE level_name = 'Yorktown'
 ), 'supply', 4);
 
 INSERT INTO level_tower_unlock (id, level_info_id, tower_kind, max_tower_level) VALUES

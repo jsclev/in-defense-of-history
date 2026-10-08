@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// Both armies share ground-depth ordering. Drawing the entire friendly army
 /// last used to hide a living enemy when the combatants overlapped.
@@ -45,14 +46,21 @@ struct GroundTroopLayer: View {
                 let height = sprites.points(MapSpriteSizing.meleeUnit)
                 let foot = projection.viewPoint(soldier.position)
                 ZStack(alignment: .topLeading) {
-                    Image(soldier.assetName).resizable().scaledToFit().frame(height: height)
-                        .position(x: foot.x, y: foot.y - height / 2)
+                    Image(uiImage: militiaImage(soldier.assetName)).resizable().scaledToFit().frame(height: height)
+                        .position(x: foot.x, y: foot.y - height / 2 + height * MapSpriteSizing.meleeGroundInsetFraction)
                     health(soldier.health, at: foot, height: height, fill: .blue)
                 }
                 .zIndex(Double(foot.y))
             }
         }
         .allowsHitTesting(false)
+    }
+
+    private func militiaImage(_ assetName: String) -> UIImage {
+        guard let image = UIImage(named: assetName) else {
+            fatalError("Missing required American melee animation asset '\(assetName)'")
+        }
+        return image
     }
 
     private func health(_ health: UnitHealth, at foot: CGPoint, height: CGFloat, fill: Color,

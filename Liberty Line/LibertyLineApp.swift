@@ -99,7 +99,8 @@ struct LibertyLineApp: App {
                     DemolitionDeviceReview(store: store)
                         .statusBarHidden(true)
                         .persistentSystemOverlays(.hidden)
-                } else if CommandLine.arguments.contains("--combat-review") {
+                } else if CommandLine.arguments.contains("--combat-review")
+                            || CommandLine.arguments.contains("--melee-animation-review") {
                     CombatDeviceReview(store: store)
                         .statusBarHidden(true)
                         .persistentSystemOverlays(.hidden)

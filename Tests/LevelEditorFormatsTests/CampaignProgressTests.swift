@@ -11,7 +11,7 @@ final class CampaignProgressTests: XCTestCase {
         XCTAssertEqual(levels.count, 15)
         XCTAssertEqual(Array(states.prefix(14)), Array(repeating: .completed, count: 14))
         XCTAssertEqual(states[14], .current)
-        XCTAssertEqual(levels[14].name, "Charleston")
+        XCTAssertEqual(levels[14].name, "Yorktown")
 
         // A victory updates the observable map snapshot; restoring the authored
         // profile returns the final marker to current without a Swift preset.
